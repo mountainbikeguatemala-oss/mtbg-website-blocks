@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_review_account_admin,review account admin,model_review_account,base.group_system,1,1,1,1
+access_review_source_designer,review source designer,model_review_source,website.group_website_designer,1,1,1,1
+access_review_source_admin,review source admin,model_review_source,base.group_system,1,1,1,1
+access_review_review_designer,review designer,model_review_review,website.group_website_designer,1,1,1,1
+access_review_review_restricted,review restricted editor,model_review_review,website.group_website_restricted_editor,1,1,0,0
+access_review_translation_designer,review translation designer,model_review_review_translation,website.group_website_designer,1,1,1,1
+access_review_translation_restricted,review translation restricted editor,model_review_review_translation,website.group_website_restricted_editor,1,1,0,0

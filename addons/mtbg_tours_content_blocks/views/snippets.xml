@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The block as stored in page content: the chosen block id and a placeholder. The shared content is
+         filled in when the page is rendered (ir.qweb), so every page shows the block's current version. -->
+    <template id="s_mtbg_content_block" name="Reusable Block">
+        <section class="s_mtbg_content_block o_not_editable my-4" data-mtbg-block="">
+            <div class="s_mtbg_content_block_placeholder">Reusable block</div>
+        </section>
+    </template>
+
+    <!-- Group: a section whose background (color, image, filter, scroll effect) sits behind several blocks, like
+         the native Parallax block; the blocks inside keep all their own options. -->
+    <template id="s_mtbg_group" name="Group">
+        <section class="s_mtbg_group o_cc o_cc2 pt48 pb48">
+            <div class="oe_structure">
+                <section class="s_text_block pt16 pb16" data-snippet="s_text_block" data-name="Text">
+                    <div class="container s_allow_columns">
+                        <h2>Group title</h2>
+                        <p>Everything in this group shares its background. Drag more blocks into it, and set its
+                            background, width, corners and shadow in the Group options.</p>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </template>
+
+    <template id="snippets" inherit_id="website.snippets" name="MTBG Tours reusable block snippet">
+        <xpath expr="//snippets[@id='snippet_structure']" position="inside">
+            <t t-snippet="mtbg_tours_content_blocks.s_mtbg_group" string="Group" group="content"
+               t-thumbnail="/mtbg_tours_content_blocks/static/src/img/s_mtbg_group.svg">
+                <keywords>group, container, wrapper, box, panel, background, section, columns</keywords>
+            </t>
+        </xpath>
+        <xpath expr="//t[@t-snippet='website.s_chart']" position="before">
+            <t t-snippet="mtbg_tours_content_blocks.s_mtbg_content_block" string="Reusable Block"
+               t-thumbnail="/mtbg_tours_content_blocks/static/src/img/s_mtbg_content_block.svg">
+                <keywords>reusable, shared, content block, global, what to bring, faq, policy, include</keywords>
+            </t>
+        </xpath>
+    </template>
+</odoo>

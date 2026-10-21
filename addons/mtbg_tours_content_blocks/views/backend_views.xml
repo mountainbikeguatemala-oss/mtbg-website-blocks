@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tour form: blocks are placed in the website editor; this tab only lists them -->
+    <record id="view_tour_form_content_blocks" model="ir.ui.view">
+        <field name="name">mtbg.tour.form.content.blocks</field>
+        <field name="model">mtbg.tour</field>
+        <field name="inherit_id" ref="mtbg_tours_catalog.view_tour_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='block_line_ids']" position="before">
+                <div class="alert alert-info" role="alert">
+                    Reusable blocks are placed on the tour page in the website editor: drag the <b>Reusable Block</b>
+                    building block into the description, choose the block, move it like any other content.
+                    This list shows the blocks the page uses, in page order.
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='block_line_ids']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='block_line_ids']/list" position="attributes">
+                <attribute name="editable"/>
+                <attribute name="create">0</attribute>
+                <attribute name="delete">0</attribute>
+            </xpath>
+            <xpath expr="//field[@name='block_line_ids']/list/field[@name='sequence']" position="attributes">
+                <attribute name="widget"/>
+                <attribute name="string">#</attribute>
+            </xpath>
+            <xpath expr="//field[@name='block_line_ids']/list/field[@name='title']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='block_line_ids']/list/field[@name='hidden']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='block_line_ids']/list/field[@name='override_body']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Block form: where it is used (tours and other website pages) -->
+    <record id="view_content_block_form_usage" model="ir.ui.view">
+        <field name="name">mtbg.tours.content.block.form.usage</field>
+        <field name="model">mtbg.tours.content.block</field>
+        <field name="inherit_id" ref="mtbg_tours_catalog.view_content_block_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_mtbg_edit_in_builder" type="object" class="btn-primary"
+                            string="Edit in Website Builder" icon="fa-paint-brush"
+                            help="Edit the content with the full website builder: blocks, backgrounds, carousels..."/>
+                </header>
+            </xpath>
+            <xpath expr="//notebook/page[1]" position="inside">
+                <div class="text-muted small mt-2">
+                    Layout, backgrounds and carousels: use <b>Edit in Website Builder</b> above. This field is the
+                    raw content (HTML view available).
+                </div>
+            </xpath>
+            <xpath expr="//div[hasclass('alert')]" position="replace">
+                <div class="alert alert-info" role="alert">
+                    This is a <b>shared</b> block: it shows on every page where the <b>Reusable Block</b> building
+                    block points to it, and edits (here or with <i>Edit in place</i> in the website editor) apply to
+                    all of them. Used on <field name="usage_total" nolabel="1" class="fw-bold"/> page(s)
+                    (<field name="usage_count" nolabel="1"/> tours, <field name="website_view_count" nolabel="1"/> other pages).
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='tour_line_ids']/list/field[@name='title']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='tour_line_ids']/list/field[@name='hidden']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='tour_line_ids']/list/field[@name='override_body']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_content_block_list_usage" model="ir.ui.view">
+        <field name="name">mtbg.tours.content.block.list.usage</field>
+        <field name="model">mtbg.tours.content.block</field>
+        <field name="inherit_id" ref="mtbg_tours_catalog.view_content_block_list"/>
+        <field name="arch" type="xml">
+            <field name="usage_count" position="after">
+                <field name="website_view_count" optional="show"/>
+            </field>
+        </field>
+    </record>
+</odoo>

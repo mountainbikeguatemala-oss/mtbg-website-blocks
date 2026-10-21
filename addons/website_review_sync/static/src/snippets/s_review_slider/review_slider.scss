@@ -1,0 +1,221 @@
+// Reviews block (review_slider.js): a horizontal track of review cards, snapping to cards; the Reviews wall
+// (review_wall.js) shows the same cards and badges
+.s_review_slider, .s_review_wall {
+    .s_review_slider_body { container: review-slider / inline-size; }
+    .s_review_slider_badge {
+        display: inline-flex;
+        align-items: center;
+        gap: .25rem;
+        margin: 0 .75rem .5rem;
+        color: inherit;
+        text-decoration: none;
+        .fa { font-size: 1.15rem; }
+    }
+    .s_review_slider_stars, .s_review_slider_rating { color: #f5b301; letter-spacing: 1px; }
+    .s_review_slider_track {
+        display: flex;
+        gap: 1rem;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        padding: .25rem .25rem 1rem;
+        &::-webkit-scrollbar { display: none; }
+    }
+    .s_review_slider_card {
+        flex: 0 0 calc((100% - 2rem) / 3);
+        scroll-snap-align: start;
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        padding: 1.25rem;
+        border-radius: 12px;
+        background: var(--o-cc1-bg, #fff);
+        color: var(--o-cc1-text, #222);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, .08);
+        text-align: left;
+        // by the block's own width (a tour page's column is narrower than the page): 3, 2, then 1 review at a time
+        @container review-slider (max-width: 860px) { flex-basis: calc((100% - 1rem) / 2); }
+        @container review-slider (max-width: 540px) { flex-basis: 100%; }
+    }
+    .s_review_slider_head { display: flex; align-items: center; gap: .65rem; }
+    .s_review_slider_photo {
+        width: 44px;
+        height: 44px;
+        flex: 0 0 44px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    .s_review_slider_initial {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #e5e7eb;
+        font-weight: 700;
+    }
+    .s_review_slider_who { display: flex; flex-direction: column; min-width: 0; line-height: 1.25;
+        small { opacity: .7; } }
+    .s_review_slider_platform { margin-left: auto; font-size: 1.25rem; opacity: .8; }
+    .s_review_slider_title { margin: 0; font-size: 1rem; font-weight: 700; }
+    .s_review_slider_text {
+        margin: 0;
+        white-space: pre-line;
+        &.is-clamped { display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
+    }
+    .s_review_slider_more { align-self: flex-start; font-size: .9rem; }
+    .s_review_slider_photos {
+        display: flex;
+        gap: .4rem;
+        a { flex: 0 0 calc((100% - .8rem) / 3); }
+        img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px; }
+    }
+    .s_review_slider_link { margin-top: auto; font-size: .85rem; }
+    // a translated review: "Translated · See original"
+    .s_review_slider_translated {
+        margin: 0;
+        font-size: .78rem;
+        opacity: .7;
+        .btn-link { font-size: inherit; vertical-align: baseline; color: inherit; text-decoration: underline; }
+    }
+    .s_review_slider_prev, .s_review_slider_next {
+        position: absolute;
+        top: 50%;
+        z-index: 1;
+        width: 2.5rem;
+        height: 2.5rem;
+        padding: 0;
+        transform: translateY(-50%);
+    }
+    .s_review_slider_prev { left: -1.25rem; }
+    .s_review_slider_next { right: -1.25rem; }
+    @media (max-width: 575.98px) { .s_review_slider_prev, .s_review_slider_next { display: none; } }
+}
+
+// ------------------------------------------------------------------ the five-star banner (both blocks)
+.s_review_total {
+    .s_review_total_stars { color: #f5b301; font-size: 1.75rem; letter-spacing: .3rem; line-height: 1; }
+    .s_review_total_number {
+        font-size: clamp(3rem, 8vw, 5rem);
+        font-weight: 800;
+        line-height: 1.05;
+        font-variant-numeric: tabular-nums;
+        &:empty { display: none; }
+    }
+    .s_review_total_label { margin: 0; font-size: 1.1rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+}
+
+// ------------------------------------------------------------------ card layout: the reviewer on top (cards)
+.s_review_slider_card {
+    .s_review_slider_bubble { display: flex; flex-direction: column; gap: .5rem; flex: 1 1 auto; }
+}
+.s_review_slider:not(.s_review_bubbles), .s_review_wall:not(.s_review_bubbles) {
+    .s_review_slider_head { order: -1; }
+}
+
+// ------------------------------------------------------------------ speech bubbles: the reviewer below, talking
+.s_review_bubbles {
+    .s_review_slider_card {
+        padding: 0 0 .25rem;
+        background: transparent;
+        box-shadow: none;
+        border-radius: 0;
+        gap: 0;
+    }
+    .s_review_slider_bubble {
+        position: relative;
+        padding: 1.25rem 1.25rem 1rem;
+        border-radius: 22px;
+        background: var(--o-cc1-bg, #fff);
+        color: var(--o-cc1-text, #222);
+        box-shadow: 0 3px 14px rgba(0, 0, 0, .1);
+        // the bubble's tail, pointing down at the reviewer
+        &::after {
+            content: "";
+            position: absolute;
+            left: 34px;
+            bottom: -16px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 16px 18px 0 0;
+            border-color: var(--o-cc1-bg, #fff) transparent transparent transparent;
+            filter: drop-shadow(0 3px 2px rgba(0, 0, 0, .06));
+        }
+    }
+    .s_review_slider_head { margin-top: 1.4rem; padding-left: 18px; }
+    .s_review_slider_link { margin-top: .25rem; }
+}
+.s_review_wall.s_review_bubbles .s_review_slider_card { margin-bottom: 1.5rem; }
+
+// ------------------------------------------------------------------ dark
+.s_review_dark {
+    background-color: #0f172a;
+    color: #e5e7eb;
+    .s_review_slider_card, .s_review_slider_bubble { background: #1e293b; color: #e5e7eb; }
+    &.s_review_bubbles .s_review_slider_card { background: transparent; }
+    &.s_review_bubbles .s_review_slider_bubble::after { border-top-color: #1e293b; }
+    .s_review_slider_who small, .s_review_wall_status { color: #94a3b8; opacity: 1; }
+    .s_review_slider_initial { background: #334155; color: #e5e7eb; }
+    a:not(.btn), .s_review_slider_more { color: #93c5fd; }
+    .btn-outline-primary { color: #e5e7eb; border-color: #e5e7eb; &:hover { background: #e5e7eb; color: #0f172a; } }
+    .s_review_slider_prev, .s_review_slider_next { background: #1e293b; color: #e5e7eb; border-color: #334155; }
+    .form-select { background-color: #1e293b; color: #e5e7eb; border-color: #334155; }
+}
+
+// review photos open in Odoo's gallery lightbox: zoom cursor, a dark backdrop
+.s_review_slider_photos a { cursor: zoom-in; }
+.s_review_lightbox { background: rgba(0, 0, 0, .9); }
+
+// ------------------------------------------------------------------ the site's colours (theme colour combination)
+// the bubbles stay light (the website's first combination) with their own text and link colours
+.s_review_site {
+    .s_review_slider_bubble {
+        background: var(--o-cc1-bg, #fff);
+        color: var(--o-cc1-text, #222);
+        a:not(.btn), .s_review_slider_more { color: inherit; text-decoration: underline; }
+        &::after { border-top-color: var(--o-cc1-bg, #fff); }
+    }
+    // the reviewer, under the bubble, in the section's own text colour (white on navy)
+    .s_review_slider_card { color: inherit; }
+    .s_review_slider_head, .s_review_slider_who b { color: inherit; }
+    .s_review_slider_who small { opacity: .8; }
+    .s_review_slider_initial { color: var(--o-cc1-text, #222); }
+    // a review's title takes the bubble's text colour, not the section's heading colour
+    .s_review_slider_bubble .s_review_slider_title { color: inherit; }
+    .s_review_slider_prev, .s_review_slider_next { border: 0; }
+}
+// one-line banner: ★★★★★ 400+ five star reviews
+.s_review_total_inline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: center;
+    gap: .5rem;
+    .s_review_total_stars { font-size: 1.25rem; letter-spacing: .15rem; }
+    .s_review_total_number { font-size: 1.6rem; }
+    .s_review_total_label { font-size: 1rem; font-weight: 600; letter-spacing: .02em; text-transform: none; }
+}
+
+// ------------------------------------------------------------------ width and corners (block options)
+// Boxed: the block sits inside the page's width, with room at the sides; its arrows move inside the box
+.s_review_boxed {
+    margin: 1.5rem auto;
+    width: calc(100% - 2 * clamp(12px, 3vw, 48px));
+    max-width: 1400px;
+    --mtbg-side-pad-default: clamp(1.25rem, 4vw, 3.5rem);
+    // the arrows sit in the box's side padding, clear of the reviews
+    .s_review_slider_prev { left: calc(-1 * var(--mtbg-side-pad-used) + .4rem); }
+    .s_review_slider_next { right: calc(-1 * var(--mtbg-side-pad-used) + .4rem); }
+}
+.s_review_rounded { border-radius: 1.25rem; overflow: hidden; }
+.s_review_rounded_lg { border-radius: 2.5rem; overflow: hidden; }
+
+// Side padding (block option, --mtbg-side-pad in px), capped at 8% of the screen so phones keep their room
+.s_review_slider, .s_review_wall {
+    --mtbg-side-pad-used: #{"min(var(--mtbg-side-pad, var(--mtbg-side-pad-default, 12px)), 8vw)"};
+    > .container { padding-left: var(--mtbg-side-pad-used); padding-right: var(--mtbg-side-pad-used); }
+}
+.s_review_slider:not(.s_review_boxed), .s_review_wall:not(.s_review_boxed) {
+    // full width: Bootstrap's own gutter until a side padding is set
+    --mtbg-side-pad-default: calc(var(--bs-gutter-x, 1.5rem) * .5);
+}

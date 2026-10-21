@@ -1,0 +1,2 @@
+// Visitors never see an unfilled block (the server drops it); hide the placeholder in any case.
+.s_mtbg_content_block_placeholder { display: none; }

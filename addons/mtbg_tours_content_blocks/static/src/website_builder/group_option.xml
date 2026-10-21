@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mtbg_tours_content_blocks.GroupOption">
+        <BuilderRow label.translate="Width">
+            <BuilderSelect>
+                <BuilderSelectItem classAction="''">Full width</BuilderSelectItem>
+                <BuilderSelectItem classAction="'s_mtbg_group_boxed'">Boxed</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Corners">
+            <BuilderSelect>
+                <BuilderSelectItem classAction="''">Square</BuilderSelectItem>
+                <BuilderSelectItem classAction="'rounded-3'">Rounded</BuilderSelectItem>
+                <BuilderSelectItem classAction="'rounded-5'">Very rounded</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Side padding" tooltip.translate="Space at the left and right inside the block (less on small screens)">
+            <BuilderNumberInput styleAction="'--mtbg-side-pad'" unit="'px'" min="0" max="240" step="4"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Shadow">
+            <BuilderCheckbox classAction="'shadow'"/>
+        </BuilderRow>
+    </t>
+</templates>

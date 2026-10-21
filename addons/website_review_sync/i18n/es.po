@@ -1,0 +1,1038 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-21 00:13+0000\n"
+"PO-Revision-Date: 2026-10-21 00:13+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_slider/review_card.js:0
+msgid "%(count)s reviews on %(name)s"
+msgstr "%(count)s reseñas en %(name)s"
+
+#. module: website_review_sync
+#. odoo-python
+#: code:addons/website_review_sync/models/review.py:0
+msgid "%s location(s) found."
+msgstr "Se encontraron %s ubicaciones."
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_slider/review_card.js:0
+msgid "%s out of 5 stars"
+msgstr "%s de 5 estrellas"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_wall/review_wall.js:0
+msgid "%s reviews"
+msgstr "%s reseñas"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "3 stars and up"
+msgstr "3 estrellas o más"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_wall/review_wall.js:0
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "4 stars and up"
+msgstr "4 estrellas o más"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_wall/review_wall.js:0
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_review_search
+msgid "5 stars"
+msgstr "5 estrellas"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.s_review_slider_site
+msgid ""
+"<span class=\"s_review_total_stars o_not_editable\" aria-hidden=\"true\">★★★★★</span>\n"
+"                    <span class=\"s_review_total_number o_not_editable\"/>\n"
+"                    <span class=\"s_review_total_label\">five star reviews</span>"
+msgstr ""
+"<span class=\"s_review_total_stars o_not_editable\" aria-hidden=\"true\">★★★★★</span>\n"
+"                    <span class=\"s_review_total_number o_not_editable\"/>\n"
+"                    <span class=\"s_review_total_label\">reseñas de cinco estrellas</span>"
+
+#. module: website_review_sync
+#: model:ir.model.constraint,message:website_review_sync.constraint_review_review_rating_range
+msgid "A rating goes from 1 to 5 stars."
+msgstr "Una calificación va de 1 a 5 estrellas."
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_account__tripadvisor_api_key
+msgid "API Key"
+msgstr "Clave de API"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__account_id
+msgid "Account"
+msgstr "Cuenta"
+
+#. module: website_review_sync
+#: model:ir.ui.menu,name:website_review_sync.menu_review_account
+msgid "Accounts"
+msgstr "Cuentas"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_account__active
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__active
+msgid "Active"
+msgstr "Activo"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "All"
+msgstr "Todas"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_wall/review_wall.js:0
+msgid "All languages"
+msgstr "Todos los idiomas"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_wall/review_wall.js:0
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "All ratings"
+msgstr "Todas las calificaciones"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_wall/review_wall.js:0
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "All reviews"
+msgstr "Todas las reseñas"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "All sources"
+msgstr "Todas las fuentes"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__date_approx
+msgid "Approximate Date"
+msgstr "Fecha aproximada"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Arrows"
+msgstr "Flechas"
+
+#. module: website_review_sync
+#: model:ir.model.fields,help:website_review_sync.field_review_source__rating_average
+#: model:ir.model.fields,help:website_review_sync.field_review_source__rating_count
+msgid "As reported by the platform"
+msgstr "Según lo reporta la plataforma"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Autoplay"
+msgstr "Reproducción automática"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Boxed"
+msgstr "Con marco"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Cards"
+msgstr "Tarjetas"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.s_review_slider_site
+msgid "Check out some of our recent reviews"
+msgstr "Mira algunas de nuestras reseñas recientes"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_account__company_id
+msgid "Company"
+msgstr "Empresa"
+
+#. module: website_review_sync
+#. odoo-python
+#: code:addons/website_review_sync/models/review.py:0
+msgid "Connect the Google account first."
+msgstr "Primero conecta la cuenta de Google."
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_account__connected
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_account_form
+msgid "Connected"
+msgstr "Conectada"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Corners"
+msgstr "Esquinas"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_account__create_uid
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__create_uid
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review_translation__create_uid
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_account__create_date
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__create_date
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review_translation__create_date
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Dark"
+msgstr "Oscuro"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_account__display_name
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__display_name
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review_translation__display_name
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__display_name
+msgid "Display Name"
+msgstr "Nombre para mostrar"
+
+#. module: website_review_sync
+#: model:ir.model.fields,help:website_review_sync.field_review_source__account_id
+msgid "Empty for reviews entered by hand / imported"
+msgstr "Vacío para reseñas ingresadas a mano o importadas"
+
+#. module: website_review_sync
+#. odoo-python
+#: code:addons/website_review_sync/models/review.py:0
+msgid ""
+"Enter the Google OAuth client ID and secret first (Google Cloud console)."
+msgstr ""
+"Primero ingresa el ID de cliente y el secreto de Google OAuth (consola de "
+"Google Cloud)."
+
+#. module: website_review_sync
+#. odoo-python
+#: code:addons/website_review_sync/models/review.py:0
+msgid "Enter the Tripadvisor API key and the listing id first."
+msgstr "Primero ingresa la clave de API de Tripadvisor y el ID del listado."
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__external_id
+msgid "External"
+msgstr "Externa"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__featured
+msgid "Featured"
+msgstr "Destacada"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Featured first"
+msgstr "Destacadas primero"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_account_form
+msgid "Find Locations"
+msgstr "Buscar ubicaciones"
+
+#. module: website_review_sync
+#: model:ir.model.fields.selection,name:website_review_sync.selection__review_source__author_display__first_initial
+msgid "First name and initial"
+msgstr "Nombre e inicial"
+
+#. module: website_review_sync
+#: model:ir.model.fields.selection,name:website_review_sync.selection__review_source__author_display__first
+msgid "First name only"
+msgstr "Solo el nombre"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.s_review_slider
+#: model_terms:ir.ui.view,arch_db:website_review_sync.s_review_slider_cards
+#: model_terms:ir.ui.view,arch_db:website_review_sync.s_review_slider_dark
+#: model_terms:ir.ui.view,arch_db:website_review_sync.s_review_wall
+msgid "Five star reviews"
+msgstr "Reseñas de cinco estrellas"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__author_location
+msgid "From"
+msgstr "Desde"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_account_form
+msgid ""
+"From Tripadvisor's Content API (developer portal). Each sync adds the listing's latest\n"
+"                                reviews; older ones can be imported from a file or entered by hand."
+msgstr ""
+"Desde la API de contenido de Tripadvisor (portal para desarrolladores). Cada"
+" sincronización agrega las reseñas más recientes del listado; las anteriores"
+" se pueden importar desde un archivo o ingresar a mano."
+
+#. module: website_review_sync
+#: model:ir.model.fields.selection,name:website_review_sync.selection__review_source__author_display__full
+msgid "Full name"
+msgstr "Nombre completo"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Full width"
+msgstr "Ancho completo"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+#: model:ir.model.fields.selection,name:website_review_sync.selection__review_account__platform__google
+#: model:ir.model.fields.selection,name:website_review_sync.selection__review_review__platform__google
+#: model:ir.model.fields.selection,name:website_review_sync.selection__review_source__platform__google
+msgid "Google"
+msgstr "Google"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_account_form
+msgid "Google Cloud OAuth client"
+msgstr "Cliente OAuth de Google Cloud"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_account__google_refresh_token
+msgid "Google Refresh Token"
+msgstr "Token de actualización de Google"
+
+#. module: website_review_sync
+#. odoo-python
+#: code:addons/website_review_sync/models/review.py:0
+msgid ""
+"Google did not return a refresh token: remove the app's access in the Google"
+" account's security settings and connect again."
+msgstr ""
+"Google no devolvió un token de actualización: quita el acceso de la "
+"aplicación en la configuración de seguridad de la cuenta de Google y vuelve "
+"a conectar."
+
+#. module: website_review_sync
+#: model:ir.model.fields,help:website_review_sync.field_review_source__external_ref
+msgid ""
+"Google: accounts/123/locations/456 (found by the account); Tripadvisor: the "
+"listing's id, the number in its URL after -d"
+msgstr ""
+"Google: accounts/123/locations/456 (lo encuentra la cuenta); Tripadvisor: el"
+" ID del listado, el número en su URL después de -d"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__has_photos
+msgid "Has Photos"
+msgstr "Tiene fotos"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_review_search
+msgid "Hidden"
+msgstr "Oculta"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_wall/review_wall.js:0
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Highest rated"
+msgstr "Mejor calificadas"
+
+#. module: website_review_sync
+#: model:ir.model.fields,help:website_review_sync.field_review_source__author_display
+msgid "How reviewers' names show on the website (the full name stays here)"
+msgstr ""
+"Cómo se muestran los nombres de los autores en el sitio web (el nombre "
+"completo se queda aquí)"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_account__id
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__id
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review_translation__id
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__id
+msgid "ID"
+msgstr "ID"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_account_form
+msgid ""
+"In the Google Cloud console: enable the Business Profile APIs (access is granted by Google\n"
+"                                on request), create an OAuth client (Web application) with the redirect URI\n"
+"                                <code>&lt;your website&gt;/review_sync/google/callback</code>, then sign in here with the\n"
+"                                Google account that manages the business profiles."
+msgstr ""
+"En la consola de Google Cloud: activa las API de Business Profile (Google otorga el acceso\n"
+"                                a solicitud), crea un cliente OAuth (aplicación web) con el URI de redirección\n"
+"                                <code>&lt;your website&gt;/review_sync/google/callback</code>, y luego inicia sesión aquí con la\n"
+"                                cuenta de Google que administra los perfiles de negocio."
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_wall/review_wall.js:0
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__language
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review_translation__lang
+msgid "Language"
+msgstr "Idioma"
+
+#. module: website_review_sync
+#: model:ir.model.fields,help:website_review_sync.field_review_review_translation__lang
+msgid "Language code: es, en, fr..."
+msgstr "Código de idioma: es, en, fr..."
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__languages
+msgid "Languages"
+msgstr "Idiomas"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__last_error
+msgid "Last Error"
+msgstr "Último error"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__last_sync
+msgid "Last Sync"
+msgstr "Última sincronización"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_account__write_uid
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__write_uid
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review_translation__write_uid
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_account__write_date
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__write_date
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review_translation__write_date
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Light"
+msgstr "Claro"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_wall/review_wall.js:0
+msgid "Loading reviews…"
+msgstr "Cargando reseñas…"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__external_ref
+msgid "Location"
+msgstr "Ubicación"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_account__source_ids
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_account_list
+msgid "Locations"
+msgstr "Ubicaciones"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Minimum rating"
+msgstr "Calificación mínima"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Most recent"
+msgstr "Más recientes"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_account__name
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: website_review_sync
+#: model:ir.model.fields,help:website_review_sync.field_review_source__auto_publish_rating
+msgid ""
+"New reviews with at least this many stars show on the website; the others "
+"wait (unpublished)"
+msgstr ""
+"Las reseñas nuevas con al menos esta cantidad de estrellas se muestran en el"
+" sitio web; las demás quedan en espera (sin publicar)"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_wall/review_wall.js:0
+msgid "Newest first"
+msgstr "Más recientes primero"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_slider/review_slider.js:0
+msgid "Next"
+msgstr "Siguiente"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_wall/review_wall.js:0
+msgid "No reviews match these filters."
+msgstr "Ninguna reseña coincide con estos filtros."
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_slider/review_slider.js:0
+msgid "No reviews to show yet."
+msgstr "Aún no hay reseñas para mostrar."
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_account__note
+msgid "Note"
+msgstr "Nota"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_account__google_client_id
+msgid "OAuth Client ID"
+msgstr "ID de cliente OAuth"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_account__google_client_secret
+msgid "OAuth Client Secret"
+msgstr "Secreto de cliente OAuth"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__is_published
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_review_search
+msgid "On Website"
+msgstr "En el sitio web"
+
+#. module: website_review_sync
+#: model:ir.model.fields,help:website_review_sync.field_review_source__website_id
+msgid "Only on this website (empty: every website)"
+msgstr "Solo en este sitio web (vacío: todos los sitios)"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Order"
+msgstr "Orden"
+
+#. module: website_review_sync
+#: model:ir.model.fields.selection,name:website_review_sync.selection__review_review__platform__manual
+#: model:ir.model.fields.selection,name:website_review_sync.selection__review_source__platform__manual
+msgid "Other / Manual"
+msgstr "Otra / Manual"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__reply_text
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review_translation__reply_text
+msgid "Our Reply"
+msgstr "Nuestra respuesta"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_review_form
+msgid "Our reply"
+msgstr "Nuestra respuesta"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__image_ids
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_review_form
+msgid "Photos"
+msgstr "Fotos"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_wall/review_wall.js:0
+msgid "Photos first"
+msgstr "Fotos primero"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+#: model:ir.model.fields,field_description:website_review_sync.field_review_account__platform
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__platform
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__platform
+msgid "Platform"
+msgstr "Plataforma"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_slider/review_slider.js:0
+msgid "Previous"
+msgstr "Anterior"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__profile_url
+msgid "Profile Page"
+msgstr "Página de perfil"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__auto_publish_rating
+msgid "Publish From"
+msgstr "Publicar desde"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_wall/review_wall.js:0
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__rating
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_review_search
+msgid "Rating"
+msgstr "Calificación"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__rating_average
+msgid "Rating Average"
+msgstr "Calificación promedio"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__rating_count
+msgid "Rating Count"
+msgstr "Cantidad de calificaciones"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_slider/review_card.js:0
+msgid "Read less"
+msgstr "Leer menos"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_slider/review_card.js:0
+msgid "Read more"
+msgstr "Leer más"
+
+#. module: website_review_sync
+#: model:ir.model,name:website_review_sync.model_review_review
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review_translation__review_id
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__review_ids
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_review_form
+msgid "Review"
+msgstr "Reseña"
+
+#. module: website_review_sync
+#: model:ir.model,name:website_review_sync.model_review_account
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_account_form
+msgid "Review Account"
+msgstr "Cuenta de reseñas"
+
+#. module: website_review_sync
+#: model:ir.actions.act_window,name:website_review_sync.action_review_account
+msgid "Review Accounts"
+msgstr "Cuentas de reseñas"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__review_count
+msgid "Review Count"
+msgstr "Cantidad de reseñas"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__review_date
+msgid "Review Date"
+msgstr "Fecha de la reseña"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__url
+msgid "Review Link"
+msgstr "Enlace de la reseña"
+
+#. module: website_review_sync
+#: model:ir.model,name:website_review_sync.model_review_source
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_source_form
+msgid "Review Source"
+msgstr "Fuente de reseñas"
+
+#. module: website_review_sync
+#: model:ir.actions.act_window,name:website_review_sync.action_review_source
+msgid "Review Sources"
+msgstr "Fuentes de reseñas"
+
+#. module: website_review_sync
+#: model:ir.model,name:website_review_sync.model_review_review_translation
+msgid "Review Translation"
+msgstr "Traducción de la reseña"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__author_name
+msgid "Reviewer"
+msgstr "Autor de la reseña"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__author_display
+msgid "Reviewer Names"
+msgstr "Nombres de los autores"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__author_photo_url
+msgid "Reviewer Photo"
+msgstr "Foto del autor de la reseña"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__author_url
+msgid "Reviewer Profile"
+msgstr "Perfil del autor de la reseña"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+#: model:ir.actions.act_window,name:website_review_sync.action_review_review
+#: model:ir.ui.menu,name:website_review_sync.menu_review_review
+#: model:ir.ui.menu,name:website_review_sync.menu_reviews
+#: model_terms:ir.ui.view,arch_db:website_review_sync.snippets
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_source_form
+msgid "Reviews"
+msgstr "Reseñas"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.snippets
+msgid "Reviews (cards)"
+msgstr "Reseñas (tarjetas)"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.snippets
+msgid "Reviews (dark)"
+msgstr "Reseñas (oscuro)"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.snippets
+msgid "Reviews (site colors)"
+msgstr "Reseñas (colores del sitio)"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.snippets
+msgid "Reviews Wall"
+msgstr "Muro de reseñas"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_account_form
+msgid "Reviews here"
+msgstr "Reseñas aquí"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Reviews linked to the page's item, e.g. a tour"
+msgstr "Reseñas vinculadas al elemento de la página, p. ej. un tour"
+
+#. module: website_review_sync
+#: model:ir.actions.server,name:website_review_sync.cron_review_sync_ir_actions_server
+msgid "Reviews: sync Google / Tripadvisor"
+msgstr "Reseñas: sincronizar Google / Tripadvisor"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Rounded"
+msgstr "Redondeado"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.s_review_slider
+#: model_terms:ir.ui.view,arch_db:website_review_sync.s_review_slider_cards
+#: model_terms:ir.ui.view,arch_db:website_review_sync.s_review_slider_dark
+#: model_terms:ir.ui.view,arch_db:website_review_sync.s_review_slider_site
+msgid "See all reviews"
+msgstr "Ver todas las reseñas"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_slider/review_card.js:0
+msgid "See original"
+msgstr "Ver original"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_slider/review_card.js:0
+msgid "See translation"
+msgstr "Ver traducción"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: website_review_sync
+#. odoo-python
+#: code:addons/website_review_sync/models/review.py:0
+msgid ""
+"Set the location (accounts/…/locations/…): use Find Locations on the "
+"account."
+msgstr ""
+"Define la ubicación (accounts/…/locations/…): usa Buscar ubicaciones en la "
+"cuenta."
+
+#. module: website_review_sync
+#: model:ir.model.fields,help:website_review_sync.field_review_review__featured
+msgid "Shown first in the sliders"
+msgstr "Se muestra primero en los carruseles"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Side padding"
+msgstr "Margen lateral"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_account_form
+msgid "Sign in with Google"
+msgstr "Iniciar sesión con Google"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_wall/review_wall.js:0
+msgid "Sort"
+msgstr "Ordenar"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__source_id
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_review_search
+msgid "Source"
+msgstr "Fuente"
+
+#. module: website_review_sync
+#: model:ir.ui.menu,name:website_review_sync.menu_review_source
+msgid "Sources"
+msgstr "Fuentes"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Space at the left and right inside the block (less on small screens)"
+msgstr ""
+"Espacio a la izquierda y a la derecha dentro del bloque (menos en pantallas "
+"pequeñas)"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Speech bubbles"
+msgstr "Globos de texto"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Square"
+msgstr "Cuadrado"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Start on"
+msgstr "Empezar en"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Style"
+msgstr "Estilo"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_account_form
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_source_form
+msgid "Sync Now"
+msgstr "Sincronizar ahora"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__text
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review_translation__text
+msgid "Text"
+msgstr "Texto"
+
+#. module: website_review_sync
+#: model:ir.model.fields,help:website_review_sync.field_review_source__profile_url
+msgid "The listing on Google / Tripadvisor (\"See all reviews\" links)"
+msgstr "El listado en Google / Tripadvisor (enlaces de \"Ver todas las reseñas\")"
+
+#. module: website_review_sync
+#: model:ir.model.constraint,message:website_review_sync.constraint_review_review_translation_review_lang_uniq
+msgid "The review has a translation in this language already."
+msgstr "La reseña ya tiene una traducción en este idioma."
+
+#. module: website_review_sync
+#: model:ir.model.fields,help:website_review_sync.field_review_review__translation_ids
+msgid ""
+"The review in other languages: visitors see the one of the page's language "
+"(with the original a click away)"
+msgstr ""
+"La reseña en otros idiomas: los visitantes ven la del idioma de la página "
+"(con el original a un clic)"
+
+#. module: website_review_sync
+#: model:ir.model.fields,help:website_review_sync.field_review_review__external_id
+msgid "The review's id on its platform (sync key)"
+msgstr "El ID de la reseña en su plataforma (clave de sincronización)"
+
+#. module: website_review_sync
+#: model:ir.model.fields,help:website_review_sync.field_review_review__image_ids
+msgid "The reviewer's photos (shown on the review's card)"
+msgstr ""
+"Las fotos del autor de la reseña (se muestran en la tarjeta de la reseña)"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Theme"
+msgstr "Tema"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "This page's reviews only"
+msgstr "Solo las reseñas de esta página"
+
+#. module: website_review_sync
+#: model:ir.model.constraint,message:website_review_sync.constraint_review_review_source_external_uniq
+msgid "This review is already imported."
+msgstr "Esta reseña ya fue importada."
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__title
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review_translation__title
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_review_form
+msgid "Title"
+msgstr "Título"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_slider/review_card.js:0
+msgid "Translated"
+msgstr "Traducido"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__translation_ids
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_review_form
+msgid "Translations"
+msgstr "Traducciones"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_review__trip_date
+msgid "Travelled"
+msgstr "Viajó"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+#: model:ir.model.fields.selection,name:website_review_sync.selection__review_account__platform__tripadvisor
+#: model:ir.model.fields.selection,name:website_review_sync.selection__review_review__platform__tripadvisor
+#: model:ir.model.fields.selection,name:website_review_sync.selection__review_source__platform__tripadvisor
+msgid "Tripadvisor"
+msgstr "Tripadvisor"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_account_form
+msgid "Tripadvisor Content API"
+msgstr "API de contenido de Tripadvisor"
+
+#. module: website_review_sync
+#: model:ir.model.fields,help:website_review_sync.field_review_source__languages
+msgid "Tripadvisor: languages to fetch, comma separated"
+msgstr "Tripadvisor: idiomas a obtener, separados por comas"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Very rounded"
+msgstr "Muy redondeado"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_slider/review_card.js:0
+msgid "View on %s"
+msgstr "Ver en %s"
+
+#. module: website_review_sync
+#: model:ir.model.fields,field_description:website_review_sync.field_review_source__website_id
+msgid "Website"
+msgstr "Sitio web"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_wall/review_wall.js:0
+msgid "Where"
+msgstr "Dónde"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Width"
+msgstr "Ancho"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/snippets/s_review_wall/review_wall.js:0
+msgid "With photos"
+msgstr "Con fotos"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "With photos first"
+msgstr "Con fotos primero"
+
+#. module: website_review_sync
+#: model:ir.model.fields,help:website_review_sync.field_review_review__date_approx
+msgid "Worked out from the platform's \"3 months ago\""
+msgstr "Calculada a partir del \"hace 3 meses\" de la plataforma"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.view_review_account_form
+msgid "e.g. MTB Guatemala Google"
+msgstr "p. ej. MTB Guatemala Google"
+
+#. module: website_review_sync
+#: model:ir.model.fields,help:website_review_sync.field_review_review__trip_date
+msgid "e.g. October 2025 (Tripadvisor)"
+msgstr "p. ej. octubre de 2025 (Tripadvisor)"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.snippets
+msgid "reviews, testimonials, all reviews, wall, google, tripadvisor, filter"
+msgstr ""
+"reseñas, testimonios, todas las reseñas, muro, google, tripadvisor, filtro"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.snippets
+msgid "reviews, testimonials, cards, slider"
+msgstr "reseñas, testimonios, tarjetas, carrusel"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.snippets
+msgid "reviews, testimonials, dark, slider"
+msgstr "reseñas, testimonios, oscuro, carrusel"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.snippets
+msgid ""
+"reviews, testimonials, google, tripadvisor, rating, stars, slider, speech "
+"bubbles"
+msgstr ""
+"reseñas, testimonios, google, tripadvisor, calificación, estrellas, "
+"carrusel, globos de texto"
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.snippets
+msgid "reviews, testimonials, recent reviews, brand, theme colors, slider"
+msgstr ""
+"reseñas, testimonios, reseñas recientes, marca, colores del tema, carrusel"

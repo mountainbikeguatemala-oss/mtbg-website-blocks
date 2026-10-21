@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="website_review_sync.ReviewSliderOption">
+        <BuilderRow label.translate="Style">
+            <BuilderSelect>
+                <BuilderSelectItem classAction="'s_review_bubbles'">Speech bubbles</BuilderSelectItem>
+                <BuilderSelectItem classAction="'s_review_cards'">Cards</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Theme">
+            <BuilderSelect>
+                <BuilderSelectItem classAction="''">Light</BuilderSelectItem>
+                <BuilderSelectItem classAction="'s_review_dark'">Dark</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Width">
+            <BuilderSelect>
+                <BuilderSelectItem classAction="''">Full width</BuilderSelectItem>
+                <BuilderSelectItem classAction="'s_review_boxed'">Boxed</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Corners">
+            <BuilderSelect>
+                <BuilderSelectItem classAction="''">Square</BuilderSelectItem>
+                <BuilderSelectItem classAction="'s_review_rounded'">Rounded</BuilderSelectItem>
+                <BuilderSelectItem classAction="'s_review_rounded_lg'">Very rounded</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Side padding" tooltip.translate="Space at the left and right inside the block (less on small screens)">
+            <BuilderNumberInput styleAction="'--mtbg-side-pad'" unit="'px'" min="0" max="240" step="4"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Order">
+            <BuilderSelect dataAttributeAction="'sort'">
+                <BuilderSelectItem dataAttributeActionValue="'recent'">Most recent</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'featured'">Featured first</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'best'">Highest rated</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'photos'">With photos first</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Platform">
+            <BuilderSelect dataAttributeAction="'platform'">
+                <BuilderSelectItem dataAttributeActionValue="'all'">All</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'google'">Google</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'tripadvisor'">Tripadvisor</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Source">
+            <BuilderSelect dataAttributeAction="'sourceId'">
+                <BuilderSelectItem dataAttributeActionValue="'all'">All sources</BuilderSelectItem>
+                <t t-foreach="state.sources" t-as="source" t-key="source.id">
+                    <BuilderSelectItem dataAttributeActionValue="source.key"><t t-out="source.name"/></BuilderSelectItem>
+                </t>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Minimum rating">
+            <BuilderSelect dataAttributeAction="'minRating'">
+                <BuilderSelectItem dataAttributeActionValue="'5'">5 stars</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'4'">4 stars and up</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'3'">3 stars and up</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'1'">All ratings</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="This page's reviews only" tooltip.translate="Reviews linked to the page's item, e.g. a tour">
+            <BuilderCheckbox dataAttributeAction="'scope'" dataAttributeActionValue="'page'"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Reviews">
+            <BuilderNumberInput dataAttributeAction="'limit'" min="1" max="50"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Arrows">
+            <BuilderCheckbox dataAttributeAction="'arrows'" dataAttributeActionValue="'true'"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Autoplay">
+            <BuilderCheckbox dataAttributeAction="'autoplay'" dataAttributeActionValue="'true'"/>
+        </BuilderRow>
+    </t>
+    <t t-name="website_review_sync.ReviewWallOption">
+        <BuilderRow label.translate="Style">
+            <BuilderSelect>
+                <BuilderSelectItem classAction="'s_review_bubbles'">Speech bubbles</BuilderSelectItem>
+                <BuilderSelectItem classAction="'s_review_cards'">Cards</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Theme">
+            <BuilderSelect>
+                <BuilderSelectItem classAction="''">Light</BuilderSelectItem>
+                <BuilderSelectItem classAction="'s_review_dark'">Dark</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Width">
+            <BuilderSelect>
+                <BuilderSelectItem classAction="''">Full width</BuilderSelectItem>
+                <BuilderSelectItem classAction="'s_review_boxed'">Boxed</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Corners">
+            <BuilderSelect>
+                <BuilderSelectItem classAction="''">Square</BuilderSelectItem>
+                <BuilderSelectItem classAction="'s_review_rounded'">Rounded</BuilderSelectItem>
+                <BuilderSelectItem classAction="'s_review_rounded_lg'">Very rounded</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Side padding" tooltip.translate="Space at the left and right inside the block (less on small screens)">
+            <BuilderNumberInput styleAction="'--mtbg-side-pad'" unit="'px'" min="0" max="240" step="4"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Start on">
+            <BuilderSelect dataAttributeAction="'platform'">
+                <BuilderSelectItem dataAttributeActionValue="'all'">All reviews</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'google'">Google</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'tripadvisor'">Tripadvisor</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Minimum rating">
+            <BuilderSelect dataAttributeAction="'minRating'">
+                <BuilderSelectItem dataAttributeActionValue="'1'">All ratings</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'4'">4 stars and up</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'5'">5 stars</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+    </t>
+</templates>

@@ -1,0 +1,28 @@
+// Group: one background behind several blocks (see the s_mtbg_group snippet).
+.s_mtbg_group {
+    position: relative;
+    // the blocks paint above the group's background layers (image filter, scroll effect)
+    > .oe_structure {
+        position: relative;
+    }
+    &.s_mtbg_group_boxed {
+        @include make-container();
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+        @each $breakpoint, $width in $container-max-widths {
+            @include media-breakpoint-up($breakpoint) {
+                max-width: $width;
+            }
+        }
+    }
+    // Side padding (Group option, --mtbg-side-pad in px), capped at 8% of the screen so phones keep their room;
+    // only once set (a boxed group keeps its container gutter otherwise)
+    &[style*="--mtbg-side-pad"] {
+        padding-left: #{"min(var(--mtbg-side-pad), 8vw)"};
+        padding-right: #{"min(var(--mtbg-side-pad), 8vw)"};
+    }
+    &.rounded-3,
+    &.rounded-5 {
+        overflow: hidden; // keep the background inside the corners
+    }
+}

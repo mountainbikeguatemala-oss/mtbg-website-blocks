@@ -1,0 +1,28 @@
+// Website editor (inside the page iframe): a group is visibly one container, and its tab selects it.
+$mtbg-group-color: #0d6efd;
+
+.s_mtbg_group {
+    outline: 2px dashed rgba($mtbg-group-color, .5);
+    outline-offset: -2px;
+    // Clicking the tab clicks the group itself, so the builder selects the group (its background and options)
+    // rather than a block inside it.
+    &::before {
+        content: "\f247  Group · click here for its background";
+        font-family: FontAwesome, var(--body-font-family, sans-serif);
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 3;
+        padding: 2px 10px;
+        border-radius: 0 0 4px 0;
+        background: $mtbg-group-color;
+        color: #fff;
+        font-size: 11px;
+        line-height: 1.5;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+    > .oe_structure:empty {
+        min-height: 6rem;
+    }
+}

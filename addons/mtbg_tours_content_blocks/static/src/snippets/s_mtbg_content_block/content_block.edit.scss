@@ -1,0 +1,46 @@
+// Website editor (inside the page iframe): a reusable block is visibly shared content.
+$mtbg-cb-shared: #8e44ad;
+$mtbg-cb-editing: #00a86b;
+
+.s_mtbg_content_block {
+    position: relative;
+    outline: 2px dashed rgba($mtbg-cb-shared, .55);
+    outline-offset: 6px;
+    min-height: 2.5rem;
+    &::before {
+        content: "\f0c1  Shared block · " attr(data-mtbg-label) " · used on " attr(data-mtbg-usage) " page(s)";
+        font-family: FontAwesome, var(--body-font-family, sans-serif);
+        position: absolute;
+        top: -1.55rem;
+        left: -6px;
+        z-index: 2;
+        padding: 1px 8px;
+        border-radius: 3px 3px 0 0;
+        background: $mtbg-cb-shared;
+        color: #fff;
+        font-size: 11px;
+        line-height: 1.5;
+        white-space: nowrap;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        pointer-events: none;
+    }
+    &:not([data-mtbg-label])::before { content: "\f0c1  Reusable block · choose one in the block options"; }
+    &.o_mtbg_cb_editing {
+        outline: 2px solid $mtbg-cb-editing;
+        &::before {
+            content: "\f040  Editing shared block · " attr(data-mtbg-label) " · changes apply to " attr(data-mtbg-usage) " page(s)";
+            background: $mtbg-cb-editing;
+        }
+    }
+    .s_mtbg_content_block_placeholder {
+        display: block;
+        padding: 1.25rem;
+        border-radius: 6px;
+        background: rgba($mtbg-cb-shared, .07);
+        color: $mtbg-cb-shared;
+        text-align: center;
+        font-style: italic;
+    }
+}

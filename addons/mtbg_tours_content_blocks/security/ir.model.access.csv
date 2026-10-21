@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_content_block_designer,content block website designer,mtbg_tours_catalog.model_mtbg_tours_content_block,website.group_website_designer,1,1,1,0
+access_block_line_designer,block line website designer,mtbg_tours_catalog.model_mtbg_tour_block_line,website.group_website_designer,1,0,0,0

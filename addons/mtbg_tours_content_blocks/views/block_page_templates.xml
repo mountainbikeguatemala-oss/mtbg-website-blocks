@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- A reusable block alone, edited with the full website builder (opened from the block's form). The content
+         column is as wide as a tour description, so the block looks as it does on tour pages. -->
+    <template id="block_page" name="Reusable Block (editor page)">
+        <t t-call="website.layout">
+            <t t-set="additional_title" t-value="block.name"/>
+            <t t-set="pageName" t-value="'mtbg_content_block'"/>
+            <div id="wrap" class="mtbg-cb-page">
+                <div class="container pt-4">
+                    <div class="alert alert-info d-flex flex-wrap align-items-center gap-2" role="status">
+                        <i class="fa fa-clone" role="img" aria-label="Reusable block" title="Reusable block"/>
+                        <span>Reusable block <b t-out="block.name"/>, used on <b t-out="block.usage_total"/> page(s):
+                            edits here show on every page that uses it.</span>
+                        <a class="ms-auto" t-attf-href="/odoo/action-mtbg_tours_catalog.action_content_block/#{block.id}">Back to the block</a>
+                    </div>
+                </div>
+                <div class="container pb-5">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="mtbg-cb-page-body" t-field="block.body"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Accounts: a Google sign-in or a Tripadvisor API key -->
+    <record id="view_review_account_form" model="ir.ui.view">
+        <field name="name">review.account.form</field>
+        <field name="model">review.account</field>
+        <field name="arch" type="xml">
+            <form string="Review Account">
+                <header>
+                    <button name="action_google_connect" type="object" string="Sign in with Google" class="btn-primary"
+                            icon="fa-google" invisible="platform != 'google'"/>
+                    <button name="action_find_locations" type="object" string="Find Locations" icon="fa-map-marker"
+                            invisible="platform != 'google' or not connected"/>
+                    <button name="action_sync" type="object" string="Sync Now" icon="fa-refresh" invisible="not source_ids"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Connected" bg_color="text-bg-success" invisible="not connected"/>
+                    <div class="oe_title"><h1><field name="name" placeholder="e.g. MTB Guatemala Google"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="platform" widget="radio" options="{'horizontal': true}"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="connected" invisible="1"/>
+                        </group>
+                        <group invisible="platform != 'google'" string="Google Cloud OAuth client">
+                            <field name="google_client_id"/>
+                            <field name="google_client_secret" password="True"/>
+                            <div colspan="2" class="text-muted small">
+                                In the Google Cloud console: enable the Business Profile APIs (access is granted by Google
+                                on request), create an OAuth client (Web application) with the redirect URI
+                                <code>&lt;your website&gt;/review_sync/google/callback</code>, then sign in here with the
+                                Google account that manages the business profiles.
+                            </div>
+                        </group>
+                        <group invisible="platform != 'tripadvisor'" string="Tripadvisor Content API">
+                            <field name="tripadvisor_api_key" password="True"/>
+                            <div colspan="2" class="text-muted small">
+                                From Tripadvisor's Content API (developer portal). Each sync adds the listing's latest
+                                reviews; older ones can be imported from a file or entered by hand.
+                            </div>
+                        </group>
+                    </group>
+                    <field name="note" invisible="not note" class="text-muted"/>
+                    <field name="source_ids" context="{'default_account_id': id}">
+                        <list>
+                            <field name="sequence" widget="handle"/>
+                            <field name="name"/>
+                            <field name="external_ref"/>
+                            <field name="website_id" optional="hide"/>
+                            <field name="rating_average"/>
+                            <field name="rating_count"/>
+                            <field name="review_count" string="Reviews here"/>
+                            <field name="last_sync"/>
+                            <field name="last_error" optional="show"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_review_account_list" model="ir.ui.view">
+        <field name="name">review.account.list</field>
+        <field name="model">review.account</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="platform"/>
+                <field name="connected"/>
+                <field name="source_ids" widget="many2many_tags" string="Locations"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_review_account" model="ir.actions.act_window">
+        <field name="name">Review Accounts</field>
+        <field name="res_model">review.account</field>
+        <field name="view_mode">list,form</field>
+        <field name="path">review-accounts</field>
+    </record>
+
+    <!-- Sources: a Google location / Tripadvisor listing -->
+    <record id="view_review_source_form" model="ir.ui.view">
+        <field name="name">review.source.form</field>
+        <field name="model">review.source</field>
+        <field name="arch" type="xml">
+            <form string="Review Source">
+                <header>
+                    <button name="action_sync" type="object" string="Sync Now" icon="fa-refresh" class="btn-primary"
+                            invisible="not account_id"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_reviews" type="object" class="oe_stat_button" icon="fa-star">
+                            <field name="review_count" widget="statinfo" string="Reviews"/>
+                        </button>
+                    </div>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="account_id"/>
+                            <field name="platform" readonly="account_id"/>
+                            <field name="external_ref" invisible="not account_id"/>
+                            <field name="languages" invisible="platform != 'tripadvisor'"/>
+                            <field name="profile_url" widget="url"/>
+                            <field name="website_id"/>
+                        </group>
+                        <group>
+                            <field name="auto_publish_rating"/>
+                            <field name="author_display"/>
+                            <field name="rating_average"/>
+                            <field name="rating_count"/>
+                            <field name="last_sync"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <field name="last_error" invisible="not last_error" class="text-danger"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_review_source_list" model="ir.ui.view">
+        <field name="name">review.source.list</field>
+        <field name="model">review.source</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="platform"/>
+                <field name="account_id"/>
+                <field name="rating_average"/>
+                <field name="rating_count"/>
+                <field name="review_count"/>
+                <field name="last_sync"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_review_source" model="ir.actions.act_window">
+        <field name="name">Review Sources</field>
+        <field name="res_model">review.source</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Reviews -->
+    <record id="view_review_review_list" model="ir.ui.view">
+        <field name="name">review.review.list</field>
+        <field name="model">review.review</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" multi_edit="1">
+                <field name="review_date"/>
+                <field name="platform"/>
+                <field name="source_id" optional="show"/>
+                <field name="author_name"/>
+                <field name="rating"/>
+                <field name="title" optional="show"/>
+                <field name="text" optional="show"/>
+                <field name="language" optional="hide"/>
+                <field name="is_published" widget="boolean_toggle"/>
+                <field name="featured" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_review_review_form" model="ir.ui.view">
+        <field name="name">review.review.form</field>
+        <field name="model">review.review</field>
+        <field name="arch" type="xml">
+            <form string="Review">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="author_name"/>
+                            <field name="author_location"/>
+                            <field name="author_photo_url" widget="url"/>
+                            <field name="rating"/>
+                            <field name="review_date"/>
+                            <field name="date_approx"/>
+                            <field name="trip_date"/>
+                            <field name="author_url" widget="url"/>
+                        </group>
+                        <group>
+                            <field name="source_id"/>
+                            <field name="platform"/>
+                            <field name="url" widget="url"/>
+                            <field name="language"/>
+                            <field name="is_published"/>
+                            <field name="featured"/>
+                        </group>
+                    </group>
+                    <field name="title" placeholder="Title"/>
+                    <field name="text" placeholder="Review"/>
+                    <field name="reply_text" placeholder="Our reply"/>
+                    <field name="image_ids" widget="many2many_binary" string="Photos"/>
+                    <notebook>
+                        <page string="Translations" name="translations">
+                            <field name="translation_ids">
+                                <list editable="bottom">
+                                    <field name="lang" width="80px"/>
+                                    <field name="title"/>
+                                    <field name="text"/>
+                                    <field name="reply_text" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_review_review_search" model="ir.ui.view">
+        <field name="name">review.review.search</field>
+        <field name="model">review.review</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="author_name"/>
+                <field name="text"/>
+                <field name="source_id"/>
+                <filter name="published" string="On Website" domain="[('is_published', '=', True)]"/>
+                <filter name="unpublished" string="Hidden" domain="[('is_published', '=', False)]"/>
+                <filter name="five" string="5 stars" domain="[('rating', '=', 5)]"/>
+                <group>
+                    <filter name="by_source" string="Source" context="{'group_by': 'source_id'}"/>
+                    <filter name="by_rating" string="Rating" context="{'group_by': 'rating'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_review_review" model="ir.actions.act_window">
+        <field name="name">Reviews</field>
+        <field name="res_model">review.review</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_reviews" name="Reviews" parent="website.menu_website_configuration" sequence="45"/>
+    <menuitem id="menu_review_review" name="Reviews" parent="menu_reviews" action="action_review_review" sequence="1"/>
+    <menuitem id="menu_review_source" name="Sources" parent="menu_reviews" action="action_review_source" sequence="2"/>
+    <menuitem id="menu_review_account" name="Accounts" parent="menu_reviews" action="action_review_account" sequence="3"
+              groups="base.group_system"/>
+</odoo>

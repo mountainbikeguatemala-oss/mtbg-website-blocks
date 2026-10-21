@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mtbg_tours_content_blocks.ContentBlockOption">
+        <BuilderRow label.translate="Block">
+            <BuilderButton action="'mtbgChooseContentBlock'" preview="false" type="'success'"
+                           className="'o_we_no_toggle o_mtbg_cb_choose text-truncate'" title.translate="Choose the reusable block">
+                <i class="fa fa-search me-1"/>
+                <t t-if="state.name" t-out="state.name"/>
+                <t t-else="">Choose…</t>
+            </BuilderButton>
+        </BuilderRow>
+        <t t-if="state.blockId">
+            <BuilderRow label.translate="Shared">
+                <span class="small" t-if="state.usage == 1">Used on this page only</span>
+                <span class="small" t-else="">Used on <b t-out="state.usage"/> pages</span>
+            </BuilderRow>
+            <BuilderRow label.translate="Edit">
+                <BuilderButton action="'mtbgEditContentBlockInPlace'" preview="false"
+                               className="'o_we_no_toggle'" title.translate="Edit the shared content right here (all pages change)">
+                    <t t-if="state.editing"><i class="fa fa-lock me-1"/>Done</t>
+                    <t t-else=""><i class="fa fa-pencil me-1"/>In place</t>
+                </BuilderButton>
+                <BuilderButton action="'mtbgOpenContentBlock'" preview="false"
+                               className="'o_we_no_toggle'" title.translate="Open the block in the back office (new tab)">
+                    <i class="fa fa-external-link me-1"/>Open
+                </BuilderButton>
+            </BuilderRow>
+            <BuilderRow label.translate="This page">
+                <BuilderButton action="'mtbgDetachContentBlock'" preview="false"
+                               className="'o_we_no_toggle'" title.translate="Replace the block by a copy of its content that only this page has">
+                    <i class="fa fa-unlink me-1"/>Make a local copy
+                </BuilderButton>
+            </BuilderRow>
+            <BuilderRow label.translate="" t-if="state.editing">
+                <span class="small text-warning">Editing the shared block: saving the page changes it on every page that uses it.</span>
+            </BuilderRow>
+        </t>
+    </t>
+
+    <!-- Block picker: search, type filter and a preview card per block -->
+    <t t-name="mtbg_tours_content_blocks.ContentBlockPicker">
+        <Dialog title.translate="Choose a reusable block" size="'xl'" footer="false" contentClass="'o_mtbg_cb_picker'">
+            <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+                <input type="search" class="form-control flex-grow-1 w-auto" placeholder="Search blocks…"
+                       t-model="state.query" t-ref="search" style="min-width: 220px"/>
+                <select class="form-select w-auto" t-model="state.type">
+                    <option value="">All types</option>
+                    <option t-foreach="props.types" t-as="type" t-key="type.key" t-att-value="type.key" t-out="type.label"/>
+                </select>
+                <div class="input-group w-auto">
+                    <input type="text" class="form-control" placeholder="New block name" t-model="state.newName"
+                           t-on-keydown="(ev) => ev.key === 'Enter' and this.create()"/>
+                    <button type="button" class="btn btn-secondary" t-on-click="create" t-att-disabled="state.creating">
+                        <i class="fa fa-plus me-1"/>New block
+                    </button>
+                </div>
+            </div>
+            <p class="text-muted small mb-2"><t t-out="filtered.length"/> block(s)</p>
+            <div class="o_mtbg_cb_grid">
+                <button type="button" t-foreach="filtered" t-as="block" t-key="block.id"
+                        t-attf-class="o_mtbg_cb_card text-start #{block.id === props.currentId ? 'is-current' : ''}"
+                        t-on-click="() => this.choose(block)">
+                    <div class="o_mtbg_cb_card__head">
+                        <span class="o_mtbg_cb_card__name" t-out="block.name"/>
+                        <span class="badge text-bg-light" t-out="block.type_label"/>
+                    </div>
+                    <div class="o_mtbg_cb_card__preview">
+                        <img t-if="block.image" t-att-src="block.image" alt="" loading="lazy"/>
+                        <span t-out="block.excerpt or '(empty)'"/>
+                    </div>
+                    <div class="o_mtbg_cb_card__foot small text-muted">
+                        <t t-if="block.usage">Used on <t t-out="block.usage"/> page(s)</t>
+                        <t t-else="">Not used yet</t>
+                        <span t-if="block.id === props.currentId" class="ms-2 text-success"><i class="fa fa-check"/> current</span>
+                    </div>
+                </button>
+            </div>
+        </Dialog>
+    </t>
+</templates>
