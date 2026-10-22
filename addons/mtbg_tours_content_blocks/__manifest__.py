@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Tours — Reusable Blocks',
-    'version': '19.0.0.3.0',
+    'version': '19.0.0.3.1',
     'category': 'Website',
     'summary': 'Reusable Block and Group building blocks: shared content placed visually; one background behind several blocks',
     'description': """
