@@ -243,8 +243,9 @@ class ReviewReview(models.Model):
                   '|', ('source_id', '=', False), ('source_id.website_id', 'in', [False] + ([website.id] if website else []))]
         if platform in dict(PLATFORMS):
             domain.append(('platform', '=', platform))
-        if source_id:
-            domain.append(('source_id', '=', int(source_id)))
+        source_ids = self._source_ids(source_id)
+        if source_ids:
+            domain.append(('source_id', 'in', source_ids))
         if options.get('with_photos'):
             domain.append(('has_photos', '=', True))
         if options.get('language'):
@@ -254,6 +255,13 @@ class ReviewReview(models.Model):
         elif options.get('scope') == 'page':
             domain += self._slider_page_domain(options.get('page_record'))
         return domain
+
+    @api.model
+    def _source_ids(self, source_id):
+        """A block's sources: one id, or several ("3,5", a preset's sources); [] for every source."""
+        if not source_id or source_id == 'all':
+            return []
+        return [int(part) for part in str(source_id).split(',') if part.strip().isdigit()]
 
     def _slider_page_domain(self, record):
         """Condition for the reviews of the page's record (override); [] when not known."""
@@ -269,8 +277,9 @@ class ReviewReview(models.Model):
             # the visitor's language first (by review), others after
             short = lang.split('_')[0]
             reviews = reviews.sorted(lambda r: (not r.featured, (r.language or '')[:2] != short))
+        source_ids = self._source_ids(source_id)
         sources = self.env['review.source'].sudo().search([('active', '=', True)] + (
-            [('id', '=', int(source_id))] if source_id else []))
+            [('id', 'in', source_ids)] if source_ids else []))
         return {
             'reviews': self._card_values(reviews),
             'summary': self._summary_values(sources, platform),

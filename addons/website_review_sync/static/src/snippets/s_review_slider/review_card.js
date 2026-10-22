@@ -43,6 +43,10 @@ export function ratingBadges(summary) {
 export function reviewCard(r) {
     const card = make("article", "s_review_slider_card");
     const bubble = make("div", "s_review_slider_bubble");
+    // the platform's logo in the bubble's top right corner (shown when a preset asks for it, rv-logo-bubble)
+    const logo = make("i", `fa ${ICONS[r.platform] || "fa-comment"} s_review_slider_bubble_logo`);
+    logo.setAttribute("aria-hidden", "true");
+    bubble.append(logo);
     const stars = make("div", "s_review_slider_rating", "★".repeat(r.rating) + "☆".repeat(5 - r.rating));
     stars.setAttribute("aria-label", _t("%s out of 5 stars", r.rating));
     bubble.append(stars);
@@ -136,16 +140,26 @@ export function toggleOriginal(button) {
 
 const COUNT_MS = 5000; // the count-up's length: long, slowing right down as it reaches the total
 
-/** Ease-out (quint): fast at first, then slower and slower to the end. */
-function easeOut(t) {
-    return 1 - Math.pow(1 - t, 5);
+/** How the count-up's speed changes on the way to the total (a preset's "Count-up speed"), t from 0 to 1. */
+const EASINGS = {
+    linear: (t) => t, // steady
+    smooth: (t) => 1 - Math.pow(1 - t, 3),
+    slow: (t) => 1 - Math.pow(1 - t, 5), // fast at first, slower and slower to the end (the blocks' own)
+    slower: (t) => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t)),
+    log: (t) => Math.log1p(99 * t) / Math.log(100),
+};
+
+/** The count-up options of a block (data-count-ms, data-count-ease; blocks without them: 5 s, slowing down). */
+export function countOptions(el) {
+    const ms = parseInt(el.dataset.countMs);
+    return { ms: Number.isNaN(ms) ? COUNT_MS : ms, ease: el.dataset.countEase || "slow" };
 }
 
 /**
- * The block's five-star total: counts up to the exact number ("416+") when it comes into view, easing out over
- * a few seconds (at once without motion). Returns a cleanup function.
+ * The block's five-star total: counts up to the exact number ("416+") when it comes into view, over ``ms``
+ * milliseconds along the ``ease`` curve (at once with ms 0 or without motion). Returns a cleanup function.
  */
-export function countUp(el, count) {
+export function countUp(el, count, { ms = COUNT_MS, ease = "slow" } = {}) {
     if (!el) {
         return () => {};
     }
@@ -155,7 +169,7 @@ export function countUp(el, count) {
         el.textContent = "";
         return () => {};
     }
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !window.IntersectionObserver) {
+    if (!ms || window.matchMedia("(prefers-reduced-motion: reduce)").matches || !window.IntersectionObserver) {
         show(target);
         return () => {};
     }
@@ -168,8 +182,8 @@ export function countUp(el, count) {
         observer.disconnect();
         const start = performance.now();
         const step = (now) => {
-            const t = Math.min(1, (now - start) / COUNT_MS);
-            show(Math.round(target * easeOut(t)));
+            const t = Math.min(1, (now - start) / ms);
+            show(Math.round(target * (EASINGS[ease] || EASINGS.slow)(t)));
             if (t < 1) {
                 frame = requestAnimationFrame(step);
             }

@@ -228,9 +228,5 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem id="menu_reviews" name="Reviews" parent="website.menu_website_configuration" sequence="45"/>
-    <menuitem id="menu_review_review" name="Reviews" parent="menu_reviews" action="action_review_review" sequence="1"/>
-    <menuitem id="menu_review_source" name="Sources" parent="menu_reviews" action="action_review_source" sequence="2"/>
-    <menuitem id="menu_review_account" name="Accounts" parent="menu_reviews" action="action_review_account" sequence="3"
-              groups="base.group_system"/>
+    <!-- no menus: everything is on the Reviews page (this extension's tile in Tours > Configuration > Extensions) -->
 </odoo>

@@ -10,7 +10,7 @@ import { registry } from "@web/core/registry";
 import { rpc } from "@web/core/network/rpc";
 import { _t } from "@web/core/l10n/translation";
 
-import { countUp, make, openPhotos, pageLang, ratingBadges, reviewCard, toggleMore, toggleOriginal } from "./review_card";
+import { countOptions, countUp, make, openPhotos, pageLang, ratingBadges, reviewCard, toggleMore, toggleOriginal } from "./review_card";
 
 export class ReviewSlider extends Interaction {
     static selector = ".s_review_slider";
@@ -56,7 +56,7 @@ export class ReviewSlider extends Interaction {
 
     render() {
         // the five-star total ("400+"), or (older blocks) a rating badge per source
-        this.registerCleanup(countUp(this.el.querySelector(".s_review_total_number"), this.data.five_star));
+        this.registerCleanup(countUp(this.el.querySelector(".s_review_total_number"), this.data.five_star, countOptions(this.el)));
         this.el.querySelector(".s_review_slider_summary")?.replaceChildren(...ratingBadges(this.data.summary));
         if (!this.data.reviews.length) {
             this.track.replaceChildren(make("p", "text-muted text-center w-100", _t("No reviews to show yet.")));

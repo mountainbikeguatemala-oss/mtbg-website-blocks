@@ -1,100 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Reviews slider: the latest reviews as speech bubbles, the reviewer below each (the slides are loaded from the synced reviews, never saved with the page) -->
+    <!-- The Reviews blocks: each names its preset (data-preset); the block is drawn from the preset on each visit, so
+         its look, reviews, layout and texts are set on the Reviews page (Presets) and change every block using it.
+         The body is filled by review_preset.js and emptied before saving. -->
     <template id="s_review_slider" name="Reviews">
-        <section class="s_review_slider s_review_bubbles pt48 pb48" data-platform="all" data-source-id="all" data-min-rating="4"
-                 data-limit="12" data-sort="recent" data-autoplay="true" data-arrows="true">
-            <div class="container">
-                <!-- the five-star banner: stars, the total counting up ("400+"), its label (editable) -->
-                <div class="s_review_total text-center mb-4">
-                    <div class="s_review_total_stars o_not_editable" aria-hidden="true">★★★★★</div>
-                    <div class="s_review_total_number o_not_editable"/>
-                    <p class="s_review_total_label">Five star reviews</p>
-                </div>
-                <div class="s_review_slider_body o_not_editable position-relative">
-                    <div class="s_review_slider_track" aria-live="polite"/>
-                </div>
-                <!-- ordinary content: edit its text or link (e.g. the page with the Reviews wall) -->
-                <p class="text-center mt-3 mb-0"><a href="/reviews" class="btn btn-outline-primary">See all reviews</a></p>
-            </div>
+        <section class="s_review_preset" data-preset="bubbles">
+            <div class="s_review_preset_body o_not_editable"/>
         </section>
     </template>
 
-    <!-- The same slider, reviews as cards -->
     <template id="s_review_slider_cards" name="Reviews (cards)">
-        <section class="s_review_slider s_review_cards pt48 pb48" data-platform="all" data-source-id="all" data-min-rating="4"
-                 data-limit="12" data-sort="recent" data-autoplay="true" data-arrows="true">
-            <div class="container">
-                <!-- the five-star banner: stars, the total counting up ("400+"), its label (editable) -->
-                <div class="s_review_total text-center mb-4">
-                    <div class="s_review_total_stars o_not_editable" aria-hidden="true">★★★★★</div>
-                    <div class="s_review_total_number o_not_editable"/>
-                    <p class="s_review_total_label">Five star reviews</p>
-                </div>
-                <div class="s_review_slider_body o_not_editable position-relative">
-                    <div class="s_review_slider_track" aria-live="polite"/>
-                </div>
-                <!-- ordinary content: edit its text or link (e.g. the page with the Reviews wall) -->
-                <p class="text-center mt-3 mb-0"><a href="/reviews" class="btn btn-outline-primary">See all reviews</a></p>
-            </div>
+        <section class="s_review_preset" data-preset="cards">
+            <div class="s_review_preset_body o_not_editable"/>
         </section>
     </template>
 
-    <!-- The same slider on a dark background -->
     <template id="s_review_slider_dark" name="Reviews (dark)">
-        <section class="s_review_slider s_review_bubbles s_review_dark pt48 pb48" data-platform="all" data-source-id="all" data-min-rating="4"
-                 data-limit="12" data-sort="recent" data-autoplay="true" data-arrows="true">
-            <div class="container">
-                <!-- the five-star banner: stars, the total counting up ("400+"), its label (editable) -->
-                <div class="s_review_total text-center mb-4">
-                    <div class="s_review_total_stars o_not_editable" aria-hidden="true">★★★★★</div>
-                    <div class="s_review_total_number o_not_editable"/>
-                    <p class="s_review_total_label">Five star reviews</p>
-                </div>
-                <div class="s_review_slider_body o_not_editable position-relative">
-                    <div class="s_review_slider_track" aria-live="polite"/>
-                </div>
-                <!-- ordinary content: edit its text or link (e.g. the page with the Reviews wall) -->
-                <p class="text-center mt-3 mb-0"><a href="/reviews" class="btn btn-outline-primary">See all reviews</a></p>
-            </div>
+        <section class="s_review_preset" data-preset="dark">
+            <div class="s_review_preset_body o_not_editable"/>
         </section>
     </template>
 
-    <!-- The slider in the website's own colours (its theme colour combination: change it with Background), the
-         latest reviews under a heading and a one-line five-star banner -->
     <template id="s_review_slider_site" name="Reviews (site colors)">
-        <section class="s_review_slider s_review_bubbles s_review_site s_review_boxed s_review_rounded o_cc o_cc5 pt64 pb64" data-platform="all"
-                 data-source-id="all" data-min-rating="4" data-limit="12" data-sort="recent" data-autoplay="true" data-arrows="true">
-            <div class="container">
-                <h2 class="text-center mb-2">Check out some of our recent reviews</h2>
-                <div class="s_review_total s_review_total_inline text-center mb-4">
-                    <span class="s_review_total_stars o_not_editable" aria-hidden="true">★★★★★</span>
-                    <span class="s_review_total_number o_not_editable"/>
-                    <span class="s_review_total_label">five star reviews</span>
-                </div>
-                <div class="s_review_slider_body o_not_editable position-relative">
-                    <div class="s_review_slider_track" aria-live="polite"/>
-                </div>
-                <p class="text-center mt-4 mb-0"><a href="/reviews" class="btn btn-primary">See all reviews</a></p>
-            </div>
+        <section class="s_review_preset" data-preset="site">
+            <div class="s_review_preset_body o_not_editable"/>
         </section>
     </template>
 
-    <!-- Reviews wall (the full reviews page): the five-star banner, filters, then every review with endless scroll -->
     <template id="s_review_wall" name="Reviews Wall">
-        <section class="s_review_wall s_review_bubbles pt48 pb48" data-platform="all" data-min-rating="1">
-            <div class="container">
-                <!-- the five-star banner: stars, the total counting up ("400+"), its label (editable) -->
-                <div class="s_review_total text-center mb-4">
-                    <div class="s_review_total_stars o_not_editable" aria-hidden="true">★★★★★</div>
-                    <div class="s_review_total_number o_not_editable"/>
-                    <p class="s_review_total_label">Five star reviews</p>
-                </div>
-                <div class="s_review_wall_filters o_not_editable"/>
-                <div class="s_review_wall_grid o_not_editable" aria-live="polite"/>
-                <div class="s_review_wall_more o_not_editable" aria-hidden="true"/>
-                <p class="s_review_wall_status o_not_editable"/>
-            </div>
+        <section class="s_review_preset" data-preset="wall">
+            <div class="s_review_preset_body o_not_editable"/>
         </section>
     </template>
 

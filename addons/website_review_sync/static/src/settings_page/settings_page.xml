@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="website_review_sync.ReviewSettingsPage">
+        <div class="o_action rv_page h-100 d-flex flex-column">
+            <div t-if="!state.data" class="p-4 text-muted"><i class="fa fa-spinner fa-spin me-1"/>Loading…</div>
+            <t t-else="">
+                <div class="rv_head d-flex flex-wrap align-items-center gap-3 px-4 py-2 border-bottom">
+                    <img src="/website_review_sync/static/description/icon.png" class="rv_icon" alt=""/>
+                    <div class="flex-grow-1">
+                        <h2 class="mb-0">Reviews</h2>
+                        <div class="text-muted small">The Reviews blocks' presets, the reviews, and where they come from.</div>
+                    </div>
+                    <t t-if="state.tab === 'presets'">
+                        <span t-if="isDirty" class="badge text-bg-warning">Unsaved changes</span>
+                        <button class="btn btn-secondary" t-att-disabled="!isDirty or state.saving" t-on-click="discard">Discard</button>
+                        <button class="btn btn-primary" t-att-disabled="!isDirty or state.saving" t-on-click="save">
+                            <i t-if="state.saving" class="fa fa-spinner fa-spin me-1"/>Save
+                        </button>
+                    </t>
+                </div>
+                <ul class="nav nav-tabs px-4 pt-2 rv_tabs">
+                    <li t-foreach="tabs" t-as="tab" t-key="tab.key" class="nav-item">
+                        <a href="#" class="nav-link" t-att-class="{ active: state.tab === tab.key }"
+                           t-on-click.prevent="() => this.setTab(tab.key)">
+                            <i t-attf-class="fa {{tab.icon}} me-1"/><t t-esc="tab.label"/>
+                            <span t-if="tab.count !== undefined" class="badge rounded-pill text-bg-light ms-1" t-esc="tab.count"/>
+                        </a>
+                    </li>
+                </ul>
+
+                <t t-if="state.tab === 'presets'" t-call="website_review_sync.ReviewSettingsPresets"/>
+                <t t-elif="state.tab === 'reviews'" t-call="website_review_sync.ReviewSettingsReviews"/>
+                <t t-elif="state.tab === 'sources'" t-call="website_review_sync.ReviewSettingsSources"/>
+                <t t-else="" t-call="website_review_sync.ReviewSettingsAccounts"/>
+            </t>
+        </div>
+    </t>
+
+    <!-- ================================================================ presets -->
+    <t t-name="website_review_sync.ReviewSettingsPresets">
+        <div class="rv_body flex-grow-1 d-flex">
+            <!-- the chosen preset: picked from a dropdown, then its settings in three steps -->
+            <div t-if="preset" class="rv_settings overflow-auto">
+                <div class="rv_picker px-4 py-2 border-bottom">
+                    <div class="d-flex gap-2 align-items-end">
+                        <div class="flex-grow-1 min-w-0">
+                            <label class="form-label small mb-0" for="rv_preset"
+                                   title="A change here changes every block using this preset. In the website editor, a Reviews block's options choose its preset.">
+                                Preset <i class="fa fa-info-circle text-muted"/></label>
+                            <select id="rv_preset" class="form-select" t-on-change="(ev) => this.selectUid(ev.target.value)">
+                                <t t-foreach="state.presets" t-as="item" t-key="item.uid">
+                                    <option t-att-value="item.uid" t-att-selected="item.uid === state.current"
+                                            t-esc="presetOption(item)"/>
+                                </t>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary" t-on-click="newPreset" title="A new preset, starting as a copy of this one">
+                            <i class="fa fa-plus me-1"/>New</button>
+                        <button t-if="!preset.builtin" type="button" class="btn btn-outline-danger" t-on-click="removePreset"
+                                title="Delete this preset"><i class="fa fa-trash"/></button>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2 align-items-center mt-2">
+                        <input class="form-control form-control-sm rv_name" aria-label="Preset name" title="The preset's name"
+                               t-att-value="preset.name" t-on-input="(ev) => this.set('name', ev.target.value)"/>
+                        <div t-if="!preset.id" class="btn-group btn-group-sm" role="group" aria-label="Kind of block">
+                            <button type="button" t-att-class="'btn ' + (preset.kind === 'slider' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                    t-on-click="() => this.set('kind', 'slider')">Slider</button>
+                            <button type="button" t-att-class="'btn ' + (preset.kind === 'wall' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                    t-on-click="() => this.set('kind', 'wall')">Wall</button>
+                        </div>
+                    </div>
+                    <div class="form-text mb-0">
+                        <t t-if="preset.kind === 'wall'">Wall</t><t t-else="">Slider</t>
+                        <t t-if="preset.key"> · blocks use it as <code t-esc="preset.key"/></t>
+                        · <t t-esc="usageLabel(preset)"/>
+                        <t t-if="preset.builtin"> · built in (cannot be deleted)</t>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div t-if="isTranslating" class="alert alert-info py-1 small">
+                        <i class="fa fa-language me-1"/><t t-esc="translatingNote"/>
+                    </div>
+
+                    <!-- 1. which reviews -->
+                    <section class="rv_section">
+                        <h3 class="rv_step"><span>1</span>Sources</h3>
+                        <div class="text-muted small mb-2">Which reviews the block shows.</div>
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <span class="small">Platform</span>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Platform">
+                                <t t-foreach="platformChoices" t-as="pl" t-key="pl.key">
+                                    <button type="button" t-att-class="'btn ' + (preset.platform === pl.key ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.set('platform', pl.key)" t-esc="pl.label"/>
+                                </t>
+                            </div>
+                        </div>
+                        <div class="small mb-1">Sources <span class="text-muted">(none ticked: every source)</span></div>
+                        <div class="rv_sources mb-2">
+                            <label t-foreach="state.data.sources" t-as="source" t-key="source.id" class="form-check mb-1">
+                                <input type="checkbox" class="form-check-input" t-att-checked="preset.source_ids.includes(source.id)"
+                                       t-on-change="() => this.toggleSource(source.id)"/>
+                                <span class="form-check-label">
+                                    <i t-attf-class="fa {{platformIcon(source.platform)}} me-1"/><t t-esc="source.name"/>
+                                    <span class="text-muted small"> · <t t-esc="source.reviews"/> reviews</span>
+                                </span>
+                            </label>
+                            <div t-if="!state.data.sources.length" class="text-muted small">No source yet (Sources tab).</div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label class="form-label small mb-0" for="rv_min">Minimum rating</label>
+                                <select id="rv_min" class="form-select form-select-sm" t-on-change="(ev) => this.setNumber('min_rating', ev.target.value)">
+                                    <t t-foreach="[5, 4, 3, 2, 1]" t-as="n" t-key="n">
+                                        <option t-att-value="n" t-att-selected="preset.min_rating === n">
+                                            <t t-if="n === 1">All ratings</t><t t-elif="n === 5">5 stars</t><t t-else=""><t t-esc="n"/> stars and up</t>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                            <t t-if="preset.kind === 'slider'">
+                                <div class="col-6">
+                                    <label class="form-label small mb-0" for="rv_sort">Order</label>
+                                    <select id="rv_sort" class="form-select form-select-sm" t-on-change="(ev) => this.set('sort', ev.target.value)">
+                                        <t t-foreach="sorts" t-as="s" t-key="s.key">
+                                            <option t-att-value="s.key" t-att-selected="preset.sort === s.key" t-esc="s.label"/>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small mb-0" for="rv_limit">How many</label>
+                                    <input id="rv_limit" type="number" min="1" max="50" class="form-control form-control-sm"
+                                           t-att-value="preset.limit" t-on-change="(ev) => this.setNumber('limit', ev.target.value)"/>
+                                </div>
+                                <div class="col-6 d-flex flex-column justify-content-end">
+                                    <div class="form-check form-switch mb-0">
+                                        <input id="rv_page" type="checkbox" class="form-check-input" t-att-checked="preset.page_only"
+                                               t-on-change="(ev) => this.set('page_only', ev.target.checked)"/>
+                                        <label class="form-check-label small" for="rv_page" title="Reviews linked to the page's item, e.g. a tour">This page's reviews only</label>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </section>
+
+                    <!-- 2. the look -->
+                    <section class="rv_section">
+                        <h3 class="rv_step"><span>2</span>Design</h3>
+                        <div class="rv_subhead">Bubbles</div>
+                        <div class="btn-group mb-2 w-100" role="group" aria-label="Bubble type">
+                            <t t-foreach="styles" t-as="st" t-key="st.key">
+                                <button type="button" t-att-title="st.help"
+                                        t-att-class="'btn rv_style_btn ' + (preset.style === st.key ? 'btn-secondary' : 'btn-outline-secondary')"
+                                        t-on-click="() => this.set('style', st.key)">
+                                    <span t-attf-class="rv_mini rv_mini_{{st.key}}"><i/><i/><i/></span><t t-esc="st.label"/>
+                                </button>
+                            </t>
+                        </div>
+                        <div t-if="preset.style === 'bubbles'" class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <span class="small">Tail</span>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Tail">
+                                <t t-foreach="tails" t-as="t" t-key="t.key">
+                                    <button type="button" t-att-class="'btn ' + (preset.tail === t.key ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.set('tail', t.key)" t-esc="t.label"/>
+                                </t>
+                            </div>
+                        </div>
+                        <div class="row g-3 align-items-center">
+                            <div class="col-7">
+                                <label class="form-label small mb-0" for="rv_radius">Corners: <t t-esc="preset.radius"/> px</label>
+                                <input id="rv_radius" type="range" class="form-range" min="0" max="60" step="1"
+                                       t-att-value="preset.radius" t-on-input="(ev) => this.setNumber('radius', ev.target.value)"/>
+                            </div>
+                            <div class="col-5">
+                                <div class="form-check form-switch mb-0">
+                                    <input id="rv_shadow" type="checkbox" class="form-check-input" t-att-checked="preset.shadow"
+                                           t-on-change="(ev) => this.set('shadow', ev.target.checked)"/>
+                                    <label class="form-check-label" for="rv_shadow">Shadow</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rv_subhead mt-3">Colours</div>
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Colours">
+                                <t t-foreach="themes" t-as="t" t-key="t.key">
+                                    <button type="button" t-att-class="'btn ' + (preset.theme === t.key ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.set('theme', t.key)" t-esc="t.label"/>
+                                </t>
+                            </div>
+                            <t t-if="preset.theme === 'site'">
+                                <span class="small ms-2">Combination</span>
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Colour combination">
+                                    <t t-foreach="['1', '2', '3', '4', '5']" t-as="cc" t-key="cc">
+                                        <button type="button" t-att-class="'btn ' + (preset.site_cc === cc ? 'btn-secondary' : 'btn-outline-secondary')"
+                                                t-on-click="() => this.set('site_cc', cc)" t-esc="cc"/>
+                                    </t>
+                                </div>
+                            </t>
+                        </div>
+                        <div class="form-text mt-0 mb-2">Your own colours go over these; empty: the colours above.</div>
+                        <div class="rv_colors">
+                            <t t-foreach="colorRows" t-as="row" t-key="row.key"><t t-call="website_review_sync.ReviewSettingsColor"/></t>
+                        </div>
+                        <div class="rv_subhead mt-3">Block</div>
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Width">
+                                <button type="button" t-att-class="'btn ' + (preset.width === 'full' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                        t-on-click="() => this.set('width', 'full')">Full width</button>
+                                <button type="button" t-att-class="'btn ' + (preset.width === 'boxed' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                        t-on-click="() => this.set('width', 'boxed')">Boxed</button>
+                            </div>
+                            <div t-if="preset.width === 'boxed'" class="btn-group btn-group-sm" role="group" aria-label="Block corners">
+                                <t t-foreach="[['square', 'Square'], ['rounded', 'Rounded'], ['rounded_lg', 'Very rounded']]" t-as="c" t-key="c[0]">
+                                    <button type="button" t-att-class="'btn ' + (preset.corners === c[0] ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.set('corners', c[0])" t-esc="c[1]"/>
+                                </t>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <label class="form-label small mb-0" for="rv_spacing">Top / bottom space: <t t-esc="preset.spacing"/> px</label>
+                                <input id="rv_spacing" type="range" class="form-range" min="0" max="200" step="4"
+                                       t-att-value="preset.spacing" t-on-input="(ev) => this.setNumber('spacing', ev.target.value)"/>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small mb-0" for="rv_side">Side space:
+                                    <t t-if="preset.side_padding"><t t-esc="preset.side_padding"/> px</t><t t-else="">default</t></label>
+                                <input id="rv_side" type="range" class="form-range" min="0" max="240" step="4"
+                                       t-att-value="preset.side_padding" t-on-input="(ev) => this.setNumber('side_padding', ev.target.value)"/>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 3. what the block holds, in order -->
+                    <section class="rv_section">
+                        <h3 class="rv_step"><span>3</span>Content and layout</h3>
+                        <div class="text-muted small mb-2">Drag a row by its grip to move it (or focus the grip and use the
+                            arrow keys); the eye shows or hides it. Texts are in the language chosen at the top; an empty
+                            heading or button is not shown.</div>
+                        <div class="rv_subhead">The block, top to bottom</div>
+                        <t t-call="website_review_sync.ReviewSettingsParts"><t t-set="list" t-value="'layout'"/></t>
+                        <div class="rv_subhead mt-3">A review</div>
+                        <t t-call="website_review_sync.ReviewSettingsParts"><t t-set="list" t-value="'card_parts'"/></t>
+                        <div class="form-text" t-esc="reviewerNote"/>
+                    </section>
+                </div>
+            </div>
+
+            <!-- live preview -->
+            <div class="rv_preview d-flex flex-column">
+                <div class="d-flex align-items-center gap-2 px-3 py-2 border-bottom">
+                    <b class="flex-grow-1">Preview</b>
+                    <span t-if="preset and isPresetDirty(preset)" class="small text-muted">unsaved changes shown</span>
+                    <t t-call="website_review_sync.ReviewPreviewTools"/>
+                </div>
+                <div class="rv_stage flex-grow-1" t-ref="stage" t-att-class="{ rv_mobile: state.device === 'mobile' }">
+                    <iframe t-if="preset" t-key="state.frameKey" class="rv_frame" t-ref="frame" t-att-src="previewUrl"
+                            t-att-style="frameStyle" title="Preview" t-on-load="onFrameLoad"/>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- the preview's tools: language (also of the texts edited), currency, light / dark page, device, reload -->
+    <t t-name="website_review_sync.ReviewPreviewTools">
+        <select t-if="state.data.langs.length > 1" class="form-select form-select-sm w-auto" aria-label="Language"
+                title="The preview's language, and the language of the texts you edit" t-on-change="(ev) => this.setLang(ev.target.value)">
+            <t t-foreach="state.data.langs" t-as="lang" t-key="lang.code">
+                <option t-att-value="lang.code" t-att-selected="lang.code === state.lang" t-esc="lang.name"/>
+            </t>
+        </select>
+        <div t-if="state.data.currencies.length > 1" class="btn-group btn-group-sm" role="group" aria-label="Currency">
+            <t t-foreach="state.data.currencies" t-as="cur" t-key="cur.key">
+                <button type="button" t-att-class="'btn ' + (state.currency === cur.key ? 'btn-secondary' : 'btn-outline-secondary')"
+                        t-on-click="() => this.setPreviewLook('currency', cur.key)" t-esc="cur.code"/>
+            </t>
+        </div>
+        <div class="btn-group btn-group-sm" role="group" aria-label="Page look">
+            <button type="button" title="Light page" t-att-class="'btn ' + (!state.dark ? 'btn-secondary' : 'btn-outline-secondary')"
+                    t-on-click="() => this.setPreviewLook('dark', false)"><i class="fa fa-sun-o"/></button>
+            <button type="button" title="Dark page" t-att-class="'btn ' + (state.dark ? 'btn-secondary' : 'btn-outline-secondary')"
+                    t-on-click="() => this.setPreviewLook('dark', true)"><i class="fa fa-moon-o"/></button>
+        </div>
+        <div class="btn-group btn-group-sm" role="group" aria-label="Device">
+            <button type="button" title="Desktop" t-att-class="'btn ' + (state.device === 'desktop' ? 'btn-secondary' : 'btn-outline-secondary')"
+                    t-on-click="() => this.setDevice('desktop')"><i class="fa fa-desktop"/></button>
+            <button type="button" title="Phone" t-att-class="'btn ' + (state.device === 'mobile' ? 'btn-secondary' : 'btn-outline-secondary')"
+                    t-on-click="() => this.setDevice('mobile')"><i class="fa fa-mobile"/></button>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-secondary" title="Reload" t-on-click="reloadPreview">
+            <i class="fa fa-refresh"/></button>
+    </t>
+
+    <!-- a draggable list of parts (list: 'layout' or 'card_parts'); a block part's texts and options under its row -->
+    <t t-name="website_review_sync.ReviewSettingsParts">
+        <div class="rv_parts" t-on-drop.prevent="onDragEnd">
+            <div t-foreach="preset[list]" t-as="part" t-key="part.key" class="rv_part"
+                 t-att-class="{ 'is-hidden': !part.show, 'is-dragging': state.drag and state.drag.list === list and state.drag.key === part.key }"
+                 t-on-dragover="(ev) => this.onDragOver(ev, list, part)">
+                <div class="rv_part_line">
+                    <span class="rv_grip" draggable="true" tabindex="0" role="button" title="Drag to move (or use the arrow keys)"
+                          t-att-aria-label="'Move ' + partLabel(part.key)"
+                          t-on-dragstart="(ev) => this.onDragStart(ev, list, part)" t-on-dragend="onDragEnd"
+                          t-on-keydown="(ev) => this.onGripKey(ev, list, part)"><i class="fa fa-bars"/></span>
+                    <i t-attf-class="fa {{partIcon(part.key)}} fa-fw text-muted"/>
+                    <span class="flex-grow-1" t-esc="partLabel(part.key)"/>
+                    <button type="button" class="btn btn-sm btn-link text-muted" t-att-disabled="isFixed(part.key)"
+                            t-att-title="isFixed(part.key) ? 'Always shown' : (part.show ? 'Hide' : 'Show')"
+                            t-on-click="() => this.togglePart(list, part)">
+                        <i t-attf-class="fa {{part.show ? 'fa-eye' : 'fa-eye-slash'}}"/>
+                    </button>
+                </div>
+                <div t-if="hasEdit(list, part)" class="rv_part_edit">
+                    <t t-if="part.key === 'heading'">
+                        <input class="form-control form-control-sm" aria-label="Heading text" t-att-placeholder="placeholder('heading')"
+                               t-att-value="text('heading')" t-on-input="(ev) => this.setText('heading', ev.target.value)"/>
+                    </t>
+                    <t t-elif="part.key === 'total'">
+                        <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+                            <input class="form-control form-control-sm flex-grow-1 w-auto" aria-label="Label after the number"
+                                   t-att-placeholder="placeholder('total_label')"
+                                   t-att-value="text('total_label')" t-on-input="(ev) => this.setText('total_label', ev.target.value)"/>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Five-star total">
+                                <button type="button" t-att-class="'btn ' + (preset.total_style === 'stacked' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                        title="The number big, the label under it" t-on-click="() => this.set('total_style', 'stacked')">Stacked</button>
+                                <button type="button" t-att-class="'btn ' + (preset.total_style === 'inline' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                        title="Stars (when next to it), number and label on one line" t-on-click="() => this.set('total_style', 'inline')">One line</button>
+                            </div>
+                        </div>
+                        <label class="form-label small mb-0" for="rv_count_ms">Count-up:
+                            <t t-if="preset.count_ms" t-esc="countLabel"/><t t-else="">off (the total at once)</t></label>
+                        <input id="rv_count_ms" type="range" class="form-range" min="0" max="15000" step="250"
+                               t-att-value="preset.count_ms" t-on-input="(ev) => this.setNumber('count_ms', ev.target.value)"/>
+                        <div t-if="preset.count_ms" class="d-flex flex-wrap gap-2 align-items-center">
+                            <span class="small">Speed</span>
+                            <div class="btn-group btn-group-sm flex-wrap" role="group" aria-label="Count-up speed">
+                                <t t-foreach="easings" t-as="e" t-key="e.key">
+                                    <button type="button" t-att-title="e.help"
+                                            t-att-class="'btn ' + (preset.count_ease === e.key ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.set('count_ease', e.key)">
+                                        <svg class="rv_curve" viewBox="0 0 24 16" aria-hidden="true"><path t-att-d="e.path"/></svg>
+                                        <t t-esc="e.label"/>
+                                    </button>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-elif="part.key === 'reviews'">
+                        <div class="d-flex flex-wrap gap-3">
+                            <div class="form-check form-switch mb-0">
+                                <input id="rv_arrows" type="checkbox" class="form-check-input" t-att-checked="preset.arrows"
+                                       t-on-change="(ev) => this.set('arrows', ev.target.checked)"/>
+                                <label class="form-check-label small" for="rv_arrows">Arrows (beside the reviews)</label>
+                            </div>
+                            <div class="form-check form-switch mb-0">
+                                <input id="rv_autoplay" type="checkbox" class="form-check-input" t-att-checked="preset.autoplay"
+                                       t-on-change="(ev) => this.set('autoplay', ev.target.checked)"/>
+                                <label class="form-check-label small" for="rv_autoplay">Autoplay</label>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-elif="part.key === 'reviewer'">
+                        <div class="d-flex flex-wrap gap-2 align-items-center">
+                            <span class="small">Platform logo (Google, Tripadvisor…)</span>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Platform logo">
+                                <t t-foreach="logoChoices" t-as="l" t-key="l.key">
+                                    <button type="button" t-att-class="'btn ' + (preset.logo === l.key ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.set('logo', l.key)" t-esc="l.label"/>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-elif="part.key === 'button'">
+                        <input class="form-control form-control-sm mb-2" aria-label="Button text" t-att-placeholder="placeholder('button_text')"
+                               t-att-value="text('button_text')" t-on-input="(ev) => this.setText('button_text', ev.target.value)"/>
+                        <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Button style">
+                                <button type="button" t-att-class="'btn ' + (preset.button_style === 'primary' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                        t-on-click="() => this.set('button_style', 'primary')">Solid</button>
+                                <button type="button" t-att-class="'btn ' + (preset.button_style === 'outline' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                        t-on-click="() => this.set('button_style', 'outline')">Outline</button>
+                            </div>
+                            <span class="small ms-2">Size</span>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Button size">
+                                <t t-foreach="[['sm', 'Small'], ['md', 'Medium'], ['lg', 'Large']]" t-as="z" t-key="z[0]">
+                                    <button type="button" t-att-class="'btn ' + (preset.button_size === z[0] ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.set('button_size', z[0])" t-esc="z[1]"/>
+                                </t>
+                            </div>
+                        </div>
+                        <input class="form-control form-control-sm mb-2" aria-label="Button link" placeholder="Link, e.g. /reviews"
+                               t-att-value="preset.button_url" t-on-input="(ev) => this.set('button_url', ev.target.value)"/>
+                        <div class="rv_colors">
+                            <t t-foreach="buttonColorRows" t-as="row" t-key="row.key"><t t-call="website_review_sync.ReviewSettingsColor"/></t>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- one colour: picker, name, value, back to the preset's colours -->
+    <t t-name="website_review_sync.ReviewSettingsColor">
+        <div class="rv_color">
+            <input type="color" class="form-control form-control-color" t-att-id="'rv_color_' + row.key"
+                   t-att-class="{ 'is-empty': !preset.colors[row.key] }"
+                   t-att-value="preset.colors[row.key] or '#ffffff'"
+                   t-on-input="(ev) => this.setColor(row.key, ev.target.value)"/>
+            <label class="flex-grow-1 min-w-0" t-att-for="'rv_color_' + row.key">
+                <span class="d-block small fw-bold" t-esc="row.label"/>
+                <span class="d-block rv_tiny text-muted text-truncate">
+                    <t t-if="preset.colors[row.key]" t-esc="preset.colors[row.key]"/>
+                    <t t-else="">Preset colours</t>
+                    <t t-if="row.help"> · <t t-esc="row.help"/></t>
+                </span>
+            </label>
+            <button t-if="preset.colors[row.key]" type="button" class="btn btn-sm btn-link text-muted"
+                    title="Back to the preset's colours" t-on-click="() => this.setColor(row.key, '')">
+                <i class="fa fa-times"/></button>
+        </div>
+    </t>
+
+    <!-- ================================================================ reviews -->
+    <t t-name="website_review_sync.ReviewSettingsReviews">
+        <div class="flex-grow-1 overflow-auto p-4">
+            <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+                <input type="search" class="form-control form-control-sm rv_search" placeholder="Search a reviewer or words…"
+                       t-att-value="state.filters.search" t-on-input="(ev) => this.setFilter('search', ev.target.value)"/>
+                <select class="form-select form-select-sm w-auto" aria-label="Source"
+                        t-on-change="(ev) => this.setFilter('source_id', ev.target.value)">
+                    <option value="">Every source</option>
+                    <t t-foreach="state.data.sources" t-as="source" t-key="source.id">
+                        <option t-att-value="source.id" t-att-selected="isFilter('source_id', source.id)" t-esc="source.name"/>
+                    </t>
+                </select>
+                <select class="form-select form-select-sm w-auto" aria-label="Rating" t-on-change="(ev) => this.setFilter('rating', ev.target.value)">
+                    <option value="">Every rating</option>
+                    <t t-foreach="[5, 4, 3, 2, 1]" t-as="n" t-key="n">
+                        <option t-att-value="n" t-att-selected="isFilter('rating', n)"><t t-esc="n"/> ★</option>
+                    </t>
+                </select>
+                <select class="form-select form-select-sm w-auto" aria-label="Status" t-on-change="(ev) => this.setFilter('status', ev.target.value)">
+                    <option value="">All</option>
+                    <option value="published" t-att-selected="state.filters.status === 'published'">On the website</option>
+                    <option value="hidden" t-att-selected="state.filters.status === 'hidden'">Hidden</option>
+                    <option value="featured" t-att-selected="state.filters.status === 'featured'">Featured</option>
+                    <option value="photos" t-att-selected="state.filters.status === 'photos'">With photos</option>
+                </select>
+                <div class="flex-grow-1"/>
+                <button type="button" class="btn btn-sm btn-outline-primary" t-on-click="() => this.openRecord('review.review')">
+                    <i class="fa fa-plus me-1"/>Add a review</button>
+            </div>
+            <div t-if="!state.reviews" class="text-muted"><i class="fa fa-spinner fa-spin me-1"/>Loading…</div>
+            <t t-else="">
+                <table class="table table-sm align-middle rv_table">
+                    <thead>
+                        <tr><th>Date</th><th>Source</th><th>Reviewer</th><th>Rating</th><th>Review</th>
+                            <th class="text-center">On website</th><th class="text-center">Featured</th><th/></tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="state.reviews.rows" t-as="row" t-key="row.id" t-att-class="{ 'text-muted': !row.published }">
+                            <td class="text-nowrap small" t-esc="row.date"/>
+                            <td class="text-nowrap small"><i t-attf-class="fa {{platformIcon(row.platform)}} me-1"/><t t-esc="row.source"/></td>
+                            <td class="text-nowrap" t-esc="row.author"/>
+                            <td class="text-nowrap rv_stars" t-esc="stars(row.rating)"/>
+                            <td class="rv_text">
+                                <b t-if="row.title" class="d-block" t-esc="row.title"/>
+                                <span t-esc="row.text"/>
+                                <span t-if="row.photos" class="badge text-bg-light ms-1"><i class="fa fa-picture-o me-1"/><t t-esc="row.photos"/></span>
+                                <span t-if="row.language" class="badge text-bg-light ms-1" t-esc="row.language"/>
+                            </td>
+                            <td class="text-center">
+                                <div class="form-check form-switch d-inline-block mb-0">
+                                    <input type="checkbox" class="form-check-input" t-att-checked="row.published" aria-label="On website"
+                                           t-on-change="(ev) => this.setReview(row, 'is_published', ev.target.checked)"/>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="form-check form-switch d-inline-block mb-0">
+                                    <input type="checkbox" class="form-check-input" t-att-checked="row.featured" aria-label="Featured"
+                                           t-on-change="(ev) => this.setReview(row, 'featured', ev.target.checked)"/>
+                                </div>
+                            </td>
+                            <td class="text-end text-nowrap">
+                                <a t-if="row.url" t-att-href="row.url" target="_blank" class="btn btn-sm btn-link" title="On its platform">
+                                    <i class="fa fa-external-link"/></a>
+                                <button type="button" class="btn btn-sm btn-link" title="Open (text, photos, translations, tours)"
+                                        t-on-click="() => this.openRecord('review.review', row.id)"><i class="fa fa-pencil"/></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div t-if="!state.reviews.rows.length" class="text-muted">No review matches.</div>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="small text-muted">
+                        <t t-esc="reviewRange"/>
+                    </span>
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-outline-secondary" t-att-disabled="!state.reviews.offset"
+                                t-on-click="() => this.page(-1)" aria-label="Previous"><i class="fa fa-chevron-left"/></button>
+                        <button type="button" class="btn btn-outline-secondary"
+                                t-att-disabled="state.reviews.offset + state.reviews.page_size >= state.reviews.total"
+                                t-on-click="() => this.page(1)" aria-label="Next"><i class="fa fa-chevron-right"/></button>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+
+    <!-- ================================================================ sources -->
+    <t t-name="website_review_sync.ReviewSettingsSources">
+        <div class="flex-grow-1 overflow-auto p-4">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <div class="text-muted small flex-grow-1">A Google Business Profile location or a Tripadvisor listing (synced
+                    every day), or a source of reviews entered by hand.</div>
+                <button type="button" class="btn btn-sm btn-outline-secondary" t-att-disabled="state.busy" t-on-click="() => this.sync()">
+                    <i t-attf-class="fa {{state.busy ? 'fa-spinner fa-spin' : 'fa-refresh'}} me-1"/>Sync all</button>
+                <button type="button" class="btn btn-sm btn-outline-primary" t-on-click="() => this.openRecord('review.source')">
+                    <i class="fa fa-plus me-1"/>Add a source</button>
+            </div>
+            <table class="table align-middle">
+                <thead><tr><th>Source</th><th>Rating</th><th>Reviews here</th><th>Last sync</th><th/></tr></thead>
+                <tbody>
+                    <t t-foreach="state.data.sources" t-as="source" t-key="source.id">
+                        <tr t-att-class="{ 'text-muted': !source.active }">
+                            <td>
+                                <i t-attf-class="fa {{platformIcon(source.platform)}} fa-fw me-1"/><b t-esc="source.name"/>
+                                <span t-if="!source.active" class="badge text-bg-secondary ms-1">Archived</span>
+                                <div class="small text-muted">
+                                    <t t-if="source.account">Synced with <t t-esc="source.account"/></t><t t-else="">Entered by hand / imported</t>
+                                    <a t-if="source.url" t-att-href="source.url" target="_blank" class="ms-2">Profile <i class="fa fa-external-link"/></a>
+                                </div>
+                            </td>
+                            <td class="text-nowrap"><t t-if="source.count"><b t-esc="source.average.toFixed(1)"/> <span class="rv_stars">★</span>
+                                <span class="small text-muted">(<t t-esc="source.count"/>)</span></t></td>
+                            <td t-esc="source.reviews"/>
+                            <td class="small text-nowrap"><t t-if="source.synced" t-esc="when(source.last_sync)"/></td>
+                            <td class="text-end text-nowrap">
+                                <button t-if="source.synced" type="button" class="btn btn-sm btn-outline-secondary" t-att-disabled="state.busy"
+                                        t-on-click="() => this.sync(source)"><i class="fa fa-refresh me-1"/>Sync now</button>
+                                <button type="button" class="btn btn-sm btn-link" title="Open" t-on-click="() => this.openRecord('review.source', source.id)">
+                                    <i class="fa fa-pencil"/></button>
+                            </td>
+                        </tr>
+                        <tr t-if="source.last_error"><td colspan="5" class="small text-danger border-top-0 pt-0">
+                            <i class="fa fa-exclamation-triangle me-1"/><t t-esc="source.last_error"/></td></tr>
+                    </t>
+                </tbody>
+            </table>
+            <div t-if="!state.data.sources.length" class="text-muted">No source yet.</div>
+        </div>
+    </t>
+
+    <!-- ================================================================ accounts (administrators) -->
+    <t t-name="website_review_sync.ReviewSettingsAccounts">
+        <div class="flex-grow-1 overflow-auto p-4">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <div class="text-muted small flex-grow-1">The sign-ins reviews are synced with: a Google account (the
+                    business owner's) or a Tripadvisor Content API key. Open one to connect it or find its locations.</div>
+                <button type="button" class="btn btn-sm btn-outline-primary" t-on-click="() => this.openRecord('review.account')">
+                    <i class="fa fa-plus me-1"/>Add an account</button>
+            </div>
+            <table class="table align-middle">
+                <thead><tr><th>Account</th><th>Status</th><th>Locations</th><th/></tr></thead>
+                <tbody>
+                    <tr t-foreach="state.data.accounts" t-as="account" t-key="account.id" t-att-class="{ 'text-muted': !account.active }">
+                        <td><i t-attf-class="fa {{platformIcon(account.platform)}} fa-fw me-1"/><b t-esc="account.name"/>
+                            <div t-if="account.note" class="small text-muted" t-esc="account.note"/></td>
+                        <td><span t-if="account.connected" class="badge text-bg-success">Connected</span>
+                            <span t-else="" class="badge text-bg-warning">Not connected</span></td>
+                        <td t-esc="account.locations"/>
+                        <td class="text-end"><button type="button" class="btn btn-sm btn-link" title="Open"
+                                t-on-click="() => this.openRecord('review.account', account.id)"><i class="fa fa-pencil"/></button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div t-if="!state.data.accounts.length" class="text-muted">No account yet.</div>
+        </div>
+    </t>
+</templates>
