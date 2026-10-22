@@ -33,6 +33,9 @@ def block_ids_in(html):
 class MtbgContentBlock(models.Model):
     _inherit = 'mtbg.tours.content.block'
 
+    tag_ids = fields.Many2many('mtbg.tours.content.block.tag', 'mtbg_content_block_tag_rel', 'block_id', 'tag_id',
+                               string='Tags')
+    note = fields.Text(string='Internal Note', help="For the team (Reusable Blocks page); never shown on the website")
     website_view_count = fields.Integer(compute='_compute_website_usage', string='Website Pages',
                                         help="Website pages (outside tour descriptions) showing this block")
     usage_total = fields.Integer(compute='_compute_website_usage', string='Used On')
@@ -100,7 +103,7 @@ class MtbgContentBlock(models.Model):
     # ------------------------------------------------------------------ website editor
     @api.model
     def mtbg_picker_data(self):
-        """Blocks offered in the editor's block picker, with a short text preview."""
+        """Blocks offered in the editor's block picker, with a short text preview and their tags."""
         types = dict(self._fields['block_type']._description_selection(self.env))
         result = []
         for block in self.search([], order='block_type, name'):
@@ -108,8 +111,11 @@ class MtbgContentBlock(models.Model):
             image = re.search(r'<img\b[^>]*\bsrc="([^"]+)"', str(block.body or ''))
             result.append({'id': block.id, 'name': block.name, 'type': block.block_type,
                            'type_label': types.get(block.block_type, ''), 'usage': block.usage_total,
+                           'tag_ids': block.tag_ids.ids,
                            'excerpt': text[:220], 'image': image.group(1) if image else ''})
-        return {'blocks': result, 'types': [{'key': k, 'label': v} for k, v in types.items()]}
+        tags = self.env['mtbg.tours.content.block.tag'].search([])
+        return {'blocks': result, 'types': [{'key': k, 'label': v} for k, v in types.items()],
+                'tags': [{'id': t.id, 'name': t.name, 'color': t.color} for t in tags]}
 
     @api.model
     def mtbg_editor_block(self, block_id):

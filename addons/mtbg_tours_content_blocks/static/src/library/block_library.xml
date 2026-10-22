@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mtbg_tours_content_blocks.BlockLibrary">
+        <div class="o_action mtbg_bl h-100 d-flex flex-column">
+            <div t-if="!state.data" class="p-4 text-muted"><i class="fa fa-spinner fa-spin me-1"/>Loading…</div>
+            <t t-else="">
+                <div class="mtbg_bl_head d-flex flex-wrap align-items-center gap-3 px-4 py-2 border-bottom">
+                    <img src="/mtbg_tours_content_blocks/static/description/icon.png" class="mtbg_bl_icon" alt=""/>
+                    <div class="flex-grow-1">
+                        <h2 class="mb-0">Reusable Blocks</h2>
+                        <div class="text-muted small">Shared content placed on tour and website pages with the
+                            Reusable Block building block: organise it, see where it is used, edit it.</div>
+                    </div>
+                    <button class="btn btn-outline-secondary" t-on-click="openList"><i class="fa fa-list me-1"/>List view</button>
+                    <t t-if="state.data.can_edit">
+                        <div t-if="state.adding" class="input-group w-auto">
+                            <input t-ref="newName" class="form-control" placeholder="Name of the new block" t-on-keydown="onNewKey"
+                                   aria-label="Name of the new block"/>
+                            <button class="btn btn-primary" t-on-click="newBlock">Create</button>
+                        </div>
+                        <button t-else="" class="btn btn-primary" t-on-click="newBlock"><i class="fa fa-plus me-1"/>New block</button>
+                    </t>
+                </div>
+
+                <div class="mtbg_bl_body flex-grow-1 d-flex">
+                    <!-- filters: views, types, tags (drop blocks on a tag to tag them) -->
+                    <nav class="mtbg_bl_side overflow-auto border-end p-2" aria-label="Filters">
+                        <t t-foreach="views" t-as="view" t-key="view.key">
+                            <button type="button" class="mtbg_bl_filter" t-att-class="{'active': state.view === view.key}"
+                                    t-on-click="() => this.setView(view.key)">
+                                <i t-attf-class="fa {{view.icon}} fa-fw me-1"/><span class="flex-grow-1" t-esc="view.label"/>
+                                <span class="mtbg_bl_count" t-esc="view.count"/>
+                            </button>
+                        </t>
+
+                        <div class="mtbg_bl_side_title">Type</div>
+                        <t t-foreach="state.data.types" t-as="type" t-key="type.key">
+                            <button t-if="typeCount(type.key)" type="button" class="mtbg_bl_filter"
+                                    t-att-class="{'active': state.type === type.key}" t-on-click="() => this.setType(type.key)">
+                                <span class="flex-grow-1" t-esc="type.label"/>
+                                <span class="mtbg_bl_count" t-esc="typeCount(type.key)"/>
+                            </button>
+                        </t>
+
+                        <div class="mtbg_bl_side_title d-flex align-items-center">
+                            <span class="flex-grow-1">Tags</span>
+                            <button t-if="state.data.can_edit" type="button" class="btn btn-link btn-sm p-0" title="New tag"
+                                    t-on-click="() => { state.creatingTag = true; }"><i class="fa fa-plus"/></button>
+                        </div>
+                        <div t-if="state.creatingTag" class="px-1 mb-1">
+                            <input t-ref="newTag" class="form-control form-control-sm" placeholder="Tag name, then Enter" aria-label="New tag"
+                                   t-on-keydown="(ev) => this.onTagKey(ev, 0)" t-on-blur="() => { state.creatingTag = false; }"/>
+                        </div>
+                        <t t-foreach="state.data.tags" t-as="tag" t-key="tag.id">
+                            <div t-if="state.editingTag === tag.id" class="mtbg_bl_tag_edit px-1 mb-1 d-flex gap-1">
+                                <input t-ref="tagInput" class="form-control form-control-sm" t-att-value="tag.name" aria-label="Tag name"
+                                       t-on-keydown="(ev) => this.onTagKey(ev, tag.id)"/>
+                                <button type="button" class="btn btn-sm btn-light" title="Change colour"
+                                        t-on-click="() => this.cycleColor(tag)"><span t-attf-class="mtbg_bl_dot o_tag o_tag_color_{{tag.color}}"/></button>
+                                <button type="button" class="btn btn-sm btn-light text-danger" title="Remove tag"
+                                        t-on-click="() => this.deleteTag(tag)"><i class="fa fa-trash"/></button>
+                            </div>
+                            <button t-else="" type="button" class="mtbg_bl_filter mtbg_bl_tagfilter"
+                                    t-att-class="{'active': state.tag === tag.id, 'is-drop': state.dropTag === tag.id}"
+                                    t-on-click="() => this.setTag(tag.id)"
+                                    t-on-dragover="(ev) => this.onTagDragOver(ev, tag.id)"
+                                    t-on-dragleave="() => { state.dropTag = 0; }"
+                                    t-on-drop.prevent="() => this.onTagDrop(tag.id)">
+                                <span t-attf-class="mtbg_bl_dot o_tag o_tag_color_{{tag.color}} me-2"/>
+                                <span class="flex-grow-1 text-truncate" t-esc="tag.name"/>
+                                <span class="mtbg_bl_count" t-esc="tagCount(tag.id)"/>
+                                <i t-if="state.data.can_edit" class="fa fa-pencil mtbg_bl_tag_pen ms-1" title="Rename, colour or remove"
+                                   t-on-click.stop="() => { state.editingTag = tag.id; }"/>
+                            </button>
+                        </t>
+                        <div t-if="!state.data.tags.length" class="text-muted small px-2">No tags yet. Create one with +,
+                            then drag blocks onto it.</div>
+                        <div t-elif="state.data.can_edit" class="text-muted small px-2 mt-1">Drag blocks onto a tag to tag them.</div>
+                    </nav>
+
+                    <!-- the list -->
+                    <section class="mtbg_bl_list d-flex flex-column border-end" aria-label="Blocks">
+                        <div class="p-2 border-bottom d-flex gap-2">
+                            <input type="search" class="form-control form-control-sm" placeholder="Search name, text, tag…"
+                                   aria-label="Search" t-on-input="(ev) => { state.query = ev.target.value; }"/>
+                            <select class="form-select form-select-sm w-auto" aria-label="Sort"
+                                    t-on-change="(ev) => { state.sort = ev.target.value; }">
+                                <option value="name">A–Z</option>
+                                <option value="recent">Last edited</option>
+                                <option value="usage">Most used</option>
+                            </select>
+                        </div>
+                        <!-- several blocks at once -->
+                        <div class="mtbg_bl_bulk px-2 py-1 border-bottom d-flex flex-wrap align-items-center gap-1 small">
+                            <input type="checkbox" class="form-check-input m-0 me-1" t-att-checked="allVisibleSelected"
+                                   aria-label="Select all" t-on-change="toggleAll"/>
+                            <t t-if="state.selected.length and state.data.can_edit">
+                                <b class="me-1"><t t-esc="state.selected.length"/> selected</b>
+                                <Dropdown t-if="state.data.tags.length">
+                                    <button class="btn btn-sm btn-light dropdown-toggle">Tag</button>
+                                    <t t-set-slot="content">
+                                        <t t-foreach="state.data.tags" t-as="tag" t-key="tag.id">
+                                            <DropdownItem onSelected="() => this.bulk('add_tag', tag.id)">
+                                                <span t-attf-class="mtbg_bl_dot o_tag o_tag_color_{{tag.color}} me-2"/>Add <t t-esc="tag.name"/></DropdownItem>
+                                        </t>
+                                        <div class="dropdown-divider"/>
+                                        <t t-foreach="state.data.tags" t-as="tag" t-key="tag.id">
+                                            <DropdownItem onSelected="() => this.bulk('remove_tag', tag.id)" class="'text-muted'">Remove <t t-esc="tag.name"/></DropdownItem>
+                                        </t>
+                                    </t>
+                                </Dropdown>
+                                <Dropdown>
+                                    <button class="btn btn-sm btn-light dropdown-toggle">Type</button>
+                                    <t t-set-slot="content">
+                                        <t t-foreach="state.data.types" t-as="type" t-key="type.key">
+                                            <DropdownItem onSelected="() => this.bulk('set_type', type.key)"><t t-esc="type.label"/></DropdownItem>
+                                        </t>
+                                    </t>
+                                </Dropdown>
+                                <button class="btn btn-sm btn-light" t-on-click="() => this.bulk('duplicate')">Duplicate</button>
+                                <button t-if="state.view !== 'archived'" class="btn btn-sm btn-light" t-on-click="() => this.bulk('archive')">Archive</button>
+                                <t t-else="">
+                                    <button class="btn btn-sm btn-light" t-on-click="() => this.bulk('restore')">Restore</button>
+                                    <button t-if="state.data.can_delete" class="btn btn-sm btn-light text-danger" t-on-click="() => this.confirmDelete()">Delete</button>
+                                </t>
+                            </t>
+                            <span t-else="" class="text-muted"><t t-esc="visible.length"/> block(s)</span>
+                        </div>
+                        <div class="flex-grow-1 overflow-auto">
+                            <t t-foreach="visible" t-as="block" t-key="block.id">
+                                <div class="mtbg_bl_item" draggable="true" tabindex="0"
+                                     t-att-class="{'active': block.id === state.currentId, 'is-dragging': state.dragging === block.id}"
+                                     t-on-click="() => this.open(block.id)" t-on-keydown="(ev) => ev.key === 'Enter' and this.open(block.id)"
+                                     t-on-dragstart="(ev) => this.onDragStart(ev, block.id)" t-on-dragend="onDragEnd">
+                                    <input type="checkbox" class="form-check-input mt-1" t-att-checked="isSelected(block.id)"
+                                           t-att-aria-label="'Select ' + block.name"
+                                           t-on-click.stop="() => {}" t-on-change="() => this.toggleSelected(block.id)"/>
+                                    <div class="mtbg_bl_thumb" t-attf-style="{{block.image ? 'background-image:url(&quot;' + block.image + '&quot;)' : ''}}">
+                                        <i t-if="!block.image" class="fa fa-align-left"/>
+                                    </div>
+                                    <div class="flex-grow-1 min-w-0">
+                                        <div class="d-flex align-items-center gap-1">
+                                            <b class="text-truncate" t-esc="block.name"/>
+                                            <i t-if="block.duplicate" class="fa fa-files-o text-warning" title="Possible duplicate (same name or content)"/>
+                                            <i t-if="block.empty" class="fa fa-square-o text-muted" title="Empty: no text or image"/>
+                                            <i t-if="block.note" class="fa fa-sticky-note-o text-muted" title="Has an internal note"/>
+                                            <i t-if="block.builtin" class="fa fa-puzzle-piece text-muted" title="Built into an extension: never deleted"/>
+                                        </div>
+                                        <div class="text-muted small text-truncate" t-esc="block.excerpt or '—'"/>
+                                        <div class="d-flex flex-wrap align-items-center gap-1 mt-1">
+                                            <span class="badge text-bg-light" t-esc="typeLabel(block.type)"/>
+                                            <t t-foreach="block.tag_ids" t-as="tagId" t-key="tagId">
+                                                <span t-if="tagById(tagId)" t-attf-class="o_tag badge rounded-pill o_tag_color_{{tagById(tagId).color}}" t-esc="tagById(tagId).name"/>
+                                            </t>
+                                            <span class="ms-auto small" t-att-class="block.usage ? 'text-muted' : 'text-warning'"
+                                                  t-att-title="block.usage ? 'Places it is used' : 'Not used anywhere'">
+                                                <i class="fa fa-link me-1"/><t t-esc="block.usage"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                            <div t-if="!visible.length" class="p-4 text-center text-muted">No block here.</div>
+                        </div>
+                    </section>
+
+                    <!-- the selected block -->
+                    <section class="mtbg_bl_detail flex-grow-1 d-flex flex-column" aria-label="Block">
+                        <div t-if="!state.current" class="p-5 text-center text-muted">Choose a block on the left.</div>
+                        <t t-else="">
+                            <t t-set="cur" t-value="state.current"/>
+                            <div class="mtbg_bl_fields p-3 border-bottom">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <input class="form-control form-control-lg fw-bold mtbg_bl_name" t-att-value="cur.name"
+                                           aria-label="Name" t-att-readonly="!state.data.can_edit"
+                                           t-on-change="(ev) => this.save({ name: ev.target.value })"/>
+                                    <span t-if="cur.builtin" class="badge text-bg-info flex-shrink-0" title="An extension creates and uses this block: edit it freely, it is never deleted">Built-in</span>
+                                    <span t-if="!cur.active" class="badge text-bg-secondary flex-shrink-0">Archived</span>
+                                </div>
+                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                    <button t-if="state.data.can_edit" class="btn btn-primary" t-on-click="editInBuilder">
+                                        <i class="fa fa-paint-brush me-1"/>Edit in Website Builder</button>
+                                    <button class="btn btn-outline-secondary" t-on-click="openForm"><i class="fa fa-code me-1"/>Form / HTML</button>
+                                    <t t-if="state.data.can_edit">
+                                        <button class="btn btn-outline-secondary" t-on-click="() => this.bulk('duplicate', null, [cur.id])"><i class="fa fa-copy me-1"/>Duplicate</button>
+                                        <button t-if="cur.active" class="btn btn-outline-secondary" t-on-click="() => this.bulk('archive', null, [cur.id])"><i class="fa fa-archive me-1"/>Archive</button>
+                                        <button t-else="" class="btn btn-outline-secondary" t-on-click="() => this.bulk('restore', null, [cur.id])"><i class="fa fa-undo me-1"/>Restore</button>
+                                        <button t-if="state.data.can_delete and !cur.used_on.length" class="btn btn-outline-danger"
+                                                t-on-click="() => this.confirmDelete([cur.id])"><i class="fa fa-trash me-1"/>Delete</button>
+                                    </t>
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-md-4">
+                                        <label class="form-label small mb-0" for="mtbg_bl_type">Type</label>
+                                        <select id="mtbg_bl_type" class="form-select form-select-sm" t-att-disabled="!state.data.can_edit"
+                                                t-on-change="(ev) => this.save({ block_type: ev.target.value })">
+                                            <t t-foreach="state.data.types" t-as="type" t-key="type.key">
+                                                <option t-att-value="type.key" t-att-selected="type.key === cur.type" t-esc="type.label"/>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="form-label small mb-0 d-block">Tags</span>
+                                        <div class="d-flex flex-wrap align-items-center gap-1">
+                                            <t t-foreach="cur.tag_ids" t-as="tagId" t-key="tagId">
+                                                <span t-if="tagById(tagId)" t-attf-class="o_tag badge rounded-pill o_tag_color_{{tagById(tagId).color}}">
+                                                    <t t-esc="tagById(tagId).name"/>
+                                                    <i t-if="state.data.can_edit" class="fa fa-times ms-1 mtbg_bl_untag" role="button"
+                                                       title="Remove" t-on-click="() => this.toggleCurrentTag(tagId)"/>
+                                                </span>
+                                            </t>
+                                            <Dropdown t-if="state.data.can_edit and availableTags.length">
+                                                <button class="btn btn-sm btn-light py-0"><i class="fa fa-plus me-1"/>Tag</button>
+                                                <t t-set-slot="content">
+                                                    <t t-foreach="availableTags" t-as="tag" t-key="tag.id">
+                                                        <DropdownItem onSelected="() => this.toggleCurrentTag(tag.id)">
+                                                            <span t-attf-class="mtbg_bl_dot o_tag o_tag_color_{{tag.color}} me-2"/><t t-esc="tag.name"/></DropdownItem>
+                                                    </t>
+                                                </t>
+                                            </Dropdown>
+                                            <span t-if="!cur.tag_ids.length and !state.data.tags.length" class="text-muted small">Create tags in the left column.</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label small mb-0" for="mtbg_bl_note">Internal note</label>
+                                        <textarea id="mtbg_bl_note" class="form-control form-control-sm" rows="2" t-att-readonly="!state.data.can_edit"
+                                                  placeholder="For the team: what it is for, where it should go… Never shown on the website."
+                                                  t-on-change="(ev) => this.save({ note: ev.target.value })" t-esc="cur.note"/>
+                                    </div>
+                                </div>
+                                <details class="mt-2" t-att-open="cur.used_on.length and cur.used_on.length &lt;= 6">
+                                    <summary class="small">
+                                        <t t-if="cur.used_on.length">Used on <b t-esc="cur.used_on.length"/> place(s): edits show on all of them</t>
+                                        <t t-else=""><span class="text-warning">Not used anywhere yet</span></t>
+                                        <span class="text-muted"> · edited <t t-esc="formatDate(cur.write_date)"/> by <t t-esc="cur.write_uid"/></span>
+                                    </summary>
+                                    <ul class="list-unstyled small mb-0 mt-1 mtbg_bl_usage">
+                                        <li t-foreach="cur.used_on" t-as="use" t-key="use_index">
+                                            <i t-attf-class="fa {{usageIcon(use.kind)}} fa-fw me-1 text-muted"/>
+                                            <a t-if="use.url" t-att-href="use.url" target="_blank" t-esc="use.name"/>
+                                            <a t-elif="use.kind === 'block'" href="#" t-on-click.prevent="() => this.open(use.id)">Inside the block <t t-esc="use.name"/></a>
+                                            <span t-else="" t-esc="use.name"/>
+                                        </li>
+                                    </ul>
+                                </details>
+                            </div>
+                            <!-- live preview -->
+                            <div class="mtbg_bl_preview flex-grow-1 d-flex flex-column">
+                                <div class="px-3 py-1 border-bottom d-flex align-items-center gap-2">
+                                    <strong class="me-auto small"><i class="fa fa-eye me-1"/>Preview</strong>
+                                    <div class="btn-group btn-group-sm" role="group" aria-label="Page">
+                                        <button type="button" class="btn" title="Light tour page"
+                                                t-att-class="state.theme === 'light' ? 'btn-secondary' : 'btn-outline-secondary'"
+                                                t-on-click="() => this.setTheme('light')"><i class="fa fa-sun-o"/></button>
+                                        <button type="button" class="btn" title="Dark tour page"
+                                                t-att-class="state.theme === 'dark' ? 'btn-secondary' : 'btn-outline-secondary'"
+                                                t-on-click="() => this.setTheme('dark')"><i class="fa fa-moon-o"/></button>
+                                    </div>
+                                    <div class="btn-group btn-group-sm" role="group" aria-label="Device">
+                                        <button type="button" class="btn" title="Desktop"
+                                                t-att-class="state.device === 'desktop' ? 'btn-secondary' : 'btn-outline-secondary'"
+                                                t-on-click="() => { state.device = 'desktop'; }"><i class="fa fa-desktop"/></button>
+                                        <button type="button" class="btn" title="Phone"
+                                                t-att-class="state.device === 'mobile' ? 'btn-secondary' : 'btn-outline-secondary'"
+                                                t-on-click="() => { state.device = 'mobile'; }"><i class="fa fa-mobile"/></button>
+                                    </div>
+                                    <button class="btn btn-sm btn-light" title="Reload" t-on-click="reloadPreview"><i class="fa fa-refresh"/></button>
+                                </div>
+                                <div t-attf-class="mtbg_bl_stage flex-grow-1 mtbg_bl_{{state.device}}">
+                                    <iframe t-att-key="state.frameKey" t-att-src="previewUrl" class="mtbg_bl_frame" title="Block preview"/>
+                                </div>
+                            </div>
+                        </t>
+                    </section>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

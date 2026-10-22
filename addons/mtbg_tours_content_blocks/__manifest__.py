@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Tours — Reusable Blocks',
-    'version': '19.0.0.3.1',
+    'version': '19.0.0.4.0',
     'category': 'Website',
     'summary': 'Reusable Block and Group building blocks: shared content placed visually; one background behind several blocks',
     'description': """
@@ -12,6 +12,9 @@ Shared content (What to Bring, How to Book, policies...) placed visually in the 
   an edit shows on every page that uses it (and stays indexable, without JavaScript)
 * Edit in place: unlock the shared content right on the page, saving writes the block itself
 * Open in the back office, create a new block from the picker, or make a local copy for one page
+* Reusable Blocks page (the extension's tile, Catalog › Reusable Blocks): every block with where it is used,
+  organised by type and tags (drag blocks onto a tag, act on several at once), a live preview, and the full
+  website builder for the content
 * Existing tour block placements become reusable blocks at the end of the description on install
 """,
     'author': 'MTBG Tours contributors',
@@ -22,11 +25,15 @@ Shared content (What to Bring, How to Book, policies...) placed visually in the 
         'views/snippets.xml',
         'views/backend_views.xml',
         'views/block_page_templates.xml',
+        'views/block_library.xml',
     ],
     'assets': {
         'web.assets_frontend': [
             'mtbg_tours_content_blocks/static/src/snippets/s_mtbg_content_block/content_block.scss',
             'mtbg_tours_content_blocks/static/src/snippets/s_mtbg_group/group.scss',
+        ],
+        'web.assets_backend': [
+            'mtbg_tours_content_blocks/static/src/library/*',
         ],
         'website.assets_inside_builder_iframe': [
             'mtbg_tours_content_blocks/static/src/snippets/s_mtbg_content_block/content_block.edit.scss',

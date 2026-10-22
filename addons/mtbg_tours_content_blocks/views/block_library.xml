@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The extension tile opens the Reusable Blocks page (organise, tag, see where used, preview, edit) -->
+    <record id="action_mtbg_extension_page" model="ir.actions.client">
+        <field name="name">Reusable Blocks</field>
+        <field name="tag">mtbg_content_block_library</field>
+    </record>
+    <!-- Catalog › Content Blocks opens the page (its List view button opens the plain list) -->
+    <record id="mtbg_tours_catalog.menu_content_block" model="ir.ui.menu">
+        <field name="name">Reusable Blocks</field>
+        <field name="action" ref="action_mtbg_extension_page"/>
+    </record>
+
+    <record id="view_content_block_tag_list" model="ir.ui.view">
+        <field name="name">mtbg.tours.content.block.tag.list</field>
+        <field name="model">mtbg.tours.content.block.tag</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="color" widget="color_picker"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- tags on the block's form and list too -->
+    <record id="view_content_block_form_tags" model="ir.ui.view">
+        <field name="name">mtbg.tours.content.block.form.tags</field>
+        <field name="model">mtbg.tours.content.block</field>
+        <field name="inherit_id" ref="mtbg_tours_catalog.view_content_block_form"/>
+        <field name="arch" type="xml">
+            <field name="block_type" position="after">
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="note"/>
+            </field>
+        </field>
+    </record>
+    <record id="view_content_block_list_tags" model="ir.ui.view">
+        <field name="name">mtbg.tours.content.block.list.tags</field>
+        <field name="model">mtbg.tours.content.block</field>
+        <field name="inherit_id" ref="mtbg_tours_catalog.view_content_block_list"/>
+        <field name="arch" type="xml">
+            <field name="block_type" position="after">
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" optional="show"/>
+            </field>
+        </field>
+    </record>
+</odoo>

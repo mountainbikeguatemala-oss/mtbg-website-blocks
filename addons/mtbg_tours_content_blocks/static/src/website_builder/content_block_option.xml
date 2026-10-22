@@ -55,6 +55,13 @@
                     </button>
                 </div>
             </div>
+            <div t-if="props.tags and props.tags.length" class="d-flex flex-wrap gap-1 mb-2" role="group" aria-label="Tags">
+                <button type="button" t-foreach="props.tags" t-as="tag" t-key="tag.id"
+                        t-attf-class="o_tag btn btn-sm rounded-pill o_tag_color_{{tag.color}} {{state.tag === tag.id ? 'fw-bold' : 'opacity-75'}}"
+                        t-on-click="() => this.setTag(tag.id)">
+                    <i t-if="state.tag === tag.id" class="fa fa-check me-1"/><t t-out="tag.name"/>
+                </button>
+            </div>
             <p class="text-muted small mb-2"><t t-out="filtered.length"/> block(s)</p>
             <div class="o_mtbg_cb_grid">
                 <button type="button" t-foreach="filtered" t-as="block" t-key="block.id"
@@ -63,6 +70,11 @@
                     <div class="o_mtbg_cb_card__head">
                         <span class="o_mtbg_cb_card__name" t-out="block.name"/>
                         <span class="badge text-bg-light" t-out="block.type_label"/>
+                    </div>
+                    <div t-if="block.tag_ids and block.tag_ids.length" class="d-flex flex-wrap gap-1 mb-1">
+                        <t t-foreach="block.tag_ids" t-as="tagId" t-key="tagId">
+                            <span t-if="tagById(tagId)" t-attf-class="o_tag badge rounded-pill o_tag_color_{{tagById(tagId).color}}" t-out="tagById(tagId).name"/>
+                        </t>
                     </div>
                     <div class="o_mtbg_cb_card__preview">
                         <img t-if="block.image" t-att-src="block.image" alt="" loading="lazy"/>

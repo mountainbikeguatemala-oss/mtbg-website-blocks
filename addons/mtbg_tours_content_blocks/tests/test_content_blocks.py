@@ -1,6 +1,7 @@
 import re
 from markupsafe import Markup
 
+from odoo.exceptions import UserError
 from odoo.tests import HttpCase, TransactionCase, tagged
 
 from odoo.addons.mtbg_tours_content_blocks.hooks import post_init_hook
@@ -162,3 +163,123 @@ class TestContentBlockPage(HttpCase):
         self.assertTrue(cover, "the dropped Cover is saved in the group")
         self.assertNotIn('oe_img_bg', cover.group(1), "a block dropped into a group is transparent")
         self.assertNotRegex(cover.group(1), r'\bo_cc\d?\b')
+
+
+@tagged('post_install', '-at_install', 'mtbg')
+class TestBlockLibrary(TransactionCase):
+    """The Reusable Blocks page: where blocks are used, duplicates, tags and actions on several blocks."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        Block = cls.env['mtbg.tours.content.block']
+        cls.Lib = cls.env['mtbg.content.block.library']
+        cls.used = Block.create({'name': 'Lib Used', 'body': '<p>Shared policy text.</p>'})
+        cls.twin = Block.create({'name': 'Lib Twin', 'body': '<p>Shared policy text.</p>'})
+        cls.empty = Block.create({'name': 'Lib Empty', 'body': '<style>.x{}</style>'})
+        cls.outer = Block.create({'name': 'Lib Outer', 'body': Markup('<p>Outer</p>') + placeholder_html(cls.used.id)})
+        cls.tour = cls.env['mtbg.tour'].create({'name': 'Lib Tour', 'slug': 'lib-tour',
+                                                'description': placeholder_html(cls.used.id)})
+
+    def _row(self, data, block):
+        return next(b for b in data['blocks'] if b['id'] == block.id)
+
+    def test_library_rows(self):
+        data = self.Lib.mtbg_get_library()
+        used = self._row(data, self.used)
+        self.assertEqual(used['usage'], 2, "the tour and the block that contains it")
+        self.assertTrue(used['duplicate'] and self._row(data, self.twin)['duplicate'], "same content")
+        self.assertTrue(self._row(data, self.empty)['empty'])
+        self.assertEqual(self._row(data, self.twin)['usage'], 0)
+        details = self.Lib.mtbg_get_block(self.used.id)
+        kinds = sorted((u['kind'], u['name']) for u in details['used_on'])
+        self.assertEqual(kinds, [('block', 'Lib Outer'), ('tour', 'Lib Tour')])
+        self.assertEqual(next(u for u in details['used_on'] if u['kind'] == 'tour')['url'], '/tours/lib-tour')
+
+    def test_details_and_tags(self):
+        tag = self.Lib.mtbg_save_tag(False, 'Policies')
+        with self.assertRaises(UserError):
+            self.Lib.mtbg_save_tag(False, 'policies')
+        details = self.Lib.mtbg_save_block(self.twin.id, {'name': 'Lib Twin 2', 'block_type': 'policy',
+                                                          'note': 'Old copy', 'tag_ids': [tag], 'active': False})
+        self.assertEqual((details['name'], details['type'], details['note'], details['tag_ids']),
+                         ('Lib Twin 2', 'policy', 'Old copy', [tag]))
+        self.assertTrue(self.twin.active, "only the page's fields are written")
+        self.Lib.mtbg_save_tag(tag, 'Policy', 3)
+        self.assertEqual((self.twin.tag_ids.name, self.twin.tag_ids.color), ('Policy', 3))
+        picker = self.env['mtbg.tours.content.block'].mtbg_picker_data()
+        self.assertIn(tag, next(b for b in picker['blocks'] if b['id'] == self.twin.id)['tag_ids'])
+        self.assertIn('Policy', [t['name'] for t in picker['tags']])
+        self.Lib.mtbg_delete_tag(tag)
+        self.assertFalse(self.twin.tag_ids)
+        self.assertTrue(self.twin.exists())
+
+    def test_bulk(self):
+        tag = self.Lib.mtbg_save_tag(False, 'Bulk')
+        blocks = self.twin | self.empty
+        self.Lib.mtbg_bulk(blocks.ids, 'add_tag', tag)
+        self.assertEqual(blocks.tag_ids.ids, [tag])
+        self.Lib.mtbg_bulk(blocks.ids, 'remove_tag', tag)
+        self.assertFalse(blocks.tag_ids)
+        self.Lib.mtbg_bulk(blocks.ids, 'set_type', 'faq')
+        self.assertEqual(set(blocks.mapped('block_type')), {'faq'})
+        copies = self.env['mtbg.tours.content.block'].browse(self.Lib.mtbg_bulk([self.twin.id], 'duplicate'))
+        self.assertEqual(copies.name, 'Lib Twin (copy)')
+        self.Lib.mtbg_bulk(blocks.ids, 'archive')
+        self.assertFalse(any(blocks.mapped('active')))
+        self.Lib.mtbg_bulk(blocks.ids, 'restore')
+        self.assertTrue(all(blocks.mapped('active')))
+        with self.assertRaises(UserError):
+            self.Lib.mtbg_bulk([self.used.id], 'delete')
+        self.assertTrue(self.used.exists(), "a block still used is never deleted")
+        self.Lib.mtbg_bulk(copies.ids, 'delete')
+        self.assertFalse(copies.exists())
+
+    def test_builtin_blocks(self):
+        """Blocks an extension creates (its data) count as used and are never deleted."""
+        builtin = self.env['ir.model.data'].search([('model', '=', 'mtbg.tours.content.block')], limit=1)
+        if not builtin:
+            self.skipTest("no built-in block installed")
+        block = self.env['mtbg.tours.content.block'].browse(builtin.res_id)
+        row = self._row(self.Lib.mtbg_get_library(), block)
+        self.assertTrue(row['builtin'])
+        self.assertGreaterEqual(row['usage'], 1)
+        self.assertEqual(self.Lib.mtbg_get_block(block.id)['used_on'][0]['kind'], 'extension')
+        with self.assertRaises(UserError):
+            self.Lib.mtbg_bulk([block.id], 'delete')
+        self.assertTrue(block.exists())
+
+    def test_create(self):
+        tag = self.Lib.mtbg_save_tag(False, 'New ones')
+        block = self.env['mtbg.tours.content.block'].browse(self.Lib.mtbg_create_block('Fresh', [tag], 'faq'))
+        self.assertEqual((block.name, block.block_type, block.tag_ids.ids), ('Fresh', 'faq', [tag]))
+
+
+@tagged('post_install', '-at_install', 'mtbg')
+class TestBlockLibraryPage(HttpCase):
+
+    def test_preview_and_page(self):
+        Block = self.env['mtbg.tours.content.block']
+        block = Block.create({'name': 'Lib Preview', 'body': '<p>Preview me.</p>'})
+        Block.create({'name': 'Lib Other', 'body': '<p>Other.</p>'})
+        self.authenticate('admin', 'admin')
+        page = self.url_open(f'/mtbg/block/{block.id}?preview=1&theme=dark').text
+        self.assertIn('Preview me.', page)
+        self.assertIn('mtbg-theme-dark', page)
+        self.assertNotIn('Back to Reusable Blocks', page, "the preview shows the block alone")
+        self.assertIn('Back to Reusable Blocks', self.url_open(f'/mtbg/block/{block.id}').text)
+        code = f"""
+            const deadline = Date.now() + 20000;
+            (function check() {{
+                const items = [...document.querySelectorAll('.mtbg_bl_item')].map((i) => i.textContent);
+                const frame = document.querySelector('.mtbg_bl_frame');
+                const name = document.querySelector('.mtbg_bl_name');
+                if (items.some((t) => t.includes('Lib Other')) && frame && name && name.value === 'Lib Preview') {{
+                    console.log('test successful');
+                }} else if (Date.now() > deadline) {{
+                    console.error(`items=${{items.length}} frame=${{!!frame}} name=${{name && name.value}}`);
+                }} else {{ setTimeout(check, 300); }}
+            }})();
+        """
+        self.browser_js(f'/odoo/action-mtbg_tours_content_blocks.action_mtbg_extension_page?block={block.id}', code,
+                        ready="document.readyState === 'complete'", login='admin', timeout=90)

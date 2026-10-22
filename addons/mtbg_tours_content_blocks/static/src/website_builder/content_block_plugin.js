@@ -38,6 +38,7 @@ export class ChooseContentBlockAction extends BuilderAction {
                 {
                     blocks: data.blocks,
                     types: data.types,
+                    tags: data.tags,
                     currentId: parseInt(editingElement.dataset.mtbgBlock) || 0,
                     onChoose: async (id) => {
                         chosen = await orm.call(MODEL, "mtbg_editor_block", [id]);

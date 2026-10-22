@@ -6,16 +6,23 @@
         <t t-call="website.layout">
             <t t-set="additional_title" t-value="block.name"/>
             <t t-set="pageName" t-value="'mtbg_content_block'"/>
-            <div id="wrap" class="mtbg-cb-page">
-                <div class="container pt-4">
+            <t t-if="preview">
+                <t t-set="no_header" t-value="True"/>
+                <t t-set="no_footer" t-value="True"/>
+                <t t-set="no_livechat" t-value="True"/>
+                <t t-set="mtbg_minimal_page" t-value="True"/>
+            </t>
+            <div id="wrap" t-attf-class="mtbg-cb-page {{'mtbg-tour-page mtbg-cb-preview' if preview else ''}} {{'mtbg-theme-dark' if dark else ''}}">
+                <div t-if="not preview" class="container pt-4">
                     <div class="alert alert-info d-flex flex-wrap align-items-center gap-2" role="status">
                         <i class="fa fa-clone" role="img" aria-label="Reusable block" title="Reusable block"/>
                         <span>Reusable block <b t-out="block.name"/>, used on <b t-out="block.usage_total"/> page(s):
                             edits here show on every page that uses it.</span>
-                        <a class="ms-auto" t-attf-href="/odoo/action-mtbg_tours_catalog.action_content_block/#{block.id}">Back to the block</a>
+                        <a class="ms-auto" target="_top" t-attf-href="/odoo/action-mtbg_tours_content_blocks.action_mtbg_extension_page?block=#{block.id}">
+                            <i class="fa fa-arrow-left me-1"/>Back to Reusable Blocks</a>
                     </div>
                 </div>
-                <div class="container pb-5">
+                <div t-attf-class="container {{'py-4' if preview else 'pb-5'}}">
                     <div class="row">
                         <div class="col-lg-8">
                             <div class="mtbg-cb-page-body" t-field="block.body"/>
