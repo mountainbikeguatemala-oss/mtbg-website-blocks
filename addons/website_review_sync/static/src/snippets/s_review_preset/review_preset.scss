@@ -1,0 +1,148 @@
+// Reviews blocks drawn from a preset (.s_review_ordered, review.preset._render_context): the parts stacked in the
+// preset's order, the review card's parts ordered by --rv-o-<part>, hidden ones (.s_review_hide_<part>), the
+// preset's colours (--rv-<colour> with an rv-<colour> class when set), corners, shadow and bubble tail.
+// (after review_slider.scss: these win over the built-in styles)
+.s_review_preset_body:empty { min-height: 4rem; }
+
+.s_review_ordered {
+    --rv-bubble-used: var(--rv-bubble, var(--o-cc1-bg, #fff));
+    --rv-bubble-text-used: var(--rv-bubble-text, var(--o-cc1-text, #222));
+    &.s_review_dark {
+        --rv-bubble-used: var(--rv-bubble, #1e293b);
+        --rv-bubble-text-used: var(--rv-bubble-text, #e5e7eb);
+    }
+
+    // the block's parts, top to bottom, evenly spaced whatever their order
+    .s_review_preset_stack {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        > * { margin-top: 0; margin-bottom: 0; }
+    }
+
+    // the section's colours
+    &.rv-bg { background-color: var(--rv-bg) !important; }
+    &.rv-text {
+        color: var(--rv-text) !important;
+        h1, h2, h3, h4, h5, h6, .s_review_total_label, .s_review_wall_status { color: var(--rv-text); }
+        // a review's own title keeps the bubble's text colour
+        .s_review_slider_bubble .s_review_slider_title { color: inherit; }
+        // an outline button in the text colour (the link colour, when set, wins below)
+        .btn-outline-primary { color: var(--rv-text); border-color: var(--rv-text); background: transparent; }
+        .btn-outline-primary:hover { color: var(--rv-bg, #fff); background: var(--rv-text); }
+    }
+    &.rv-star {
+        .s_review_slider_rating, .s_review_total_stars, .s_review_slider_stars { color: var(--rv-star); }
+    }
+    &.rv-link {
+        a:not(.btn), .s_review_slider_more { color: var(--rv-link); }
+        .btn-primary { --btn-bg: var(--rv-link); --btn-border-color: var(--rv-link); background-color: var(--rv-link); border-color: var(--rv-link); }
+        .btn-outline-primary { color: var(--rv-link); border-color: var(--rv-link); }
+    }
+
+    // the button's own colours (over the link colour): filled, or the outline and its text
+    &.rv-button {
+        .s_review_preset_stack .btn-primary { background-color: var(--rv-button); border-color: var(--rv-button); }
+        .s_review_preset_stack .btn-outline-primary {
+            color: var(--rv-button);
+            border-color: var(--rv-button);
+            &:hover { background-color: var(--rv-button); color: var(--rv-button-text, #fff); }
+        }
+    }
+    &.rv-button-text .s_review_preset_stack :is(.btn-primary, .btn-outline-primary) { color: var(--rv-button-text); }
+    .s_review_preset_stack .btn:hover { filter: brightness(.95); }
+
+    // a review: its parts in the preset's order, hidden parts gone
+    .s_review_slider_rating { order: var(--rv-o-rating, 0); }
+    .s_review_slider_title { order: var(--rv-o-title, 1); }
+    .s_review_slider_text, .s_review_slider_more, .s_review_slider_translated { order: var(--rv-o-text, 2); }
+    .s_review_slider_photos { order: var(--rv-o-photos, 3); }
+    .s_review_slider_link { order: var(--rv-o-link, 4); }
+    &.s_review_hide_rating .s_review_slider_rating,
+    &.s_review_hide_title .s_review_slider_title,
+    &.s_review_hide_text :is(.s_review_slider_text, .s_review_slider_more, .s_review_slider_translated),
+    &.s_review_hide_photos .s_review_slider_photos,
+    &.s_review_hide_link .s_review_slider_link,
+    &.s_review_hide_reviewer .s_review_slider_head { display: none !important; }
+
+    // cards: every part of the card in one column, the reviewer wherever it was dragged
+    &.s_review_cards {
+        .s_review_slider_card {
+            background: var(--rv-bubble-used);
+            color: var(--rv-bubble-text-used);
+            border-radius: var(--rv-radius, 12px);
+        }
+        .s_review_slider_bubble { display: contents; }
+        .s_review_slider_head { order: var(--rv-o-reviewer, 5); margin: 0; }
+    }
+
+    // speech bubbles: the reviewer below the bubble (or above it, the tail pointing up)
+    &.s_review_bubbles {
+        .s_review_slider_card { background: transparent; color: inherit; }
+        .s_review_slider_bubble {
+            background: var(--rv-bubble-used);
+            color: var(--rv-bubble-text-used);
+            border-radius: var(--rv-radius, 22px);
+            &::after { border-top-color: var(--rv-bubble-used); }
+        }
+        &.s_review_reviewer_top {
+            .s_review_slider_head { order: -1; margin: 0 0 1.4rem; }
+            .s_review_slider_bubble::after {
+                top: -16px;
+                bottom: auto;
+                border-width: 0 18px 16px 0;
+                border-color: transparent transparent var(--rv-bubble-used) transparent;
+                filter: none;
+            }
+        }
+        &.rv-tail-center {
+            .s_review_slider_bubble::after { left: 50%; transform: translateX(-50%); border-width: 16px 12px 0; }
+            &.s_review_reviewer_top .s_review_slider_bubble::after { border-width: 0 12px 16px; }
+            .s_review_slider_head { justify-content: center; padding-left: 0; }
+            .s_review_slider_platform { margin-left: .5rem; }
+        }
+        &.rv-tail-right {
+            .s_review_slider_bubble::after { left: auto; right: 34px; border-width: 16px 0 0 18px; }
+            &.s_review_reviewer_top .s_review_slider_bubble::after { border-width: 0 0 16px 18px; border-color: transparent transparent var(--rv-bubble-used) transparent; }
+            .s_review_slider_head { flex-direction: row-reverse; padding-left: 0; padding-right: 18px; text-align: right; }
+            .s_review_slider_platform { margin-left: 0; margin-right: auto; }
+        }
+        &.rv-tail-none .s_review_slider_bubble::after { display: none; }
+    }
+    &.rv-flat :is(.s_review_slider_card, .s_review_slider_bubble) { box-shadow: none; }
+    &.rv-flat .s_review_slider_bubble::after { filter: none; }
+
+    // the wall's cards follow the same look
+    &.s_review_wall .s_review_wall_grid .s_review_slider_card { margin-bottom: 1.5rem; }
+}
+
+// the platform's logo: beside the reviewer (the blocks' own), top right of the bubble, or hidden
+.s_review_slider_bubble_logo { display: none; }
+.s_review_ordered {
+    &.rv-logo-bubble {
+        .s_review_slider_card, .s_review_slider_bubble { position: relative; }
+        .s_review_slider_bubble_logo {
+            display: block;
+            position: absolute;
+            top: 1rem;
+            right: 1.1rem;
+            font-size: 1.2rem;
+            line-height: 1;
+            opacity: .8;
+        }
+        .s_review_slider_rating { padding-right: 2rem; }
+        .s_review_slider_head .s_review_slider_platform { display: none; }
+    }
+    &.rv-logo-none .s_review_slider_platform { display: none; }
+
+    // the arrows beside the reviews, never over them (phones swipe: no arrows, no room kept)
+    &.rv-arrows {
+        .s_review_slider_body { padding: 0 3.25rem; }
+        .s_review_slider_prev { left: 0; }
+        .s_review_slider_next { right: 0; }
+        @media (max-width: 575.98px) { .s_review_slider_body { padding: 0; } }
+    }
+}
+
+// the Reviews page's preview: the block on a little of the page's background
+.s_review_preview_page { min-height: 100vh; padding: 1.5rem 0; --mtbg-footer-room: 0px; }

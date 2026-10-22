@@ -52,3 +52,20 @@ class ReviewSync(http.Controller):
         return request.env['review.review'].slider_reviews(
             platform=platform or None, source_id=source_id or None, min_rating=min_rating, limit=limit,
             lang=request.env.lang, website=request.website, page_record=record, scope=scope, sort=sort)
+
+    @http.route('/review_sync/preset', type='jsonrpc', auth='public', website=True, sitemap=False)
+    def preset(self, key=None, lang=None, **kw):
+        """A Reviews block linked to a preset (``data-preset``): its HTML, drawn from the preset ('' when gone)."""
+        self._use_lang(lang)
+        return {'html': request.env['review.preset'].render_block(key)}
+
+    @http.route('/review_sync/preset/preview', type='http', auth='user', website=True, sitemap=False)
+    def preset_preview(self, preset=None, **kw):
+        """The Reviews page's preview: a page with the preset's block (the page puts its unsaved changes in place)."""
+        if not request.env.user.has_group('website.group_website_designer'):
+            raise request.not_found()
+        record = request.env['review.preset'].browse(int(preset)).exists() if (preset or '').isdigit() else None
+        response = request.render('website_review_sync.preset_preview', {
+            'block': record._render_saved() if record else ''})
+        response.headers['Cache-Control'] = 'no-store'
+        return response

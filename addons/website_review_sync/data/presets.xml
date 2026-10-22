@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- The built-in presets: the Reviews blocks as they were (Reviews page > Presets changes them; they cannot be
+         deleted, blocks use their keys) -->
+    <record id="preset_bubbles" model="review.preset">
+        <field name="name">Speech bubbles</field>
+        <field name="key">bubbles</field>
+        <field name="sequence">1</field>
+        <field name="layout" eval="[{'key': 'heading', 'show': False}, {'key': 'total', 'show': True}, {'key': 'reviews', 'show': True}, {'key': 'button', 'show': True}]"/>
+        <field name="total_label">Five star reviews</field>
+        <field name="button_text">See all reviews</field>
+    </record>
+    <record id="preset_cards" model="review.preset">
+        <field name="name">Cards</field>
+        <field name="key">cards</field>
+        <field name="sequence">2</field>
+        <field name="style">cards</field>
+        <field name="radius">12</field>
+        <field name="card_parts" eval="[{'key': 'reviewer', 'show': True}, {'key': 'rating', 'show': True}, {'key': 'title', 'show': True}, {'key': 'text', 'show': True}, {'key': 'photos', 'show': True}, {'key': 'link', 'show': True}]"/>
+        <field name="layout" eval="[{'key': 'heading', 'show': False}, {'key': 'total', 'show': True}, {'key': 'reviews', 'show': True}, {'key': 'button', 'show': True}]"/>
+        <field name="total_label">Five star reviews</field>
+        <field name="button_text">See all reviews</field>
+    </record>
+    <record id="preset_dark" model="review.preset">
+        <field name="name">Dark</field>
+        <field name="key">dark</field>
+        <field name="sequence">3</field>
+        <field name="theme">dark</field>
+        <field name="layout" eval="[{'key': 'heading', 'show': False}, {'key': 'total', 'show': True}, {'key': 'reviews', 'show': True}, {'key': 'button', 'show': True}]"/>
+        <field name="total_label">Five star reviews</field>
+        <field name="button_text">See all reviews</field>
+    </record>
+    <record id="preset_site" model="review.preset">
+        <field name="name">Website colours</field>
+        <field name="key">site</field>
+        <field name="sequence">4</field>
+        <field name="theme">site</field>
+        <field name="site_cc">5</field>
+        <field name="width">boxed</field>
+        <field name="corners">rounded</field>
+        <field name="spacing">64</field>
+        <field name="total_style">inline</field>
+        <field name="button_style">primary</field>
+        <field name="layout" eval="[{'key': 'heading', 'show': True}, {'key': 'total', 'show': True}, {'key': 'reviews', 'show': True}, {'key': 'button', 'show': True}]"/>
+        <field name="heading">Check out some of our recent reviews</field>
+        <field name="total_label">five star reviews</field>
+        <field name="button_text">See all reviews</field>
+    </record>
+    <record id="preset_wall" model="review.preset">
+        <field name="name">Reviews wall</field>
+        <field name="key">wall</field>
+        <field name="sequence">5</field>
+        <field name="kind">wall</field>
+        <field name="min_rating">1</field>
+        <field name="layout" eval="[{'key': 'heading', 'show': False}, {'key': 'total', 'show': True}, {'key': 'filters', 'show': True}, {'key': 'reviews', 'show': True}]"/>
+        <field name="total_label">Five star reviews</field>
+    </record>
+</odoo>

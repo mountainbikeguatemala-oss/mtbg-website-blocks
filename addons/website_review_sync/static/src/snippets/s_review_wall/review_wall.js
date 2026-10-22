@@ -8,7 +8,7 @@ import { registry } from "@web/core/registry";
 import { rpc } from "@web/core/network/rpc";
 import { _t } from "@web/core/l10n/translation";
 
-import { countUp, make, openPhotos, pageLang, ratingBadges, reviewCard, toggleMore, toggleOriginal } from "../s_review_slider/review_card";
+import { countOptions, countUp, make, openPhotos, pageLang, ratingBadges, reviewCard, toggleMore, toggleOriginal } from "../s_review_slider/review_card";
 
 const PAGE = 12;
 
@@ -30,6 +30,8 @@ export class ReviewWall extends Interaction {
         const d = this.el.dataset;
         this.filters = { platform: d.platform && d.platform !== "all" ? d.platform : "", source_id: "", min_rating: d.minRating || "1", with_photos: false,
                          language: "", sort: "newest" };
+        // a preset's sources (data-source-id "3,5"): the wall shows those unless a visitor picks one
+        this.baseSources = d.sourceId && d.sourceId !== "all" ? d.sourceId : "";
     }
 
     async willStart() {
@@ -38,7 +40,7 @@ export class ReviewWall extends Interaction {
 
     start() {
         this.renderFilters();
-        this.registerCleanup(countUp(this.el.querySelector(".s_review_total_number"), this.meta?.five_star));
+        this.registerCleanup(countUp(this.el.querySelector(".s_review_total_number"), this.meta?.five_star, countOptions(this.el)));
         this.el.querySelector(".s_review_wall_summary")?.replaceChildren(...ratingBadges(this.meta?.summary || []));
         const sentinel = this.el.querySelector(".s_review_wall_more");
         this.observer = new IntersectionObserver((entries) => entries[0].isIntersecting && this.loadMore(), { rootMargin: "600px" });
@@ -49,12 +51,15 @@ export class ReviewWall extends Interaction {
 
     query() {
         const f = this.filters;
-        return { platform: f.platform || null, source_id: f.source_id || null, min_rating: parseInt(f.min_rating) || 1,
+        return { platform: f.platform || null, source_id: f.source_id || this.baseSources || null, min_rating: parseInt(f.min_rating) || 1,
                  with_photos: f.with_photos, language: f.language || null, sort: f.sort };
     }
 
     renderFilters() {
         const bar = this.el.querySelector(".s_review_wall_filters");
+        if (!bar) {
+            return; // a preset without the filters
+        }
         const select = (name, label, options) => {
             const wrap = make("label", "s_review_wall_field");
             wrap.append(make("span", "visually-hidden", label));

@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
+    <t t-name="website_review_sync.ReviewPresetOption">
+        <BuilderRow label.translate="Preset" tooltip.translate="The block's look, reviews, layout and texts: set on the Reviews page, for every block using the preset">
+            <BuilderSelect dataAttributeAction="'preset'">
+                <t t-foreach="state.presets" t-as="preset" t-key="preset.id">
+                    <BuilderSelectItem dataAttributeActionValue="preset.key"><t t-out="preset.name"/></BuilderSelectItem>
+                </t>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Look and texts">
+            <a class="btn btn-sm btn-link px-0" href="/odoo/action-website_review_sync.action_mtbg_extension_page" target="_blank">
+                <i class="fa fa-external-link me-1"/>Edit the presets
+            </a>
+        </BuilderRow>
+    </t>
     <t t-name="website_review_sync.ReviewSliderOption">
         <BuilderRow label.translate="Style">
             <BuilderSelect>

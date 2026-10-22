@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- A Reviews block drawn from its preset (review.preset._render_context): the parts in the preset's order; the
+         slider / wall scripts fill the reviews and the five-star total -->
+    <template id="preset_block" name="Reviews block (from a preset)">
+        <div t-att-class="p['classes']" t-att-style="p['style']" t-att="p['data']">
+            <div class="container s_review_preset_stack">
+                <t t-foreach="p['parts']" t-as="part">
+                    <h2 t-if="part['key'] == 'heading' and p['heading']" class="text-center mb-0 s_review_heading" t-out="p['heading']"/>
+                    <!-- the stars and the five-star total ("400+ five star reviews"): one banner when next to each other -->
+                    <t t-if="part['key'] == 'banner'">
+                        <div t-if="p['total_style'] == 'inline'" class="s_review_total s_review_total_inline text-center">
+                            <t t-foreach="part['items']" t-as="item">
+                                <span t-if="item == 'stars'" class="s_review_total_stars" aria-hidden="true">★★★★★</span>
+                                <t t-else="">
+                                    <span class="s_review_total_number"/>
+                                    <span class="s_review_total_label" t-out="p['total_label']"/>
+                                </t>
+                            </t>
+                        </div>
+                        <div t-else="" class="s_review_total text-center">
+                            <t t-foreach="part['items']" t-as="item">
+                                <div t-if="item == 'stars'" class="s_review_total_stars" aria-hidden="true">★★★★★</div>
+                                <t t-else="">
+                                    <div class="s_review_total_number"/>
+                                    <p class="s_review_total_label" t-out="p['total_label']"/>
+                                </t>
+                            </t>
+                        </div>
+                    </t>
+                    <div t-if="part['key'] == 'filters'" class="s_review_wall_filters mb-0"/>
+                    <t t-if="part['key'] == 'reviews'">
+                        <div t-if="p['kind'] == 'slider'" class="s_review_slider_body position-relative">
+                            <div class="s_review_slider_track" aria-live="polite"/>
+                        </div>
+                        <div t-else="">
+                            <div class="s_review_wall_grid" aria-live="polite"/>
+                            <div class="s_review_wall_more" aria-hidden="true"/>
+                            <p class="s_review_wall_status mb-0"/>
+                        </div>
+                    </t>
+                    <p t-if="part['key'] == 'button' and p['button_text']" class="text-center mb-0">
+                        <a t-att-href="p['button_url']" t-att-class="p['button_class']" t-out="p['button_text']"/>
+                    </p>
+                </t>
+            </div>
+        </div>
+    </template>
+
+    <!-- The Reviews page's live preview: only the block, on a little of the page's background (no header or footer);
+         the page sets the language (address), the currency and the light / dark page look -->
+    <template id="preset_preview" name="Reviews preset preview">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="True"/>
+            <t t-set="no_footer" t-value="True"/>
+            <t t-set="no_livechat" t-value="True"/>
+            <div id="wrap" class="s_review_preview_page mtbg-theme-light">
+                <div data-review-preset-preview=""><t t-out="block"/></div>
+            </div>
+        </t>
+    </template>
+
+    <!-- The Reviews page (presets, reviews, sources, accounts): this extension's tile in Tours > Configuration >
+         Extensions -->
+    <record id="action_mtbg_extension_page" model="ir.actions.client">
+        <field name="name">Reviews</field>
+        <field name="tag">review_settings_page</field>
+    </record>
+</odoo>
