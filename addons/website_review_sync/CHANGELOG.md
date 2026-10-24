@@ -2,6 +2,11 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'website_review_sync-*'`.
 
+## 19.0.0.2.1 · 2026-10-24
+
+- Its scheduled job is kept as the site set it: an upgrade no longer switches a paused job back on (noupdate).
+- **Reversible: no data change.**
+
 ## 19.0.0.2.0 · 2026-10-22
 
 - **Reviews page** (this extension's tile in Tours › Configuration › Extensions), with tabs:

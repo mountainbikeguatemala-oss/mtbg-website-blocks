@@ -1,6 +1,6 @@
 {
     'name': 'Website Reviews (Google & Tripadvisor)',
-    'version': '19.0.0.2.0',
+    'version': '19.0.0.2.1',
     'category': 'Website',
     'summary': 'Google Business Profile and Tripadvisor reviews synced into Odoo, shown with a Reviews slider block',
     'description': """
