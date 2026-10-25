@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Tours — Reusable Blocks',
-    'version': '19.0.0.4.0',
+    'version': '19.0.0.5.0',
     'category': 'Website',
     'summary': 'Reusable Block and Group building blocks: shared content placed visually; one background behind several blocks',
     'description': """
@@ -26,6 +26,7 @@ Shared content (What to Bring, How to Book, policies...) placed visually in the 
         'views/backend_views.xml',
         'views/block_page_templates.xml',
         'views/block_library.xml',
+        'views/page_template_views.xml',
     ],
     'assets': {
         'web.assets_frontend': [

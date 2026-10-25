@@ -20,14 +20,20 @@ msgstr ", usado en"
 
 #. module: mtbg_tours_content_blocks
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.block_page
-msgid "<i class=\"fa fa-clone\" role=\"img\" aria-label=\"Reusable block\" title=\"Reusable block\"/>"
-msgstr "<i class=\"fa fa-clone\" role=\"img\" aria-label=\"Bloque reutilizable\" title=\"Bloque reutilizable\"/>"
+msgid ""
+"<i class=\"fa fa-clone\" role=\"img\" aria-label=\"Reusable block\" "
+"title=\"Reusable block\"/>"
+msgstr ""
+"<i class=\"fa fa-clone\" role=\"img\" aria-label=\"Bloque reutilizable\" "
+"title=\"Bloque reutilizable\"/>"
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_plugin.js:0
 msgid "A reusable block cannot be placed inside another reusable block."
-msgstr "Un bloque reutilizable no se puede colocar dentro de otro bloque reutilizable."
+msgstr ""
+"Un bloque reutilizable no se puede colocar dentro de otro bloque "
+"reutilizable."
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
@@ -77,7 +83,11 @@ msgid "Corners"
 msgstr "Esquinas"
 
 #. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_ir_qweb__display_name model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tour__display_name model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_ir_qweb__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tour__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__display_name
 msgid "Display Name"
 msgstr "Nombre para mostrar"
 
@@ -100,8 +110,12 @@ msgstr "Editar en el Constructor de sitios web"
 
 #. module: mtbg_tours_content_blocks
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_content_block_form_usage
-msgid "Edit the content with the full website builder: blocks, backgrounds, carousels..."
-msgstr "Edite el contenido con el constructor de sitios web completo: bloques, fondos, carruseles..."
+msgid ""
+"Edit the content with the full website builder: blocks, backgrounds, "
+"carousels..."
+msgstr ""
+"Edite el contenido con el constructor de sitios web completo: bloques, "
+"fondos, carruseles..."
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
@@ -112,15 +126,21 @@ msgstr "Edite el contenido compartido aquí mismo (cambian todas las páginas)"
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_option.xml:0
-msgid "Editing the shared block: saving the page changes it on every page that uses it."
-msgstr "Está editando el bloque compartido: al guardar la página se cambia en todas las páginas que lo usan."
+msgid ""
+"Editing the shared block: saving the page changes it on every page that uses"
+" it."
+msgstr ""
+"Está editando el bloque compartido: al guardar la página se cambia en todas "
+"las páginas que lo usan."
 
 #. module: mtbg_tours_content_blocks
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.s_mtbg_group
 msgid ""
 "Everything in this group shares its background. Drag more blocks into it, and set its\n"
 "                            background, width, corners and shadow in the Group options."
-msgstr "Todo lo de este grupo comparte su fondo. Arrastre más bloques aquí y defina su fondo, ancho, esquinas y sombra en las opciones del Grupo."
+msgstr ""
+"Todo lo de este grupo comparte su fondo. Arrastre más bloques aquí y defina "
+"su fondo, ancho, esquinas y sombra en las opciones del Grupo."
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
@@ -139,7 +159,11 @@ msgid "Group title"
 msgstr "Título del grupo"
 
 #. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_ir_qweb__id model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tour__id model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block__id
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_ir_qweb__id
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tour__id
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block__id
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__id
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__id
 msgid "ID"
 msgstr "ID"
 
@@ -154,7 +178,9 @@ msgstr "En el lugar"
 msgid ""
 "Layout, backgrounds and carousels: use <b>Edit in Website Builder</b> above. This field is the\n"
 "                    raw content (HTML view available)."
-msgstr "Diseño, fondos y carruseles: use <b>Editar en el Constructor de sitios web</b> arriba. Este campo es el contenido en bruto (vista HTML disponible)."
+msgstr ""
+"Diseño, fondos y carruseles: use <b>Editar en el Constructor de sitios "
+"web</b> arriba. Este campo es el contenido en bruto (vista HTML disponible)."
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
@@ -165,7 +191,8 @@ msgstr "Hacer una copia local"
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
 #. odoo-python
-#: code:addons/mtbg_tours_content_blocks/models/content_block.py:0 code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_option.xml:0
+#: code:addons/mtbg_tours_content_blocks/models/content_block.py:0
+#: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_option.xml:0
 msgid "New block"
 msgstr "Nuevo bloque"
 
@@ -202,15 +229,20 @@ msgstr "Qweb"
 #. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_option.xml:0
 msgid "Replace the block by a copy of its content that only this page has"
-msgstr "Reemplazar el bloque por una copia de su contenido que solo tendrá esta página"
+msgstr ""
+"Reemplazar el bloque por una copia de su contenido que solo tendrá esta "
+"página"
 
 #. module: mtbg_tours_content_blocks
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.snippets
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__block_id
 msgid "Reusable Block"
 msgstr "Bloque reutilizable"
 
 #. module: mtbg_tours_content_blocks
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.block_page model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.s_mtbg_content_block
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.block_page
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.s_mtbg_content_block
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.tour_el_block
 msgid "Reusable block"
 msgstr "Bloque reutilizable"
 
@@ -220,7 +252,11 @@ msgid ""
 "Reusable blocks are placed on the tour page in the website editor: drag the <b>Reusable Block</b>\n"
 "                    building block into the description, choose the block, move it like any other content.\n"
 "                    This list shows the blocks the page uses, in page order."
-msgstr "Los bloques reutilizables se colocan en la página del tour en el editor del sitio web: arrastre el bloque de construcción <b>Bloque reutilizable</b> a la descripción, elija el bloque y muévalo como cualquier otro contenido. Esta lista muestra los bloques que usa la página, en el orden de la página."
+msgstr ""
+"Los bloques reutilizables se colocan en la página del tour en el editor del "
+"sitio web: arrastre el bloque de construcción <b>Bloque reutilizable</b> a "
+"la descripción, elija el bloque y muévalo como cualquier otro contenido. "
+"Esta lista muestra los bloques que usa la página, en el orden de la página."
 
 #. module: mtbg_tours_content_blocks
 #: model:ir.model,name:mtbg_tours_content_blocks.model_mtbg_tours_content_block
@@ -261,7 +297,9 @@ msgstr "Margen lateral"
 #. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/group_option.xml:0
 msgid "Space at the left and right inside the block (less on small screens)"
-msgstr "Espacio a la izquierda y a la derecha dentro del bloque (menos en pantallas pequeñas)"
+msgstr ""
+"Espacio a la izquierda y a la derecha dentro del bloque (menos en pantallas "
+"pequeñas)"
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
@@ -275,7 +313,11 @@ msgid ""
 "This is a <b>shared</b> block: it shows on every page where the <b>Reusable Block</b> building\n"
 "                    block points to it, and edits (here or with <i>Edit in place</i> in the website editor) apply to\n"
 "                    all of them. Used on"
-msgstr "Este es un bloque <b>compartido</b>: se muestra en todas las páginas donde el bloque de construcción <b>Bloque reutilizable</b> apunta a él, y las ediciones (aquí o con <i>Editar en el lugar</i> en el editor del sitio web) se aplican a todas. Usado en"
+msgstr ""
+"Este es un bloque <b>compartido</b>: se muestra en todas las páginas donde "
+"el bloque de construcción <b>Bloque reutilizable</b> apunta a él, y las "
+"ediciones (aquí o con <i>Editar en el lugar</i> en el editor del sitio web) "
+"se aplican a todas. Usado en"
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
@@ -319,7 +361,9 @@ msgstr "Páginas del sitio web"
 #. module: mtbg_tours_content_blocks
 #: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_tours_content_block__website_view_count
 msgid "Website pages (outside tour descriptions) showing this block"
-msgstr "Páginas del sitio web (fuera de las descripciones de tours) que muestran este bloque"
+msgstr ""
+"Páginas del sitio web (fuera de las descripciones de tours) que muestran "
+"este bloque"
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
@@ -373,7 +417,8 @@ msgstr "página(s) ("
 msgid ""
 "page(s):\n"
 "                            edits here show on every page that uses it."
-msgstr "página(s): las ediciones aquí se ven en todas las páginas que lo usan."
+msgstr ""
+"página(s): las ediciones aquí se ven en todas las páginas que lo usan."
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
@@ -383,10 +428,305 @@ msgstr "páginas"
 
 #. module: mtbg_tours_content_blocks
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.snippets
-msgid "reusable, shared, content block, global, what to bring, faq, policy, include"
-msgstr "reutilizable, compartido, bloque de contenido, global, qué traer, preguntas frecuentes, política, incluir"
+msgid ""
+"reusable, shared, content block, global, what to bring, faq, policy, include"
+msgstr ""
+"reutilizable, compartido, bloque de contenido, global, qué traer, preguntas "
+"frecuentes, política, incluir"
 
 #. module: mtbg_tours_content_blocks
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_content_block_form_usage
 msgid "tours,"
 msgstr "tours,"
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+msgid "%s (copy)"
+msgstr "%s (copia)"
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+msgid "%s (not installed)"
+msgstr "%s (no instalado)"
+
+#. module: mtbg_tours_content_blocks
+#: model_terms:ir.actions.act_window,help:mtbg_tours_content_blocks.action_page_template
+msgid ""
+"A page template decides which elements a page shows and where. The Default of each kind is the page as\n"
+"                it has always been."
+msgstr ""
+"Una plantilla de página decide qué elementos muestra una página y dónde. La "
+"predeterminada de cada tipo es la página tal como siempre ha sido."
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.constraint,message:mtbg_tours_content_blocks.constraint_mtbg_page_template_line_element_or_block
+msgid "A template line shows either an element or a reusable block."
+msgstr "Una línea de plantilla muestra un elemento o un bloque reutilizable."
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__active
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__active
+msgid "Active"
+msgstr "Activo"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template_line__element_code
+msgid "An element an extension places on the page"
+msgstr "Un elemento que una extensión coloca en la página"
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_search
+msgid "Archived"
+msgstr "Archivado"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__create_uid
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__create_date
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__is_default
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
+msgid "Default"
+msgstr "Predeterminada"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__element_name
+msgid "Element"
+msgstr "Elemento"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__element_code
+msgid "Element Code"
+msgstr "Código del elemento"
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__line_ids
+msgid "Elements"
+msgstr "Elementos"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__line_count
+msgid "Elements Shown"
+msgstr "Elementos mostrados"
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+msgid "Elements shown"
+msgstr "Elementos mostrados"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template__note
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
+msgid "For the team; never shown on the website"
+msgstr "Para el equipo; nunca se muestra en el sitio web"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__slot
+msgid "Insert Point"
+msgstr "Punto de inserción"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__note
+msgid "Internal Note"
+msgstr "Nota interna"
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__kind
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__kind
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_search
+msgid "Kind"
+msgstr "Tipo"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__write_uid
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__write_date
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: mtbg_tours_content_blocks
+#: model_terms:ir.actions.act_window,help:mtbg_tours_content_blocks.action_page_template
+msgid "Lay out tour and rental pages"
+msgstr "Diseñe las páginas de tours y de alquiler"
+
+#. module: mtbg_tours_content_blocks
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
+msgid "Make Default"
+msgstr "Hacer predeterminada"
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template_line__active
+msgid "Off: removed from the page (the template remembers it)."
+msgstr "Apagado: quitado de la página (la plantilla lo recuerda)."
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model,name:mtbg_tours_content_blocks.model_mtbg_page_template
+msgid "Page Template"
+msgstr "Plantilla de página"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model,name:mtbg_tours_content_blocks.model_mtbg_page_template_line
+msgid "Page Template Element"
+msgstr "Elemento de plantilla de página"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.actions.act_window,name:mtbg_tours_content_blocks.action_page_template
+#: model:ir.ui.menu,name:mtbg_tours_content_blocks.menu_page_template
+msgid "Page Templates"
+msgstr "Plantillas de página"
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+#: model:ir.model.fields.selection,name:mtbg_tours_content_blocks.selection__mtbg_page_template__kind__rental
+msgid "Rental page"
+msgstr "Página de alquiler"
+
+#. module: mtbg_tours_content_blocks
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_search
+msgid "Rental pages"
+msgstr "Páginas de alquiler"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__sequence
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: mtbg_tours_content_blocks
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
+msgid "Shown"
+msgstr "Visible"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__slot_order
+msgid "Slot Order"
+msgstr "Orden del punto de inserción"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__template_id
+msgid "Template"
+msgstr "Plantilla"
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+msgid "The Default template of a kind cannot be archived."
+msgstr "La plantilla predeterminada de un tipo no se puede archivar."
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template_line__slot_order
+msgid "The insert point's place on the page"
+msgstr "El lugar del punto de inserción en la página"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template__kind
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template_line__kind
+msgid "The pages this template lays out: tour pages or bike rental pages."
+msgstr ""
+"Las páginas que diseña esta plantilla: páginas de tours o de alquiler de "
+"bicicletas."
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+msgid "There is already a Default template for this kind of page."
+msgstr "Ya hay una plantilla predeterminada para este tipo de página."
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__mtbg_missing_ids
+msgid "Things missing"
+msgstr "Cosas pendientes"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__mtbg_time_stage
+msgid "Time to start"
+msgstr "Tiempo para el inicio"
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+#: model:ir.model.fields.selection,name:mtbg_tours_content_blocks.selection__mtbg_page_template__kind__tour
+msgid "Tour page"
+msgstr "Página de tour"
+
+#. module: mtbg_tours_content_blocks
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_search
+msgid "Tour pages"
+msgstr "Páginas de tours"
+
+#. module: mtbg_tours_content_blocks
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
+msgid ""
+"Use this template for every page of its kind that no other template is "
+"assigned to"
+msgstr ""
+"Usar esta plantilla en cada página de su tipo que no tenga otra plantilla "
+"asignada"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template__is_default
+msgid "Used by every page of its kind that no other template is assigned to."
+msgstr ""
+"La usan todas las páginas de su tipo que no tienen otra plantilla asignada."
+
+#. module: mtbg_tours_content_blocks
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
+msgid ""
+"What the page shows, in each insert point, top to bottom. Switch an element off to leave it\n"
+"                        out of the page: the template remembers it. Elements of extensions installed later show at\n"
+"                        their usual place until the template places them."
+msgstr ""
+"Lo que muestra la página, en cada punto de inserción, de arriba abajo. "
+"Apague un elemento para dejarlo fuera de la página: la plantilla lo "
+"recuerda. Los elementos de extensiones instaladas después aparecen en su "
+"lugar habitual hasta que la plantilla los coloque."
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template__mtbg_missing_ids
+msgid "What the record's card says it still lacks (refreshed by the boards)"
+msgstr ""
+"Lo que la tarjeta del registro dice que aún le falta (lo actualizan los "
+"tableros)"
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template__mtbg_time_stage
+msgid "Where the record is from its start date (refreshed by the boards)"
+msgstr ""
+"Dónde está el registro respecto a su fecha de inicio (lo actualizan los "
+"tableros)"
+
+#. module: mtbg_tours_content_blocks
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
+msgid "e.g. Day tours"
+msgstr "p. ej. Tours de un día"

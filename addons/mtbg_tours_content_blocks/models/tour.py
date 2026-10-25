@@ -35,3 +35,9 @@ class MtbgTour(models.Model):
     def get_public_blocks(self):
         # blocks now render inside the description
         return self.env['mtbg.tour.block.line']
+
+    def _mtbg_tour_page_layout(self):
+        """The page as its template lays it out (Website's registry defaults when there is none)."""
+        self.ensure_one()
+        template = self.env['mtbg.page.template'].sudo()._mtbg_template_for(self)
+        return template._mtbg_layout() if template else super()._mtbg_tour_page_layout()

@@ -4,11 +4,18 @@ from markupsafe import Markup
 from psycopg2.extras import Json
 
 from .models.content_block import placeholder_html
+from .models.page_template import SYNC_PARAM
 
 _logger = logging.getLogger(__name__)
 
 
 def post_init_hook(env):
+    # the Default page templates: made once every module is loaded (models/page_template.py)
+    env['ir.config_parameter'].sudo().set_param(SYNC_PARAM, '1')
+    _move_block_lines(env)
+
+
+def _move_block_lines(env):
     """Turn each tour's block placements (shown after the description) into reusable block elements at
     the end of its description, in every language, the placement title above as a heading. Pages look
     the same; from now on blocks are placed, moved and chosen in the website editor."""

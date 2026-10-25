@@ -2,6 +2,16 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_content_blocks-*'`.
 
+## 19.0.0.5.0 · 2026-10-25
+
+- **Page templates** (Catalog › Page Templates): named layouts of the tour page, one kind for tour pages and one for
+  bike rental pages. Duplicate, archive, and make one the Default of its kind. Each line places an element (from any
+  installed extension) or a reusable block in an insert point; switch a line off to leave the element out (the
+  template remembers it). Elements of extensions installed later show at their usual place.
+- The **Default templates** (Tour page, Rental page) are the page as it has always been. They are made on install and
+  by this update, once every module is loaded.
+- The visual editor, conditions and category assignments come next (docs/architecture/page-templates.md).
+
 ## 19.0.0.4.0 · 2026-10-22
 
 - **Reusable Blocks page** (the extension's tile; Catalog › Reusable Blocks): every block in one place.
