@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Bullets: a list whose bullets are icons (static/src/snippets/s_mtbg_icon_list). Its style (a preset or an icon,
+         colour, size and box of its own) is set in the block's options; the text is typed in the list as usual. -->
+    <template id="s_mtbg_icon_list" name="Bullets">
+        <section class="s_mtbg_icon_list mtbg-icons--check pt16 pb16">
+            <div class="container">
+                <ul class="mtbg-icon-list">
+                    <li>Professional bilingual guides</li>
+                    <li>Quality full-suspension bikes</li>
+                    <li>Snacks, water and transport</li>
+                </ul>
+            </div>
+        </section>
+    </template>
+
+    <template id="snippets" inherit_id="website.snippets" name="MTBG Tours: Bullets block">
+        <xpath expr="//snippets[@id='snippet_structure']" position="inside">
+            <t t-snippet="mtbg_tours_bullets.s_mtbg_icon_list" string="Bullets" group="text"
+               t-thumbnail="/mtbg_tours_bullets/static/src/img/s_mtbg_icon_list.svg">
+                <keywords>list, bullets, icons, check, checklist, highlights, included, not included, features</keywords>
+            </t>
+        </xpath>
+    </template>
+</odoo>

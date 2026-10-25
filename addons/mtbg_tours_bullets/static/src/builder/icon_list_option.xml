@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- Bullets block (s_mtbg_icon_list): a preset, or the icon and its look one by one -->
+    <t t-name="mtbg_tours_bullets.IconListOption">
+        <BuilderRow label.translate="Style">
+            <BuilderSelect action="'mtbgIconPreset'">
+                <BuilderSelectItem actionParam="'check'">Check box</BuilderSelectItem>
+                <BuilderSelectItem actionParam="'bookmark'">Bookmark</BuilderSelectItem>
+                <BuilderSelectItem actionParam="'cross'">Cross</BuilderSelectItem>
+                <BuilderSelectItem actionParam="'none'">None</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Icon">
+            <BuilderButton action="'mtbgIconCustom'" title.translate="Choose an icon">
+                <i class="fa fa-fw fa-picture-o"/> Choose…
+            </BuilderButton>
+        </BuilderRow>
+        <BuilderRow label.translate="Icon color">
+            <BuilderColorPicker styleAction="'--mtbg-icon-color'" enabledTabs="['solid', 'custom']"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Icon size">
+            <BuilderNumberInput styleAction="'--mtbg-icon-size'" unit="'px'" min="8" max="64"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Box">
+            <BuilderColorPicker styleAction="'--mtbg-icon-bg'" enabledTabs="['solid', 'custom']"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Box size" level="1">
+            <BuilderNumberInput styleAction="'--mtbg-icon-box'" unit="'px'" min="8" max="80"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Corners" level="1">
+            <BuilderNumberInput styleAction="'--mtbg-icon-radius'" unit="'px'" min="0" max="40"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Space after icon">
+            <BuilderNumberInput styleAction="'--mtbg-icon-gap'" unit="'px'" min="0" max="48"/>
+        </BuilderRow>
+    </t>
+</templates>

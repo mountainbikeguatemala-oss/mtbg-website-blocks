@@ -1,0 +1,112 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: mtbg_tours_bullets
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_bullets.s_mtbg_icon_list
+msgid "Professional bilingual guides"
+msgstr ""
+
+#. module: mtbg_tours_bullets
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_bullets.s_mtbg_icon_list
+msgid "Quality full-suspension bikes"
+msgstr ""
+
+#. module: mtbg_tours_bullets
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_bullets.s_mtbg_icon_list
+msgid "Snacks, water and transport"
+msgstr ""
+
+#. module: mtbg_tours_bullets
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_bullets.snippets
+msgid "Bullets"
+msgstr ""
+
+#. module: mtbg_tours_bullets
+#. odoo-javascript
+#: code:addons/mtbg_tours_bullets/static/src/builder/icon_list_option.xml:0
+msgid "Style"
+msgstr ""
+
+#. module: mtbg_tours_bullets
+#. odoo-javascript
+#: code:addons/mtbg_tours_bullets/static/src/builder/icon_list_option.xml:0
+msgid "Check box"
+msgstr ""
+
+#. module: mtbg_tours_bullets
+#. odoo-javascript
+#: code:addons/mtbg_tours_bullets/static/src/builder/icon_list_option.xml:0
+msgid "Bookmark"
+msgstr ""
+
+#. module: mtbg_tours_bullets
+#. odoo-javascript
+#: code:addons/mtbg_tours_bullets/static/src/builder/icon_list_option.xml:0
+msgid "Cross"
+msgstr ""
+
+#. module: mtbg_tours_bullets
+#. odoo-javascript
+#: code:addons/mtbg_tours_bullets/static/src/builder/icon_list_option.xml:0
+msgid "None"
+msgstr ""
+
+#. module: mtbg_tours_bullets
+#. odoo-javascript
+#: code:addons/mtbg_tours_bullets/static/src/builder/icon_list_option.xml:0
+msgid "Icon"
+msgstr ""
+
+#. module: mtbg_tours_bullets
+#. odoo-javascript
+#: code:addons/mtbg_tours_bullets/static/src/builder/icon_list_option.xml:0
+msgid "Choose an icon"
+msgstr ""
+
+#. module: mtbg_tours_bullets
+#. odoo-javascript
+#: code:addons/mtbg_tours_bullets/static/src/builder/icon_list_option.xml:0
+msgid "Choose…"
+msgstr ""
+
+#. module: mtbg_tours_bullets
+#. odoo-javascript
+#: code:addons/mtbg_tours_bullets/static/src/builder/icon_list_option.xml:0
+msgid "Icon color"
+msgstr ""
+
+#. module: mtbg_tours_bullets
+#. odoo-javascript
+#: code:addons/mtbg_tours_bullets/static/src/builder/icon_list_option.xml:0
+msgid "Icon size"
+msgstr ""
+
+#. module: mtbg_tours_bullets
+#. odoo-javascript
+#: code:addons/mtbg_tours_bullets/static/src/builder/icon_list_option.xml:0
+msgid "Box"
+msgstr ""
+
+#. module: mtbg_tours_bullets
+#. odoo-javascript
+#: code:addons/mtbg_tours_bullets/static/src/builder/icon_list_option.xml:0
+msgid "Box size"
+msgstr ""
+
+#. module: mtbg_tours_bullets
+#. odoo-javascript
+#: code:addons/mtbg_tours_bullets/static/src/builder/icon_list_option.xml:0
+msgid "Corners"
+msgstr ""
+
+#. module: mtbg_tours_bullets
+#. odoo-javascript
+#: code:addons/mtbg_tours_bullets/static/src/builder/icon_list_option.xml:0
+msgid "Space after icon"
+msgstr ""

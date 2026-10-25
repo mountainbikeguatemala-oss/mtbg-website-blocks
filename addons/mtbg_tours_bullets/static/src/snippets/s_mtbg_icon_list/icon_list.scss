@@ -1,0 +1,74 @@
+// Bullets block (views/snippets.xml): every list item's bullet is an icon, drawn by ::before from the block's variables
+// (set by a preset class, or one by one in its options: the icon, its font, colour, size, box and corners). The text
+// wraps under itself (a hanging indent); the side follows the language (logical properties, right-to-left too).
+// The old site's list classes look the same with no change to the content: .highlights (bookmark), .checkbullet
+// (check box) and .xbullet (cross).
+.s_mtbg_icon_list, ul.highlights, ul.checkbullet, ul.xbullet {
+    --mtbg-icon: none;
+    --mtbg-icon-font: inherit;
+    --mtbg-icon-color: currentColor;
+    --mtbg-icon-size: 1.25em;
+    --mtbg-icon-box: var(--mtbg-icon-size);
+    --mtbg-icon-bg: transparent;
+    --mtbg-icon-radius: 0px;
+    --mtbg-icon-gap: 8px;
+    --mtbg-icon-top: .15em;
+}
+// the presets (the old site's values)
+.mtbg-icons--bookmark, ul.highlights {
+    --mtbg-icon: "\f02e";
+    --mtbg-icon-font: FontAwesome;
+    --mtbg-icon-color: #465a6f;
+    --mtbg-icon-size: 20px;
+    --mtbg-icon-box: 20px;
+    --mtbg-icon-gap: 8px;
+}
+.mtbg-icons--check, ul.checkbullet {
+    --mtbg-icon: "\2714";
+    --mtbg-icon-color: #fff;
+    --mtbg-icon-size: 14px;
+    --mtbg-icon-box: 18px;
+    --mtbg-icon-bg: #01cb68;
+    --mtbg-icon-radius: 3px;
+    --mtbg-icon-gap: 10px;
+}
+.mtbg-icons--cross, ul.xbullet {
+    --mtbg-icon: "\f00d";
+    --mtbg-icon-font: FontAwesome;
+    --mtbg-icon-color: #eb7591;
+    --mtbg-icon-size: 20px;
+    --mtbg-icon-box: 20px;
+    --mtbg-icon-gap: 8px;
+}
+
+.s_mtbg_icon_list ul, ul.highlights, ul.checkbullet, ul.xbullet {
+    list-style: none;
+    padding-inline: 10px;
+    > li {
+        position: relative;
+        list-style: none;
+        // the hanging indent: wrapped lines start under the text, not under the icon
+        padding-inline-start: calc(var(--mtbg-icon-box) + var(--mtbg-icon-gap));
+        &::before {
+            content: var(--mtbg-icon);
+            position: absolute;
+            inset-inline-start: 0;
+            top: var(--mtbg-icon-top);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: var(--mtbg-icon-box);
+            height: var(--mtbg-icon-box);
+            border-radius: var(--mtbg-icon-radius);
+            background: var(--mtbg-icon-bg);
+            color: var(--mtbg-icon-color);
+            font-family: var(--mtbg-icon-font);
+            font-size: var(--mtbg-icon-size);
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1;
+        }
+    }
+}
+// None: a plain list without bullets
+.mtbg-icons--none ul > li { padding-inline-start: 0; &::before { content: none; } }
