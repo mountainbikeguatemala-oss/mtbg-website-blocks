@@ -1,0 +1,53 @@
+// The page template editor (template_editor.xml), in two halves: the page outline with its insert points (dashed),
+// each with its "Add…" list, on the left; the preview of a sample page, as tall as the screen, on the right.
+.mtbg_pte {
+    --pte-slot: #2f6b45;
+    --pte-slot-soft: #e2efe5;
+    --pte-block: #34506e;
+    --pte-block-soft: #e3eaf2;
+    background: var(--bs-body-bg, #fff);
+
+    .mtbg_pte_title { font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--bs-secondary-color, #6c757d); margin-bottom: .5rem; }
+    // the two halves, each scrolling on its own
+    .mtbg_pte_split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); min-height: 0; }
+    // a narrow window: the preview under the editor, the page scrolls as one
+    @media (max-width: 900px) {
+        .mtbg_pte_split { display: block; overflow: auto; }
+        .mtbg_pte_editor { overflow: visible; border-right: 0; }
+        .mtbg_pte_preview { height: 80vh; border-top: 1px solid var(--border-color, #dee2e6); }
+    }
+    .mtbg_pte_editor { overflow: auto; padding: .75rem 1rem 1.5rem; border-right: 1px solid var(--border-color, #dee2e6); }
+    .mtbg_pte_preview { display: flex; flex-direction: column; min-height: 0; background: var(--bs-tertiary-bg, #f1f3f5); }
+    .mtbg_pte_preview_bar { border-bottom: 1px solid var(--border-color, #dee2e6); background: var(--bs-body-bg, #fff); }
+
+    // right: the page outline
+    .mtbg_pte_page { padding: .75rem; border: 1px solid var(--border-color, #dee2e6); border-radius: .75rem; background: var(--bs-tertiary-bg, #f8f9fa); }
+    .mtbg_pte_row + .mtbg_pte_row { margin-top: .75rem; }
+    .mtbg_pte_row_label { font-size: .7rem; text-transform: uppercase; letter-spacing: .05em; color: var(--bs-secondary-color, #6c757d); margin-bottom: .25rem; }
+    .mtbg_pte_cols { display: grid; grid-template-columns: repeat(var(--cols, 1), minmax(0, 1fr)); gap: .5rem; }
+    .mtbg_pte_col { display: flex; flex-direction: column; gap: .4rem; min-width: 0; }
+    .mtbg_pte_slot {
+        padding: .35rem .45rem .45rem; border: 1.5px dashed var(--pte-slot); border-radius: .45rem; background: var(--pte-slot-soft);
+        &.is-drop { background: #cfe6d6; border-style: solid; }
+    }
+    .mtbg_pte_slot_name { font-size: .72rem; font-weight: 700; color: var(--pte-slot); margin-bottom: .25rem; cursor: help; }
+    .mtbg_pte_chip {
+        display: flex; align-items: center; gap: .35rem; margin-top: .25rem; padding: .25rem .4rem;
+        border: 1px solid var(--border-color, #dee2e6); border-radius: .35rem; background: var(--bs-body-bg, #fff);
+        font-size: .82rem; cursor: grab; user-select: none;
+        &.is-selected { border-color: var(--pte-block); box-shadow: 0 0 0 2px var(--pte-block-soft); }
+        &.is-block { border-color: #b9a6dc; }
+        .btn-link { color: var(--bs-secondary-color, #6c757d); line-height: 1; }
+        .btn-link:disabled { opacity: .25; }
+    }
+    .mtbg_pte_drop { height: 0; margin: .3rem 0 0; border-top: 3px solid var(--pte-block); border-radius: 2px; }
+    .mtbg_pte_add {
+        margin-top: .3rem; padding-top: .15rem; padding-bottom: .15rem; font-size: .78rem; width: auto; max-width: 100%;
+        border-style: dashed; background-color: transparent; color: var(--pte-slot);
+    }
+
+    // the preview: the page at its real width, scaled to the half (template_editor.js frameStyle)
+    .mtbg_pte_stage { flex: 1 1 auto; min-height: 0; display: flex; justify-content: center; padding: 8px; overflow: hidden; }
+    .mtbg_pte_frame { border: 1px solid var(--border-color, #dee2e6); border-radius: .5rem; background: #fff; transform-origin: top center; flex: 0 0 auto; }
+    .mtbg_pte_phone .mtbg_pte_frame { border-radius: 1.5rem; border-width: 8px; border-color: #212529; }
+}

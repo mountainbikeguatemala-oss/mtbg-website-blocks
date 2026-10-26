@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Tours — Reusable Blocks',
-    'version': '19.0.0.6.0',
+    'version': '19.0.0.7.0',
     # its section on the Extensions panel: Custom blocks (its main job is website editor blocks)
     'mtbg_tours_section': 'blocks',
     'category': 'Website',
@@ -37,6 +37,7 @@ Shared content (What to Bring, How to Book, policies...) placed visually in the 
         ],
         'web.assets_backend': [
             'mtbg_tours_content_blocks/static/src/library/*',
+            'mtbg_tours_content_blocks/static/src/template_editor/*',
         ],
         'website.assets_inside_builder_iframe': [
             'mtbg_tours_content_blocks/static/src/snippets/s_mtbg_content_block/content_block.edit.scss',

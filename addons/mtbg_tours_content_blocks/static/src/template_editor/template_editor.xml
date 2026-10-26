@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- The page template editor (template_editor.js): the top bar (templates), the canvas (the elements on the left, the
+         page outline on the right, the connecting lines over both) and the preview under it -->
+    <t t-name="mtbg_tours_content_blocks.PageTemplateEditor">
+        <div class="o_action mtbg_pte h-100 d-flex flex-column">
+            <div t-if="!state.data" class="p-4 text-muted"><i class="fa fa-spinner fa-spin me-1"/>Loading…</div>
+            <t t-else="">
+                <!-- top bar: the template, its name, what can be done with it -->
+                <div class="mtbg_pte_head d-flex flex-wrap align-items-center gap-2 px-4 py-2 border-bottom">
+                    <h2 class="mb-0 me-2">Page Templates</h2>
+                    <select class="form-select w-auto" aria-label="Template" t-on-change="onPickTemplate">
+                        <t t-foreach="templateGroups" t-as="group" t-key="group.key">
+                            <optgroup t-att-label="group.label">
+                                <t t-foreach="group.templates" t-as="t" t-key="t.id">
+                                    <option t-att-value="t.id" t-att-selected="t.id === template.id">
+                                        <t t-esc="t.name"/><t t-if="t.is_default"> (Default)</t><t t-if="!t.active"> (archived)</t>
+                                    </option>
+                                </t>
+                            </optgroup>
+                        </t>
+                    </select>
+                    <t t-if="state.renaming">
+                        <input t-ref="nameInput" class="form-control w-auto" aria-label="Template name" t-att-value="template.name"
+                               t-on-blur="rename" t-on-keydown="onRenameKey"/>
+                    </t>
+                    <button t-else="" type="button" class="btn btn-link px-1" title="Rename" t-on-click="() => this.state.renaming = true">
+                        <i class="fa fa-pencil"/></button>
+                    <span t-if="template.is_default" class="badge text-bg-success">Default</span>
+                    <span t-if="!template.active" class="badge text-bg-danger">Archived</span>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-light" t-on-click="() => this.startCreate()"><i class="fa fa-plus me-1"/>New</button>
+                        <button type="button" class="btn btn-light" t-on-click="duplicate"><i class="fa fa-clone me-1"/>Duplicate</button>
+                        <button t-if="!template.is_default" type="button" class="btn btn-light" t-on-click="makeDefault"
+                                title="Use this template for every page of its kind"><i class="fa fa-star-o me-1"/>Make Default</button>
+                        <button type="button" class="btn btn-light" t-on-click="toggleArchive">
+                            <i t-attf-class="fa {{template.active ? 'fa-archive' : 'fa-undo'}} me-1"/><t t-if="template.active">Archive</t><t t-else="">Restore</t>
+                        </button>
+                        <button type="button" class="btn btn-light" t-on-click="openList" title="All templates as a list"><i class="fa fa-list"/></button>
+                    </div>
+                    <div class="ms-auto d-flex align-items-center gap-2">
+                        <span t-if="state.dirty" class="badge text-bg-warning">Unsaved changes</span>
+                        <button class="btn btn-secondary" t-att-disabled="!state.dirty or state.saving" t-on-click="discard">Discard</button>
+                        <button class="btn btn-primary" t-att-disabled="!state.dirty or state.saving" t-on-click="save">
+                            <i t-if="state.saving" class="fa fa-spinner fa-spin me-1"/>Save
+                        </button>
+                    </div>
+                </div>
+                <!-- a new template: its kind and name -->
+                <div t-if="state.creating" class="mtbg_pte_create d-flex flex-wrap align-items-center gap-2 px-4 py-2 border-bottom">
+                    <span class="small text-muted">New template:</span>
+                    <select class="form-select form-select-sm w-auto" aria-label="Kind" t-on-change="(ev) => this.state.creating.kind = ev.target.value">
+                        <t t-foreach="state.data.kinds" t-as="kind" t-key="kind.key">
+                            <option t-att-value="kind.key" t-att-selected="kind.key === state.creating.kind" t-esc="kind.label"/>
+                        </t>
+                    </select>
+                    <input class="form-control form-control-sm w-auto" placeholder="e.g. 7+ Day Tours" aria-label="Name" autofocus="autofocus"
+                           t-att-value="state.creating.name" t-on-input="(ev) => this.state.creating.name = ev.target.value" t-on-keydown="onCreateKey"/>
+                    <button class="btn btn-sm btn-primary" t-att-disabled="!state.creating.name.trim()" t-on-click="create">Create</button>
+                    <button class="btn btn-sm btn-link" t-on-click="() => this.state.creating = null">Cancel</button>
+                    <span class="small text-muted">It starts as the page is today; then place the elements your way.</span>
+                </div>
+
+                <!-- two halves: the editor (the elements beside the page outline) and the preview -->
+                <div class="flex-grow-1 mtbg_pte_split">
+                    <div class="mtbg_pte_editor">
+                        <div class="mtbg_pte_help small text-muted mb-2">
+                            Add… on an insert point places what the page does not show yet (an element left out, a reusable
+                            block); drag an element (or its arrows) to move it; the eye leaves it out of the page. The
+                            preview shows your unsaved changes; the site shows them after Save.
+                        </div>
+                        <div t-if="missingLines.length" class="alert alert-warning mb-2 py-2 small">
+                            <t t-esc="missingLines.length"/> element(s) of a switched-off extension are kept in this template
+                            and come back when it is switched on again.
+                        </div>
+                        <div class="mtbg_pte_grid">
+                            <!-- the page outline, its insert points and what each shows -->
+                            <div class="mtbg_pte_page">
+                                <h5 class="mtbg_pte_title">The page · <t t-esc="template.kind_label"/></h5>
+                                <div t-foreach="outline" t-as="row" t-key="row.key" class="mtbg_pte_row">
+                                    <div class="mtbg_pte_row_label" t-esc="row.label"/>
+                                    <div class="mtbg_pte_cols" t-attf-style="--cols: {{row.cols.length}}">
+                                        <div t-foreach="row.cols" t-as="col" t-key="col_index" class="mtbg_pte_col">
+                                            <div t-foreach="col" t-as="slot" t-key="slot.code" class="mtbg_pte_slot"
+                                                 t-att-class="{ 'is-drop': state.dropSlot === slot.code }"
+                                                 t-on-dragover="(ev) => this.onSlotDragOver(ev, slot.code)"
+                                                 t-on-dragleave="(ev) => this.onSlotDragLeave(ev, slot.code)"
+                                                 t-on-drop="(ev) => this.onSlotDrop(ev, slot.code)">
+                                                <div class="mtbg_pte_slot_name" t-att-title="slot.description" t-esc="slot.name"/>
+                                                <t t-set="chips" t-value="slotLines(slot.code)"/>
+                                                <t t-foreach="chips" t-as="line" t-key="line.key">
+                                                    <div t-if="state.dropSlot === slot.code and state.dropIndex === line_index" class="mtbg_pte_drop"/>
+                                                    <div class="mtbg_pte_chip" t-att-class="{ 'is-selected': isSelected(line), 'is-block': line.block_id }"
+                                                         t-att-data-key="line.key" draggable="true"
+                                                         t-on-dragstart="(ev) => this.onDragStart(ev, { type: 'chip', key: line.key })" t-on-dragend="onDragEnd"
+                                                         t-on-click="() => this.selectLine(line)">
+                                                        <i t-attf-class="fa {{lineIcon(line)}} fa-fw"/>
+                                                        <span class="flex-grow-1 text-truncate" t-esc="lineName(line)"/>
+                                                        <t t-set="panel" t-value="!line.block_id and elementOf(line.code)?.panel"/>
+                                                        <button t-if="panel" type="button" class="btn btn-sm btn-link p-0" title="Its settings"
+                                                                t-on-click.stop="() => this.openPanel({ panel: panel, name: elementOf(line.code).group_name or lineName(line) })"><i class="fa fa-cog"/></button>
+                                                        <button type="button" class="btn btn-sm btn-link p-0" title="Move up" t-att-disabled="line_first"
+                                                                t-on-click.stop="() => this.moveLine(line, -1)"><i class="fa fa-angle-up"/></button>
+                                                        <button type="button" class="btn btn-sm btn-link p-0" title="Move down" t-att-disabled="line_last"
+                                                                t-on-click.stop="() => this.moveLine(line, 1)"><i class="fa fa-angle-down"/></button>
+                                                        <button type="button" class="btn btn-sm btn-link p-0 text-muted" title="Leave out of the page"
+                                                                t-on-click.stop="() => this.removeLine(line)"><i class="fa fa-eye-slash"/></button>
+                                                    </div>
+                                                </t>
+                                                <div t-if="state.dropSlot === slot.code and state.dropIndex >= chips.length" class="mtbg_pte_drop"/>
+                                                <select t-if="addOptions.elements.length or addOptions.blocks.length" class="form-select form-select-sm mtbg_pte_add"
+                                                        t-att-aria-label="'Add to ' + slot.name" t-on-change="(ev) => this.addToSlot(ev, slot.code)">
+                                                    <option value="" selected="selected">+ Add…</option>
+                                                    <optgroup t-if="addOptions.elements.length" label="Elements left out">
+                                                        <t t-foreach="addOptions.elements" t-as="o" t-key="o.value">
+                                                            <option t-att-value="o.value" t-esc="o.label"/>
+                                                        </t>
+                                                    </optgroup>
+                                                    <optgroup t-if="addOptions.blocks.length" label="Reusable blocks">
+                                                        <t t-foreach="addOptions.blocks" t-as="o" t-key="o.value">
+                                                            <option t-att-value="o.value" t-esc="o.label"/>
+                                                        </t>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- the preview: a sample page with the unsaved changes -->
+                    <div class="mtbg_pte_preview">
+                        <div class="mtbg_pte_preview_bar d-flex flex-wrap align-items-center gap-2 px-3 py-2">
+                            <strong class="me-1"><i class="fa fa-eye me-1"/>Preview</strong>
+                            <select t-if="state.data.tours.length" class="form-select form-select-sm w-auto mw-100" aria-label="Sample page" t-on-change="onPickTour">
+                                <t t-foreach="state.data.tours" t-as="t" t-key="t.id">
+                                    <option t-att-value="t.id" t-att-selected="t.id === state.tourId"><t t-esc="t.name"/><t t-if="!t.published"> (unpublished)</t></option>
+                                </t>
+                            </select>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Device">
+                                <button type="button" t-att-class="'btn ' + (state.device === 'desktop' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                        t-on-click="() => this.setDevice('desktop')" title="Desktop"><i class="fa fa-desktop"/></button>
+                                <button type="button" t-att-class="'btn ' + (state.device === 'phone' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                        t-on-click="() => this.setDevice('phone')" title="Phone"><i class="fa fa-mobile"/></button>
+                            </div>
+                            <div t-if="state.data.langs.length > 1" class="btn-group btn-group-sm" role="group" aria-label="Language">
+                                <t t-foreach="state.data.langs" t-as="lang" t-key="lang.code">
+                                    <button type="button" t-att-class="'btn ' + (state.lang === lang.code ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.setLang(lang.code)" t-att-title="lang.name" t-esc="lang.code.split('_')[0].toUpperCase()"/>
+                                </t>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-link px-1" t-on-click="refreshPreview" title="Reload the preview"><i class="fa fa-refresh"/></button>
+                            <button type="button" class="btn btn-sm btn-link px-1 ms-auto" t-on-click="openPage" title="Open the saved page"><i class="fa fa-external-link"/></button>
+                        </div>
+                        <div class="mtbg_pte_stage" t-attf-class="mtbg_pte_{{state.device}}" t-ref="stage">
+                            <iframe t-if="previewUrl" t-att-key="state.previewKey" t-att-src="previewUrl" class="mtbg_pte_frame" t-att-style="frameStyle" title="Page preview"/>
+                            <div t-else="" class="p-4 text-muted">No page of this kind to preview yet.</div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

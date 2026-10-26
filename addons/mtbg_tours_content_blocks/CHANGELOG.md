@@ -2,6 +2,20 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_content_blocks-*'`.
 
+## 19.0.0.7.0 · 2026-10-26
+
+- **The page template editor** (Catalog › Page Templates; Page templates phase 2), in two halves. On the left, the
+  page outline with its insert points, laid out like the page (top, the top section's two columns, the main column,
+  the full-width bands). Each insert point's **Add…** list offers what the page does not show yet (the elements left
+  out, the reusable blocks not used), so it shrinks as things are placed; drag a placed element (or its arrows) to
+  move it, the eye leaves it out (it is offered again). Templates are picked, created, duplicated, renamed, archived
+  and made Default in the top bar; the list is a click away, and a template's form has "Open in the editor".
+- On the right, the **preview**, as tall as the screen: a sample page of the template's kind with the unsaved changes
+  (only to the person editing: ?mtbg_template_preview, website designers), on a desktop or a phone, in each language;
+  the site keeps the saved page until Save. A narrow window shows it under the outline.
+- Stats & ratings is one element there (its two parts are added, moved and left out together); its cog opens the Tour Stats settings.
+- Spanish for the Reusable Blocks page's texts too (they were missing).
+
 ## 19.0.0.6.0 · 2026-10-25
 
 - **Reusable blocks inside reusable blocks** (content and background apart, e.g. a background block holding "The MTB

@@ -43,6 +43,8 @@
         <field name="arch" type="xml">
             <form>
                 <header>
+                    <button name="action_open_editor" type="object" string="Open in the editor" class="btn-primary"
+                            help="Lay the page out visually, with a preview"/>
                     <button name="action_make_default" type="object" string="Make Default" invisible="is_default"
                             help="Use this template for every page of its kind that no other template is assigned to"/>
                 </header>
@@ -110,6 +112,13 @@
         </field>
     </record>
 
+    <!-- the template editor (static/src/template_editor): Catalog › Page Templates opens it; its list button opens the
+         list above -->
+    <record id="action_page_template_editor" model="ir.actions.client">
+        <field name="name">Page Templates</field>
+        <field name="tag">mtbg_page_template_editor</field>
+    </record>
+
     <menuitem id="menu_page_template" name="Page Templates" parent="mtbg_tours_core.menu_mtbg_catalog"
-              action="action_page_template" sequence="25" groups="website.group_website_designer"/>
+              action="action_page_template_editor" sequence="25" groups="website.group_website_designer"/>
 </odoo>

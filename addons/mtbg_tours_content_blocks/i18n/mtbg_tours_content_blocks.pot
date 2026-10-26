@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-21 00:13+0000\n"
-"PO-Revision-Date: 2026-10-21 00:13+0000\n"
+"POT-Creation-Date: 2026-10-26 06:41+0000\n"
+"PO-Revision-Date: 2026-10-26 06:41+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,8 +16,88 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/block_library.py:0
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+msgid "%s (copy)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+msgid "%s (not installed)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "%s block(s) archived."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "%s block(s) deleted."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "%s block(s) duplicated."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "%s block(s) restored."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid ""
+"%s block(s) will be deleted permanently. Only blocks not used anywhere can "
+"be deleted; archive the others."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "(Default)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+msgid "(archived block)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "(archived)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "(unpublished)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "+ Add…"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.block_page
 msgid ", used on"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.block_page
+msgid "<i class=\"fa fa-arrow-left me-1\"/>Back to Reusable Blocks"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
@@ -28,9 +108,71 @@ msgid ""
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/block_library.py:0
+msgid "A block needs a name."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model_terms:ir.actions.act_window,help:mtbg_tours_content_blocks.action_page_template
+msgid ""
+"A page template decides which elements a page shows and where. The Default of each kind is the page as\n"
+"                it has always been."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/block_library.py:0
+msgid "A tag named %s already exists."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/block_library.py:0
+msgid "A tag needs a name."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.constraint,message:mtbg_tours_content_blocks.constraint_mtbg_tours_content_block_tag_name_unique
+msgid "A tag with this name already exists."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.constraint,message:mtbg_tours_content_blocks.constraint_mtbg_page_template_line_element_or_block
+msgid "A template line shows either an element or a reusable block."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__active
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__active
+msgid "Active"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
 #. odoo-javascript
-#: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_plugin.js:0
-msgid "A reusable block cannot be placed inside another reusable block."
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Add"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid ""
+"Add… on an insert point places what the page does not show yet (an element left out, a reusable\n"
+"                            block); drag an element (or its arrows) to move it; the eye leaves it out of the page. The\n"
+"                            preview shows your unsaved changes; the site shows them after Save."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "All blocks"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "All templates as a list"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
@@ -40,20 +182,109 @@ msgid "All types"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.block_page
-msgid "Back to the block"
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template_line__element_code
+msgid "An element an extension places on the page"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid ""
+"An extension creates and uses this block: edit it freely, it is never "
+"deleted"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Archive"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_search
+msgid "Archived"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid ""
+"Archived, these blocks show nothing inside the blocks that contain them: %s"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "A–Z"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_option.xml:0
 msgid "Block"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Block preview"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block_tag__block_ids
+msgid "Blocks"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/group_option.xml:0
 msgid "Boxed"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Built into an extension: never deleted"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "Built into extensions"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Built-in"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Cancel"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Change colour"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Choose a block on the left."
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
@@ -75,17 +306,106 @@ msgid "Choose…"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block_tag__color
+msgid "Color"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
 #. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/group_option.xml:0
 msgid "Corners"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Create"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Create tags in the left column."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__create_uid
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__create_uid
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block_tag__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__create_date
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__create_date
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block_tag__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Dark tour page"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__is_default
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
+msgid "Default"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.js:0
+msgid "Default template changed: the pages of this kind use it now."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Delete"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "Delete for good?"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Desktop"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Device"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Discard"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
 #: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_ir_qweb__display_name
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tour__display_name
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_content_block_library__display_name
 #: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__display_name
 #: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tour__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block_tag__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -96,12 +416,32 @@ msgid "Done"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__draft_layout
+msgid "Draft Layout"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Drag blocks onto a tag to tag them."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Duplicate"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
 #. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_option.xml:0
 msgid "Edit"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_content_block_form_usage
 msgid "Edit in Website Builder"
 msgstr ""
@@ -128,6 +468,52 @@ msgid ""
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__element_name
+msgid "Element"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__element_code
+msgid "Element Code"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__line_ids
+msgid "Elements"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__line_count
+msgid "Elements Shown"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Elements left out"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+msgid "Elements shown"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "Empty (no text or image)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Empty: no text or image"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.s_mtbg_group
 msgid ""
 "Everything in this group shares its background. Drag more blocks into it, and set its\n"
@@ -136,8 +522,45 @@ msgstr ""
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Filters"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_tours_content_block__note
+msgid "For the team (Reusable Blocks page); never shown on the website"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid ""
+"For the team: what it is for, where it should go… Never shown on the "
+"website."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template__note
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
+msgid "For the team; never shown on the website"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Form / HTML"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/group_option.xml:0
 msgid "Full width"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.js:0
+msgid "Full width, under the page"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
@@ -151,11 +574,19 @@ msgid "Group title"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Has an internal note"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
 #: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_ir_qweb__id
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tour__id
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block__id
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_content_block_library__id
 #: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__id
 #: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__id
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tour__id
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block__id
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block_tag__id
 msgid "ID"
 msgstr ""
 
@@ -163,6 +594,94 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_option.xml:0
 msgid "In place"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__slot
+msgid "Insert Point"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Inside the block"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__note
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block__note
+msgid "Internal Note"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Internal note"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "It comes off %s block(s); the blocks stay."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "It starts as the page is today; then place the elements your way."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Its settings"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__kind
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__kind
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_search
+msgid "Kind"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Language"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__write_uid
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__write_uid
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block_tag__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__write_date
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__write_date
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block_tag__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Last edited"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model_terms:ir.actions.act_window,help:mtbg_tours_content_blocks.action_page_template
+msgid "Lay out tour and rental pages"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
+msgid "Lay the page out visually, with a preview"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
@@ -174,14 +693,112 @@ msgstr ""
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Leave out of the page"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.js:0
+msgid "Leave them"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Light tour page"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "List view"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Loading…"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.js:0
+msgid "Main column"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
+msgid "Make Default"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_option.xml:0
 msgid "Make a local copy"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.js:0
+msgid ""
+"Make another template the Default first: the Default cannot be archived."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.js:0
+msgid "More insert points"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Most used"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Move down"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Move up"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__name
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block_tag__name
+msgid "Name"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Name of the new block"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "New"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
 #. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/block_library.py:0
 #: code:addons/mtbg_tours_content_blocks/models/content_block.py:0
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_option.xml:0
 msgid "New block"
 msgstr ""
@@ -194,8 +811,74 @@ msgstr ""
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "New tag"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "New template:"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "No block here."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "No page of this kind to preview yet."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "No tag"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid ""
+"No tags yet. Create one with +,\n"
+"                            then drag blocks onto it."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "Not used anywhere"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Not used anywhere yet"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_option.xml:0
 msgid "Not used yet"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_tours_content_block_tag__color
+msgid "Odoo colour index (0-11)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template_line__active
+msgid "Off: removed from the page (the template remembers it)."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+msgid "Only website designers can lay out pages."
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
@@ -205,9 +888,79 @@ msgid "Open"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
+msgid "Open in the editor"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
 #. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_option.xml:0
 msgid "Open the block in the back office (new tab)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Open the saved page"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Page"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model,name:mtbg_tours_content_blocks.model_mtbg_page_template
+msgid "Page Template"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model,name:mtbg_tours_content_blocks.model_mtbg_page_template_line
+msgid "Page Template Element"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+#: model:ir.actions.act_window,name:mtbg_tours_content_blocks.action_page_template
+#: model:ir.actions.client,name:mtbg_tours_content_blocks.action_page_template_editor
+#: model:ir.ui.menu,name:mtbg_tours_content_blocks.menu_page_template
+msgid "Page Templates"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Page preview"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Phone"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Possible duplicate (same name or content)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "Possible duplicates"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Preview"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
@@ -217,14 +970,88 @@ msgstr ""
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Reload"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Reload the preview"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Remove"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Remove tag"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "Remove the tag %s?"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Rename"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Rename, colour or remove"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+#: model:ir.model.fields.selection,name:mtbg_tours_content_blocks.selection__mtbg_page_template__kind__rental
+msgid "Rental page"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_search
+msgid "Rental pages"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_option.xml:0
 msgid "Replace the block by a copy of its content that only this page has"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.snippets
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Restore"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
 #: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__block_id
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.snippets
 msgid "Reusable Block"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+#: model:ir.actions.client,name:mtbg_tours_content_blocks.action_mtbg_extension_page
+msgid "Reusable Blocks"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model,name:mtbg_tours_content_blocks.model_mtbg_content_block_library
+msgid "Reusable Blocks page"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
@@ -232,6 +1059,17 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.s_mtbg_content_block
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.tour_el_block
 msgid "Reusable block"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model,name:mtbg_tours_content_blocks.model_mtbg_tours_content_block_tag
+msgid "Reusable block tag"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Reusable blocks"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
@@ -255,8 +1093,45 @@ msgstr ""
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Sample page"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Save"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Search"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_option.xml:0
 msgid "Search blocks…"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Search name, text, tag…"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Select all"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__sequence
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__sequence
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block_tag__sequence
+msgid "Sequence"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
@@ -273,8 +1148,32 @@ msgstr ""
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid ""
+"Shared content placed on tour and website pages with the\n"
+"                            Reusable Block building block: organise it, see where it is used, edit it."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
+msgid "Shown"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/group_option.xml:0
 msgid "Side padding"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__slot_order
+msgid "Slot Order"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Sort"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
@@ -287,6 +1186,122 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/group_option.xml:0
 msgid "Square"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/block_library.py:0
+msgid ""
+"Still used (or built into an extension), so not deleted: %s. Take it off its"
+" pages first, or archive it."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Tag"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "Tag added to %s block(s)."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Tag name"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Tag name, then Enter"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "Tag removed from %s block(s)."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+#: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_option.xml:0
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_tours_content_block__tag_ids
+msgid "Tags"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__template_id
+msgid "Template"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Template name"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.js:0
+msgid "Template saved: the pages that use it show it now."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/block_library.py:0
+msgid "The %s extension"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+msgid "The Default template of a kind cannot be archived."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template__draft_layout
+msgid "The editor's unsaved lines (JSON), shown only in its preview"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template_line__slot_order
+msgid "The insert point's place on the page"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "The page ·"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template__kind
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template_line__kind
+msgid "The pages this template lays out: tour pages or bike rental pages."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+msgid "There is already a Default template for this kind of page."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__mtbg_missing_ids
+msgid "Things missing"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/block_library.py:0
+msgid "This block no longer exists."
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
@@ -304,8 +1319,81 @@ msgid "This page"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.js:0
+msgid "This template has changes that are not saved. Leave them?"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__mtbg_time_stage
+msgid "Time to start"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.js:0
+msgid "Top"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.js:0
+msgid "Top section"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
 #: model:ir.model,name:mtbg_tours_content_blocks.model_mtbg_tour
 msgid "Tour Product"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
+#: model:ir.model.fields.selection,name:mtbg_tours_content_blocks.selection__mtbg_page_template__kind__tour
+msgid "Tour page"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_search
+msgid "Tour pages"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "Type"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "Type set on %s block(s)."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/block_library.py:0
+msgid "Unknown action: %s"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.js:0
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Unsaved changes"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "Use this template for every page of its kind"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
+msgid ""
+"Use this template for every page of its kind that no other template is "
+"assigned to"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
@@ -314,7 +1402,19 @@ msgid "Used On"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template__is_default
+msgid "Used by every page of its kind that no other template is assigned to."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
 #. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "Used inside other blocks"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_option.xml:0
 msgid "Used on"
 msgstr ""
@@ -342,6 +1442,24 @@ msgid "Website pages (outside tour descriptions) showing this block"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
+msgid ""
+"What the page shows, in each insert point, top to bottom. Switch an element off to leave it\n"
+"                        out of the page: the template remembers it. Elements of extensions installed later show at\n"
+"                        their usual place until the template places them."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template__mtbg_missing_ids
+msgid "What the record's card says it still lacks (refreshed by the boards)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template__mtbg_time_stage
+msgid "Where the record is from its start date (refreshed by the boards)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
 #. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/group_option.xml:0
 msgid "Width"
@@ -349,20 +1467,53 @@ msgstr ""
 
 #. module: mtbg_tours_content_blocks
 #. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/block_library.py:0
 #: code:addons/mtbg_tours_content_blocks/models/content_block.py:0
 msgid "Write the shared content here."
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/block_library.py:0
+msgid "You cannot change reusable blocks."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
 #. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_option.xml:0
 msgid "block(s)"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "by"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_option.xml:0
 msgid "current"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid "e.g. 7+ Day Tours"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
+msgid "e.g. Day tours"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/template_editor/template_editor.xml:0
+msgid ""
+"element(s) of a switched-off extension are kept in this template\n"
+"                            and come back when it is switched on again."
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
@@ -402,9 +1553,21 @@ msgid "pages"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "place(s): edits show on all of them"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.snippets
 msgid ""
 "reusable, shared, content block, global, what to bring, faq, policy, include"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "selected"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
@@ -413,303 +1576,13 @@ msgid "tours,"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
-#. odoo-python
-#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
-msgid "%s (copy)"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#. odoo-python
-#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
-msgid "%s (not installed)"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model_terms:ir.actions.act_window,help:mtbg_tours_content_blocks.action_page_template
-msgid ""
-"A page template decides which elements a page shows and where. The Default of each kind is the page as\n"
-"                it has always been."
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.constraint,message:mtbg_tours_content_blocks.constraint_mtbg_page_template_line_element_or_block
-msgid "A template line shows either an element or a reusable block."
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__active
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__active
-msgid "Active"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template_line__element_code
-msgid "An element an extension places on the page"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
 #. odoo-javascript
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_search
-msgid "Archived"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__create_uid
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__create_uid
-msgid "Created by"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__create_date
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__create_date
-msgid "Created on"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#. odoo-python
-#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__is_default
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
-msgid "Default"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__element_name
-msgid "Element"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__element_code
-msgid "Element Code"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#. odoo-python
-#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__line_ids
-msgid "Elements"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__line_count
-msgid "Elements Shown"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#. odoo-python
-#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
-msgid "Elements shown"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template__note
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
-msgid "For the team; never shown on the website"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__slot
-msgid "Insert Point"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__note
-msgid "Internal Note"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#. odoo-python
-#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__kind
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__kind
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_search
-msgid "Kind"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__write_uid
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__write_uid
-msgid "Last Updated by"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__write_date
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__write_date
-msgid "Last Updated on"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model_terms:ir.actions.act_window,help:mtbg_tours_content_blocks.action_page_template
-msgid "Lay out tour and rental pages"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
-msgid "Make Default"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#. odoo-javascript
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__name
-msgid "Name"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template_line__active
-msgid "Off: removed from the page (the template remembers it)."
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model,name:mtbg_tours_content_blocks.model_mtbg_page_template
-msgid "Page Template"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model,name:mtbg_tours_content_blocks.model_mtbg_page_template_line
-msgid "Page Template Element"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.actions.act_window,name:mtbg_tours_content_blocks.action_page_template
-#: model:ir.ui.menu,name:mtbg_tours_content_blocks.menu_page_template
-msgid "Page Templates"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#. odoo-python
-#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
-#: model:ir.model.fields.selection,name:mtbg_tours_content_blocks.selection__mtbg_page_template__kind__rental
-msgid "Rental page"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_search
-msgid "Rental pages"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__sequence
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__sequence
-msgid "Sequence"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
-msgid "Shown"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__slot_order
-msgid "Slot Order"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template_line__template_id
-msgid "Template"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#. odoo-python
-#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
-msgid "The Default template of a kind cannot be archived."
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template_line__slot_order
-msgid "The insert point's place on the page"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template__kind
-#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template_line__kind
-msgid "The pages this template lays out: tour pages or bike rental pages."
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#. odoo-python
-#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
-msgid "There is already a Default template for this kind of page."
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__mtbg_missing_ids
-msgid "Things missing"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_page_template__mtbg_time_stage
-msgid "Time to start"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#. odoo-python
-#: code:addons/mtbg_tours_content_blocks/models/page_template.py:0
-#: model:ir.model.fields.selection,name:mtbg_tours_content_blocks.selection__mtbg_page_template__kind__tour
-msgid "Tour page"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_search
-msgid "Tour pages"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
-msgid ""
-"Use this template for every page of its kind that no other template is "
-"assigned to"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template__is_default
-msgid "Used by every page of its kind that no other template is assigned to."
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
-msgid ""
-"What the page shows, in each insert point, top to bottom. Switch an element off to leave it\n"
-"                        out of the page: the template remembers it. Elements of extensions installed later show at\n"
-"                        their usual place until the template places them."
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template__mtbg_missing_ids
-msgid "What the record's card says it still lacks (refreshed by the boards)"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_page_template__mtbg_time_stage
-msgid "Where the record is from its start date (refreshed by the boards)"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
-msgid "e.g. Day tours"
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.xml:0
+msgid "· edited"
 msgstr ""
 
 #. module: mtbg_tours_content_blocks
 #. odoo-javascript
 #: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_plugin.js:0
 msgid "“%s” contains this place already: a block cannot be put inside itself."
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#. odoo-javascript
-#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
-msgid "Used inside other blocks"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#. odoo-javascript
-#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
-msgid ""
-"Archived, these blocks show nothing inside the blocks that contain them: %s"
-msgstr ""
-
-#. module: mtbg_tours_content_blocks
-#. odoo-javascript
-#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
-msgid "Archive"
 msgstr ""

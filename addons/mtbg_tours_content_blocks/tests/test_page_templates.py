@@ -115,3 +115,109 @@ class TestPageTemplates(HttpCase):
         self._line('title', self.rental_tpl).active = False
         self.assertNotIn('title', codes(rental._mtbg_tour_page_layout())['top'])
         self.assertIn('title', codes(self.tour._mtbg_tour_page_layout())['top'])
+
+
+@tagged('post_install', '-at_install', 'mtbg')
+class TestPageTemplateEditor(HttpCase):
+    """The template editor (phase 2): its data, the preview of unsaved lines, saving."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.Template = cls.env['mtbg.page.template']
+        cls.Template._mtbg_ensure_defaults()
+        cls.tpl = cls.Template.search([('kind', '=', 'tour'), ('is_default', '=', True)])
+        cls.tour = cls.env['mtbg.tour'].create({'name': 'Editor Test Ride', 'slug': 'editor-test-ride',
+                                                'is_published': True, 'description': '<p>Editor words</p>'})
+        cls.block = cls.env['mtbg.tours.content.block'].create({'name': 'Editor Notice', 'block_type': 'generic',
+                                                                'body': '<p>Placed in the editor</p>'})
+
+    def _lines(self):
+        return [dict(line) for line in self.tpl.mtbg_editor_data(self.tpl.id)['lines']]
+
+    def test_editor_data(self):
+        data = self.Template.mtbg_editor_data(self.tpl.id)
+        self.assertEqual(data['template']['id'], self.tpl.id)
+        self.assertTrue({'top', 'reviews', 'gallery'} <= {s['code'] for s in data['slots']})
+        self.assertIn('title', {e['code'] for e in data['elements']})
+        self.assertIn(self.tour.id, [t['id'] for t in data['tours']])
+        self.assertTrue(data['langs'])
+        stats = [e for e in data['elements'] if e.get('group') == 'stats']
+        if stats:  # Stats installed: one card for its two parts, with the Tour Stats settings as its panel
+            self.assertEqual({e['code'] for e in stats}, {'stats_ratings', 'stats_columns'})
+            self.assertEqual({e['panel'] for e in stats}, {'mtbg_tour_stats_page'})
+
+    def test_preview_keeps_the_site_as_saved(self):
+        """The owner's check: the gallery above the reviews, seen in the preview only until saved."""
+        lines = self._lines()
+        gallery = next(l for l in lines if l['code'] == 'gallery')
+        gallery['slot'] = 'reviews'
+        lines.remove(gallery)
+        first_review = next(n for n, l in enumerate(lines) if l['slot'] == 'reviews')
+        lines.insert(first_review, gallery)
+        lines.append({'id': 0, 'code': False, 'block_id': self.block.id, 'slot': 'under_title', 'active': True})
+        self.tpl.mtbg_editor_preview(lines)
+        self.assertIn('gallery', codes(self.tpl._mtbg_layout(draft=True))['reviews'])
+        self.assertNotIn('gallery', codes(self.tpl._mtbg_layout()).get('reviews', []), "the site keeps the saved page")
+        self.authenticate('admin', 'admin')
+        preview = self.url_open(f'/tours/editor-test-ride?mtbg_template_preview={self.tpl.id}').text
+        self.assertIn('Placed in the editor', preview)
+        self.authenticate(None, None)
+        self.assertNotIn('Placed in the editor', self.url_open('/tours/editor-test-ride?mtbg_template_preview=%s' % self.tpl.id).text,
+                         "a visitor never sees the draft")
+        data = self.tpl.mtbg_editor_save(lines)
+        self.assertFalse(self.tpl.sudo().draft_layout)
+        self.assertIn('gallery', codes(self.tpl._mtbg_layout())['reviews'])
+        reviews_lines = [l['code'] for l in data['lines'] if l['slot'] == 'reviews']
+        self.assertEqual(reviews_lines[0], 'gallery', "saved in the order given")
+        self.assertIn('Placed in the editor', self.url_open('/tours/editor-test-ride').text)
+
+    def test_clean_lines(self):
+        lines = self.tpl._mtbg_clean_lines([
+            {'code': 'title', 'slot': 'top'}, {'code': 'title', 'slot': 'bottom'},  # an element once
+            {'code': 'price', 'slot': 'nowhere'},  # unknown insert point
+            {'code': 'faq', 'block_id': self.block.id, 'slot': 'bottom'},  # both
+            {'block_id': self.block.id, 'slot': 'bottom'}, {'code': 'faq', 'slot': 'bottom', 'active': False},
+        ])
+        self.assertEqual([(l['code'], l['block_id'], l['slot'], l['sequence']) for l in lines],
+                         [('title', 0, 'top', 10), (False, self.block.id, 'bottom', 10), ('faq', 0, 'bottom', 20)])
+        self.assertFalse(lines[-1]['active'])
+
+    def test_designers_only(self):
+        user = self.env['res.users'].create({'name': 'No Designer', 'login': 'no_designer_pte',
+                                             'group_ids': [(6, 0, [self.env.ref('base.group_user').id])]})
+        with self.assertRaises(Exception):
+            self.Template.with_user(user).mtbg_editor_data(self.tpl.id)
+
+    def test_editor_in_the_browser(self):
+        code = """
+        (async () => {
+            const wait = async (fn, what) => {
+                for (let i = 0; i < 200; i++) {
+                    const found = fn();
+                    if (found) { return found; }
+                    await new Promise((r) => setTimeout(r, 100));
+                }
+                throw new Error('timeout: ' + what);
+            };
+            await wait(() => document.querySelector('.mtbg_pte_slot'), 'the page outline');
+            const chips = document.querySelectorAll('.mtbg_pte_chip').length;
+            if (chips < 5) { throw new Error('too few elements on the page: ' + chips); }
+            // leave the title out: the change is unsaved, and the title is offered back in the "Add…" lists
+            const title = [...document.querySelectorAll('.mtbg_pte_chip')].find((c) => /Title/.test(c.textContent));
+            title.querySelector('.fa-eye-slash').closest('button').click();
+            await wait(() => document.querySelector('.mtbg_pte_head .badge.text-bg-warning'), 'unsaved changes');
+            const add = await wait(() => [...document.querySelectorAll('.mtbg_pte_add')].find((s) =>
+                [...s.options].some((o) => o.textContent.trim() === 'Title')), 'the title offered back');
+            add.value = [...add.options].find((o) => o.textContent.trim() === 'Title').value;
+            add.dispatchEvent(new Event('change', { bubbles: true }));
+            await wait(() => [...document.querySelectorAll('.mtbg_pte_chip')].some((c) => /Title/.test(c.textContent)), 'the title placed again');
+            if ([...document.querySelectorAll('.mtbg_pte_add option')].some((o) => o.textContent.trim() === 'Title')) {
+                throw new Error('a placed element is still offered');
+            }
+            const frame = await wait(() => document.querySelector('.mtbg_pte_frame'), 'the preview');
+            await wait(() => frame.contentDocument?.querySelector('.mtbg-tour-main'), 'the preview page');
+            console.log('test successful');
+        })().catch((e) => console.error(e.message));
+        """
+        self.browser_js('/odoo/action-mtbg_tours_content_blocks.action_page_template_editor', code, login='admin', timeout=120)
