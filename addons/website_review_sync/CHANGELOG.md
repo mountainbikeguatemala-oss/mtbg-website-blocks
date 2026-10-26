@@ -2,6 +2,11 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'website_review_sync-*'`.
 
+## 19.0.0.2.2 · 2026-10-25
+
+- On Tours › Configuration › Extensions it shows in the **Custom blocks** section (with the other extensions
+  whose main job is website editor blocks).
+
 ## 19.0.0.2.1 · 2026-10-24
 
 - Its scheduled job is kept as the site set it: an upgrade no longer switches a paused job back on (noupdate).

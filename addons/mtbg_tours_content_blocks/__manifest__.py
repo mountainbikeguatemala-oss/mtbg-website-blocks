@@ -1,6 +1,8 @@
 {
     'name': 'MTBG Tours — Reusable Blocks',
-    'version': '19.0.0.5.0',
+    'version': '19.0.0.5.1',
+    # its section on the Extensions panel: Custom blocks (its main job is website editor blocks)
+    'mtbg_tours_section': 'blocks',
     'category': 'Website',
     'summary': 'Reusable Block and Group building blocks: shared content placed visually; one background behind several blocks',
     'description': """

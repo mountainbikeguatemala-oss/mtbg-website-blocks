@@ -2,6 +2,11 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_content_blocks-*'`.
 
+## 19.0.0.5.1 · 2026-10-25
+
+- On Tours › Configuration › Extensions it shows in the **Custom blocks** section (with the other extensions
+  whose main job is website editor blocks).
+
 ## 19.0.0.5.0 · 2026-10-25
 
 - **Page templates** (Catalog › Page Templates): named layouts of the tour page, one kind for tour pages and one for

@@ -1,6 +1,8 @@
 {
     'name': 'Website Reviews (Google & Tripadvisor)',
-    'version': '19.0.0.2.1',
+    'version': '19.0.0.2.2',
+    # its section on the Extensions panel: Custom blocks (its main job is website editor blocks)
+    'mtbg_tours_section': 'blocks',
     'category': 'Website',
     'summary': 'Google Business Profile and Tripadvisor reviews synced into Odoo, shown with a Reviews slider block',
     'description': """
