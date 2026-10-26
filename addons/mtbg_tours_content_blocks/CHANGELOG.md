@@ -2,6 +2,15 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_content_blocks-*'`.
 
+## 19.0.0.10.0 · 2026-10-26
+
+- **Website Blocks**, the website blocks' own app menu (owner, 2026-10-26: out of Tours' Extensions page, into a
+  left-hand menu of their own): **Blocks** (every reusable block as a board by type, and a list), **Block Library**
+  (was Website › Content › Reusable Blocks), **Page Templates** (was Website › Content › Page Templates), the **Card
+  Designer** (mtbg_website_cards) and **Extensions**: every website block module (its manifest says
+  `'mtbg_tours_section': 'blocks'` or `'mtbg_website_blocks': True`), on or off, with its switch and its own page.
+  Plain Odoo views; Tours gives them its look (mtbg_tours_page_templates).
+
 ## 19.0.0.9.0 · 2026-10-26
 
 - **The website blocks pack's base** (repo mtbg-website-blocks): needs only Odoo's website now, so it runs on any

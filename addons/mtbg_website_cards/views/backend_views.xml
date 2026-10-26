@@ -61,6 +61,7 @@
         <field name="tag">mtbg_card_designer</field>
     </record>
 
-    <menuitem id="menu_card_designer" name="Card Designs" parent="website.menu_content"
-              action="action_card_designer" sequence="50" groups="website.group_website_designer"/>
+    <!-- Website Blocks › Card Designer -->
+    <menuitem id="menu_card_designer" name="Card Designer" parent="mtbg_tours_content_blocks.menu_website_blocks_root"
+              action="action_card_designer" sequence="40" groups="website.group_website_designer"/>
 </odoo>

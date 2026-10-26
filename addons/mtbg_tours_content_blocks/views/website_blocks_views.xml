@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Website Blocks › Blocks: every reusable block as a board and a list -->
+    <record id="view_content_block_kanban" model="ir.ui.view">
+        <field name="name">mtbg.tours.content.block.kanban</field>
+        <field name="model">mtbg.tours.content.block</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="block_type" class="o_mtbg_wb_blocks">
+                <field name="name"/>
+                <field name="block_type"/>
+                <field name="usage_total"/>
+                <field name="tag_ids"/>
+                <templates>
+                    <t t-name="card">
+                        <field name="name" class="fw-bold"/>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        <footer class="pt-1">
+                            <span class="text-muted small"><i class="fa fa-link me-1" title="Used On"/><field name="usage_total"/> used</span>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_website_blocks" model="ir.actions.act_window">
+        <field name="name">Blocks</field>
+        <field name="res_model">mtbg.tours.content.block</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'sequence': 1, 'view_mode': 'kanban', 'view_id': ref('view_content_block_kanban')}),
+            (0, 0, {'sequence': 2, 'view_mode': 'list', 'view_id': ref('view_content_block_list')})]"/>
+        <field name="search_view_id" ref="view_content_block_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No reusable block yet</p>
+            <p>A reusable block is shared content (What to Bring, policies…) placed on many pages: edit it once, every
+                page shows it.</p>
+        </field>
+    </record>
+
+    <!-- Website Blocks › Extensions: the website block modules -->
+    <record id="view_website_block_module_kanban" model="ir.ui.view">
+        <field name="name">ir.module.module.kanban.website.blocks</field>
+        <field name="model">ir.module.module</field>
+        <field name="arch" type="xml">
+            <kanban create="0" class="o_mtbg_wb_modules">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="icon"/>
+                <field name="mtbg_wb_has_page"/>
+                <templates>
+                    <t t-name="card" class="flex-row">
+                        <aside class="me-3">
+                            <img t-att-src="record.icon.value or '/base/static/description/icon.png'" alt="" width="48" height="48"/>
+                        </aside>
+                        <main class="flex-grow-1">
+                            <field name="shortdesc" class="fw-bold"/>
+                            <field name="summary" class="text-muted small"/>
+                            <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
+                                <span t-if="record.state.raw_value === 'installed'" class="badge text-bg-success">On</span>
+                                <span t-else="" class="badge text-bg-secondary">Off</span>
+                                <field name="installed_version" class="small text-muted"/>
+                                <div class="ms-auto d-flex gap-1">
+                                    <button t-if="record.mtbg_wb_has_page.raw_value" name="action_mtbg_wb_open" type="object"
+                                            class="btn btn-sm btn-primary">Open</button>
+                                    <button t-if="record.state.raw_value === 'uninstalled'" name="action_mtbg_wb_switch_on"
+                                            type="object" class="btn btn-sm btn-secondary">Switch on</button>
+                                    <button t-if="record.state.raw_value === 'installed' and record.name.raw_value !== 'mtbg_tours_content_blocks'"
+                                            name="action_mtbg_wb_switch_off" type="object" class="btn btn-sm btn-link text-muted">Switch off</button>
+                                </div>
+                            </div>
+                        </main>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_website_block_module_list" model="ir.ui.view">
+        <field name="name">ir.module.module.list.website.blocks</field>
+        <field name="model">ir.module.module</field>
+        <field name="arch" type="xml">
+            <list create="0">
+                <field name="shortdesc" string="Extension"/>
+                <field name="summary" optional="show"/>
+                <field name="installed_version" string="Version"/>
+                <field name="state" widget="badge" decoration-success="state == 'installed'"/>
+                <field name="name" string="Technical Name" optional="hide"/>
+                <field name="mtbg_wb_has_page" column_invisible="1"/>
+                <button name="action_mtbg_wb_open" type="object" string="Open" invisible="not mtbg_wb_has_page"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_website_block_module_search" model="ir.ui.view">
+        <field name="name">ir.module.module.search.website.blocks</field>
+        <field name="model">ir.module.module</field>
+        <field name="arch" type="xml">
+            <search string="Extensions">
+                <field name="shortdesc" string="Extension"/>
+                <field name="name" string="Technical Name"/>
+                <filter name="installed" string="On" domain="[('state', '=', 'installed')]"/>
+                <filter name="not_installed" string="Off" domain="[('state', '!=', 'installed')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_website_block_modules" model="ir.actions.act_window">
+        <field name="name">Extensions</field>
+        <field name="res_model">ir.module.module</field>
+        <field name="view_mode">kanban,list</field>
+        <field name="domain">[('mtbg_website_block', '=', True), ('state', '!=', 'uninstallable')]</field>
+        <field name="context">{'search_default_app': 0}</field>
+        <field name="search_view_id" ref="view_website_block_module_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'sequence': 1, 'view_mode': 'kanban', 'view_id': ref('view_website_block_module_kanban')}),
+            (0, 0, {'sequence': 2, 'view_mode': 'list', 'view_id': ref('view_website_block_module_list')})]"/>
+        <field name="help" type="html">
+            <p>The website blocks: switch one on or off (switching off uninstalls it and deletes its data), open its
+                page.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_website_blocks_blocks" name="Blocks" parent="menu_website_blocks_root"
+              action="action_website_blocks" sequence="10" groups="website.group_website_designer"/>
+    <menuitem id="menu_website_blocks_extensions" name="Extensions" parent="menu_website_blocks_root"
+              action="action_website_block_modules" sequence="90" groups="base.group_system"/>
+</odoo>

@@ -5,9 +5,9 @@
         <field name="name">Reusable Blocks</field>
         <field name="tag">mtbg_content_block_library</field>
     </record>
-    <!-- Website › Content › Reusable Blocks (on a Tours site: Catalog › Reusable Blocks instead) -->
-    <menuitem id="menu_block_library" name="Reusable Blocks" parent="website.menu_content"
-              action="action_mtbg_extension_page" sequence="40" groups="website.group_website_designer"/>
+    <!-- Website Blocks › Block Library -->
+    <menuitem id="menu_block_library" name="Block Library" parent="menu_website_blocks_root"
+              action="action_mtbg_extension_page" sequence="20" groups="website.group_website_designer"/>
 
     <record id="view_content_block_tag_list" model="ir.ui.view">
         <field name="name">mtbg.tours.content.block.tag.list</field>

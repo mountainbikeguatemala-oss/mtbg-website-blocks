@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The Website Blocks app (owner, 2026-10-26): its own left-hand menu, with the blocks, the Block Library, the
+         Page Templates (views/page_template_views.xml), the Card Designer (mtbg_website_cards) and the Extensions
+         page (the website block modules, their switches and pages). Loaded first: the other files hang their menus
+         on it. -->
+    <menuitem id="menu_website_blocks_root" name="Website Blocks" sequence="46"
+              web_icon="mtbg_tours_content_blocks,static/description/icon.png"
+              groups="website.group_website_designer"/>
+</odoo>

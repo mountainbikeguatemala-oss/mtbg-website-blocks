@@ -1,13 +1,13 @@
 {
     'name': 'MTBG Website — Card Designer',
-    'version': '19.0.0.1.0',
+    'version': '19.0.0.1.1',
     # where the updater gets it (the website blocks pack's repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     'mtbg_tours_section': 'blocks',
     'category': 'Website',
     'summary': 'Design the website\'s cards visually: text over or beside the photo, fields on the photo or below, hover',
     'description': """
-Card designs for the website's cards, made visually (Website › Content › Card Designs): each design shows the
+Card designs for the website's cards, made visually (Website Blocks › Card Designer): each design shows the
 records of a source (a module gives its sources: e.g. Tours' tours and group departures).
 
 * Style: text over the photo, below it or above it; the photo's frame (3:2, 4:3, 16:9, square), corners, shadow
@@ -22,7 +22,9 @@ Part of the MTBG website blocks: needs only Odoo's website.
 """,
     'author': 'MTBG Tours contributors',
     'license': 'LGPL-3',
-    'depends': ['website'],
+    # the Website Blocks menu (its Card Designer entry) is the website blocks' base's
+    'depends': ['website', 'mtbg_tours_content_blocks'],
+    'mtbg_requires': {'mtbg_tours_content_blocks': '19.0.0.10.0'},
     'data': [
         'security/ir.model.access.csv',
         'views/card_templates.xml',

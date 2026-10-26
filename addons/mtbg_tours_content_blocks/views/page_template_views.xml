@@ -113,13 +113,13 @@
         </field>
     </record>
 
-    <!-- the template editor (static/src/template_editor): Website › Content › Page Templates opens it (a Tours site:
-         Catalog › Page Templates); its list button opens the list above -->
+    <!-- the template editor (static/src/template_editor): Website Blocks › Page Templates opens it; its list button
+         opens the list above -->
     <record id="action_page_template_editor" model="ir.actions.client">
         <field name="name">Page Templates</field>
         <field name="tag">mtbg_page_template_editor</field>
     </record>
 
-    <menuitem id="menu_page_template" name="Page Templates" parent="website.menu_content"
-              action="action_page_template_editor" sequence="45" groups="website.group_website_designer"/>
+    <menuitem id="menu_page_template" name="Page Templates" parent="menu_website_blocks_root"
+              action="action_page_template_editor" sequence="30" groups="website.group_website_designer"/>
 </odoo>

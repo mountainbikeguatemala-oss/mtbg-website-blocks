@@ -62,3 +62,37 @@ class TestBlockPage(HttpCase):
         self.assertNotIn('Free shipping', self.url_open(f'/mtbg/block/{block.id}').text, "visitors: the login page")
         self.authenticate('admin', 'admin')
         self.assertIn('Free shipping', self.url_open(f'/mtbg/block/{block.id}').text)
+
+
+@tagged('post_install', '-at_install', 'mtbg')
+class TestWebsiteBlocksMenu(TransactionCase):
+    """The website blocks' own app menu (owner, 2026-10-26): Blocks, Block Library, Page Templates (and the Card
+    Designer when installed), Extensions with every website block module."""
+
+    def test_menu(self):
+        root = self.env.ref('mtbg_tours_content_blocks.menu_website_blocks_root')
+        self.assertFalse(root.parent_id, "an app of its own (left-hand menu)")
+        children = root.child_id.sorted('sequence')
+        names = children.mapped(lambda m: m.with_context(lang='en_US').name)
+        self.assertEqual(names[:3], ['Blocks', 'Block Library', 'Page Templates'])
+        self.assertEqual(names[-1], 'Extensions')
+        content = self.env.ref('website.menu_content')
+        self.assertFalse(content.child_id & children, "no longer under Website › Content")
+
+    def test_extensions_page(self):
+        Module = self.env['ir.module.module']
+        Module._mtbg_wb_fill()
+        action = self.env.ref('mtbg_tours_content_blocks.action_website_block_modules')
+        from odoo.tools.safe_eval import safe_eval
+        listed = Module.search(safe_eval(action.domain))
+        self.assertIn('mtbg_tours_content_blocks', listed.mapped('name'))
+        self.assertNotIn('website', listed.mapped('name'))
+        base = listed.filtered(lambda m: m.name == 'mtbg_tours_content_blocks')
+        self.assertTrue(base.mtbg_wb_has_page, "its page: the Block Library")
+        self.assertEqual(base.action_mtbg_wb_open()['tag'], 'mtbg_content_block_library')
+        with self.assertRaises(Exception):
+            base.action_mtbg_wb_switch_off()
+        # a manifest's key is read with the module list
+        website = Module.search([('name', '=', 'website')])
+        website._update_from_terp(dict(Module.get_module_info('website'), mtbg_website_blocks=True))
+        self.assertTrue(website.mtbg_website_block)

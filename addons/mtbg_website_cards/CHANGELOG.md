@@ -2,6 +2,11 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_website_cards-*'`.
 
+## 19.0.0.1.1 · 2026-10-26
+
+- The Card Designer is on the website blocks' own menu: **Website Blocks › Card Designer** (was Website › Content ›
+  Card Designs). Needs Reusable Blocks 19.0.0.10.0 (the menu's base).
+
 ## 19.0.0.1.0 · 2026-10-26
 
 - **Card Designer** (Website › Content › Card Designs): card designs made visually, each for a source of records a

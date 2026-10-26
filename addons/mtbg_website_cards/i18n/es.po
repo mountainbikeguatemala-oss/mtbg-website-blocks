@@ -1,3 +1,6 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mtbg_website_cards
 #
 msgid ""
 msgstr ""
@@ -56,12 +59,12 @@ msgstr "Cancelar"
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 #: model:ir.actions.client,name:mtbg_website_cards.action_card_designer
 #: model:ir.actions.client,name:mtbg_website_cards.action_mtbg_extension_page
+#: model:ir.ui.menu,name:mtbg_website_cards.menu_card_designer
 msgid "Card Designer"
 msgstr "Diseñador de tarjetas"
 
 #. module: mtbg_website_cards
 #: model:ir.actions.act_window,name:mtbg_website_cards.action_card_design
-#: model:ir.ui.menu,name:mtbg_website_cards.menu_card_designer
 msgid "Card Designs"
 msgstr "Diseños de tarjetas"
 
