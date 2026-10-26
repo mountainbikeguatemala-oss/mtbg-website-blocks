@@ -59,6 +59,35 @@ class TestReviewPresets(TransactionCase):
         with self.assertRaises(ValidationError):
             self.page.preview(data)
 
+    def test_bubble_dividers_and_date(self):
+        """Speech bubbles: the dividers set what sits above the bubble, in it and under it; the date part on its own."""
+        import json
+        import re
+        from html import unescape
+        from ..models.preset import _card_parts
+        # saved before the dividers: the bubble where it was, the reviewer above (first) or under it
+        old = _card_parts([{'key': 'reviewer', 'show': True}, {'key': 'text', 'show': True}])
+        keys = [p['key'] for p in old]
+        self.assertEqual(keys[:2], ['reviewer', 'bubble_start'])
+        self.assertLess(keys.index('text'), keys.index('bubble_end'))
+        self.assertFalse(next(p for p in old if p['key'] == 'date')['show'], "the date part starts hidden")
+        under = [p['key'] for p in _card_parts([{'key': 'text', 'show': True}, {'key': 'reviewer', 'show': True}])]
+        self.assertGreater(under.index('reviewer'), under.index('bubble_end'))
+        data = _preset_data(self.env, 'bubbles')
+        data['card_parts'] = [{'key': 'date', 'show': True}, {'key': 'bubble_start', 'show': False},
+                              {'key': 'rating', 'show': True}, {'key': 'text', 'show': True},
+                              {'key': 'reviewer', 'show': True}, {'key': 'bubble_end', 'show': True},
+                              {'key': 'link', 'show': True}, {'key': 'photos', 'show': False}, {'key': 'title', 'show': True}]
+        html = self.page.preview(data)
+        zones = json.loads(unescape(re.search(r'data-rv-zones="([^"]*)"', html).group(1)))
+        self.assertEqual(zones, {'above': ['date'], 'below': ['link', 'title']}, "a divider can't be hidden")
+        self.assertIn('s_review_date_apart', html, "the date on its own: the reviewer's line leaves it out")
+        self.assertNotIn('s_review_reviewer_top', html, "the reviewer in the bubble")
+        self.assertIn('--rv-o-date: 0', html)
+        # cards: no dividers
+        cards = _preset_data(self.env, 'cards')
+        self.assertNotIn('data-rv-zones', self.page.preview(cards))
+
     def test_stars_count_up_and_button(self):
         """The stars are a part of their own (one banner when next to the total), the count-up's time and curve
         reach the block, the button has its own colours."""

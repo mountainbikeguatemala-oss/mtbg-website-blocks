@@ -2,6 +2,15 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'website_review_sync-*'`.
 
+## 19.0.0.3.0 · 2026-10-26
+
+- Reviews page › a preset's card parts, speech bubbles: **two dividers, Bubble starts and Bubble ends**. Drag the
+  parts between them to put them in the bubble, above them to show them over the bubble, below them to show them
+  under it (any part: the reviewer, the stars, the link...). Saved presets keep their look (the dividers go where
+  the bubble was). Cards don't use them.
+- **Date only**: a card part of its own (hidden until switched on), to place anywhere; while it shows, the
+  reviewer's line leaves its date out.
+
 ## 19.0.0.2.2 · 2026-10-25
 
 - On Tours › Configuration › Extensions it shows in the **Custom blocks** section (with the other extensions

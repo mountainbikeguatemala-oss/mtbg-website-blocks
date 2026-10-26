@@ -3,6 +3,7 @@
 A block on a page only names its preset (``<section class="s_review_preset" data-preset="site">``): the block is
 drawn from the preset on each visit (``/review_sync/preset``), so changing a preset changes every block using it.
 """
+import json
 import re
 
 from odoo import _, api, fields, models
@@ -17,8 +18,10 @@ BLOCK_PARTS = {
     'slider': ['heading', 'stars', 'total', 'reviews', 'button'],
     'wall': ['heading', 'stars', 'total', 'filters', 'reviews'],
 }
-# the parts of a review card, in order (the reviewer: above or below the bubble with speech bubbles)
-CARD_PARTS = ['rating', 'title', 'text', 'photos', 'link', 'reviewer']
+# the parts of a review card, in order; with speech bubbles two dividers set what is above the bubble, in it and
+# under it (bubble_start / bubble_end, always "shown"); the date: the reviewer's line, or a part of its own
+CARD_PARTS = ['rating', 'title', 'text', 'photos', 'link', 'reviewer', 'date', 'bubble_start', 'bubble_end']
+MARKERS = ('bubble_start', 'bubble_end')
 COLORS = ['bg', 'text', 'bubble', 'bubble_text', 'star', 'link', 'button', 'button_text']
 # the five-star total's count-up: how its speed changes on the way to the total
 EASINGS = ['linear', 'smooth', 'slow', 'slower', 'log']
@@ -44,6 +47,39 @@ def _parts(value, names, default_hidden=()):
         if key not in seen:
             parts.append({'key': key, 'show': key not in default_hidden})
     return parts
+
+
+def _card_parts(value):
+    """A review card's parts cleaned (_parts). Saved before the dividers: they go where the bubble was, the reviewer
+    above it when it was first (shown), under it otherwise; the date part starts hidden (the reviewer's line has it)."""
+    value = [item for item in (value or []) if isinstance(item, dict)]
+    keys = [item.get('key') for item in value]
+    if value and not any(marker in keys for marker in MARKERS):
+        shown = [item.get('key') for item in value if item.get('show', True)]
+        reviewer = next((item for item in value if item.get('key') == 'reviewer'), None)
+        rest = [item for item in value if item.get('key') != 'reviewer']
+        start, end = {'key': 'bubble_start', 'show': True}, {'key': 'bubble_end', 'show': True}
+        if reviewer and shown[:1] == ['reviewer']:
+            value = [reviewer, start, *rest, end]
+        else:
+            value = [start, *rest, end] + ([reviewer] if reviewer else [])
+    elif not value:
+        value = [{'key': 'bubble_start', 'show': True}] + [{'key': key, 'show': key != 'date'} for key in CARD_PARTS
+                 if key not in MARKERS and key != 'reviewer'] + [{'key': 'bubble_end', 'show': True},
+                                                                  {'key': 'reviewer', 'show': True}]
+    parts = _parts(value, CARD_PARTS, ('date',))
+    for part in parts:
+        if part['key'] in MARKERS:
+            part['show'] = True
+    return parts
+
+
+def _card_zones(parts):
+    """Speech bubbles: the shown parts above the bubble, in it and under it, by the two dividers."""
+    keys = [p['key'] for p in parts if p['show']]
+    start, end = sorted((keys.index('bubble_start'), keys.index('bubble_end')))
+    zone = lambda part_keys: [k for k in part_keys if k not in MARKERS]
+    return {'above': zone(keys[:start]), 'inside': zone(keys[start + 1:end]), 'below': zone(keys[end + 1:])}
 
 
 class ReviewPreset(models.Model):
@@ -148,7 +184,7 @@ class ReviewPreset(models.Model):
             'source_ids': self.source_ids.ids, 'min_rating': self.min_rating, 'limit': self.limit, 'sort': self.sort,
             'page_only': self.page_only, 'autoplay': self.autoplay, 'arrows': self.arrows,
             'layout': _parts(self.layout, BLOCK_PARTS[self.kind], ('heading',)),
-            'card_parts': _parts(self.card_parts, CARD_PARTS), 'total_style': self.total_style,
+            'card_parts': _card_parts(self.card_parts), 'total_style': self.total_style,
             'count_ms': self.count_ms, 'count_ease': self.count_ease,
             'button_url': self.button_url or '', 'button_style': self.button_style, 'button_size': self.button_size,
             'logo': self.logo,
@@ -185,7 +221,7 @@ class ReviewPreset(models.Model):
             'autoplay': bool(data.get('autoplay')), 'arrows': bool(data.get('arrows')),
             'source_ids': [(6, 0, sources.ids)], 'button_url': url or False,
             'layout': _parts(data.get('layout'), BLOCK_PARTS[kind], ('heading',)),
-            'card_parts': _parts(data.get('card_parts'), CARD_PARTS),
+            'card_parts': _card_parts(data.get('card_parts')),
         })
         return vals
 
@@ -193,7 +229,7 @@ class ReviewPreset(models.Model):
     def _render_context(self, vals, texts):
         """What the block template needs, from cleaned values and the texts of one language."""
         hidden = {p['key'] for p in vals['card_parts'] if not p['show']}
-        order = {p['key']: i for i, p in enumerate(vals['card_parts'])}
+        order = {key: i for i, key in enumerate(p['key'] for p in vals['card_parts'] if p['key'] not in MARKERS)}
         classes = ['s_review_ordered', 's_review_wall' if vals['kind'] == 'wall' else 's_review_slider',
                    's_review_' + vals['style']]
         if vals['theme'] == 'dark':
@@ -212,10 +248,13 @@ class ReviewPreset(models.Model):
             classes.append('rv-logo-' + vals['logo'])
         if vals['arrows'] and vals['kind'] == 'slider':
             classes.append('rv-arrows')  # the arrows beside the reviews, not over them
-        # speech bubbles: the reviewer goes above the bubble when dragged before every other part
-        shown = [p['key'] for p in vals['card_parts'] if p['show']]
-        if vals['style'] == 'bubbles' and shown[:1] == ['reviewer']:
+        # speech bubbles: the dividers set what sits above the bubble, in it and under it (the tail points up when
+        # the reviewer is above); the date part shown: the reviewer's line leaves its date out
+        zones = _card_zones(vals['card_parts']) if vals['style'] == 'bubbles' else None
+        if zones and 'reviewer' in zones['above']:
             classes.append('s_review_reviewer_top')
+        if 'date' not in hidden:
+            classes.append('s_review_date_apart')
         classes += ['s_review_hide_' + key for key in sorted(hidden)]
         style = [f'--rv-o-{key}: {index}' for key, index in order.items()]
         style.append(f"--rv-radius: {vals['radius']}px")
@@ -248,6 +287,7 @@ class ReviewPreset(models.Model):
                 'data-arrows': 'true' if vals['arrows'] else 'false',
                 'data-scope': 'page' if vals['page_only'] else None,
                 'data-count-ms': vals['count_ms'], 'data-count-ease': vals['count_ease'],
+                'data-rv-zones': json.dumps({'above': zones['above'], 'below': zones['below']}) if zones else None,
             },
             'heading': texts.get('heading') or '', 'total_label': texts.get('total_label') or '',
             'button_text': texts.get('button_text') or '', 'button_url': vals.get('button_url') or '/reviews',

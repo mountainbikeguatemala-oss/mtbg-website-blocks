@@ -10,7 +10,7 @@ import { registry } from "@web/core/registry";
 import { rpc } from "@web/core/network/rpc";
 import { _t } from "@web/core/l10n/translation";
 
-import { countOptions, countUp, make, openPhotos, pageLang, ratingBadges, reviewCard, toggleMore, toggleOriginal } from "./review_card";
+import { cardLayout, countOptions, countUp, make, openPhotos, pageLang, ratingBadges, reviewCard, toggleMore, toggleOriginal } from "./review_card";
 
 export class ReviewSlider extends Interaction {
     static selector = ".s_review_slider";
@@ -62,7 +62,7 @@ export class ReviewSlider extends Interaction {
             this.track.replaceChildren(make("p", "text-muted text-center w-100", _t("No reviews to show yet.")));
             return;
         }
-        this.track.replaceChildren(...this.data.reviews.map((r) => reviewCard(r)));
+        this.track.replaceChildren(...this.data.reviews.map((r) => reviewCard(r, cardLayout(this.el))));
         const body = this.el.querySelector(".s_review_slider_body");
         // navigation arrows (block option "Arrows"; swiping / scrolling always works)
         if (this.el.dataset.arrows !== "true") {

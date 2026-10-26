@@ -1550,6 +1550,30 @@ msgstr ""
 #. module: website_review_sync
 #. odoo-javascript
 #: code:addons/website_review_sync/static/src/settings_page/settings_page.js:0
+msgid "Date only"
+msgstr ""
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/settings_page/settings_page.js:0
+msgid "Bubble starts"
+msgstr ""
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/settings_page/settings_page.js:0
+msgid "Bubble ends"
+msgstr ""
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/settings_page/settings_page.js:0
+msgid "Speech bubbles: the parts between Bubble starts and Bubble ends are in the bubble; above it, over the bubble; below it, under the bubble. Date only: the date on its own (the reviewer's line then leaves it out)."
+msgstr ""
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/settings_page/settings_page.js:0
 msgid "Reviewer (photo, name, date)"
 msgstr ""
 
@@ -1830,20 +1854,6 @@ msgstr ""
 #: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
 #: model:ir.model.fields.selection,name:website_review_sync.selection__review_preset__style__bubbles
 msgid "Speech bubbles"
-msgstr ""
-
-#. module: website_review_sync
-#. odoo-javascript
-#: code:addons/website_review_sync/static/src/settings_page/settings_page.js:0
-msgid ""
-"Speech bubbles: drag the reviewer to the top to show it above the bubble; "
-"anywhere else it is under it."
-msgstr ""
-
-#. module: website_review_sync
-#. odoo-javascript
-#: code:addons/website_review_sync/static/src/settings_page/settings_page.js:0
-msgid "Speech bubbles: the reviewer is first, so it shows above the bubble."
 msgstr ""
 
 #. module: website_review_sync

@@ -1,6 +1,6 @@
 {
     'name': 'Website Reviews (Google & Tripadvisor)',
-    'version': '19.0.0.2.2',
+    'version': '19.0.0.3.0',
     # its section on the Extensions panel: Custom blocks (its main job is website editor blocks)
     'mtbg_tours_section': 'blocks',
     'category': 'Website',

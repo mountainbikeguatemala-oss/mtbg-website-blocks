@@ -1580,6 +1580,30 @@ msgstr "Autor de la reseña"
 #. module: website_review_sync
 #. odoo-javascript
 #: code:addons/website_review_sync/static/src/settings_page/settings_page.js:0
+msgid "Date only"
+msgstr "Solo la fecha"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/settings_page/settings_page.js:0
+msgid "Bubble starts"
+msgstr "Empieza el globo"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/settings_page/settings_page.js:0
+msgid "Bubble ends"
+msgstr "Termina el globo"
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/settings_page/settings_page.js:0
+msgid "Speech bubbles: the parts between Bubble starts and Bubble ends are in the bubble; above it, over the bubble; below it, under the bubble. Date only: the date on its own (the reviewer's line then leaves it out)."
+msgstr "Globos de texto: las partes entre Empieza el globo y Termina el globo van dentro del globo; las de arriba, encima de él; las de abajo, debajo. Solo la fecha: la fecha sola (la línea de quien reseña ya no la muestra)."
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/settings_page/settings_page.js:0
 msgid "Reviewer (photo, name, date)"
 msgstr "Quien reseña (foto, nombre, fecha)"
 
@@ -1867,23 +1891,6 @@ msgstr ""
 #: model:ir.model.fields.selection,name:website_review_sync.selection__review_preset__style__bubbles
 msgid "Speech bubbles"
 msgstr "Globos de texto"
-
-#. module: website_review_sync
-#. odoo-javascript
-#: code:addons/website_review_sync/static/src/settings_page/settings_page.js:0
-msgid ""
-"Speech bubbles: drag the reviewer to the top to show it above the bubble; "
-"anywhere else it is under it."
-msgstr ""
-"Globos de texto: arrastra a quien reseña arriba del todo para mostrarlo "
-"sobre el globo; en cualquier otro lugar va debajo."
-
-#. module: website_review_sync
-#. odoo-javascript
-#: code:addons/website_review_sync/static/src/settings_page/settings_page.js:0
-msgid "Speech bubbles: the reviewer is first, so it shows above the bubble."
-msgstr ""
-"Globos de texto: quien reseña va primero, así que se muestra sobre el globo."
 
 #. module: website_review_sync
 #. odoo-javascript

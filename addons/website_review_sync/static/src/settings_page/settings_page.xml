@@ -293,8 +293,8 @@
     <!-- a draggable list of parts (list: 'layout' or 'card_parts'); a block part's texts and options under its row -->
     <t t-name="website_review_sync.ReviewSettingsParts">
         <div class="rv_parts" t-on-drop.prevent="onDragEnd">
-            <div t-foreach="preset[list]" t-as="part" t-key="part.key" class="rv_part"
-                 t-att-class="{ 'is-hidden': !part.show, 'is-dragging': state.drag and state.drag.list === list and state.drag.key === part.key }"
+            <div t-foreach="preset[list]" t-as="part" t-key="part.key" t-if="showsRow(list, part)" class="rv_part"
+                 t-att-class="{ 'is-hidden': !part.show, 'is-marker': list === 'card_parts' and isMarker(part.key), 'is-dragging': state.drag and state.drag.list === list and state.drag.key === part.key }"
                  t-on-dragover="(ev) => this.onDragOver(ev, list, part)">
                 <div class="rv_part_line">
                     <span class="rv_grip" draggable="true" tabindex="0" role="button" title="Drag to move (or use the arrow keys)"
@@ -303,7 +303,7 @@
                           t-on-keydown="(ev) => this.onGripKey(ev, list, part)"><i class="fa fa-bars"/></span>
                     <i t-attf-class="fa {{partIcon(part.key)}} fa-fw text-muted"/>
                     <span class="flex-grow-1" t-esc="partLabel(part.key)"/>
-                    <button type="button" class="btn btn-sm btn-link text-muted" t-att-disabled="isFixed(part.key)"
+                    <button t-if="!(list === 'card_parts' and isMarker(part.key))" type="button" class="btn btn-sm btn-link text-muted" t-att-disabled="isFixed(part.key)"
                             t-att-title="isFixed(part.key) ? 'Always shown' : (part.show ? 'Hide' : 'Show')"
                             t-on-click="() => this.togglePart(list, part)">
                         <i t-attf-class="fa {{part.show ? 'fa-eye' : 'fa-eye-slash'}}"/>

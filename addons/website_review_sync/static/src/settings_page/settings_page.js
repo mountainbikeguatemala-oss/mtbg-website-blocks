@@ -202,7 +202,8 @@ export class ReviewSettingsPage extends Component {
             reviews: _t("The reviews"), button: _t("Button"),
             filters: _t("Filters (platform, rating, language…)"), rating: _t("Stars"), title: _t("Title"),
             text: _t("Review text"), photos: _t("Photos"), link: _t("Link to the review"),
-            reviewer: _t("Reviewer (photo, name, date)"),
+            reviewer: _t("Reviewer (photo, name, date)"), date: _t("Date only"),
+            bubble_start: _t("Bubble starts"), bubble_end: _t("Bubble ends"),
         }[key] || key;
     }
 
@@ -210,24 +211,32 @@ export class ReviewSettingsPage extends Component {
         return {
             heading: "fa-header", stars: "fa-star", total: "fa-sort-numeric-asc", reviews: "fa-comments", button: "fa-hand-pointer-o",
             filters: "fa-filter", rating: "fa-star-o", title: "fa-bold", text: "fa-align-left", photos: "fa-picture-o",
-            link: "fa-external-link", reviewer: "fa-user-circle",
+            link: "fa-external-link", reviewer: "fa-user-circle", date: "fa-calendar",
+            bubble_start: "fa-comment-o", bubble_end: "fa-comment-o",
         }[key] || "fa-square";
     }
 
-    /** A part that cannot be hidden (the reviews themselves). */
+    /** A part that cannot be hidden (the reviews themselves, the bubble's dividers). */
     isFixed(key) {
-        return key === "reviews";
+        return key === "reviews" || this.isMarker(key);
+    }
+
+    /** The speech bubble's dividers in a review card's parts (only with speech bubbles). */
+    isMarker(key) {
+        return key === "bubble_start" || key === "bubble_end";
+    }
+
+    /** A part's row in the list (the dividers: speech bubbles only). */
+    showsRow(list, part) {
+        return list !== "card_parts" || !this.isMarker(part.key) || this.preset.style === "bubbles";
     }
 
     get reviewerNote() {
-        const p = this.preset;
-        if (p.style !== "bubbles") {
+        if (this.preset.style !== "bubbles") {
             return _t("Cards: every part goes where you drag it.");
         }
-        const shown = p.card_parts.filter((part) => part.show).map((part) => part.key);
-        return shown[0] === "reviewer"
-            ? _t("Speech bubbles: the reviewer is first, so it shows above the bubble.")
-            : _t("Speech bubbles: drag the reviewer to the top to show it above the bubble; anywhere else it is under it.");
+        return _t("Speech bubbles: the parts between Bubble starts and Bubble ends are in the bubble; above it, over the " +
+                  "bubble; below it, under the bubble. Date only: the date on its own (the reviewer's line then leaves it out).");
     }
 
     text(field) {

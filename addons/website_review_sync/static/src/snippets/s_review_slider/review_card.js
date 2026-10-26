@@ -37,10 +37,26 @@ export function ratingBadges(summary) {
 }
 
 /**
- * One review: its words in a bubble (stars, title, text, Read more, photos, link to the review), then who said it.
- * The block's style lays it out: a card (the reviewer first) or a speech bubble with the reviewer below it.
+ * The review cards' layout from the block (a preset's: review.preset._render_context): with speech bubbles, the parts
+ * above and under the bubble (data-rv-zones; the rest are in it); the date part shown: the reviewer's line without it.
  */
-export function reviewCard(r) {
+export function cardLayout(el) {
+    let zones = null;
+    try {
+        zones = el.dataset.rvZones ? JSON.parse(el.dataset.rvZones) : null;
+    } catch {
+        zones = null;
+    }
+    return { bubbles: Boolean(zones), above: zones?.above || [], below: zones?.below || [],
+             dateApart: el.classList.contains("s_review_date_apart") };
+}
+
+/**
+ * One review: its words in a bubble (stars, title, text, Read more, photos, link to the review), then who said it.
+ * The block's style lays it out: a card (the reviewer first) or a speech bubble with the reviewer below it; with a
+ * ``layout`` (cardLayout), the parts above and under the bubble come out of it, in their order.
+ */
+export function reviewCard(r, layout = null) {
     const card = make("article", "s_review_slider_card");
     const bubble = make("div", "s_review_slider_bubble");
     // the platform's logo in the bubble's top right corner (shown when a preset asks for it, rv-logo-bubble)
@@ -100,12 +116,37 @@ export function reviewCard(r) {
     } else {
         head.append(make("span", "s_review_slider_photo s_review_slider_initial", (r.author || "?")[0].toUpperCase()));
     }
+    const date = r.date && new Date(r.date + "T00:00").toLocaleDateString(undefined, { month: "short", year: "numeric" });
     const who = make("div", "s_review_slider_who");
-    who.append(make("b", "", r.author), make("small", "", [r.from, r.date && new Date(r.date + "T00:00").toLocaleDateString(undefined, { month: "short", year: "numeric" })].filter(Boolean).join(" · ")));
+    who.append(make("b", "", r.author), make("small", "", [r.from, !layout?.dateApart && date].filter(Boolean).join(" · ")));
     const platform = make("i", `fa ${ICONS[r.platform] || "fa-comment"} s_review_slider_platform`);
     platform.setAttribute("aria-label", r.platform);
     head.append(who, platform);
-    card.append(bubble, head);
+    // the date on its own (the "Date only" part; hidden unless the preset shows it)
+    const dateEl = make("small", "s_review_slider_date", date || "");
+    bubble.append(dateEl);
+    if (layout?.bubbles) {
+        // speech bubbles: the parts the preset puts above or under the bubble, in its order
+        const parts = {
+            rating: [stars], title: [bubble.querySelector(".s_review_slider_title")],
+            text: [...bubble.querySelectorAll(".s_review_slider_text, .s_review_slider_more, .s_review_slider_translated")],
+            photos: [bubble.querySelector(".s_review_slider_photos")], link: [bubble.querySelector(".s_review_slider_link")],
+            reviewer: [head], date: [dateEl],
+        };
+        const zone = (keys, cls) => {
+            const box = make("div", `s_review_slider_out ${cls}`);
+            for (const key of keys) {
+                box.append(...(parts[key] || []).filter(Boolean));
+            }
+            return box;
+        };
+        card.append(zone(layout.above, "s_review_slider_out_above"), bubble, zone(layout.below, "s_review_slider_out_below"));
+        if (!layout.above.includes("reviewer") && !layout.below.includes("reviewer")) {
+            bubble.append(head); // the reviewer in the bubble
+        }
+    } else {
+        card.append(bubble, head);
+    }
     card.mtbgReview = r; // for See original
     return card;
 }

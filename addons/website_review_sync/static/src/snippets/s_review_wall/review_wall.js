@@ -8,7 +8,7 @@ import { registry } from "@web/core/registry";
 import { rpc } from "@web/core/network/rpc";
 import { _t } from "@web/core/l10n/translation";
 
-import { countOptions, countUp, make, openPhotos, pageLang, ratingBadges, reviewCard, toggleMore, toggleOriginal } from "../s_review_slider/review_card";
+import { cardLayout, countOptions, countUp, make, openPhotos, pageLang, ratingBadges, reviewCard, toggleMore, toggleOriginal } from "../s_review_slider/review_card";
 
 const PAGE = 12;
 
@@ -126,7 +126,7 @@ export class ReviewWall extends Interaction {
         }
         this.total = data.total;
         this.offset += data.reviews.length;
-        this.grid.append(...data.reviews.map((r) => reviewCard(r)));
+        this.grid.append(...data.reviews.map((r) => reviewCard(r, cardLayout(this.el))));
         this.status.textContent = !this.total ? _t("No reviews match these filters.")
             : this.offset >= this.total ? _t("%s reviews", this.total) : "";
         // a short page can leave the end in view: keep loading

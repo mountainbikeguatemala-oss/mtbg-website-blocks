@@ -113,6 +113,12 @@
     border-radius: .4rem;
     background: var(--bs-body-bg, #fff);
     &.is-hidden { opacity: .55; }
+    // the speech bubble's dividers: a dashed line with its name, not a part
+    &.is-marker {
+        padding: .1rem .5rem; border-style: dashed; background: transparent;
+        font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .03em;
+        color: var(--bs-primary, #714b67);
+    }
     &.is-dragging { border-style: dashed; border-color: var(--bs-primary, #714b67); }
     .rv_part_line { display: flex; align-items: center; gap: .5rem; }
     .rv_part_edit { padding: .25rem 0 .4rem 2.6rem; }

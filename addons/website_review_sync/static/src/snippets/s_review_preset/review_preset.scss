@@ -58,12 +58,14 @@
     .s_review_slider_text, .s_review_slider_more, .s_review_slider_translated { order: var(--rv-o-text, 2); }
     .s_review_slider_photos { order: var(--rv-o-photos, 3); }
     .s_review_slider_link { order: var(--rv-o-link, 4); }
+    .s_review_slider_date { order: var(--rv-o-date, 6); display: block; font-size: .85em; opacity: .75; }
     &.s_review_hide_rating .s_review_slider_rating,
     &.s_review_hide_title .s_review_slider_title,
     &.s_review_hide_text :is(.s_review_slider_text, .s_review_slider_more, .s_review_slider_translated),
     &.s_review_hide_photos .s_review_slider_photos,
     &.s_review_hide_link .s_review_slider_link,
-    &.s_review_hide_reviewer .s_review_slider_head { display: none !important; }
+    &.s_review_hide_reviewer .s_review_slider_head,
+    &.s_review_hide_date .s_review_slider_date { display: none !important; }
 
     // cards: every part of the card in one column, the reviewer wherever it was dragged
     &.s_review_cards {
@@ -85,8 +87,14 @@
             border-radius: var(--rv-radius, 22px);
             &::after { border-top-color: var(--rv-bubble-used); }
         }
+        // the parts above / under the bubble (the dividers), in the preset's order; the reviewer in the bubble: at its place
+        .s_review_slider_out { display: flex; flex-direction: column; gap: .4rem; &:empty { display: none; } }
+        .s_review_slider_out_above { margin-bottom: 1.4rem; }
+        .s_review_slider_out_below { margin-top: 1.4rem; .s_review_slider_head { margin: 0; } }
+        .s_review_slider_out :is(.s_review_slider_link, .s_review_slider_date, .s_review_slider_rating) { margin: 0; }
+        .s_review_slider_bubble .s_review_slider_head { order: var(--rv-o-reviewer, 5); margin: .75rem 0 0; padding: 0; }
         &.s_review_reviewer_top {
-            .s_review_slider_head { order: -1; margin: 0 0 1.4rem; }
+            .s_review_slider_out_above .s_review_slider_head { margin: 0; }
             .s_review_slider_bubble::after {
                 top: -16px;
                 bottom: auto;
