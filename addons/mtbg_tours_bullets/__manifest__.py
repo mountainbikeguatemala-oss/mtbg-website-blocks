@@ -1,6 +1,8 @@
 {
     'name': 'MTBG Tours — Bullets',
-    'version': '19.0.0.1.0',
+    'version': '19.0.0.1.1',
+    # where the updater gets it (the website blocks pack's repo)
+    'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     'category': 'Website',
     'summary': 'A "Bullets" website block: lists whose bullets are icons (check box, bookmark, cross or any icon)',
     'description': """

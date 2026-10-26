@@ -26,6 +26,14 @@ const OUTLINE = [
     { key: "bottom", label: _t("Full width, under the page"), cols: [["reviews", "gallery", "bottom"]] },
 ];
 
+// the areas whose sections (insert points) move as a whole, within their area (owner, 2026-10-26); the others stay
+const AREAS = {
+    main: ["under_top", "before_description", "description", "after_description", "after_itinerary"],
+    bottom: ["reviews", "gallery", "bottom"],
+};
+// a phone shows the page as one column: the top, the summary, ratings and the booking column, then the areas
+const PHONE_TOP = ["top", "under_title", "summary", "top_columns", "ratings", "booking", "booking_under"];
+
 export class PageTemplateEditor extends Component {
     static template = "mtbg_tours_content_blocks.PageTemplateEditor";
     static props = ["*"];
@@ -39,8 +47,8 @@ export class PageTemplateEditor extends Component {
         this.nameInput = useRef("nameInput");
         this.state = useState({
             data: null, lines: [], dirty: false, saving: false, selected: null, renaming: false, creating: null,
-            drag: null, dropSlot: null, dropIndex: -1,
-            tourId: 0, lang: null, device: "desktop", previewKey: 1, scale: 1, stageHeight: 600,
+            drag: null, dropSlot: null, dropIndex: -1, dropSection: null, order: [],
+            sampleId: 0, lang: null, device: "desktop", mobileFollows: true, previewKey: 1, scale: 1, stageHeight: 600,
         });
         this.newKey = 0;
         this.previewTimer = null;
@@ -76,7 +84,7 @@ export class PageTemplateEditor extends Component {
     writeLast() {
         try {
             window.localStorage.setItem(LAST_KEY, JSON.stringify({
-                template: this.state.data?.template.id, tour: this.state.tourId, lang: this.state.lang,
+                template: this.state.data?.template.id, sample: this.state.sampleId, lang: this.state.lang,
             }));
         } catch {
             // blocked storage: nothing remembered
@@ -91,13 +99,29 @@ export class PageTemplateEditor extends Component {
 
     applyData(data, last = {}) {
         this.state.data = data;
-        this.state.lines = data.lines.map((line) => ({ ...line, key: this.lineKey(line) }));
+        // the Desktop and Mobile layouts: the preview's device says which one is edited; Mobile follows Desktop
+        // (null) until it is changed, then it is a copy of its own
+        this.layouts = {
+            desktop: data.lines.map((line) => ({ ...line, key: this.lineKey(line) })),
+            mobile: data.mobile_lines ? data.mobile_lines.map((line) => ({ ...line, key: this.lineKey(line) })) : null,
+        };
+        this.state.mobileFollows = !data.mobile_lines;
+        this.state.lines = this.linesFor(this.state.device);
+        // the sections' order, per layout (Mobile, while it follows Desktop: a copy of Desktop's)
+        this.orders = { desktop: [...(data.slot_order?.desktop || [])],
+                        mobile: data.slot_order?.mobile ? [...data.slot_order.mobile] : null };
+        this.state.order = this.orderFor(this.state.device);
+        // the sections left out of the page, per layout (Mobile, while it follows Desktop: a copy of Desktop's)
+        this.hiddens = { desktop: [...(data.hidden_slots?.desktop || [])],
+                         mobile: data.hidden_slots?.mobile ? [...data.hidden_slots.mobile] : null };
+        this.state.hidden = this.hiddenFor(this.state.device);
         this.state.dirty = false;
         this.state.selected = null;
         this.state.renaming = false;
-        const tours = data.tours;
-        const keepTour = [this.state.tourId, last.tour].find((id) => tours.some((t) => t.id === id));
-        this.state.tourId = keepTour || tours[0]?.id || 0;
+        // the pages of the template's kind to preview on (the module drawing that kind gives them)
+        const samples = data.samples || [];
+        const keep = [this.state.sampleId, last.sample ?? last.tour].find((id) => samples.some((t) => t.id === id));
+        this.state.sampleId = keep || samples[0]?.id || 0;
         const keepLang = [this.state.lang, last.lang].find((code) => data.langs.some((l) => l.code === code));
         this.state.lang = keepLang || data.langs[0]?.code;
         this.writeLast();
@@ -114,16 +138,80 @@ export class PageTemplateEditor extends Component {
         return `n${this.newKey}`;
     }
 
+    /** The lines of the layout a device edits: Mobile, while it follows Desktop, a fresh copy of Desktop's. */
+    linesFor(device) {
+        if (device !== "phone") {
+            return this.layouts.desktop;
+        }
+        if (!this.layouts.mobile) {
+            this.layouts.mobile = this.layouts.desktop.map((line) => {
+                const copy = { ...line, id: 0 };
+                return { ...copy, key: this.lineKey(copy) };
+            });
+        }
+        return this.layouts.mobile;
+    }
+
+    orderFor(device) {
+        if (device !== "phone") {
+            return this.orders.desktop;
+        }
+        if (!this.orders.mobile) {
+            this.orders.mobile = [...this.orders.desktop];
+        }
+        return this.orders.mobile;
+    }
+
+    hiddenFor(device) {
+        if (device !== "phone") {
+            return this.hiddens.desktop;
+        }
+        if (!this.hiddens.mobile) {
+            this.hiddens.mobile = [...this.hiddens.desktop];
+        }
+        return this.hiddens.mobile;
+    }
+
+    /** Keep what is being edited in its layout (before switching layouts or sending it). */
+    stashLayout() {
+        this.layouts[this.layoutKey] = this.state.lines;
+        this.orders[this.layoutKey] = this.state.order;
+        this.hiddens[this.layoutKey] = this.state.hidden;
+    }
+
+    get layoutKey() {
+        return this.state.device === "phone" ? "mobile" : "desktop";
+    }
+
+    /** [Desktop lines, Mobile lines or null (phones show Desktop)] for the server. */
     get payload() {
-        return this.state.lines.map((l) => ({
+        this.stashLayout();
+        const clean = (lines) => lines.map((l) => ({
             id: l.id || 0, code: l.code || false, block_id: l.block_id || 0, slot: l.slot, active: l.active,
         }));
+        const follows = this.state.mobileFollows;
+        return [clean(this.layouts.desktop), follows ? null : clean(this.layouts.mobile),
+                { desktop: this.orders.desktop, mobile: follows ? null : this.orders.mobile },
+                { desktop: this.hiddens.desktop, mobile: follows ? null : this.hiddens.mobile }];
+    }
+
+    /** Mobile follows Desktop again (its own layout dropped on Save). */
+    followDesktop() {
+        this.layouts.mobile = null;
+        this.orders.mobile = null;
+        this.hiddens.mobile = null;
+        this.state.mobileFollows = true;
+        this.state.lines = this.linesFor(this.state.device);
+        this.state.order = this.orderFor(this.state.device);
+        this.state.hidden = this.hiddenFor(this.state.device);
+        this.state.dirty = true;
+        this.queuePreview();
     }
 
     async save() {
         this.state.saving = true;
         try {
-            const data = await this.orm.call(MODEL, "mtbg_editor_save", [[this.template.id], this.payload]);
+            const data = await this.orm.call(MODEL, "mtbg_editor_save", [[this.template.id], ...this.payload]);
             this.applyData(data);
             this.notification.add(_t("Template saved: the pages that use it show it now."), { type: "success" });
             await this.sendPreview();
@@ -151,6 +239,9 @@ export class PageTemplateEditor extends Component {
     }
 
     changed() {
+        if (this.state.device === "phone") {
+            this.state.mobileFollows = false;  // the Mobile layout's own from now on
+        }
         this.state.dirty = true;
         this.queuePreview();
     }
@@ -246,12 +337,22 @@ export class PageTemplateEditor extends Component {
 
     /** Fresh template list and flags, the lines being edited stay. */
     async reloadKeepingEdits() {
-        const lines = this.state.lines;
+        this.stashLayout();
+        const layouts = { ...this.layouts };
+        const orders = { ...this.orders };
+        const hiddens = { ...this.hiddens };
+        const follows = this.state.mobileFollows;
         const dirty = this.state.dirty;
         const data = await this.orm.call(MODEL, "mtbg_editor_data", [this.template.id]);
         this.applyData(data);
         if (dirty) {
-            this.state.lines = lines;
+            this.layouts = layouts;
+            this.orders = orders;
+            this.hiddens = hiddens;
+            this.state.mobileFollows = follows;
+            this.state.lines = this.linesFor(this.state.device);
+            this.state.order = this.orderFor(this.state.device);
+            this.state.hidden = this.hiddenFor(this.state.device);
             this.state.dirty = true;
         }
     }
@@ -267,11 +368,31 @@ export class PageTemplateEditor extends Component {
         return this.state.data.slots;
     }
 
-    /** The outline's rows: [{key, label, cols: [[slot, ...], ...]}] with the insert points this page has. */
+    /** The insert points of an area in this layout's order (those it lacks at their usual place). */
+    areaSlots(area) {
+        const codes = AREAS[area];
+        const order = (this.state.order || []).filter((c) => codes.includes(c));
+        return [...order, ...codes.filter((c) => !order.includes(c))];
+    }
+
+    slotArea(code) {
+        return Object.keys(AREAS).find((area) => AREAS[area].includes(code)) || null;
+    }
+
+    /** The outline's rows: [{key, label, cols: [[slot, ...], ...]}] with the insert points this page has. On a phone:
+     * one column, top to bottom, as the phone shows the page. */
     get outline() {
         const known = new Map(this.slots.map((s) => [s.code, s]));
         const used = new Set();
-        const rows = OUTLINE.map((row) => ({
+        if (this.state.device === "phone") {
+            const codes = [...PHONE_TOP, ...this.areaSlots("main"), ...this.areaSlots("bottom")];
+            const col = codes.filter((c) => known.has(c)).map((c) => known.get(c));
+            const others = this.slots.filter((s) => !codes.includes(s.code));
+            return [{ key: "phone", label: _t("On a phone, top to bottom"), cols: [[...col, ...others]] }];
+        }
+        const layout = OUTLINE.map((row) => row.key === "main" || row.key === "bottom"
+            ? { ...row, cols: [this.areaSlots(row.key)] } : row);
+        const rows = layout.map((row) => ({
             ...row,
             cols: row.cols.map((col) => col.filter((code) => known.has(code)).map((code) => {
                 used.add(code);
@@ -283,6 +404,34 @@ export class PageTemplateEditor extends Component {
             rows.push({ key: "other", label: _t("More insert points"), cols: [others] });
         }
         return rows;
+    }
+
+    /** The side panel: every section of the layout (in the outline's order) with all its blocks, shown or not. */
+    get panelSections() {
+        return this.outline.flatMap((row) => row.cols.flat()).map((slot) => ({
+            code: slot.code, name: slot.name, hidden: this.isHidden(slot.code),
+            lines: this.state.lines.filter((l) => l.slot === slot.code && !l.missing),
+        }));
+    }
+
+    isHidden(code) {
+        return this.state.hidden.includes(code);
+    }
+
+    /** Show / hide a whole section on the page (its blocks stay as they are, and come back with it). */
+    toggleSection(code) {
+        this.state.hidden = this.isHidden(code) ? this.state.hidden.filter((c) => c !== code) : [...this.state.hidden, code];
+        this.changed();
+    }
+
+    /** Show / hide one block (an element hides with its group, as the eye does). */
+    toggleLine(line) {
+        const card = !line.block_id && this.cards.find((c) => c.codes.includes(line.code));
+        const show = !line.active;
+        for (const l of card ? card.lines : [line]) {
+            l.active = show;
+        }
+        this.changed();
     }
 
     slotName(code) {
@@ -346,7 +495,7 @@ export class PageTemplateEditor extends Component {
     /** What an insert point's "Add…" list offers: the elements not on the page (a group as one) and the reusable
      * blocks the page does not show yet. It shrinks as they are placed and grows back when they are left out. */
     get addOptions() {
-        const used = new Set(this.state.lines.filter((l) => l.block_id && l.active).map((l) => l.block_id));
+        const used = new Set(this.state.lines.filter((l) => l.block_id).map((l) => l.block_id));
         return {
             elements: this.cards.filter((c) => !c.placed).map((c) => ({ value: `card:${c.key}`, label: c.name })),
             blocks: this.state.data.blocks.filter((b) => !used.has(b.id)).map((b) => ({ value: `block:${b.id}`, label: b.name })),
@@ -408,10 +557,28 @@ export class PageTemplateEditor extends Component {
         this.state.drag = null;
         this.state.dropSlot = null;
         this.state.dropIndex = -1;
+        this.state.dropSection = null;
+    }
+
+    /** A whole section (an insert point and its blocks) dragged by its name: it moves within its area. */
+    onSectionDragStart(ev, code) {
+        ev.stopPropagation();
+        this.onDragStart(ev, { type: "section", code, area: this.slotArea(code) });
     }
 
     onSlotDragOver(ev, slot) {
         if (!this.state.drag) {
+            return;
+        }
+        if (this.state.drag.type === "section") {
+            if (this.slotArea(slot) !== this.state.drag.area || slot === this.state.drag.code) {
+                this.state.dropSection = null;
+                return;
+            }
+            ev.preventDefault();
+            ev.dataTransfer.dropEffect = "move";
+            const box = ev.currentTarget.getBoundingClientRect();
+            this.state.dropSection = { code: slot, after: ev.clientY > box.top + box.height / 2 };
             return;
         }
         ev.preventDefault();
@@ -439,8 +606,15 @@ export class PageTemplateEditor extends Component {
         ev.preventDefault();
         const drag = this.state.drag;
         const index = this.state.dropIndex;
+        const section = this.state.dropSection;
         this.onDragEnd();
         if (!drag) {
+            return;
+        }
+        if (drag.type === "section") {
+            if (section) {
+                this.moveSection(drag.code, section.code, section.after);
+            }
             return;
         }
         let moving = [];
@@ -449,6 +623,32 @@ export class PageTemplateEditor extends Component {
         }
         this.placeAt(moving, slot, index);
         this.changed();
+    }
+
+    /** Move the section ``code`` before (or after) ``target`` in their area; the page's other sections stay. */
+    moveSection(code, target, after = false) {
+        const area = this.slotArea(code);
+        const seq = this.areaSlots(area).filter((c) => c !== code);
+        const at = seq.indexOf(target) + (after ? 1 : 0);
+        seq.splice(at, 0, code);
+        const full = [...(this.state.order || [])];
+        for (const c of AREAS[area]) {
+            if (!full.includes(c)) {
+                full.push(c);
+            }
+        }
+        let n = 0;
+        this.state.order = full.map((c) => (AREAS[area].includes(c) ? seq[n++] : c));
+        this.changed();
+    }
+
+    /** Move a section one place up or down in its area (its arrows). */
+    stepSection(code, step) {
+        const seq = this.areaSlots(this.slotArea(code));
+        const to = seq.indexOf(code) + step;
+        if (to >= 0 && to < seq.length) {
+            this.moveSection(code, seq[to], step > 0);
+        }
     }
 
     /** Move ``moving`` (lines) into ``slot`` before its ``index``-th visible line, keeping their order. */
@@ -500,17 +700,19 @@ export class PageTemplateEditor extends Component {
     // ------------------------------------------------------------------
     // Preview
     // ------------------------------------------------------------------
-    get previewTour() {
-        return this.state.data.tours.find((t) => t.id === this.state.tourId);
+    get previewSample() {
+        return (this.state.data.samples || []).find((t) => t.id === this.state.sampleId);
     }
 
     get previewUrl() {
-        const tour = this.previewTour;
-        if (!tour) {
+        const sample = this.previewSample;
+        if (!sample) {
             return "";
         }
         const lang = this.state.data.langs.find((l) => l.code === this.state.lang);
-        return `${lang?.prefix || ""}/tours/${encodeURIComponent(tour.slug)}?mtbg_template_preview=${this.template.id}&k=${this.state.previewKey}`;
+        const layout = this.state.device === "phone" ? "mobile" : "desktop";
+        const sep = sample.url.includes("?") ? "&" : "?";
+        return `${lang?.prefix || ""}${sample.url}${sep}mtbg_template_preview=${this.template.id}&mtbg_layout=${layout}&k=${this.state.previewKey}`;
     }
 
     /** The page at its real width, scaled down to the preview half, as tall as the half (in page pixels). */
@@ -530,8 +732,17 @@ export class PageTemplateEditor extends Component {
         this.state.stageHeight = Math.max(300, stage.clientHeight - 16);
     }
 
+    /** The preview's device, and the layout edited: Desktop or Mobile. */
     setDevice(device) {
-        this.state.device = device;
+        if (device !== this.state.device) {
+            this.stashLayout();
+            this.state.device = device;
+            this.state.selected = null;
+            this.state.lines = this.linesFor(device);
+            this.state.order = this.orderFor(device);
+            this.state.hidden = this.hiddenFor(device);
+            this.refreshPreview();
+        }
         this.fitPreview();
     }
 
@@ -541,8 +752,8 @@ export class PageTemplateEditor extends Component {
         this.refreshPreview();
     }
 
-    onPickTour(ev) {
-        this.state.tourId = parseInt(ev.target.value);
+    onPickSample(ev) {
+        this.state.sampleId = parseInt(ev.target.value);
         this.writeLast();
         this.refreshPreview();
     }
@@ -556,7 +767,7 @@ export class PageTemplateEditor extends Component {
         if (!this.state.data) {
             return;
         }
-        await this.orm.call(MODEL, "mtbg_editor_preview", [[this.template.id], this.payload]);
+        await this.orm.call(MODEL, "mtbg_editor_preview", [[this.template.id], ...this.payload]);
         this.refreshPreview();
     }
 
@@ -565,10 +776,10 @@ export class PageTemplateEditor extends Component {
     }
 
     openPage() {
-        const tour = this.previewTour;
-        if (tour) {
+        const sample = this.previewSample;
+        if (sample) {
             const lang = this.state.data.langs.find((l) => l.code === this.state.lang);
-            window.open(`${lang?.prefix || ""}/tours/${encodeURIComponent(tour.slug)}`, "_blank");
+            window.open(`${lang?.prefix || ""}${sample.url}`, "_blank");
         }
     }
 }

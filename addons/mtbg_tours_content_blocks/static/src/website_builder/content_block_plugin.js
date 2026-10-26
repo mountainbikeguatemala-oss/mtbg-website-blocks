@@ -127,7 +127,7 @@ export class OpenContentBlockAction extends BuilderAction {
     apply({ editingElement }) {
         const id = parseInt(editingElement.dataset.mtbgBlock);
         if (id) {
-            window.open(`/odoo/action-mtbg_tours_catalog.action_content_block/${id}`, "_blank", "noopener");
+            window.open(`/odoo/action-mtbg_tours_content_blocks.action_content_block/${id}`, "_blank", "noopener");
         }
     }
 }

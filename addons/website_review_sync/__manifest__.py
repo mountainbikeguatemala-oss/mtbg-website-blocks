@@ -1,6 +1,8 @@
 {
     'name': 'Website Reviews (Google & Tripadvisor)',
-    'version': '19.0.0.3.0',
+    'version': '19.0.0.4.0',
+    # where the updater gets it (the website blocks pack's repo)
+    'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     # its section on the Extensions panel: Custom blocks (its main job is website editor blocks)
     'mtbg_tours_section': 'blocks',
     'category': 'Website',
@@ -34,6 +36,9 @@ and shown on the website with a "Reviews" building block (a slider of review car
     ],
     'assets': {
         'web.assets_frontend': [
+            'website_review_sync/static/src/js/count_up.js',
+            'website_review_sync/static/src/snippets/s_mtbg_counter/counter.scss',
+            'website_review_sync/static/src/snippets/s_mtbg_counter/counter.js',
             'website_review_sync/static/src/snippets/s_review_slider/review_slider.scss',
             'website_review_sync/static/src/snippets/s_review_slider/review_card.js',
             'website_review_sync/static/src/snippets/s_review_slider/review_slider.js',
@@ -46,6 +51,7 @@ and shown on the website with a "Reviews" building block (a slider of review car
             'website_review_sync/static/src/settings_page/*',
         ],
         'website.website_builder_assets': [
+            'website_review_sync/static/src/js/count_up.js',
             'website_review_sync/static/src/website_builder/**/*',
         ],
     },

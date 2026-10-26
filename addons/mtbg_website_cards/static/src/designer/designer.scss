@@ -1,0 +1,32 @@
+// Card Designer: the settings on the left, the cards live on the right (stacked on small screens)
+.mtbg_cd {
+    background: var(--body-bg, #fff);
+    .mtbg_cd_body { min-height: 0; }
+    .mtbg_cd_settings {
+        flex: 0 0 26rem;
+        max-width: 26rem;
+        border-right: 1px solid var(--border-color, #dee2e6);
+    }
+    .mtbg_cd_line {
+        display: flex;
+        align-items: center;
+        gap: .4rem;
+        padding: .25rem 0;
+        &.is-off span { color: var(--bs-secondary-color, #6c757d); text-decoration: line-through; }
+        &[draggable="true"]:active { opacity: .6; }
+    }
+    .mtbg_cd_grip { cursor: grab; color: var(--bs-secondary-color, #6c757d); padding: 0 .15rem; }
+    .mtbg_cd_hex { width: 6.5rem; font-family: var(--font-monospace, monospace); }
+    .mtbg_cd_preview { flex: 1; min-width: 0; }
+    .mtbg_cd_stage {
+        position: relative;
+        background: var(--bs-tertiary-bg, #f3f4f6);
+        &.mtbg_cd_phone .mtbg_cd_frame { width: 390px; max-width: 100%; left: 50%; transform: translateX(-50%); }
+    }
+    .mtbg_cd_frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+    @media (max-width: 991.98px) {
+        .mtbg_cd_body { flex-direction: column; }
+        .mtbg_cd_settings { flex: none; max-width: none; border-right: 0; }
+        .mtbg_cd_preview { min-height: 30rem; }
+    }
+}

@@ -1,89 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Tour form: blocks are placed in the website editor; this tab only lists them -->
-    <record id="view_tour_form_content_blocks" model="ir.ui.view">
-        <field name="name">mtbg.tour.form.content.blocks</field>
-        <field name="model">mtbg.tour</field>
-        <field name="inherit_id" ref="mtbg_tours_catalog.view_tour_form"/>
+    <!-- The reusable blocks' list, form and search (until 19.0.0.9.0 Catalog's: their ids moved here, see
+         migrations/19.0.0.9.0) -->
+    <record id="view_content_block_list" model="ir.ui.view">
+        <field name="name">mtbg.tours.content.block.list</field>
+        <field name="model">mtbg.tours.content.block</field>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='block_line_ids']" position="before">
-                <div class="alert alert-info" role="alert">
-                    Reusable blocks are placed on the tour page in the website editor: drag the <b>Reusable Block</b>
-                    building block into the description, choose the block, move it like any other content.
-                    This list shows the blocks the page uses, in page order.
-                </div>
-            </xpath>
-            <xpath expr="//field[@name='block_line_ids']" position="attributes">
-                <attribute name="readonly">1</attribute>
-            </xpath>
-            <xpath expr="//field[@name='block_line_ids']/list" position="attributes">
-                <attribute name="editable"/>
-                <attribute name="create">0</attribute>
-                <attribute name="delete">0</attribute>
-            </xpath>
-            <xpath expr="//field[@name='block_line_ids']/list/field[@name='sequence']" position="attributes">
-                <attribute name="widget"/>
-                <attribute name="string">#</attribute>
-            </xpath>
-            <xpath expr="//field[@name='block_line_ids']/list/field[@name='title']" position="attributes">
-                <attribute name="column_invisible">1</attribute>
-            </xpath>
-            <xpath expr="//field[@name='block_line_ids']/list/field[@name='hidden']" position="attributes">
-                <attribute name="column_invisible">1</attribute>
-            </xpath>
-            <xpath expr="//field[@name='block_line_ids']/list/field[@name='override_body']" position="attributes">
-                <attribute name="column_invisible">1</attribute>
-            </xpath>
+            <list>
+                <field name="name"/>
+                <field name="block_type"/>
+                <field name="key" optional="show"/>
+                <field name="usage_total"/>
+                <field name="website_view_count" optional="show"/>
+            </list>
         </field>
     </record>
 
-    <!-- Block form: where it is used (tours and other website pages) -->
-    <record id="view_content_block_form_usage" model="ir.ui.view">
-        <field name="name">mtbg.tours.content.block.form.usage</field>
+    <record id="view_content_block_form" model="ir.ui.view">
+        <field name="name">mtbg.tours.content.block.form</field>
         <field name="model">mtbg.tours.content.block</field>
-        <field name="inherit_id" ref="mtbg_tours_catalog.view_content_block_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//sheet" position="before">
+            <form>
                 <header>
                     <button name="action_mtbg_edit_in_builder" type="object" class="btn-primary"
                             string="Edit in Website Builder" icon="fa-paint-brush"
                             help="Edit the content with the full website builder: blocks, backgrounds, carousels..."/>
                 </header>
-            </xpath>
-            <xpath expr="//notebook/page[1]" position="inside">
-                <div class="text-muted small mt-2">
-                    Layout, backgrounds and carousels: use <b>Edit in Website Builder</b> above. This field is the
-                    raw content (HTML view available).
-                </div>
-            </xpath>
-            <xpath expr="//div[hasclass('alert')]" position="replace">
-                <div class="alert alert-info" role="alert">
-                    This is a <b>shared</b> block: it shows on every page where the <b>Reusable Block</b> building
-                    block points to it, and edits (here or with <i>Edit in place</i> in the website editor) apply to
-                    all of them. Used on <field name="usage_total" nolabel="1" class="fw-bold"/> page(s)
-                    (<field name="usage_count" nolabel="1"/> tours, <field name="website_view_count" nolabel="1"/> other pages).
-                </div>
-            </xpath>
-            <xpath expr="//field[@name='tour_line_ids']/list/field[@name='title']" position="attributes">
-                <attribute name="column_invisible">1</attribute>
-            </xpath>
-            <xpath expr="//field[@name='tour_line_ids']/list/field[@name='hidden']" position="attributes">
-                <attribute name="column_invisible">1</attribute>
-            </xpath>
-            <xpath expr="//field[@name='tour_line_ids']/list/field[@name='override_body']" position="attributes">
-                <attribute name="column_invisible">1</attribute>
-            </xpath>
+                <sheet>
+                    <div class="alert alert-info" role="alert">
+                        This is a <b>shared</b> block: it shows on every page where the <b>Reusable Block</b> building
+                        block points to it, and edits (here or with <i>Edit in place</i> in the website editor) apply to
+                        all of them. Used on <field name="usage_total" nolabel="1" class="fw-bold"/> page(s).
+                    </div>
+                    <group>
+                        <field name="name"/>
+                        <field name="block_type"/>
+                        <field name="key"/>
+                        <field name="active"/>
+                    </group>
+                    <notebook>
+                        <page string="Content" name="content">
+                            <field name="body" options="{'codeview': true}"/>
+                            <div class="text-muted small mt-2">
+                                Layout, backgrounds and carousels: use <b>Edit in Website Builder</b> above. This field
+                                is the raw content (HTML view available).
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
         </field>
     </record>
 
-    <record id="view_content_block_list_usage" model="ir.ui.view">
-        <field name="name">mtbg.tours.content.block.list.usage</field>
+    <record id="view_content_block_search" model="ir.ui.view">
+        <field name="name">mtbg.tours.content.block.search</field>
         <field name="model">mtbg.tours.content.block</field>
-        <field name="inherit_id" ref="mtbg_tours_catalog.view_content_block_list"/>
         <field name="arch" type="xml">
-            <field name="usage_count" position="after">
-                <field name="website_view_count" optional="show"/>
-            </field>
+            <search>
+                <field name="name"/>
+                <field name="key"/>
+                <filter string="Type" name="group_type" context="{'group_by': 'block_type'}"/>
+            </search>
         </field>
+    </record>
+
+    <record id="action_content_block" model="ir.actions.act_window">
+        <field name="name">Reusable Content Blocks</field>
+        <field name="res_model">mtbg.tours.content.block</field>
+        <field name="view_mode">list,form</field>
     </record>
 </odoo>

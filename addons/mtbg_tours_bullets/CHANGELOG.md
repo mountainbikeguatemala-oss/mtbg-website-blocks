@@ -2,6 +2,11 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_bullets-*'`.
 
+## 19.0.0.1.1 · 2026-10-26
+
+- Part of the website blocks pack (repo mtbg-website-blocks): its manifest names that repo as its update source
+  (`mtbg_github_source`). No change on the site.
+
 ## 19.0.0.1.0 · 2026-10-25
 
 - **Bullets block** (website editor › Text › Bullets): a list whose bullets are icons. Its options: a style preset

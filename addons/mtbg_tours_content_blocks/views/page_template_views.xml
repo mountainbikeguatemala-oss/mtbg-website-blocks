@@ -2,20 +2,24 @@
 <odoo>
     <!-- A reusable block placed by a page template (models/page_template.py): stored as the block's placeholder,
          filled with its current content when the page renders, like the blocks placed in a description -->
-    <template id="tour_el_block" name="Tour page element: reusable block">
+    <template id="tour_el_block" name="Page element: reusable block">
         <section class="s_mtbg_content_block o_not_editable my-4" data-snippet="s_mtbg_content_block" data-name="Reusable Block"
                  t-att-data-mtbg-block="mtbg_el['block_id']"><div class="s_mtbg_content_block_placeholder">Reusable block</div></section>
     </template>
 
-    <!-- Page templates on Core's pages: the board (by kind), the side bar list, the form with its elements -->
+    <!-- Page templates: a kanban by kind, the list, the form with its elements (a Tours site shows them on its own
+         boards and side bar list: mtbg_tours_page_templates) -->
     <record id="view_page_template_kanban" model="ir.ui.view">
         <field name="name">mtbg.page.template.kanban</field>
         <field name="model">mtbg.page.template</field>
         <field name="arch" type="xml">
-            <kanban quick_create="false" class="mtbg_card_kanban" js_class="mtbg_board_kanban" default_group_by="kind">
+            <kanban quick_create="false" default_group_by="kind">
+                <field name="is_default"/>
                 <templates>
                     <t t-name="card">
-                        <widget name="mtbg_record_card"/>
+                        <field name="name" class="fw-bold"/>
+                        <span t-if="record.is_default.raw_value" class="badge text-bg-success ms-1">Default</span>
+                        <div class="text-muted small"><field name="line_count"/> elements</div>
                     </t>
                 </templates>
             </kanban>
@@ -26,7 +30,7 @@
         <field name="name">mtbg.page.template.list</field>
         <field name="model">mtbg.page.template</field>
         <field name="arch" type="xml">
-            <list js_class="mtbg_sidebar_list">
+            <list>
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="kind"/>
@@ -90,9 +94,6 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
-                <filter name="tour" string="Tour pages" domain="[('kind', '=', 'tour')]"/>
-                <filter name="rental" string="Rental pages" domain="[('kind', '=', 'rental')]"/>
-                <separator/>
                 <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
                 <group>
                     <filter name="group_kind" string="Kind" context="{'group_by': 'kind'}"/>
@@ -106,19 +107,19 @@
         <field name="res_model">mtbg.page.template</field>
         <field name="view_mode">list,kanban,form</field>
         <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">Lay out tour and rental pages</p>
+            <p class="o_view_nocontent_smiling_face">Lay out your pages</p>
             <p>A page template decides which elements a page shows and where. The Default of each kind is the page as
                 it has always been.</p>
         </field>
     </record>
 
-    <!-- the template editor (static/src/template_editor): Catalog › Page Templates opens it; its list button opens the
-         list above -->
+    <!-- the template editor (static/src/template_editor): Website › Content › Page Templates opens it (a Tours site:
+         Catalog › Page Templates); its list button opens the list above -->
     <record id="action_page_template_editor" model="ir.actions.client">
         <field name="name">Page Templates</field>
         <field name="tag">mtbg_page_template_editor</field>
     </record>
 
-    <menuitem id="menu_page_template" name="Page Templates" parent="mtbg_tours_core.menu_mtbg_catalog"
-              action="action_page_template_editor" sequence="25" groups="website.group_website_designer"/>
+    <menuitem id="menu_page_template" name="Page Templates" parent="website.menu_content"
+              action="action_page_template_editor" sequence="45" groups="website.group_website_designer"/>
 </odoo>

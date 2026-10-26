@@ -61,13 +61,60 @@
                     <span class="small text-muted">It starts as the page is today; then place the elements your way.</span>
                 </div>
 
+                <div class="flex-grow-1 mtbg_pte_body">
+                <!-- the side panel: every section of the layout edited and its blocks, each shown or hidden on the page -->
+                <nav class="mtbg_pte_side" aria-label="Show or hide">
+                    <div class="mtbg_pte_side_title">
+                        <i t-attf-class="fa {{state.device === 'phone' ? 'fa-mobile' : 'fa-desktop'}} fa-fw me-1"/>
+                        <t t-if="state.device === 'phone'">Mobile</t><t t-else="">Desktop</t>: shown on the page
+                    </div>
+                    <div t-foreach="panelSections" t-as="section" t-key="section.code" class="mtbg_pte_side_group">
+                        <label class="mtbg_pte_side_head" t-att-class="{ 'is-off': section.hidden }">
+                            <input type="checkbox" class="form-check-input" t-att-checked="!section.hidden"
+                                   t-on-change="() => this.toggleSection(section.code)"/>
+                            <span class="mtbg_pte_side_label" t-esc="section.name"/>
+                        </label>
+                        <label t-foreach="section.lines" t-as="line" t-key="line.key" class="mtbg_pte_side_item"
+                               t-att-class="{ 'is-off': section.hidden or !line.active, 'is-disabled': section.hidden }">
+                            <input type="checkbox" class="form-check-input" t-att-checked="line.active"
+                                   t-att-disabled="section.hidden" t-on-change="() => this.toggleLine(line)"/>
+                            <i t-attf-class="fa {{lineIcon(line)}} fa-fw"/>
+                            <span class="mtbg_pte_side_label" t-esc="lineName(line)"/>
+                        </label>
+                        <div t-if="!section.lines.length" class="mtbg_pte_side_empty">Nothing here yet</div>
+                    </div>
+                </nav>
                 <!-- two halves: the editor (the elements beside the page outline) and the preview -->
-                <div class="flex-grow-1 mtbg_pte_split">
+                <div class="mtbg_pte_split">
                     <div class="mtbg_pte_editor">
                         <div class="mtbg_pte_help small text-muted mb-2">
                             Add… on an insert point places what the page does not show yet (an element left out, a reusable
-                            block); drag an element (or its arrows) to move it; the eye leaves it out of the page. The
+                            block); drag an element (or its arrows) to move it; the eye (or a tick in the left panel) leaves it out of the page; untick a
+                            whole section there to hide it with its blocks. The
                             preview shows your unsaved changes; the site shows them after Save.
+                        </div>
+                        <!-- the layout edited: the preview's device (Desktop / Phone) -->
+                        <div class="mtbg_pte_layout d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Layout">
+                                <button type="button" t-att-class="'btn ' + (state.device !== 'phone' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                        t-on-click="() => this.setDevice('desktop')"><i class="fa fa-desktop me-1"/>Desktop</button>
+                                <button type="button" t-att-class="'btn ' + (state.device === 'phone' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                        t-on-click="() => this.setDevice('phone')"><i class="fa fa-mobile me-1"/>Mobile</button>
+                            </div>
+                            <span t-if="state.device === 'phone' and state.mobileFollows" class="small text-muted">Phones show the
+                                Desktop layout. Move or remove an element here to give phones a layout of their own.</span>
+                            <t t-elif="state.device === 'phone'">
+                                <span class="small text-muted">Phones use this Mobile layout.</span>
+                                <button type="button" class="btn btn-sm btn-link px-1" t-on-click="followDesktop">
+                                    <i class="fa fa-undo me-1"/>Use the Desktop layout on phones</button>
+                            </t>
+                            <span t-elif="!state.mobileFollows" class="small text-muted">Computers and tablets use this layout;
+                                phones have their own (Mobile).</span>
+                            <t t-else="">
+                                <span class="small text-muted">Phones show this layout too.</span>
+                                <button type="button" class="btn btn-sm btn-link px-1" t-on-click="() => this.setDevice('phone')">
+                                    <i class="fa fa-mobile me-1"/>Edit the Mobile layout</button>
+                            </t>
                         </div>
                         <div t-if="missingLines.length" class="alert alert-warning mb-2 py-2 small">
                             <t t-esc="missingLines.length"/> element(s) of a switched-off extension are kept in this template
@@ -75,18 +122,40 @@
                         </div>
                         <div class="mtbg_pte_grid">
                             <!-- the page outline, its insert points and what each shows -->
-                            <div class="mtbg_pte_page">
+                            <div class="mtbg_pte_page" t-att-class="{ 'is-phone': state.device === 'phone' }">
                                 <h5 class="mtbg_pte_title">The page · <t t-esc="template.kind_label"/></h5>
                                 <div t-foreach="outline" t-as="row" t-key="row.key" class="mtbg_pte_row">
                                     <div class="mtbg_pte_row_label" t-esc="row.label"/>
                                     <div class="mtbg_pte_cols" t-attf-style="--cols: {{row.cols.length}}">
                                         <div t-foreach="row.cols" t-as="col" t-key="col_index" class="mtbg_pte_col">
                                             <div t-foreach="col" t-as="slot" t-key="slot.code" class="mtbg_pte_slot"
-                                                 t-att-class="{ 'is-drop': state.dropSlot === slot.code }"
+                                                 t-att-class="{ 'is-drop': state.dropSlot === slot.code,
+                                                                'is-section-before': state.dropSection and state.dropSection.code === slot.code and !state.dropSection.after,
+                                                                'is-section-after': state.dropSection and state.dropSection.code === slot.code and state.dropSection.after,
+                                                                'is-moving': state.drag and state.drag.type === 'section' and state.drag.code === slot.code,
+                                                                'is-hidden': isHidden(slot.code) }"
                                                  t-on-dragover="(ev) => this.onSlotDragOver(ev, slot.code)"
                                                  t-on-dragleave="(ev) => this.onSlotDragLeave(ev, slot.code)"
                                                  t-on-drop="(ev) => this.onSlotDrop(ev, slot.code)">
-                                                <div class="mtbg_pte_slot_name" t-att-title="slot.description" t-esc="slot.name"/>
+                                                <t t-set="area" t-value="slotArea(slot.code)"/>
+                                                <!-- a section of a movable area: dragged by its name (or its arrows), within its area -->
+                                                <div t-if="area" class="mtbg_pte_slot_name is-movable d-flex align-items-center gap-1" draggable="true"
+                                                     t-att-title="'Drag to move the whole section: ' + (slot.description or '')"
+                                                     t-on-dragstart="(ev) => this.onSectionDragStart(ev, slot.code)" t-on-dragend="onDragEnd">
+                                                    <i class="fa fa-arrows-v" aria-hidden="true"/>
+                                                    <span class="flex-grow-1" t-esc="slot.name"/>
+                                                    <span t-if="isHidden(slot.code)" class="badge text-bg-secondary">Hidden</span>
+                                                    <button type="button" class="btn btn-sm btn-link p-0" title="Move the section up"
+                                                            t-att-disabled="areaSlots(area)[0] === slot.code"
+                                                            t-on-click.stop="() => this.stepSection(slot.code, -1)"><i class="fa fa-angle-up"/></button>
+                                                    <button type="button" class="btn btn-sm btn-link p-0" title="Move the section down"
+                                                            t-att-disabled="areaSlots(area).at(-1) === slot.code"
+                                                            t-on-click.stop="() => this.stepSection(slot.code, 1)"><i class="fa fa-angle-down"/></button>
+                                                </div>
+                                                <div t-else="" class="mtbg_pte_slot_name" t-att-title="slot.description">
+                                                    <t t-esc="slot.name"/>
+                                                    <span t-if="isHidden(slot.code)" class="badge text-bg-secondary ms-1">Hidden</span>
+                                                </div>
                                                 <t t-set="chips" t-value="slotLines(slot.code)"/>
                                                 <t t-foreach="chips" t-as="line" t-key="line.key">
                                                     <div t-if="state.dropSlot === slot.code and state.dropIndex === line_index" class="mtbg_pte_drop"/>
@@ -134,9 +203,9 @@
                     <div class="mtbg_pte_preview">
                         <div class="mtbg_pte_preview_bar d-flex flex-wrap align-items-center gap-2 px-3 py-2">
                             <strong class="me-1"><i class="fa fa-eye me-1"/>Preview</strong>
-                            <select t-if="state.data.tours.length" class="form-select form-select-sm w-auto mw-100" aria-label="Sample page" t-on-change="onPickTour">
-                                <t t-foreach="state.data.tours" t-as="t" t-key="t.id">
-                                    <option t-att-value="t.id" t-att-selected="t.id === state.tourId"><t t-esc="t.name"/><t t-if="!t.published"> (unpublished)</t></option>
+                            <select t-if="state.data.samples.length" class="form-select form-select-sm w-auto mw-100" aria-label="Sample page" t-on-change="onPickSample">
+                                <t t-foreach="state.data.samples" t-as="t" t-key="t.id">
+                                    <option t-att-value="t.id" t-att-selected="t.id === state.sampleId"><t t-esc="t.name"/><t t-if="!t.published"> (unpublished)</t></option>
                                 </t>
                             </select>
                             <div class="btn-group btn-group-sm" role="group" aria-label="Device">
@@ -159,6 +228,7 @@
                             <div t-else="" class="p-4 text-muted">No page of this kind to preview yet.</div>
                         </div>
                     </div>
+                </div>
                 </div>
             </t>
         </div>

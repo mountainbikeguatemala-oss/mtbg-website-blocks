@@ -2,6 +2,34 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_content_blocks-*'`.
 
+## 19.0.0.9.0 · 2026-10-26
+
+- **The website blocks pack's base** (repo mtbg-website-blocks): needs only Odoo's website now, so it runs on any
+  Odoo website (Tours plugs its pages in with mtbg_tours_page_templates).
+- The **reusable block model** (`mtbg.tours.content.block`) is this module's (until now Tours' Catalog's): same name,
+  same rows; its list, form, search and action move here with their ids (pre-migrate 19.0.0.9.0), and the views
+  this module drops are removed before the update.
+- **Page templates for any kind of page**: a module gives its kinds of page (insert points, elements, sample pages)
+  through the page kinds protocol (`_mtbg_page_kinds`, `_mtbg_page_slots`, `_mtbg_page_registry`,
+  `_mtbg_page_samples`); a page renders `_mtbg_page_layout(kind)` (Desktop / Mobile, the editor's preview). The
+  editor previews on the kind's sample pages.
+- **Whole sections move** (owner, 2026-10-26): drag a section by its name (or its arrows) to reorder it within its
+  area (the main column's, the full-width bottom's; the top and the booking column stay), Desktop and Mobile each
+  their own order (`slot_order`; a layout is a `PageLayout` whose `order` gives the sections in page order).
+- The editor's **Mobile** view is the page as a phone shows it: one phone-wide column, top to bottom. On Desktop,
+  "Phones show this layout too" with an "Edit the Mobile layout" link (the earlier "no Mobile layout yet" read like
+  an unsupported feature).
+- Where a block is used: other modules add their records (`_mtbg_usage_records`); "Used On" counts them.
+- Menus: Website › Content › Reusable Blocks and Page Templates; access for the website's designers and editors.
+  Tours' boards, cards, Catalog menus and Tours groups: mtbg_tours_page_templates.
+
+## 19.0.0.8.0 · 2026-10-26
+
+- **Desktop and Mobile layouts** for every page template: the editor's Desktop / Mobile switch (the same as the
+  preview's device) picks the layout you edit. Mobile starts as a copy of Desktop and follows it until you change
+  it; "Use the Desktop layout on phones" drops it again. Phones (their browser says "Mobi") get the Mobile layout
+  when the template has one, every other screen the Desktop one. Template lines: new field `layout`.
+
 ## 19.0.0.7.0 · 2026-10-26
 
 - **The page template editor** (Catalog › Page Templates; Page templates phase 2), in two halves. On the left, the

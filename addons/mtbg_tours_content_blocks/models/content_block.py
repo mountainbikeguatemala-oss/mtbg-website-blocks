@@ -34,14 +34,35 @@ def block_ids_in(html):
 
 
 class MtbgContentBlock(models.Model):
-    _inherit = 'mtbg.tours.content.block'
+    """A reusable content block (What to Bring, How to Book, a policy...): placed on any page with the Reusable Block
+    building block, it shows its current content everywhere, so an edit applies to every page using it. (Until
+    19.0.0.9.0 the model came from Tours' Catalog; the name and the rows are unchanged.)"""
+    _name = 'mtbg.tours.content.block'
+    _description = 'Reusable content block'
+    _order = 'block_type, name'
 
+    name = fields.Char(required=True, translate=True)
+    key = fields.Char(index=True, help="Stable technical key, e.g. legacy slug")
+    block_type = fields.Selection([
+        ('generic', 'Generic'), ('faq', 'FAQ'), ('what_to_bring', 'What to Bring'),
+        ('how_to_book', 'How to Book'), ('itinerary', 'Itinerary'), ('lodging', 'Lodging'),
+        ('route', 'Route'), ('resources', 'Resources'), ('policy', 'Policy'),
+    ], default='generic', required=True)
+    body = fields.Html(translate=True, sanitize_overridable=True, sanitize_attributes=False)
+    active = fields.Boolean(default=True)
+    usage_count = fields.Integer(compute='_compute_usage_count',
+                                 help="Records (e.g. tours) whose own content places this block")
     tag_ids = fields.Many2many('mtbg.tours.content.block.tag', 'mtbg_content_block_tag_rel', 'block_id', 'tag_id',
                                string='Tags')
     note = fields.Text(string='Internal Note', help="For the team (Reusable Blocks page); never shown on the website")
     website_view_count = fields.Integer(compute='_compute_website_usage', string='Website Pages',
                                         help="Website pages (outside tour descriptions) showing this block")
     usage_total = fields.Integer(compute='_compute_website_usage', string='Used On')
+
+    def _compute_usage_count(self):
+        """The records of other modules that place this block in their content (Tours: the tours); 0 here."""
+        for block in self:
+            block.usage_count = 0
 
     def _compute_website_usage(self):
         View = self.env['ir.ui.view'].sudo()

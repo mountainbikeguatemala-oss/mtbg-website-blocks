@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- Card Designer (designer.js): the design's settings on the left, its cards live on the right -->
+    <t t-name="mtbg_website_cards.CardDesigner">
+        <div class="o_action mtbg_cd h-100 d-flex flex-column">
+            <div t-if="!state.data" class="p-4 text-muted"><i class="fa fa-spinner fa-spin me-1"/>Loading…</div>
+            <t t-else="">
+                <div class="d-flex flex-wrap align-items-center gap-2 px-4 py-2 border-bottom">
+                    <h2 class="mb-0 me-2">Card Designer</h2>
+                    <select t-if="state.data.designs.length" class="form-select w-auto" aria-label="Design" t-on-change="pickDesign">
+                        <t t-foreach="state.data.sources" t-as="source" t-key="source.key">
+                            <optgroup t-att-label="source.name">
+                                <t t-foreach="state.data.designs" t-as="d" t-key="d.id">
+                                    <option t-if="d.source === source.key" t-att-value="d.id" t-att-selected="design and d.id === design.id">
+                                        <t t-esc="d.name"/><t t-if="d.is_default"> (Default)</t>
+                                    </option>
+                                </t>
+                            </optgroup>
+                        </t>
+                    </select>
+                    <span t-if="design and design.is_default" class="badge text-bg-success">Default</span>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-light" t-att-disabled="!state.data.sources.length" t-on-click="startCreate">
+                            <i class="fa fa-plus me-1"/>New</button>
+                        <button t-if="design and !design.is_default" type="button" class="btn btn-light" t-on-click="makeDefault"
+                                title="The design of its source's cards where none is chosen"><i class="fa fa-star-o me-1"/>Make Default</button>
+                    </div>
+                    <div class="ms-auto d-flex align-items-center gap-2">
+                        <span t-if="dirty" class="badge text-bg-warning">Unsaved changes</span>
+                        <button class="btn btn-secondary" t-att-disabled="!dirty or state.saving" t-on-click="discard">Discard</button>
+                        <button class="btn btn-primary" t-att-disabled="!dirty or state.saving" t-on-click="save">
+                            <i t-if="state.saving" class="fa fa-spinner fa-spin me-1"/>Save</button>
+                    </div>
+                </div>
+                <div t-if="state.creating" class="d-flex flex-wrap align-items-center gap-2 px-4 py-2 border-bottom">
+                    <span class="small text-muted">New design of</span>
+                    <select class="form-select form-select-sm w-auto" aria-label="Source"
+                            t-on-change="(ev) => this.state.creating.source = ev.target.value">
+                        <t t-foreach="state.data.sources" t-as="source" t-key="source.key">
+                            <option t-att-value="source.key" t-att-selected="source.key === state.creating.source" t-esc="source.name"/>
+                        </t>
+                    </select>
+                    <input class="form-control form-control-sm w-auto" placeholder="e.g. Big photo cards" aria-label="Name"
+                           t-att-value="state.creating.name" t-on-input="(ev) => this.state.creating.name = ev.target.value"/>
+                    <button class="btn btn-sm btn-primary" t-on-click="create">Create</button>
+                    <button class="btn btn-sm btn-link" t-on-click="() => this.state.creating = null">Cancel</button>
+                    <span class="small text-muted">It starts as the design shown (same source), else plain.</span>
+                </div>
+
+                <div t-if="!design" class="p-4 text-muted">
+                    No card design yet. <t t-if="state.data.sources.length">Click New to make one.</t>
+                    <t t-else="">An extension gives the cards' sources (e.g. Tours: tours, group departures).</t>
+                </div>
+                <div t-else="" class="mtbg_cd_body flex-grow-1 d-flex">
+                    <div class="mtbg_cd_settings overflow-auto p-4">
+                        <section class="mb-4">
+                            <h5 class="mb-2">Style</h5>
+                            <div class="btn-group btn-group-sm mb-2" role="group" aria-label="Style">
+                                <t t-foreach="styles" t-as="s" t-key="s.key">
+                                    <button type="button" t-att-class="'btn ' + (state.settings.style === s.key ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.change('style', s.key)"><i t-attf-class="fa {{s.icon}} me-1"/><t t-esc="s.label"/></button>
+                                </t>
+                            </div>
+                            <div class="d-flex flex-wrap gap-3 align-items-center small">
+                                <label class="d-flex align-items-center gap-2 mb-0">Photo frame
+                                    <select class="form-select form-select-sm w-auto" t-on-change="(ev) => this.change('ratio', ev.target.value)">
+                                        <t t-foreach="[['3-2', '3:2'], ['4-3', '4:3'], ['16-9', '16:9'], ['1-1', 'Square']]" t-as="r" t-key="r[0]">
+                                            <option t-att-value="r[0]" t-att-selected="state.settings.ratio === r[0]" t-esc="r[1]"/>
+                                        </t>
+                                    </select>
+                                </label>
+                                <label class="d-flex align-items-center gap-2 mb-0">Corners
+                                    <select class="form-select form-select-sm w-auto" t-on-change="(ev) => this.change('corners', ev.target.value)">
+                                        <option value="none" t-att-selected="state.settings.corners === 'none'">Square</option>
+                                        <option value="small" t-att-selected="state.settings.corners === 'small'">Rounded</option>
+                                        <option value="large" t-att-selected="state.settings.corners === 'large'">Very rounded</option>
+                                    </select>
+                                </label>
+                                <div class="form-check form-switch mb-0">
+                                    <input class="form-check-input" type="checkbox" id="mtbg_cd_shadow" t-att-checked="state.settings.shadow"
+                                           t-on-change="(ev) => this.change('shadow', ev.target.checked)"/>
+                                    <label class="form-check-label" for="mtbg_cd_shadow">Shadow</label>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="mb-4">
+                            <h5 class="mb-2">Hover</h5>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="mtbg_cd_zoom" t-att-checked="state.settings.hover_zoom"
+                                       t-on-change="(ev) => this.change('hover_zoom', ev.target.checked)"/>
+                                <label class="form-check-label" for="mtbg_cd_zoom">Zoom the photo</label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="mtbg_cd_darken" t-att-checked="state.settings.hover_darken"
+                                       t-on-change="(ev) => this.change('hover_darken', ev.target.checked)"/>
+                                <label class="form-check-label" for="mtbg_cd_darken">Darken the photo</label>
+                            </div>
+                        </section>
+                        <section class="mb-4">
+                            <h5 class="mb-1">Fields</h5>
+                            <div class="text-muted small mb-2">In this order: drag one (or use the arrows). Each one goes on the
+                                photo, in the text, or nowhere.</div>
+                            <div t-foreach="state.settings.look.parts" t-as="part" t-key="part.key" class="mtbg_cd_line"
+                                 t-att-class="{'is-off': part.place === 'off'}" draggable="true"
+                                 t-on-dragstart="(ev) => this.onDragStart(part_index, ev)" t-on-dragover="onDragOver"
+                                 t-on-drop="(ev) => this.onDrop(part_index, ev)">
+                                <i class="fa fa-bars mtbg_cd_grip" aria-hidden="true"/>
+                                <button type="button" class="btn btn-sm btn-light" title="Earlier" t-att-disabled="part_first"
+                                        t-on-click="() => this.movePart(part_index, -1)"><i class="fa fa-arrow-up"/></button>
+                                <button type="button" class="btn btn-sm btn-light" title="Later" t-att-disabled="part_last"
+                                        t-on-click="() => this.movePart(part_index, 1)"><i class="fa fa-arrow-down"/></button>
+                                <span class="flex-grow-1 text-truncate" t-esc="fieldLabel(part.key)"/>
+                                <select class="form-select form-select-sm w-auto" t-att-aria-label="fieldLabel(part.key)"
+                                        t-on-change="(ev) => this.setPlace(part, ev.target.value)">
+                                    <t t-foreach="state.data.places" t-as="p" t-key="p.key">
+                                        <option t-att-value="p.key" t-att-selected="part.place === p.key" t-esc="p.label"/>
+                                    </t>
+                                </select>
+                            </div>
+                        </section>
+                        <section>
+                            <h5 class="mb-1">Colours <span class="small text-muted fw-normal">
+                                <i t-attf-class="fa {{state.dark ? 'fa-moon-o' : 'fa-sun-o'}} me-1"/><t t-if="state.dark">dark pages</t><t t-else="">light pages</t></span></h5>
+                            <div class="text-muted small mb-2">The preview's light / dark switch picks which colours you set. Empty: the
+                                theme's (on dark pages: dark ones of its own).</div>
+                            <div t-foreach="colors" t-as="c" t-key="c.key" class="d-flex align-items-center gap-2 mb-1">
+                                <input type="color" class="form-control form-control-color form-control-sm"
+                                       t-att-value="colorOf(c.key) or '#ffffff'" t-on-input="(ev) => this.setColor(c.key, ev.target.value)"/>
+                                <span class="small flex-grow-1" t-esc="c.label"/>
+                                <input class="form-control form-control-sm mtbg_cd_hex" placeholder="theme" t-att-value="colorOf(c.key)"
+                                       t-on-change="(ev) => this.setColor(c.key, ev.target.value)"/>
+                                <button type="button" class="btn btn-sm btn-link px-1" title="The theme's" t-att-disabled="!colorOf(c.key)"
+                                        t-on-click="() => this.setColor(c.key, '')"><i class="fa fa-undo"/></button>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="mtbg_cd_preview d-flex flex-column">
+                        <div class="px-3 py-2 border-bottom d-flex flex-wrap align-items-center gap-2">
+                            <strong class="me-auto"><i class="fa fa-eye me-1"/>Preview</strong>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Light or dark">
+                                <button type="button" title="Light page" t-att-class="'btn ' + (!state.dark ? 'btn-secondary' : 'btn-outline-secondary')"
+                                        t-on-click="() => this.setDark(false)"><i class="fa fa-sun-o"/></button>
+                                <button type="button" title="Dark page" t-att-class="'btn ' + (state.dark ? 'btn-secondary' : 'btn-outline-secondary')"
+                                        t-on-click="() => this.setDark(true)"><i class="fa fa-moon-o"/></button>
+                            </div>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Device">
+                                <button type="button" title="Computer" t-att-class="'btn ' + (state.device !== 'phone' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                        t-on-click="() => this.state.device = 'desktop'"><i class="fa fa-desktop"/></button>
+                                <button type="button" title="Phone" t-att-class="'btn ' + (state.device === 'phone' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                        t-on-click="() => this.state.device = 'phone'"><i class="fa fa-mobile"/></button>
+                            </div>
+                            <button class="btn btn-sm btn-light" title="Reload" t-on-click="() => this.state.frameKey++"><i class="fa fa-refresh"/></button>
+                        </div>
+                        <div t-if="dirty" class="alert alert-warning rounded-0 mb-0 py-1 px-3 small">
+                            <i class="fa fa-bolt me-1"/>Live: the cards show your unsaved changes (only you see them).
+                        </div>
+                        <div t-attf-class="mtbg_cd_stage flex-grow-1 mtbg_cd_{{state.device}}">
+                            <iframe t-att-key="state.frameKey" t-att-src="previewUrl" class="mtbg_cd_frame" title="Card preview"/>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

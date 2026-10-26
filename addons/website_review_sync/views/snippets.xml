@@ -33,6 +33,29 @@
         </section>
     </template>
 
+    <!-- Counter: numbers that count up from 0 once scrolled into view (counter.js); each number's options are its data
+         attributes (the editor's Counter options). Sizes: the theme's (h2 numbers, paragraph labels). -->
+    <template id="s_mtbg_counter" name="Counter">
+        <section class="s_mtbg_counter pt48 pb48">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-lg-4 s_mtbg_counter_item pb24">
+                        <h2 class="s_mtbg_counter_number" data-mtbg-count="300" data-mtbg-count-suffix="+">300+</h2>
+                        <p class="s_mtbg_counter_label">Happy riders</p>
+                    </div>
+                    <div class="col-lg-4 s_mtbg_counter_item pb24">
+                        <h2 class="s_mtbg_counter_number" data-mtbg-count="60" data-mtbg-count-suffix="+">60+</h2>
+                        <p class="s_mtbg_counter_label">Trails</p>
+                    </div>
+                    <div class="col-lg-4 s_mtbg_counter_item pb24">
+                        <h2 class="s_mtbg_counter_number" data-mtbg-count="4.9" data-mtbg-count-decimals="1">4.9</h2>
+                        <p class="s_mtbg_counter_label">Average rating</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+
     <template id="snippets" inherit_id="website.snippets" name="Reviews building block">
         <!-- a Reviews category of its own in the editor's Blocks panel -->
         <xpath expr="//snippets[@id='snippet_groups']/t[@id='installed_snippets_hook']" position="before">
@@ -40,6 +63,10 @@
                t-thumbnail="/website_review_sync/static/src/img/s_review_slider.svg"/>
         </xpath>
         <xpath expr="//snippets[@id='snippet_structure']" position="inside">
+            <t t-snippet="website_review_sync.s_mtbg_counter" string="Counter" group="reviews"
+               t-thumbnail="/website_review_sync/static/src/img/s_mtbg_counter.svg">
+                <keywords>counter, count up, numbers, statistics, figures, animated</keywords>
+            </t>
             <t t-snippet="website_review_sync.s_review_slider" string="Reviews" group="reviews"
                t-thumbnail="/website_review_sync/static/src/img/s_review_slider.svg"
                t-image-preview="/website_review_sync/static/src/img/s_review_slider_preview.svg">

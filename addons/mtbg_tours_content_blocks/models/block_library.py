@@ -38,18 +38,24 @@ class MtbgContentBlockLibrary(models.AbstractModel):
     # ------------------------------------------------------------------
     @api.model
     def _mtbg_usage_index(self):
-        """{block id: {'tours': tours, 'views': views, 'blocks': blocks}}: the tours whose description shows it, the
-        website views (pages, header, footer...) and the other blocks that contain it."""
-        index = defaultdict(lambda: {'tours': self.env['mtbg.tour'], 'views': self.env['ir.ui.view'],
-                                     'blocks': self.env['mtbg.tours.content.block']})
-        for line in self.env['mtbg.tour.block.line'].sudo().search([]):
-            index[line.block_id.id]['tours'] |= line.tour_id
+        """{block id: {'views': views, 'blocks': blocks, 'records': [{kind, name, url}]}}: the website views (pages,
+        header, footer...) and the other blocks that contain it, and the records of other modules whose content
+        places it (``records``: Tours adds its tours, _mtbg_usage_records)."""
+        index = defaultdict(lambda: {'views': self.env['ir.ui.view'], 'blocks': self.env['mtbg.tours.content.block'],
+                                     'records': []})
+        self._mtbg_usage_records(index)
         for view in self.env['ir.ui.view'].sudo().search([('arch_db', 'ilike', 'data-mtbg-block=')]):
             for block_id in {int(i) for i in BLOCK_ID_RE.findall(view.arch_db or '')}:
                 index[block_id]['views'] |= view
         for block in self._blocks().sudo().search([('body', 'ilike', 'data-mtbg-block=')]):
             for block_id in {int(i) for i in BLOCK_ID_RE.findall(str(block.body or ''))} - {block.id}:
                 index[block_id]['blocks'] |= block
+        return index
+
+    @api.model
+    def _mtbg_usage_records(self, index):
+        """Add the records of other modules whose content places a block: index[block id]['records'] += [{kind,
+        name, url}]. None here."""
         return index
 
     @api.model
@@ -64,7 +70,7 @@ class MtbgContentBlockLibrary(models.AbstractModel):
     @api.model
     def _mtbg_usage_rows(self, usage):
         """Where one block is used, as the page lists it: [{kind, name, url}]."""
-        rows = [{'kind': 'tour', 'name': tour.name, 'url': tour.website_url} for tour in usage['tours']]
+        rows = list(usage['records'])
         pages = self.env['website.page'].sudo().search([('view_id', 'in', usage['views'].ids)])
         page_views = pages.view_id
         rows += [{'kind': 'page', 'name': page.name, 'url': page.url} for page in pages]
@@ -95,7 +101,7 @@ class MtbgContentBlockLibrary(models.AbstractModel):
             text = _text(block.body)
             image = re.search(r'<img\b[^>]*\bsrc="([^"]+)"', str(block.body or ''))
             used = usage.get(block.id)
-            count = (len(used['tours']) + len(used['views']) + len(used['blocks'])) if used else 0
+            count = (len(used['records']) + len(used['views']) + len(used['blocks'])) if used else 0
             count += 1 if block.id in builtin else 0
             rows.append({
                 'id': block.id, 'name': block.name, 'type': block.block_type, 'tag_ids': block.tag_ids.ids,
@@ -110,7 +116,7 @@ class MtbgContentBlockLibrary(models.AbstractModel):
             'tags': [{'id': t.id, 'name': t.name, 'color': t.color} for t in Tag.search([])],
             'can_edit': Block.has_access('write'),
             'can_delete': Block.has_access('unlink'),
-            'list_action': self.env.ref('mtbg_tours_catalog.action_content_block').id,
+            'list_action': self.env.ref('mtbg_tours_content_blocks.action_content_block').id,
         }
 
     @api.model

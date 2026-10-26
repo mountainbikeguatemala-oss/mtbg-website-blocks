@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_card_design_public,card design public,model_mtbg_website_card_design,base.group_public,1,0,0,0
+access_card_design_portal,card design portal,model_mtbg_website_card_design,base.group_portal,1,0,0,0
+access_card_design_user,card design user,model_mtbg_website_card_design,base.group_user,1,0,0,0
+access_card_design_designer,card design website designer,model_mtbg_website_card_design,website.group_website_designer,1,1,1,1

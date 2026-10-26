@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- the Cards block's options: what it shows (a source, its filters, how many), in which design and columns -->
+    <t t-name="mtbg_website_cards.CardsOption">
+        <BuilderRow label.translate="Show">
+            <BuilderSelect dataAttributeAction="'source'">
+                <t t-foreach="state.sources" t-as="source" t-key="source.key">
+                    <BuilderSelectItem dataAttributeActionValue="source.key"><t t-out="source.name"/></BuilderSelectItem>
+                </t>
+            </BuilderSelect>
+        </BuilderRow>
+        <t t-foreach="currentFilters" t-as="filter" t-key="filter.key">
+            <BuilderRow label="filter.label">
+                <BuilderSelect dataAttributeAction="filter.attr">
+                    <BuilderSelectItem dataAttributeActionValue="''">All</BuilderSelectItem>
+                    <t t-foreach="filter.options" t-as="option" t-key="option.key">
+                        <BuilderSelectItem dataAttributeActionValue="option.key"><t t-out="option.label"/></BuilderSelectItem>
+                    </t>
+                </BuilderSelect>
+            </BuilderRow>
+        </t>
+        <BuilderRow label.translate="Design" tooltip.translate="The card design (Website › Content › Card Designs); none: the source's Default">
+            <BuilderSelect dataAttributeAction="'design'">
+                <BuilderSelectItem dataAttributeActionValue="''">Default</BuilderSelectItem>
+                <t t-foreach="currentDesigns" t-as="design" t-key="design.id">
+                    <BuilderSelectItem dataAttributeActionValue="String(design.id)"><t t-out="design.name"/></BuilderSelectItem>
+                </t>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="How many">
+            <BuilderNumberInput dataAttributeAction="'limit'" min="1" max="48" step="1"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Columns">
+            <BuilderSelect dataAttributeAction="'columns'">
+                <BuilderSelectItem dataAttributeActionValue="'2'">2</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'3'">3</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'4'">4</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Designs">
+            <a class="btn btn-sm btn-link px-0" href="/odoo/action-mtbg_website_cards.action_card_designer" target="_blank">
+                <i class="fa fa-external-link me-1"/>Open the Card Designer
+            </a>
+        </BuilderRow>
+    </t>
+</templates>

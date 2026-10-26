@@ -1568,7 +1568,10 @@ msgstr ""
 #. module: website_review_sync
 #. odoo-javascript
 #: code:addons/website_review_sync/static/src/settings_page/settings_page.js:0
-msgid "Speech bubbles: the parts between Bubble starts and Bubble ends are in the bubble; above it, over the bubble; below it, under the bubble. Date only: the date on its own (the reviewer's line then leaves it out)."
+msgid ""
+"Speech bubbles: the parts between Bubble starts and Bubble ends are in the "
+"bubble; above it, over the bubble; below it, under the bubble. Date only: "
+"the date on its own (the reviewer's line then leaves it out)."
 msgstr ""
 
 #. module: website_review_sync
@@ -1791,6 +1794,7 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/website_review_sync/static/src/settings_page/settings_page.js:0
 #: model:ir.model.fields.selection,name:website_review_sync.selection__review_preset__count_ease__smooth
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
 msgid "Smooth"
 msgstr ""
 
@@ -1859,6 +1863,7 @@ msgstr ""
 #. module: website_review_sync
 #. odoo-javascript
 #: code:addons/website_review_sync/static/src/settings_page/settings_page.xml:0
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
 msgid "Speed"
 msgstr ""
 
@@ -1915,6 +1920,7 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/website_review_sync/static/src/settings_page/settings_page.js:0
 #: model:ir.model.fields.selection,name:website_review_sync.selection__review_preset__count_ease__linear
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
 msgid "Steady"
 msgstr ""
 
@@ -2426,4 +2432,90 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/website_review_sync/static/src/settings_page/settings_page.xml:0
 msgid "· built in (cannot be deleted)"
+msgstr ""
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.snippets
+msgid "Counter"
+msgstr ""
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.s_mtbg_counter
+msgid "Happy riders"
+msgstr ""
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.s_mtbg_counter
+msgid "Trails"
+msgstr ""
+
+#. module: website_review_sync
+#: model_terms:ir.ui.view,arch_db:website_review_sync.s_mtbg_counter
+msgid "Average rating"
+msgstr ""
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Number"
+msgstr ""
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Before"
+msgstr ""
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "After"
+msgstr ""
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Decimals"
+msgstr ""
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Duration"
+msgstr ""
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Text before the number, e.g. $"
+msgstr ""
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Text after the number, e.g. + or %"
+msgstr ""
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "How long it counts (0: shows the number at once)"
+msgstr ""
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Slowing down"
+msgstr ""
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Slowing down a lot"
+msgstr ""
+
+#. module: website_review_sync
+#. odoo-javascript
+#: code:addons/website_review_sync/static/src/website_builder/review_slider_option.xml:0
+msgid "Fast start"
 msgstr ""

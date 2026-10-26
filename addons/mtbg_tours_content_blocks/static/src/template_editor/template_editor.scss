@@ -8,11 +8,32 @@
     background: var(--bs-body-bg, #fff);
 
     .mtbg_pte_title { font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--bs-secondary-color, #6c757d); margin-bottom: .5rem; }
-    // the two halves, each scrolling on its own
-    .mtbg_pte_split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); min-height: 0; }
+    // the side panel (the look of Core's list side bars) beside the two halves, each scrolling on its own
+    .mtbg_pte_body { display: flex; min-height: 0; }
+    .mtbg_pte_side {
+        flex: 0 0 16rem; width: 16rem; overflow-y: auto; padding: .5rem .4rem;
+        background: var(--bs-tertiary-bg, #f8f9fa); border-right: 1px solid var(--border-color, #dee2e6); font-size: .875rem;
+        .form-check-input { flex: none; margin: 0; }
+        .is-off .mtbg_pte_side_label { color: var(--bs-secondary-color, #6c757d); text-decoration: line-through; }
+    }
+    .mtbg_pte_side_title { padding: .25rem .4rem .5rem; font-size: .72rem; font-weight: 700; letter-spacing: .05em;
+        text-transform: uppercase; color: var(--bs-secondary-color, #6c757d); }
+    .mtbg_pte_side_group + .mtbg_pte_side_group { margin-top: .35rem; }
+    .mtbg_pte_side_head, .mtbg_pte_side_item {
+        display: flex; align-items: center; gap: .45rem; margin: 0; padding: .25rem .4rem; border-radius: .35rem;
+        line-height: 1.25; cursor: pointer;
+        &:hover { background: var(--bs-secondary-bg, #e9ecef); }
+    }
+    .mtbg_pte_side_head { font-weight: 600; }
+    .mtbg_pte_side_item { padding-left: 1.6rem; font-size: .82rem; &.is-disabled { cursor: default; opacity: .6; } }
+    .mtbg_pte_side_label { min-width: 0; overflow-wrap: anywhere; }
+    .mtbg_pte_side_empty { padding: .1rem .4rem .1rem 1.6rem; font-size: .78rem; font-style: italic; color: var(--bs-secondary-color, #6c757d); }
+    .mtbg_pte_split { flex: 1 1 auto; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); min-height: 0; }
     // a narrow window: the preview under the editor, the page scrolls as one
     @media (max-width: 900px) {
-        .mtbg_pte_split { display: block; overflow: auto; }
+        .mtbg_pte_body { display: block; overflow: auto; }
+        .mtbg_pte_side { width: auto; border-right: 0; border-bottom: 1px solid var(--border-color, #dee2e6); }
+        .mtbg_pte_split { display: block; overflow: visible; }
         .mtbg_pte_editor { overflow: visible; border-right: 0; }
         .mtbg_pte_preview { height: 80vh; border-top: 1px solid var(--border-color, #dee2e6); }
     }
@@ -30,7 +51,17 @@
         padding: .35rem .45rem .45rem; border: 1.5px dashed var(--pte-slot); border-radius: .45rem; background: var(--pte-slot-soft);
         &.is-drop { background: #cfe6d6; border-style: solid; }
     }
-    .mtbg_pte_slot_name { font-size: .72rem; font-weight: 700; color: var(--pte-slot); margin-bottom: .25rem; cursor: help; }
+    .mtbg_pte_slot_name { font-size: .72rem; font-weight: 700; color: var(--pte-slot); margin-bottom: .25rem; cursor: help;
+        &.is-movable { cursor: grab; .btn-link { color: var(--pte-slot); line-height: 1; } .btn-link:disabled { opacity: .25; } }
+    }
+    // a whole section dragged: where it lands (before / after the section under the pointer)
+    .mtbg_pte_slot.is-section-before { box-shadow: 0 -4px 0 0 var(--pte-block); }
+    .mtbg_pte_slot.is-section-after { box-shadow: 0 4px 0 0 var(--pte-block); }
+    .mtbg_pte_slot.is-moving { opacity: .45; }
+    // a hidden section: left out of the page (its blocks too) until ticked again
+    .mtbg_pte_slot.is-hidden { opacity: .5; border-color: var(--bs-secondary-color, #6c757d); background: transparent; }
+    // Mobile: the page as a phone shows it, one column, phone wide
+    .mtbg_pte_page.is-phone { max-width: 420px; margin: 0 auto; border-radius: 1.5rem; }
     .mtbg_pte_chip {
         display: flex; align-items: center; gap: .35rem; margin-top: .25rem; padding: .25rem .4rem;
         border: 1px solid var(--border-color, #dee2e6); border-radius: .35rem; background: var(--bs-body-bg, #fff);

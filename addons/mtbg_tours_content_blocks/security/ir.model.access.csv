@@ -1,10 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_content_block_designer,content block website designer,mtbg_tours_catalog.model_mtbg_tours_content_block,website.group_website_designer,1,1,1,0
-access_block_line_designer,block line website designer,mtbg_tours_catalog.model_mtbg_tour_block_line,website.group_website_designer,1,0,0,0
-access_block_tag_guide,block tag guide,model_mtbg_tours_content_block_tag,mtbg_tours_core.group_mtbg_guide,1,0,0,0
-access_block_tag_user,block tag user,model_mtbg_tours_content_block_tag,mtbg_tours_core.group_mtbg_user,1,1,1,1
+access_content_block_designer,content block website designer,model_mtbg_tours_content_block,website.group_website_designer,1,1,1,0
+access_content_block_editor,content block website editor,model_mtbg_tours_content_block,website.group_website_restricted_editor,1,0,0,0
+access_block_tag_editor,block tag website editor,model_mtbg_tours_content_block_tag,website.group_website_restricted_editor,1,0,0,0
 access_block_tag_designer,block tag website designer,model_mtbg_tours_content_block_tag,website.group_website_designer,1,1,1,0
-access_page_template_user,page template user,model_mtbg_page_template,mtbg_tours_core.group_mtbg_user,1,0,0,0
 access_page_template_designer,page template website designer,model_mtbg_page_template,website.group_website_designer,1,1,1,1
-access_page_template_line_user,page template line user,model_mtbg_page_template_line,mtbg_tours_core.group_mtbg_user,1,0,0,0
 access_page_template_line_designer,page template line website designer,model_mtbg_page_template_line,website.group_website_designer,1,1,1,1

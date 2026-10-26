@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
+    <!-- a counting number (the Counter block's, or any marked data-mtbg-count): its value, words around it, speed -->
+    <t t-name="website_review_sync.CounterOption">
+        <BuilderRow label.translate="Number">
+            <BuilderNumberInput dataAttributeAction="'mtbgCount'" min="0"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Before" tooltip.translate="Text before the number, e.g. $">
+            <BuilderTextInput dataAttributeAction="'mtbgCountPrefix'"/>
+        </BuilderRow>
+        <BuilderRow label.translate="After" tooltip.translate="Text after the number, e.g. + or %">
+            <BuilderTextInput dataAttributeAction="'mtbgCountSuffix'"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Decimals">
+            <BuilderNumberInput dataAttributeAction="'mtbgCountDecimals'" min="0" max="4" step="1"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Duration" tooltip.translate="How long it counts (0: shows the number at once)">
+            <BuilderNumberInput dataAttributeAction="'countMs'" unit="'ms'" min="0" max="20000" step="250"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Speed">
+            <BuilderSelect dataAttributeAction="'countEase'">
+                <BuilderSelectItem dataAttributeActionValue="'linear'">Steady</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'smooth'">Smooth</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'slow'">Slowing down</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'slower'">Slowing down a lot</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'log'">Fast start</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+    </t>
     <t t-name="website_review_sync.ReviewPresetOption">
         <BuilderRow label.translate="Preset" tooltip.translate="The block's look, reviews, layout and texts: set on the Reviews page, for every block using the preset">
             <BuilderSelect dataAttributeAction="'preset'">

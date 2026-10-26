@@ -1,0 +1,7 @@
+// The Counter block: the numbers in a row (stacked on phones); their size is the theme's heading (h2), the label a
+// paragraph; the digits keep one width so a number does not jump while it counts
+.s_mtbg_counter {
+    .s_mtbg_counter_number { font-variant-numeric: tabular-nums; margin-bottom: .25rem; }
+    .s_mtbg_counter_label { margin-bottom: 0; }
+}
+[data-mtbg-count] { font-variant-numeric: tabular-nums; }

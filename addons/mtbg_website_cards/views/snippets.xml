@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Cards: a grid of a source's records in a card design (block/cards_block.js fills it on each visit; its options:
+         data-source, data-design, data-limit, data-columns, data-f-<filter> = option). The body is emptied before
+         saving. -->
+    <template id="s_mtbg_cards" name="Cards">
+        <section class="s_mtbg_cards pt32 pb32" data-source="" data-limit="6" data-columns="3">
+            <div class="container">
+                <div class="s_mtbg_cards_body o_not_editable"><p class="text-muted text-center">Cards</p></div>
+            </div>
+        </section>
+    </template>
+
+    <template id="snippets" inherit_id="website.snippets" name="Cards building block">
+        <xpath expr="//snippets[@id='snippet_structure']" position="inside">
+            <t t-snippet="mtbg_website_cards.s_mtbg_cards" string="Cards" group="content"
+               t-thumbnail="/mtbg_website_cards/static/src/img/s_mtbg_cards.svg">
+                <keywords>cards, tours, grid, listing, products, designer</keywords>
+            </t>
+        </xpath>
+    </template>
+</odoo>

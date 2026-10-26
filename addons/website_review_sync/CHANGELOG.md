@@ -2,6 +2,15 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'website_review_sync-*'`.
 
+## 19.0.0.4.0 · 2026-10-26
+
+- **Counter** block (Reviews group of the Blocks panel): numbers that count up from 0 once scrolled into view, with
+  a label each. Each number's options: the number, text before and after it, decimals, how long it counts and its
+  speed (the Reviews blocks' curves). Any element marked `data-mtbg-count` (with -prefix, -suffix, -decimals,
+  data-count-ms, data-count-ease) counts the same way, e.g. a number in a tour's description. The page keeps the
+  final value as its text. Sizes: the theme's headings.
+- The count-up moved to a shared helper (`static/src/js/count_up.js`), used by the Reviews totals and the Counter.
+
 ## 19.0.0.3.0 · 2026-10-26
 
 - Reviews page › a preset's card parts, speech bubbles: **two dividers, Bubble starts and Bubble ends**. Drag the
