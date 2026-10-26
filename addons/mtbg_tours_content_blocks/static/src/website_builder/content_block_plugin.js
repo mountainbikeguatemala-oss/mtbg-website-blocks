@@ -25,6 +25,15 @@ function setBlock(blockEl, block) {
     blockEl.replaceChildren(...holder.childNodes);
 }
 
+/** The ids of the reusable blocks around an element (the blocks it is inside, nearest first). */
+function blocksAround(el) {
+    const ids = [];
+    for (let around = el.parentElement?.closest(BLOCK_SELECTOR); around; around = around.parentElement?.closest(BLOCK_SELECTOR)) {
+        ids.push(parseInt(around.dataset.mtbgBlock) || 0);
+    }
+    return ids;
+}
+
 /** Choose…: the block picker; the chosen block's current content replaces the element's content. */
 export class ChooseContentBlockAction extends BuilderAction {
     static id = "mtbgChooseContentBlock";
@@ -41,7 +50,7 @@ export class ChooseContentBlockAction extends BuilderAction {
                     tags: data.tags,
                     currentId: parseInt(editingElement.dataset.mtbgBlock) || 0,
                     onChoose: async (id) => {
-                        chosen = await orm.call(MODEL, "mtbg_editor_block", [id]);
+                        chosen = await orm.call(MODEL, "mtbg_editor_block", [id, blocksAround(editingElement)]);
                     },
                     onCreate: async (name) => {
                         chosen = await orm.call(MODEL, "mtbg_create_from_editor", [name]);
@@ -55,6 +64,13 @@ export class ChooseContentBlockAction extends BuilderAction {
     }
     apply({ editingElement, loadResult: block }) {
         if (!block) {
+            return;
+        }
+        // a block inside another one: never one of the blocks around it (it would contain itself)
+        if (blocksAround(editingElement).includes(block.id)) {
+            this.services.notification.add(_t("“%s” contains this place already: a block cannot be put inside itself.", block.name), {
+                type: "warning",
+            });
             return;
         }
         setBlock(editingElement, block);
@@ -146,20 +162,10 @@ class MtbgContentBlockPlugin extends Plugin {
         so_snippet_addition_selector: [BLOCK_SELECTOR],
         // the shared content is locked until "Edit in place"
         content_not_editable_selectors: [`${BLOCK_SELECTOR}:not(.o_mtbg_cb_editing) ${BODY_SELECTOR}`],
-        on_snippet_dropped_handlers: this.onSnippetDropped.bind(this),
-        // a page stores only the block id: the shared content is filled in when the page is rendered
+        // a page stores only the block id: the shared content is filled in when the page is rendered; inside a block
+        // opened with "Edit in place", the blocks it contains are stored the same way (placeholders)
         clean_for_save_handlers: this.cleanForSave.bind(this),
     };
-
-    onSnippetDropped({ snippetEl }) {
-        const blockEl = snippetEl.matches(BLOCK_SELECTOR) ? snippetEl : snippetEl.querySelector(BLOCK_SELECTOR);
-        if (blockEl && blockEl.parentElement?.closest(BODY_SELECTOR)) {
-            blockEl.remove(); // no reusable block inside another one's shared content
-            this.services.notification.add(_t("A reusable block cannot be placed inside another reusable block."), {
-                type: "warning",
-            });
-        }
-    }
 
     cleanForSave({ root }) {
         // dynamic slots (filled for each page): stored with their placeholder only

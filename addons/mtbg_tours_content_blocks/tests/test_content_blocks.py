@@ -43,6 +43,60 @@ class TestContentBlocks(TransactionCase):
         self.assertIn('s_mtbg_content_block_placeholder', self.env['mtbg.tours.content.block']._mtbg_expand(html, True),
                       "the editor still shows the block, to choose another one")
 
+    # ------------------------------------------------------------------ reusable blocks inside reusable blocks
+    def _block(self, name, body):
+        return self.env['mtbg.tours.content.block'].create({'name': name, 'body': body})
+
+    def test_nested_blocks_render(self):
+        """A block placed inside another block's content is filled too, for visitors and in the editor."""
+        outer = self._block('Why Ride', Markup('<h3>Why</h3>') + placeholder_html(self.bring.id))
+        Block = self.env['mtbg.tours.content.block']
+        out = str(Block._mtbg_expand(placeholder_html(outer.id)))
+        self.assertIn('<h3>Why</h3>', out)
+        self.assertIn('<li>Helmet</li>', out, "the inner block's content is in the page's HTML")
+        self.assertNotIn('s_mtbg_content_block_placeholder', out)
+        editor = str(Block._mtbg_expand(placeholder_html(outer.id), editable=True))
+        self.assertIn(f'data-oe-id="{self.bring.id}" data-oe-field="body"', editor, "the inner block is its own field")
+        self.assertIn('data-mtbg-label="What to Bring"', editor, "and shows its name, locked")
+
+    def test_block_inside_itself_renders_once(self):
+        """A in B in A: each shows once, then it stops (the editor marks where)."""
+        first = self._block('First', Markup('<p>first-content</p>'))
+        second = self._block('Second', Markup('<p>second-content</p>') + placeholder_html(first.id))
+        first.body = Markup('<p>first-content</p>') + placeholder_html(second.id)
+        Block = self.env['mtbg.tours.content.block']
+        out = str(Block._mtbg_expand(placeholder_html(first.id)))
+        self.assertEqual(out.count('first-content'), 1)
+        self.assertEqual(out.count('second-content'), 1)
+        self.assertNotIn('s_mtbg_content_block_placeholder', out, "visitors see nothing where it would repeat")
+        editor = str(Block._mtbg_expand(placeholder_html(first.id), editable=True))
+        self.assertIn('data-mtbg-cycle="self"', editor)
+
+    def test_nesting_stops_after_five_levels(self):
+        blocks = []
+        for level in range(7, 0, -1):
+            inner = placeholder_html(blocks[-1].id) if blocks else Markup('')
+            blocks.append(self._block(f'Level {level}', Markup('<p>level-%s</p>') % level + inner))
+        out = str(self.env['mtbg.tours.content.block']._mtbg_expand(placeholder_html(blocks[-1].id)))
+        for level in range(1, 6):
+            self.assertIn(f'level-{level}<', out)
+        self.assertNotIn('level-6<', out, "at most five blocks deep")
+
+    def test_used_on_counts_blocks_that_contain_it(self):
+        before = self.bring.usage_total
+        self._block('Holder', placeholder_html(self.bring.id))
+        self.bring.invalidate_recordset(['usage_total'])
+        self.assertEqual(self.bring.usage_total, before + 1)
+        library = self.env['mtbg.content.block.library']
+        self.assertEqual(library.mtbg_used_inside([self.bring.id, self.book.id]), {'What to Bring': ['Holder']},
+                         "archiving it asks first: it would empty the Holder block")
+
+    def test_editor_block_knows_the_blocks_around_it(self):
+        outer = self._block('Around', placeholder_html(self.bring.id))
+        inner = self._block('Inner', placeholder_html(outer.id))
+        html = self.env['mtbg.tours.content.block'].mtbg_editor_block(inner.id, [outer.id])['html']
+        self.assertIn('data-mtbg-cycle="self"', str(html), "placed inside Around, Inner does not show Around again")
+
     def test_edit_in_place_saves_the_shared_block(self):
         """The editor saves an edited block body as an embedded field of the block (ir.ui.view.save)."""
         body = self.bring._mtbg_body_html(True).replace('Helmet', 'Helmet and gloves')

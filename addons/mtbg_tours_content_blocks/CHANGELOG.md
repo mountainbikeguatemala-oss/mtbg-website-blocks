@@ -2,6 +2,19 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_content_blocks-*'`.
 
+## 19.0.0.6.0 · 2026-10-25
+
+- **Reusable blocks inside reusable blocks** (content and background apart, e.g. a background block holding "The MTB
+  Guatemala Difference"): a block placed in another block's content is filled in turn, up to five deep, and is in the
+  page's HTML for visitors and search engines; dynamic slots fill at every level. A block met again inside itself
+  (A in B in A) shows once, then stops; the editor marks the spot.
+- Editor: a Reusable Block can be dropped inside a block opened with "Edit in place"; saving keeps the inner one as
+  its placeholder (only its id), and it shows locked with its name. Choosing a block that already contains this
+  place is refused.
+- Reusable Blocks page: "Used on" counts the other blocks that contain a block (also in the editor's label); the
+  preview shows the blocks inside; archiving a block that other blocks contain asks first, and deleting it is
+  refused (as for pages).
+
 ## 19.0.0.5.1 · 2026-10-25
 
 - On Tours › Configuration › Extensions it shows in the **Custom blocks** section (with the other extensions

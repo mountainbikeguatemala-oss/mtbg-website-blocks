@@ -27,6 +27,9 @@ $mtbg-cb-editing: #00a86b;
         pointer-events: none;
     }
     &:not([data-mtbg-label])::before { content: "\f0c1  Reusable block · choose one in the block options"; }
+    // a block inside itself (A in B in A), or nested too deep: shown once, then not again
+    &[data-mtbg-cycle]::before { content: "\f071  " attr(data-mtbg-label) " · inside itself: not shown again here"; background: #c0392b; }
+    &[data-mtbg-cycle="depth"]::before { content: "\f071  " attr(data-mtbg-label) " · too many blocks inside blocks: not shown"; }
     &.o_mtbg_cb_editing {
         outline: 2px solid $mtbg-cb-editing;
         &::before {

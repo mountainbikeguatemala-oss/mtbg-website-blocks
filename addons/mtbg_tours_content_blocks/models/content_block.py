@@ -12,6 +12,9 @@ BLOCK_RE = re.compile(
     r'<div\b[^>]*\b' + PLACEHOLDER_CLASS + r'\b[^>]*>.*?</div>\s*</(?P=tag)>',
     re.S)
 BLOCK_ID_RE = re.compile(r'data-mtbg-block="(\d+)"')
+# Reusable blocks inside reusable blocks: filled level by level, at most this deep; a block met again inside itself
+# (A in B in A) is shown once, then stops
+MAX_DEPTH = 5
 # Dynamic content inside a block's shared body: ``<div data-mtbg-slot="name">`` is filled for the page it shows on
 # (e.g. the tour's group discounts table, see _mtbg_slot_html); it is stored with its placeholder text only
 SLOT_RE = re.compile(
@@ -42,31 +45,41 @@ class MtbgContentBlock(models.Model):
 
     def _compute_website_usage(self):
         View = self.env['ir.ui.view'].sudo()
+        Block = self.sudo().with_context(active_test=False)
         for block in self:
-            count = View.search_count([('arch_db', 'ilike', f'data-mtbg-block="{block.id}"')]) if block.id else 0
+            marker = f'data-mtbg-block="{block.id}"'
+            count = View.search_count([('arch_db', 'ilike', marker)]) if block.id else 0
+            # the other reusable blocks that contain it count as places it shows
+            inside = Block.search_count([('body', 'ilike', marker), ('id', '!=', block.id)]) if block.id else 0
             block.website_view_count = count
-            block.usage_total = block.usage_count + count
+            block.usage_total = block.usage_count + count + inside
 
     # ------------------------------------------------------------------ rendering
-    def _mtbg_body_html(self, editable):
+    def _mtbg_body_html(self, editable, _stack=()):
         """The shared body inside a page. In the editor it is the block's own (locked) field, so
         "Edit in place" saves straight to this block. It is an ``oe_structure`` (a drop area of blocks, like the
         native Parallax block's): the website builder only gives blocks nested in another block their background
         and other section options when their parent is one."""
         self.ensure_one()
+        body = self.body or Markup()
+        if PLACEHOLDER_CLASS in body:
+            # the reusable blocks inside this one, filled in turn (``_stack``: the blocks around it)
+            body = self._mtbg_expand(body, editable=editable, _stack=_stack + (self.id,))
         if not editable:
-            return Markup('<div class="s_mtbg_content_block_body oe_structure">%s</div>') % (self.body or Markup())
+            return Markup('<div class="s_mtbg_content_block_body oe_structure">%s</div>') % body
         return Markup(
             '<div class="s_mtbg_content_block_body oe_structure" data-oe-model="mtbg.tours.content.block" data-oe-id="%s" '
             'data-oe-field="body" data-oe-type="html" data-oe-expression="block.body" data-oe-readonly="1">%s</div>'
-        ) % (self.id, self.body or Markup())
+        ) % (self.id, body)
 
     @api.model
-    def _mtbg_expand(self, html, editable=False):
-        """Fill every reusable block placeholder of rendered ``html`` with its block's body.
+    def _mtbg_expand(self, html, editable=False, _stack=()):
+        """Fill every reusable block placeholder of rendered ``html`` with its block's body, and the blocks inside
+        those bodies in turn (``_stack``: the blocks already being filled around ``html``).
 
-        Visitors: a missing or archived block renders nothing. Editor: the block carries its name and
-        how many pages use it (the editor's label), and an unknown block keeps its placeholder.
+        Visitors: a missing or archived block renders nothing, nor does a block inside itself or nested deeper than
+        MAX_DEPTH. Editor: the block carries its name and how many pages use it (the editor's label), an unknown block
+        keeps its placeholder, and a block inside itself (or too deep) keeps it with a warning (data-mtbg-cycle).
         """
         ids = {int(m.group('id')) for m in BLOCK_RE.finditer(html)}
         blocks = {b.id: b for b in self.sudo().browse(ids).exists().filtered('active')}
@@ -76,10 +89,16 @@ class MtbgContentBlock(models.Model):
             tag, attrs = match.group('tag'), match.group('attrs')
             if not block:
                 return match.group(0) if editable else ''
-            if editable:
+            if block.id in _stack or len(_stack) >= MAX_DEPTH:
+                if not editable:
+                    return ''
                 # attrs is page source (already escaped): append escaped values, never str + Markup
+                attrs += ' data-mtbg-label="%s" data-mtbg-cycle="%s"' % (
+                    escape(block.name), 'self' if block.id in _stack else 'depth')
+                return f'<{tag}{attrs}>{match.group(0)[match.group(0).index(">") + 1:]}'
+            if editable:
                 attrs += ' data-mtbg-label="%s" data-mtbg-usage="%s"' % (escape(block.name), block.usage_total)
-            return f'<{tag}{attrs}>{block._mtbg_body_html(editable)}</{tag}>'
+            return f'<{tag}{attrs}>{block._mtbg_body_html(editable, _stack)}</{tag}>'
 
         return Markup(BLOCK_RE.sub(fill, str(html)))
 
@@ -118,12 +137,15 @@ class MtbgContentBlock(models.Model):
                 'tags': [{'id': t.id, 'name': t.name, 'color': t.color} for t in tags]}
 
     @api.model
-    def mtbg_editor_block(self, block_id):
-        """A chosen block as the editor shows it: its locked body field, name and usage."""
+    def mtbg_editor_block(self, block_id, around=None):
+        """A chosen block as the editor shows it: its locked body field, name and usage. ``around``: the ids of the
+        reusable blocks it is placed in (the blocks inside it are filled as on the page)."""
         block = self.browse(int(block_id)).exists()
         if not block:
             return False
-        return {'id': block.id, 'name': block.name, 'usage': block.usage_total, 'html': block._mtbg_body_html(True)}
+        stack = tuple(int(i) for i in around or () if i)
+        return {'id': block.id, 'name': block.name, 'usage': block.usage_total,
+                'html': block._mtbg_body_html(True, stack)}
 
     @api.model
     def mtbg_create_from_editor(self, name):

@@ -255,6 +255,24 @@ export class BlockLibrary extends Component {
         this.notification.add(messages[operation], { type: "success" });
     }
 
+    /** Archive, asking first when other reusable blocks contain them (they would show nothing there). */
+    async confirmArchive(ids = null) {
+        ids = ids || this.state.selected;
+        const inside = await this.orm.call(MODEL, "mtbg_used_inside", [ids]);
+        const names = Object.entries(inside);
+        if (!names.length) {
+            return this.bulk("archive", null, ids);
+        }
+        const lines = names.map(([name, parents]) => `${name} (in ${parents.join(", ")})`).join(" · ");
+        this.dialog.add(ConfirmationDialog, {
+            title: _t("Used inside other blocks"),
+            body: _t("Archived, these blocks show nothing inside the blocks that contain them: %s", lines),
+            confirmLabel: _t("Archive"),
+            confirm: () => this.bulk("archive", null, ids),
+            cancel: () => {},
+        });
+    }
+
     confirmDelete(ids = null) {
         ids = ids || this.state.selected;
         this.dialog.add(ConfirmationDialog, {

@@ -157,6 +157,18 @@ class MtbgContentBlockLibrary(models.AbstractModel):
         return block.id
 
     @api.model
+    def mtbg_used_inside(self, block_ids):
+        """The other reusable blocks that contain these blocks ({block name: [names of the blocks containing it]}):
+        archiving one empties it there, so the page asks first."""
+        usage = self._mtbg_usage_index()
+        result = {}
+        for block in self._blocks().browse([int(i) for i in block_ids]).exists():
+            inside = usage[block.id]['blocks'] if block.id in usage else self._blocks()
+            if inside:
+                result[block.name] = inside.mapped('name')
+        return result
+
+    @api.model
     def mtbg_bulk(self, block_ids, operation, value=None):
         """An action on the blocks ticked in the list: add_tag / remove_tag (``value``: tag id), set_type, archive,
         restore, duplicate, delete (unused blocks only)."""

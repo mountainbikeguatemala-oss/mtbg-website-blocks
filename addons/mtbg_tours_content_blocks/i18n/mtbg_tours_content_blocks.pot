@@ -688,3 +688,28 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_content_blocks.view_page_template_form
 msgid "e.g. Day tours"
 msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/website_builder/content_block_plugin.js:0
+msgid "“%s” contains this place already: a block cannot be put inside itself."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "Used inside other blocks"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid ""
+"Archived, these blocks show nothing inside the blocks that contain them: %s"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/library/block_library.js:0
+msgid "Archive"
+msgstr ""
