@@ -52,15 +52,23 @@
                     <t t-else="">An extension gives the cards' sources (e.g. Tours: tours, group departures).</t>
                 </div>
                 <div t-else="" class="mtbg_cd_body flex-grow-1 d-flex">
-                    <div class="mtbg_cd_settings overflow-auto p-4">
+                    <!-- left: the fields to place, the card's frame, the colours -->
+                    <div class="mtbg_cd_settings overflow-auto p-3">
                         <section class="mb-4">
-                            <h5 class="mb-2">Style</h5>
-                            <div class="btn-group btn-group-sm mb-2" role="group" aria-label="Style">
-                                <t t-foreach="styles" t-as="s" t-key="s.key">
-                                    <button type="button" t-att-class="'btn ' + (state.settings.style === s.key ? 'btn-secondary' : 'btn-outline-secondary')"
-                                            t-on-click="() => this.change('style', s.key)"><i t-attf-class="fa {{s.icon}} me-1"/><t t-esc="s.label"/></button>
-                                </t>
+                            <h5 class="mb-1">Fields</h5>
+                            <div class="text-muted small mb-2">Drag a field into the card (or click it: it goes into the region
+                                of the field you clicked last). A field can be placed more than once.</div>
+                            <div t-foreach="state.data.fields" t-as="f" t-key="f.key" class="mtbg_cd_field" draggable="true"
+                                 t-on-dragstart="(ev) => this.onDragField(ev, f.key)" t-on-dragend="onDragEnd"
+                                 t-on-click="() => this.addField(f.key)" t-att-title="'Add: ' + f.label">
+                                <i class="fa fa-bars mtbg_cd_grip" aria-hidden="true"/>
+                                <i t-if="f.icon" t-attf-class="fa {{f.icon}} fa-fw text-muted" aria-hidden="true"/>
+                                <span class="flex-grow-1 text-truncate" t-esc="f.label"/>
+                                <span t-if="placedCount(f.key)" class="badge rounded-pill text-bg-light" t-esc="placedCount(f.key)"/>
                             </div>
+                        </section>
+                        <section class="mb-4">
+                            <h5 class="mb-2">Card</h5>
                             <div class="d-flex flex-wrap gap-3 align-items-center small">
                                 <label class="d-flex align-items-center gap-2 mb-0">Photo frame
                                     <select class="form-select form-select-sm w-auto" t-on-change="(ev) => this.change('ratio', ev.target.value)">
@@ -82,40 +90,18 @@
                                     <label class="form-check-label" for="mtbg_cd_shadow">Shadow</label>
                                 </div>
                             </div>
-                        </section>
-                        <section class="mb-4">
-                            <h5 class="mb-2">Hover</h5>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="mtbg_cd_zoom" t-att-checked="state.settings.hover_zoom"
-                                       t-on-change="(ev) => this.change('hover_zoom', ev.target.checked)"/>
-                                <label class="form-check-label" for="mtbg_cd_zoom">Zoom the photo</label>
-                            </div>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="mtbg_cd_darken" t-att-checked="state.settings.hover_darken"
-                                       t-on-change="(ev) => this.change('hover_darken', ev.target.checked)"/>
-                                <label class="form-check-label" for="mtbg_cd_darken">Darken the photo</label>
-                            </div>
-                        </section>
-                        <section class="mb-4">
-                            <h5 class="mb-1">Fields</h5>
-                            <div class="text-muted small mb-2">In this order: drag one (or use the arrows). Each one goes on the
-                                photo, in the text, or nowhere.</div>
-                            <div t-foreach="state.settings.look.parts" t-as="part" t-key="part.key" class="mtbg_cd_line"
-                                 t-att-class="{'is-off': part.place === 'off'}" draggable="true"
-                                 t-on-dragstart="(ev) => this.onDragStart(part_index, ev)" t-on-dragover="onDragOver"
-                                 t-on-drop="(ev) => this.onDrop(part_index, ev)">
-                                <i class="fa fa-bars mtbg_cd_grip" aria-hidden="true"/>
-                                <button type="button" class="btn btn-sm btn-light" title="Earlier" t-att-disabled="part_first"
-                                        t-on-click="() => this.movePart(part_index, -1)"><i class="fa fa-arrow-up"/></button>
-                                <button type="button" class="btn btn-sm btn-light" title="Later" t-att-disabled="part_last"
-                                        t-on-click="() => this.movePart(part_index, 1)"><i class="fa fa-arrow-down"/></button>
-                                <span class="flex-grow-1 text-truncate" t-esc="fieldLabel(part.key)"/>
-                                <select class="form-select form-select-sm w-auto" t-att-aria-label="fieldLabel(part.key)"
-                                        t-on-change="(ev) => this.setPlace(part, ev.target.value)">
-                                    <t t-foreach="state.data.places" t-as="p" t-key="p.key">
-                                        <option t-att-value="p.key" t-att-selected="part.place === p.key" t-esc="p.label"/>
-                                    </t>
-                                </select>
+                            <div class="d-flex flex-wrap gap-3 mt-2 small">
+                                <span class="text-muted">On hover, the photo:</span>
+                                <div class="form-check form-switch mb-0">
+                                    <input class="form-check-input" type="checkbox" id="mtbg_cd_zoom" t-att-checked="state.settings.hover_zoom"
+                                           t-on-change="(ev) => this.change('hover_zoom', ev.target.checked)"/>
+                                    <label class="form-check-label" for="mtbg_cd_zoom">Zooms</label>
+                                </div>
+                                <div class="form-check form-switch mb-0">
+                                    <input class="form-check-input" type="checkbox" id="mtbg_cd_darken" t-att-checked="state.settings.hover_darken"
+                                           t-on-change="(ev) => this.change('hover_darken', ev.target.checked)"/>
+                                    <label class="form-check-label" for="mtbg_cd_darken">Darkens</label>
+                                </div>
                             </div>
                         </section>
                         <section>
@@ -134,9 +120,78 @@
                             </div>
                         </section>
                     </div>
+
+                    <!-- middle: the card as a plan, its regions as drop zones; the clicked field's settings -->
+                    <div class="mtbg_cd_plan overflow-auto p-3">
+                        <h5 class="mb-2">Layout</h5>
+                        <t t-call="mtbg_website_cards.CardDesignerRegion"><t t-set="rkey" t-value="'header'"/></t>
+                        <div class="mtbg_cd_card">
+                            <div class="mtbg_cd_photo">
+                                <t t-call="mtbg_website_cards.CardDesignerRegion"><t t-set="rkey" t-value="'top'"/></t>
+                                <t t-call="mtbg_website_cards.CardDesignerRegion"><t t-set="rkey" t-value="'center'"/></t>
+                                <t t-call="mtbg_website_cards.CardDesignerRegion"><t t-set="rkey" t-value="'bottom'"/></t>
+                            </div>
+                            <t t-call="mtbg_website_cards.CardDesignerRegion"><t t-set="rkey" t-value="'below'"/></t>
+                            <t t-call="mtbg_website_cards.CardDesignerRegion"><t t-set="rkey" t-value="'footer'"/></t>
+                        </div>
+                        <!-- the clicked field -->
+                        <t t-set="item" t-value="selectedItem"/>
+                        <div t-if="item" class="mtbg_cd_item_panel mt-3 p-3">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <strong class="flex-grow-1" t-esc="field(item.field).label"/>
+                                <button type="button" class="btn btn-sm btn-light" title="Place it once more" t-on-click="duplicateItem">
+                                    <i class="fa fa-clone me-1"/>Duplicate</button>
+                                <button type="button" class="btn btn-sm btn-light text-danger" title="Take it off the card" t-on-click="removeItem">
+                                    <i class="fa fa-trash"/></button>
+                            </div>
+                            <div class="small mb-2">
+                                <div class="text-muted mb-1">Look</div>
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Look">
+                                    <t t-foreach="state.data.looks" t-as="l" t-key="l.key">
+                                        <button type="button" t-att-class="'btn ' + (item.look === l.key ? 'btn-secondary' : 'btn-outline-secondary')"
+                                                t-on-click="() => this.setItem('look', l.key)" t-esc="l.label"/>
+                                    </t>
+                                </div>
+                            </div>
+                            <div t-if="isPhoto(state.selected.region)" class="small mb-2">
+                                <div class="text-muted mb-1">Shows</div>
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Shows">
+                                    <button type="button" t-att-class="'btn ' + (!item.show ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.setItem('show', '')">Like its region</button>
+                                    <button type="button" t-att-class="'btn ' + (item.show === 'always' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.setItem('show', 'always')">Always</button>
+                                    <button type="button" t-att-class="'btn ' + (item.show === 'hover' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.setItem('show', 'hover')">On hover</button>
+                                </div>
+                            </div>
+                            <label class="small d-block mb-2"><span class="text-muted">Words</span>
+                                <input class="form-control form-control-sm" t-att-value="item.text"
+                                       t-att-placeholder="field(item.field).kind === 'button' ? (field(item.field).text or 'Book') : 'The field itself'"
+                                       t-on-change="(ev) => this.setItem('text', ev.target.value)"/>
+                                <span class="text-muted">Empty: the field itself. Mix words and fields: <code>{value}</code> is this
+                                    field, <code>{price}</code> (or any field's key) another, e.g. <code>Book (from {price})</code>.</span>
+                            </label>
+                            <label class="small d-block mb-0"><span class="text-muted">Icon</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <i t-if="item.icon" t-attf-class="fa {{item.icon}} fa-fw"/>
+                                    <input class="form-control form-control-sm" placeholder="e.g. fa-users (empty: none)" t-att-value="item.icon"
+                                           t-on-change="(ev) => this.setItem('icon', ev.target.value)"/>
+                                </div>
+                            </label>
+                            <div class="text-muted small mt-2">Field keys: <t t-foreach="state.data.fields" t-as="f" t-key="f.key"><code t-esc="'{' + f.key + '}'"/><t t-if="!f_last">, </t></t></div>
+                        </div>
+                        <div t-else="" class="text-muted small mt-3">Click a placed field for its look, words, icon and when it shows.</div>
+                    </div>
+
+                    <!-- right: the cards live -->
                     <div class="mtbg_cd_preview d-flex flex-column">
                         <div class="px-3 py-2 border-bottom d-flex flex-wrap align-items-center gap-2">
                             <strong class="me-auto"><i class="fa fa-eye me-1"/>Preview</strong>
+                            <div class="form-check form-switch mb-0 small">
+                                <input class="form-check-input" type="checkbox" id="mtbg_cd_hover" t-att-checked="state.hover"
+                                       t-on-change="(ev) => this.setHover(ev.target.checked)"/>
+                                <label class="form-check-label" for="mtbg_cd_hover">Show hover</label>
+                            </div>
                             <div class="btn-group btn-group-sm" role="group" aria-label="Light or dark">
                                 <button type="button" title="Light page" t-att-class="'btn ' + (!state.dark ? 'btn-secondary' : 'btn-outline-secondary')"
                                         t-on-click="() => this.setDark(false)"><i class="fa fa-sun-o"/></button>
@@ -160,6 +215,47 @@
                     </div>
                 </div>
             </t>
+        </div>
+    </t>
+    <!-- a region of the plan: its name, its settings (on the photo: always / on hover; the strips: shade), its fields
+         (drop targets: a field lands before the one under the pointer, else last) -->
+    <t t-name="mtbg_website_cards.CardDesignerRegion">
+        <t t-set="reg" t-value="region(rkey)"/>
+        <t t-set="meta" t-value="regions.find((r) => r.key === rkey)"/>
+        <div t-attf-class="mtbg_cd_region mtbg_cd_region--{{rkey}}" t-att-class="{'is-drop': state.dropAt and state.dropAt.region === rkey}"
+             t-on-dragover="(ev) => this.onDragOver(ev, rkey, reg.items.length)" t-on-drop="(ev) => this.onDrop(ev, rkey, reg.items.length)">
+            <div class="mtbg_cd_region_head d-flex align-items-center gap-1">
+                <span class="fw-bold" t-esc="meta.label"/>
+                <span class="text-muted small text-truncate" t-esc="meta.help"/>
+                <div t-if="isPhoto(rkey)" class="ms-auto btn-group btn-group-sm" role="group" t-att-aria-label="meta.label">
+                    <button type="button" t-att-class="'btn py-0 ' + (reg.show === 'always' ? 'btn-secondary' : 'btn-outline-secondary')"
+                            t-on-click="() => this.setRegion(rkey, 'show', 'always')">Always</button>
+                    <button type="button" t-att-class="'btn py-0 ' + (reg.show === 'hover' ? 'btn-secondary' : 'btn-outline-secondary')"
+                            t-on-click="() => this.setRegion(rkey, 'show', 'hover')">On hover</button>
+                </div>
+            </div>
+            <div t-if="rkey === 'bottom'" class="form-check form-switch small mb-1">
+                <input class="form-check-input" type="checkbox" id="mtbg_cd_shade" t-att-checked="reg.shade"
+                       t-on-change="(ev) => this.setRegion('bottom', 'shade', ev.target.checked)"/>
+                <label class="form-check-label" for="mtbg_cd_shade">A shade instead of its colour</label>
+            </div>
+            <div t-attf-class="mtbg_cd_items {{rkey === 'footer' ? 'is-row' : ''}}">
+                <t t-foreach="reg.items" t-as="it" t-key="it.uid">
+                    <div t-if="isDropAt(rkey, it_index)" class="mtbg_cd_drop"/>
+                    <div class="mtbg_cd_item" draggable="true"
+                         t-att-class="{'is-selected': state.selected and state.selected.uid === it.uid, 'is-moving': state.drag and state.drag.uid === it.uid}"
+                         t-on-dragstart="(ev) => this.onDragItem(ev, rkey, it)" t-on-dragend="onDragEnd"
+                         t-on-dragover="(ev) => this.onDragOver(ev, rkey, it_index)" t-on-drop="(ev) => this.onDrop(ev, rkey, it_index)"
+                         t-on-click="() => this.select(rkey, it)">
+                        <i t-if="it.icon" t-attf-class="fa {{it.icon}} fa-fw" aria-hidden="true"/>
+                        <span class="text-truncate" t-esc="it.text or field(it.field).label"/>
+                        <span class="badge text-bg-light" t-esc="lookLabel(it.look)"/>
+                        <i t-if="it.show === 'hover' or (!it.show and isPhoto(rkey) and reg.show === 'hover')" class="fa fa-hand-pointer-o text-muted" title="On hover"/>
+                    </div>
+                </t>
+                <div t-if="isDropAt(rkey, reg.items.length)" class="mtbg_cd_drop"/>
+                <div t-if="!reg.items.length" class="mtbg_cd_empty">Drop fields here</div>
+            </div>
         </div>
     </t>
 </templates>

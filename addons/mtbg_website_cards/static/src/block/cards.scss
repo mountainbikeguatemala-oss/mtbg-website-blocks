@@ -1,5 +1,6 @@
-// Cards in a design (views/card_templates.xml): a grid (columns on desktop, two on tablets, one on phones); a card is
-// its photo in the design's frame (fields placed on it) and its text, below, above or over the photo. Colours: the
+// Cards in a design (views/card_templates.xml): a grid (columns on desktop, two on tablets, one on phones). A card:
+// its header (above it), the photo with its top strip, center and bottom strip, and below it the text and the
+// footer line. data-show="hover": shown when the card is hovered or focused (always on touch screens). Colours: the
 // design's (inline --mtbg-card-*, and --mtbg-card-dark-* for dark pages: .mtbg-theme-dark), else the theme's. The
 // title's font and size are the theme's (an h5).
 .mtbg-cards {
@@ -13,129 +14,182 @@
     @media (max-width: 575.98px) { grid-template-columns: minmax(0, 1fr); }
 }
 
-.mtbg-card {
+.mtbg-card-cell {
     --c-bg: var(--mtbg-card-card-bg, var(--body-bg, #fff));
     --c-text: var(--mtbg-card-text, inherit);
     --c-muted: var(--mtbg-card-muted, #6c757d);
     --c-accent: var(--mtbg-card-accent, var(--o-color-1, #f0426e));
     --c-accent-text: var(--mtbg-card-accent-text, #fff);
     --c-overlay: var(--mtbg-card-overlay, #000);
+    --c-top-bg: var(--mtbg-card-top-bg, var(--c-accent));
+    --c-top-text: var(--mtbg-card-top-text, var(--c-accent-text));
+    --c-bottom-bg: var(--mtbg-card-bottom-bg, rgba(20, 20, 20, .82));
+    --c-bottom-text: var(--mtbg-card-bottom-text, #fff);
+    --c-footer-bg: var(--mtbg-card-footer-bg, rgba(0, 0, 0, .03));
+    --c-early-bg: var(--mtbg-card-early-bg, #ffd84d);
+    --c-early-text: var(--mtbg-card-early-text, #2b2100);
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    min-width: 0;
+}
+
+.mtbg-card__header { display: flex; flex-direction: column; gap: .25rem; color: var(--c-text); }
+
+.mtbg-card {
     --c-radius: 0;
     position: relative;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    flex: 1 1 auto;
     overflow: hidden;
     background: var(--c-bg);
     color: var(--c-text);
+    border: 1px solid rgba(0, 0, 0, .125);
     border-radius: var(--c-radius);
-    &.mtbg-card--corners-small { --c-radius: 10px; }
-    &.mtbg-card--corners-large { --c-radius: 20px; }
+    &.mtbg-card--corners-small { --c-radius: .375rem; }
+    &.mtbg-card--corners-large { --c-radius: 1.25rem; }
     &.has-shadow { box-shadow: 0 6px 22px rgba(0, 0, 0, .12); }
 
-    // the whole card is the link (its fields stay selectable text)
+    // the whole card is the link; buttons and fields with a tip sit above it
     .mtbg-card__link { position: absolute; inset: 0; z-index: 3; }
+    .mtbg-card__btn, .mtbg-card__icons-row { position: relative; z-index: 4; }
 
-    .mtbg-card__media {
-        position: relative;
-        overflow: hidden;
-        aspect-ratio: 3 / 2;
-        background: #1c3650;
-    }
+    .mtbg-card__media { position: relative; overflow: hidden; aspect-ratio: 3 / 2; background: #1c3650; }
     &.mtbg-card--ratio-4-3 .mtbg-card__media { aspect-ratio: 4 / 3; }
     &.mtbg-card--ratio-16-9 .mtbg-card__media { aspect-ratio: 16 / 9; }
     &.mtbg-card--ratio-1-1 .mtbg-card__media { aspect-ratio: 1; }
     .mtbg-card__img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform .45s ease;
+        display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .45s ease;
         &.is-empty { background: linear-gradient(135deg, #1c3650, #0a1724); }
     }
     .mtbg-card__shade {
-        position: absolute;
-        inset: 0;
-        background: var(--c-overlay);
-        opacity: 0;
-        transition: opacity .3s ease;
+        position: absolute; inset: 0; background: var(--c-overlay); opacity: 0; transition: opacity .3s ease;
         pointer-events: none;
     }
     &.hover-zoom:hover .mtbg-card__img { transform: scale(1.06); }
     &.hover-darken:hover .mtbg-card__shade { opacity: .35; }
 
-    // fields on the photo: its top corners and its bottom (over a soft dark gradient)
-    .mtbg-card__corner {
+    // ---- on the photo: the strips (full width, small capitals) and the center
+    .mtbg-card__on {
         position: absolute;
-        top: .75rem;
+        left: 0;
+        right: 0;
         z-index: 2;
         display: flex;
         flex-direction: column;
-        gap: .35rem;
-        &--left { left: .75rem; align-items: flex-start; }
-        &--right { right: .75rem; align-items: flex-end; }
+        align-items: center;
+        gap: 1px;
+        transition: opacity .15s ease, transform .15s ease;
     }
-    .mtbg-card__over {
-        position: absolute;
-        inset: auto 0 0 0;
-        z-index: 2;
-        padding: 2.5rem 1rem .9rem;
-        color: #fff;
-        background: linear-gradient(to top, rgba(0, 0, 0, .75), rgba(0, 0, 0, 0));
-        .mtbg-card__title, .mtbg-card__price { color: #fff; }
-        .mtbg-card__meta, .mtbg-card__text, .mtbg-card__countdown { color: rgba(255, 255, 255, .88); }
-    }
-    &.mtbg-card--overlay .mtbg-card__media { flex: 1 1 auto; min-height: 100%; }
-
-    .mtbg-card__body {
-        display: flex;
-        flex-direction: column;
-        gap: .35rem;
-        flex: 1 1 auto;
-        padding: 1rem 1.1rem 1.15rem;
-    }
-    .mtbg-card__part { margin: 0; }
-    .mtbg-card__title { color: var(--c-text); }
-    .mtbg-card__text { color: var(--c-muted); font-size: .92rem; }
-    .mtbg-card__meta { color: var(--c-muted); font-size: .88rem; .fa { width: 1.1em; } }
-    .mtbg-card__price { font-weight: 700; color: var(--c-accent); }
-    .mtbg-card__badge {
-        display: inline-block;
-        padding: .2rem .6rem;
-        border-radius: 999px;
-        background: var(--c-accent);
-        color: var(--c-accent-text);
-        font-size: .75rem;
+    .mtbg-card__on--top, .mtbg-card__on--bottom {
+        padding: 5px 8px;
+        font-size: 11px;
         font-weight: 700;
-        letter-spacing: .02em;
+        line-height: 1.3;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        overflow: hidden;
+        text-align: center;
     }
-    .mtbg-card__corner .mtbg-card__price,
-    .mtbg-card__corner .mtbg-card__meta,
-    .mtbg-card__corner .mtbg-card__countdown {
-        padding: .2rem .55rem;
-        border-radius: 6px;
-        background: rgba(0, 0, 0, .55);
-        color: #fff;
-        font-size: .8rem;
+    .mtbg-card__on--top { top: 0; background: var(--c-top-bg); color: var(--c-top-text); }
+    .mtbg-card__on--bottom {
+        bottom: 0; background: var(--c-bottom-bg); color: var(--c-bottom-text);
+        // a shade instead of a colour: the photo shows through, darker at the bottom
+        &.has-shade { background: linear-gradient(transparent, rgba(0, 0, 0, .75)); color: #fff; padding-top: 2rem; }
+        &.has-shade .mtbg-card__item--plain { text-transform: none; letter-spacing: 0; font-size: 1rem; white-space: normal; }
     }
-    .mtbg-card__rating { color: #f5b301; font-size: .9rem; .mtbg-card__rating-count { color: var(--c-muted); margin-left: .25rem; } }
-    .mtbg-card__countdown {
-        font-size: .82rem;
-        color: var(--c-muted);
-        .mtbg-card__countdown-clock { font-variant-numeric: tabular-nums; font-weight: 700; margin-left: .25rem; }
+    .mtbg-card__on--center { top: 50%; transform: translateY(-50%); gap: .4rem; }
+    // the early bird runs (the countdown in it says so): the strip turns yellow; closed: grey
+    .mtbg-card__on--top:has(.is-early), .mtbg-card__on--bottom:has(.is-early) { background: var(--c-early-bg); color: var(--c-early-text); }
+    .mtbg-card__on--bottom:has(.is-closed) { background: rgba(120, 120, 120, .85); }
+
+    // hover parts: hidden until the card is hovered or focused
+    .mtbg-card__on[data-show="hover"] { opacity: 0; }
+    .mtbg-card__on--top[data-show="hover"] { transform: translateY(-100%); }
+    .mtbg-card__on--bottom[data-show="hover"] { transform: translateY(100%); }
+    .mtbg-card__on--center[data-show="hover"] { transform: translateY(-50%) scale(.92); }
+    .mtbg-card__on .mtbg-card__item[data-show="hover"] {
+        max-height: 0; opacity: 0; overflow: hidden; transition: opacity .15s ease, max-height .15s ease;
     }
-    // the body's last fields sit at the bottom, so the cards of a row line up
-    .mtbg-card__body > .mtbg-card__price:last-child { margin-top: auto; }
+
+    // ---- the text under the photo and its footer line
+    .mtbg-card__body { display: flex; flex-direction: column; gap: .35rem; flex: 1 1 auto; padding: 1rem 1.1rem; }
+    .mtbg-card__footer {
+        display: flex; align-items: center; justify-content: space-between; gap: .5rem; flex-wrap: wrap;
+        padding: .5rem 1.1rem; background: var(--c-footer-bg); border-top: 1px solid rgba(0, 0, 0, .125);
+    }
+
+    // ---- the items
+    .mtbg-card__item { margin: 0; min-width: 0; .fa { margin-right: .25rem; } }
+    .mtbg-card__k-title { color: var(--c-text); }
+    .mtbg-card__k-text { color: var(--c-muted); font-size: .92rem; }
+    .mtbg-card__k-meta { font-size: .88rem; }
+    .mtbg-card__body .mtbg-card__k-meta { color: var(--c-accent); font-weight: 700; }
+    .mtbg-card__k-price { font-weight: 700; }
+    .mtbg-card__k-badge.mtbg-card__item--plain { font-weight: 700; }
+    .mtbg-card__item--pill {
+        display: inline-block; align-self: center; padding: 4px 12px; border-radius: 999px; background: var(--c-accent);
+        color: var(--c-accent-text); font-size: 13px; font-weight: 700; line-height: 1.5; white-space: nowrap;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, .3);
+    }
+    .mtbg-card__body .mtbg-card__item--pill, .mtbg-card__footer .mtbg-card__item--pill, .mtbg-card__header .mtbg-card__item--pill { align-self: flex-start; box-shadow: none; }
+    .mtbg-card__item--button {
+        display: inline-block; padding: .25rem .5rem; border-radius: .25rem; background: var(--c-accent);
+        color: var(--c-accent-text); font-size: .875rem; line-height: 1.5; text-decoration: none; white-space: nowrap;
+        &:hover, &:focus-visible { filter: brightness(.92); color: var(--c-accent-text); }
+    }
+    .mtbg-card__body .mtbg-card__item--button { align-self: flex-start; }
+    .mtbg-card__item--bar {
+        align-self: stretch; padding: 5px 8px; background: var(--c-bottom-bg); color: var(--c-bottom-text);
+        font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; text-align: center;
+        &.is-early { background: var(--c-early-bg); color: var(--c-early-text); }
+        &.is-closed { background: rgba(120, 120, 120, .85); }
+    }
+    .mtbg-card__on--top .mtbg-card__item--bar { background: var(--c-top-bg); color: var(--c-top-text); }
+    .mtbg-card__on .mtbg-card__item--bar { margin: 0 -8px; }
+    .mtbg-card__on--bottom .mtbg-card__item--bar:last-child { margin-bottom: -5px; }
+
+    .mtbg-card__k-rating { color: #f5b301; font-size: .9rem; .mtbg-card__rating-count { color: var(--c-muted); margin-left: .25rem; } }
+    .mtbg-card__k-icons { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+    .mtbg-card__icons-row { cursor: help; letter-spacing: 1px; .fa { margin-right: 0; } .is-off { opacity: .25; } }
+    // a countdown: its words above its clock
+    .mtbg-card__k-countdown {
+        display: flex; flex-direction: column; align-items: center; gap: 1px;
+        .mtbg-card__countdown-label { font-size: 10.5px; opacity: .9; }
+        .mtbg-card__countdown-time { font-size: 13px; letter-spacing: .02em; text-transform: none; font-variant-numeric: tabular-nums; }
+        .mtbg-card__countdown-time[hidden] { display: none; }
+    }
+    .mtbg-card__body .mtbg-card__k-countdown, .mtbg-card__footer .mtbg-card__k-countdown { align-items: flex-start; color: var(--c-muted); }
+    .mtbg-card__body > .mtbg-card__item:last-child { margin-top: auto; }
 }
 
+// hovered (or focused, or a touch screen): the hover parts show
+@mixin mtbg-card-shown {
+    .mtbg-card__on[data-show="hover"] { opacity: 1; transform: none; }
+    .mtbg-card__on--center[data-show="hover"] { transform: translateY(-50%); }
+    .mtbg-card__on .mtbg-card__item[data-show="hover"] { max-height: 4rem; opacity: 1; }
+}
+.mtbg-card:hover, .mtbg-card:focus-within, .mtbg-cards-preview.is-hovered .mtbg-card { @include mtbg-card-shown; }
+@media (hover: none) { .mtbg-card { @include mtbg-card-shown; } }
+
 // dark pages: the design's dark colours, else dark ones of its own
-.mtbg-theme-dark .mtbg-card {
+.mtbg-theme-dark .mtbg-card-cell {
     --c-bg: var(--mtbg-card-dark-card-bg, #1b1c20);
     --c-text: var(--mtbg-card-dark-text, #ececec);
     --c-muted: var(--mtbg-card-dark-muted, rgba(255, 255, 255, .62));
     --c-accent: var(--mtbg-card-dark-accent, var(--mtbg-card-accent, var(--o-color-1, #f0426e)));
     --c-accent-text: var(--mtbg-card-dark-accent-text, var(--mtbg-card-accent-text, #fff));
     --c-overlay: var(--mtbg-card-dark-overlay, var(--mtbg-card-overlay, #000));
+    --c-top-bg: var(--mtbg-card-dark-top-bg, var(--mtbg-card-top-bg, var(--c-accent)));
+    --c-top-text: var(--mtbg-card-dark-top-text, var(--mtbg-card-top-text, var(--c-accent-text)));
+    --c-bottom-bg: var(--mtbg-card-dark-bottom-bg, var(--mtbg-card-bottom-bg, rgba(20, 20, 20, .82)));
+    --c-bottom-text: var(--mtbg-card-dark-bottom-text, var(--mtbg-card-bottom-text, #fff));
+    --c-footer-bg: var(--mtbg-card-dark-footer-bg, rgba(255, 255, 255, .04));
+    --c-early-bg: var(--mtbg-card-dark-early-bg, var(--mtbg-card-early-bg, #ffd84d));
+    --c-early-text: var(--mtbg-card-dark-early-text, var(--mtbg-card-early-text, #2b2100));
+    .mtbg-card { border-color: rgba(255, 255, 255, .1); }
 }
 
 .s_mtbg_cards .s_mtbg_cards_body:empty { min-height: 4rem; }

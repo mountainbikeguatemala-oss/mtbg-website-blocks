@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Cards in a design (models/card_design.py mtbg_render): a grid of cards; each card its photo (with the fields
-         placed on it) and its text, in the design's style. Its colours: CSS variables (light, and dark for dark
-         pages: .mtbg-theme-dark), cards.scss. -->
+    <!-- Cards in a design (models/card_design.py mtbg_render): a grid of cards. A card: its header (above it, no
+         colour), the photo with its top strip, center and bottom strip (each shown always or on hover), and below
+         it the text and the footer line. Its colours: CSS variables (light, and dark for dark pages:
+         .mtbg-theme-dark), cards.scss. -->
     <template id="cards" name="Cards in a design">
         <div t-attf-class="mtbg-cards mtbg-cards--cols-#{columns or 3}" t-att-style="style_vars or None">
             <t t-foreach="cards" t-as="card"><t t-call="mtbg_website_cards.card"/></t>
@@ -10,58 +11,83 @@
     </template>
 
     <template id="card" name="Card">
-        <t t-set="v" t-value="card['values']"/>
-        <t t-set="places" t-value="card['places']"/>
-        <article t-attf-class="mtbg-card mtbg-card--#{settings['style']} mtbg-card--ratio-#{settings['ratio']} mtbg-card--corners-#{settings['corners']} #{'has-shadow' if settings['shadow'] else ''} #{'hover-zoom' if settings['hover_zoom'] else ''} #{'hover-darken' if settings['hover_darken'] else ''}">
-            <a class="mtbg-card__link" t-att-href="v.get('url') or None" t-att-aria-label="v.get('name') or None"/>
-            <div t-if="settings['style'] == 'above' and places['body']" class="mtbg-card__body">
-                <t t-foreach="places['body']" t-as="part"><t t-call="mtbg_website_cards.card_part"/></t>
+        <t t-set="regions" t-value="card['regions']"/>
+        <div class="mtbg-card-cell">
+            <div t-if="regions['header']['items']" class="mtbg-card__header">
+                <t t-foreach="regions['header']['items']" t-as="item"><t t-call="mtbg_website_cards.card_item"/></t>
             </div>
-            <div class="mtbg-card__media">
-                <img t-if="v.get('image')" class="mtbg-card__img" loading="lazy" t-att-src="v['image']" t-att-alt="v.get('name') or ''"/>
-                <div t-else="" class="mtbg-card__img is-empty"/>
-                <div class="mtbg-card__shade"/>
-                <div t-if="places['top_left']" class="mtbg-card__corner mtbg-card__corner--left">
-                    <t t-foreach="places['top_left']" t-as="part"><t t-call="mtbg_website_cards.card_part"/></t>
-                </div>
-                <div t-if="places['top_right']" class="mtbg-card__corner mtbg-card__corner--right">
-                    <t t-foreach="places['top_right']" t-as="part"><t t-call="mtbg_website_cards.card_part"/></t>
-                </div>
-                <div t-if="places['image_bottom'] or (settings['style'] == 'overlay' and places['body'])" class="mtbg-card__over">
-                    <t t-foreach="places['image_bottom']" t-as="part"><t t-call="mtbg_website_cards.card_part"/></t>
-                    <t t-if="settings['style'] == 'overlay'">
-                        <t t-foreach="places['body']" t-as="part"><t t-call="mtbg_website_cards.card_part"/></t>
+            <article t-attf-class="mtbg-card mtbg-card--ratio-#{settings['ratio']} mtbg-card--corners-#{settings['corners']} #{'has-shadow' if settings['shadow'] else ''} #{'hover-zoom' if settings['hover_zoom'] else ''} #{'hover-darken' if settings['hover_darken'] else ''}">
+                <a class="mtbg-card__link" t-att-href="card['url'] or None" t-att-aria-label="card['name'] or None"/>
+                <div class="mtbg-card__media">
+                    <img t-if="card['image']" class="mtbg-card__img" loading="lazy" t-att-src="card['image']" t-att-alt="card['name']"/>
+                    <div t-else="" class="mtbg-card__img is-empty"/>
+                    <div class="mtbg-card__shade"/>
+                    <t t-foreach="['top', 'center', 'bottom']" t-as="rkey">
+                        <t t-set="region" t-value="regions[rkey]"/>
+                        <div t-if="region['items']" t-attf-class="mtbg-card__on mtbg-card__on--#{rkey} #{'has-shade' if region.get('shade') else ''}"
+                             t-att-data-show="region['show']">
+                            <t t-foreach="region['items']" t-as="item"><t t-call="mtbg_website_cards.card_item"/></t>
+                        </div>
                     </t>
                 </div>
-            </div>
-            <div t-if="settings['style'] == 'below' and places['body']" class="mtbg-card__body">
-                <t t-foreach="places['body']" t-as="part"><t t-call="mtbg_website_cards.card_part"/></t>
-            </div>
-        </article>
+                <div t-if="regions['below']['items']" class="mtbg-card__body">
+                    <t t-foreach="regions['below']['items']" t-as="item"><t t-call="mtbg_website_cards.card_item"/></t>
+                </div>
+                <div t-if="regions['footer']['items']" class="mtbg-card__footer">
+                    <t t-foreach="regions['footer']['items']" t-as="item"><t t-call="mtbg_website_cards.card_item"/></t>
+                </div>
+            </article>
+        </div>
     </template>
 
-    <!-- one field of a card, by its kind -->
-    <template id="card_part" name="Card field">
-        <t t-set="val" t-value="part['value']"/>
-        <h3 t-if="part['kind'] == 'title'" t-attf-class="mtbg-card__part mtbg-card__title h5" t-out="val"/>
-        <span t-elif="part['kind'] == 'badge'" t-attf-class="mtbg-card__part mtbg-card__badge" t-out="val"/>
-        <div t-elif="part['kind'] == 'price'" t-attf-class="mtbg-card__part mtbg-card__price" t-out="val"/>
-        <div t-elif="part['kind'] == 'meta'" t-attf-class="mtbg-card__part mtbg-card__meta">
-            <i t-if="part['icon']" t-attf-class="fa #{part['icon']}" aria-hidden="true"/> <t t-out="val"/>
+    <!-- one placed field: its look (plain, pill, button, bar), its icon, its words (its value, or its text with the
+         values it names); data-show: always / on hover (on the photo) -->
+    <template id="card_item" name="Card field">
+        <t t-set="kind" t-value="item['kind']"/>
+        <t t-set="val" t-value="item['value']"/>
+        <t t-set="cls" t-value="'mtbg-card__item mtbg-card__item--%s mtbg-card__k-%s mtbg-card__f-%s' % (item['look'], kind, item['field'])"/>
+        <a t-if="item['look'] == 'button'" t-attf-class="#{cls} mtbg-card__btn" t-att-href="card['url'] or None"
+           t-att-data-show="item['show']">
+            <i t-if="item['icon']" t-attf-class="fa #{item['icon']}" aria-hidden="true"/>
+            <t t-call="mtbg_website_cards.card_words"/>
+        </a>
+        <h3 t-elif="kind == 'title'" t-attf-class="#{cls} h5" t-att-data-show="item['show']">
+            <i t-if="item['icon']" t-attf-class="fa #{item['icon']}" aria-hidden="true"/>
+            <t t-call="mtbg_website_cards.card_words"/>
+        </h3>
+        <div t-elif="kind == 'countdown'" t-attf-class="#{cls} #{val.get('class') or ''}" t-att-data-show="item['show']"
+             t-att-data-deadline="val.get('deadline') or None" t-att="val.get('attrs') or {}">
+            <span t-attf-class="mtbg-card__countdown-label #{val.get('label_class') or ''}" t-out="item['text'] or val.get('label') or ''"/>
+            <span class="mtbg-card__countdown-time"><i t-if="item['icon']" t-attf-class="fa #{item['icon']}" aria-hidden="true"/> <span t-attf-class="mtbg-card__countdown-clock #{val.get('clock_class') or ''}"/></span>
         </div>
-        <div t-elif="part['kind'] == 'rating'" t-attf-class="mtbg-card__part mtbg-card__rating"
-             t-att-title="'%s/5' % (val.get('value') if isinstance(val, dict) else val)">
-            <t t-set="stars" t-value="round(float(val.get('value') if isinstance(val, dict) else val or 0))"/>
+        <div t-elif="kind == 'rating'" t-att-class="cls" t-att-data-show="item['show']"
+             t-att-title="'%s/5' % (val.get('value') or val.get('text'))">
+            <t t-set="stars" t-value="round(float(val.get('value') or val.get('text') or 0))"/>
             <t t-foreach="range(1, 6)" t-as="n"><i t-attf-class="fa #{'fa-star' if n &lt;= stars else 'fa-star-o'}" aria-hidden="true"/></t>
-            <span t-if="isinstance(val, dict) and val.get('count')" class="mtbg-card__rating-count" t-out="'(%s)' % val['count']"/>
+            <span t-if="val.get('count')" class="mtbg-card__rating-count" t-out="'(%s)' % val['count']"/>
         </div>
-        <div t-elif="part['kind'] == 'countdown'" t-attf-class="mtbg-card__part mtbg-card__countdown"
-             t-att-data-deadline="val.get('deadline') if isinstance(val, dict) else None">
-            <i class="fa fa-clock-o" aria-hidden="true"/>
-            <span class="mtbg-card__countdown-label" t-out="val.get('label') if isinstance(val, dict) else ''"/>
-            <span class="mtbg-card__countdown-clock"/>
+        <div t-elif="kind == 'icons'" t-att-class="cls" t-att-data-show="item['show']">
+            <span t-foreach="val.get('list') or []" t-as="row" class="mtbg-card__icons-row" tabindex="0"
+                  t-att-title="row.get('tip') or None" t-att-aria-label="row.get('tip') or None">
+                <t t-foreach="range(1, int(row.get('of') or 5) + 1)" t-as="n"><i t-attf-class="fa #{row.get('icon') or 'fa-circle'} #{'is-on' if n &lt;= int(row.get('value') or 0) else 'is-off'}" aria-hidden="true"/></t>
+            </span>
         </div>
-        <div t-else="" t-attf-class="mtbg-card__part mtbg-card__text" t-out="val"/>
+        <div t-else="" t-att-class="cls" t-att-data-show="item['show']">
+            <i t-if="item['icon']" t-attf-class="fa #{item['icon']}" aria-hidden="true"/>
+            <t t-call="mtbg_website_cards.card_words"/>
+        </div>
+    </template>
+
+    <!-- an item's words: plain text, and field values (a value may carry another module's classes / data, e.g. a
+         price that follows the visitor's currency) -->
+    <template id="card_words" name="Card field words">
+        <t t-foreach="item['segments']" t-as="seg">
+            <t t-if="'text' in seg" t-out="seg['text']"/>
+            <t t-else="">
+                <t t-set="sv" t-value="seg['value']"/>
+                <span t-att-class="sv.get('class') or None" t-att="sv.get('attrs') or {}"><span t-att-class="sv.get('inner_class') or None" t-out="sv.get('text')"/></span>
+            </t>
+        </t>
     </template>
 
     <!-- the Card Designer's preview: a design on a website page, with the source's sample records (its unsaved
@@ -70,7 +96,7 @@
         <t t-call="website.layout">
             <t t-set="no_header" t-value="True"/>
             <t t-set="no_footer" t-value="True"/>
-            <div id="wrap" t-attf-class="mtbg-cards-preview #{'mtbg-theme-dark' if dark else 'mtbg-theme-light'}">
+            <div id="wrap" t-attf-class="mtbg-cards-preview #{'mtbg-theme-dark' if dark else 'mtbg-theme-light'} #{'is-hovered' if hover else ''}">
                 <div class="container py-4">
                     <t t-if="cards_html" t-out="cards_html"/>
                     <p t-else="" class="text-muted">Nothing to show yet: the source has no records.</p>

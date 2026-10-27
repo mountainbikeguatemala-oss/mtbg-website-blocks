@@ -19,7 +19,7 @@ function clock(ms) {
 
 export function tickCountdowns(root) {
     const now = Date.now();
-    for (const el of root.querySelectorAll(".mtbg-card__countdown[data-deadline]")) {
+    for (const el of root.querySelectorAll(".mtbg-card__k-countdown[data-deadline]")) {
         const left = new Date(el.dataset.deadline).getTime() - now;
         const out = el.querySelector(".mtbg-card__countdown-clock");
         if (out) {
@@ -56,6 +56,8 @@ export class CardsBlock extends Interaction {
         if (body && this.html !== undefined) {
             body.innerHTML = this.html;
             this.registerCleanup(() => body.replaceChildren());
+            // other modules' scripts on the cards' fields (e.g. Tours: the price's currency, the early bird)
+            this.services["public.interactions"].startInteractions(body);
         }
         tickCountdowns(this.el);
         this.timer = setInterval(() => tickCountdowns(this.el), 1000);
@@ -68,7 +70,7 @@ export class CardCountdowns extends Interaction {
     static selector = ".mtbg-cards:not(.s_mtbg_cards .mtbg-cards)";
 
     start() {
-        if (!this.el.querySelector(".mtbg-card__countdown[data-deadline]")) {
+        if (!this.el.querySelector(".mtbg-card__k-countdown[data-deadline]")) {
             return;
         }
         tickCountdowns(this.el);

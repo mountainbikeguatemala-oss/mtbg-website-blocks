@@ -24,7 +24,7 @@ class MtbgWebsiteCards(http.Controller):
         return {'html': design.with_context(lang=Design.env.lang).mtbg_render(records, columns=int(columns or 3))}
 
     @http.route('/mtbg/cards/preview/<int:design_id>', type='http', auth='user', website=True, sitemap=False)
-    def cards_preview(self, design_id, dark=None, **kw):
+    def cards_preview(self, design_id, dark=None, hover=None, **kw):
         """The Card Designer's preview: the design (its unsaved settings) with its source's sample records."""
         if not request.env.user.has_group('website.group_website_designer'):
             raise NotFound()
@@ -34,6 +34,6 @@ class MtbgWebsiteCards(http.Controller):
         samples = design._mtbg_card_samples(design.source)
         cards_html = design.mtbg_render(samples, draft=True) if samples else ''
         response = request.render('mtbg_website_cards.designer_preview', {
-            'cards_html': cards_html, 'dark': dark == '1'})
+            'cards_html': cards_html, 'dark': dark == '1', 'hover': hover == '1'})
         response.headers['Cache-Control'] = 'no-store'
         return response
