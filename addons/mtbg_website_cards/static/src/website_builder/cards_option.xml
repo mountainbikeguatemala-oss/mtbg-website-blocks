@@ -23,14 +23,20 @@
             <BuilderSelect dataAttributeAction="'design'">
                 <BuilderSelectItem dataAttributeActionValue="''">Default</BuilderSelectItem>
                 <t t-foreach="currentDesigns" t-as="design" t-key="design.id">
-                    <BuilderSelectItem dataAttributeActionValue="String(design.id)"><t t-out="design.name"/></BuilderSelectItem>
+                    <BuilderSelectItem dataAttributeActionValue="design.key"><t t-out="design.name"/></BuilderSelectItem>
                 </t>
             </BuilderSelect>
         </BuilderRow>
         <BuilderRow label.translate="How many">
             <BuilderNumberInput dataAttributeAction="'limit'" min="1" max="48" step="1"/>
         </BuilderRow>
-        <BuilderRow label.translate="Columns">
+        <BuilderRow label.translate="Layout" tooltip.translate="Slider: one row of cards, scrolled sideways (arrows on desktop, a swipe on phones)">
+            <BuilderSelect dataAttributeAction="'layout'">
+                <BuilderSelectItem dataAttributeActionValue="''">Grid</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'slider'">Slider</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Columns" tooltip.translate="Slider: how many cards show at once">
             <BuilderSelect dataAttributeAction="'columns'">
                 <BuilderSelectItem dataAttributeActionValue="'2'">2</BuilderSelectItem>
                 <BuilderSelectItem dataAttributeActionValue="'3'">3</BuilderSelectItem>

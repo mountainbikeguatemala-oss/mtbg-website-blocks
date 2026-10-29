@@ -1,6 +1,7 @@
 /**
  * The Cards block (s_mtbg_cards): its source's records in its card design, fetched on each visit
- * (/mtbg/cards/render: data-source, data-design, data-limit, data-columns, data-f-<filter>). Cards with a booking
+ * (/mtbg/cards/render: data-source, data-design, data-limit, data-columns, data-layout, data-f-<filter>; data-layout
+ * "slider": one row scrolled sideways, CardsSlider below). Cards with a booking
  * countdown (data-deadline) count down on the visitor's clock; the countdowns of cards rendered by the server
  * elsewhere (menus, listings) count too.
  */
@@ -46,7 +47,7 @@ export class CardsBlock extends Interaction {
         const lang = (document.documentElement.lang || "en-US").replace("-", "_");
         const result = await this.waitFor(rpc("/mtbg/cards/render", {
             source: d.source, design_id: parseInt(d.design || 0), filters, limit: parseInt(d.limit || 6),
-            columns: parseInt(d.columns || 3), lang,
+            columns: parseInt(d.columns || 3), lang, layout: d.layout === "slider" ? "slider" : "grid",
         }));
         this.html = result.html || "";
     }
@@ -79,5 +80,54 @@ export class CardCountdowns extends Interaction {
     }
 }
 
+/**
+ * The cards as a slider: the arrows scroll one page of cards at a time and hide at either end (as the mega menu's
+ * Image Cards (slider)); touch and trackpads scroll natively, snapping to a card.
+ */
+export class CardsSlider extends Interaction {
+    static selector = ".mtbg-cards-slider";
+    dynamicContent = {
+        ".mtbg-cards-slider-prev": {
+            "t-on-click": () => this.page(-1),
+            "t-att-disabled": () => this.atStart,
+        },
+        ".mtbg-cards-slider-next": {
+            "t-on-click": () => this.page(1),
+            "t-att-disabled": () => this.atEnd,
+        },
+        ".mtbg-cards--slider": {
+            "t-on-scroll": this.debounced(this.updateEnds, 50),
+        },
+        _window: {
+            "t-on-resize": this.debounced(this.updateEnds, 100),
+        },
+    };
+
+    setup() {
+        this.track = this.el.querySelector(".mtbg-cards--slider");
+        this.atStart = true;
+        this.atEnd = false;
+    }
+
+    start() {
+        this.updateEnds();
+        this.observer = new ResizeObserver(() => this.updateEnds());
+        this.observer.observe(this.track);
+        this.registerCleanup(() => this.observer.disconnect());
+    }
+
+    page(direction) {
+        this.track.scrollBy({ left: direction * this.track.clientWidth, behavior: "smooth" });
+    }
+
+    updateEnds() {
+        const { scrollLeft, scrollWidth, clientWidth } = this.track;
+        this.atStart = scrollLeft <= 1;
+        this.atEnd = scrollLeft + clientWidth >= scrollWidth - 1;
+        this.updateContent();
+    }
+}
+
 registry.category("public.interactions").add("mtbg_website_cards.cards_block", CardsBlock);
+registry.category("public.interactions").add("mtbg_website_cards.cards_slider", CardsSlider);
 registry.category("public.interactions").add("mtbg_website_cards.card_countdowns", CardCountdowns);

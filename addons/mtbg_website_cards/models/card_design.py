@@ -264,8 +264,9 @@ class MtbgWebsiteCardDesign(models.Model):
                 out.append(f"{prefix}{key.replace('_', '-')}: {value}")
         return '; '.join(out)
 
-    def mtbg_render(self, records=None, values_list=None, draft=False, columns=3):
-        """The cards (HTML) of ``records`` (or of ready ``values_list``) in this design."""
+    def mtbg_render(self, records=None, values_list=None, draft=False, columns=3, layout='grid'):
+        """The cards (HTML) of ``records`` (or of ready ``values_list``) in this design: a grid, or a slider (one row
+        scrolled sideways)."""
         self.ensure_one()
         settings = self._mtbg_settings(draft=draft)
         if values_list is None:
@@ -273,6 +274,7 @@ class MtbgWebsiteCardDesign(models.Model):
         cards = [self._mtbg_card_context(values, settings) for values in values_list]
         return self.env['ir.qweb']._render('mtbg_website_cards.cards', {
             'design': self, 'settings': settings, 'cards': cards, 'columns': columns,
+            'layout': 'slider' if layout == 'slider' else 'grid',
             'style_vars': self._mtbg_style_vars(settings)})
 
     # ------------------------------------------------------------------ the designer

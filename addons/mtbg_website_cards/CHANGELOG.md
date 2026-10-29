@@ -2,6 +2,16 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_website_cards-*'`.
 
+## 19.0.0.3.0 · 2026-10-29
+
+- **Layout: Grid or Slider** (owner, 2026-10-29): a slider shows the same cards (designs, fields, filters) in one row,
+  as many at once as its Columns (two on tablets, most of one on phones with the next one peeking), scrolled
+  sideways and snapping to a card; arrows on desktop (gone at either end and on touch screens), a swipe on phones.
+  The mega menu's Image Cards (slider) look. Block option Layout (`data-layout="slider"`).
+- **Short descriptions at most 3 lines** with "…" in every card design (rental cards grew very tall).
+- **Fix: the block's options open again when its source has card designs** (the Design list called `String()` in
+  its template: "ctx.String is not a function", the options panel failed).
+
 ## 19.0.0.2.0 · 2026-10-26
 
 - **Regions** (owner, 2026-10-26: "like our current confirmed departure cards"): a card is its **Header** (above

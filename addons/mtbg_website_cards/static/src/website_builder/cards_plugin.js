@@ -30,8 +30,9 @@ export class CardsOption extends BaseOptionComponent {
         }));
     }
 
+    /** The source's designs, each with its id as the data attribute's text (templates cannot call String()). */
     get currentDesigns() {
-        return this.currentSource?.designs || [];
+        return (this.currentSource?.designs || []).map((d) => ({ ...d, key: String(d.id) }));
     }
 }
 

@@ -1,4 +1,5 @@
-// Cards in a design (views/card_templates.xml): a grid (columns on desktop, two on tablets, one on phones). A card:
+// Cards in a design (views/card_templates.xml): a grid (columns on desktop, two on tablets, one on phones) or a
+// slider (one row scrolled sideways). A card:
 // its header (above it), the photo with its top strip, center and bottom strip, and below it the text and the
 // footer line. data-show="hover": shown when the card is hovered or focused (always on touch screens). Colours: the
 // design's (inline --mtbg-card-*, and --mtbg-card-dark-* for dark pages: .mtbg-theme-dark), else the theme's. The
@@ -12,6 +13,39 @@
     &.mtbg-cards--cols-4 { --mtbg-cards-cols: 4; }
     @media (max-width: 991.98px) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     @media (max-width: 575.98px) { grid-template-columns: minmax(0, 1fr); }
+
+    // the slider (data-layout="slider"): one row, as many cards at once as its columns (two on tablets, most of one
+    // on phones, the next one peeking), scrolled sideways and snapping to a card; the arrows page (cards_block.js)
+    &.mtbg-cards--slider {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        padding-bottom: .5rem;
+        &::-webkit-scrollbar { display: none; }
+        > .mtbg-card-cell {
+            flex: 0 0 calc((100% - (var(--mtbg-cards-cols, 3) - 1) * 1.5rem) / var(--mtbg-cards-cols, 3));
+            scroll-snap-align: start;
+        }
+        @media (max-width: 991.98px) { > .mtbg-card-cell { flex-basis: calc((100% - 1.5rem) / 2); } }
+        @media (max-width: 575.98px) { > .mtbg-card-cell { flex-basis: 82%; } }
+    }
+}
+
+// the slider's arrows (the mega menu's Image Cards (slider) look): on the row's edges, gone at either end and on
+// touch screens (a swipe there)
+.mtbg-cards-slider {
+    .mtbg-cards-slider-prev, .mtbg-cards-slider-next {
+        width: 2.5rem;
+        height: 2.5rem;
+        padding: 0;
+        transform: translateY(-50%);
+        &:disabled { display: none; }
+        @media (hover: none) { display: none; }
+    }
+    .mtbg-cards-slider-prev { margin-left: -1.25rem; }
+    .mtbg-cards-slider-next { margin-right: -1.25rem; }
 }
 
 .mtbg-card-cell {
@@ -124,7 +158,11 @@
     // ---- the items
     .mtbg-card__item { margin: 0; min-width: 0; .fa { margin-right: .25rem; } }
     .mtbg-card__k-title { color: var(--c-text); }
-    .mtbg-card__k-text { color: var(--c-muted); font-size: .92rem; }
+    // a text (the short description) at most 3 lines, then "…" (owner, 2026-10-29: rental cards grew very tall)
+    .mtbg-card__k-text {
+        color: var(--c-muted); font-size: .92rem;
+        display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden;
+    }
     .mtbg-card__k-meta { font-size: .88rem; }
     .mtbg-card__body .mtbg-card__k-meta { color: var(--c-accent); font-weight: 700; }
     .mtbg-card__k-price { font-weight: 700; }

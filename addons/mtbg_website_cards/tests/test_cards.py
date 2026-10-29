@@ -98,3 +98,20 @@ class TestCardDesigns(HttpCase):
         self.authenticate('admin', 'admin')
         page = self.url_open(f'/mtbg/cards/preview/{design.id}?hover=1').text
         self.assertIn('is-hovered', page)
+
+    def test_slider_layout(self):
+        """Grid or slider (owner, 2026-10-29): the same cards in one row with arrows; the block asks for it."""
+        design = self.Design.browse(self.Design.mtbg_designer_create('Plain', 'thing')['design']['id'])
+        grid = str(design.mtbg_render([1, 2, 3], columns=4))
+        self.assertNotIn('mtbg-cards-slider', grid)
+        self.assertIn('mtbg-cards mtbg-cards--cols-4', grid)
+        slider = str(design.mtbg_render([1, 2, 3], columns=4, layout='slider'))
+        self.assertIn('mtbg-cards mtbg-cards--slider mtbg-cards--cols-4', slider)
+        self.assertIn('mtbg-cards-slider-prev', slider)
+        self.assertIn('mtbg-cards-slider-next', slider)
+        self.assertEqual(slider.count('mtbg-card mtbg-card--'), 3, "the same cards")
+        self.assertNotIn('mtbg-cards-slider', str(design.mtbg_render([1], layout='nonsense')))
+        res = self.make_jsonrpc_request('/mtbg/cards/render', {'source': 'thing', 'limit': 3, 'layout': 'slider'})
+        self.assertIn('mtbg-cards--slider', res['html'])
+        self.assertNotIn('mtbg-cards--slider', self.make_jsonrpc_request(
+            '/mtbg/cards/render', {'source': 'thing', 'limit': 3})['html'])

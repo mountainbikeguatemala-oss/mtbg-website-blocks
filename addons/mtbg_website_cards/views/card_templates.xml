@@ -5,8 +5,21 @@
          it the text and the footer line. Its colours: CSS variables (light, and dark for dark pages:
          .mtbg-theme-dark), cards.scss. -->
     <template id="cards" name="Cards in a design">
-        <div t-attf-class="mtbg-cards mtbg-cards--cols-#{columns or 3}" t-att-style="style_vars or None">
+        <div t-if="layout != 'slider'" t-attf-class="mtbg-cards mtbg-cards--cols-#{columns or 3}" t-att-style="style_vars or None">
             <t t-foreach="cards" t-as="card"><t t-call="mtbg_website_cards.card"/></t>
+        </div>
+        <!-- the slider (owner, 2026-10-29): the same cards in one row, scrolled sideways (snapping to a card), the
+             arrows on desktop, a swipe on phones; cards_block.js CardsSlider -->
+        <div t-else="" class="mtbg-cards-slider position-relative">
+            <button type="button" class="mtbg-cards-slider-prev btn btn-light rounded-circle shadow position-absolute top-50 start-0 z-3" aria-label="Previous">
+                <i class="fa fa-chevron-left" role="img" aria-label="Previous"/>
+            </button>
+            <div t-attf-class="mtbg-cards mtbg-cards--slider mtbg-cards--cols-#{columns or 3}" t-att-style="style_vars or None">
+                <t t-foreach="cards" t-as="card"><t t-call="mtbg_website_cards.card"/></t>
+            </div>
+            <button type="button" class="mtbg-cards-slider-next btn btn-light rounded-circle shadow position-absolute top-50 end-0 z-3" aria-label="Next">
+                <i class="fa fa-chevron-right" role="img" aria-label="Next"/>
+            </button>
         </div>
     </template>
 

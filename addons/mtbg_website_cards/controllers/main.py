@@ -7,9 +7,9 @@ from odoo.http import request
 class MtbgWebsiteCards(http.Controller):
 
     @http.route('/mtbg/cards/render', type='jsonrpc', auth='public', website=True, sitemap=False, readonly=True)
-    def cards_render(self, source, design_id=0, filters=None, limit=6, columns=3, lang=None):
-        """The Cards block: its source's records (its filters, how many) as cards in its design, in the page's
-        language."""
+    def cards_render(self, source, design_id=0, filters=None, limit=6, columns=3, lang=None, layout='grid'):
+        """The Cards block: its source's records (its filters, how many) as cards in its design (a grid or a
+        slider), in the page's language."""
         Design = request.env['mtbg.website.card.design']
         langs = {code for code, _name in request.env['res.lang'].get_installed()}
         if lang in langs:
@@ -21,7 +21,8 @@ class MtbgWebsiteCards(http.Controller):
             return {'html': ''}
         limit = max(1, min(int(limit or 6), 48))
         records = Design.sudo()._mtbg_card_records(source, Design.mtbg_parse_filters(filters), limit)
-        return {'html': design.with_context(lang=Design.env.lang).mtbg_render(records, columns=int(columns or 3))}
+        return {'html': design.with_context(lang=Design.env.lang).mtbg_render(records, columns=int(columns or 3),
+                                                                               layout=layout)}
 
     @http.route('/mtbg/cards/preview/<int:design_id>', type='http', auth='user', website=True, sitemap=False)
     def cards_preview(self, design_id, dark=None, hover=None, **kw):
