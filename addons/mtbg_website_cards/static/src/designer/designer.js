@@ -20,6 +20,7 @@ const COLOR = /^#[0-9a-fA-F]{6}$/;
 const ICON = /^fa-[a-z0-9-]+$/;
 const DRAFT_DELAY = 400;
 const PHOTO = ["top", "center", "bottom"];
+const BANNER_LOOKS = ["corner", "banner", "badge"];  // (the banners' section only)
 
 function uid() {
     return Math.random().toString(16).slice(2, 10);
@@ -50,6 +51,7 @@ export class CardDesigner extends Component {
         this.state.settings = d ? JSON.parse(JSON.stringify({
             ratio: d.ratio, corners: d.corners, shadow: d.shadow,
             hover_zoom: d.hover_zoom, hover_darken: d.hover_darken, look: d.look,
+            frame: d.frame, align: d.align, image_size: d.image_size,
         })) : null;
         this.state.saved = JSON.stringify(this.state.settings);
         this.state.selected = null;
@@ -143,6 +145,53 @@ export class CardDesigner extends Component {
         this.queueDraft();
     }
 
+    // the banners' section: the banner looks only; the other sections: all but those
+    looksFor(region) {
+        const isBanner = (l) => BANNER_LOOKS.includes(l.key);
+        return this.state.data.looks.filter((l) => (region === "banners" ? isBanner(l) : !isBanner(l)));
+    }
+
+    // an item moved into (or out of) the banners' section: a look of that section
+    fitLook(item, region) {
+        if (region === "banners" && !BANNER_LOOKS.includes(item.look)) {
+            item.look = "corner";
+        } else if (region !== "banners" && BANNER_LOOKS.includes(item.look)) {
+            item.look = this.field(item.field).kind === "button" ? "button" : "plain";
+        }
+    }
+
+    // a field with words of its own (bold, case, line height): not the ratings' icons, stars, photos...
+    hasWords(item) {
+        return !["countdown", "rating", "icons", "compare", "avatar", "photos", "logo"].includes(this.field(item.field).kind);
+    }
+
+    // a size by steps (down / up buttons): 0 stored = as designed (its base)
+    stepValue(item, prop, base) {
+        return item[prop] || base;
+    }
+
+    stepLabel(item, prop, base) {
+        const value = this.stepValue(item, prop, base);
+        if (prop === "lh") {
+            return item.lh ? (value / 100).toFixed(1) : _t("Auto");  // (as designed: the theme's)
+        }
+        return prop === "lift" ? `${value} px` : `${value}%`;
+    }
+
+    stepItem(prop, delta, base, min, max) {
+        const item = this.selectedItem;
+        if (!item) {
+            return;
+        }
+        const next = Math.max(min, Math.min(max, this.stepValue(item, prop, base) + delta));
+        // (a line height has no "as designed" number: it stays as set until its value is clicked)
+        this.setItem(prop, next === base && prop !== "lh" ? 0 : next);
+    }
+
+    toInt(value) {
+        return Number.parseInt(value, 10) || 0;
+    }
+
     newItem(fieldKey) {
         const field = this.field(fieldKey);
         return { uid: uid(), field: fieldKey, look: field.kind === "button" ? "button" : "plain", show: "",
@@ -151,6 +200,7 @@ export class CardDesigner extends Component {
 
     addField(fieldKey, region = this.state.selected?.region || "below") {
         const item = this.newItem(fieldKey);
+        this.fitLook(item, region);
         this.region(region).items.push(item);
         this.state.selected = { region, uid: item.uid };
         this.queueDraft();
@@ -236,6 +286,7 @@ export class CardDesigner extends Component {
                 item.show = "";
             }
         }
+        this.fitLook(item, region);
         target.splice(Math.min(index, target.length), 0, item);
         this.state.selected = { region, uid: item.uid };
         this.queueDraft();

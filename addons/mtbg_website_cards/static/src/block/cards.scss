@@ -4,49 +4,24 @@
 // footer line. data-show="hover": shown when the card is hovered or focused (always on touch screens). Colours: the
 // design's (inline --mtbg-card-*, and --mtbg-card-dark-* for dark pages: .mtbg-theme-dark), else the theme's. The
 // title's font and size are the theme's (an h5).
+// the layouts (a card use's): how many side by side by the page's width (--mtbg-cards-lg / -md / -sm), the gap
 .mtbg-cards {
+    --mtbg-cards-cols: var(--mtbg-cards-lg, 3);
     display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(var(--mtbg-cards-cols, 3), minmax(0, 1fr));
-    &.mtbg-cards--cols-2 { --mtbg-cards-cols: 2; }
-    &.mtbg-cards--cols-3 { --mtbg-cards-cols: 3; }
-    &.mtbg-cards--cols-4 { --mtbg-cards-cols: 4; }
-    @media (max-width: 991.98px) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    @media (max-width: 575.98px) { grid-template-columns: minmax(0, 1fr); }
-
-    // the slider (data-layout="slider"): one row, as many cards at once as its columns (two on tablets, most of one
-    // on phones, the next one peeking), scrolled sideways and snapping to a card; the arrows page (cards_block.js)
-    &.mtbg-cards--slider {
-        display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        scroll-behavior: smooth;
-        scrollbar-width: none;
-        padding-bottom: .5rem;
-        &::-webkit-scrollbar { display: none; }
-        > .mtbg-card-cell {
-            flex: 0 0 calc((100% - (var(--mtbg-cards-cols, 3) - 1) * 1.5rem) / var(--mtbg-cards-cols, 3));
-            scroll-snap-align: start;
-        }
-        @media (max-width: 991.98px) { > .mtbg-card-cell { flex-basis: calc((100% - 1.5rem) / 2); } }
-        @media (max-width: 575.98px) { > .mtbg-card-cell { flex-basis: 82%; } }
+    gap: var(--mtbg-cards-gap, 1.5rem);
+    grid-template-columns: repeat(var(--mtbg-cards-cols), minmax(0, 1fr));
+    @media (max-width: 991.98px) { --mtbg-cards-cols: var(--mtbg-cards-md, 2); }
+    @media (max-width: 575.98px) { --mtbg-cards-cols: var(--mtbg-cards-sm, 1); }
+    // a masonry wall: columns of cards of any height (the reviews' wall)
+    &.mtbg-cards--masonry {
+        display: block;
+        columns: var(--mtbg-cards-cols);
+        column-gap: var(--mtbg-cards-gap, 1.5rem);
+        > .mtbg-card-cell { break-inside: avoid; margin-bottom: var(--mtbg-cards-gap, 1.5rem); }
     }
+    &.mtbg-cards--stack { grid-template-columns: minmax(0, 1fr); }
 }
 
-// the slider's arrows (the mega menu's Image Cards (slider) look): on the row's edges, gone at either end and on
-// touch screens (a swipe there)
-.mtbg-cards-slider {
-    .mtbg-cards-slider-prev, .mtbg-cards-slider-next {
-        width: 2.5rem;
-        height: 2.5rem;
-        padding: 0;
-        transform: translateY(-50%);
-        &:disabled { display: none; }
-        @media (hover: none) { display: none; }
-    }
-    .mtbg-cards-slider-prev { margin-left: -1.25rem; }
-    .mtbg-cards-slider-next { margin-right: -1.25rem; }
-}
 
 .mtbg-card-cell {
     --c-bg: var(--mtbg-card-card-bg, var(--body-bg, #fff));
@@ -67,6 +42,8 @@
     gap: .5rem;
     min-width: 0;
 }
+// the card and its banners reaching past its edges (3D folds)
+.mtbg-card__frame { position: relative; display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0; }
 
 .mtbg-card__header { display: flex; flex-direction: column; gap: .25rem; color: var(--c-text); }
 
@@ -134,7 +111,14 @@
         &.has-shade { background: linear-gradient(transparent, rgba(0, 0, 0, .75)); color: #fff; padding-top: 2rem; }
         &.has-shade .mtbg-card__item--plain { text-transform: none; letter-spacing: 0; font-size: 1rem; white-space: normal; }
     }
-    .mtbg-card__on--center { top: 50%; transform: translateY(-50%); gap: .4rem; }
+    // the center: white words over the photo (a shadow keeps them readable on light photos), whatever field
+    .mtbg-card__on--center {
+        top: 50%; transform: translateY(-50%); gap: .4rem; padding: 0 .75rem; text-align: center;
+        color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, .8);
+        .mtbg-card__item, .mtbg-card__k-meta, .mtbg-card__k-text, .mtbg-card__k-title { color: inherit; }
+        .mtbg-card__row { justify-content: center; }
+        .mtbg-card__k-icons { align-items: center; }
+    }
     // the early bird runs (the countdown in it says so): the strip turns yellow; closed: grey
     .mtbg-card__on--top:has(.is-early), .mtbg-card__on--bottom:has(.is-early) { background: var(--c-early-bg); color: var(--c-early-text); }
     .mtbg-card__on--bottom:has(.is-closed) { background: rgba(120, 120, 120, .85); }
@@ -159,8 +143,9 @@
     .mtbg-card__item { margin: 0; min-width: 0; .fa { margin-right: .25rem; } }
     .mtbg-card__k-title { color: var(--c-text); }
     // a text (the short description) at most 3 lines, then "…" (owner, 2026-10-29: rental cards grew very tall)
-    .mtbg-card__k-text {
-        color: var(--c-muted); font-size: .92rem;
+    // (a field with its own number of lines and Read more: .is-clamped below)
+    .mtbg-card__k-text { color: var(--c-muted); font-size: .92rem; }
+    .mtbg-card__k-text:not(.is-clamped) {
         display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden;
     }
     .mtbg-card__k-meta { font-size: .88rem; }
@@ -233,3 +218,380 @@
 .s_mtbg_cards .s_mtbg_cards_body:empty { min-height: 4rem; }
 .mtbg-cards-preview { min-height: 100vh; }
 .mtbg-cards-preview.mtbg-theme-dark { background: #0c0d10; }
+
+// ---- frames: no frame (the photo and the words alone, e.g. a mega menu row), a speech bubble (a review: the photo
+// and "below" in a bubble, its tail at the bottom left, the footer under it); words centred
+.mtbg-card__main { display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0; }
+.mtbg-card.mtbg-card--frame-none {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    overflow: visible;
+    .mtbg-card__media { border-radius: var(--c-radius); }
+    .mtbg-card__body { padding: .5rem 0 0; }
+    .mtbg-card__footer { background: transparent; border-top: 0; padding: .25rem 0 0; }
+}
+.mtbg-card.mtbg-card--frame-bubble {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    overflow: visible;
+    .mtbg-card__main {
+        position: relative;
+        background: var(--c-bg);
+        border: 1px solid rgba(0, 0, 0, .1);
+        border-radius: var(--c-radius, .375rem);
+        &::after {
+            content: "";
+            position: absolute;
+            left: 1.5rem;
+            bottom: -16px;
+            border-style: solid;
+            border-width: 16px 18px 0 0;
+            border-color: var(--c-bg) transparent transparent;
+        }
+    }
+    &.has-shadow .mtbg-card__main { box-shadow: 0 6px 22px rgba(0, 0, 0, .12); }
+    .mtbg-card__footer {
+        background: transparent;
+        border-top: 0;
+        margin-top: 1.25rem;
+        padding: 0 .25rem;
+        justify-content: flex-start;
+    }
+}
+.mtbg-card--align-center { .mtbg-card__body, .mtbg-card__header { align-items: center; text-align: center; } }
+
+// ---- the fields added for the shared looks
+.mtbg-card {
+    // a rating's meaning on hover and focus
+    .mtbg-card__icons-row[data-tip] {
+        position: relative;
+        &:hover::after, &:focus-visible::after {
+            content: attr(data-tip);
+            position: absolute;
+            left: 0;
+            bottom: calc(100% + .35rem);
+            z-index: 6;
+            width: max-content;
+            max-width: 16rem;
+            padding: .35rem .55rem;
+            border-radius: .3rem;
+            background: rgba(20, 20, 20, .92);
+            color: #fff;
+            font-size: .8rem;
+            line-height: 1.3;
+            white-space: normal;
+            pointer-events: none;
+        }
+    }
+    // "Compare" and Read more sit above the card's link
+    .mtbg-card__compare, .mtbg-card__more, .mtbg-card__alt-toggle, .mtbg-card__photo { position: relative; z-index: 4; }
+    .mtbg-card__compare { display: inline-flex; align-items: center; gap: .3rem; font-size: .85rem; cursor: pointer; }
+    .mtbg-card__more, .mtbg-card__alt-toggle { align-self: flex-start; font-size: .9rem; }
+    .mtbg-card__avatar {
+        display: inline-flex;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        object-fit: cover;
+        &.is-initial { align-items: center; justify-content: center; background: var(--c-accent); color: var(--c-accent-text); font-weight: 700; }
+    }
+    .mtbg-card__k-photos {
+        display: flex;
+        gap: .4rem;
+        .mtbg-card__photo { flex: 0 0 calc((100% - .8rem) / 3); }
+        img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px; }
+    }
+    .mtbg-card__k-logo { font-size: 1.25rem; }
+    // a text cut after its lines (Read more opens it)
+    .is-clamped:not(.is-open) .mtbg-card__words {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: var(--mtbg-lines, 3);
+        line-clamp: var(--mtbg-lines, 3);
+        overflow: hidden;
+    }
+    .is-showing-alt .mtbg-card__words { display: none !important; }
+}
+
+// fields placed on one line: side by side, wrapping when the card is narrow
+.mtbg-card .mtbg-card__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: .75rem;
+    row-gap: .15rem;
+    > .mtbg-card__item { flex: 0 0 auto; }
+}
+.mtbg-card .mtbg-card__item--strong { font-weight: 700; color: var(--c-text); font-size: 1rem; margin: 0; }
+
+// icon rows (the ratings): the design's size, spacing and lift per field (--mtbg-icon-size / -gap as a share of the
+// text, --mtbg-icon-lift in px); an icon may be an image (the site's own, Tour Stats)
+// every icon in a box of the same width (Font Awesome's are not all as wide): the rows' icons line up in columns
+.mtbg-card .mtbg-card__k-icons {
+    .mtbg-card__icons-row { display: inline-flex; align-items: center; gap: .5em; }
+    .mtbg-card__icons-set { display: inline-flex; align-items: center; gap: calc(1em * var(--mtbg-icon-gap, .1)); }
+    // labels: each rating's name above its icons
+    &.has-labels {
+        gap: .35em;
+        .mtbg-card__icons-row { flex-direction: column; align-items: flex-start; gap: 1px; }
+    }
+    .mtbg-card__icons-label { font-size: .85em; line-height: 1.2; }
+    i, .mtbg-card__icon-img {
+        width: 1.25em;  // (of its own size: the icon size included)
+        text-align: center;
+        font-size: calc(1em * var(--mtbg-icon-size, 1));
+        position: relative;
+        top: var(--mtbg-icon-lift, 0);
+        margin: 0;
+    }
+    .mtbg-card__icon-img { height: auto; object-fit: contain; }
+    .is-off { opacity: .25; }
+}
+
+// the Book button as the website's card settings say (Website Blocks › Card Settings): its colours (the design's
+// accent, the theme's Primary or Secondary button, or its own), size, shape, full width, capitals
+.mtbg-card .mtbg-card__btn.mtbg-card__f-book {
+    &.mtbg-book--primary {
+        background: var(--o-cc1-btn-primary, var(--primary, #13283c)); color: var(--o-cc1-btn-primary-text, #fff);
+        &:hover, &:focus-visible { color: var(--o-cc1-btn-primary-text, #fff); }
+    }
+    &.mtbg-book--secondary {
+        background: var(--o-cc1-btn-secondary, var(--secondary, #f8f8c3)); color: var(--o-cc1-btn-secondary-text, #212529);
+        &:hover, &:focus-visible { color: var(--o-cc1-btn-secondary-text, #212529); }
+    }
+    &.mtbg-book--custom {
+        background: var(--mtbg-book-bg, var(--c-accent)); color: var(--mtbg-book-text, var(--c-accent-text));
+        &:hover, &:focus-visible { color: var(--mtbg-book-text, var(--c-accent-text)); }
+    }
+    &.mtbg-book--sm { font-size: .78rem; padding: .15rem .45rem; }
+    &.mtbg-book--lg { font-size: 1rem; padding: .45rem .9rem; }
+    &.mtbg-book--square { border-radius: 0; }
+    &.mtbg-book--rounded { border-radius: .375rem; }
+    &.mtbg-book--pill { border-radius: 50rem; }
+    &.mtbg-book--full { display: block; flex: 1 1 auto; width: 100%; text-align: center; }
+    &.mtbg-book--caps { text-transform: uppercase; letter-spacing: .03em; }
+}
+
+// banners (the looks Corner / Top / Badge banner): over the card's top whatever region they were placed in; their
+// colours the design's accent, else their own (--b-bg / --b-text); each its styles and side (is-left / is-right)
+.mtbg-card__frame .mtbg-card__banners {
+    position: absolute; inset: 0; z-index: 5; overflow: hidden; pointer-events: none;
+    border-radius: inherit;
+    .mtbg-card__banner {
+        position: absolute; background: var(--b-bg, var(--c-accent)); color: var(--b-text, var(--c-accent-text));
+        font-size: 12px; font-weight: 700; line-height: 1.4; letter-spacing: .04em; text-transform: uppercase;
+        white-space: nowrap; text-align: center; box-shadow: 0 2px 6px rgba(0, 0, 0, .3);
+        .fa { margin-right: .3rem; }
+    }
+
+    // ---- corner: a diagonal ribbon (its middle 50px in from the corner: about 140px of it shows), a triangle, a tab,
+    // a circle; right unless is-left
+    .mtbg-card__item--corner {
+        font-size: 11px;
+        .mtbg-card__banner-in { display: block; overflow: hidden; text-overflow: ellipsis; }
+        &:is(.mtbg-card__banner--default, .mtbg-card__banner--ribbon) {
+            top: 38px; right: -50px; width: 200px; padding: 4px 0; transform: rotate(45deg);
+            .mtbg-card__banner-in { padding: 0 36px; }
+            .fa { display: none; }  // (no room for an icon in a corner)
+            &.is-left { right: auto; left: -50px; transform: rotate(-45deg); }
+        }
+        &.mtbg-card__banner--triangle {
+            top: 0; right: 0; width: 8rem; height: 8rem; box-shadow: none; letter-spacing: 0;
+            clip-path: polygon(0 0, 100% 0, 100% 100%);
+            .mtbg-card__banner-in { position: absolute; top: 2rem; right: -1.6rem; width: 8rem; padding: 0 1.1rem; transform: rotate(45deg); }
+            .fa { display: none; }
+            &.is-left {
+                right: auto; left: 0; clip-path: polygon(0 0, 100% 0, 0 100%);
+                .mtbg-card__banner-in { right: auto; left: -1.6rem; transform: rotate(-45deg); }
+            }
+        }
+        &.mtbg-card__banner--tab {
+            top: 0; right: 0; padding: 6px 12px; border-bottom-left-radius: .5rem; max-width: 70%;
+            &.is-left { right: auto; left: 0; border-bottom-left-radius: 0; border-bottom-right-radius: .5rem; }
+        }
+        &.mtbg-card__banner--circle {
+            top: 10px; right: 10px; width: 4.5rem; height: 4.5rem; border-radius: 50%; padding: .35rem;
+            display: flex; align-items: center; justify-content: center; white-space: normal; line-height: 1.15;
+            .mtbg-card__banner-in { overflow: visible; }
+            .fa { display: block; margin: 0 auto 2px; }
+            &.is-left { right: auto; left: 10px; }
+        }
+    }
+
+    // ---- top banner: a band across the top, solid or see-through
+    .mtbg-card__item--banner {
+        top: 0; left: 0; right: 0; padding: 5px 10px; white-space: normal;
+        &.mtbg-card__banner--shade { background: color-mix(in srgb, var(--b-bg, var(--c-accent)) 70%, transparent); backdrop-filter: blur(2px); box-shadow: none; }
+    }
+    .mtbg-card__item--banner + .mtbg-card__item--banner { top: 28px; }
+
+    // ---- badge: a tag on the left (or right) edge, its end cut like a flag; a pill, a square, rounded, a tag from
+    // the edge, a circle
+    .mtbg-card__item--badge {
+        top: 12px; left: 0; padding: 4px 18px 4px 10px;
+        &:is(.mtbg-card__banner--default, .mtbg-card__banner--flag) {
+            clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 50%, 100% 100%, 0 100%); box-shadow: none;
+            &.is-right { left: auto; right: 0; padding: 4px 10px 4px 18px; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 8px 50%); }
+        }
+        &.mtbg-card__banner--pill { left: 12px; padding: 4px 12px; border-radius: 999px; }
+        &.mtbg-card__banner--square { left: 12px; padding: 4px 10px; border-radius: 0; }
+        &.mtbg-card__banner--rounded { left: 12px; padding: 4px 10px; border-radius: .35rem; }
+        &.mtbg-card__banner--tag { padding: 4px 12px 4px 10px; border-radius: 0 .35rem .35rem 0; }
+        &.mtbg-card__banner--circle {
+            left: 12px; width: 3.75rem; height: 3.75rem; padding: .3rem; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; white-space: normal; line-height: 1.1; font-size: 10px;
+            .fa { display: block; margin: 0 auto 2px; }
+        }
+        &.is-right:not(.mtbg-card__banner--default, .mtbg-card__banner--flag) { left: auto; right: 12px; }
+        &.is-right.mtbg-card__banner--tag { right: 0; border-radius: .35rem 0 0 .35rem; }
+    }
+    .mtbg-card__item--badge + .mtbg-card__item--badge { top: 44px; }
+}
+
+// ---- 3D banners (owner, 2026-10-30: "make some 3d banner presets"; "dont want gradient on banners": one colour): an edge of light at the top, a
+// shadow under), the dark fold of a ribbon going round the card's corner or edge (--b-dark)
+.mtbg-card__frame .mtbg-card__banners .mtbg-card__banner {
+    --b-base: var(--b-bg, var(--c-accent));
+    --b-dark: color-mix(in srgb, var(--b-base) 55%, #000);
+    --b-light: color-mix(in srgb, var(--b-base) 75%, #fff);
+    &:is(.mtbg-card__banner--ribbon3d, .mtbg-card__banner--bevel3d, .mtbg-card__banner--seal3d, .mtbg-card__banner--wrap3d) {
+        background: var(--b-base);
+        text-shadow: 0 1px 1px rgba(0, 0, 0, .35);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), inset 0 -2px 0 rgba(0, 0, 0, .2), 0 4px 10px rgba(0, 0, 0, .35);
+    }
+    // corner: the diagonal ribbon, raised
+    &.mtbg-card__item--corner.mtbg-card__banner--ribbon3d {
+        top: 38px; right: -50px; width: 200px; padding: 5px 0; transform: rotate(45deg);
+        .mtbg-card__banner-in { padding: 0 36px; }
+        .fa { display: none; }
+        &.is-left { right: auto; left: -50px; transform: rotate(-45deg); }
+    }
+    &.mtbg-card__item--badge.mtbg-card__banner--bevel3d { left: 12px; padding: 5px 12px; border-radius: .4rem; }
+    &.mtbg-card__item--badge.mtbg-card__banner--seal3d {
+        left: 12px; width: 4rem; height: 4rem; padding: .3rem; border-radius: 50%; display: flex; align-items: center;
+        justify-content: center; white-space: normal; line-height: 1.1; font-size: 10px;
+        background: var(--b-base);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, .55), 0 0 0 5px var(--b-dark), 0 6px 14px rgba(0, 0, 0, .4);
+        .fa { display: block; margin: 0 auto 2px; }
+    }
+    &.mtbg-card__item--badge:is(.mtbg-card__banner--bevel3d, .mtbg-card__banner--seal3d).is-right { left: auto; right: 12px; }
+    &.mtbg-card__item--banner.mtbg-card__banner--bevel3d { padding: 6px 10px; }
+}
+
+// past the card's edges: a ribbon folded round the corner, a band round the sides, a tag round the edge
+.mtbg-card__frame .mtbg-card__banners--out {
+    overflow: visible;
+    border-radius: 0;
+    // the ribbon folded round the corner: a box over the corner, the ribbon across it, its two ends' folds
+    .mtbg-card__item--corner.mtbg-card__banner--fold3d {
+        // (a box of 7.5rem over the corner, 8px past both edges; the ribbon 1.5 times as long, cut by the box where
+        // the folds are: the box's top left and bottom right corners)
+        top: -8px; right: -8px; width: 7.5rem; height: 7.5rem; padding: 0; overflow: hidden;
+        background: none; box-shadow: none; text-shadow: none;
+        .mtbg-card__banner-in {
+            position: absolute; top: 1.5rem; left: -1.25rem; width: 11.25rem; padding: 10px 2.6rem; transform: rotate(45deg);
+            background: var(--b-base);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), 0 5px 10px rgba(0, 0, 0, .35);
+            text-shadow: 0 1px 1px rgba(0, 0, 0, .35);
+        }
+        .fa { display: none; }
+        &::before, &::after {
+            content: ''; position: absolute; z-index: -1; border: 4px solid var(--b-dark);
+            border-top-color: transparent; border-right-color: transparent;
+        }
+        &::before { top: 0; left: 0; }
+        &::after { bottom: 0; right: 0; }
+        &.is-left {
+            right: auto; left: -8px;
+            .mtbg-card__banner-in { left: auto; right: -1.25rem; transform: rotate(-45deg); }
+            &::before, &::after { border-color: var(--b-dark); border-top-color: transparent; border-left-color: transparent; }
+            &::before { left: auto; right: 0; }
+            &::after { right: auto; left: 0; }
+        }
+    }
+    // a band wider than the card, its ends folded behind the sides
+    .mtbg-card__item--banner.mtbg-card__banner--wrap3d {
+        top: 14px; left: -8px; right: -8px; padding: 6px 12px;
+        &::before, &::after { content: ''; position: absolute; top: 100%; border-top: 8px solid var(--b-dark); }
+        &::before { left: 0; border-left: 8px solid transparent; }
+        &::after { right: 0; border-right: 8px solid transparent; }
+    }
+    // a tag from past the edge, its end folded behind it
+    .mtbg-card__item--badge.mtbg-card__banner--wrap3d {
+        top: 14px; left: -8px; padding: 5px 14px 5px 16px; border-radius: 0 .3rem .3rem 0;
+        &::after { content: ''; position: absolute; left: 0; top: 100%; border-top: 8px solid var(--b-dark); border-left: 8px solid transparent; }
+        &.is-right {
+            left: auto; right: -8px; padding: 5px 16px 5px 14px; border-radius: .3rem 0 0 .3rem;
+            &::after { left: auto; right: 0; border-left: 0; border-right: 8px solid transparent; }
+        }
+    }
+    .mtbg-card__item--badge + .mtbg-card__item--badge { top: 50px; }
+}
+
+// ---- ribbon shapes after css-generators.com/ribbon-shapes (Temani Afif; owner, 2026-10-30: "put in #9, 10, 6, 3, 11,
+// 12"): their folds a shade of the banner's colour (#0005 over it); a left one the right one mirrored
+.mtbg-card__frame .mtbg-card__banners--out .mtbg-card__banner {
+    --f: .5em;   // the folded part
+    --r: .8em;   // the notch / point
+    &:is(.mtbg-card__banner--fold45, .mtbg-card__banner--wrapband, .mtbg-card__banner--bookmark,
+         .mtbg-card__banner--bookmarkpoint, .mtbg-card__banner--sidetag, .mtbg-card__banner--sidepoint) {
+        background-color: var(--b-base); box-shadow: none; text-shadow: none; font-size: 12px;
+    }
+    // #3: a band round both sides, its folds under
+    &.mtbg-card__banner--wrapband {
+        --d: .8em;
+        top: 20px; left: calc(-1 * var(--d)); right: calc(-1 * var(--d)); padding: 0 calc(var(--d) + .5em);
+        border-bottom: var(--d) solid #0008; line-height: 1.8;
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--d)), calc(100% - var(--d)) 100%, calc(100% - var(--d)) calc(100% - var(--d)),
+                           var(--d) calc(100% - var(--d)), var(--d) 100%, 0 calc(100% - var(--d)));
+    }
+    // #6: across the corner, its ends folded round the card's edges (right; is-left: the top left corner)
+    &.mtbg-card__banner--fold45 {
+        top: 0; right: 0; left: auto; line-height: 1.8; padding: 0 1.8em var(--f);
+        border-image: conic-gradient(#0008 0 0) 51% / var(--f);
+        clip-path: polygon(100% calc(100% - var(--f)), 100% 100%, calc(100% - var(--f)) calc(100% - var(--f)), var(--f) calc(100% - var(--f)),
+                           0 100%, 0 calc(100% - var(--f)), 999px calc(100% - var(--f) - 999px), calc(100% - 999px) calc(100% - var(--f) - 999px));
+        transform: translate(calc((1 - cos(45deg)) * 100%), -100%) rotate(45deg);
+        transform-origin: 0% 100%;
+        &.is-left { right: auto; left: 0; transform: translate(calc((cos(45deg) - 1) * 100%), -100%) rotate(-45deg); transform-origin: 100% 100%; }
+    }
+    // #9 / #10: a bookmark hanging from the card's top edge, its end notched / pointed (right; is-left: left)
+    &:is(.mtbg-card__banner--bookmark, .mtbg-card__banner--bookmarkpoint) {
+        top: calc(-1 * var(--f)); right: 20px; left: auto; padding: .4em .5em; white-space: normal; max-width: 6em;
+        line-height: 1.2; border-right: var(--f) solid #0005; border-bottom: var(--r) solid #0000;
+        &.is-left { right: auto; left: 20px; }
+    }
+    &.mtbg-card__banner--bookmark {
+        clip-path: polygon(calc(100% - var(--f)) 0, 0 0, 0 100%, calc(50% - var(--f) / 2) calc(100% - var(--r)), calc(100% - var(--f)) 100%,
+                           calc(100% - var(--f)) var(--f), 100% var(--f));
+    }
+    &.mtbg-card__banner--bookmarkpoint {
+        clip-path: polygon(calc(100% - var(--f)) 0, 0 0, 0 calc(100% - var(--r)), calc(50% - var(--f) / 2) 100%, calc(100% - var(--f)) calc(100% - var(--r)),
+                           calc(100% - var(--f)) var(--f), 100% var(--f));
+    }
+    // #11 / #12: from past the card's side, its inner end notched / pointed (right; is-left: mirrored, its words not)
+    &:is(.mtbg-card__banner--sidetag, .mtbg-card__banner--sidepoint) {
+        top: 20px; left: auto; right: calc(-1 * var(--f)); padding: 0 .6em 0 calc(var(--r) + .4em); line-height: 1.8;
+        border-bottom: var(--f) solid #0005;
+        &.is-left { right: auto; left: calc(-1 * var(--f)); transform: scaleX(-1); .mtbg-card__banner-in { display: inline-block; transform: scaleX(-1); } }
+    }
+    &.mtbg-card__banner--sidetag {
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--f)), calc(100% - var(--f)) 100%, calc(100% - var(--f)) calc(100% - var(--f)),
+                           0 calc(100% - var(--f)), var(--r) calc(50% - var(--f) / 2));
+    }
+    &.mtbg-card__banner--sidepoint {
+        clip-path: polygon(var(--r) 0, 100% 0, 100% calc(100% - var(--f)), calc(100% - var(--f)) 100%, calc(100% - var(--f)) calc(100% - var(--f)),
+                           var(--r) calc(100% - var(--f)), 0 calc(50% - var(--f) / 2));
+    }
+}
+
+// a field's bold and capitals (the design's item options; also in the header, above the card): last, they win
+.mtbg-card-cell {
+    .mtbg-card__w-bold { font-weight: 700; }
+    .mtbg-card__w-normal { font-weight: 400; }
+    .mtbg-card__case-upper { text-transform: uppercase; }
+    .mtbg-card__case-lower { text-transform: lowercase; }
+    .mtbg-card__case-capitalize { text-transform: capitalize; }
+}

@@ -2,6 +2,31 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_website_cards-*'`.
 
+## 19.0.0.4.0 · 2026-10-30
+
+- **One card system, one slider for the website** (owner, 2026-10-29: "put everything in one module with the same
+  settings and template system"; "Sliding is sliding and cards are cards. Then we interperate them with different
+  designs on top"): the one slider (`mtbg_website_cards.slider`, slider.js: how many at once by its own width, arrows,
+  autoplay, loop, stacked on narrow screens) draws every sliding row of cards; layouts Grid, Slider, Masonry wall and
+  One under another.
+- **Card Uses** (Website Blocks › Card Uses): each place of the website that shows cards, its design and layout (how
+  many side by side on desktop, tablet and phone, gap, arrows, autoplay); extensions bring their places as data.
+- **Card Settings** (Website Blocks › Card Settings): the Book button of every card: its words (EN/ES), icon, colours
+  (the design's accent, the theme's Primary or Secondary button, or its own), size, shape, full width, capitals.
+- **Card Designer**:
+  - a design's frame (card, none, speech bubble), words left or centred, photo size (or no photo);
+  - per field: Max words (then "…"), Lines with Read more, text size and line height (down / up buttons), bold and
+    upper case toggles; the tour name's heading level (H3, H4, H5); icons only for stats fields;
+  - the ratings: icon size, spacing, up / down, optional labels (above their icons, with the same text controls);
+    each icon in a box of the same width, the rows lined up;
+  - **Ribbons**: their own section in the card; corner, top and badge ribbons in many styles (diagonal, triangle,
+    tab, circle, flag, pill, tag, 3D ribbons, seal and folds, ribbon shapes after css-generators.com), their side and
+    colours; set only in that section;
+  - new field kinds: compare box, avatar, photos, logo; fields on one line ("Same line") and Bold;
+  - fields in the photo's centre in white, readable on the photo;
+  - dark admin: the plan's photo areas and the drop-down lists in the page's colours;
+  - fix: number settings no longer fail ("v34 is not a function").
+
 ## 19.0.0.3.0 · 2026-10-29
 
 - **Layout: Grid or Slider** (owner, 2026-10-29): a slider shows the same cards (designs, fields, filters) in one row,

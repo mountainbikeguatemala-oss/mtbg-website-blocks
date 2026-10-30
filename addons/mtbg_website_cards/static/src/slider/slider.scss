@@ -1,0 +1,74 @@
+// The one slider of the website (slider.js): a row of slides scrolled sideways, snapping to a slide. How many show
+// at once, by the slider's own width (a mega menu column, a tour page's side column and a full page differ):
+//   --mtbg-slider-per-lg  992px and wider (default 4)
+//   --mtbg-slider-per-md  576 to 991px   (default 3)
+//   --mtbg-slider-per-sm  under 576px    (default 1.2: the next one peeks)
+//   --mtbg-slider-gap     between slides (default 1rem)
+// mtbg-slider--stack-md: under 992px the slides stack (no sideways scrolling, no arrows).
+// The arrows: on the row's edges, gone at either end (unless it loops), when everything fits, and on touch screens.
+.mtbg-slider {
+    --mtbg-slider-per: var(--mtbg-slider-per-lg, 4);
+    position: relative;
+    container-type: inline-size;
+    container-name: mtbg-slider;
+
+    .mtbg-slider__track {
+        display: flex;
+        gap: var(--mtbg-slider-gap, 1rem);
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        padding-bottom: .5rem;
+        &::-webkit-scrollbar { display: none; }
+    }
+
+    .mtbg-slider__slide {
+        flex: 0 0 calc((100% - (var(--mtbg-slider-per) - 1) * var(--mtbg-slider-gap, 1rem)) / var(--mtbg-slider-per));
+        min-width: 0;
+        scroll-snap-align: start;
+        display: flex;
+        flex-direction: column;
+        > * { flex: 1 1 auto; }
+    }
+
+    .mtbg-slider__prev, .mtbg-slider__next {
+        position: absolute;
+        top: 50%;
+        z-index: 3;
+        width: 2.5rem;
+        height: 2.5rem;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transform: translateY(var(--mtbg-slider-arrow-y, -50%));
+        &:disabled { display: none; }
+        @media (hover: none) { display: none; }
+    }
+    .mtbg-slider__prev { left: 0; margin-left: -1.25rem; }
+    .mtbg-slider__next { right: 0; margin-right: -1.25rem; }
+    &.mtbg-slider--fits :is(.mtbg-slider__prev, .mtbg-slider__next) { display: none; }
+}
+
+// (the per-view counts by the slider's own width: container queries on the slider's track)
+@container mtbg-slider (max-width: 991.98px) {
+    .mtbg-slider__track { --mtbg-slider-per: var(--mtbg-slider-per-md, 3); }
+}
+@container mtbg-slider (max-width: 575.98px) {
+    .mtbg-slider__track { --mtbg-slider-per: var(--mtbg-slider-per-sm, 1.2); }
+}
+.mtbg-slider .mtbg-slider__track .mtbg-slider__slide {
+    flex-basis: calc((100% - (var(--mtbg-slider-per) - 1) * var(--mtbg-slider-gap, 1rem)) / var(--mtbg-slider-per));
+}
+
+// stacked under 992px of slider width
+@container mtbg-slider (max-width: 991.98px) {
+    .mtbg-slider--stack .mtbg-slider__track {
+        flex-direction: column;
+        overflow-x: visible;
+        scroll-snap-type: none;
+        .mtbg-slider__slide { flex-basis: auto; }
+    }
+    .mtbg-slider--stack :is(.mtbg-slider__prev, .mtbg-slider__next) { display: none; }
+}

@@ -3,3 +3,9 @@ access_card_design_public,card design public,model_mtbg_website_card_design,base
 access_card_design_portal,card design portal,model_mtbg_website_card_design,base.group_portal,1,0,0,0
 access_card_design_user,card design user,model_mtbg_website_card_design,base.group_user,1,0,0,0
 access_card_design_designer,card design website designer,model_mtbg_website_card_design,website.group_website_designer,1,1,1,1
+access_card_use_public,card use public,model_mtbg_website_card_use,base.group_public,1,0,0,0
+access_card_use_portal,card use portal,model_mtbg_website_card_use,base.group_portal,1,0,0,0
+access_card_use_user,card use user,model_mtbg_website_card_use,base.group_user,1,0,0,0
+access_card_use_designer,card use website designer,model_mtbg_website_card_use,website.group_website_designer,1,1,1,1
+access_card_settings_user,card settings user,model_mtbg_website_card_settings,base.group_user,1,0,0,0
+access_card_settings_designer,card settings website designer,model_mtbg_website_card_settings,website.group_website_designer,1,1,1,0

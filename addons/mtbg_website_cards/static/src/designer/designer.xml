@@ -70,6 +70,27 @@
                         <section class="mb-4">
                             <h5 class="mb-2">Card</h5>
                             <div class="d-flex flex-wrap gap-3 align-items-center small">
+                                <label class="d-flex align-items-center gap-2 mb-0">Frame
+                                    <select class="form-select form-select-sm w-auto" t-on-change="(ev) => this.change('frame', ev.target.value)">
+                                        <option value="card" t-att-selected="state.settings.frame === 'card'">Card</option>
+                                        <option value="none" t-att-selected="state.settings.frame === 'none'">No frame</option>
+                                        <option value="bubble" t-att-selected="state.settings.frame === 'bubble'">Speech bubble</option>
+                                    </select>
+                                </label>
+                                <label class="d-flex align-items-center gap-2 mb-0">Words
+                                    <select class="form-select form-select-sm w-auto" t-on-change="(ev) => this.change('align', ev.target.value)">
+                                        <option value="start" t-att-selected="state.settings.align === 'start'">Left</option>
+                                        <option value="center" t-att-selected="state.settings.align === 'center'">Centred</option>
+                                    </select>
+                                </label>
+                                <label class="d-flex align-items-center gap-2 mb-0">Photo size
+                                    <select class="form-select form-select-sm w-auto" t-on-change="(ev) => this.change('image_size', ev.target.value)">
+                                        <option value="512x288" t-att-selected="state.settings.image_size === '512x288'">Small</option>
+                                        <option value="600x400" t-att-selected="state.settings.image_size === '600x400'">Medium</option>
+                                        <option value="900x600" t-att-selected="state.settings.image_size === '900x600'">Large</option>
+                                        <option value="none" t-att-selected="state.settings.image_size === 'none'">No photo</option>
+                                    </select>
+                                </label>
                                 <label class="d-flex align-items-center gap-2 mb-0">Photo frame
                                     <select class="form-select form-select-sm w-auto" t-on-change="(ev) => this.change('ratio', ev.target.value)">
                                         <t t-foreach="[['3-2', '3:2'], ['4-3', '4:3'], ['16-9', '16:9'], ['1-1', 'Square']]" t-as="r" t-key="r[0]">
@@ -126,6 +147,7 @@
                         <h5 class="mb-2">Layout</h5>
                         <t t-call="mtbg_website_cards.CardDesignerRegion"><t t-set="rkey" t-value="'header'"/></t>
                         <div class="mtbg_cd_card">
+                            <t t-call="mtbg_website_cards.CardDesignerRegion"><t t-set="rkey" t-value="'banners'"/></t>
                             <div class="mtbg_cd_photo">
                                 <t t-call="mtbg_website_cards.CardDesignerRegion"><t t-set="rkey" t-value="'top'"/></t>
                                 <t t-call="mtbg_website_cards.CardDesignerRegion"><t t-set="rkey" t-value="'center'"/></t>
@@ -136,51 +158,8 @@
                         </div>
                         <!-- the clicked field -->
                         <t t-set="item" t-value="selectedItem"/>
-                        <div t-if="item" class="mtbg_cd_item_panel mt-3 p-3">
-                            <div class="d-flex align-items-center gap-2 mb-2">
-                                <strong class="flex-grow-1" t-esc="field(item.field).label"/>
-                                <button type="button" class="btn btn-sm btn-light" title="Place it once more" t-on-click="duplicateItem">
-                                    <i class="fa fa-clone me-1"/>Duplicate</button>
-                                <button type="button" class="btn btn-sm btn-light text-danger" title="Take it off the card" t-on-click="removeItem">
-                                    <i class="fa fa-trash"/></button>
-                            </div>
-                            <div class="small mb-2">
-                                <div class="text-muted mb-1">Look</div>
-                                <div class="btn-group btn-group-sm" role="group" aria-label="Look">
-                                    <t t-foreach="state.data.looks" t-as="l" t-key="l.key">
-                                        <button type="button" t-att-class="'btn ' + (item.look === l.key ? 'btn-secondary' : 'btn-outline-secondary')"
-                                                t-on-click="() => this.setItem('look', l.key)" t-esc="l.label"/>
-                                    </t>
-                                </div>
-                            </div>
-                            <div t-if="isPhoto(state.selected.region)" class="small mb-2">
-                                <div class="text-muted mb-1">Shows</div>
-                                <div class="btn-group btn-group-sm" role="group" aria-label="Shows">
-                                    <button type="button" t-att-class="'btn ' + (!item.show ? 'btn-secondary' : 'btn-outline-secondary')"
-                                            t-on-click="() => this.setItem('show', '')">Like its region</button>
-                                    <button type="button" t-att-class="'btn ' + (item.show === 'always' ? 'btn-secondary' : 'btn-outline-secondary')"
-                                            t-on-click="() => this.setItem('show', 'always')">Always</button>
-                                    <button type="button" t-att-class="'btn ' + (item.show === 'hover' ? 'btn-secondary' : 'btn-outline-secondary')"
-                                            t-on-click="() => this.setItem('show', 'hover')">On hover</button>
-                                </div>
-                            </div>
-                            <label class="small d-block mb-2"><span class="text-muted">Words</span>
-                                <input class="form-control form-control-sm" t-att-value="item.text"
-                                       t-att-placeholder="field(item.field).kind === 'button' ? (field(item.field).text or 'Book') : 'The field itself'"
-                                       t-on-change="(ev) => this.setItem('text', ev.target.value)"/>
-                                <span class="text-muted">Empty: the field itself. Mix words and fields: <code>{value}</code> is this
-                                    field, <code>{price}</code> (or any field's key) another, e.g. <code>Book (from {price})</code>.</span>
-                            </label>
-                            <label class="small d-block mb-0"><span class="text-muted">Icon</span>
-                                <div class="d-flex align-items-center gap-2">
-                                    <i t-if="item.icon" t-attf-class="fa {{item.icon}} fa-fw"/>
-                                    <input class="form-control form-control-sm" placeholder="e.g. fa-users (empty: none)" t-att-value="item.icon"
-                                           t-on-change="(ev) => this.setItem('icon', ev.target.value)"/>
-                                </div>
-                            </label>
-                            <div class="text-muted small mt-2">Field keys: <t t-foreach="state.data.fields" t-as="f" t-key="f.key"><code t-esc="'{' + f.key + '}'"/><t t-if="!f_last">, </t></t></div>
-                        </div>
-                        <div t-else="" class="text-muted small mt-3">Click a placed field for its look, words, icon and when it shows.</div>
+                        <t t-if="item and state.selected.region !== 'banners'"><t t-call="mtbg_website_cards.CardDesignerItemPanel"/></t>
+                        <div t-if="!item" class="text-muted small mt-3">Click a placed field for its look, words, icon and when it shows.</div>
                     </div>
 
                     <!-- right: the cards live -->
@@ -216,6 +195,142 @@
                 </div>
             </t>
         </div>
+    </t>
+    <!-- a size as down / up buttons (its value between them; back to as designed: click the value) -->
+    <t t-name="mtbg_website_cards.CardDesignerStepper">
+        <div class="d-inline-flex align-items-center gap-2">
+            <span class="text-muted"><t t-out="s_label"/></span>
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-outline-secondary" title="Smaller" t-att-disabled="stepValue(item, s_prop, s_base) &lt;= s_min"
+                        t-on-click="() => this.stepItem(s_prop, -s_step, s_base, s_min, s_max)"><i class="fa fa-minus"/></button>
+                <button type="button" class="btn btn-outline-secondary" style="min-width: 3.5rem" title="As designed"
+                        t-on-click="() => this.setItem(s_prop, 0)" t-esc="stepLabel(item, s_prop, s_base)"/>
+                <button type="button" class="btn btn-outline-secondary" title="Bigger" t-att-disabled="stepValue(item, s_prop, s_base) &gt;= s_max"
+                        t-on-click="() => this.stepItem(s_prop, s_step, s_base, s_min, s_max)"><i class="fa fa-plus"/></button>
+            </div>
+        </div>
+    </t>
+    <!-- the clicked field's settings: under the plan, or in the Ribbons section for a ribbon -->
+    <t t-name="mtbg_website_cards.CardDesignerItemPanel">
+        <div class="mtbg_cd_item_panel mt-3 p-3">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <strong class="flex-grow-1" t-esc="field(item.field).label"/>
+                                <button type="button" class="btn btn-sm btn-light" title="Place it once more" t-on-click="duplicateItem">
+                                    <i class="fa fa-clone me-1"/>Duplicate</button>
+                                <button type="button" class="btn btn-sm btn-light text-danger" title="Take it off the card" t-on-click="removeItem">
+                                    <i class="fa fa-trash"/></button>
+                            </div>
+                            <div t-if="field(item.field).kind !== 'icons'" class="small mb-2">
+                                <div class="text-muted mb-1">Look</div>
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Look">
+                                    <t t-foreach="looksFor(state.selected.region)" t-as="l" t-key="l.key">
+                                        <button type="button" t-att-class="'btn ' + (item.look === l.key ? 'btn-secondary' : 'btn-outline-secondary')"
+                                                t-on-click="() => this.setItem('look', l.key)" t-esc="l.label"/>
+                                    </t>
+                                </div>
+                            </div>
+                            <div t-if="isPhoto(state.selected.region)" class="small mb-2">
+                                <div class="text-muted mb-1">Shows</div>
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Shows">
+                                    <button type="button" t-att-class="'btn ' + (!item.show ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.setItem('show', '')">Like its region</button>
+                                    <button type="button" t-att-class="'btn ' + (item.show === 'always' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.setItem('show', 'always')">Always</button>
+                                    <button type="button" t-att-class="'btn ' + (item.show === 'hover' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.setItem('show', 'hover')">On hover</button>
+                                </div>
+                            </div>
+                            <label class="small d-block mb-2"><span class="text-muted">Words</span>
+                                <input class="form-control form-control-sm" t-att-value="item.text"
+                                       t-att-placeholder="field(item.field).kind === 'button' ? (field(item.field).text or 'Book') : 'The field itself'"
+                                       t-on-change="(ev) => this.setItem('text', ev.target.value)"/>
+                                <span class="text-muted">Empty: the field itself. Mix words and fields: <code>{value}</code> is this
+                                    field, <code>{price}</code> (or any field's key) another, e.g. <code>Book (from {price})</code>.</span>
+                            </label>
+                            <div t-if="['text', 'title'].includes(field(item.field).kind) and state.selected.region !== 'banners'" class="d-flex flex-wrap align-items-center gap-3 small mb-2">
+                                <label class="d-flex align-items-center gap-2 mb-0"><span class="text-muted">Lines</span>
+                                    <input type="number" min="0" max="20" class="form-control form-control-sm" style="width: 5rem"
+                                           t-att-value="item.lines || 0" t-on-change="(ev) => this.setItem('lines', this.toInt(ev.target.value))"/>
+                                    <span class="text-muted">0: all</span>
+                                </label>
+                                <label class="d-flex align-items-center gap-2 mb-0"><span class="text-muted">Max words</span>
+                                    <input type="number" min="0" max="200" class="form-control form-control-sm" style="width: 5rem"
+                                           t-att-value="item.words || 0" t-on-change="(ev) => this.setItem('words', this.toInt(ev.target.value))"/>
+                                    <span class="text-muted">0: all</span>
+                                </label>
+                                <div class="form-check form-switch mb-0">
+                                    <input class="form-check-input" type="checkbox" t-att-id="'mtbg_cd_more_' + item.uid" t-att-checked="item.more"
+                                           t-on-change="(ev) => this.setItem('more', ev.target.checked)"/>
+                                    <label class="form-check-label" t-att-for="'mtbg_cd_more_' + item.uid">Read more</label>
+                                </div>
+                            </div>
+                            <div t-if="state.data.banner_styles and state.data.banner_styles[item.look]" class="d-flex flex-wrap align-items-center gap-3 small mb-2">
+                                <label class="d-flex align-items-center gap-2 mb-0"><span class="text-muted">Style</span>
+                                    <select class="form-select form-select-sm" style="width: auto" t-on-change="(ev) => this.setItem('bstyle', ev.target.value)">
+                                        <t t-foreach="state.data.banner_styles[item.look]" t-as="bs" t-key="bs.key">
+                                            <option t-att-value="bs_first ? '' : bs.key" t-att-selected="bs_first ? !item.bstyle : item.bstyle === bs.key" t-esc="bs.label"/>
+                                        </t>
+                                    </select>
+                                </label>
+                                <label t-if="item.look !== 'banner'" class="d-flex align-items-center gap-2 mb-0"><span class="text-muted">Side</span>
+                                    <select class="form-select form-select-sm" style="width: auto" t-on-change="(ev) => this.setItem('bside', ev.target.value)">
+                                        <option value="" t-att-selected="!item.bside">As the style</option>
+                                        <option value="left" t-att-selected="item.bside === 'left'">Left</option>
+                                        <option value="right" t-att-selected="item.bside === 'right'">Right</option>
+                                    </select>
+                                </label>
+                                <label class="d-flex align-items-center gap-2 mb-0"><span class="text-muted">Background</span>
+                                    <input type="color" class="form-control form-control-sm form-control-color" t-att-value="item.bbg || '#714b67'"
+                                           t-on-change="(ev) => this.setItem('bbg', ev.target.value)"/>
+                                </label>
+                                <label class="d-flex align-items-center gap-2 mb-0"><span class="text-muted">Text</span>
+                                    <input type="color" class="form-control form-control-sm form-control-color" t-att-value="item.btext || '#ffffff'"
+                                           t-on-change="(ev) => this.setItem('btext', ev.target.value)"/>
+                                </label>
+                                <button t-if="item.bbg or item.btext" type="button" class="btn btn-sm btn-link p-0"
+                                        t-on-click="() => { this.setItem('bbg', ''); this.setItem('btext', ''); }">The design's colours</button>
+                            </div>
+                            <div t-if="!hasWords(item) and field(item.field).kind !== 'icons'" class="small mb-2"><t t-call="mtbg_website_cards.CardDesignerStepper"><t t-set="s_label">Text size</t><t t-set="s_prop" t-value="'fsize'"/><t t-set="s_base" t-value="100"/><t t-set="s_step" t-value="10"/><t t-set="s_min" t-value="50"/><t t-set="s_max" t-value="300"/></t></div>
+                            <div t-if="hasWords(item) or (field(item.field).kind === 'icons' and item.labels)" class="d-flex flex-wrap align-items-center gap-3 small mb-2">
+                                <!-- one line: the name's heading level, then bold and capitals as toggles -->
+                                <div class="d-flex align-items-center gap-2">
+                                    <div t-if="field(item.field).kind === 'title'" class="btn-group btn-group-sm" role="group" aria-label="Heading">
+                                        <t t-foreach="[['', 'H3'], ['h4', 'H4'], ['h5', 'H5']]" t-as="o" t-key="o[0]">
+                                            <button type="button" t-att-title="'Heading ' + o[1] + ' (for search engines; its size: Text size)'"
+                                                    t-att-class="'btn ' + ((item.tag || '') === o[0] ? 'btn-secondary' : 'btn-outline-secondary')"
+                                                    t-on-click="() => this.setItem('tag', o[0])" t-esc="o[1]"/>
+                                        </t>
+                                    </div>
+                                    <button type="button" title="Bold" t-att-class="'btn btn-sm ' + (item.weight === 'bold' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.setItem('weight', item.weight === 'bold' ? '' : 'bold')"><i class="fa fa-bold"/></button>
+                                    <button type="button" title="Upper case" t-att-class="'btn btn-sm ' + (item.case === 'upper' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.setItem('case', item.case === 'upper' ? '' : 'upper')">AA</button>
+                                </div>
+                                <!-- (the text size and line height side by side) -->
+                                <div class="d-flex flex-wrap align-items-center gap-3 w-100">
+                                    <t t-call="mtbg_website_cards.CardDesignerStepper"><t t-set="s_label">Text size</t><t t-set="s_prop" t-value="'fsize'"/><t t-set="s_base" t-value="100"/><t t-set="s_step" t-value="10"/><t t-set="s_min" t-value="50"/><t t-set="s_max" t-value="300"/></t>
+                                    <t t-call="mtbg_website_cards.CardDesignerStepper"><t t-set="s_label">Line height</t><t t-set="s_prop" t-value="'lh'"/><t t-set="s_base" t-value="150"/><t t-set="s_step" t-value="10"/><t t-set="s_min" t-value="80"/><t t-set="s_max" t-value="300"/></t>
+                                </div>
+                            </div>
+                            <div t-if="field(item.field).kind === 'icons'" class="d-flex flex-wrap align-items-center gap-3 small mb-2">
+                                <t t-call="mtbg_website_cards.CardDesignerStepper"><t t-set="s_label">Icon size</t><t t-set="s_prop" t-value="'size'"/><t t-set="s_base" t-value="100"/><t t-set="s_step" t-value="10"/><t t-set="s_min" t-value="50"/><t t-set="s_max" t-value="300"/></t>
+                                <t t-call="mtbg_website_cards.CardDesignerStepper"><t t-set="s_label">Spacing</t><t t-set="s_prop" t-value="'gap'"/><t t-set="s_base" t-value="10"/><t t-set="s_step" t-value="5"/><t t-set="s_min" t-value="5"/><t t-set="s_max" t-value="200"/></t>
+                                <div class="form-check form-switch mb-0">
+                                    <input class="form-check-input" type="checkbox" t-att-id="'mtbg_cd_labels_' + item.uid" t-att-checked="item.labels"
+                                           t-on-change="(ev) => this.setItem('labels', ev.target.checked)"/>
+                                    <label class="form-check-label" t-att-for="'mtbg_cd_labels_' + item.uid">Labels</label>
+                                </div>
+                                <t t-call="mtbg_website_cards.CardDesignerStepper"><t t-set="s_label">Up / down</t><t t-set="s_prop" t-value="'lift'"/><t t-set="s_base" t-value="0"/><t t-set="s_step" t-value="1"/><t t-set="s_min" t-value="-20"/><t t-set="s_max" t-value="20"/></t>
+                            </div>
+                            <label t-if="field(item.field).kind === 'meta'" class="small d-block mb-0"><span class="text-muted">Icon</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <i t-if="item.icon" t-attf-class="fa {{item.icon}} fa-fw"/>
+                                    <input class="form-control form-control-sm" placeholder="e.g. fa-users (empty: none)" t-att-value="item.icon"
+                                           t-on-change="(ev) => this.setItem('icon', ev.target.value)"/>
+                                </div>
+                            </label>
+                            <div class="text-muted small mt-2">Field keys: <t t-foreach="state.data.fields" t-as="f" t-key="f.key"><code t-esc="'{' + f.key + '}'"/><t t-if="!f_last">, </t></t></div>
+                        </div>
     </t>
     <!-- a region of the plan: its name, its settings (on the photo: always / on hover; the strips: shade), its fields
          (drop targets: a field lands before the one under the pointer, else last) -->
@@ -256,6 +371,11 @@
                 <div t-if="isDropAt(rkey, reg.items.length)" class="mtbg_cd_drop"/>
                 <div t-if="!reg.items.length" class="mtbg_cd_empty">Drop fields here</div>
             </div>
+            <!-- the Ribbons section: the clicked ribbon's settings here, in the section (owner, 2026-10-30) -->
+            <t t-if="rkey === 'banners' and state.selected and state.selected.region === 'banners' and selectedItem">
+                <t t-set="item" t-value="selectedItem"/>
+                <t t-call="mtbg_website_cards.CardDesignerItemPanel"/>
+            </t>
         </div>
     </t>
 </templates>

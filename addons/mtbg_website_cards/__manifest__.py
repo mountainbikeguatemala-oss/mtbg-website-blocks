@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Website — Card Designer',
-    'version': '19.0.0.3.0',
+    'version': '19.0.0.4.0',
     # where the updater gets it (the website blocks pack's repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     'mtbg_tours_section': 'blocks',
@@ -27,12 +27,16 @@ Part of the MTBG website blocks: needs only Odoo's website.
     'mtbg_requires': {'mtbg_tours_content_blocks': '19.0.0.10.0'},
     'data': [
         'security/ir.model.access.csv',
+        'data/card_settings.xml',
+        'views/slider_templates.xml',
         'views/card_templates.xml',
         'views/snippets.xml',
         'views/backend_views.xml',
     ],
     'assets': {
         'web.assets_frontend': [
+            'mtbg_website_cards/static/src/slider/slider.scss',
+            'mtbg_website_cards/static/src/slider/slider.js',
             'mtbg_website_cards/static/src/block/cards.scss',
             'mtbg_website_cards/static/src/block/cards_block.js',
         ],

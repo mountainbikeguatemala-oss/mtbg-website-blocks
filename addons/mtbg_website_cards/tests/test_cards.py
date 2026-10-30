@@ -38,11 +38,34 @@ class TestCardDesigns(HttpCase):
             self.addCleanup(p.stop)
         self.Design = self.env['mtbg.website.card.design']
 
+    def test_ribbons(self):
+        """Ribbons: their own section; one with a ribbon look placed elsewhere moves into it, a field without one there
+        takes the corner ribbon; a folded one is drawn past the card's edges."""
+        data = self.Design.mtbg_designer_create('Ribbons', 'thing')
+        design = self.Design.browse(data['design']['id'])
+        look = {'regions': {
+            'top': {'show': 'always', 'items': [dict(item('a', 'badge'), look='badge', bstyle='pill', bbg='#9b59b6')]},
+            'banners': {'items': [item('b', 'name'), dict(item('c', 'price'), look='corner', bstyle='fold3d', bside='left')]},
+            'below': {'items': [item('d', 'name', look='pill')]},
+        }}
+        design.mtbg_designer_save(dict(data['design'], look=look))
+        regions = design.look['regions']
+        self.assertEqual([(i['field'], i['look']) for i in regions['banners']['items']],
+                         [('name', 'corner'), ('price', 'corner'), ('badge', 'badge')])
+        self.assertEqual(regions['top']['items'], [])
+        self.assertEqual([i['look'] for i in regions['below']['items']], ['pill'], "the other sections keep theirs")
+        html = str(design.mtbg_render([1]))
+        self.assertIn('mtbg-card__banners', html)
+        self.assertIn('mtbg-card__banners mtbg-card__banners--out', html, "a folded ribbon reaches past the card")
+        self.assertIn('mtbg-card__banner--fold3d is-left', html)
+        self.assertIn('--b-bg: #9b59b6', html)
+
     def test_regions_and_render(self):
         data = self.Design.mtbg_designer_create('Plain', 'thing')
         design = self.Design.browse(data['design']['id'])
         self.assertTrue(design.is_default, "the first design of a source is its Default")
-        self.assertEqual([r['key'] for r in data['regions']], ['header', 'top', 'center', 'bottom', 'below', 'footer'])
+        self.assertEqual([r['key'] for r in data['regions']],
+                         ['header', 'banners', 'top', 'center', 'bottom', 'below', 'footer'])
         self.assertIn('book', [f['key'] for f in data['fields']], "every source has the Book button")
         look = {'regions': {
             'top': {'show': 'always', 'items': [item('a', 'badge', icon='fa-star')]},
@@ -104,14 +127,40 @@ class TestCardDesigns(HttpCase):
         design = self.Design.browse(self.Design.mtbg_designer_create('Plain', 'thing')['design']['id'])
         grid = str(design.mtbg_render([1, 2, 3], columns=4))
         self.assertNotIn('mtbg-cards-slider', grid)
-        self.assertIn('mtbg-cards mtbg-cards--cols-4', grid)
+        self.assertIn('mtbg-cards mtbg-cards--grid mtbg-cards--cols-4', grid)
+        self.assertIn('--mtbg-cards-lg: 4', grid)
         slider = str(design.mtbg_render([1, 2, 3], columns=4, layout='slider'))
-        self.assertIn('mtbg-cards mtbg-cards--slider mtbg-cards--cols-4', slider)
-        self.assertIn('mtbg-cards-slider-prev', slider)
-        self.assertIn('mtbg-cards-slider-next', slider)
+        # the one slider (slider_templates.xml), as many at once as the columns
+        self.assertIn('mtbg-slider mtbg-cards-slider', slider)
+        self.assertIn('--mtbg-slider-per-lg: 4', slider)
+        self.assertIn('mtbg-slider__prev', slider)
+        self.assertIn('mtbg-slider__next', slider)
+        self.assertEqual(slider.count('class="mtbg-slider__slide"'), 3)
         self.assertEqual(slider.count('mtbg-card mtbg-card--'), 3, "the same cards")
-        self.assertNotIn('mtbg-cards-slider', str(design.mtbg_render([1], layout='nonsense')))
+        self.assertNotIn('mtbg-slider', str(design.mtbg_render([1], layout='nonsense')))
         res = self.make_jsonrpc_request('/mtbg/cards/render', {'source': 'thing', 'limit': 3, 'layout': 'slider'})
-        self.assertIn('mtbg-cards--slider', res['html'])
-        self.assertNotIn('mtbg-cards--slider', self.make_jsonrpc_request(
+        self.assertIn('mtbg-slider__track', res['html'])
+        self.assertNotIn('mtbg-slider', self.make_jsonrpc_request(
             '/mtbg/cards/render', {'source': 'thing', 'limit': 3})['html'])
+
+    def test_book_button_settings(self):
+        """The website's card settings: every card's Book button (owner, 2026-10-30: "need book botton global
+        settings"); a design's own words still win."""
+        design = self.Design.browse(self.Design.mtbg_designer_create('Plain', 'thing')['design']['id'])
+        look = {'regions': {'footer': {'items': [item('b1', 'book', look='button')]}}}
+        design.mtbg_designer_save(dict(design._mtbg_settings(), look=look))
+        settings = self.env['mtbg.website.card.settings']._mtbg_get().with_context(mtbg_skip_menu_refresh=True)
+        settings.write({'book_text': 'Reserve', 'book_icon': 'fa-calendar-check-o', 'book_style': 'custom',
+                        'book_bg': '#123456', 'book_color': '#ffffff', 'book_size': 'lg', 'book_shape': 'pill',
+                        'book_full': True})
+        html = str(design.mtbg_render([1]))
+        self.assertIn('Reserve', html)
+        self.assertIn('fa-calendar-check-o', html)
+        for cls in ('mtbg-book--custom', 'mtbg-book--lg', 'mtbg-book--pill', 'mtbg-book--full'):
+            self.assertIn(cls, html)
+        self.assertIn('--mtbg-book-bg: #123456', html)
+        look['regions']['footer']['items'][0]['text'] = 'Go ({price})'
+        design.mtbg_designer_save(dict(design._mtbg_settings(), look=look))
+        html = str(design.mtbg_render([1]))
+        self.assertIn('Go (', html)
+        self.assertNotIn('Reserve', html)

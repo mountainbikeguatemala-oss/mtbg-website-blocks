@@ -21,15 +21,16 @@
     .mtbg_cd_photo {
         display: flex; flex-direction: column; justify-content: space-between; gap: .4rem; min-height: 15rem; padding: .4rem;
         background: linear-gradient(135deg, #2e4a63, #13202d);
-        .mtbg_cd_region { background: rgba(255, 255, 255, .92); }
+        // (the page's own surface, nearly opaque over the photo: readable in the dark admin too, owner 2026-10-30)
+        .mtbg_cd_region { background: color-mix(in srgb, var(--bs-body-bg, #fff) 94%, transparent); color: var(--bs-body-color, #212529); }
     }
     .mtbg_cd_region {
         margin: .4rem; padding: .35rem .45rem .45rem; border: 1.5px dashed #8aa2b8; border-radius: .45rem;
-        &.is-drop { border-style: solid; border-color: var(--bs-primary, #714b67); background: #f3edf2; }
+        &.is-drop { border-style: solid; border-color: var(--bs-primary, #714b67); background: var(--bs-primary-bg-subtle, #f3edf2); }
     }
     .mtbg_cd_photo .mtbg_cd_region { margin: 0; }
     .mtbg_cd_region--header { margin: 0 0 .5rem; background: var(--bs-body-bg, #fff); }
-    .mtbg_cd_region--footer { background: rgba(0, 0, 0, .03); }
+    .mtbg_cd_region--footer { background: color-mix(in srgb, var(--bs-body-color, #000) 4%, transparent); }
     .mtbg_cd_region_head { font-size: .78rem; margin-bottom: .3rem; .btn { font-size: .7rem; } }
     .mtbg_cd_items { display: flex; flex-direction: column; gap: .25rem; min-height: 1.6rem;
         &.is-row { flex-direction: row; flex-wrap: wrap; justify-content: space-between; }
@@ -37,7 +38,7 @@
     .mtbg_cd_item {
         display: flex; align-items: center; gap: .35rem; padding: .2rem .4rem; border: 1px solid var(--border-color, #dee2e6);
         border-radius: .35rem; background: var(--bs-body-bg, #fff); font-size: .82rem; cursor: grab; user-select: none; min-width: 0;
-        &.is-selected { border-color: var(--bs-primary, #714b67); box-shadow: 0 0 0 2px #e9e2e7; }
+        &.is-selected { border-color: var(--bs-primary, #714b67); box-shadow: 0 0 0 2px var(--bs-primary-bg-subtle, #e9e2e7); }
         &.is-moving { opacity: .45; }
         .badge { font-weight: 500; }
     }
@@ -58,4 +59,10 @@
         .mtbg_cd_settings, .mtbg_cd_plan { flex: none; max-width: none; border-right: 0; overflow: visible !important; }
         .mtbg_cd_preview { min-height: 30rem; }
     }
+}
+
+// the designer's drop-down lists open in the page's colours (dark admin: a white list with light words otherwise)
+.mtbg_cd select, .mtbg_cd select :is(option, optgroup) {
+    background-color: var(--bs-body-bg, #fff);
+    color: var(--bs-body-color, #212529);
 }

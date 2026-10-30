@@ -29,6 +29,9 @@
                         <group>
                             <field name="source"/>
                             <field name="style"/>
+                            <field name="frame"/>
+                            <field name="align"/>
+                            <field name="image_size"/>
                             <field name="ratio"/>
                             <field name="corners"/>
                         </group>
@@ -60,6 +63,81 @@
         <field name="name">Card Designer</field>
         <field name="tag">mtbg_card_designer</field>
     </record>
+
+    <!-- Card uses: every place of the website that shows cards, its design and layout (one place for all) -->
+    <record id="view_card_use_list" model="ir.ui.view">
+        <field name="name">mtbg.website.card.use.list</field>
+        <field name="model">mtbg.website.card.use</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" create="0" delete="0">
+                <field name="sequence" widget="handle"/>
+                <field name="name" readonly="1"/>
+                <field name="source" readonly="1"/>
+                <field name="design_id" placeholder="The source's Default" options="{'no_create': True}"/>
+                <field name="layout"/>
+                <field name="per_lg"/>
+                <field name="per_md"/>
+                <field name="per_sm"/>
+                <field name="gap" optional="hide"/>
+                <field name="arrows" invisible="layout != 'slider'"/>
+                <field name="autoplay" invisible="layout != 'slider'" optional="hide"/>
+                <field name="loop" invisible="layout != 'slider'" optional="hide"/>
+                <field name="stack_md" invisible="layout != 'slider'" optional="hide"/>
+                <field name="arrow_class" invisible="layout != 'slider'" optional="hide"/>
+                <field name="css_class" optional="hide"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_card_use" model="ir.actions.act_window">
+        <field name="name">Card Uses</field>
+        <field name="res_model">mtbg.website.card.use</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html"><p>Every place of the website that shows cards: which card design draws them, and
+            how they are laid out (a grid, the slider, a masonry wall), how many side by side on desktop, tablet and
+            phone. Extensions bring their places.</p></field>
+    </record>
+    <menuitem id="menu_card_uses" name="Card Uses" parent="mtbg_tours_content_blocks.menu_website_blocks_root"
+              action="action_card_use" sequence="41" groups="website.group_website_designer"/>
+    <menuitem id="menu_card_designs" name="Card Designs" parent="mtbg_tours_content_blocks.menu_website_blocks_root"
+              action="action_card_design" sequence="42" groups="website.group_website_designer"/>
+
+    <!-- the website's card settings: the Book button of every card -->
+    <record id="view_card_settings_form" model="ir.ui.view">
+        <field name="name">mtbg.website.card.settings.form</field>
+        <field name="model">mtbg.website.card.settings</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0">
+                <sheet>
+                    <div class="oe_title"><h1>Card Settings</h1></div>
+                    <p class="text-muted">For every card of the website at once. A design's own words or icon for its
+                        Book button (Card Designer) still win.</p>
+                    <group string="Book button">
+                        <group>
+                            <field name="book_text"/>
+                            <field name="book_icon" placeholder="e.g. fa-calendar-check-o"/>
+                            <field name="book_style"/>
+                            <field name="book_bg" invisible="book_style != 'custom'" placeholder="#9b59b6"/>
+                            <field name="book_color" invisible="book_style != 'custom'" placeholder="#ffffff"/>
+                        </group>
+                        <group>
+                            <field name="book_size"/>
+                            <field name="book_shape"/>
+                            <field name="book_full"/>
+                            <field name="book_caps"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_card_settings" model="ir.actions.server">
+        <field name="name">Card Settings</field>
+        <field name="model_id" ref="model_mtbg_website_card_settings"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open()</field>
+    </record>
+    <menuitem id="menu_card_settings" name="Card Settings" parent="mtbg_tours_content_blocks.menu_website_blocks_root"
+              action="action_card_settings" sequence="43" groups="website.group_website_designer"/>
 
     <!-- Website Blocks › Card Designer -->
     <menuitem id="menu_card_designer" name="Card Designer" parent="mtbg_tours_content_blocks.menu_website_blocks_root"

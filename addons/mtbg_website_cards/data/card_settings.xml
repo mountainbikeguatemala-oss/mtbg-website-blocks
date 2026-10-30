@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- the website's card settings: one record (Website Blocks › Card Settings) -->
+    <record id="card_settings" model="mtbg.website.card.settings">
+        <field name="name">Card settings</field>
+    </record>
+</odoo>

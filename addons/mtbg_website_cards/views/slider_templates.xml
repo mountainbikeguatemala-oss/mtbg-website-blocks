@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The one slider (static/src/slider): every row of things scrolled sideways calls it, the slides as its body
+         (each a div.mtbg-slider__slide). Options (t-set before the call):
+           slider_per     {'lg': 4, 'md': 3, 'sm': 1.2}  how many at once by the slider's width (a fraction: the
+                          next one peeks)
+           slider_gap     CSS length between slides ('1rem')
+           slider_arrows  True / False (default True)
+           slider_arrow_class  the arrows' classes ('btn btn-light rounded-circle shadow')
+           slider_autoplay  ms between pages (0: none), slider_loop: the last page goes back to the first
+           slider_class   more classes (e.g. the stack modifier of slider.scss: stacked under 992px), slider_style: more style -->
+    <template id="slider" name="Slider">
+        <t t-set="sp" t-value="slider_per or {}"/>
+        <div t-attf-class="mtbg-slider #{slider_class or ''}"
+             t-att-data-autoplay="slider_autoplay or None" t-att-data-loop="'1' if slider_loop else None"
+             t-attf-style="--mtbg-slider-per-lg: #{sp.get('lg', 4)}; --mtbg-slider-per-md: #{sp.get('md', 3)}; --mtbg-slider-per-sm: #{sp.get('sm', 1.2)}; --mtbg-slider-gap: #{slider_gap or '1rem'}; #{slider_style or ''}">
+            <button t-if="slider_arrows is not False" type="button" t-attf-class="mtbg-slider__prev #{slider_arrow_class or 'btn btn-light rounded-circle shadow'}" aria-label="Previous">
+                <i class="fa fa-chevron-left" aria-hidden="true"/>
+            </button>
+            <div class="mtbg-slider__track"><t t-out="0"/></div>
+            <button t-if="slider_arrows is not False" type="button" t-attf-class="mtbg-slider__next #{slider_arrow_class or 'btn btn-light rounded-circle shadow'}" aria-label="Next">
+                <i class="fa fa-chevron-right" aria-hidden="true"/>
+            </button>
+        </div>
+    </template>
+</odoo>

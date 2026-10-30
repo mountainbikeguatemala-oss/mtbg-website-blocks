@@ -17,6 +17,16 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: mtbg_website_cards
+#: model_terms:ir.ui.view,arch_db:mtbg_website_cards.view_card_settings_form
+msgid "#9b59b6"
+msgstr "#9b59b6"
+
+#. module: mtbg_website_cards
+#: model_terms:ir.ui.view,arch_db:mtbg_website_cards.view_card_settings_form
+msgid "#ffffff"
+msgstr "#ffffff"
+
+#. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 msgid "(Default)"
@@ -31,8 +41,82 @@ msgstr "(o la clave de cualquier campo) otro, p. ej."
 #. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+msgid "0: all"
+msgstr "0: todo"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "3D band folded round the sides"
+msgstr "Banda 3D doblada en los lados"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "3D raised badge"
+msgstr "Insignia 3D en relieve"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "3D raised band"
+msgstr "Banda 3D en relieve"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "3D ribbon"
+msgstr "Cinta 3D"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "3D ribbon folded round the corner"
+msgstr "Cinta 3D doblada en la esquina"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "3D seal"
+msgstr "Sello 3D"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "3D tag folded round the edge"
+msgstr "Etiqueta 3D doblada en el borde"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_use__per_md
+msgid "576 to 991px"
+msgstr "576 a 991 px"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_settings__book_icon
+msgid ""
+"A Font Awesome name, e.g. fa-calendar-check-o (empty: none; a design's own "
+"icon wins)"
+msgstr ""
+"Un nombre de Font Awesome, p. ej. fa-calendar-check-o (vacío: ninguno; gana "
+"el icono propio de un diseño)"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_settings.py:0
+msgid "A colour is a hex code, e.g. #9b59b6."
+msgstr "Un color es un código hexadecimal, p. ej. #9b59b6."
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 msgid "A shade instead of its colour"
 msgstr "Una sombra en lugar de su color"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+msgid "AA"
+msgstr "AA"
 
 #. module: mtbg_website_cards
 #. odoo-python
@@ -45,12 +129,6 @@ msgstr "Encima de la tarjeta"
 #: code:addons/mtbg_website_cards/static/src/designer/designer.js:0
 msgid "Accent (pills, buttons, dates)"
 msgstr "Acento (píldoras, botones, fechas)"
-
-#. module: mtbg_website_cards
-#. odoo-javascript
-#: code:addons/mtbg_website_cards/static/src/designer/designer.js:0
-msgid "Accent (price, badges)"
-msgstr "Acento (precio, distintivos)"
 
 #. module: mtbg_website_cards
 #: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_design__active
@@ -80,6 +158,64 @@ msgstr ""
 
 #. module: mtbg_website_cards
 #. odoo-python
+#: code:addons/mtbg_website_cards/models/card_settings.py:0
+msgid "An icon is a Font Awesome name, e.g. fa-calendar-check-o."
+msgstr "Un icono es un nombre de Font Awesome, p. ej. fa-calendar-check-o."
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__arrow_class
+msgid "Arrow Class"
+msgstr "Clase de las flechas"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__arrows
+msgid "Arrows"
+msgstr "Flechas"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+msgid "As designed"
+msgstr "Como en el diseño"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+msgid "As the style"
+msgstr "Según el estilo"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.js:0
+msgid "Auto"
+msgstr "Auto"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__autoplay
+msgid "Autoplay"
+msgstr "Reproducción automática"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_settings__book_bg
+msgid "Background"
+msgstr "Fondo"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Badge ribbon"
+msgstr "Cinta de insignia"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Band wrapped round the sides, notched ends"
+msgstr "Banda que rodea los lados, extremos con muesca"
+
+#. module: mtbg_website_cards
+#. odoo-python
 #: code:addons/mtbg_website_cards/models/card_design.py:0
 msgid "Bar"
 msgstr "Barra"
@@ -97,8 +233,23 @@ msgid "Below's last line, side by side"
 msgstr "Última línea de Debajo, uno al lado del otro"
 
 #. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+msgid "Bigger"
+msgstr "Más grande"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
 #. odoo-python
 #: code:addons/mtbg_website_cards/models/card_design.py:0
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+msgid "Bold"
+msgstr "Negrita"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+#: model:mtbg.website.card.settings,book_text:mtbg_website_cards.card_settings
 msgid "Book"
 msgstr "Reservar"
 
@@ -111,8 +262,36 @@ msgstr "Reservar (desde {price})"
 #. module: mtbg_website_cards
 #. odoo-python
 #: code:addons/mtbg_website_cards/models/card_design.py:0
+#: model_terms:ir.ui.view,arch_db:mtbg_website_cards.view_card_settings_form
 msgid "Book button"
 msgstr "Botón Reservar"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_settings__book_style
+msgid "Book button colours"
+msgstr "Colores del botón Reservar"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_settings__book_icon
+msgid "Book button icon"
+msgstr "Icono del botón Reservar"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_settings__book_text
+msgid "Book button words"
+msgstr "Texto del botón Reservar"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Bookmark from the top, notched"
+msgstr "Marcapáginas desde arriba, con muesca"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Bookmark from the top, pointed"
+msgstr "Marcapáginas desde arriba, en punta"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
@@ -141,8 +320,14 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: mtbg_website_cards
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_settings__book_caps
+msgid "Capitals"
+msgstr "Mayúsculas"
+
+#. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_design__frame__card
 msgid "Card"
 msgstr "Tarjeta"
 
@@ -157,14 +342,35 @@ msgstr "Diseñador de tarjetas"
 
 #. module: mtbg_website_cards
 #: model:ir.actions.act_window,name:mtbg_website_cards.action_card_design
+#: model:ir.ui.menu,name:mtbg_website_cards.menu_card_designs
 msgid "Card Designs"
 msgstr "Diseños de tarjetas"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_settings.py:0
+#: model:ir.actions.server,name:mtbg_website_cards.action_card_settings
+#: model:ir.ui.menu,name:mtbg_website_cards.menu_card_settings
+#: model_terms:ir.ui.view,arch_db:mtbg_website_cards.view_card_settings_form
+msgid "Card Settings"
+msgstr "Ajustes de tarjetas"
+
+#. module: mtbg_website_cards
+#: model:ir.actions.act_window,name:mtbg_website_cards.action_card_use
+#: model:ir.ui.menu,name:mtbg_website_cards.menu_card_uses
+msgid "Card Uses"
+msgstr "Usos de tarjetas"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.js:0
 msgid "Card background"
 msgstr "Fondo de la tarjeta"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__design_id
+msgid "Card design"
+msgstr "Diseño de tarjeta"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
@@ -189,6 +395,24 @@ msgstr "Tarjetas"
 #: code:addons/mtbg_website_cards/models/card_design.py:0
 msgid "Center"
 msgstr "Centro"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_design__align__center
+msgid "Centred"
+msgstr "Centrado"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Circle"
+msgstr "Círculo"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_use__css_class
+msgid "Classes on the cards' container"
+msgstr "Clases en el contenedor de las tarjetas"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
@@ -223,6 +447,12 @@ msgid "Computer"
 msgstr "Computadora"
 
 #. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Corner ribbon"
+msgstr "Cinta de esquina"
+
+#. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 #: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_design__corners
@@ -237,11 +467,15 @@ msgstr "Crear"
 
 #. module: mtbg_website_cards
 #: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_design__create_uid
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_settings__create_uid
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: mtbg_website_cards
 #: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_design__create_date
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_settings__create_date
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__create_date
 msgid "Created on"
 msgstr "Creado el"
 
@@ -250,12 +484,6 @@ msgstr "Creado el"
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 msgid "Dark page"
 msgstr "Página oscura"
-
-#. module: mtbg_website_cards
-#. odoo-javascript
-#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
-msgid "Darken the photo"
-msgstr "Oscurecer la foto"
 
 #. module: mtbg_website_cards
 #: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_design__hover_darken
@@ -291,10 +519,21 @@ msgid "Designs"
 msgstr "Diseños"
 
 #. module: mtbg_website_cards
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__per_lg
+msgid "Desktop"
+msgstr "Escritorio"
+
+#. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 msgid "Device"
 msgstr "Dispositivo"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Diagonal ribbon"
+msgstr "Cinta diagonal"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
@@ -304,6 +543,8 @@ msgstr "Descartar"
 
 #. module: mtbg_website_cards
 #: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_design__display_name
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_settings__display_name
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
 
@@ -336,12 +577,6 @@ msgstr "Duplicar"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
-#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
-msgid "Earlier"
-msgstr "Antes"
-
-#. module: mtbg_website_cards
-#. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.js:0
 msgid "Early bird strip"
 msgstr "Franja de reserva anticipada"
@@ -359,6 +594,27 @@ msgid "Empty: the field itself. Mix words and fields:"
 msgstr "Vacío: el campo mismo. Mezcla palabras y campos:"
 
 #. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_use__design_id
+msgid "Empty: the source's Default design"
+msgstr "Vacío: el diseño predeterminado de la fuente"
+
+#. module: mtbg_website_cards
+#: model_terms:ir.actions.act_window,help:mtbg_website_cards.action_card_use
+msgid ""
+"Every place of the website that shows cards: which card design draws them, and\n"
+"            how they are laid out (a grid, the slider, a masonry wall), how many side by side on desktop, tablet and\n"
+"            phone. Extensions bring their places."
+msgstr ""
+"Cada lugar del sitio web que muestra tarjetas: qué diseño de tarjeta las dibuja y\n"
+"            cómo se disponen (una cuadrícula, el carrusel, un muro tipo mosaico), cuántas una al lado de otra en escritorio, tableta y\n"
+"            teléfono. Las extensiones aportan sus lugares."
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__css_class
+msgid "Extra classes"
+msgstr "Clases adicionales"
+
+#. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 msgid "Field keys:"
@@ -371,6 +627,12 @@ msgid "Fields"
 msgstr "Campos"
 
 #. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Flag"
+msgstr "Bandera"
+
+#. module: mtbg_website_cards
 #. odoo-javascript
 #. odoo-python
 #: code:addons/mtbg_website_cards/models/card_design.py:0
@@ -379,22 +641,49 @@ msgid "Footer line"
 msgstr "Línea de pie"
 
 #. module: mtbg_website_cards
+#: model_terms:ir.ui.view,arch_db:mtbg_website_cards.view_card_settings_form
+msgid ""
+"For every card of the website at once. A design's own words or icon for its\n"
+"                        Book button (Card Designer) still win."
+msgstr ""
+"Para todas las tarjetas del sitio web a la vez. El texto o icono propio de un diseño para su\n"
+"                        botón Reservar (Diseñador de tarjetas) sigue ganando."
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_design__frame
+msgid "Frame"
+msgstr "Marco"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_settings__book_full
+msgid "Full width"
+msgstr "Ancho completo"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__gap
+msgid "Gap"
+msgstr "Espacio"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/website_builder/cards_option.xml:0
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_use__layout__grid
+msgid "Grid"
+msgstr "Cuadrícula"
+
+#. module: mtbg_website_cards
 #. odoo-python
 #: code:addons/mtbg_website_cards/models/card_design.py:0
 msgid "Header"
 msgstr "Encabezado"
 
 #. module: mtbg_website_cards
-#. odoo-python
-#: code:addons/mtbg_website_cards/models/card_design.py:0
-msgid "Hidden"
-msgstr "Oculto"
-
-#. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
-msgid "Hover"
-msgstr "Al pasar el cursor"
+msgid "Heading"
+msgstr "Encabezado"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
@@ -403,7 +692,14 @@ msgid "How many"
 msgstr "Cuántas"
 
 #. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_use__per_lg
+msgid "How many side by side on wide screens (992px and up)"
+msgstr "Cuántas una al lado de otra en pantallas anchas (992 px o más)"
+
+#. module: mtbg_website_cards
 #: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_design__id
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_settings__id
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__id
 msgid "ID"
 msgstr "ID"
 
@@ -416,12 +712,8 @@ msgstr "Icono"
 #. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
-msgid ""
-"In this order: drag one (or use the arrows). Each one goes on the\n"
-"                                photo, in the text, or nowhere."
-msgstr ""
-"En este orden: arrastra uno (o usa las flechas). Cada uno va en la foto, en "
-"el texto o en ninguna parte."
+msgid "Icon size"
+msgstr "Tamaño del icono"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
@@ -430,25 +722,42 @@ msgid "It starts as the design shown (same source), else plain."
 msgstr "Empieza como el diseño mostrado (misma fuente), si no, sencillo."
 
 #. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+msgid "Labels"
+msgstr "Etiquetas"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_settings__book_size__lg
+msgid "Large"
+msgstr "Grande"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_design__image_size__900x600
+msgid "Large (900 x 600)"
+msgstr "Grande (900 x 600)"
+
+#. module: mtbg_website_cards
 #: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_design__write_uid
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_settings__write_uid
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__write_uid
 msgid "Last Updated by"
 msgstr "Última actualización por"
 
 #. module: mtbg_website_cards
 #: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_design__write_date
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_settings__write_date
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__write_date
 msgid "Last Updated on"
 msgstr "Última actualización el"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
-msgid "Later"
-msgstr "Después"
-
-#. module: mtbg_website_cards
-#. odoo-javascript
-#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 #: code:addons/mtbg_website_cards/static/src/website_builder/cards_option.xml:0
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__layout
 msgid "Layout"
 msgstr "Diseño"
 
@@ -457,6 +766,13 @@ msgstr "Diseño"
 #: code:addons/mtbg_website_cards/static/src/designer/designer.js:0
 msgid "Leave this design? Your changes are not saved."
 msgstr "¿Salir de este diseño? Tus cambios no están guardados."
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_design__align__start
+msgid "Left"
+msgstr "Izquierda"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
@@ -479,6 +795,18 @@ msgstr "Como su región"
 #. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+msgid "Line height"
+msgstr "Altura de línea"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+msgid "Lines"
+msgstr "Líneas"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 msgid "Live: the cards show your unsaved changes (only you see them)."
 msgstr ""
 "En vivo: las tarjetas muestran tus cambios sin guardar (solo tú los ves)."
@@ -497,6 +825,11 @@ msgid "Look"
 msgstr "Aspecto"
 
 #. module: mtbg_website_cards
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__loop
+msgid "Loop"
+msgstr "Bucle"
+
+#. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 #: model_terms:ir.ui.view,arch_db:mtbg_website_cards.view_card_design_form
@@ -504,9 +837,49 @@ msgid "Make Default"
 msgstr "Hacer predeterminado"
 
 #. module: mtbg_website_cards
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_use__layout__masonry
+msgid "Masonry wall"
+msgstr "Muro tipo mosaico"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+msgid "Max words"
+msgstr "Máx. palabras"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_settings__book_size__md
+msgid "Medium"
+msgstr "Mediano"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_design__image_size__600x400
+msgid "Medium (600 x 400)"
+msgstr "Mediano (600 x 400)"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_settings__book_style__custom
+msgid "My colours"
+msgstr "Mis colores"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_settings__book_bg
+msgid "My colours: e.g. #9b59b6"
+msgstr "Mis colores: p. ej. #9b59b6"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_settings__book_color
+msgid "My colours: e.g. #ffffff"
+msgstr "Mis colores: p. ej. #ffffff"
+
+#. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 #: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_design__name
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_settings__name
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__name
 msgid "Name"
 msgstr "Nombre"
 
@@ -530,9 +903,30 @@ msgstr "Nuevo diseño de"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/slider/slider.js:0
+#: model_terms:ir.ui.view,arch_db:mtbg_website_cards.slider
+msgid "Next"
+msgstr "Siguiente"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 msgid "No card design yet."
 msgstr "Aún no hay diseños de tarjetas."
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_design__frame__none
+msgid "No frame"
+msgstr "Sin marco"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_design__image_size__none
+msgid "No photo"
+msgstr "Sin foto"
 
 #. module: mtbg_website_cards
 #: model_terms:ir.ui.view,arch_db:mtbg_website_cards.designer_preview
@@ -570,6 +964,11 @@ msgid "On the photo, in its middle"
 msgstr "Sobre la foto, en el centro"
 
 #. module: mtbg_website_cards
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_use__layout__stack
+msgid "One under another"
+msgstr "Una debajo de otra"
+
+#. module: mtbg_website_cards
 #. odoo-python
 #: code:addons/mtbg_website_cards/models/card_design.py:0
 msgid "Only website designers can design cards."
@@ -582,8 +981,15 @@ msgid "Open the Card Designer"
 msgstr "Abrir el diseñador de tarjetas"
 
 #. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Over the card's corner or top"
+msgstr "Sobre la esquina o la parte superior de la tarjeta"
+
+#. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__per_sm
 msgid "Phone"
 msgstr "Teléfono"
 
@@ -597,36 +1003,20 @@ msgstr "Marco de la foto"
 #. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.js:0
-msgid "Photo shade"
-msgstr "Sombra de la foto"
-
-#. module: mtbg_website_cards
-#. odoo-javascript
-#: code:addons/mtbg_website_cards/static/src/designer/designer.js:0
 msgid "Photo shade on hover"
 msgstr "Sombra de la foto al pasar el cursor"
 
 #. module: mtbg_website_cards
-#. odoo-python
-#: code:addons/mtbg_website_cards/models/card_design.py:0
-msgid "Photo, bottom"
-msgstr "Foto, abajo"
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_design__image_size
+msgid "Photo size"
+msgstr "Tamaño de la foto"
 
 #. module: mtbg_website_cards
 #. odoo-python
 #: code:addons/mtbg_website_cards/models/card_design.py:0
-msgid "Photo, top left"
-msgstr "Foto, arriba a la izquierda"
-
-#. module: mtbg_website_cards
-#. odoo-python
-#: code:addons/mtbg_website_cards/models/card_design.py:0
-msgid "Photo, top right"
-msgstr "Foto, arriba a la derecha"
-
-#. module: mtbg_website_cards
-#. odoo-python
-#: code:addons/mtbg_website_cards/models/card_design.py:0
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_settings__book_shape__pill
 msgid "Pill"
 msgstr "Píldora"
 
@@ -650,16 +1040,76 @@ msgstr "Vista previa"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/slider/slider.js:0
+#: model_terms:ir.ui.view,arch_db:mtbg_website_cards.slider
+msgid "Previous"
+msgstr "Anterior"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/block/cards_block.js:0
+msgid "Read less"
+msgstr "Leer menos"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/block/cards_block.js:0
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+#: model_terms:ir.ui.view,arch_db:mtbg_website_cards.card_item
+msgid "Read more"
+msgstr "Leer más"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 msgid "Reload"
 msgstr "Recargar"
 
 #. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Ribbon across the corner, ends folded"
+msgstr "Cinta en la esquina, extremos doblados"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Ribbon from the side, notched"
+msgstr "Cinta desde el lado, con muesca"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Ribbon from the side, pointed"
+msgstr "Cinta desde el lado, en punta"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Ribbons"
+msgstr "Cintas"
+
+#. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+msgid "Right"
+msgstr "Derecha"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 #: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_design__corners__small
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_settings__book_shape__rounded
 msgid "Rounded"
 msgstr "Redondeadas"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Same line"
+msgstr "Misma línea"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
@@ -668,7 +1118,14 @@ msgid "Save"
 msgstr "Guardar"
 
 #. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "See-through band"
+msgstr "Banda transparente"
+
+#. module: mtbg_website_cards
 #: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_design__sequence
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__sequence
 msgid "Sequence"
 msgstr "Secuencia"
 
@@ -678,6 +1135,11 @@ msgstr "Secuencia"
 #: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_design__shadow
 msgid "Shadow"
 msgstr "Sombra"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_settings__book_shape
+msgid "Shape"
+msgstr "Forma"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
@@ -699,6 +1161,77 @@ msgstr "Se muestra"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+msgid "Side"
+msgstr "Lado"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_settings__book_size
+msgid "Size"
+msgstr "Tamaño"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/website_builder/cards_option.xml:0
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_use__layout__slider
+msgid "Slider"
+msgstr "Carrusel"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_use__arrows
+msgid "Slider: arrows on the row's edges (desktop)"
+msgstr "Carrusel: flechas en los bordes de la fila (escritorio)"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/website_builder/cards_option.xml:0
+msgid "Slider: how many cards show at once"
+msgstr "Carrusel: cuántas tarjetas se ven a la vez"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_use__autoplay
+msgid "Slider: milliseconds between pages (0: no autoplay)"
+msgstr "Carrusel: milisegundos entre páginas (0: sin reproducción automática)"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/website_builder/cards_option.xml:0
+msgid ""
+"Slider: one row of cards, scrolled sideways (arrows on desktop, a swipe on "
+"phones)"
+msgstr ""
+"Carrusel: una fila de tarjetas que se desplaza de lado (flechas en "
+"computadora, deslizar en teléfonos)"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_use__stack_md
+msgid "Slider: one under another under 992px"
+msgstr "Carrusel: una debajo de otra por debajo de 992 px"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_use__arrow_class
+msgid "Slider: the arrows' classes"
+msgstr "Carrusel: las clases de las flechas"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_use__loop
+msgid "Slider: the last page goes back to the first"
+msgstr "Carrusel: la última página vuelve a la primera"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_settings__book_size__sm
+msgid "Small"
+msgstr "Pequeño"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_design__image_size__512x288
+msgid "Small (512 x 288)"
+msgstr "Pequeño (512 x 288)"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.js:0
 msgid "Small text"
 msgstr "Texto pequeño"
@@ -706,17 +1239,56 @@ msgstr "Texto pequeño"
 #. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
-#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_design__source
-msgid "Source"
-msgstr "Fuente"
+msgid "Smaller"
+msgstr "Más pequeño"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Solid band"
+msgstr "Banda sólida"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_design__source
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__source
+msgid "Source"
+msgstr "Fuente"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_use__gap
+msgid "Space between cards (a CSS length)"
+msgstr "Espacio entre tarjetas (una longitud CSS)"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+msgid "Spacing"
+msgstr "Espaciado"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_design__frame__bubble
+msgid "Speech bubble"
+msgstr "Bocadillo"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 #: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_design__corners__none
 #: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_design__ratio__1-1
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_settings__book_shape__square
 msgid "Square"
 msgstr "Cuadradas"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__stack_md
+msgid "Stack on tablets and phones"
+msgstr "Apilar en tabletas y teléfonos"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
@@ -726,6 +1298,23 @@ msgid "Style"
 msgstr "Estilo"
 
 #. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Tab"
+msgstr "Pestaña"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_use__per_md
+msgid "Tablet"
+msgstr "Tableta"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Tag (from the edge)"
+msgstr "Etiqueta (desde el borde)"
+
+#. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 msgid "Take it off the card"
@@ -733,17 +1322,10 @@ msgstr "Quitarlo de la tarjeta"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
-#. odoo-python
-#: code:addons/mtbg_website_cards/models/card_design.py:0
 #: code:addons/mtbg_website_cards/static/src/designer/designer.js:0
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 msgid "Text"
 msgstr "Texto"
-
-#. module: mtbg_website_cards
-#. odoo-javascript
-#: code:addons/mtbg_website_cards/static/src/designer/designer.js:0
-msgid "Text above"
-msgstr "Texto arriba"
 
 #. module: mtbg_website_cards
 #: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_design__style__above
@@ -751,15 +1333,14 @@ msgid "Text above the photo"
 msgstr "Texto sobre la foto (arriba)"
 
 #. module: mtbg_website_cards
-#. odoo-javascript
-#: code:addons/mtbg_website_cards/static/src/designer/designer.js:0
-msgid "Text below"
-msgstr "Texto abajo"
-
-#. module: mtbg_website_cards
 #: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_design__style__below
 msgid "Text below the photo"
 msgstr "Texto debajo de la foto"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_settings__book_color
+msgid "Text colour"
+msgstr "Color del texto"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
@@ -768,15 +1349,20 @@ msgid "Text on the accent"
 msgstr "Texto sobre el acento"
 
 #. module: mtbg_website_cards
-#. odoo-javascript
-#: code:addons/mtbg_website_cards/static/src/designer/designer.js:0
-msgid "Text over"
-msgstr "Texto encima"
-
-#. module: mtbg_website_cards
 #: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_design__style__overlay
 msgid "Text over the photo"
 msgstr "Texto encima de la foto"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+msgid "Text size"
+msgstr "Tamaño del texto"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_settings__book_full
+msgid "The button as wide as its line"
+msgstr "El botón tan ancho como su línea"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
@@ -796,6 +1382,17 @@ msgid "The design of its source's cards where none is chosen"
 msgstr "El diseño de las tarjetas de su fuente cuando no se elige ninguno"
 
 #. module: mtbg_website_cards
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_settings__book_style__design
+msgid "The design's accent colour"
+msgstr "El color de acento del diseño"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+msgid "The design's colours"
+msgstr "Los colores del diseño"
+
+#. module: mtbg_website_cards
 #: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_design__draft
 msgid "The designer's unsaved settings, shown only in its preview"
 msgstr "Los ajustes sin guardar del diseñador, solo en su vista previa"
@@ -811,10 +1408,46 @@ msgstr ""
 "Vacío: los del tema (en páginas oscuras: unos oscuros propios)."
 
 #. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_design__image_size
+msgid "The size of the photo the source gives (smaller: a faster page)"
+msgstr ""
+"El tamaño de la foto que da la fuente (más pequeña: una página más rápida)"
+
+#. module: mtbg_website_cards
+#: model_terms:ir.ui.view,arch_db:mtbg_website_cards.view_card_use_list
+msgid "The source's Default"
+msgstr "El predeterminado de la fuente"
+
+#. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 msgid "The theme's"
 msgstr "El del tema"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_settings__book_style__primary
+msgid "The theme's Primary button"
+msgstr "El botón Primario del tema"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_settings__book_style__secondary
+msgid "The theme's Secondary button"
+msgstr "El botón Secundario del tema"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_settings__book_text
+msgid ""
+"The words of every card's Book button (a design may give its own, e.g. "
+"\"Book (from {price})\")"
+msgstr ""
+"El texto del botón Reservar de cada tarjeta (un diseño puede dar el suyo, p."
+" ej. \"Reservar (desde {price})\")"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Top ribbon"
+msgstr "Cinta superior"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
@@ -829,6 +1462,17 @@ msgstr "Franja superior"
 #: code:addons/mtbg_website_cards/static/src/designer/designer.js:0
 msgid "Top strip text"
 msgstr "Texto de la franja superior"
+
+#. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Triangle"
+msgstr "Triángulo"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_use__per_sm
+msgid "Under 576px; in a slider 1.2 lets the next card peek"
+msgstr "Menos de 576 px; en un carrusel, 1.2 deja asomar la siguiente tarjeta"
 
 #. module: mtbg_website_cards
 #. odoo-python
@@ -851,6 +1495,18 @@ msgstr "Cambios sin guardar"
 #. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+msgid "Up / down"
+msgstr "Arriba / abajo"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+msgid "Upper case"
+msgstr "Mayúsculas"
+
+#. module: mtbg_website_cards
+#. odoo-javascript
+#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 #: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_design__corners__large
 msgid "Very rounded"
 msgstr "Muy redondeadas"
@@ -861,6 +1517,21 @@ msgid "Website card design"
 msgstr "Diseño de tarjeta del sitio web"
 
 #. module: mtbg_website_cards
+#: model:ir.model,name:mtbg_website_cards.model_mtbg_website_card_settings
+msgid "Website card settings"
+msgstr "Ajustes de tarjetas del sitio web"
+
+#. module: mtbg_website_cards
+#: model:ir.model,name:mtbg_website_cards.model_mtbg_website_card_use
+msgid "Website card use"
+msgstr "Uso de tarjetas del sitio web"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_use__source
+msgid "What its cards show"
+msgstr "Lo que muestran sus tarjetas"
+
+#. module: mtbg_website_cards
 #: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_design__source
 msgid "What the cards show (the records of a source a module gives)"
 msgstr ""
@@ -869,14 +1540,9 @@ msgstr ""
 #. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
+#: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_design__align
 msgid "Words"
 msgstr "Palabras"
-
-#. module: mtbg_website_cards
-#. odoo-javascript
-#: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
-msgid "Zoom the photo"
-msgstr "Ampliar la foto"
 
 #. module: mtbg_website_cards
 #: model:ir.model.fields,field_description:mtbg_website_cards.field_mtbg_website_card_design__hover_zoom
@@ -905,6 +1571,11 @@ msgstr "páginas oscuras"
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 msgid "e.g. Big photo cards"
 msgstr "p. ej. Tarjetas de foto grande"
+
+#. module: mtbg_website_cards
+#: model_terms:ir.ui.view,arch_db:mtbg_website_cards.view_card_settings_form
+msgid "e.g. fa-calendar-check-o"
+msgstr "p. ej. fa-calendar-check-o"
 
 #. module: mtbg_website_cards
 #. odoo-javascript
@@ -954,51 +1625,3 @@ msgstr "{price}"
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 msgid "{value}"
 msgstr "{value}"
-
-#. module: mtbg_website_cards
-#: model_terms:ir.ui.view,arch_db:mtbg_website_cards.cards
-msgid "<i class=\"fa fa-chevron-left\" role=\"img\" aria-label=\"Previous\"/>"
-msgstr "<i class=\"fa fa-chevron-left\" role=\"img\" aria-label=\"Anterior\"/>"
-
-#. module: mtbg_website_cards
-#: model_terms:ir.ui.view,arch_db:mtbg_website_cards.cards
-msgid "<i class=\"fa fa-chevron-right\" role=\"img\" aria-label=\"Next\"/>"
-msgstr "<i class=\"fa fa-chevron-right\" role=\"img\" aria-label=\"Siguiente\"/>"
-
-#. module: mtbg_website_cards
-#. odoo-javascript
-#: code:addons/mtbg_website_cards/static/src/website_builder/cards_option.xml:0
-msgid "Grid"
-msgstr "Cuadrícula"
-
-#. module: mtbg_website_cards
-#: model_terms:ir.ui.view,arch_db:mtbg_website_cards.cards
-msgid "Next"
-msgstr "Siguiente"
-
-#. module: mtbg_website_cards
-#: model_terms:ir.ui.view,arch_db:mtbg_website_cards.cards
-msgid "Previous"
-msgstr "Anterior"
-
-#. module: mtbg_website_cards
-#. odoo-javascript
-#: code:addons/mtbg_website_cards/static/src/website_builder/cards_option.xml:0
-msgid "Slider"
-msgstr "Carrusel"
-
-#. module: mtbg_website_cards
-#. odoo-javascript
-#: code:addons/mtbg_website_cards/static/src/website_builder/cards_option.xml:0
-msgid "Slider: how many cards show at once"
-msgstr "Carrusel: cuántas tarjetas se ven a la vez"
-
-#. module: mtbg_website_cards
-#. odoo-javascript
-#: code:addons/mtbg_website_cards/static/src/website_builder/cards_option.xml:0
-msgid ""
-"Slider: one row of cards, scrolled sideways (arrows on desktop, a swipe on "
-"phones)"
-msgstr ""
-"Carrusel: una fila de tarjetas que se desplaza de lado (flechas en "
-"computadora, deslizar en teléfonos)"
