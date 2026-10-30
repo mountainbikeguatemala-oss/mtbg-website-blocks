@@ -5,7 +5,7 @@ Book button's words, icon, colours, size and shape. A design's own words for its
 One record (``mtbg_website_cards.card_settings``), edited in Website Blocks › Card Settings."""
 import re
 
-from odoo import api, fields, models
+from odoo import api, fields, models, tools
 from odoo.exceptions import ValidationError
 
 COLOR = re.compile(r'^#[0-9a-fA-F]{6}$')
@@ -49,8 +49,23 @@ class MtbgWebsiteCardSettings(models.Model):
     @api.model
     def _mtbg_get(self):
         """The settings (sudo), made if missing."""
+        return self.sudo().browse(self._mtbg_get_id())
+
+    @api.model
+    @tools.ormcache()
+    def _mtbg_get_id(self):
+        """The settings' id, kept until settings are made or deleted: every card of a page asks."""
         record = self.env.ref('mtbg_website_cards.card_settings', raise_if_not_found=False)
-        return (record or self.sudo().search([], limit=1) or self.sudo().create({})).sudo()
+        return (record or self.sudo().search([], limit=1) or self.sudo().create({})).id
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        self.env.registry.clear_cache()
+        return super().create(vals_list)
+
+    def unlink(self):
+        self.env.registry.clear_cache()
+        return super().unlink()
 
     def _mtbg_book(self):
         """What the cards need of the Book button: its words, icon, classes and colour variables."""

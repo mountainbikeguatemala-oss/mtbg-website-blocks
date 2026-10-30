@@ -2,6 +2,11 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_website_cards-*'`.
 
+## 19.0.0.4.1 · 2026-10-30
+
+- **Faster pages with cards** (owner, 2026-10-30, page speed): the card settings are found once and kept, instead of
+  checked twice for every card (about 50 queries less on /tours).
+
 ## 19.0.0.4.0 · 2026-10-30
 
 - **One card system, one slider for the website** (owner, 2026-10-29: "put everything in one module with the same
