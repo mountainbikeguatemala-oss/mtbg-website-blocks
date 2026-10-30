@@ -8,6 +8,8 @@
         <!-- the layouts (a card use's, models/card_use.py): a grid (how many side by side by screen width), the one
              slider (slider_templates.xml), a masonry wall (cards of any height in columns), one under another -->
         <t t-set="per" t-value="per or {'lg': columns or 3, 'md': 2, 'sm': 1}"/>
+        <!-- (eager: the first row's photos at once, the first one first; the rest when scrolled to) -->
+        <t t-set="first_row" t-value="int(float(per.get('lg') or 3) + 0.99) if eager else 0"/>
         <t t-set="layout_style" t-value="'--mtbg-cards-lg: %s; --mtbg-cards-md: %s; --mtbg-cards-sm: %s; --mtbg-cards-gap: %s; %s' % (per.get('lg'), per.get('md'), per.get('sm'), gap or '1.5rem', style_vars or '')"/>
         <t t-if="layout == 'slider'">
             <t t-set="slider_style" t-value="style_vars"/>
@@ -41,7 +43,8 @@
                 <!-- (the photo and "below": the bubble of a speech-bubble card, the footer under it) -->
                 <div class="mtbg-card__main">
                 <div t-if="settings['image_size'] != 'none'" class="mtbg-card__media">
-                    <img t-if="card['image']" class="mtbg-card__img" loading="lazy" t-att-src="card['image']" t-att-alt="card['name']"/>
+                    <img t-if="card['image']" class="mtbg-card__img" t-att-loading="'eager' if (card_index or 0) &lt; (first_row or 0) else 'lazy'"
+                         t-att-fetchpriority="'high' if first_row and not card_index else None" t-att-src="card['image']" t-att-alt="card['name']"/>
                     <div t-else="" class="mtbg-card__img is-empty"/>
                     <div class="mtbg-card__shade"/>
                     <t t-foreach="['top', 'center', 'bottom']" t-as="rkey">

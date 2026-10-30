@@ -395,7 +395,10 @@ class MtbgWebsiteCardDesign(models.Model):
         style_vars = '; '.join(v for v in (self._mtbg_style_vars(settings), book['style']) if v)
         return self.env['ir.qweb']._render('mtbg_website_cards.cards', dict(
             layout_values, design=self, settings=settings, cards=cards, columns=columns, layout=layout,
-            style_vars=style_vars, book=book))
+            style_vars=style_vars, book=book,
+            # a page's first cards (context ``mtbg_cards_eager``: the catalog; never the menus, hidden until opened):
+            # the first row's photos load at once, the first one first (speed work phase 4)
+            eager=bool(self.env.context.get('mtbg_cards_eager'))))
 
     # ------------------------------------------------------------------ the designer
     @api.model
