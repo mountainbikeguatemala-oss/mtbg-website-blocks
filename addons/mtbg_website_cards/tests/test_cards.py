@@ -164,3 +164,15 @@ class TestCardDesigns(HttpCase):
         html = str(design.mtbg_render([1]))
         self.assertIn('Go (', html)
         self.assertNotIn('Reserve', html)
+
+    def test_book_button_site_colour(self):
+        """Owner, 2026-11-03: the cards' Book buttons take the site's one Book Buttons colour by default."""
+        self.assertEqual(self.env['mtbg.website.card.settings'].new({})._fields['book_style'].default(None), 'site')
+        design = self.Design.browse(self.Design.mtbg_designer_create('Site Book', 'thing')['design']['id'])
+        look = {'regions': {'footer': {'items': [item('b1', 'book', look='button')]}}}
+        design.mtbg_designer_save(dict(design._mtbg_settings(), look=look))
+        settings = self.env['mtbg.website.card.settings']._mtbg_get().with_context(mtbg_skip_menu_refresh=True)
+        settings.write({'book_style': 'site'})
+        html = str(design.mtbg_render([1]))
+        self.assertIn('mtbg-book--site', html)
+        self.assertNotIn('--mtbg-book-bg:', html, "no colour of its own: the page's")

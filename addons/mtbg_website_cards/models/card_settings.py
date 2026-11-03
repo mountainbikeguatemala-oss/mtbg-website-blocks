@@ -23,11 +23,16 @@ class MtbgWebsiteCardSettings(models.Model):
     book_icon = fields.Char(string='Book button icon', help="A Font Awesome name, e.g. fa-calendar-check-o (empty: "
                                                             "none; a design's own icon wins)")
     book_style = fields.Selection([
+        # the site's one Book buttons colour, when the site gives it (CSS variables --mtbg-book, --mtbg-book-text,
+        # --mtbg-book-hover on the page, e.g. MTBG Tours' Website settings › Book Buttons); else the design's accent
+        ('site', "The Book Buttons colour"),
         ('design', "The design's accent colour"),
         ('primary', "The theme's Primary button"),
         ('secondary', "The theme's Secondary button"),
         ('custom', 'My colours'),
-    ], string='Book button colours', required=True, default='design')
+    ], string='Book button colours', required=True, default='site',
+        help="The Book Buttons colour: the one colour the website gives every Book button (e.g. Tours' Website "
+             "settings › Book Buttons); without one, the design's accent colour.")
     book_bg = fields.Char(string='Background', help="My colours: e.g. #9b59b6")
     book_color = fields.Char(string='Text colour', help="My colours: e.g. #ffffff")
     book_size = fields.Selection([('sm', 'Small'), ('md', 'Medium'), ('lg', 'Large')], string='Size',

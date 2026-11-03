@@ -2,6 +2,15 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_website_cards-*'`.
 
+## 19.0.0.4.3 · 2026-11-03
+
+- **Card Book buttons in the site's one Book Buttons colour** (owner, 2026-11-03: #0074d4 was set in two places):
+  Card Settings › Book button colours has **The Book Buttons colour**, now the default. The cards' Book buttons then
+  use the colour, text colour and hover the website gives every Book button (the page's CSS variables `--mtbg-book`,
+  `--mtbg-book-text`, `--mtbg-book-hover`, e.g. MTBG Tours' Website settings › Book Buttons); a site without them
+  keeps the design's accent. The design's accent, the theme's buttons and My colours work as before. At this update,
+  settings on the design's accent, or on My colours with #0074d4, take the new choice.
+
 ## 19.0.0.4.1 · 2026-10-30
 
 - **Faster pages with cards** (owner, 2026-10-30, page speed): the card settings are found once and kept, instead of

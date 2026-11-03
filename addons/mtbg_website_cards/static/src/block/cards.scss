@@ -350,9 +350,17 @@
     .is-off { opacity: .25; }
 }
 
-// the Book button as the website's card settings say (Website Blocks › Card Settings): its colours (the design's
-// accent, the theme's Primary or Secondary button, or its own), size, shape, full width, capitals
+// the Book button as the website's card settings say (Website Blocks › Card Settings): its colours (the site's Book
+// buttons colour, the design's accent, the theme's Primary or Secondary button, or its own), size, shape, full width, capitals
 .mtbg-card .mtbg-card__btn.mtbg-card__f-book {
+    // the site's one Book buttons colour (CSS variables the site sets on the page), else the design's accent
+    &.mtbg-book--site {
+        background: var(--mtbg-book, var(--c-accent)); color: var(--mtbg-book-text, var(--c-accent-text));
+        &:hover, &:focus-visible {
+            background: var(--mtbg-book-hover, var(--mtbg-book, var(--c-accent)));
+            color: var(--mtbg-book-text, var(--c-accent-text));
+        }
+    }
     &.mtbg-book--primary {
         background: var(--o-cc1-btn-primary, var(--primary, #13283c)); color: var(--o-cc1-btn-primary-text, #fff);
         &:hover, &:focus-visible { color: var(--o-cc1-btn-primary-text, #fff); }
