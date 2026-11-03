@@ -2,6 +2,12 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'website_review_sync-*'`.
 
+## 19.0.0.4.1 · 2026-11-03
+
+- **Alt text on the review cards' pictures** (owner, 2026-11-03: "Alt text for every image on the page"): the
+  reviewer's photo is named after the reviewer, a review's photos "Photo from <name>'s review", and the lightbox keeps
+  those names. Every Reviews slider and wall had them alt="" (about 50 per page with reviews on www).
+
 ## 19.0.0.4.0 · 2026-10-26
 
 - **Counter** block (Reviews group of the Blocks panel): numbers that count up from 0 once scrolled into view, with

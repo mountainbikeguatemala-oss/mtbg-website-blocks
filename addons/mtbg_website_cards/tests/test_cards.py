@@ -176,3 +176,37 @@ class TestCardDesigns(HttpCase):
         html = str(design.mtbg_render([1]))
         self.assertIn('mtbg-book--site', html)
         self.assertNotIn('--mtbg-book-bg:', html, "no colour of its own: the page's")
+
+
+PEOPLE = {'person': {'name': 'People', 'fields': [
+    {'key': 'name', 'label': 'Name', 'kind': 'title'},
+    {'key': 'face', 'label': 'Face', 'kind': 'avatar'},
+    {'key': 'pics', 'label': 'Photos', 'kind': 'photos'},
+], 'filters': []}}
+
+
+@tagged('post_install', '-at_install', 'mtbg')
+class TestCardImageAlts(HttpCase):
+    """Alt text for every picture on the page (owner, 2026-11-03): a card's round photo is named after its person,
+    its photos without a caption after the card."""
+
+    def test_avatar_and_photos_have_alt(self):
+        cls = type(self.env['mtbg.website.card.design'])
+        vals = lambda self, source, record: {
+            'url': '/p/%s' % record, 'image': '/web/image/1', 'name': 'Rider %s' % record,
+            'face': {'image': '/web/image/2', 'text': 'Ana Torres'},
+            'pics': {'list': [{'thumb': '/web/image/3', 'full': '/web/image/3'}]}}
+        for p in (patch.object(cls, '_mtbg_card_sources', lambda self: PEOPLE),
+                  patch.object(cls, '_mtbg_card_values', vals),
+                  patch.object(cls, '_mtbg_card_records', lambda self, source, filters, limit: [1][:limit])):
+            p.start()
+            self.addCleanup(p.stop)
+        Design = self.env['mtbg.website.card.design']
+        data = Design.mtbg_designer_create('People', 'person')
+        design = Design.browse(data['design']['id'])
+        look = {'regions': {'below': {'items': [item('a', 'name'), item('b', 'face'), item('c', 'pics')]}}}
+        design.mtbg_designer_save(dict(data['design'], look=look))
+        html = str(design.mtbg_render([1]))
+        self.assertIn('alt="Ana Torres"', html, "the round photo: its person")
+        self.assertRegex(html, r'<img[^>]*src="/web/image/3"[^>]*alt="Rider 1"|<img[^>]*alt="Rider 1"[^>]*src="/web/image/3"')
+        self.assertNotRegex(html, r'<img(?![^>]*role="presentation")[^>]*\salt=""', "no picture without words")

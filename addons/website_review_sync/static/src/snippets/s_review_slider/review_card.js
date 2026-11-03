@@ -84,6 +84,7 @@ export function reviewCard(r, layout = null) {
     }
     if (r.photos?.length) {
         const strip = make("div", "s_review_slider_photos");
+        const photoAlt = r.author ? _t("Photo from %s's review", r.author) : _t("Photo from a review");
         for (const src of r.photos) {
             const link = make("a", "");
             link.href = src.replace(/\/\d+x\d+$/, "");
@@ -91,7 +92,7 @@ export function reviewCard(r, layout = null) {
             link.rel = "noopener";
             const img = make("img", "");
             img.src = src;
-            img.alt = "";
+            img.alt = photoAlt;
             img.loading = "lazy";
             link.append(img);
             strip.append(link);
@@ -109,7 +110,7 @@ export function reviewCard(r, layout = null) {
     if (r.photo) {
         const img = make("img", "s_review_slider_photo");
         img.src = r.photo;
-        img.alt = "";
+        img.alt = r.author || _t("Reviewer");
         img.loading = "lazy";
         img.referrerPolicy = "no-referrer";
         head.append(img);
@@ -191,7 +192,7 @@ export function openPhotos(link) {
     const images = links.map((a) => {
         const img = document.createElement("img");
         img.setAttribute("src", a.getAttribute("href"));
-        img.alt = "";
+        img.alt = a.querySelector("img")?.alt || "";
         return img;
     });
     const modalEl = renderToElement("website.gallery.s_image_gallery_mirror.lightbox", {

@@ -140,7 +140,7 @@
                 <!-- the site's own icon: a Font Awesome name, or its image (Tour Stats' icon image) -->
                 <span class="mtbg-card__icons-set">
                     <t t-foreach="range(1, int(row.get('of') or 5) + 1)" t-as="n">
-                        <img t-if="row.get('image')" t-att-src="row['image']" alt="" t-attf-class="mtbg-card__icon-img #{'is-on' if n &lt;= int(row.get('value') or 0) else 'is-off'}"/>
+                        <img t-if="row.get('image')" t-att-src="row['image']" alt="" role="presentation" t-attf-class="mtbg-card__icon-img #{'is-on' if n &lt;= int(row.get('value') or 0) else 'is-off'}"/>
                         <i t-else="" t-attf-class="fa #{row.get('icon') or 'fa-circle'} #{'is-on' if n &lt;= int(row.get('value') or 0) else 'is-off'}" aria-hidden="true"/>
                     </t>
                 </span>
@@ -153,13 +153,13 @@
         </label>
         <!-- a round photo, else the first letter of the name -->
         <span t-elif="kind == 'avatar'" t-att-class="cls" t-att-data-show="item['show']" t-att-style="item_zoom or None">
-            <img t-if="val.get('image')" class="mtbg-card__avatar" loading="lazy" alt="" t-att-src="val['image']"/>
+            <img t-if="val.get('image')" class="mtbg-card__avatar" loading="lazy" t-att-alt="val.get('text') or (card or {}).get('name') or ''" t-att-src="val['image']"/>
             <span t-else="" class="mtbg-card__avatar is-initial" aria-hidden="true" t-out="(val.get('text') or '?')[:1].upper()"/>
         </span>
         <!-- photos: thumbnails, a click opens them large (cards_block.js) -->
         <div t-elif="kind == 'photos'" t-att-class="cls" t-att-data-show="item['show']" t-att-style="item_zoom or None">
             <a t-foreach="val.get('list') or []" t-as="photo" class="mtbg-card__photo" t-att-href="photo.get('full') or photo.get('thumb')">
-                <img loading="lazy" t-att-src="photo.get('thumb') or photo.get('full')" t-att-alt="photo.get('alt') or ''"/>
+                <img loading="lazy" t-att-src="photo.get('thumb') or photo.get('full')" t-att-alt="photo.get('alt') or (card or {}).get('name') or ''"/>
             </a>
         </div>
         <!-- an icon only (e.g. the review's platform) -->

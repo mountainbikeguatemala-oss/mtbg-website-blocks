@@ -2,6 +2,12 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_website_cards-*'`.
 
+## 19.0.0.4.4 · 2026-11-03
+
+- **Alt text on card pictures** (owner, 2026-11-03): a card's round photo is named after its person (else the card),
+  its photos without a caption after the card; the rating icons drawn as pictures are marked as decoration (the row
+  has its own label).
+
 ## 19.0.0.4.3 · 2026-11-03
 
 - **Card Book buttons in the site's one Book Buttons colour** (owner, 2026-11-03: #0074d4 was set in two places):
