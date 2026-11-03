@@ -1,5 +1,7 @@
 from unittest.mock import patch
 
+from lxml import etree
+
 from odoo.tests import HttpCase, TransactionCase, tagged
 
 from odoo.addons.mtbg_tours_content_blocks.models.content_block import placeholder_html
@@ -62,6 +64,21 @@ class TestBlockPage(HttpCase):
         self.assertNotIn('Free shipping', self.url_open(f'/mtbg/block/{block.id}').text, "visitors: the login page")
         self.authenticate('admin', 'admin')
         self.assertIn('Free shipping', self.url_open(f'/mtbg/block/{block.id}').text)
+
+    def test_group_in_the_blocks_panel(self):
+        """Group is a tile of the Blocks panel (dragged straight into a description) and still in the Content
+        category's window."""
+        arch = etree.fromstring(self.env.ref('website.snippets').get_combined_arch())
+        for category in ('snippet_content', 'snippet_structure'):
+            self.assertTrue(arch.xpath(f"//snippets[@id='{category}']//t[@t-snippet='mtbg_tours_content_blocks.s_mtbg_group']"),
+                            f"Group listed in {category}")
+
+    def test_group_dragged_from_the_panel(self):
+        """Website editor: the Group tile dropped into an html field, its background set, saved."""
+        block = self.env['mtbg.tours.content.block'].create({'name': 'Panel Group Host', 'body': '<p>Before the group.</p>'})
+        self.start_tour(self.env['website'].get_client_action_url(f'/mtbg/block/{block.id}', True),
+                        'mtbg_group_panel_tour', login='admin', timeout=180)
+        self.assertRegex(str(block.body), r'class="s_mtbg_group[^"]*\bo_cc4\b', "the group is saved with its background")
 
 
 @tagged('post_install', '-at_install', 'mtbg')

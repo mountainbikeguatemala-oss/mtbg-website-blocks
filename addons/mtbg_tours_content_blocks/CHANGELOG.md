@@ -2,6 +2,15 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_content_blocks-*'`.
 
+## 19.0.0.10.1 · 2026-11-03
+
+- **Group is dragged straight from the Blocks panel** (owner, 2026-11-03: "I need access to it in the block editor
+  drag and drop compose window for products"): a tile among the blocks under the categories, next to Reusable Block,
+  so it goes into a tour's or rental's Description, a day's text, a reusable block or any page like the other
+  blocks. Until now it was only inside the Content category's "Insert a block" window, as its last entry. It stays
+  there too (Odoo lists Countdown and Map in both places as well). Its options (background, width, corners, shadow)
+  work the same wherever it is dropped.
+
 ## 19.0.0.10.0 · 2026-10-26
 
 - **Website Blocks**, the website blocks' own app menu (owner, 2026-10-26: out of Tours' Extensions page, into a

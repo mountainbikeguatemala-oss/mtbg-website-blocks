@@ -36,6 +36,14 @@
                t-thumbnail="/mtbg_tours_content_blocks/static/src/img/s_mtbg_content_block.svg">
                 <keywords>reusable, shared, content block, global, what to bring, faq, policy, include</keywords>
             </t>
+            <!-- Group also among the blocks dragged straight from the panel, beside Reusable Block (like Odoo's own
+                 Countdown or Map, listed in both): until now only in the Content category's window, its last entry, so
+                 on a tour or rental page (owner, 2026-11-03) it was not found where the blocks are dragged into a
+                 description. -->
+            <t t-snippet="mtbg_tours_content_blocks.s_mtbg_group" string="Group"
+               t-thumbnail="/mtbg_tours_content_blocks/static/src/img/s_mtbg_group.svg">
+                <keywords>group, container, wrapper, box, panel, background, section, columns</keywords>
+            </t>
         </xpath>
     </template>
 </odoo>
