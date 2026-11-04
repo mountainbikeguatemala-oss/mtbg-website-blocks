@@ -162,9 +162,8 @@
     .form-select { background-color: #1e293b; color: #e5e7eb; border-color: #334155; }
 }
 
-// review photos open in Odoo's gallery lightbox: zoom cursor, a dark backdrop
+// review photos open in the site's photo viewer (Tours Core's lightbox): zoom cursor
 .s_review_slider_photos a { cursor: zoom-in; }
-.s_review_lightbox { background: rgba(0, 0, 0, .9); }
 
 // ------------------------------------------------------------------ the site's colours (theme colour combination)
 // the bubbles stay light (the website's first combination) with their own text and link colours

@@ -8,8 +8,6 @@
 import { Interaction } from "@web/public/interaction";
 import { registry } from "@web/core/registry";
 import { rpc } from "@web/core/network/rpc";
-import { renderToElement } from "@web/core/utils/render";
-import { uniqueId } from "@web/core/utils/functions";
 import { _t } from "@web/core/l10n/translation";
 
 /** "3d 04:10:33", under a day "04:10:33". */
@@ -83,31 +81,19 @@ export class CardCountdowns extends Interaction {
     }
 }
 
-/** Photos of a card (a review's): large, one after the other, in the website's own lightbox. */
+/**
+ * Photos of a card (a review's): large, one after the other, in the site's photo viewer (Tours Core's shared one,
+ * @mtbg_tours_core/shared/lightbox; owner, 2026-11-04: shared JavaScript lives once, in the base). Returns false when
+ * the site has no Tours Core (this pack works without it): the link then opens the photo.
+ */
 export function openCardPhotos(link) {
+    const viewer = odoo.loader.modules.get("@mtbg_tours_core/shared/lightbox");
+    if (!viewer?.slideFromLink) {
+        return false;
+    }
     const links = [...link.closest(".mtbg-card__k-photos").querySelectorAll("a")];
-    const images = links.map((a) => {
-        const img = document.createElement("img");
-        img.setAttribute("src", a.getAttribute("href"));
-        img.alt = a.querySelector("img")?.alt || "";
-        return img;
-    });
-    const modalEl = renderToElement("website.gallery.s_image_gallery_mirror.lightbox", {
-        images, index: Math.max(0, links.indexOf(link)), dim: {}, interval: 0, ride: "false",
-        id: uniqueId("mtbg_card_photos_"),
-    });
-    modalEl.classList.add("mtbg-card-lightbox");
-    modalEl.addEventListener("keydown", (ev) => {
-        if (ev.key === "ArrowLeft" || ev.key === "ArrowRight") {
-            modalEl.querySelector(`.carousel-control-${ev.key === "ArrowLeft" ? "prev" : "next"}`)?.click();
-        }
-    });
-    modalEl.addEventListener("hidden.bs.modal", () => {
-        modalEl.querySelectorAll(".modal-backdrop").forEach((backdrop) => backdrop.remove());
-        modalEl.remove();
-    }, { once: true });
-    document.body.append(modalEl);
-    new Modal(modalEl, { keyboard: true, backdrop: true }).show();  // (Bootstrap's Modal, a global of the website)
+    viewer.openLightbox(links.map(viewer.slideFromLink), Math.max(0, links.indexOf(link)));
+    return true;
 }
 
 /**
@@ -119,7 +105,7 @@ export class CardBehaviours extends Interaction {
     dynamicContent = {
         ".mtbg-card__more": { "t-on-click": (ev) => this.toggleMore(ev.currentTarget) },
         ".mtbg-card__alt-toggle": { "t-on-click": (ev) => this.toggleAlt(ev.currentTarget) },
-        ".mtbg-card__photo": { "t-on-click.prevent": (ev) => openCardPhotos(ev.currentTarget) },
+        ".mtbg-card__photo": { "t-on-click": (ev) => openCardPhotos(ev.currentTarget) && ev.preventDefault() },
     };
 
     toggleMore(button) {

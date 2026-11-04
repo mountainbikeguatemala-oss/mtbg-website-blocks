@@ -2,6 +2,10 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_website_cards-*'`.
 
+## 19.0.0.4.6 · 2026-11-04
+
+- **A card's photos open in the site's one photo viewer** (owner, 2026-11-04, JS consolidation part C: shared JavaScript lives once, in the base): Tours Core's shared lightbox (`@mtbg_tours_core/shared/lightbox`, Core 0.5.35: full screen, swipe, pinch zoom, "3 / 15") instead of a copy of Odoo's gallery modal. The pack still needs only the website: without Tours Core, a photo's link opens the photo.
+
 ## 19.0.0.4.5 · 2026-11-03
 
 - Spanish (bulk translation pass): the .pot regenerated from Odoo's export and es.po rebuilt from it; 2 new Spanish translations; 2 strings added to the .pot that were missing (they never loaded). No English text changed.

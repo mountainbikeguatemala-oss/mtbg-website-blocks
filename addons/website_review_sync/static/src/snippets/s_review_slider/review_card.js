@@ -2,8 +2,6 @@
  * Review cards and rating badges, shared by the Reviews slider and the Reviews wall.
  */
 import { _t } from "@web/core/l10n/translation";
-import { uniqueId } from "@web/core/utils/functions";
-import { renderToElement } from "@web/core/utils/render";
 
 export const ICONS = { google: "fa-google", tripadvisor: "fa-tripadvisor" };
 const LONG = 260; // characters before "Read more"
@@ -184,36 +182,19 @@ export function toggleOriginal(button) {
 export { countOptions, countUp } from "../../js/count_up";
 
 /**
- * A card's photos in Odoo's image lightbox (the gallery one), starting at the one clicked; arrows, swipe and the
- * keyboard browse them. ``link`` is the clicked photo's link inside a card.
+ * A card's photos in the site's photo viewer (Tours Core's shared one, @mtbg_tours_core/shared/lightbox; owner,
+ * 2026-11-04: shared JavaScript lives once, in the base), starting at the one clicked. ``link`` is the clicked photo's
+ * link inside a card. Returns false when the site has no Tours Core (this pack works without it): the link then opens
+ * the photo.
  */
 export function openPhotos(link) {
+    const viewer = odoo.loader.modules.get("@mtbg_tours_core/shared/lightbox");
+    if (!viewer?.slideFromLink) {
+        return false;
+    }
     const links = [...link.closest(".s_review_slider_photos").querySelectorAll("a")];
-    const images = links.map((a) => {
-        const img = document.createElement("img");
-        img.setAttribute("src", a.getAttribute("href"));
-        img.alt = a.querySelector("img")?.alt || "";
-        return img;
-    });
-    const modalEl = renderToElement("website.gallery.s_image_gallery_mirror.lightbox", {
-        images, index: Math.max(0, links.indexOf(link)), dim: {}, interval: 0, ride: "false",
-        id: uniqueId("review_photos_"),
-    });
-    modalEl.classList.add("s_review_lightbox");
-    const onKeydown = (ev) => {
-        if (ev.key === "ArrowLeft" || ev.key === "ArrowRight") {
-            modalEl.querySelector(`.carousel-control-${ev.key === "ArrowLeft" ? "prev" : "next"}`)?.click();
-        }
-    };
-    modalEl.addEventListener("keydown", onKeydown);
-    modalEl.addEventListener("hidden.bs.modal", () => {
-        for (const backdrop of modalEl.querySelectorAll(".modal-backdrop")) {
-            backdrop.remove();
-        }
-        modalEl.remove();
-    }, { once: true });
-    document.body.append(modalEl);
-    new Modal(modalEl, { keyboard: true, backdrop: true }).show();
+    viewer.openLightbox(links.map(viewer.slideFromLink), Math.max(0, links.indexOf(link)));
+    return true;
 }
 
 /** "Read more" / "Read less" on a card (delegated by the blocks). */

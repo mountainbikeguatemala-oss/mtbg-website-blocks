@@ -17,7 +17,7 @@ export class ReviewWall extends Interaction {
     dynamicContent = {
         ".s_review_wall_filter": { "t-on-change": this.onFilter },
         ".s_review_slider_more": { "t-on-click": (ev) => toggleMore(ev.currentTarget) },
-        ".s_review_slider_photos a": { "t-on-click.prevent": (ev) => openPhotos(ev.currentTarget) },
+        ".s_review_slider_photos a": { "t-on-click": (ev) => openPhotos(ev.currentTarget) && ev.preventDefault() },
         ".s_review_slider_original": { "t-on-click": (ev) => toggleOriginal(ev.currentTarget) },
     };
 

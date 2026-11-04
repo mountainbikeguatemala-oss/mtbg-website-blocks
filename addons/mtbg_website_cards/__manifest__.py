@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Website — Card Designer',
-    'version': '19.0.0.4.5',
+    'version': '19.0.0.4.6',
     # where the updater gets it (the website blocks pack's repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     'mtbg_tours_section': 'blocks',

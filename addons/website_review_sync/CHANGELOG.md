@@ -2,6 +2,10 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'website_review_sync-*'`.
 
+## 19.0.0.4.4 · 2026-11-04
+
+- **A review's photos open in the site's one photo viewer** (owner, 2026-11-04, JS consolidation part C: shared JavaScript lives once, in the base): Tours Core's shared lightbox (`@mtbg_tours_core/shared/lightbox`, Core 0.5.35) instead of a copy of Odoo's gallery modal, in the slider and the wall. The module still needs only the website: without Tours Core, a photo's link opens the photo in a new tab.
+
 ## 19.0.0.4.3 · 2026-11-04
 
 - **The Reviews blocks' and the Counter's code load on the pages that have one only** (owner, 2026-11-04, JS consolidation part B): the slider, wall, preset and counter scripts and the Reviews styles moved out of every page's bundle into `website_review_sync.assets_reviews`, loaded with its styles by a ~1 KB loader (`js/review_assets.js`) on a page with a Reviews block or a counted number (the blocks draw themselves from the server, so nothing shows unstyled); the Reviews page's preview has the styles in its head. The website editor has the code and styles from the start (`website.assets_inside_builder_iframe`), so a block dropped on any page works. The Counter's own styles stay on every page. About 25 KB of script and 18 KB of styles off pages without reviews.

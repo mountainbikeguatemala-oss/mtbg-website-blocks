@@ -18,7 +18,7 @@ export class ReviewSlider extends Interaction {
         ".s_review_slider_prev": { "t-on-click": () => this.page(-1) },
         ".s_review_slider_next": { "t-on-click": () => this.page(1) },
         ".s_review_slider_more": { "t-on-click": this.onMore },
-        ".s_review_slider_photos a": { "t-on-click.prevent": (ev) => openPhotos(ev.currentTarget) },
+        ".s_review_slider_photos a": { "t-on-click": (ev) => openPhotos(ev.currentTarget) && ev.preventDefault() },
         ".s_review_slider_original": { "t-on-click": (ev) => toggleOriginal(ev.currentTarget) },
         _root: {
             "t-on-mouseenter": () => (this.paused = true),
