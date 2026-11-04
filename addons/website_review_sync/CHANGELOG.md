@@ -2,6 +2,10 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'website_review_sync-*'`.
 
+## 19.0.0.4.3 · 2026-11-04
+
+- **The Reviews blocks' and the Counter's code load on the pages that have one only** (owner, 2026-11-04, JS consolidation part B): the slider, wall, preset and counter scripts and the Reviews styles moved out of every page's bundle into `website_review_sync.assets_reviews`, loaded with its styles by a ~1 KB loader (`js/review_assets.js`) on a page with a Reviews block or a counted number (the blocks draw themselves from the server, so nothing shows unstyled); the Reviews page's preview has the styles in its head. The website editor has the code and styles from the start (`website.assets_inside_builder_iframe`), so a block dropped on any page works. The Counter's own styles stay on every page. About 25 KB of script and 18 KB of styles off pages without reviews.
+
 ## 19.0.0.4.2 · 2026-11-03
 
 - Spanish (bulk translation pass): the .pot regenerated from Odoo's export and es.po rebuilt from it; 4 new Spanish translations; 3 strings added to the .pot that were missing (they never loaded). No English text changed.

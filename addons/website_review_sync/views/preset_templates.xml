@@ -54,6 +54,7 @@
             <t t-set="no_header" t-value="True"/>
             <t t-set="no_footer" t-value="True"/>
             <t t-set="no_livechat" t-value="True"/>
+            <t t-set="review_sync_assets" t-value="True"/>
             <div id="wrap" class="s_review_preview_page mtbg-theme-light">
                 <div data-review-preset-preview=""><t t-out="block"/></div>
             </div>

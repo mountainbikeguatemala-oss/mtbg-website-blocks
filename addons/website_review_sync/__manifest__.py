@@ -1,6 +1,6 @@
 {
     'name': 'Website Reviews (Google & Tripadvisor)',
-    'version': '19.0.0.4.2',
+    'version': '19.0.0.4.3',
     # where the updater gets it (the website blocks pack's repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     # its section on the Extensions panel: Custom blocks (its main job is website editor blocks)
@@ -33,11 +33,18 @@ and shown on the website with a "Reviews" building block (a slider of review car
         'views/review_views.xml',
         'views/snippets.xml',
         'views/preset_templates.xml',
+        'views/assets_templates.xml',
     ],
     'assets': {
+        # every page: the Counter's look and a small loader; the blocks' code and the reviews' styles are in their own
+        # bundle, loaded on the pages that have a Reviews block or a counter (owner, 2026-11-04, JS consolidation
+        # part B: static/src/js/review_assets.js)
         'web.assets_frontend': [
-            'website_review_sync/static/src/js/count_up.js',
             'website_review_sync/static/src/snippets/s_mtbg_counter/counter.scss',
+            'website_review_sync/static/src/js/review_assets.js',
+        ],
+        'website_review_sync.assets_reviews': [
+            'website_review_sync/static/src/js/count_up.js',
             'website_review_sync/static/src/snippets/s_mtbg_counter/counter.js',
             'website_review_sync/static/src/snippets/s_review_slider/review_slider.scss',
             'website_review_sync/static/src/snippets/s_review_slider/review_card.js',
@@ -46,6 +53,10 @@ and shown on the website with a "Reviews" building block (a slider of review car
             'website_review_sync/static/src/snippets/s_review_wall/review_wall.js',
             'website_review_sync/static/src/snippets/s_review_preset/review_preset.scss',
             'website_review_sync/static/src/snippets/s_review_preset/review_preset.js',
+        ],
+        # the website editor: the blocks' code and styles are there from the start (a block dropped on any page)
+        'website.assets_inside_builder_iframe': [
+            ('include', 'website_review_sync.assets_reviews'),
         ],
         'web.assets_backend': [
             'website_review_sync/static/src/settings_page/*',
