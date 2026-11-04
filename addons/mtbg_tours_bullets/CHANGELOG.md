@@ -2,6 +2,10 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_bullets-*'`.
 
+## 19.0.0.1.2 · 2026-11-03
+
+- Spanish (bulk translation pass): the .pot regenerated from Odoo's export and es.po rebuilt from it; 1 new Spanish translations; 1 strings added to the .pot that were missing (they never loaded). No English text changed.
+
 ## 19.0.0.1.1 · 2026-10-26
 
 - Part of the website blocks pack (repo mtbg-website-blocks): its manifest names that repo as its update source

@@ -1,6 +1,3 @@
-# Translation of Odoo Server.
-# This file contains the translation of the following modules:
-# 	* mtbg_website_cards
 #
 msgid ""
 msgstr ""
@@ -1358,6 +1355,22 @@ msgstr "Texto encima de la foto"
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 msgid "Text size"
 msgstr "Tamaño del texto"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields.selection,name:mtbg_website_cards.selection__mtbg_website_card_settings__book_style__site
+msgid "The Book Buttons colour"
+msgstr "El color de los botones de reserva"
+
+#. module: mtbg_website_cards
+#: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_settings__book_style
+msgid ""
+"The Book Buttons colour: the one colour the website gives every Book button "
+"(e.g. Tours' Website settings › Book Buttons); without one, the design's "
+"accent colour."
+msgstr ""
+"El color de los botones de reserva: el único color que el sitio web da a "
+"todos los botones de reserva (p. ej. Ajustes del sitio web de Tours › "
+"Botones de reserva); sin él, el color de acento del diseño."
 
 #. module: mtbg_website_cards
 #: model:ir.model.fields,help:mtbg_website_cards.field_mtbg_website_card_settings__book_full

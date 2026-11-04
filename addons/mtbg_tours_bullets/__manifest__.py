@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Tours — Bullets',
-    'version': '19.0.0.1.1',
+    'version': '19.0.0.1.2',
     # where the updater gets it (the website blocks pack's repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     'category': 'Website',

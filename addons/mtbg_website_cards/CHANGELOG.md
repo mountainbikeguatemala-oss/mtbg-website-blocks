@@ -2,6 +2,10 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_website_cards-*'`.
 
+## 19.0.0.4.5 · 2026-11-03
+
+- Spanish (bulk translation pass): the .pot regenerated from Odoo's export and es.po rebuilt from it; 2 new Spanish translations; 2 strings added to the .pot that were missing (they never loaded). No English text changed.
+
 ## 19.0.0.4.4 · 2026-11-03
 
 - **Alt text on card pictures** (owner, 2026-11-03): a card's round photo is named after its person (else the card),

@@ -2,6 +2,10 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'website_review_sync-*'`.
 
+## 19.0.0.4.2 · 2026-11-03
+
+- Spanish (bulk translation pass): the .pot regenerated from Odoo's export and es.po rebuilt from it; 4 new Spanish translations; 3 strings added to the .pot that were missing (they never loaded). No English text changed.
+
 ## 19.0.0.4.1 · 2026-11-03
 
 - **Alt text on the review cards' pictures** (owner, 2026-11-03: "Alt text for every image on the page"): the
