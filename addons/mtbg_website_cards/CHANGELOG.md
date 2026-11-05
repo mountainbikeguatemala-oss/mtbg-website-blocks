@@ -2,6 +2,14 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_website_cards-*'`.
 
+## 19.0.0.4.7 · 2026-11-04
+
+- **Card countdowns tick on the site's one clock** (owner, 2026-11-04, code clean-up: no repeat scripts): the cards'
+  booking countdowns use Tours Core's shared countdown (`@mtbg_tours_core/shared/countdown`: "03d 12:24:32s", under
+  48 hours "47:12:24s") and its one page tick, instead of a clock of their own and a timer per block. The pack still
+  needs only the website: without Tours Core the cards' countdowns tick on one timer of the pack's, in the same shape.
+  Wording and markup unchanged.
+
 ## 19.0.0.4.6 · 2026-11-04
 
 - **A card's photos open in the site's one photo viewer** (owner, 2026-11-04, JS consolidation part C: shared JavaScript lives once, in the base): Tours Core's shared lightbox (`@mtbg_tours_core/shared/lightbox`, Core 0.5.35: full screen, swipe, pinch zoom, "3 / 15") instead of a copy of Odoo's gallery modal. The pack still needs only the website: without Tours Core, a photo's link opens the photo.

@@ -10,25 +10,65 @@ import { registry } from "@web/core/registry";
 import { rpc } from "@web/core/network/rpc";
 import { _t } from "@web/core/l10n/translation";
 
-/** "3d 04:10:33", under a day "04:10:33". */
-function clock(ms) {
-    const total = Math.max(0, Math.floor(ms / 1000));
-    const pad = (n) => String(n).padStart(2, "0");
-    const days = Math.floor(total / 86400);
-    const time = `${pad(Math.floor((total % 86400) / 3600))}:${pad(Math.floor((total % 3600) / 60))}:${pad(total % 60)}`;
-    return days ? `${days}d ${time}` : time;
+/**
+ * The site's countdown clock and its one page tick: Tours Core's shared helper (@mtbg_tours_core/shared/countdown:
+ * "03d 12:24:32s", under 48 hours "47:12:24s"; owner, 2026-11-04: shared JavaScript lives once, in the base). This
+ * pack works without Tours Core: its countdowns then tick on one timer of their own, in the same shape.
+ */
+let fallback = null;
+
+function sharedCountdown() {
+    const core = odoo.loader.modules.get("@mtbg_tours_core/shared/countdown");
+    if (core?.countdown && core.everySecond) {
+        return core;
+    }
+    if (!fallback) {
+        const listeners = new Set();
+        let timer = null;
+        const pad = (n) => String(n).padStart(2, "0");
+        fallback = {
+            countdown(ms) {
+                const total = Math.max(0, Math.floor(ms / 1000));
+                const clock = `${pad(Math.floor((total % 3600) / 60))}:${pad(total % 60)}s`;
+                return total < 48 * 3600 ? `${pad(Math.floor(total / 3600))}:${clock}`
+                    : `${pad(Math.floor(total / 86400))}d ${pad(Math.floor((total % 86400) / 3600))}:${clock}`;
+            },
+            everySecond(callback) {
+                listeners.add(callback);
+                timer ??= setInterval(() => listeners.forEach((listener) => listener()), 1000);
+                return () => {
+                    listeners.delete(callback);
+                    if (!listeners.size) {
+                        clearInterval(timer);
+                        timer = null;
+                    }
+                };
+            },
+        };
+    }
+    return fallback;
 }
 
 export function tickCountdowns(root) {
+    const { countdown } = sharedCountdown();
     const now = Date.now();
     for (const el of root.querySelectorAll(".mtbg-card__k-countdown[data-deadline]")) {
         const left = new Date(el.dataset.deadline).getTime() - now;
         const out = el.querySelector(".mtbg-card__countdown-clock");
         if (out) {
-            out.textContent = left > 0 ? clock(left) : "";
+            out.textContent = left > 0 ? countdown(left) : "";
         }
         el.hidden = left <= 0;
     }
+}
+
+/** Ticks the card countdowns under ``root`` now and on the page's one clock tick; returns the stop. */
+function tickEverySecond(root) {
+    if (!root.querySelector(".mtbg-card__k-countdown[data-deadline]")) {
+        return () => {};
+    }
+    tickCountdowns(root);
+    return sharedCountdown().everySecond(() => tickCountdowns(root));
 }
 
 export class CardsBlock extends Interaction {
@@ -61,9 +101,7 @@ export class CardsBlock extends Interaction {
             // other modules' scripts on the cards' fields (e.g. Tours: the price's currency, the early bird)
             this.services["public.interactions"].startInteractions(body);
         }
-        tickCountdowns(this.el);
-        this.timer = setInterval(() => tickCountdowns(this.el), 1000);
-        this.registerCleanup(() => clearInterval(this.timer));
+        this.registerCleanup(tickEverySecond(this.el));
     }
 }
 
@@ -72,12 +110,7 @@ export class CardCountdowns extends Interaction {
     static selector = ".mtbg-cards:not(.s_mtbg_cards .mtbg-cards)";
 
     start() {
-        if (!this.el.querySelector(".mtbg-card__k-countdown[data-deadline]")) {
-            return;
-        }
-        tickCountdowns(this.el);
-        this.timer = setInterval(() => tickCountdowns(this.el), 1000);
-        this.registerCleanup(() => clearInterval(this.timer));
+        this.registerCleanup(tickEverySecond(this.el));
     }
 }
 
