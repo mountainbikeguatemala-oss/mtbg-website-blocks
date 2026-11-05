@@ -63,8 +63,8 @@
                 </button>
             </div>
             <p class="text-muted small mb-2"><t t-out="filtered.length"/> block(s)</p>
-            <div class="o_mtbg_cb_grid">
-                <button type="button" t-foreach="filtered" t-as="block" t-key="block.id"
+            <div class="o_mtbg_cb_grid" t-ref="grid">
+                <button type="button" t-foreach="filtered" t-as="block" t-key="block.id" t-att-data-block-id="block.id"
                         t-attf-class="o_mtbg_cb_card text-start #{block.id === props.currentId ? 'is-current' : ''}"
                         t-on-click="() => this.choose(block)">
                     <div class="o_mtbg_cb_card__head">
@@ -76,9 +76,13 @@
                             <span t-if="tagById(tagId)" t-attf-class="o_tag badge rounded-pill o_tag_color_{{tagById(tagId).color}}" t-out="tagById(tagId).name"/>
                         </t>
                     </div>
-                    <div class="o_mtbg_cb_card__preview">
-                        <img t-if="block.image" t-att-src="block.image" alt="" loading="lazy"/>
-                        <span t-out="block.excerpt or '(empty)'"/>
+                    <t t-set="pv" t-value="state.previews[block.id]"/>
+                    <div t-if="pv" class="o_mtbg_cb_card__preview">
+                        <img t-if="pv.thumb" t-att-src="pv.thumb" alt="" loading="lazy" decoding="async"/>
+                        <span t-out="pv.excerpt or '(empty)'"/>
+                    </div>
+                    <div t-else="" class="o_mtbg_cb_card__preview placeholder-glow" aria-hidden="true">
+                        <span class="placeholder col-12"/><span class="placeholder col-9"/><span class="placeholder col-6"/>
                     </div>
                     <div class="o_mtbg_cb_card__foot small text-muted">
                         <t t-if="block.usage">Used on <t t-out="block.usage"/> page(s)</t>

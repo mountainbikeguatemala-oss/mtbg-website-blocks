@@ -1,4 +1,5 @@
 import re
+from collections import defaultdict
 
 from markupsafe import Markup, escape
 
@@ -27,6 +28,19 @@ def placeholder_html(block_id='', css='my-4'):
         '<section class="s_mtbg_content_block o_not_editable %s" data-snippet="s_mtbg_content_block" '
         'data-name="Reusable Block" data-mtbg-block="%s"><div class="%s">Reusable block</div></section>'
     ) % (css, block_id, PLACEHOLDER_CLASS)
+
+
+# an Odoo image (/web/image/<id>[-<checksum>][/<name>]) at a card's size: resized by the server, and cached by the
+# browser for good (a changed image has a new checksum, so a new address: never a stale thumbnail)
+WEB_IMAGE_RE = re.compile(r'^(/web/image/\d+(?:-[0-9a-f]+)?)(/[^/?#]*)?(\?[^#]*)?$')
+THUMB_SIZE = '160x120'
+
+
+def thumb_url(src):
+    match = WEB_IMAGE_RE.match(src or '')
+    if not match:
+        return src or ''
+    return f"{match.group(1)}/{THUMB_SIZE}{match.group(2) or ''}"
 
 
 def block_ids_in(html):
@@ -65,15 +79,45 @@ class MtbgContentBlock(models.Model):
             block.usage_count = 0
 
     def _compute_website_usage(self):
-        View = self.env['ir.ui.view'].sudo()
-        Block = self.sudo().with_context(active_test=False)
+        """Counted for all the blocks at once: one search of the website views and one of the blocks that place a
+        reusable block (each id read from their content), never two searches per block (a board of 70 blocks took a
+        second with them)."""
+        views, inside = self._mtbg_usage_counts()
         for block in self:
-            marker = f'data-mtbg-block="{block.id}"'
-            count = View.search_count([('arch_db', 'ilike', marker)]) if block.id else 0
-            # the other reusable blocks that contain it count as places it shows
-            inside = Block.search_count([('body', 'ilike', marker), ('id', '!=', block.id)]) if block.id else 0
-            block.website_view_count = count
-            block.usage_total = block.usage_count + count + inside
+            block.website_view_count = views.get(block.id, 0)
+            block.usage_total = block.usage_count + block.website_view_count + inside.get(block.id, 0)
+
+    @api.model
+    def _mtbg_usage_counts(self):
+        """({block id: website views placing it}, {block id: other blocks containing it}): every view and block that
+        places a reusable block, read once."""
+        views, inside = defaultdict(int), defaultdict(int)
+        View = self.env['ir.ui.view'].sudo()
+        for view in View.search([('arch_db', 'ilike', 'data-mtbg-block=')]):
+            for block_id in set(block_ids_in(view.arch_db)):
+                views[block_id] += 1
+        for block in self.sudo().with_context(active_test=False).search([('body', 'ilike', 'data-mtbg-block=')]):
+            for block_id in set(block_ids_in(block.body)) - {block.id}:
+                inside[block_id] += 1
+        return views, inside
+
+    # ------------------------------------------------------------------ previews (the cards' second stage)
+    @api.model
+    def _mtbg_preview(self, body):
+        """A block's card preview from its body: {excerpt (its words, CSS and scripts left out), image (its first
+        picture, as a small thumbnail when it is an Odoo image), empty}. Worked out from the current body every time
+        it is asked for (cheap: no rendering), so it is never stale after an edit."""
+        html = re.sub(r'<(style|script)\b.*?</\1>', ' ', str(body or ''), flags=re.S | re.I)
+        text = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', ' ', html)).strip()
+        image = re.search(r'<img\b[^>]*\bsrc="([^"]+)"', html)
+        image = image.group(1) if image else ''
+        return {'excerpt': text[:220], 'image': image, 'thumb': thumb_url(image), 'empty': not text and not image}
+
+    @api.model
+    def mtbg_block_previews(self, block_ids):
+        """{id: preview} of these blocks (the picker asks for the cards in view, a few at a time)."""
+        blocks = self.browse([int(i) for i in block_ids or ()]).exists()
+        return {block.id: self._mtbg_preview(block.body) for block in blocks}
 
     # ------------------------------------------------------------------ rendering
     def _mtbg_body_html(self, editable, _stack=()):
@@ -143,16 +187,13 @@ class MtbgContentBlock(models.Model):
     # ------------------------------------------------------------------ website editor
     @api.model
     def mtbg_picker_data(self):
-        """Blocks offered in the editor's block picker, with a short text preview and their tags."""
+        """The editor's block picker, first stage: every block as text (name, type, tags, usage), with no content read,
+        so the list shows at once; the cards' previews follow (mtbg_block_previews)."""
         types = dict(self._fields['block_type']._description_selection(self.env))
-        result = []
-        for block in self.search([], order='block_type, name'):
-            text = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', ' ', str(block.body or ''))).strip()
-            image = re.search(r'<img\b[^>]*\bsrc="([^"]+)"', str(block.body or ''))
-            result.append({'id': block.id, 'name': block.name, 'type': block.block_type,
-                           'type_label': types.get(block.block_type, ''), 'usage': block.usage_total,
-                           'tag_ids': block.tag_ids.ids,
-                           'excerpt': text[:220], 'image': image.group(1) if image else ''})
+        blocks = self.search_fetch([], ['name', 'block_type', 'tag_ids'], order='block_type, name')
+        result = [{'id': block.id, 'name': block.name, 'type': block.block_type,
+                   'type_label': types.get(block.block_type, ''), 'usage': block.usage_total,
+                   'tag_ids': block.tag_ids.ids} for block in blocks]
         tags = self.env['mtbg.tours.content.block.tag'].search([])
         return {'blocks': result, 'types': [{'key': k, 'label': v} for k, v in types.items()],
                 'tags': [{'id': t.id, 'name': t.name, 'color': t.color} for t in tags]}

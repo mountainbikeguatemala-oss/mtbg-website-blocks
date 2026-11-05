@@ -29,7 +29,7 @@ export class BlockLibrary extends Component {
         this.newTagInput = useRef("newTag");
         this.tagInput = useRef("tagInput");
         this.state = useState({
-            data: null, query: "", view: "all", type: "", tag: 0, sort: "name", selected: [],
+            data: null, previews: null, query: "", view: "all", type: "", tag: 0, sort: "name", selected: [],
             currentId: 0, current: null, theme: "light", device: "desktop", frameKey: 1,
             dragging: 0, dropTag: 0, editingTag: null, creatingTag: false, newTag: "", adding: false,
         });
@@ -53,10 +53,28 @@ export class BlockLibrary extends Component {
         });
     }
 
+    /**
+     * Two stages: the blocks as text first (name, type, tags, where used), so the list shows and works at once; then
+     * their previews (excerpt, thumbnail, empty, possible duplicate), filled in when they come (the thumbnails load as
+     * they scroll into view).
+     */
     async load() {
         this.state.data = await this.orm.call(MODEL, "mtbg_get_library", []);
         const ids = new Set(this.state.data.blocks.map((b) => b.id));
         this.state.selected = this.state.selected.filter((id) => ids.has(id));
+        this.loadPreviews();
+    }
+
+    async loadPreviews() {
+        const ask = (this.previewsAsked = (this.previewsAsked || 0) + 1);
+        const previews = await this.orm.silent.call(MODEL, "mtbg_library_previews", []);
+        if (ask === this.previewsAsked) {
+            this.state.previews = previews; // only the latest answer (a save reloads them)
+        }
+    }
+
+    preview(block) {
+        return this.state.previews?.[block.id];
     }
 
     blockById(id) {
@@ -81,8 +99,11 @@ export class BlockLibrary extends Component {
             { key: "all", label: _t("All blocks"), icon: "fa-clone", count: active.length },
             { key: "unused", label: _t("Not used anywhere"), icon: "fa-chain-broken", count: active.filter((b) => !b.usage).length },
             { key: "builtin", label: _t("Built into extensions"), icon: "fa-puzzle-piece", count: active.filter((b) => b.builtin).length },
-            { key: "empty", label: _t("Empty (no text or image)"), icon: "fa-square-o", count: active.filter((b) => b.empty).length },
-            { key: "duplicates", label: _t("Possible duplicates"), icon: "fa-files-o", count: active.filter((b) => b.duplicate).length },
+            // these two need the previews: counted once they are in
+            { key: "empty", label: _t("Empty (no text or image)"), icon: "fa-square-o",
+              count: this.state.previews ? active.filter((b) => this.preview(b)?.empty).length : "…" },
+            { key: "duplicates", label: _t("Possible duplicates"), icon: "fa-files-o",
+              count: this.state.previews ? active.filter((b) => this.preview(b)?.duplicate).length : "…" },
             { key: "untagged", label: _t("No tag"), icon: "fa-tag", count: active.filter((b) => !b.tag_ids.length).length },
             { key: "archived", label: _t("Archived"), icon: "fa-archive", count: blocks.length - active.length },
         ];
@@ -118,15 +139,17 @@ export class BlockLibrary extends Component {
             if (s.view === "archived" ? b.active : !b.active) {
                 return false;
             }
-            if ((s.view === "unused" && b.usage) || (s.view === "empty" && !b.empty) || (s.view === "builtin" && !b.builtin)
-                || (s.view === "duplicates" && !b.duplicate) || (s.view === "untagged" && b.tag_ids.length)) {
+            const preview = this.preview(b);
+            if ((s.view === "unused" && b.usage) || (s.view === "empty" && !preview?.empty) || (s.view === "builtin" && !b.builtin)
+                || (s.view === "duplicates" && !preview?.duplicate) || (s.view === "untagged" && b.tag_ids.length)) {
                 return false;
             }
             if ((s.type && b.type !== s.type) || (s.tag && !b.tag_ids.includes(s.tag))) {
                 return false;
             }
             const tags = b.tag_ids.map((id) => this.tagById(id)?.name || "").join(" ");
-            const text = `${b.name} ${b.excerpt} ${tags} ${this.typeLabel(b.type)}`.toLowerCase();
+            // name, tags and type at once; the text too once the previews are in
+            const text = `${b.name} ${preview?.excerpt || ""} ${tags} ${this.typeLabel(b.type)}`.toLowerCase();
             return words.every((w) => text.includes(w));
         });
         const sorters = {

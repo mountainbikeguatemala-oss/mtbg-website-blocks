@@ -135,18 +135,22 @@
                                     <input type="checkbox" class="form-check-input mt-1" t-att-checked="isSelected(block.id)"
                                            t-att-aria-label="'Select ' + block.name"
                                            t-on-click.stop="() => {}" t-on-change="() => this.toggleSelected(block.id)"/>
-                                    <div class="mtbg_bl_thumb" t-attf-style="{{block.image ? 'background-image:url(&quot;' + block.image + '&quot;)' : ''}}">
-                                        <i t-if="!block.image" class="fa fa-align-left"/>
+                                    <t t-set="pv" t-value="preview(block)"/>
+                                    <div class="mtbg_bl_thumb" t-att-class="{'placeholder-glow': !pv}">
+                                        <img t-if="pv?.thumb" t-att-src="pv.thumb" alt="" loading="lazy" decoding="async"/>
+                                        <i t-elif="pv" class="fa fa-align-left"/>
+                                        <span t-else="" class="placeholder w-100 h-100"/>
                                     </div>
                                     <div class="flex-grow-1 min-w-0">
                                         <div class="d-flex align-items-center gap-1">
                                             <b class="text-truncate" t-esc="block.name"/>
-                                            <i t-if="block.duplicate" class="fa fa-files-o text-warning" title="Possible duplicate (same name or content)"/>
-                                            <i t-if="block.empty" class="fa fa-square-o text-muted" title="Empty: no text or image"/>
+                                            <i t-if="pv?.duplicate" class="fa fa-files-o text-warning" title="Possible duplicate (same name or content)"/>
+                                            <i t-if="pv?.empty" class="fa fa-square-o text-muted" title="Empty: no text or image"/>
                                             <i t-if="block.note" class="fa fa-sticky-note-o text-muted" title="Has an internal note"/>
                                             <i t-if="block.builtin" class="fa fa-puzzle-piece text-muted" title="Built into an extension: never deleted"/>
                                         </div>
-                                        <div class="text-muted small text-truncate" t-esc="block.excerpt or '—'"/>
+                                        <div t-if="pv" class="text-muted small text-truncate" t-esc="pv.excerpt or '—'"/>
+                                        <div t-else="" class="small placeholder-glow" aria-hidden="true"><span class="placeholder col-8"/></div>
                                         <div class="d-flex flex-wrap align-items-center gap-1 mt-1">
                                             <span class="badge text-bg-light" t-esc="typeLabel(block.type)"/>
                                             <t t-foreach="block.tag_ids" t-as="tagId" t-key="tagId">

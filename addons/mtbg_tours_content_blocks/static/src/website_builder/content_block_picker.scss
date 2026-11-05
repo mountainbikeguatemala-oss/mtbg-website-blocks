@@ -33,3 +33,8 @@
     .o_mtbg_cb_card__foot { margin-top: auto; }
 }
 .o_mtbg_cb_choose { max-width: 100%; }
+// the card's preview, until it is in (the cards show as text first)
+.o_mtbg_cb_picker .o_mtbg_cb_card__preview.placeholder-glow {
+    display: block;
+    .placeholder { display: block; height: .75em; margin-bottom: 5px; border-radius: 3px; }
+}

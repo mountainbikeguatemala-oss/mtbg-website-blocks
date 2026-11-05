@@ -83,30 +83,22 @@ class MtbgContentBlockLibrary(models.AbstractModel):
     # ------------------------------------------------------------------
     @api.model
     def mtbg_get_library(self):
+        """The page's first stage: every block as text (name, type, tags, where used, flags), with no content read, so
+        the list shows at once. Its previews (excerpt, thumbnail, empty, possible duplicate) follow:
+        mtbg_library_previews."""
         Block = self._blocks()
         types = dict(Block._fields['block_type']._description_selection(self.env))
         usage = self._mtbg_usage_index()
         builtin = self._mtbg_builtin()
-        blocks = Block.search([], order='name, id')
-        # possible duplicates: the same name or the same (non-empty) content
-        by_name, by_body = defaultdict(list), defaultdict(list)
-        for block in blocks:
-            by_name[(block.name or '').strip().lower()].append(block.id)
-            text = _text(block.body)
-            if text:
-                by_body[hashlib.md5(str(block.body).encode()).hexdigest()].append(block.id)
-        duplicates = {i for group in list(by_name.values()) + list(by_body.values()) if len(group) > 1 for i in group}
         rows = []
-        for block in blocks:
-            text = _text(block.body)
-            image = re.search(r'<img\b[^>]*\bsrc="([^"]+)"', str(block.body or ''))
+        for block in Block.search_fetch([], ['name', 'block_type', 'tag_ids', 'active', 'write_date', 'note'],
+                                        order='name, id'):
             used = usage.get(block.id)
             count = (len(used['records']) + len(used['views']) + len(used['blocks'])) if used else 0
             count += 1 if block.id in builtin else 0
             rows.append({
                 'id': block.id, 'name': block.name, 'type': block.block_type, 'tag_ids': block.tag_ids.ids,
-                'active': block.active, 'usage': count, 'excerpt': text[:200], 'image': image.group(1) if image else '',
-                'empty': not text and not image, 'duplicate': block.id in duplicates, 'builtin': block.id in builtin,
+                'active': block.active, 'usage': count, 'builtin': block.id in builtin,
                 'write_date': block.write_date and block.write_date.isoformat(), 'note': bool(block.note),
             })
         Tag = self.env['mtbg.tours.content.block.tag']
@@ -118,6 +110,24 @@ class MtbgContentBlockLibrary(models.AbstractModel):
             'can_delete': Block.has_access('unlink'),
             'list_action': self.env.ref('mtbg_tours_content_blocks.action_content_block').id,
         }
+
+    @api.model
+    def mtbg_library_previews(self):
+        """The page's second stage: {block id: {excerpt, image, thumb, empty, duplicate}} for every block, from their
+        current content (``duplicate``: another block has the same name or the same non-empty content)."""
+        Block = self._blocks()
+        blocks = Block.search_fetch([], ['name', 'body'], order='name, id')
+        by_name, by_body = defaultdict(list), defaultdict(list)
+        previews = {}
+        for block in blocks:
+            previews[block.id] = Block._mtbg_preview(block.body)
+            by_name[(block.name or '').strip().lower()].append(block.id)
+            if _text(block.body):
+                by_body[hashlib.md5(str(block.body).encode()).hexdigest()].append(block.id)
+        duplicates = {i for group in list(by_name.values()) + list(by_body.values()) if len(group) > 1 for i in group}
+        for block_id, preview in previews.items():
+            preview['duplicate'] = block_id in duplicates
+        return previews
 
     @api.model
     def mtbg_get_block(self, block_id):

@@ -2,6 +2,25 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_content_blocks-*'`.
 
+## 19.0.0.10.2 · 2026-11-05
+
+- **Reusable blocks load fast: the list first, the cards after** (owner, 2026-11-04: "Reusable blocks take too long
+  to load; we should load the list first (fast text), then have the card view (slow)"). Where the time went: every
+  block counted its own uses with two text searches of all the website views and blocks, so a screen of 70 blocks ran
+  ~150 queries and took over a second (the Blocks board, the Blocks list and the editor's picker alike). The uses are
+  now counted for all the blocks at once (one search of the views, one of the blocks): ~1.1 s → ~20 ms.
+- Website Blocks › Blocks opens on the **list** (plain text, at once); the board with its cards is the second view.
+- The editor's **Reusable Block picker** opens at once with every block as text (name, type, tags, usage), usable
+  right away: click to choose, search and filter by name, type and tag. Each card's preview (its text and a small
+  picture) fills in as the card comes into view, a batch at a time, with a placeholder until then; the search then
+  also matches the text.
+- **Block Library**: the list shows at once as text; the excerpts, pictures and the Empty / Possible duplicates
+  counts follow a moment later. The pictures load as they scroll into view.
+- Pictures on the cards are small thumbnails (160×120, resized by the server) instead of the full photos (some
+  1.6 MB); the browser keeps them, and a changed picture has a new address, so a card never shows an old one. The
+  previews are worked out from the block's current content each time (no rendering, a few ms), so nothing is stale
+  after an edit.
+
 ## 19.0.0.10.1 · 2026-11-03
 
 - **Group is dragged straight from the Blocks panel** (owner, 2026-11-03: "I need access to it in the block editor
