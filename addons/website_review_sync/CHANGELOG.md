@@ -2,6 +2,11 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'website_review_sync-*'`.
 
+## 19.0.0.6.0 · 2026-11-07
+
+- **The module no longer calls Google** (owner, 2026-11-07: "remove the google sync code from the core of the reviews module because now it's handled by the google extension"). The accounts' own Google sign-in is gone: the OAuth client fields, the sign-in return page `/review_sync/google/callback` and `services/google.py`. An upgrade drops their columns along with the stored secrets. Google reviews are read by a module that reaches Google, through `review.account._review_google_available()`, `_review_google_connected()`, `_review_google_locations()` and `_review_google_fetch(account_ref, location_ref)`. The Tours' Reviews does this with the Google connector. The module keeps the reviews table, the sources, Find Locations (adding a source per location the hook returns) and the Google Takeout import. Without a Google module, a Google account's form says Google reviews are imported or added by hand, and a sync says so on the source. Tripadvisor is unchanged.
+- **Find Locations and Sync Now never show a traceback** (found on www, 2026-11-07: Find Locations gave "Oops" on Google's 429 "Quota exceeded"). A failure's reason, in the words the Google module gives, goes on the account (Find Locations) or on the source (Last Error), and shows in a warning notification.
+
 ## 19.0.0.5.0 · 2026-11-07
 
 - **Google reviews can come through the site's one Google login** (owner, 2026-11-07: "the google login should come from the GLOBAL google setting"; Google reviews never synced on www). Review accounts have three hooks: `_review_google_global()`, `_review_google_connected()` and `_review_google_client()` (a `get(url, params)` returning Google's JSON). A module that gives the site one Google login overrides them; the Tours' Reviews does this with the Google connector. Under the site-wide login, a Google account's form hides its own OAuth client and says where Google is set up; Sign in with Google opens that setup. Without such a module nothing changes: each account signs in with its own OAuth client. Tripadvisor is unchanged.

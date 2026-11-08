@@ -1,19 +1,22 @@
+import copy
+import datetime
 from unittest.mock import patch
 
+from odoo.exceptions import UserError
 from odoo.tests import TransactionCase, tagged
 
-from ..services import google, tripadvisor
+from ..models.review import ReviewAccount
+from ..services import tripadvisor
 
-GOOGLE_PAGE = {
+# what a Google connection module hands over (review.account._review_google_fetch)
+GOOGLE_DATA = {
     'reviews': [
-        {'name': 'accounts/1/locations/2/reviews/r1', 'reviewId': 'r1', 'starRating': 'FIVE',
-         'reviewer': {'displayName': 'Ana', 'profilePhotoUrl': 'https://img/ana'},
-         'comment': 'Amazing trails!\n\n(Translated by Google)\n¡Senderos increíbles!', 'createTime': '2026-09-01T10:00:00Z',
-         'reviewReply': {'comment': 'Thanks Ana!'}},
-        {'name': 'accounts/1/locations/2/reviews/r2', 'reviewId': 'r2', 'starRating': 'TWO',
-         'reviewer': {'displayName': 'Bob'}, 'comment': 'Too hard', 'createTime': '2026-08-01T10:00:00Z'},
+        {'external_id': 'r1', 'author_name': 'Ana', 'author_photo_url': 'https://img/ana', 'rating': 5,
+         'text': 'Amazing trails!', 'review_date': datetime.date(2026, 9, 1), 'reply_text': 'Thanks Ana!'},
+        {'external_id': 'r2', 'author_name': 'Bob', 'author_photo_url': False, 'rating': 2, 'text': 'Too hard',
+         'review_date': datetime.date(2026, 8, 1), 'reply_text': False},
     ],
-    'averageRating': 4.9, 'totalReviewCount': 312,
+    'average': 4.9, 'total': 312,
 }
 TRIP_REVIEWS = {'data': [{'id': 9001, 'lang': 'en', 'rating': 5, 'title': 'Best day', 'text': 'Great guides',
                           'published_date': '2026-07-04T00:00:00Z', 'url': 'https://ta/9001',
@@ -28,11 +31,15 @@ class TestReviewSync(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        # the account's own Google sign-in, also where a module gives the site one Google login
-        cls.startClassPatcher(patch.object(cls.registry['review.account'], '_review_google_global', lambda self: False))
-        cls.g_account = cls.env['review.account'].create({
-            'name': 'Business Google', 'platform': 'google', 'google_client_id': 'cid', 'google_client_secret': 'sec',
-            'google_refresh_token': 'refresh'})
+        # Google as a Google connection module hands it over (this module never calls Google)
+        cls.fetched = []
+
+        def fetch(account, account_ref, location_ref):
+            cls.fetched.append((account_ref, location_ref))
+            return copy.deepcopy(GOOGLE_DATA)
+
+        cls.startClassPatcher(patch.object(cls.registry['review.account'], '_review_google_fetch', fetch))
+        cls.g_account = cls.env['review.account'].create({'name': 'Business Google', 'platform': 'google'})
         cls.g_source = cls.env['review.source'].create({'name': 'Tecpán', 'account_id': cls.g_account.id,
                                                         'external_ref': 'accounts/1/locations/2'})
         cls.t_account = cls.env['review.account'].create({'name': 'Business TA', 'platform': 'tripadvisor',
@@ -41,27 +48,23 @@ class TestReviewSync(TransactionCase):
                                                         'external_ref': '16787311', 'languages': 'en'})
 
     def test_google_sync_keeps_the_original_words_and_is_idempotent(self):
-        with patch.object(google, 'refresh_access_token', return_value='tok'), \
-                patch.object(google, '_get', return_value=GOOGLE_PAGE):
-            self.assertEqual(self.g_source._sync(), 2)
-            self.assertEqual(self.g_source._sync(), 0, "a second sync updates, never duplicates")
+        self.assertEqual(self.g_source._sync(), 2)
+        self.assertEqual(self.g_source._sync(), 0, "a second sync updates, never duplicates")
+        self.assertEqual(self.fetched[-1], ('accounts/1', 'locations/2'))
         self.assertEqual(self.g_source.platform, 'google')
         reviews = self.g_source.review_ids.sorted('rating')
         self.assertEqual(reviews.mapped('rating'), [2, 5])
         ana = reviews[-1]
-        self.assertEqual(ana.text, 'Amazing trails!', "Google's machine translation is dropped")
         self.assertEqual((ana.reply_text, str(ana.review_date)), ('Thanks Ana!', '2026-09-01'))
         self.assertTrue(ana.is_published)
         self.assertFalse(reviews[0].is_published, "under the source's 'publish from' rating: waits for review")
         self.assertEqual((self.g_source.rating_average, self.g_source.rating_count), (4.9, 312))
 
     def test_hidden_review_stays_hidden_after_sync(self):
-        with patch.object(google, 'refresh_access_token', return_value='tok'), \
-                patch.object(google, '_get', return_value=GOOGLE_PAGE):
-            self.g_source._sync()
-            ana = self.g_source.review_ids.filtered(lambda r: r.external_id == 'r1')
-            ana.is_published = False
-            self.g_source._sync()
+        self.g_source._sync()
+        ana = self.g_source.review_ids.filtered(lambda r: r.external_id == 'r1')
+        ana.is_published = False
+        self.g_source._sync()
         self.assertFalse(ana.is_published)
 
     def test_tripadvisor_sync(self):
@@ -80,9 +83,7 @@ class TestReviewSync(TransactionCase):
         self.assertIn('401', self.t_source.last_error)
 
     def test_slider_values(self):
-        with patch.object(google, 'refresh_access_token', return_value='tok'), \
-                patch.object(google, '_get', return_value=GOOGLE_PAGE):
-            self.g_source._sync()
+        self.g_source._sync()
         Review = self.env['review.review']
         data = Review.slider_reviews(min_rating=4)
         self.assertEqual([r['author'] for r in data['reviews']], ['Ana'], "published, 4 stars and up")
@@ -94,27 +95,35 @@ class TestReviewSync(TransactionCase):
                          "the page's reviews: none known for a record nothing links reviews to")
 
     def test_locations_found_become_sources(self):
-        with patch.object(google, 'list_locations', return_value=[
+        with patch.object(self.registry['review.account'], '_review_google_locations', lambda self: [
                 {'account': 'accounts/1', 'location': 'locations/2', 'title': 'Tecpán'},
                 {'account': 'accounts/1', 'location': 'locations/3', 'title': 'Antigua'}]):
-            self.g_account.action_find_locations(access_token='tok')
+            self.g_account.action_find_locations()
         self.assertEqual(sorted(self.g_account.source_ids.mapped('external_ref')),
                          ['accounts/1/locations/2', 'accounts/1/locations/3'], "existing one kept, new one added")
 
-    def test_a_site_wide_google_login_replaces_the_own_sign_in(self):
-        """The hook: a module giving the site one Google login hands the reads its client, no token of the account."""
-        calls = []
+    def test_google_errors_never_show_as_a_traceback(self):
+        """A Google module's error (here: a UserError in plain words) goes on the account and in a notification."""
+        def refuse(account):
+            raise UserError("Google hasn't approved Business Profile API access for this project yet (quota 0).")
 
-        def get(url, params=None):
-            calls.append(url)
-            return GOOGLE_PAGE
+        with patch.object(self.registry['review.account'], '_review_google_locations', refuse):
+            action = self.g_account.action_find_locations()
+        self.assertEqual((action['tag'], action['params']['type']), ('display_notification', 'warning'))
+        self.assertEqual(self.g_account.note,
+                         "Google hasn't approved Business Profile API access for this project yet (quota 0).")
+        with patch.object(self.registry['review.account'], '_review_google_fetch',
+                          lambda account, a, l: (_ for _ in ()).throw(RuntimeError('Google error 500: boom'))):
+            action = self.g_account.action_sync()
+        self.assertEqual(action['tag'], 'display_notification')
+        self.assertEqual(self.g_source.last_error, 'Google error 500: boom')
 
+    def test_without_a_google_connection_google_says_so(self):
+        """No module reaching Google: no call anywhere, the reason on the source; Tripadvisor still syncs."""
         Account = self.registry['review.account']
-        with patch.object(Account, '_review_google_client', lambda self: get), \
-                patch.object(google, 'refresh_access_token', side_effect=AssertionError("no own sign-in")):
-            self.assertEqual(self.g_source._sync(), 2)
-        self.assertFalse(self.g_source.last_error)
-        self.assertEqual(calls, ['https://mybusiness.googleapis.com/v4/accounts/1/locations/2/reviews'])
+        with patch.object(Account, '_review_google_fetch', ReviewAccount._review_google_fetch):
+            self.assertEqual(self.g_source._sync(), 0)
+        self.assertIn('No Google connection', self.g_source.last_error)
 
 
 @tagged('post_install', '-at_install')

@@ -3,7 +3,7 @@ import logging
 from odoo import api, fields, models
 from odoo.exceptions import UserError
 
-from ..services import google, tripadvisor
+from ..services import tripadvisor
 
 _logger = logging.getLogger(__name__)
 
@@ -11,9 +11,19 @@ PLATFORMS = [('google', 'Google'), ('tripadvisor', 'Tripadvisor'), ('manual', 'O
 
 
 
+def _error_text(exc):
+    """The words of an error (a UserError's message, else its text), never a traceback."""
+    return (exc.args[0] if isinstance(exc, UserError) and exc.args else str(exc)) or exc.__class__.__name__
+
+
+def _notify(title, message, kind):
+    return {'type': 'ir.actions.client', 'tag': 'display_notification',
+            'params': {'title': title, 'message': message, 'type': kind, 'sticky': kind != 'success'}}
+
+
 class ReviewAccount(models.Model):
-    """A sign-in on a review platform: a Google account (OAuth, the business owner's) or a Tripadvisor Content API
-    key. Its locations / listings are the review sources."""
+    """A sign-in on a review platform: a Google account (through the site's Google connection, which a Google
+    module brings) or a Tripadvisor Content API key. Its locations / listings are the review sources."""
     _name = 'review.account'
     _description = 'Review Account'
     _order = 'platform, name'
@@ -22,76 +32,62 @@ class ReviewAccount(models.Model):
     active = fields.Boolean(default=True)
     company_id = fields.Many2one('res.company', default=lambda self: self.env.company)
     platform = fields.Selection([p for p in PLATFORMS if p[0] != 'manual'], required=True, default='google')
-    google_client_id = fields.Char(string='OAuth Client ID', groups='base.group_system')
-    google_client_secret = fields.Char(string='OAuth Client Secret', groups='base.group_system')
-    google_refresh_token = fields.Char(groups='base.group_system', copy=False)
     connected = fields.Boolean(compute='_compute_connected')
-    google_global = fields.Boolean(compute='_compute_connected', string='Site-wide Google Login',
-                                   help="Google is reached through the site's one Google login (Settings › Google): "
-                                        "no OAuth client or sign-in on the account")
+    google_available = fields.Boolean(compute='_compute_connected', string='Google Connection Installed',
+                                      help="A module reaches Google for the reviews (the Tours' Reviews, with the "
+                                           "Google connector: Settings › Google)")
     tripadvisor_api_key = fields.Char(string='API Key', groups='base.group_system')
     source_ids = fields.One2many('review.source', 'account_id', string='Locations')
     note = fields.Text(readonly=True, copy=False)
 
     def _compute_connected(self):
-        site_wide = self._review_google_global()
+        available = self._review_google_available()
         for account in self:
-            src = account.sudo()
-            account.google_global = site_wide
-            account.connected = account._review_google_connected() if src.platform == 'google' \
-                else bool(src.tripadvisor_api_key)
+            account.google_available = available
+            account.connected = account._review_google_connected() if account.platform == 'google' \
+                else bool(account.sudo().tripadvisor_api_key)
 
     # ------------------------------------------------------------------ Google: the hooks
-    # A module giving the site one Google login (the Tours' Reviews with the Google connector) overrides these three;
-    # without one, each Google account signs in by itself (its OAuth client, below).
+    # This module never calls Google itself: a module that reaches Google (the Tours' Reviews, through the Google
+    # connector) overrides these. Without one, Google reviews come in by import (Google Takeout) or by hand.
     @api.model
-    def _review_google_global(self):
-        """True when Google is reached through the site's one Google login, not the account's own sign-in."""
+    def _review_google_available(self):
+        """True when a module reaches Google for the reviews."""
         return False
 
     def _review_google_connected(self):
-        self.ensure_one()
-        return bool(self.sudo().google_refresh_token)
+        """The account can read its Google reviews now."""
+        return False
 
-    def _review_google_client(self):
-        """``get(url, params)`` returning Google's JSON for this account (raises when it cannot reach Google)."""
-        self.ensure_one()
-        return google.token_getter(self._google_access_token())
+    def _review_google_locations(self):
+        """[{account: 'accounts/1', location: 'locations/2', title}] the account's Google login manages."""
+        raise UserError(self.env._("No Google connection is installed: Google reviews can be imported (Google "
+                                   "Takeout) or added by hand."))
 
-    # ------------------------------------------------------------------ Google sign-in (the account's own)
+    def _review_google_fetch(self, account_ref, location_ref):
+        """Every review of a location: {'reviews': [values as review.review._review_upsert takes them], 'average',
+        'total'}."""
+        raise UserError(self.env._("No Google connection is installed: Google reviews can be imported (Google "
+                                   "Takeout) or added by hand."))
+
     def action_google_connect(self):
-        """Sign in with Google (the business owner's account) to allow reading the reviews."""
-        self.ensure_one()
-        src = self.sudo()
-        if not (src.google_client_id and src.google_client_secret):
-            raise UserError(self.env._("Enter the Google OAuth client ID and secret first (Google Cloud console)."))
-        return {'type': 'ir.actions.act_url', 'target': 'self',
-                'url': google.authorize_url(src.google_client_id, self._google_redirect_uri(), state=str(self.id))}
+        """Opens where the Google login is set up (the module reaching Google overrides it)."""
+        raise UserError(self.env._("No Google connection is installed: Google reviews can be imported (Google "
+                                   "Takeout) or added by hand."))
 
-    def _google_redirect_uri(self):
-        return f"{self.get_base_url()}/review_sync/google/callback"
-
-    def _google_access_token(self):
-        src = self.sudo()
-        if not src.google_refresh_token:
-            raise UserError(self.env._("Connect the Google account first."))
-        return google.refresh_access_token(src.google_client_id, src.google_client_secret, src.google_refresh_token)
-
-    def _google_finish_connect(self, code):
-        src = self.sudo()
-        tokens = google.exchange_code(src.google_client_id, src.google_client_secret, code, self._google_redirect_uri())
-        if not tokens.get('refresh_token'):
-            raise UserError(self.env._("Google did not return a refresh token: remove the app's access in the Google "
-                                       "account's security settings and connect again."))
-        src.google_refresh_token = tokens['refresh_token']
-        self.action_find_locations(access_token=tokens['access_token'])
-
-    def action_find_locations(self, access_token=None):
-        """Google: add a review source for each location the account manages (existing ones are kept)."""
+    def action_find_locations(self):
+        """Google: add a review source for each location the account manages (existing ones are kept). A Google
+        error never shows as a traceback: its reason goes on the account and in a notification."""
+        problems = []
         for account in self.filtered(lambda a: a.platform == 'google'):
-            get = google.token_getter(access_token) if access_token else account._review_google_client()
             known = set(account.source_ids.mapped('external_ref'))
-            locations = google.list_locations(get)
+            try:
+                locations = account._review_google_locations()
+            except Exception as exc:  # noqa: BLE001 - shown on the account, never a traceback
+                _logger.warning("Reviews: %s: finding the locations failed: %s", account.name, exc)
+                account.note = _error_text(exc)
+                problems.append(account.note)
+                continue
             for loc in locations:
                 ref = f"{loc['account']}/{loc['location']}"
                 if ref in known:
@@ -105,6 +101,8 @@ class ReviewAccount(models.Model):
                     self.env['review.source'].create({'name': loc['title'] or ref, 'account_id': account.id,
                                                       'external_ref': ref})
             account.note = self.env._("%s location(s) found.", len(locations))
+        if problems:
+            return _notify(self.env._("Find Locations"), "\n".join(problems), 'warning')
         return True
 
     def action_sync(self):
@@ -154,8 +152,12 @@ class ReviewSource(models.Model):
 
     # ------------------------------------------------------------------ sync
     def action_sync(self):
+        """Sync now: each failure's reason stays on its source (Last Error) and shows in a notification."""
         for source in self:
             source._sync()
+        failed = self.filtered('last_error')
+        if failed:
+            return _notify(self.env._("Sync Now"), "\n".join(f"{s.name}: {s.last_error}" for s in failed), 'warning')
         return True
 
     def _sync(self):
@@ -169,7 +171,7 @@ class ReviewSource(models.Model):
                 if '/locations/' not in ref:
                     raise UserError(self.env._("Set the location (accounts/…/locations/…): use Find Locations on the account."))
                 acc, loc = ref.split('/locations/', 1)
-                data = google.fetch_reviews(account._review_google_client(), acc, f"locations/{loc}")
+                data = account._review_google_fetch(acc, f"locations/{loc}")
             else:
                 if not (account.tripadvisor_api_key and self.external_ref):
                     raise UserError(self.env._("Enter the Tripadvisor API key and the listing id first."))
@@ -177,7 +179,7 @@ class ReviewSource(models.Model):
                                                  [x.strip() for x in (self.languages or 'en').split(',') if x.strip()])
         except Exception as exc:  # noqa: BLE001 - kept on the source, the cron goes on with the others
             _logger.warning("Reviews: %s sync failed: %s", self.name, exc)
-            self.write({'last_error': str(exc), 'last_sync': fields.Datetime.now()})
+            self.write({'last_error': _error_text(exc), 'last_sync': fields.Datetime.now()})
             return 0
         created = self.env['review.review']._review_upsert(self, data['reviews'])
         self.write({'last_sync': fields.Datetime.now(), 'last_error': False,

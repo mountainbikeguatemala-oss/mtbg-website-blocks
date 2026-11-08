@@ -11,23 +11,6 @@ class ReviewSync(http.Controller):
         if lang and lang in dict(request.env['res.lang'].get_installed()):
             request.update_context(lang=lang)
 
-    @http.route('/review_sync/google/callback', type='http', auth='user', sitemap=False)
-    def google_callback(self, code=None, state=None, error=None, **kw):
-        """Google sign-in comes back here: keep the refresh token, add the account's locations."""
-        if not request.env.user.has_group('base.group_system'):
-            raise request.not_found()
-        account = request.env['review.account'].browse(int(state or 0)).exists()
-        if not account:
-            raise request.not_found()
-        if code and not error:
-            try:
-                account._google_finish_connect(code)
-            except Exception as exc:  # noqa: BLE001 - shown on the account
-                account.sudo().note = str(exc)
-        else:
-            account.sudo().note = error or 'Google sign-in cancelled'
-        return request.redirect(f'/odoo/action-website_review_sync.action_review_account/{account.id}')
-
     @http.route('/review_sync/wall', type='jsonrpc', auth='public', website=True, sitemap=False)
     def wall(self, platform=None, source_id=None, min_rating=1, with_photos=False, language=None, sort='newest',
              offset=0, limit=12, lang=None, **kw):

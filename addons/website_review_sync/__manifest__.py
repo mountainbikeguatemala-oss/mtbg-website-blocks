@@ -1,6 +1,6 @@
 {
     'name': 'Website Reviews (Google & Tripadvisor)',
-    'version': '19.0.0.5.0',
+    'version': '19.0.0.6.0',
     # where the updater gets it (the website blocks pack's repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     # its section on the Extensions panel: Custom blocks (its main job is website editor blocks)
@@ -15,8 +15,8 @@ and shown on the website with a "Reviews" building block (a slider of review car
   live preview (speech bubbles or cards, tail, corners, colours, which reviews, the block's and a review's parts in
   order by drag and drop, texts in every language), the reviews table, sources and accounts in one place. A block on
   a page names its preset, so a change to the preset changes every block using it.
-* Review Accounts: a Google account (the business owner signs in with
-  Google once; every location it manages can be added) or a Tripadvisor Content API key.
+* Review Accounts: a Google account (read through a Google connection module: the Tours' Reviews with the
+  Google connector; every location it manages can be added) or a Tripadvisor Content API key.
 * Review Sources: one per Google location / Tripadvisor listing; synced daily and on demand. Google returns
   every review; Tripadvisor the latest ones on each sync, so the local table keeps the whole history.
 * Reviews can be hidden, featured, added by hand or by CSV import (older reviews).

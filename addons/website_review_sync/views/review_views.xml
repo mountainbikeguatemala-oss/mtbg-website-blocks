@@ -8,7 +8,7 @@
             <form string="Review Account">
                 <header>
                     <button name="action_google_connect" type="object" string="Sign in with Google" class="btn-primary"
-                            icon="fa-google" invisible="platform != 'google'"/>
+                            icon="fa-google" invisible="platform != 'google' or not google_available"/>
                     <button name="action_find_locations" type="object" string="Find Locations" icon="fa-map-marker"
                             invisible="platform != 'google' or not connected"/>
                     <button name="action_sync" type="object" string="Sync Now" icon="fa-refresh" invisible="not source_ids"/>
@@ -21,23 +21,19 @@
                             <field name="platform" widget="radio" options="{'horizontal': true}"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                             <field name="connected" invisible="1"/>
-                            <field name="google_global" invisible="1"/>
+                            <field name="google_available" invisible="1"/>
                         </group>
-                        <group invisible="platform != 'google' or not google_global" string="Google login">
+                        <group invisible="platform != 'google' or not google_available" string="Google login">
                             <div colspan="2" class="text-muted small">
                                 Google is reached through the site's one Google login (Settings › Google): Sign in with
                                 Google opens it. Switch on its Google Business Profile app there, with the Google account
                                 that manages the business profiles, then Find Locations here.
                             </div>
                         </group>
-                        <group invisible="platform != 'google' or google_global" string="Google Cloud OAuth client">
-                            <field name="google_client_id"/>
-                            <field name="google_client_secret" password="True"/>
+                        <group invisible="platform != 'google' or google_available" string="Google">
                             <div colspan="2" class="text-muted small">
-                                In the Google Cloud console: enable the Business Profile APIs (access is granted by Google
-                                on request), create an OAuth client (Web application) with the redirect URI
-                                <code>&lt;your website&gt;/review_sync/google/callback</code>, then sign in here with the
-                                Google account that manages the business profiles.
+                                No Google connection is installed, so Google reviews do not sync: import them (Google
+                                Takeout) or add them by hand.
                             </div>
                         </group>
                         <group invisible="platform != 'tripadvisor'" string="Tripadvisor Content API">
