@@ -2,6 +2,11 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'website_review_sync-*'`.
 
+## 19.0.0.5.0 · 2026-11-07
+
+- **Google reviews can come through the site's one Google login** (owner, 2026-11-07: "the google login should come from the GLOBAL google setting"; Google reviews never synced on www). Review accounts have three hooks: `_review_google_global()`, `_review_google_connected()` and `_review_google_client()` (a `get(url, params)` returning Google's JSON). A module that gives the site one Google login overrides them; the Tours' Reviews does this with the Google connector. Under the site-wide login, a Google account's form hides its own OAuth client and says where Google is set up; Sign in with Google opens that setup. Without such a module nothing changes: each account signs in with its own OAuth client. Tripadvisor is unchanged.
+- The Google reads (`services/google.py`: `list_locations`, `fetch_reviews`) take that `get` function instead of a token; `token_getter(token)` gives one for the account's own sign-in.
+
 ## 19.0.0.4.4 · 2026-11-04
 
 - **A review's photos open in the site's one photo viewer** (owner, 2026-11-04, JS consolidation part C: shared JavaScript lives once, in the base): Tours Core's shared lightbox (`@mtbg_tours_core/shared/lightbox`, Core 0.5.35) instead of a copy of Odoo's gallery modal, in the slider and the wall. The module still needs only the website: without Tours Core, a photo's link opens the photo in a new tab.

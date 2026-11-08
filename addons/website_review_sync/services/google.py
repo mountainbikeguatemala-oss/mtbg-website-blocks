@@ -2,6 +2,9 @@
 
 Reviews are read with the Business Profile API (v4 reviews: 50 per page, with the average and total). The Google
 Cloud project needs the Business Profile APIs enabled (access is granted by Google on request).
+
+The reads take ``get(url, params)``, a function returning Google's JSON: the account's own sign-in
+(``token_getter``) or a site-wide Google connection (review.account._review_google_client()).
 """
 import datetime
 from urllib.parse import urlencode
@@ -48,14 +51,19 @@ def _get(url, token, params=None):
     return resp.json()
 
 
-def list_locations(token):
+def token_getter(token):
+    """``get(url, params)`` with an access token of the account's own sign-in."""
+    return lambda url, params=None: _get(url, token, params)
+
+
+def list_locations(get):
     """[{account, location, title}] the signed-in user manages."""
     result = []
-    for account in _get(ACCOUNTS_URL, token).get('accounts', []):
+    for account in get(ACCOUNTS_URL, None).get('accounts', []):
         page = None
         while True:
-            data = _get(LOCATIONS_URL.format(account=account['name']), token,
-                        {'readMask': 'name,title', 'pageSize': 100, **({'pageToken': page} if page else {})})
+            data = get(LOCATIONS_URL.format(account=account['name']),
+                       {'readMask': 'name,title', 'pageSize': 100, **({'pageToken': page} if page else {})})
             result += [{'account': account['name'], 'location': loc['name'], 'title': loc.get('title', '')}
                        for loc in data.get('locations', [])]
             page = data.get('nextPageToken')
@@ -84,12 +92,12 @@ def parse_review(item):
     }
 
 
-def fetch_reviews(token, account, location):
+def fetch_reviews(get, account, location):
     """Every review of the location: {'reviews': [...], 'average', 'total'}."""
     reviews, average, total, page = [], 0.0, 0, None
     while True:
-        data = _get(REVIEWS_URL.format(account=account, location=location), token,
-                    {'pageSize': 50, **({'pageToken': page} if page else {})})
+        data = get(REVIEWS_URL.format(account=account, location=location),
+                   {'pageSize': 50, **({'pageToken': page} if page else {})})
         reviews += [parse_review(r) for r in data.get('reviews', [])]
         average = data.get('averageRating', average)
         total = data.get('totalReviewCount', total)

@@ -28,6 +28,8 @@ class TestReviewSync(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        # the account's own Google sign-in, also where a module gives the site one Google login
+        cls.startClassPatcher(patch.object(cls.registry['review.account'], '_review_google_global', lambda self: False))
         cls.g_account = cls.env['review.account'].create({
             'name': 'Business Google', 'platform': 'google', 'google_client_id': 'cid', 'google_client_secret': 'sec',
             'google_refresh_token': 'refresh'})
@@ -98,6 +100,21 @@ class TestReviewSync(TransactionCase):
             self.g_account.action_find_locations(access_token='tok')
         self.assertEqual(sorted(self.g_account.source_ids.mapped('external_ref')),
                          ['accounts/1/locations/2', 'accounts/1/locations/3'], "existing one kept, new one added")
+
+    def test_a_site_wide_google_login_replaces_the_own_sign_in(self):
+        """The hook: a module giving the site one Google login hands the reads its client, no token of the account."""
+        calls = []
+
+        def get(url, params=None):
+            calls.append(url)
+            return GOOGLE_PAGE
+
+        Account = self.registry['review.account']
+        with patch.object(Account, '_review_google_client', lambda self: get), \
+                patch.object(google, 'refresh_access_token', side_effect=AssertionError("no own sign-in")):
+            self.assertEqual(self.g_source._sync(), 2)
+        self.assertFalse(self.g_source.last_error)
+        self.assertEqual(calls, ['https://mybusiness.googleapis.com/v4/accounts/1/locations/2/reviews'])
 
 
 @tagged('post_install', '-at_install')

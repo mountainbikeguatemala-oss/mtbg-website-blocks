@@ -21,8 +21,16 @@
                             <field name="platform" widget="radio" options="{'horizontal': true}"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                             <field name="connected" invisible="1"/>
+                            <field name="google_global" invisible="1"/>
                         </group>
-                        <group invisible="platform != 'google'" string="Google Cloud OAuth client">
+                        <group invisible="platform != 'google' or not google_global" string="Google login">
+                            <div colspan="2" class="text-muted small">
+                                Google is reached through the site's one Google login (Settings › Google): Sign in with
+                                Google opens it. Switch on its Google Business Profile app there, with the Google account
+                                that manages the business profiles, then Find Locations here.
+                            </div>
+                        </group>
+                        <group invisible="platform != 'google' or google_global" string="Google Cloud OAuth client">
                             <field name="google_client_id"/>
                             <field name="google_client_secret" password="True"/>
                             <div colspan="2" class="text-muted small">

@@ -26,16 +26,39 @@ class ReviewAccount(models.Model):
     google_client_secret = fields.Char(string='OAuth Client Secret', groups='base.group_system')
     google_refresh_token = fields.Char(groups='base.group_system', copy=False)
     connected = fields.Boolean(compute='_compute_connected')
+    google_global = fields.Boolean(compute='_compute_connected', string='Site-wide Google Login',
+                                   help="Google is reached through the site's one Google login (Settings › Google): "
+                                        "no OAuth client or sign-in on the account")
     tripadvisor_api_key = fields.Char(string='API Key', groups='base.group_system')
     source_ids = fields.One2many('review.source', 'account_id', string='Locations')
     note = fields.Text(readonly=True, copy=False)
 
     def _compute_connected(self):
+        site_wide = self._review_google_global()
         for account in self:
             src = account.sudo()
-            account.connected = bool(src.google_refresh_token if src.platform == 'google' else src.tripadvisor_api_key)
+            account.google_global = site_wide
+            account.connected = account._review_google_connected() if src.platform == 'google' \
+                else bool(src.tripadvisor_api_key)
 
-    # ------------------------------------------------------------------ Google sign-in
+    # ------------------------------------------------------------------ Google: the hooks
+    # A module giving the site one Google login (the Tours' Reviews with the Google connector) overrides these three;
+    # without one, each Google account signs in by itself (its OAuth client, below).
+    @api.model
+    def _review_google_global(self):
+        """True when Google is reached through the site's one Google login, not the account's own sign-in."""
+        return False
+
+    def _review_google_connected(self):
+        self.ensure_one()
+        return bool(self.sudo().google_refresh_token)
+
+    def _review_google_client(self):
+        """``get(url, params)`` returning Google's JSON for this account (raises when it cannot reach Google)."""
+        self.ensure_one()
+        return google.token_getter(self._google_access_token())
+
+    # ------------------------------------------------------------------ Google sign-in (the account's own)
     def action_google_connect(self):
         """Sign in with Google (the business owner's account) to allow reading the reviews."""
         self.ensure_one()
@@ -66,9 +89,9 @@ class ReviewAccount(models.Model):
     def action_find_locations(self, access_token=None):
         """Google: add a review source for each location the account manages (existing ones are kept)."""
         for account in self.filtered(lambda a: a.platform == 'google'):
-            token = access_token or account._google_access_token()
+            get = google.token_getter(access_token) if access_token else account._review_google_client()
             known = set(account.source_ids.mapped('external_ref'))
-            locations = google.list_locations(token)
+            locations = google.list_locations(get)
             for loc in locations:
                 ref = f"{loc['account']}/{loc['location']}"
                 if ref in known:
@@ -146,7 +169,7 @@ class ReviewSource(models.Model):
                 if '/locations/' not in ref:
                     raise UserError(self.env._("Set the location (accounts/…/locations/…): use Find Locations on the account."))
                 acc, loc = ref.split('/locations/', 1)
-                data = google.fetch_reviews(account._google_access_token(), acc, f"locations/{loc}")
+                data = google.fetch_reviews(account._review_google_client(), acc, f"locations/{loc}")
             else:
                 if not (account.tripadvisor_api_key and self.external_ref):
                     raise UserError(self.env._("Enter the Tripadvisor API key and the listing id first."))
