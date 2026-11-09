@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Tours — Reusable Blocks',
-    'version': '19.0.0.10.2',
+    'version': '19.0.0.10.3',
     # where the updater gets it (the website blocks pack's repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     # its section on the Extensions panel: Custom blocks (its main job is website editor blocks)
@@ -43,6 +43,7 @@ Part of the MTBG website blocks: needs only Odoo's website (Tours plugs its page
         'web.assets_frontend': [
             'mtbg_tours_content_blocks/static/src/snippets/s_mtbg_content_block/content_block.scss',
             'mtbg_tours_content_blocks/static/src/snippets/s_mtbg_group/group.scss',
+            'mtbg_tours_content_blocks/static/src/snippets/s_mtbg_icon_list/icon_list.scss',
         ],
         'web.assets_backend': [
             'mtbg_tours_content_blocks/static/src/library/*',

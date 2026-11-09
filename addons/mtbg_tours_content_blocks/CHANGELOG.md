@@ -2,6 +2,13 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_content_blocks-*'`.
 
+## 19.0.0.10.3 (2026-11-08)
+
+- The Bullets block merged in (owner, 2026-11-08, the module clean-up): website editor › Text › Bullets, its options,
+  and the old site's .highlights / .checkbullet / .xbullet list styles are part of the website blocks now. Where
+  Bullets was installed its records are kept with their ids (the pack's own retire helper, tools/retire.py); the old
+  extension is retired (uninstallable), nothing removed.
+
 ## 19.0.0.10.2 · 2026-11-05
 
 - **Reusable blocks load fast: the list first, the cards after** (owner, 2026-11-04: "Reusable blocks take too long

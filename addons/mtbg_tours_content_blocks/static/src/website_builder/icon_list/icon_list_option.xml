@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
     <!-- Bullets block (s_mtbg_icon_list): a preset, or the icon and its look one by one -->
-    <t t-name="mtbg_tours_bullets.IconListOption">
+    <t t-name="mtbg_tours_content_blocks.IconListOption">
         <BuilderRow label.translate="Style">
             <BuilderSelect action="'mtbgIconPreset'">
                 <BuilderSelectItem actionParam="'check'">Check box</BuilderSelectItem>

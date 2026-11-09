@@ -16,7 +16,7 @@ const LOOK_VARIABLES = [
 ];
 
 export class IconListOption extends BaseOptionComponent {
-    static template = "mtbg_tours_bullets.IconListOption";
+    static template = "mtbg_tours_content_blocks.IconListOption";
     static selector = ".s_mtbg_icon_list";
 }
 
