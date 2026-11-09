@@ -492,22 +492,36 @@
 .mtbg-card__frame .mtbg-card__banners--out {
     overflow: visible;
     border-radius: 0;
-    // the ribbon across the corner: a box over the corner, the ribbon across it, cut by the card's edges (owner,
-    // 2026-11-09: no light edge along it and no folded ends; it was 8px past both edges with a dark fold at each end)
+    // the ribbon folded round the corner: a box over the corner, the ribbon across it, its two ends' folds
     .mtbg-card__item--corner.mtbg-card__banner--fold3d {
-        // (a box of 7.5rem over the corner; the ribbon 1.5 times as long, cut by the box)
-        top: 0; right: 0; width: 7.5rem; height: 7.5rem; padding: 0; overflow: hidden;
+        // (a box of 7.5rem over the corner, 8px past both edges; the ribbon 1.5 times as long, cut by the box where
+        // the folds are: the box's top left and bottom right corners)
+        top: -8px; right: -8px; width: 7.5rem; height: 7.5rem; padding: 0; overflow: hidden;
         background: none; box-shadow: none; text-shadow: none;
         .mtbg-card__banner-in {
-            position: absolute; top: 1.5rem; left: -1.25rem; width: 11.25rem; padding: 10px 2.6rem; transform: rotate(45deg);
+            // (owner, 2026-11-09: no grey along the ribbon: its light inset edge and its drop shadow, which showed grey on
+            // the page past the card's edges, are gone; its lower edge meets the two folds exactly: the band's height is
+            // 20px + 1.4em, and its centre is 3.125rem from the box's side, so its edge reaches the folds' long side when
+            // top = 4.375rem - (1/2 + 1/√2) × height)
+            position: absolute; top: calc(4.375rem - 1.2071 * (20px + 1.4em)); left: -1.25rem; width: 11.25rem;
+            padding: 10px 2.6rem; line-height: 1.4; transform: rotate(45deg);
             background: var(--b-base);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, .35);
+            box-shadow: none;
             text-shadow: 0 1px 1px rgba(0, 0, 0, .35);
         }
         .fa { display: none; }
+        &::before, &::after {
+            content: ''; position: absolute; z-index: -1; border: 4px solid var(--b-dark);
+            border-top-color: transparent; border-right-color: transparent;
+        }
+        &::before { top: 0; left: 0; }
+        &::after { bottom: 0; right: 0; }
         &.is-left {
-            right: auto; left: 0;
+            right: auto; left: -8px;
             .mtbg-card__banner-in { left: auto; right: -1.25rem; transform: rotate(-45deg); }
+            &::before, &::after { border-color: var(--b-dark); border-top-color: transparent; border-left-color: transparent; }
+            &::before { left: auto; right: 0; }
+            &::after { right: auto; left: 0; }
         }
     }
     // a band wider than the card, its ends folded behind the sides

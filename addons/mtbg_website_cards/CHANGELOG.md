@@ -2,6 +2,14 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_website_cards-*'`.
 
+## 19.0.0.4.9 · 2026-11-09
+
+- **The 3D ribbon wraps round the card again** (owner, 2026-11-09: "I just wanted to remove the grey border not the 3D
+  wrap behind effect"): 0.4.8's flat ribbon is undone; the ribbon reaches past the card's edges with its dark folds at
+  both ends, as in 0.4.7. Only the grey goes: the light edge along the ribbon (its inset highlight) and its drop shadow,
+  which showed as grey stripes beside the folds on the page past the card. The ribbon sits so its edge meets the folds
+  (no white gap now that the shadow is gone), whatever the ribbon's font size.
+
 ## 19.0.0.4.8 · 2026-11-09
 
 - **The corner ribbon ("6 SPACES LEFT") is flat** (owner, 2026-11-09): the "3D ribbon folded round the corner" style
