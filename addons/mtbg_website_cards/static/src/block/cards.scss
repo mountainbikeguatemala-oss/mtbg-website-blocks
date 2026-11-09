@@ -492,31 +492,22 @@
 .mtbg-card__frame .mtbg-card__banners--out {
     overflow: visible;
     border-radius: 0;
-    // the ribbon folded round the corner: a box over the corner, the ribbon across it, its two ends' folds
+    // the ribbon across the corner: a box over the corner, the ribbon across it, cut by the card's edges (owner,
+    // 2026-11-09: no light edge along it and no folded ends; it was 8px past both edges with a dark fold at each end)
     .mtbg-card__item--corner.mtbg-card__banner--fold3d {
-        // (a box of 7.5rem over the corner, 8px past both edges; the ribbon 1.5 times as long, cut by the box where
-        // the folds are: the box's top left and bottom right corners)
-        top: -8px; right: -8px; width: 7.5rem; height: 7.5rem; padding: 0; overflow: hidden;
+        // (a box of 7.5rem over the corner; the ribbon 1.5 times as long, cut by the box)
+        top: 0; right: 0; width: 7.5rem; height: 7.5rem; padding: 0; overflow: hidden;
         background: none; box-shadow: none; text-shadow: none;
         .mtbg-card__banner-in {
             position: absolute; top: 1.5rem; left: -1.25rem; width: 11.25rem; padding: 10px 2.6rem; transform: rotate(45deg);
             background: var(--b-base);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), 0 5px 10px rgba(0, 0, 0, .35);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, .35);
             text-shadow: 0 1px 1px rgba(0, 0, 0, .35);
         }
         .fa { display: none; }
-        &::before, &::after {
-            content: ''; position: absolute; z-index: -1; border: 4px solid var(--b-dark);
-            border-top-color: transparent; border-right-color: transparent;
-        }
-        &::before { top: 0; left: 0; }
-        &::after { bottom: 0; right: 0; }
         &.is-left {
-            right: auto; left: -8px;
+            right: auto; left: 0;
             .mtbg-card__banner-in { left: auto; right: -1.25rem; transform: rotate(-45deg); }
-            &::before, &::after { border-color: var(--b-dark); border-top-color: transparent; border-left-color: transparent; }
-            &::before { left: auto; right: 0; }
-            &::after { right: auto; left: 0; }
         }
     }
     // a band wider than the card, its ends folded behind the sides

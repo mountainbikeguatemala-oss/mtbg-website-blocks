@@ -2,6 +2,12 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_website_cards-*'`.
 
+## 19.0.0.4.8 · 2026-11-09
+
+- **The corner ribbon ("6 SPACES LEFT") is flat** (owner, 2026-11-09): the "3D ribbon folded round the corner" style
+  loses its light edge along the ribbon and its dark folds at both ends, and now sits inside the card's corner, cut by
+  the card's edges (it reached 8px past them).
+
 ## 19.0.0.4.7 · 2026-11-04
 
 - **Card countdowns tick on the site's one clock** (owner, 2026-11-04, code clean-up: no repeat scripts): the cards'
