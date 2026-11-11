@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="zoho_connector.ZohoSetupButton">
+        <button type="button" class="btn btn-primary btn-sm" t-on-click="open"><i class="fa fa-magic me-1"/>Set up Zoho</button>
+    </t>
+
+    <t t-name="zoho_connector.ZohoSetupDialog">
+        <Dialog title="'Set up Zoho'" size="'lg'">
+            <div t-if="!state.start" class="text-muted"><i class="fa fa-spinner fa-spin me-1"/>Loading…</div>
+            <t t-else="">
+                <!-- the steps: done, here, still to come (a step opens once the ones before it are done) -->
+                <ol class="mtbg_zs_steps list-unstyled d-flex flex-wrap gap-1 mb-3">
+                    <li t-foreach="cards" t-as="card" t-key="card.key">
+                        <button type="button" class="btn btn-sm mtbg_zs_step"
+                                t-att-class="{ 'is-here': card_index === state.card, 'is-done': card_index &lt; state.card,
+                                               'is-skipped': card.app and card.app.skipped }"
+                                t-att-disabled="!reachable(card_index)" t-on-click="() => this.go(card_index)">
+                            <span class="mtbg_zs_num" t-esc="card_index + 1"/>
+                            <span t-esc="card.title"/>
+                        </button>
+                    </li>
+                </ol>
+                <div t-if="state.error" class="alert alert-danger py-2" t-esc="state.error"/>
+                <div t-foreach="state.notes" t-as="note" t-key="note_index" class="alert alert-warning py-1 small mb-2" t-esc="note"/>
+
+                <div class="mtbg_zs_viewport">
+                    <div class="mtbg_zs_track" t-attf-style="transform: translateX(-{{state.card * 100}}%)">
+                        <section t-foreach="cards" t-as="card" t-key="card.key" class="mtbg_zs_card">
+                            <!-- the login: data centre and the Self Client -->
+                            <t t-if="card.key === 'login'">
+                                <h4>Your Zoho login</h4>
+                                <p class="text-muted">In Zoho's API console, add a Self Client (once) and copy its Client ID and Client Secret here.</p>
+                                <div class="mb-3">
+                                    <label class="form-label mb-0">Data centre</label>
+                                    <select class="form-select" t-on-change="(ev) => { state.start.data_centre = ev.target.value; }">
+                                        <option t-foreach="state.start.data_centres" t-as="dc" t-key="dc.key" t-att-value="dc.key"
+                                                t-att-selected="dc.key === state.start.data_centre" t-esc="dc.label"/>
+                                    </select>
+                                </div>
+                                <a class="btn btn-secondary btn-sm mb-3" t-att-href="dataCentre.console_url" target="_blank" rel="noopener">
+                                    <i class="fa fa-external-link me-1"/>Open Zoho's API console
+                                </a>
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <label class="form-label mb-0">Client ID</label>
+                                        <input class="form-control" t-att-value="state.start.client_id" t-on-input="(ev) => { state.start.client_id = ev.target.value; }"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label mb-0">Client Secret</label>
+                                        <input class="form-control" type="password" autocomplete="off"
+                                               t-att-placeholder="state.start.has_secret ? 'Saved (hidden): type to replace it' : ''"
+                                               t-on-input="(ev) => { state.secret = ev.target.value; }"/>
+                                    </div>
+                                </div>
+                            </t>
+
+                            <!-- one per app: its organization ID (needed to go on), or skip it -->
+                            <t t-elif="card.app">
+                                <t t-set="app" t-value="card.app"/>
+                                <div class="d-flex align-items-center gap-2">
+                                    <h4 class="mb-0 me-auto" t-esc="app.label"/>
+                                    <span t-if="app.always" class="badge text-bg-secondary">Needed by Invoices &amp; Payments</span>
+                                    <button t-elif="!app.skipped" type="button" class="btn btn-sm btn-link" t-on-click="() => this.skip(app, true)">Skip this app</button>
+                                    <button t-else="" type="button" class="btn btn-sm btn-secondary" t-on-click="() => this.skip(app, false)">Set up this app</button>
+                                </div>
+                                <p t-if="app.skipped" class="text-muted mt-3">Skipped: its permissions are left out of the login. Set it up any time from here.</p>
+                                <t t-elif="app.needs_org and sameAs(app)">
+                                    <div class="alert alert-info py-2 mt-3 mb-2"><i class="fa fa-link me-1"/><t t-esc="sameAsText(app)"/></div>
+                                    <button type="button" class="btn btn-secondary btn-sm" t-on-click="() => this.setDifferent(app, true)">
+                                        <i class="fa fa-pencil me-1"/>Enter a different organization ID</button>
+                                </t>
+                                <t t-elif="app.needs_org">
+                                    <p class="text-muted mt-2 mb-2" t-esc="app.org_hint"/>
+                                    <a class="btn btn-secondary btn-sm mb-3" t-att-href="app.org_url" target="_blank" rel="noopener">
+                                        <i class="fa fa-external-link me-1"/><t t-esc="openOrgText(app)"/>
+                                    </a>
+                                    <label class="form-label mb-0">Organization ID</label>
+                                    <input class="form-control" inputmode="numeric" autocomplete="off"
+                                           t-att-class="{ 'is-invalid': (state.orgs[app.code] or '').trim() and !orgValid(app), 'is-valid': orgValid(app) }"
+                                           t-att-value="state.orgs[app.code]" t-on-input="(ev) => { state.orgs[app.code] = ev.target.value; }"/>
+                                    <div class="invalid-feedback">Digits only, as Zoho shows it (e.g. 801234567).</div>
+                                    <div class="form-text">Needed to go on. Once connected, it is checked against the organizations your login reaches.</div>
+                                    <button t-if="app.same_as" type="button" class="btn btn-sm btn-link px-0 mt-1" t-on-click="() => this.setDifferent(app, false)">
+                                        <i class="fa fa-undo me-1"/><t t-esc="useSourceText(app)"/></button>
+                                </t>
+                                <p t-else="" class="text-muted mt-2">No organization ID needed: it is the account's own.</p>
+                            </t>
+
+                            <!-- the permissions: copy, paste in the API console, the grant code back -->
+                            <t t-elif="card.key === 'permissions'">
+                                <h4>Permissions</h4>
+                                <div t-if="state.start.connected" class="alert alert-success py-2 d-flex align-items-center gap-2">
+                                    <span class="me-auto"><i class="fa fa-check-circle me-1"/>A Zoho login is saved. Keep it, or make a new grant code to add an app.</span>
+                                    <button type="button" class="btn btn-sm btn-secondary" t-att-disabled="state.busy" t-on-click="keepLogin">Keep this login</button>
+                                </div>
+                                <div t-if="missingGrantText" class="alert alert-warning py-2" t-esc="missingGrantText"/>
+                                <ol class="ps-3 mb-3">
+                                    <li>Copy the permissions.</li>
+                                    <li>In the API console: your Self Client › Generate Code, paste them in Scope, choose a duration, Create.</li>
+                                    <li>Copy the code it shows and paste it below (it is valid a few minutes, once).</li>
+                                </ol>
+                                <label class="form-label mb-0" t-esc="permissionsLabel"/>
+                                <div class="input-group mb-2">
+                                    <textarea class="form-control font-monospace small" rows="3" readonly="1" t-att-value="state.scopes"/>
+                                    <button type="button" class="btn btn-secondary" t-on-click="copyScopes"><i class="fa fa-copy me-1"/>Copy</button>
+                                </div>
+                                <a class="btn btn-secondary btn-sm mb-3" t-att-href="dataCentre.console_url" target="_blank" rel="noopener">
+                                    <i class="fa fa-external-link me-1"/>Open Zoho's API console to paste them
+                                </a>
+                                <label class="form-label mb-0">Grant code</label>
+                                <input class="form-control" autocomplete="off" t-on-input="(ev) => { state.code = ev.target.value; }"/>
+                            </t>
+
+                            <!-- Invoices & Payments' Zoho Books choices (its own settings, saved by its own method) -->
+                            <t t-elif="card.key === 'books' and state.choices">
+                                <h4>Invoices &amp; Payments in Zoho Books</h4>
+                                <div class="text-muted small mb-2">Where Stripe payments are deposited, the invoice's custom fields, the invoice template per language.</div>
+                                <div class="mb-2">
+                                    <label class="form-label mb-0">Stripe clearing account (deposit to)</label>
+                                    <select class="form-select" t-on-change="(ev) => { state.values.zoho_stripe_account_id = ev.target.value; }">
+                                        <option value="">—</option>
+                                        <option t-foreach="state.choices.accounts" t-as="a" t-key="a.id" t-att-value="a.id"
+                                                t-att-selected="a.id === state.values.zoho_stripe_account_id" t-esc="a.name"/>
+                                    </select>
+                                </div>
+                                <div class="row g-2 mb-2">
+                                    <t t-foreach="[['zoho_cf_invoice_token', 'invoice_fields', 'Invoice field: payment token'], ['zoho_cf_invoice_link', 'invoice_fields', 'Invoice field: payment link'], ['zoho_cf_payment_stripe_url', 'payment_fields', 'Payment field: Stripe link']]"
+                                       t-as="f" t-key="f[0]">
+                                        <div class="col-md-4">
+                                            <label class="form-label mb-0 small" t-esc="f[2]"/>
+                                            <select class="form-select form-select-sm" t-on-change="(ev) => { state.values[f[0]] = ev.target.value; }">
+                                                <option value="">—</option>
+                                                <option t-foreach="state.choices[f[1]]" t-as="cf" t-key="cf.id" t-att-value="cf.id"
+                                                        t-att-selected="cf.id === state.values[f[0]]" t-esc="cf.label || cf.api_name"/>
+                                            </select>
+                                        </div>
+                                    </t>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label mb-0">Stripe account ID (acct_…, for the Stripe link on each Zoho payment)</label>
+                                    <input class="form-control" t-att-value="state.values.stripe_account_id" t-on-input="(ev) => { state.values.stripe_account_id = ev.target.value; }"/>
+                                </div>
+                                <table t-if="state.langs.length" class="table table-sm align-middle mb-0">
+                                    <thead><tr><th>Language</th><th>Invoice template</th><th t-if="state.choices.contact_language">Contact Language</th></tr></thead>
+                                    <tbody>
+                                        <tr t-foreach="state.langs" t-as="row" t-key="row.code">
+                                            <td t-esc="row.name"/>
+                                            <td><select class="form-select form-select-sm" t-on-change="(ev) => { row.template_id = ev.target.value; }">
+                                                <option value="">(default)</option>
+                                                <option t-foreach="state.choices.templates" t-as="t" t-key="t.id" t-att-value="t.id"
+                                                        t-att-selected="t.id === row.template_id" t-esc="t.name"/></select></td>
+                                            <td t-if="state.choices.contact_language"><select class="form-select form-select-sm" t-on-change="(ev) => { row.contact_language = ev.target.value; }">
+                                                <option value="">—</option>
+                                                <option t-foreach="state.choices.contact_language.options" t-as="o" t-key="o" t-att-value="o"
+                                                        t-att-selected="o === row.contact_language" t-esc="o"/></select></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </t>
+
+                            <!-- done: what each app may do now -->
+                            <t t-elif="card.key === 'done' and state.result">
+                                <h4>Check access</h4>
+                                <div t-attf-class="alert py-2 mb-1 {{state.result.books.ok ? 'alert-success' : 'alert-danger'}}" t-esc="state.result.books.message"/>
+                                <div t-foreach="state.result.access" t-as="a" t-key="a.app" class="d-flex gap-2 small">
+                                    <i t-attf-class="fa {{a.ok ? 'fa-check text-success' : 'fa-times text-muted'}} mt-1"/>
+                                    <strong t-esc="a.app"/><span class="text-muted" t-esc="a.message"/>
+                                </div>
+                                <div class="text-muted small mt-2">Every app stays Off until you switch it on in its card.</div>
+                            </t>
+                        </section>
+                    </div>
+                </div>
+            </t>
+            <t t-set-slot="footer">
+                <button t-if="state.start and state.card > 0 and current.key !== 'done'" class="btn btn-secondary" t-on-click="back">
+                    <i class="fa fa-arrow-left me-1"/>Back</button>
+                <t t-if="state.start">
+                    <button t-if="current.key === 'login' or current.app" class="btn btn-primary" t-att-disabled="!canNext" t-on-click="next">
+                        Next<i class="fa fa-arrow-right ms-1"/></button>
+                    <button t-if="current.key === 'permissions'" class="btn btn-primary" t-att-disabled="state.busy or !appsDone or !state.code.trim()"
+                            t-on-click="connect">Connect</button>
+                    <button t-if="current.key === 'books'" class="btn btn-primary" t-att-disabled="state.busy" t-on-click="finish">Save and check</button>
+                    <button t-if="current.key === 'done'" class="btn btn-primary" t-on-click="done">Done</button>
+                </t>
+                <button t-if="!state.start or current.key !== 'done'" class="btn btn-secondary" t-on-click="() => this.props.close()">Cancel</button>
+            </t>
+        </Dialog>
+    </t>
+</templates>

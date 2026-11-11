@@ -1,0 +1,55 @@
+// the Zoho setup wizard: one card per step, sliding left and right
+.mtbg_zs_viewport {
+    overflow: hidden;
+}
+
+.mtbg_zs_track {
+    display: flex;
+    transition: transform .3s ease;
+}
+
+.mtbg_zs_card {
+    flex: 0 0 100%;
+    min-width: 0;
+    padding: 0 .25rem;
+}
+
+.mtbg_zs_step {
+    display: flex;
+    align-items: center;
+    gap: .35rem;
+    border: 1px solid var(--border-color, #dee2e6);
+    border-radius: 1rem;
+    padding: .15rem .6rem .15rem .25rem;
+
+    .mtbg_zs_num {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.35rem;
+        height: 1.35rem;
+        border-radius: 50%;
+        font-size: .75rem;
+        background: var(--bs-secondary-bg, #e9ecef);
+    }
+
+    &.is-here {
+        border-color: var(--primary, #71639e);
+        font-weight: 600;
+
+        .mtbg_zs_num {
+            background: var(--primary, #71639e);
+            color: #fff;
+        }
+    }
+
+    &.is-done .mtbg_zs_num {
+        background: var(--success, #28a745);
+        color: #fff;
+    }
+
+    &.is-skipped {
+        text-decoration: line-through;
+        opacity: .6;
+    }
+}

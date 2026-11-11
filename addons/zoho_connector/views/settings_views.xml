@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The Zoho section of Odoo's Settings: its own app there, beside General Settings -->
+    <record id="view_zoho_settings" model="ir.ui.view">
+        <field name="name">res.config.settings.zoho_connector</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="mode">extension</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Zoho" name="zoho_connector" logo="/zoho_connector/static/description/icon.png"
+                     groups="base.group_system">
+                    <block title="Connection" name="mtbg_zoho_connection">
+                        <setting class="col-lg-12" string="Login" help="One login for every Zoho app and every extension using Zoho: made here (Set up Zoho), its access token shared.">
+                            <div class="d-flex flex-column gap-2">
+                                <field name="mtbg_zoho_connection_info" nolabel="1" readonly="1"/>
+                                <widget name="mtbg_zoho_setup"/>
+                            </div>
+                        </setting>
+                        <setting class="col-lg-12" string="Access per App" help="What the token may do in each app, from one read per app. A missing scope: generate a new code for the self client with the scopes below, then Set up Zoho Books again.">
+                            <div class="d-flex flex-column gap-2">
+                                <field name="mtbg_zoho_access_info" nolabel="1" readonly="1"/>
+                                <button name="action_mtbg_zoho_check_access" type="object" string="Check Access" class="btn-secondary" icon="fa-plug"/>
+                            </div>
+                        </setting>
+                        <setting class="col-lg-12" string="Scopes for a New Grant Code" help="Every app's scopes, for the self client's Generate Code (api-console.zoho.com).">
+                            <field name="mtbg_zoho_scopes_needed" nolabel="1" readonly="1" class="font-monospace"/>
+                        </setting>
+                        <setting string="Calls per Minute (per app)" help="Calls are paced and retried when Zoho says too many. Zoho Books allows 100 a minute.">
+                            <field name="mtbg_zoho_rate_limit"/>
+                        </setting>
+                    </block>
+                    <!-- the section's own pages (nothing Zoho is in the main menu: everything is reached from here) -->
+                    <block title="Sync &amp; References" name="mtbg_zoho_section">
+                        <setting class="col-lg-12" string="Sync Log and References" help="Every write sent to a Zoho app and every failed call (kept 90 days); which Zoho record each Odoo record is.">
+                            <widget name="mtbg_zoho_section"/>
+                        </setting>
+                    </block>
+                    <!-- the integrations: one card per Zoho integration (its app's switches, versions, install /
+                         update, Sync now, its pages), its settings under it. Extensions add their blocks here. -->
+                    <block title="Zoho Expense: history (read only)" name="mtbg_zoho_expense">
+                        <setting class="col-lg-12">
+                            <widget name="mtbg_zoho_card" card="expense_reports"/>
+                        </setting>
+                        <setting string="Organization ID" help="Zoho Expense's organization (often the same as Zoho Books'). Zoho Expense is only read now, for the staff expenses' history import; its reports are no longer made.">
+                            <field name="mtbg_zoho_expense_org_id"/>
+                        </setting>
+                    </block>
+                    <block title="Zoho Shifts" name="mtbg_zoho_shifts">
+                        <setting class="col-lg-12">
+                            <widget name="mtbg_zoho_card" card="shifts"/>
+                        </setting>
+                        <setting string="Organization ID">
+                            <field name="mtbg_zoho_shifts_org_id"/>
+                        </setting>
+                    </block>
+                    <block title="More Zoho integrations" name="mtbg_zoho_card_others">
+                        <setting class="col-lg-12">
+                            <widget name="mtbg_zoho_card" card="others"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_zoho_settings" model="ir.actions.act_window">
+        <field name="name">Zoho</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="view_id" ref="base.res_config_settings_view_form"/>
+        <field name="context">{'module': 'zoho_connector', 'bin_size': False}</field>
+    </record>
+</odoo>
