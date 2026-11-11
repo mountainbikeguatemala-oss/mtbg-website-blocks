@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- the backend menu designer: the admin's menus arranged for everyone (administrators only); under
+         Website › Configuration (owner, 2026-11-11; before 0.11.0 it was Tours Core's, under Tours › Configuration) -->
+    <record id="action_mtbg_menu_designer" model="ir.actions.client">
+        <field name="name">Menu Designer</field>
+        <field name="tag">mtbg_menu_designer</field>
+        <field name="path">menu-designer</field>
+    </record>
+    <menuitem id="menu_mtbg_menu_designer" name="Menu Designer" parent="website.menu_website_global_configuration"
+              sequence="50" action="action_mtbg_menu_designer" groups="base.group_system"/>
+</odoo>

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mtbg_tours_content_blocks.MenuDesigner">
+        <div class="o_action mtbg_md d-flex flex-column h-100">
+            <div class="mtbg_md_head d-flex flex-wrap align-items-center gap-2 px-3 py-2 border-bottom">
+                <div class="me-auto">
+                    <h2 class="mb-0">Menu Designer</h2>
+                    <small class="text-muted">Click a menu, then ← out of its folder, → into the folder above, ↑ ↓ the order; ⋯ for more. Saved for everyone; a module update keeps it.</small>
+                </div>
+                <span t-if="state.note" class="mtbg_md_note small" t-att-class="'is-' + state.note.type" role="status" t-esc="state.note.text"/>
+                <div class="position-relative mtbg_md_presets">
+                    <button class="btn btn-secondary" t-on-click="() => this.state.presetsOpen = !this.state.presetsOpen">
+                        <i class="fa fa-magic me-1"/>Presets <i class="fa fa-caret-down ms-1"/></button>
+                    <div t-if="state.presetsOpen" class="mtbg_md_presets_menu p-2">
+                        <div t-foreach="state.presets" t-as="preset" t-key="preset.key" class="mtbg_md_preset d-flex align-items-start gap-2">
+                            <button class="btn btn-link text-start p-0 flex-grow-1" t-on-click="() => this.applyPreset(preset)">
+                                <b t-esc="preset.name"/>
+                                <small class="d-block text-muted" t-esc="preset.description"/>
+                            </button>
+                            <span t-if="preset.builtin" class="badge text-bg-secondary flex-shrink-0">Built in</span>
+                            <button t-else="" class="btn btn-sm btn-link text-danger p-0" title="Delete this preset"
+                                    t-on-click="() => this.deletePreset(preset)"><i class="fa fa-trash"/></button>
+                        </div>
+                        <div class="border-top mt-2 pt-2">
+                            <label class="form-label small mb-1">Keep the saved layout as a preset</label>
+                            <div class="input-group input-group-sm">
+                                <input class="form-control" placeholder="Preset name" t-model="state.presetName"
+                                       t-on-keydown="(ev) => ev.key === 'Enter' and this.savePreset()"/>
+                                <button class="btn btn-primary" t-att-disabled="!state.presetName.trim()" t-on-click="savePreset">Save as preset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-link" t-on-click="resetAll">Reset everything</button>
+                <button class="btn btn-secondary" t-att-disabled="!dirty or state.saving" t-on-click="discard">Discard</button>
+                <button class="btn btn-primary" t-att-disabled="!dirty or state.saving" t-on-click="save">Save</button>
+            </div>
+            <div t-if="dirty" class="mtbg_md_dirty px-3 py-1 small">Unsaved changes: Save to apply them to the menu bar.</div>
+            <div class="mtbg_md_tree flex-grow-1 overflow-auto p-3">
+                <!-- the app's top bar, as Odoo shows it inside the app: what the outline below makes -->
+                <section class="mtbg_md_topbar mb-3">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <h5 class="mb-0">Top bar</h5>
+                        <small class="text-muted">The app of the menu picked below, as staff see it. Click a menu to see its dropdown.</small>
+                    </div>
+                    <div class="mtbg_md_bar d-flex align-items-stretch flex-wrap">
+                        <span class="mtbg_md_bar_app" t-if="state.barApp and state.nodes[state.barApp]" t-esc="state.nodes[state.barApp].name"/>
+                        <button t-foreach="barMenus" t-as="menu" t-key="menu.id" class="mtbg_md_chip d-flex align-items-center gap-1"
+                                t-att-class="{ 'is-open': state.barOpen === menu.id, 'is-hidden': menu.hidden, 'is-unseen': hiddenFor(menu) }"
+                                t-on-click="() => this.toggleBarMenu(menu)">
+                            <span t-esc="menu.name"/>
+                            <i t-if="hasChildren(menu)" class="fa fa-caret-down small"/>
+                            <i t-if="menu.hidden" class="fa fa-eye-slash small"/>
+                        </button>
+                    </div>
+                    <!-- the open menu's dropdown, as Odoo draws it: folders as headings -->
+                    <div t-if="barOpenNode" class="mtbg_md_dropdown mt-1 py-1">
+                        <t t-foreach="children(barOpenNode.id)" t-as="item" t-key="item.id">
+                            <button class="mtbg_md_dd_item" t-att-class="{ 'is-heading': !item.action, 'is-hidden': item.hidden, 'is-selected': state.selected === item.id }"
+                                    t-on-click="() => this.picked(item)" t-esc="item.name"/>
+                            <t t-if="!item.action">
+                                <button t-foreach="children(item.id)" t-as="sub" t-key="sub.id" class="mtbg_md_dd_item is-sub"
+                                        t-att-class="{ 'is-hidden': sub.hidden, 'is-selected': state.selected === sub.id }"
+                                        t-on-click="() => this.picked(sub)" t-esc="sub.name"/>
+                            </t>
+                        </t>
+                        <div t-if="!hasChildren(barOpenNode)" class="mtbg_md_dd_item text-muted">Empty</div>
+                    </div>
+                </section>
+                <!-- the icons on the right of Odoo's top bar (models/topbar.py), saved as soon as changed -->
+                <section t-if="state.topbar" class="mtbg_md_topbar_icons mb-3">
+                    <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                        <h5 class="mb-0">Top bar icons</h5>
+                        <small class="text-muted">First is leftmost. ↑ ↓ to move (Alt+↑↓ on a row), the eye to hide. Saved at once, for everyone.</small>
+                    </div>
+                    <ul class="list-unstyled mb-1">
+                        <li t-foreach="topbarRows" t-as="row" t-key="row.key" tabindex="0" t-att-data-key="row.key"
+                            class="mtbg_md_row d-flex align-items-center gap-2" t-att-class="{ 'is-hidden': row.hidden, 'is-unseen': !row.present }"
+                            t-on-keydown="(ev) => this.onTopbarKey(ev, row)">
+                            <i t-attf-class="fa fa-fw {{row.icon}}"/>
+                            <span class="mtbg_md_name text-truncate" t-esc="row.label"/>
+                            <small t-if="!row.present" class="text-muted">Not on this site</small>
+                            <span class="mtbg_md_tools d-flex">
+                                <button class="btn btn-link btn-sm" title="Move left (up)" t-att-disabled="row_first or state.topbarSaving"
+                                        t-on-click="() => this.topbarMove(row, -1)"><i class="fa fa-arrow-up"/></button>
+                                <button class="btn btn-link btn-sm" title="Move right (down)" t-att-disabled="row_last or state.topbarSaving"
+                                        t-on-click="() => this.topbarMove(row, 1)"><i class="fa fa-arrow-down"/></button>
+                                <button class="btn btn-link btn-sm" t-att-title="row.hidden ? showText : hideText" t-att-disabled="state.topbarSaving"
+                                        t-on-click="() => this.topbarToggle(row)"><i t-attf-class="fa {{row.hidden ? 'fa-eye-slash' : 'fa-eye'}}"/></button>
+                            </span>
+                        </li>
+                        <li class="mtbg_md_row d-flex align-items-center gap-2 text-muted">
+                            <i class="fa fa-fw fa-user-circle"/>
+                            <span class="mtbg_md_name">Your avatar: always last</span>
+                        </li>
+                    </ul>
+                    <div class="d-flex flex-wrap align-items-center gap-3">
+                        <div class="form-check form-switch mb-0">
+                            <input class="form-check-input" type="checkbox" role="switch" id="mtbg_md_company_name"
+                                   t-att-checked="state.topbar.company_name" t-att-disabled="state.topbarSaving" t-on-change="topbarCompanyName"/>
+                            <label class="form-check-label" for="mtbg_md_company_name">Show company name in top bar</label>
+                        </div>
+                        <button class="btn btn-sm btn-link" t-on-click="resetTopbar">Back to the default icons</button>
+                    </div>
+                </section>
+                <h5 class="mb-2">All menus</h5>
+                <div class="d-flex flex-wrap gap-2 mb-2">
+                    <input class="form-control form-control-sm mtbg_md_search" placeholder="Find a menu…" t-model="state.treeSearch"/>
+                    <button class="btn btn-sm btn-secondary" t-on-click="() => this.expandAll(true)">Open all</button>
+                    <button class="btn btn-sm btn-secondary" t-on-click="() => this.expandAll(false)">Close all</button>
+                    <button class="btn btn-sm btn-secondary" t-on-click="() => this.newFolder(false)"><i class="fa fa-plus me-1"/>New app</button>
+                    <button class="btn btn-sm btn-secondary" t-on-click="() => this.openAdd(false)"><i class="fa fa-plus me-1"/>Add page</button>
+                        <div class="position-relative mtbg_md_viewas">
+                            <button class="btn btn-sm btn-secondary text-truncate mw-100" title="Check what a group sees"
+                                    t-on-click="() => this.state.viewAsOpen = !this.state.viewAsOpen">
+                                <i class="fa fa-user-secret me-1"/><t t-esc="state.viewAs ? viewAsName : viewAsPlaceholder"/>
+                                <i class="fa fa-caret-down ms-1"/>
+                            </button>
+                            <div t-if="state.viewAsOpen" class="mtbg_md_viewas_menu p-2">
+                                <input class="form-control form-control-sm mb-2" placeholder="Find a group…" t-model="state.viewAsSearch"/>
+                                <button t-if="state.viewAs" class="btn btn-sm btn-link px-1 d-block" t-on-click="() => this.pickViewAs('')">
+                                    <i class="fa fa-times me-1"/>Stop checking</button>
+                                <button t-foreach="viewAsChoices" t-as="group" t-key="group.id" class="btn btn-sm btn-link text-start px-1 d-block w-100 text-wrap"
+                                        t-att-class="{ 'fw-bold': group.id + '' === state.viewAs + '' }"
+                                        t-on-click="() => this.pickViewAs(group.id)" t-esc="group.name"/>
+                            </div>
+                        </div>
+                </div>
+                <div class="mtbg_md_keys small text-muted mb-2">Keys on a picked menu: Tab into the folder above · Shift+Tab out of its folder · Alt+↑ ↓ the order · ↑ ↓ the next menu · F2 rename</div>
+                <div t-if="state.viewAs" class="small text-muted mb-2">
+                    <i class="fa fa-user-secret me-1"/><t t-esc="viewAsNote"/>
+                </div>
+                <ul class="list-unstyled mb-0 mtbg_md_outline">
+                    <t t-foreach="children(false)" t-as="node" t-key="node.id">
+                        <t t-call="mtbg_tours_content_blocks.MenuDesignerNode"/>
+                    </t>
+                </ul>
+                <!-- the modules' menus removed: out of the menus, kept here to put back -->
+                <div t-if="removedNodes.length" class="mtbg_md_removed mt-3">
+                    <h6 class="mb-1"><i class="fa fa-trash-o me-1"/>Removed <span class="text-muted fw-normal small">(not in the menus; what was inside goes with it)</span></h6>
+                    <ul class="list-unstyled mb-0">
+                        <li t-foreach="removedNodes" t-as="node" t-key="node.id" class="d-flex align-items-center gap-2 small py-1">
+                            <button class="btn btn-sm btn-secondary" t-on-click="() => this.restore(node)"><i class="fa fa-undo me-1"/>Put back</button>
+                            <i class="fa" t-att-class="node.action ? 'fa-file-o' : (node.parent ? 'fa-folder-o' : 'fa-th-large')"/>
+                            <span class="text-truncate" t-esc="node.name"/>
+                            <small t-if="node.parent and state.nodes[node.parent]" class="text-muted">(<t t-esc="state.nodes[node.parent].name"/>)</small>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Move to…: the main menu or any folder -->
+            <div t-if="state.moveFor and state.nodes[state.moveFor]" class="mtbg_md_modal" t-on-click.self="() => this.state.moveFor = null">
+                <div class="mtbg_md_modal_box p-3" role="dialog">
+                    <h5 class="mb-1" t-esc="moveTitle"/>
+                    <div class="small text-muted mb-2" t-esc="moveWhere"/>
+                    <input class="form-control form-control-sm mb-2" placeholder="Find a folder…" t-model="state.moveSearch" autofocus="autofocus"/>
+                    <div class="mtbg_md_modal_list">
+                        <button t-foreach="moveTargets" t-as="target" t-key="target.key" class="mtbg_md_pick" t-att-disabled="target.here"
+                                t-on-click="() => this.moveTo(state.nodes[state.moveFor], target.id)">
+                            <t t-esc="target.label"/><small t-if="target.here" class="text-muted"> (here now)</small>
+                        </button>
+                    </div>
+                    <div class="mt-2 text-end"><button class="btn btn-secondary btn-sm" t-on-click="() => this.state.moveFor = null">Cancel</button></div>
+                </div>
+            </div>
+            <!-- + Page: every admin page, searched -->
+            <div t-if="state.addTo !== undefined" class="mtbg_md_modal" t-on-click.self="() => this.state.addTo = undefined">
+                <div class="mtbg_md_modal_box p-3" role="dialog">
+                    <h5 class="mb-1" t-esc="addTitle"/>
+                    <input class="form-control form-control-sm mb-2" placeholder="Search pages…" t-model="state.search" autofocus="autofocus"/>
+                    <div class="d-flex flex-wrap gap-2 mb-2">
+                        <select class="form-select form-select-sm w-auto" t-model="state.module">
+                            <option value="">All apps</option>
+                            <t t-foreach="modules" t-as="module" t-key="module[0]">
+                                <option t-att-value="module[0]" t-esc="module[1]"/>
+                            </t>
+                        </select>
+                        <div class="btn-group btn-group-sm mtbg_md_segments" role="group">
+                            <t t-set="counts" t-value="segmentCounts"/>
+                            <button class="btn" t-att-class="state.segment === 'out' ? 'btn-primary' : 'btn-secondary'"
+                                    t-on-click="() => this.state.segment = 'out'">In no menu <span class="opacity-75" t-esc="counts.out"/></button>
+                            <button class="btn" t-att-class="state.segment === 'in' ? 'btn-primary' : 'btn-secondary'"
+                                    t-on-click="() => this.state.segment = 'in'">In a menu <span class="opacity-75" t-esc="counts.in"/></button>
+                            <button class="btn" t-att-class="state.segment === 'all' ? 'btn-primary' : 'btn-secondary'"
+                                    t-on-click="() => this.state.segment = 'all'">All <span class="opacity-75" t-esc="counts.all"/></button>
+                        </div>
+                    </div>
+                    <div class="mtbg_md_modal_list">
+                        <button t-foreach="shownPages" t-as="page" t-key="page.action" class="mtbg_md_pick"
+                                t-att-class="{ 'is-unseen': pageHiddenFor(page) }" t-on-click="() => this.addPage(page)">
+                            <i class="fa me-1" t-att-class="page.kind === 'page' ? 'fa-file-o' : 'fa-cog'"/><t t-esc="page.name"/>
+                            <small class="d-block text-muted text-truncate">
+                                <t t-esc="page.module_name or page.module"/> · <t t-esc="page.model"/><t t-if="page.in_menu"> · in a menu</t>
+                            </small>
+                        </button>
+                        <div t-if="!pageList.length" class="text-muted small p-2">No page matches.</div>
+                        <div t-elif="pageList.length > shownPages.length" class="small text-muted p-2" t-esc="moreText(pageList.length - shownPages.length)"/>
+                    </div>
+                    <div class="mt-2 text-end"><button class="btn btn-secondary btn-sm" t-on-click="() => this.state.addTo = undefined">Cancel</button></div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="mtbg_tours_content_blocks.MenuDesignerNode">
+        <t t-if="matches(node)">
+        <li class="mtbg_md_item">
+            <div class="mtbg_md_row d-flex align-items-center gap-2" tabindex="0" t-att-data-node="node.id"
+                 t-att-class="{
+                     'is-hidden': node.hidden, 'is-changed': node.changed, 'is-unseen': hiddenFor(node),
+                     'is-selected': state.selected === node.id,
+                 }"
+                 t-on-click="() => this.picked(node)" t-on-keydown="(ev) => this.onRowKey(ev, node)">
+                <button class="btn btn-link p-0 mtbg_md_caret" tabindex="-1" t-on-click.stop="() => this.toggle(node)"
+                        t-att-class="{ invisible: !hasChildren(node) }">
+                    <i class="fa" t-att-class="state.open[node.id] ? 'fa-caret-down' : 'fa-caret-right'"/>
+                </button>
+                <i class="fa" t-att-class="node.action ? 'fa-file-o' : (node.parent ? 'fa-folder-o' : 'fa-th-large')"/>
+                <t t-if="state.editing === node.id">
+                    <input class="form-control form-control-sm mtbg_md_rename" t-att-value="node.name"
+                           t-on-keydown="(ev) => this.onRenameKey(ev, node)" t-on-blur="(ev) => this.rename(node, ev.target.value)"
+                           t-on-click.stop="" autofocus="autofocus"/>
+                </t>
+                <t t-else="">
+                    <span class="mtbg_md_name text-truncate" t-esc="node.name"
+                          t-on-dblclick="() => this.state.editing = node.id" t-att-title="node.name"/>
+                    <small t-if="node.name !== node.module_name and node.module_name" class="text-muted text-truncate">(<t t-esc="node.module_name"/>)</small>
+                </t>
+                <small t-if="node.group_ids.length" class="badge text-bg-secondary text-truncate" t-esc="groupNames(node)"/>
+                <i t-if="node.hidden" class="fa fa-eye-slash text-muted" title="Hidden"/>
+                <i t-if="hiddenFor(node)" class="fa fa-ban text-muted" t-att-title="viewAsNote"/>
+                <span class="ms-auto d-flex mtbg_md_tools">
+                    <t t-set="above" t-value="folderAbove(node)"/>
+                    <button class="btn btn-sm btn-link" tabindex="-1" t-att-disabled="!node.parent"
+                            t-att-title="node.parent ? 'Out of ' + state.nodes[node.parent].name + ' (Shift+Tab)' : 'Already in the main menu'"
+                            t-on-click.stop="() => this.moveOut(node)"><i class="fa fa-arrow-left"/></button>
+                    <button class="btn btn-sm btn-link" tabindex="-1" t-att-disabled="!above"
+                            t-att-title="above ? 'Into ' + above.name + ' (Tab)' : 'No folder just above'"
+                            t-on-click.stop="() => this.moveInto(node)"><i class="fa fa-arrow-right"/></button>
+                    <button class="btn btn-sm btn-link" tabindex="-1" title="Up (Alt+↑)" t-att-disabled="!canMove(node, -1)"
+                            t-on-click.stop="() => this.move(node, -1)"><i class="fa fa-arrow-up"/></button>
+                    <button class="btn btn-sm btn-link" tabindex="-1" title="Down (Alt+↓)" t-att-disabled="!canMove(node, 1)"
+                            t-on-click.stop="() => this.move(node, 1)"><i class="fa fa-arrow-down"/></button>
+                    <span class="position-relative">
+                        <button class="btn btn-sm btn-link" tabindex="-1" title="More" t-on-click.stop="() => this.toggleMenu(node)"><i class="fa fa-ellipsis-h"/></button>
+                        <div t-if="state.menuFor === node.id" class="mtbg_md_menu py-1" t-on-click.stop="">
+                            <button t-on-click="() => this.openMove(node)"><i class="fa fa-share fa-fw me-1"/>Move to…</button>
+                            <button t-on-click="() => { this.state.menuFor = null; this.state.editing = node.id; }"><i class="fa fa-pencil fa-fw me-1"/>Rename</button>
+                            <button t-on-click="() => { this.state.menuFor = null; this.state.groupSearch = ''; this.state.groupsFor = node.id; }"><i class="fa fa-users fa-fw me-1"/>Only for some groups…</button>
+                            <button t-att-disabled="node.protected" t-on-click="() => { this.state.menuFor = null; this.toggleHidden(node); }">
+                                <i class="fa fa-fw me-1" t-att-class="node.hidden ? 'fa-eye' : 'fa-eye-slash'"/><t t-if="node.hidden">Show</t><t t-else="">Hide</t>
+                            </button>
+                            <t t-if="!node.action">
+                                <button t-on-click="() => this.newFolder(node)"><i class="fa fa-folder-open-o fa-fw me-1"/>New folder inside</button>
+                                <button t-on-click="() => this.openAdd(node)"><i class="fa fa-plus fa-fw me-1"/>Add a page inside</button>
+                            </t>
+                            <button t-if="!node.designer and node.changed" t-on-click="() => { this.state.menuFor = null; this.resetOne(node); }"><i class="fa fa-undo fa-fw me-1"/>Back to its module's</button>
+                            <button class="text-danger" t-att-disabled="node.protected" t-on-click="() => this.removeMenu(node)">
+                                <i class="fa fa-trash fa-fw me-1"/><t t-if="node.designer">Remove (added here)</t><t t-else="">Remove (to Removed, below)</t>
+                            </button>
+                        </div>
+                    </span>
+                </span>
+            </div>
+            <div t-if="state.groupsFor === node.id" class="mtbg_md_groups ms-5 my-1 p-2">
+                <div class="d-flex align-items-start gap-2 mb-1">
+                    <div class="small text-muted me-auto">Shown only to these groups (none: as its module says). The menu only: what a page lets one do stays the same.</div>
+                    <button class="btn btn-sm btn-secondary" t-on-click="() => this.state.groupsFor = null">Done</button>
+                </div>
+                <input class="form-control form-control-sm mb-1" placeholder="Find a group…" t-model="state.groupSearch"/>
+                <label t-foreach="groupChoices" t-as="group" t-key="group.id" class="form-check small d-block">
+                    <input type="checkbox" class="form-check-input" t-att-checked="node.group_ids.includes(group.id)"
+                           t-on-change="() => this.toggleGroup(node, group)"/>
+                    <span class="form-check-label" t-esc="group.name"/>
+                </label>
+            </div>
+            <ul t-if="state.open[node.id] or state.treeSearch.trim()" class="list-unstyled ms-4 mb-0">
+                <t t-set="parentId" t-value="node.id"/>
+                <t t-foreach="children(node.id)" t-as="node" t-key="node.id">
+                    <t t-call="mtbg_tours_content_blocks.MenuDesignerNode"/>
+                </t>
+            </ul>
+        </li>
+        </t>
+    </t>
+</templates>

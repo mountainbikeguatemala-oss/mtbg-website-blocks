@@ -1,0 +1,70 @@
+// The top bar icons (topbar.js): every count bubble at the same place on its icon, whichever module draws it (www
+// 2026-10-29: visitors 10px down, conversations and email at 0, alerts at -1), readable, and never under the next
+// icon: in its button's room as Odoo's own bubbles (the button widens for "25", "125"), lifted onto the icon's
+// corner (www 2026-10-29, 0.5.18: absolute 10px bubbles ran under the next icon, "25" read "2")
+.o_web_client .o_main_navbar .o_menu_systray {
+    :is(button, a):has(> .badge) {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    :is(button, a) > .badge {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        z-index: 1;
+        align-self: flex-start;
+        margin: .45rem -.1rem 0 -.45rem;  // onto the icon's top right corner, its own room kept
+        transform: none;
+        min-width: 1.15rem;
+        line-height: 1;
+        font-size: .75rem;
+        padding: .2rem .35rem;
+    }
+}
+
+// The top bar's dropdowns with a list (Alerts, Conversations, Email, Visitors online): only the list scrolls; the
+// header, search and chips stay (www 2026-10-29: the dropdown and its list both scrolled, two scroll bars)
+.o_popover.o-dropdown--menu:is(.o_mtbg_alert_menu_dropdown, .o_cfd_inbox_menu, .o_cfd_visitors_online_menu):has(:is(.o_mtbg_alert_menu_list, .o_cfd_inbox_list, .o_cfd_visitors_online_list)) {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden !important;
+
+    > *, .o_mtbg_alert_menu_content > * {
+        flex-shrink: 0;
+    }
+
+    .o_mtbg_alert_menu_content {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+
+    :is(.o_mtbg_alert_menu_list, .o_cfd_inbox_list, .o_cfd_visitors_online_list) {
+        flex: 0 1 auto;
+        min-height: 0;
+        max-height: none;
+        overflow-y: auto;
+    }
+
+    // a list inside a wrapper: the wrapper shrinks with it
+    > :has(:is(.o_cfd_inbox_list, .o_cfd_visitors_online_list)) {
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 1;
+        min-height: 0;
+    }
+}
+
+body.o_mtbg_topbar_company_icon .o_switch_company_menu {
+    .oe_topbar_name {
+        display: none !important;
+    }
+
+    .fa-building {
+        display: inline-block !important;
+    }
+}

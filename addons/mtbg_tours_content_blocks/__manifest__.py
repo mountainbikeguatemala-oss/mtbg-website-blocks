@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Tours — Reusable Blocks',
-    'version': '19.0.0.10.3',
+    'version': '19.0.0.11.0',
     # where the updater gets it (the website blocks pack's repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     # its section on the Extensions panel: Custom blocks (its main job is website editor blocks)
@@ -21,6 +21,9 @@ Shared content (What to Bring, How to Book, policies...) placed visually in the 
 * Block Library (Website Blocks › Block Library, the extension's tile): every block with where it is
   used, organised by type and tags (drag blocks onto a tag, act on several at once), a live preview, and the full
   website builder for the content
+* Menu Designer (Website › Configuration › Menu Designer, administrators): the admin's menus arranged for everyone
+  (renamed, moved, ordered, hidden, kept for some groups, folders added), presets, and the top bar icons' order
+  (since 0.11.0; before, Tours Core's)
 * Page templates (Website Blocks › Page Templates): layouts of the kinds of page other modules draw (e.g. Tours'
   tour and rental pages), a Desktop and a Mobile one, edited visually with a live preview
 
@@ -38,6 +41,7 @@ Part of the MTBG website blocks: needs only Odoo's website (Tours plugs its page
         'views/block_library.xml',
         'views/page_template_views.xml',
         'views/website_blocks_views.xml',
+        'views/menu_designer.xml',
     ],
     'assets': {
         'web.assets_frontend': [
@@ -48,6 +52,8 @@ Part of the MTBG website blocks: needs only Odoo's website (Tours plugs its page
         'web.assets_backend': [
             'mtbg_tours_content_blocks/static/src/library/*',
             'mtbg_tours_content_blocks/static/src/template_editor/*',
+            'mtbg_tours_content_blocks/static/src/topbar/*',
+            'mtbg_tours_content_blocks/static/src/menu_designer/*',
         ],
         'website.assets_inside_builder_iframe': [
             'mtbg_tours_content_blocks/static/src/snippets/s_mtbg_content_block/content_block.edit.scss',
@@ -60,6 +66,7 @@ Part of the MTBG website blocks: needs only Odoo's website (Tours plugs its page
             'mtbg_tours_content_blocks/static/tests/tours/**/*',
         ],
     },
+    'pre_init_hook': 'pre_init_hook',
     'post_init_hook': 'post_init_hook',
     'installable': True,
 }

@@ -142,3 +142,117 @@ def retire_finish(env, old, new):
     cr.execute("UPDATE ir_module_module SET state = 'uninstallable' WHERE id = %s", [old_id])
     _logger.info("Retired %s into %s (end of the run): %s copies of its records removed", old, new, removed)
     return removed
+
+
+def move_into(cr, old, new, models=(), names=(), rename=()):
+    """Hand part of a module to another one (owner, 2026-11-11: the Menu Designer from Tours Core to Website Blocks), in
+    SQL before either module's code loads, from both modules' pre-migrates (the first one to run moves; the second
+    finds nothing left). Unlike ``retire_into`` the old module stays as it is: only these records change hands.
+
+    * ``models``: model names whose ir.model row, fields, field selections, SQL constraints and many2many tables
+      (ir_model_constraint, ir_model_relation) become ``new``'s, with their ids: the tables and their rows stay.
+    * ``names``: other xml ids of ``old`` (action, menu, access rules, a field it added to another model...).
+    * ``rename``: (table, column, before, after) text replacements in the moved data (an xml id or a key it holds).
+    Where ``new`` already has the same xml id, ``old``'s goes. Works whether ``new`` is installed or not (its rows
+    wait for it). Returns the number of xml ids moved."""
+    old_id, _old_state = _module_id(cr, old)
+    new_id, _new_state = _module_id(cr, new)
+    if not old_id or not new_id:
+        return 0
+    cr.execute("SELECT id FROM ir_model WHERE model IN %s", [tuple(models) or ('',)])
+    model_ids = tuple(row[0] for row in cr.fetchall()) or (0,)
+    cr.execute("SELECT id FROM ir_model_fields WHERE model_id IN %s", [model_ids])
+    field_ids = tuple(row[0] for row in cr.fetchall()) or (0,)
+    cr.execute("SELECT id FROM ir_model_fields_selection WHERE field_id IN %s", [field_ids])
+    selection_ids = tuple(row[0] for row in cr.fetchall()) or (0,)
+    cr.execute("SELECT id FROM ir_model_constraint WHERE model IN %s", [model_ids])
+    constraint_ids = tuple(row[0] for row in cr.fetchall()) or (0,)
+    cr.execute("""
+        SELECT id, name FROM ir_model_data
+         WHERE module = %s AND ((model = 'ir.model' AND res_id IN %s) OR (model = 'ir.model.fields' AND res_id IN %s)
+                OR (model = 'ir.model.fields.selection' AND res_id IN %s)
+                OR (model = 'ir.model.constraint' AND res_id IN %s) OR name IN %s)
+    """, [old, model_ids, field_ids, selection_ids, constraint_ids, tuple(names) or ('',)])
+    rows = cr.fetchall()
+    if rows:
+        ids, row_names = tuple(r[0] for r in rows), tuple(r[1] for r in rows)
+        cr.execute("""DELETE FROM ir_model_data o USING ir_model_data n
+                       WHERE o.id IN %s AND n.module = %s AND n.name = o.name""", [ids, new])
+        cr.execute("UPDATE ir_model_data SET module = %s WHERE id IN %s AND module = %s", [new, ids, old])
+        moved = cr.rowcount
+    else:
+        moved, row_names = 0, ()
+    for table in ('ir_model_constraint', 'ir_model_relation'):
+        cr.execute(f"""DELETE FROM {table} o USING {table} n
+                        WHERE o.module = %s AND n.module = %s AND n.name = o.name AND o.model IN %s""",  # noqa: S608
+                   [old_id, new_id, model_ids])
+        cr.execute(f"UPDATE {table} SET module = %s WHERE module = %s AND model IN %s",  # noqa: S608
+                   [new_id, old_id, model_ids])
+    for table, column, before, after in rename:
+        cr.execute("SELECT 1 FROM information_schema.columns WHERE table_name = %s AND column_name = %s",
+                   [table, column])
+        if not cr.fetchone():
+            continue
+        if table == 'ir_config_parameter' and column == 'key':  # a setting: moved only where the new key is not set
+            cr.execute("""UPDATE ir_config_parameter o SET key = %s WHERE key = %s
+                           AND NOT EXISTS (SELECT 1 FROM ir_config_parameter n WHERE n.key = %s)""", [after, before, after])
+            continue
+        cr.execute(f"UPDATE {table} SET {column} = replace({column}::text, %s, %s)::{_column_type(cr, table, column)} "  # noqa: S608
+                   f"WHERE {column}::text LIKE %s", [before, after, '%' + before + '%'])
+    if moved:
+        _logger.info("Moved %s xml ids from %s to %s: %s", moved, old, new, ', '.join(sorted(row_names)))
+    return moved
+
+
+def _column_type(cr, table, column):
+    cr.execute("SELECT data_type FROM information_schema.columns WHERE table_name = %s AND column_name = %s",
+               [table, column])
+    kind = cr.fetchone()[0]
+    return {'character varying': 'varchar', 'jsonb': 'jsonb', 'json': 'json'}.get(kind, 'text')
+
+
+# the Menu Designer, from Tours Core (0.5.x) to this module (0.11.0): both modules' pre-migrates call
+# move_into(cr, 'mtbg_tours_core', 'mtbg_tours_content_blocks', **MENU_DESIGNER_MOVE)
+MENU_DESIGNER_MOVE = {
+    'models': ('mtbg.menu.override', 'mtbg.menu.preset', 'mtbg.topbar'),
+    'names': ('action_mtbg_menu_designer', 'menu_mtbg_menu_designer', 'access_menu_override_admin',
+              'access_menu_preset_admin', 'field_ir_ui_menu__mtbg_designer'),
+    'rename': (
+        ('mtbg_menu_override', 'menu_xmlid', 'mtbg_tours_core.menu_mtbg_menu_designer',
+         'mtbg_tours_content_blocks.menu_mtbg_menu_designer'),
+        ('mtbg_menu_preset', 'layout', 'mtbg_tours_core.menu_mtbg_menu_designer',
+         'mtbg_tours_content_blocks.menu_mtbg_menu_designer'),
+        ('mtbg_menu_preset', 'layout', 'mtbg_tours_core.action_mtbg_menu_designer',
+         'mtbg_tours_content_blocks.action_mtbg_menu_designer'),
+        ('ir_config_parameter', 'key', 'mtbg_tours_core.topbar_items', 'mtbg_tours_content_blocks.topbar_items'),
+        ('ir_config_parameter', 'key', 'mtbg_tours_core.topbar_company_name',
+         'mtbg_tours_content_blocks.topbar_company_name'),
+    ),
+}
+# Tours Core's first version without the Menu Designer: this module never runs beside an older one (the same models
+# twice); Tours Core 0.6.0 never runs beside a version of this module without it (MENU_DESIGNER_SINCE)
+CORE_WITHOUT_DESIGNER = (0, 6, 0)
+MENU_DESIGNER_SINCE = (0, 11, 0)
+
+
+def module_version_on_disk(name):
+    """A module's version in its folder on this server, as (x, y, z) without the Odoo series (None: no folder)."""
+    from odoo.modules.module import get_manifest
+    manifest = get_manifest(name)
+    if not manifest:
+        return None
+    parts = [int(p) for p in manifest.get('version', '0').split('.') if p.isdigit()]
+    return tuple(parts[2:5]) if len(parts) >= 5 else tuple(parts[:3])
+
+
+def check_core_without_designer(cr):
+    """Refuse to load beside Tours Core with the Menu Designer still in it (installed, its folder older than 0.6.0):
+    the update stops before anything changes (the updater puts everything back)."""
+    _id, state = _module_id(cr, 'mtbg_tours_core')
+    if state not in ('installed', 'to upgrade', 'to install'):
+        return
+    version = module_version_on_disk('mtbg_tours_core')
+    if version is not None and version < CORE_WITHOUT_DESIGNER:
+        raise RuntimeError(
+            "Website Blocks 0.11 has the Menu Designer that Tours Core %s still has: update Tours Core (0.6.0 or "
+            "later) in the same update." % '.'.join(map(str, version)))

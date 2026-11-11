@@ -2,6 +2,19 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_content_blocks-*'`.
 
+## 19.0.0.11.0 (2026-11-11)
+
+- **The Menu Designer and the top bar icons, from Tours Core** (owner, 2026-11-11: a plain Odoo website installs them
+  without Tours): Website › Configuration › Menu Designer (administrators), page /odoo/menu-designer. The admin's menus
+  arranged for everyone (renamed, moved, ordered, hidden, removed, kept for some groups, folders and pages added), the
+  presets (Odoo default; one's own saved; other modules' through `_mtbg_menu_presets()`, e.g. Tours' layouts) and the
+  top bar icons' order and the company name switch.
+- On a site that had it in Tours Core, its records change hands with their ids (both modules' pre-migrates, the first
+  to run moves): the menu changes, the added folders and pages, the saved presets and the top bar settings stay.
+  The settings are now `mtbg_tours_content_blocks.topbar_items` / `.topbar_company_name`.
+- Update with Tours Core 0.6.0 in the same update: this version refuses to run beside a Tours Core that still has the
+  designer (older than 0.6.0); the update stops before anything changes.
+
 ## 19.0.0.10.3 (2026-11-08)
 
 - The Bullets block merged in (owner, 2026-11-08, the module clean-up): website editor › Text › Bullets, its options,

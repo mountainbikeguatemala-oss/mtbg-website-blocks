@@ -1949,3 +1949,679 @@ msgid ""
 "list, bullets, icons, check, checklist, highlights, included, not included, "
 "features"
 msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "%s more: search to narrow them down."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "(here now)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "(not in the menus; what was inside goes with it)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_ir_ui_menu__mtbg_designer
+msgid "A folder or page added in the menu designer (no module has it)."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "Activities (the clock)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Add a page inside"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "Add a page to %s"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Add page"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_ir_ui_menu__mtbg_designer
+msgid "Added in the Menu Designer"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model,name:mtbg_tours_content_blocks.model_mtbg_topbar
+msgid "Admin top bar icons"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "All"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "All apps"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "All menus"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_menu_override__to_top
+msgid "An app of its own (the top level)."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Back to its module's"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Back to the default icons"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Built in"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "Calls (shown during a call)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "Check visibility as…"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Check what a group sees"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid ""
+"Click a menu, then ← out of its folder, → into the folder above, ↑ ↓ the "
+"order; ⋯ for more. Saved for everyone; a module update keeps it."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Close all"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "Company"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "Delete the preset “%s”? The menus in use stay as they are."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Delete this preset"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_menu_preset__description
+msgid "Description"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "Discuss"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Down (Alt+↓)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "Emails"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Empty"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Find a folder…"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Find a group…"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Find a menu…"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid ""
+"First is leftmost. ↑ ↓ to move (Alt+↑↓ on a row), the eye to hide. Saved at "
+"once, for everyone."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/menu_designer.py:0
+msgid "Give the preset a name."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "Greyed, with a ⊘: not shown to %s."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model,name:mtbg_tours_content_blocks.model_ir_http
+msgid "HTTP Routing"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_menu_override__has_sequence
+msgid "Has Sequence"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Hide"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "Hide it from the top bar"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "In a menu"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "In no menu"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_menu_override__name
+msgid "Its name in the menu bar (empty: the module's)."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Keep the saved layout as a preset"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid ""
+"Keys on a picked menu: Tab into the folder above · Shift+Tab out of its "
+"folder · Alt+↑ ↓ the order · ↑ ↓ the next menu · F2 rename"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "Main menu (an app of its own)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model,name:mtbg_tours_content_blocks.model_ir_ui_menu
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_menu_override__menu_id
+msgid "Menu"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+#: model:ir.actions.client,name:mtbg_tours_content_blocks.action_mtbg_menu_designer
+#: model:ir.ui.menu,name:mtbg_tours_content_blocks.menu_mtbg_menu_designer
+msgid "Menu Designer"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_menu_override__menu_xmlid
+msgid "Menu XML ID"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model,name:mtbg_tours_content_blocks.model_mtbg_menu_override
+msgid "Menu designer: a change to one of the modules' menus"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model,name:mtbg_tours_content_blocks.model_mtbg_menu_preset
+msgid "Menu designer: a saved layout"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "Messaging (Conversations)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "More"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Move left (up)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Move right (down)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Move to…"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "Move “%s” to…"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_menu_override__parent_id
+msgid "Moved Into"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_menu_override__to_top
+msgid "Moved to the Top"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "New app"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/menu_designer.py:0
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "New folder"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "New folder inside"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "No page matches."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Not on this site"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "Notifications (Alerts)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "Now in: %s"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/menu_designer.py:0
+msgid "Odoo default"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.constraint,message:mtbg_tours_content_blocks.constraint_mtbg_menu_override_menu_unique
+msgid "One change per menu."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_menu_override__group_ids
+msgid "Only For"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/menu_designer.py:0
+msgid "Only administrators can change the menus."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/topbar.py:0
+msgid "Only administrators can change the top bar."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Only for some groups…"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Open all"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Preset name"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Presets"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Put back"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid ""
+"Put every menu back as the modules have them? The folders and pages added "
+"here are removed."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid ""
+"Put the top bar icons back in the default order, all shown, the company name"
+" off?"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid ""
+"Put “%s” back as its module has it (name, place, order, visibility)? Unsaved"
+" changes are lost."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Remove (added here)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Remove (to Removed, below)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+#: model:ir.model.fields,field_description:mtbg_tours_content_blocks.field_mtbg_menu_override__removed
+msgid "Removed"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Reset everything"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Save as preset"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "Save your changes first: a preset keeps the saved layout."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Search pages…"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Show"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Show company name in top bar"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "Show it in the top bar"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_menu_override__group_ids
+msgid ""
+"Shown only to these groups (empty: as the module says). Menus only: access "
+"stays as the modules define it."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid ""
+"Shown only to these groups (none: as its module says). The menu only: what a"
+" page lets one do stays the same."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Stop checking"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/menu_designer.py:0
+msgid "The Menu Designer itself cannot be hidden."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid ""
+"The app of the menu picked below, as staff see it. Click a menu to see its "
+"dropdown."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "The layout is kept as the preset “%s”."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#: model:ir.model.fields,help:mtbg_tours_content_blocks.field_mtbg_menu_override__menu_xmlid
+msgid ""
+"The menu's XML id: the change finds its menu again after a module is "
+"reinstalled."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "The menus are saved, for everyone."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/menu_designer.py:0
+msgid "The menus as the modules define them (the same as Reset everything)."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "The preset “%s” is in use."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "The top bar is saved, for everyone."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/menu_designer.py:0
+msgid "This preset is gone."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/tests/test_menu_designer.py:0
+msgid "Today"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Top bar"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Top bar icons"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-python
+#: code:addons/mtbg_tours_content_blocks/models/menu_designer.py:0
+msgid "Unknown preset."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Unsaved changes: Save to apply them to the menu bar."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Up (Alt+↑)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid ""
+"Use the preset “%s” for everyone? It replaces the menus' layout now (unsaved"
+" changes are lost)."
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.js:0
+msgid "Visits (visitors online)"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "Your avatar: always last"
+msgstr ""
+
+#. module: mtbg_tours_content_blocks
+#. odoo-javascript
+#: code:addons/mtbg_tours_content_blocks/static/src/menu_designer/menu_designer.xml:0
+msgid "· in a menu"
+msgstr ""

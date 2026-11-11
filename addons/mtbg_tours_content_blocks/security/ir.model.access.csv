@@ -5,3 +5,5 @@ access_block_tag_editor,block tag website editor,model_mtbg_tours_content_block_
 access_block_tag_designer,block tag website designer,model_mtbg_tours_content_block_tag,website.group_website_designer,1,1,1,0
 access_page_template_designer,page template website designer,model_mtbg_page_template,website.group_website_designer,1,1,1,1
 access_page_template_line_designer,page template line website designer,model_mtbg_page_template_line,website.group_website_designer,1,1,1,1
+access_menu_override_admin,menu override admin,model_mtbg_menu_override,base.group_system,1,1,1,1
+access_menu_preset_admin,menu preset admin,model_mtbg_menu_preset,base.group_system,1,1,1,1

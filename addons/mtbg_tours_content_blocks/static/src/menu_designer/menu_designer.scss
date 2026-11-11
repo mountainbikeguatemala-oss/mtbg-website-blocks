@@ -1,0 +1,324 @@
+// the menu designer: the menus as an outline (buttons and keys), the app's top bar above it
+// (surfaces from Odoo's own variables, so the admin's dark mode draws them dark: www 2026-10-29, the dropdown and the
+// page cards were white with faded rows)
+$mtbg-md-surface: var(--dropdown-bg, var(--bs-body-bg, #fff));
+$mtbg-md-border: var(--border-color, var(--bs-border-color, #dee2e6));
+$mtbg-md-hover: var(--bs-tertiary-bg, rgba(0, 0, 0, .04));
+$mtbg-md-selected: var(--bs-primary-bg-subtle, rgba(113, 99, 158, .12));
+$mtbg-md-primary: var(--primary, var(--bs-primary, #71639e));
+
+.mtbg_md {
+    background: var(--body-bg, var(--bs-body-bg, #fff));
+    color: var(--body-color, var(--bs-body-color, inherit));
+
+    .mtbg_md_presets_menu, .mtbg_md_viewas_menu, .mtbg_md_menu {
+        position: absolute;
+        right: 0;
+        top: 100%;
+        z-index: 10;
+        margin-top: .25rem;
+        border: 1px solid $mtbg-md-border;
+        border-radius: .4rem;
+        background: $mtbg-md-surface;
+        color: inherit;
+        box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .25);
+    }
+
+    .mtbg_md_presets_menu {
+        width: 24rem;
+        max-width: 90vw;
+    }
+
+    .mtbg_md_preset {
+        padding: .35rem .25rem;
+        border-radius: .3rem;
+
+        &:hover {
+            background: $mtbg-md-hover;
+        }
+    }
+
+    // what just happened (under the head, not a toast over the buttons): over the page's first line, taking no room,
+    // so nothing moves under the pointer when it shows (DEV4 2026-10-29: the head wrapped and the next click missed)
+    .mtbg_md_head {
+        position: relative;
+    }
+
+    .mtbg_md_note {
+        position: absolute;
+        top: calc(100% + .25rem);
+        right: 1rem;
+        z-index: 5;
+        max-width: calc(100% - 2rem);
+        box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .2);
+        padding: .2rem .6rem;
+        border-radius: .3rem;
+        background: var(--success-bg-subtle, var(--bs-success-bg-subtle, #d1e7dd));
+        color: var(--success-text-emphasis, var(--bs-success-text-emphasis, #0a3622));
+
+        &.is-warning {
+            background: var(--warning-bg-subtle, var(--bs-warning-bg-subtle, #fff3cd));
+            color: var(--warning-text-emphasis, var(--bs-warning-text-emphasis, #664d03));
+        }
+    }
+
+    .mtbg_md_dirty {
+        background: var(--warning-bg-subtle, #fff3cd);
+    }
+
+    .mtbg_md_search {
+        max-width: 18rem;
+    }
+
+    // room under the last rows: the website's chat window sits in the bottom right corner
+    .mtbg_md_tree {
+        padding-bottom: 8rem !important;
+    }
+
+    // a row: at most 560px (the buttons in it, always there), its name shortened to fit
+    .mtbg_md_row {
+        position: relative;
+        max-width: 560px;
+        padding: .2rem .4rem;
+        border-radius: .35rem;
+        border: 1px solid transparent;
+        cursor: pointer;
+
+        .mtbg_md_name {
+            min-width: 0;
+            flex: 1 1 auto;
+        }
+
+        &:hover {
+            background: $mtbg-md-hover;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $mtbg-md-primary;
+            outline-offset: 1px;
+        }
+
+        &.is-hidden .mtbg_md_name {
+            color: var(--bs-secondary-color, #6c757d);
+            text-decoration: line-through;
+        }
+
+        &.is-changed .mtbg_md_name {
+            font-weight: 600;
+        }
+
+        &.is-selected {
+            background: $mtbg-md-selected;
+            border-color: $mtbg-md-primary;
+        }
+    }
+
+    .mtbg_md_tools {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        align-items: center;
+
+        > .btn, > span > .btn {
+            padding: 0 .25rem;
+        }
+    }
+
+    // the row's ⋯
+    .mtbg_md_menu {
+        min-width: 15rem;
+
+        > button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: .3rem .75rem;
+            border: 0;
+            background: none;
+            color: inherit;
+
+            &:hover:not(:disabled) {
+                background: $mtbg-md-hover;
+            }
+
+            &:disabled {
+                opacity: .45;
+            }
+
+            &.text-danger {
+                color: var(--danger, #dc3545) !important;
+            }
+        }
+    }
+
+    .mtbg_md_groups {
+        max-width: 560px;
+        border: 1px solid $mtbg-md-border;
+        border-radius: .35rem;
+        background: $mtbg-md-surface;
+    }
+
+    // the app's top bar: Odoo's horizontal menu, its menus as chips
+    .mtbg_md_bar {
+        min-height: 2.6rem;
+        padding: .3rem .5rem;
+        border-radius: .4rem;
+        background: var(--o-navbar-background, #71639e);
+        color: #fff;
+        row-gap: .3rem;
+    }
+
+    .mtbg_md_bar_app {
+        font-weight: 600;
+        padding: .35rem .6rem .35rem 0;
+        margin-right: .3rem;
+        border-right: 1px solid rgba(255, 255, 255, .3);
+        align-self: center;
+    }
+
+    .mtbg_md_chip {
+        padding: .35rem .6rem;
+        border: 0;
+        border-radius: .3rem;
+        background: none;
+        color: inherit;
+
+        &:hover, &.is-open {
+            background: rgba(255, 255, 255, .15);
+        }
+
+        &.is-hidden {
+            text-decoration: line-through;
+            opacity: .6;
+        }
+    }
+
+    .mtbg_md_dropdown {
+        max-width: 22rem;
+        border: 1px solid $mtbg-md-border;
+        border-radius: .4rem;
+        background: $mtbg-md-surface;
+        color: inherit;
+        box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .2);
+    }
+
+    .mtbg_md_dd_item {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: .25rem .9rem;
+        border: 0;
+        background: none;
+        color: inherit;
+
+        &:hover {
+            background: $mtbg-md-hover;
+        }
+
+        &.is-heading {
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            color: var(--bs-secondary-color, #6c757d);
+            padding-top: .45rem;
+        }
+
+        &.is-sub {
+            padding-left: 1.6rem;
+        }
+
+        &.is-hidden {
+            text-decoration: line-through;
+            opacity: .6;
+        }
+
+        &.is-selected {
+            background: $mtbg-md-selected;
+        }
+    }
+
+    // not shown to the group being checked
+    .mtbg_md_row.is-unseen, .mtbg_md_pick.is-unseen {
+        opacity: .5;
+    }
+
+    .mtbg_md_viewas {
+        max-width: 18rem;
+        min-width: 0;
+    }
+
+    .mtbg_md_viewas_menu {
+        width: 22rem;
+        max-width: 90vw;
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+
+    .mtbg_md_segments .btn {
+        font-size: .75rem;
+        padding-left: .4rem;
+        padding-right: .4rem;
+    }
+
+    .mtbg_md_caret {
+        width: 1rem;
+    }
+
+    .mtbg_md_rename {
+        max-width: 20rem;
+    }
+
+    .mtbg_md_removed {
+        max-width: 560px;
+    }
+
+    // Move to… / + Page: a panel over the page
+    .mtbg_md_modal {
+        position: fixed;
+        inset: 0;
+        z-index: 1050;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 8vh 1rem 1rem;
+        background: rgba(0, 0, 0, .45);
+    }
+
+    .mtbg_md_modal_box {
+        width: 34rem;
+        max-width: 100%;
+        max-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid $mtbg-md-border;
+        border-radius: .5rem;
+        background: $mtbg-md-surface;
+        color: inherit;
+        box-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .35);
+    }
+
+    .mtbg_md_modal_list {
+        overflow-y: auto;
+        min-height: 0;
+        flex: 1 1 auto;
+    }
+
+    .mtbg_md_pick {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: .35rem .5rem;
+        border: 1px solid transparent;
+        border-radius: .3rem;
+        background: none;
+        color: inherit;
+
+        &:hover:not(:disabled) {
+            background: $mtbg-md-hover;
+            border-color: $mtbg-md-border;
+        }
+
+        &:disabled {
+            opacity: .5;
+        }
+    }
+}
