@@ -5,39 +5,120 @@
         <field name="model">cloudflare.setup.wizard</field>
         <field name="arch" type="xml">
             <form string="Set up Cloudflare">
-                <div invisible="log" class="alert alert-info" role="alert">
-                    <p><strong>Three steps, nothing to look for on Cloudflare.</strong></p>
-                    <ol class="mb-2">
-                        <li>Press <em>Create the token on Cloudflare</em>: the page opens with the permissions already filled in.</li>
-                        <li>Press <em>Review token</em>, then <em>Create Token</em>, and copy the token.</li>
-                        <li>Paste it below and press <em>Set up</em>. Odoo deletes it in Cloudflare when it is done.</li>
-                    </ol>
-                    <button name="action_open_dashboard" type="object" class="btn btn-primary" icon="fa-external-link"
-                            string="Create the token on Cloudflare"/>
-                </div>
-                <group invisible="log">
+                <header>
+                    <field name="step" widget="statusbar" statusbar_visible="connect,bucket,cache,review,done"/>
+                </header>
+                <field name="account_id" invisible="1"/>
+                <field name="r2_enabled" invisible="1"/>
+                <field name="account_count" invisible="1"/>
+                <field name="bucket_count" invisible="1"/>
+                <field name="zone_count" invisible="1"/>
+                <field name="bucket_name_taken" invisible="1"/>
+                <field name="done" invisible="1"/>
+
+                <!-- 1. Connect -->
+                <div invisible="step != 'connect'">
+                    <div class="alert alert-info" role="alert">
+                        <p><strong>Step 1 of 4: connect Odoo to your Cloudflare account.</strong></p>
+                        <ol class="mb-2">
+                            <li>Press <em>Create the token on Cloudflare</em>. Cloudflare opens with the permissions already filled in (sign in first if it asks).</li>
+                            <li>Press <em>Review token</em>, then <em>Create Token</em>, and copy the token it shows.</li>
+                            <li>Paste it below and press <em>Next</em>. Odoo only uses it for this setup and deletes it in Cloudflare at the end.</li>
+                        </ol>
+                        <button name="action_open_dashboard" type="object" class="btn btn-primary" icon="fa-external-link"
+                                string="Create the token on Cloudflare"/>
+                    </div>
                     <group>
-                        <field name="setup_token" password="True"/>
-                        <field name="bucket_name"/>
+                        <field name="setup_token" password="True" placeholder="Paste the token here"/>
+                        <field name="account_choice_id" invisible="account_count &lt; 2"
+                               required="step == 'connect' and account_count &gt; 1" options="{'no_create': True, 'no_open': True}"/>
+                    </group>
+                    <div class="alert alert-warning" role="alert" invisible="account_count &lt; 2 or account_id">
+                        This token sees several Cloudflare accounts: pick the one this site's backups go to, then press <em>Next</em> again.
+                    </div>
+                    <div class="alert alert-warning" role="alert" invisible="not account_id or r2_enabled">
+                        <p><strong>R2 storage is not turned on for this Cloudflare account yet.</strong></p>
+                        <p class="mb-2">Cloudflare asks for it once per account: open R2 and follow its steps to turn it on.
+                            The first 10 GB each month are free; Cloudflare may ask for a card even so. Then come back and press <em>Next</em> again.</p>
+                        <button name="action_open_r2" type="object" class="btn btn-secondary" icon="fa-external-link" string="Open R2 on Cloudflare"/>
+                    </div>
+                </div>
+
+                <!-- 2. Bucket -->
+                <div invisible="step != 'bucket'">
+                    <div class="alert alert-info" role="alert">
+                        <p><strong>Step 2 of 4: the bucket for this site's backups.</strong></p>
+                        <p class="mb-0">A bucket is a storage space in Cloudflare R2. This site keeps its off-site backups there:
+                            the database and its files, every day. Give each site a bucket of its own.
+                            Cost: the first 10 GB each month are free, then about $0.015 per GB a month. Downloading costs nothing.</p>
+                    </div>
+                    <group>
+                        <field name="bucket_mode" widget="radio" invisible="not bucket_count"/>
+                    </group>
+                    <group invisible="bucket_mode != 'new'">
+                        <field name="bucket_name" required="step == 'bucket' and bucket_mode == 'new'"
+                               help="Lowercase letters, digits and hyphens, 3 to 63 characters. It cannot be renamed later."/>
+                        <field name="location_hint" required="step == 'bucket' and bucket_mode == 'new'"/>
+                    </group>
+                    <div class="alert alert-warning" role="alert" invisible="bucket_mode != 'new' or not bucket_name_taken">
+                        The account has a bucket with this name already. Choose another name, or pick it under <em>Use a bucket that already exists</em>.
+                    </div>
+                    <group invisible="bucket_mode != 'existing'">
+                        <field name="bucket_choice_id" required="step == 'bucket' and bucket_mode == 'existing'"
+                               options="{'no_create': True, 'no_open': True}"/>
+                    </group>
+                    <separator string="Protection against deletion (bucket lock)"/>
+                    <p class="text-muted">While a file is younger than this, nobody can delete or overwrite it, not even with the bucket's own key.
+                        A backup stays safe if the site or its key is ever misused. 7 days is a good start; 0 turns the lock off.
+                        A bucket that already has a lock keeps its own.</p>
+                    <group>
                         <field name="lock_days"/>
                         <field name="lock_prefixes" invisible="lock_days &lt;= 0"/>
-                        <field name="location_hint"/>
                     </group>
-                    <group>
-                        <field name="create_purge_token"/>
-                        <field name="zone_name" invisible="not create_purge_token"/>
-                        <field name="delete_setup_token"/>
-                        <field name="account_id" placeholder="Only if the token sees several accounts"/>
-                    </group>
-                </group>
-                <div invisible="not log">
-                    <div class="alert alert-success" role="alert" invisible="not done">Cloudflare is set up.</div>
-                    <div class="alert alert-warning" role="alert" invisible="done">The setup stopped. What it finished is kept; fix the cause and run it again.</div>
-                    <field name="log" nolabel="1" widget="text" class="font-monospace"/>
                 </div>
-                <field name="done" invisible="1"/>
+
+                <!-- 3. Website cache -->
+                <div invisible="step != 'cache'">
+                    <div class="alert alert-info" role="alert">
+                        <p><strong>Step 3 of 4: the website cache (optional).</strong></p>
+                        <p class="mb-0">If this site's pages go through Cloudflare, Odoo can clear Cloudflare's copy of a page as soon as it changes,
+                            so visitors never see an old version. Odoo gets a key that can only clear the cache of the website you pick, nothing else.</p>
+                    </div>
+                    <div class="alert alert-secondary" role="alert" invisible="zone_count">
+                        No website of this account was found, so there is nothing to set here. Press <em>Next</em>.
+                    </div>
+                    <group invisible="not zone_count">
+                        <field name="create_purge_token"/>
+                        <field name="zone_choice_id" invisible="not create_purge_token"
+                               required="step == 'cache' and create_purge_token" options="{'no_create': True, 'no_open': True}"/>
+                    </group>
+                </div>
+
+                <!-- 4. Review -->
+                <div invisible="step != 'review'">
+                    <div class="alert alert-info" role="alert">
+                        <p><strong>Step 4 of 4: check, then press Set up.</strong></p>
+                        <p class="mb-0">This takes up to half a minute. You can run the setup again any time: a new key replaces the old one.</p>
+                    </div>
+                    <field name="summary" nolabel="1" widget="text" readonly="1"/>
+                    <group>
+                        <field name="delete_setup_token"/>
+                    </group>
+                </div>
+
+                <!-- Done -->
+                <div invisible="step != 'done'">
+                    <div class="alert alert-success" role="alert" invisible="not done">Cloudflare is set up. Extensions that store files in R2 (for example off-site backups) can use the bucket now.</div>
+                    <div class="alert alert-warning" role="alert" invisible="done">The setup stopped. What it finished is kept; fix the cause and run the setup again.</div>
+                    <field name="log" nolabel="1" widget="text" readonly="1" class="font-monospace"/>
+                </div>
+
                 <footer>
-                    <button name="action_run" type="object" string="Set up" class="btn-primary" invisible="log"/>
+                    <button name="action_connect" type="object" string="Next" class="btn-primary" invisible="step != 'connect'"/>
+                    <button name="action_bucket_next" type="object" string="Next" class="btn-primary" invisible="step != 'bucket'"/>
+                    <button name="action_cache_next" type="object" string="Next" class="btn-primary" invisible="step != 'cache'"/>
+                    <button name="action_run" type="object" string="Set up" class="btn-primary" invisible="step != 'review'"/>
+                    <button name="action_back" type="object" string="Back" class="btn-secondary" invisible="step in ('connect', 'done')"/>
                     <button string="Close" special="cancel" class="btn-secondary"/>
                 </footer>
             </form>

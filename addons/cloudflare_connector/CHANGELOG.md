@@ -1,5 +1,15 @@
 # Cloudflare Connector
 
+## 19.0.1.5.0 (2026-11-11)
+
+- **Set up Cloudflare is a guided wizard** (owner, 2026-11-11: "it should guide creation of bucket for R2"), in four steps with Back and Next:
+  1. *Connect*: the setup token is checked and the account is read. When the token sees several accounts, the wizard asks which one. When R2 is off on the account, it says so, with a button that opens R2 on the dashboard; Next checks again.
+  2. *Bucket*: create a new bucket or use one the account has (listed with location and creation date). A new bucket has a name, checked against Cloudflare's rules and the account's buckets, and a location, with the closest one explained. The lock and the price (10 GB free, then about $0.015 per GB a month) are explained. An existing bucket that has lock rules keeps them. A second run offers the site's saved bucket.
+  3. *Website cache*: the zone whose cache Odoo may clear, picked from the account's zones (the site's own zone comes first), or none.
+  4. *Review*: what will happen, then Set up. Its checklist ticks each step.
+- New transient model `cloudflare.setup.choice` holds the accounts, buckets and zones offered.
+- Tests: every step, the R2-off case, the bucket-name rules, existing buckets with and without lock rules. The tests no longer read the site's own saved settings.
+
 ## 19.0.1.4.2 (2026-11-11)
 
 - Moved to the universal extensions repository (owner, 2026-11-11: extensions that are not only for running tours live in their own repository, installable without Tours Core). Its manifest names its new repository, so the updater takes it from there; nothing else changes (no data, no behaviour).

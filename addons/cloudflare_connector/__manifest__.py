@@ -1,6 +1,6 @@
 {
     "name": "Cloudflare Connector",
-    "version": "19.0.1.4.2",
+    "version": "19.0.1.5.0",
     "category": "Productivity/Connectors",
     "mtbg_tours_section": "connectors",
     "summary": "One Cloudflare connection: the account, its API token and R2 storage, for every extension that uses "
@@ -8,9 +8,10 @@
     "description": """
 One Cloudflare connection, like Google and Meta have theirs:
 
-* Set up Cloudflare (wizard): paste one setup token and Odoo finds the account, creates the site's R2 bucket and
-  its lock, makes its own keys (R2 limited to that bucket; cache purge limited to the site's zone), tests them and
-  deletes the setup token in Cloudflare. Nothing else is done on the Cloudflare dashboard.
+* Set up Cloudflare (a guided wizard): paste one setup token, then pick the bucket (a new one, with its name,
+  location and lock explained and priced, or one the account has) and the website whose cache Odoo may clear.
+  Odoo creates the bucket and its lock, makes its own keys (R2 limited to that bucket; cache purge limited to that
+  zone), tests them and deletes the setup token in Cloudflare. If R2 is off on the account, it says how to turn it on.
 * Settings › Cloudflare: the account ID, an API token (Check API token) and an R2 bucket with its access key
   (Test R2 connection: a write, a read and a delete).
 * ``cloudflare.r2``: an S3-compatible client for R2 (AWS Signature V4, streamed multipart uploads, SHA-256 checked
