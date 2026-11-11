@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mtbg_tours_core.BoardBadgeField">
+        <span t-if="props.record.data[props.name]" class="badge rounded-pill" t-att-class="boardStyle ? '' : badgeClass"
+              t-att-style="boardStyle" t-esc="formattedValue"/>
+    </t>
+</templates>

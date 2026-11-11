@@ -1,0 +1,9 @@
+// the column picker's search box stays on top while its long list scrolls
+.o_optional_columns_dropdown .o_mtbg_column_search,
+.dropdown-menu .o_mtbg_column_search {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--dropdown-bg, var(--bs-body-bg, #fff));
+    min-width: 14rem;
+}

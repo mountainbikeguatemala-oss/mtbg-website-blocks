@@ -1,0 +1,89 @@
+// a board's column headers, as the CRM draws them: a block in the stage's colour (its name, the count, the column's
+// total big under it); a folded column a narrow strip, its name upright in a pill of that colour
+.o_kanban_header[data-mtbg-board] {
+    --mtbg-board-color: var(--bs-tertiary-bg, #f3f4f6);
+    --mtbg-board-ink: var(--bs-body-color, #212529);
+    padding-top: 0 !important;
+
+    .o_kanban_header_title {
+        padding: .45rem .6rem .1rem;
+        border-radius: .4rem .4rem 0 0;
+        background: var(--mtbg-board-color);
+        color: var(--mtbg-board-ink);
+
+        .o_column_title {
+            color: inherit !important;
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            align-items: center;
+        }
+
+        .btn, .o_kanban_config .btn, .dropdown-toggle {
+            color: inherit !important;
+        }
+    }
+
+    .o_mtbg_board_count {
+        flex: none;
+        min-width: 1.4rem;
+        padding: 0 .4rem;
+        border-radius: 50rem;
+        background: rgba(255, 255, 255, .85);
+        color: #1b1d26;
+        font-size: .75rem;
+        font-weight: 700;
+        line-height: 1.35rem;
+        text-align: center;
+    }
+
+    .o_mtbg_board_total {
+        padding: 0 .6rem .5rem;
+        border-radius: 0 0 .4rem .4rem;
+        background: var(--mtbg-board-color);
+        color: var(--mtbg-board-ink);
+        margin-bottom: .4rem;
+    }
+
+    // no total: the block ends under the title
+    .o_kanban_header_title:last-child, .o_kanban_header_title:has(+ :not(.o_mtbg_board_total)) {
+        border-radius: .4rem;
+        padding-bottom: .45rem;
+        margin-bottom: .4rem;
+    }
+}
+
+.o_mtbg_board_total {
+    display: flex;
+    align-items: baseline;
+    gap: .4rem;
+    min-width: 0;
+
+    .o_mtbg_board_total_value {
+        font-size: 1.15rem;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+    }
+
+    .o_mtbg_board_total_label {
+        font-size: .68rem;
+        text-transform: uppercase;
+        letter-spacing: .03em;
+        opacity: .8;
+    }
+}
+
+// a folded column: the strip, its name in a pill of the stage's colour
+.o_column_folded .o_kanban_header[data-mtbg-board] .o_kanban_header_title {
+    background: transparent;
+    color: inherit;
+    padding: .4rem 0;
+
+    .o_column_title {
+        padding: .5rem .25rem;
+        border-radius: 50rem;
+        background: var(--mtbg-board-color);
+        color: var(--mtbg-board-ink) !important;
+        opacity: 1 !important;
+    }
+}

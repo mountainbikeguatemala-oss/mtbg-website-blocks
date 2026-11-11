@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mtbg_tours_core.DataTransfer">
+        <div class="o_mtbg_data_transfer">
+            <div t-foreach="props.models" t-as="m" t-key="m.model" class="d-flex align-items-center gap-2 mb-1 small">
+                <span class="flex-grow-1 text-truncate" t-esc="m.label"/>
+                <button type="button" class="btn btn-sm btn-outline-secondary" t-on-click="() => this.import(m.model)">
+                    <i class="fa fa-upload me-1"/>Import</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" t-att-disabled="state.busy === m.model"
+                        t-on-click="() => this.export(m.model)">
+                    <i t-attf-class="fa {{state.busy === m.model ? 'fa-spinner fa-spin' : 'fa-download'}} me-1"/>Export</button>
+            </div>
+        </div>
+    </t>
+</templates>

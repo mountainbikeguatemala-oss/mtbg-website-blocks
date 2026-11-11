@@ -1,0 +1,1109 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-20 14:06+0000\n"
+"PO-Revision-Date: 2026-10-20 14:06+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/board.py:0
+msgid "%s (month)"
+msgstr "%s (mes)"
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/board.py:0
+msgid "%s (week)"
+msgstr "%s (semana)"
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/record_card.py:0
+msgid "%s card"
+msgstr "Tarjeta de %s"
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/text_setting.py:0
+msgid "%s is not a translated text setting."
+msgstr "%s no es un ajuste de texto traducido."
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/text_setting/text_setting.xml:0
+msgid "(main language, edited on the page)"
+msgstr "(idioma principal, se edita en la página)"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__f1
+msgid "1 Day Follow Up"
+msgstr "Seguimiento a 1 día"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__fm
+msgid "1 Month Follow Up"
+msgstr "Seguimiento a 1 mes"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__m1
+msgid "1 Month Out"
+msgstr "Falta 1 mes"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__fw
+msgid "1 Week Follow Up"
+msgstr "Seguimiento a 1 semana"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__w1
+msgid "1 Week Out"
+msgstr "Falta 1 semana"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__w2
+msgid "2 Weeks Out"
+msgstr "Faltan 2 semanas"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__m2
+msgid "2+ Months Out"
+msgstr "Faltan 2+ meses"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__h24
+msgid "24 Hours Out"
+msgstr "Faltan 24 horas"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__d3
+msgid "3 Days Out"
+msgstr "Faltan 3 días"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__w3
+msgid "3 Weeks Out"
+msgstr "Faltan 3 semanas"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__h48
+msgid "48 Hours Out"
+msgstr "Faltan 48 horas"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid ""
+": how a record shows as a card, in its kanban\n"
+"                            and on other records' pages. One look for the whole site, always the same width."
+msgstr ""
+": cómo se muestra un registro como tarjeta, en su kanban\n"
+"                            y en las páginas de otros registros. Un solo aspecto para todo el sitio, siempre del mismo ancho."
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+msgid "A date ascending: the soonest first."
+msgstr "Una fecha ascendente: la más próxima primero."
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "A list under the fields that opens on click (a booking's riders)."
+msgstr ""
+"Una lista bajo los campos que se abre al hacer clic (los ciclistas de una "
+"reserva)."
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_board__total_field
+msgid "A number summed over each column's cards, e.g. seats"
+msgstr "Un número sumado sobre las tarjetas de cada columna, p. ej. plazas"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "A starting point: its layout and fields, then adjust below."
+msgstr "Un punto de partida: su diseño y sus campos; luego ajusta abajo."
+
+#. module: mtbg_backend_ui
+#: model:ir.model.constraint,message:mtbg_backend_ui.constraint_mtbg_missing_tag_key_unique
+msgid "A thing missing is defined once."
+msgstr "Cada elemento faltante se define una sola vez."
+
+#. module: mtbg_backend_ui
+#: model:ir.model,name:mtbg_backend_ui.model_mtbg_user_pref
+msgid "A user's screen choice"
+msgstr ""
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Across, photo beside the fields"
+msgstr "Horizontal, foto junto a los campos"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Across, photo under"
+msgstr "Horizontal, foto debajo"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__active
+msgid "Active"
+msgstr "Activo"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
+#: code:addons/mtbg_backend_ui/static/src/sidebar_list/sidebar_list.xml:0
+msgid "All"
+msgstr "Todas"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Apply a preset…"
+msgstr "Aplicar un ajuste predefinido…"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+msgid "Ascending"
+msgstr "Ascendente"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Bar across the top"
+msgstr ""
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Beside"
+msgstr "Al lado"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Beside the photo"
+msgstr "Junto a la foto"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.js:0
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Big figure"
+msgstr "Cifra grande"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Big figure, top right"
+msgstr "Cifra grande, arriba a la derecha"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
+msgid "Board"
+msgstr "Tablero"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+msgid "Board: the columns and their order"
+msgstr "Tablero: las columnas y su orden"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
+#: model:ir.model,name:mtbg_backend_ui.model_mtbg_board_mixin
+msgid "Boards"
+msgstr "Tableros"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/sidebar_list/sidebar_list.xml:0
+msgid "Browse"
+msgstr "Explorar"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+#: code:addons/mtbg_backend_ui/static/src/text_setting/text_setting.xml:0
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__cancelled
+msgid "Cancelled"
+msgstr "Cancelado"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.js:0
+msgid "Card"
+msgstr "Tarjeta"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.js:0
+msgid "Card saved."
+msgstr "Tarjeta guardada."
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.js:0
+#: code:addons/mtbg_backend_ui/static/src/view_modes/view_modes.js:0
+msgid "Cards"
+msgstr "Tarjetas"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+msgid "Cards, top to bottom"
+msgstr "Tarjetas, de arriba abajo"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+msgid "Collapse the column"
+msgstr "Contraer la columna"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__color
+msgid "Color"
+msgstr "Color"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__total_field
+msgid "Column total"
+msgstr "Total de la columna"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__group_by
+msgid "Columns"
+msgstr "Columnas"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
+msgid "Comes with this extension"
+msgstr "Viene con esta extensión"
+
+#. module: mtbg_backend_ui
+#: model:ir.model,name:mtbg_backend_ui.model_res_config_settings
+msgid "Config Settings"
+msgstr "Ajustes de configuración"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Countdown"
+msgstr "Cuenta regresiva"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.js:0
+msgid "Countdown pill"
+msgstr "Píldora de cuenta regresiva"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__create_uid
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__create_uid
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__create_date
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__create_date
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Dark"
+msgstr "Oscuro"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/dark/color_scheme.js:0
+msgid "Dark mode"
+msgstr "Modo oscuro"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Date format"
+msgstr "Formato de fecha"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+msgid "Delete"
+msgstr "Eliminar"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+msgid "Descending"
+msgstr "Descendente"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__description
+msgid "Description"
+msgstr "Descripción"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+msgid "Direction"
+msgstr "Dirección"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Discard"
+msgstr "Descartar"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_ir_config_parameter__display_name
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_ir_http__display_name
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__display_name
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board_mixin__display_name
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_card_mixin__display_name
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_data_transfer__display_name
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__display_name
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_sidebar_mixin__display_name
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_text_setting__display_name
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__display_name
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_res_users__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Dropdown"
+msgstr "Menú desplegable"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Earlier"
+msgstr "Antes"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
+msgid "Edit"
+msgstr "Editar"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+msgid "Edit this board"
+msgstr "Editar este tablero"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Editing the"
+msgstr "Editando las etiquetas en"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/text_setting/text_setting.js:0
+#: code:addons/mtbg_backend_ui/static/src/text_setting/text_setting.xml:0
+msgid "Empty: the main text"
+msgstr "Vacío: el texto principal"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid ""
+"Every record out as a spreadsheet (the list's columns), or in from one."
+msgstr ""
+"Exporta todos los registros a una hoja de cálculo (las columnas de la lista)"
+" o impórtalos desde una."
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/data_transfer/data_transfer.xml:0
+msgid "Export"
+msgstr "Exportar"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Fields"
+msgstr "Campos"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__domain
+msgid "Filter"
+msgstr "Filtro"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
+msgid "Filtered"
+msgstr "Filtrado"
+
+#. module: mtbg_backend_ui
+#: model:ir.model,name:mtbg_backend_ui.model_ir_http
+msgid "HTTP Routing"
+msgstr "Enrutamiento HTTP"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/sidebar_list/sidebar_list.xml:0
+msgid "Hide the side bar"
+msgstr "Ocultar la barra lateral"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_ir_config_parameter__id
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_ir_http__id
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__id
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board_mixin__id
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_card_mixin__id
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_data_transfer__id
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__id
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_sidebar_mixin__id
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_text_setting__id
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__id
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_res_config_settings__id
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_res_users__id
+msgid "ID"
+msgstr "ID"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Icons instead of labels (where a field has one)"
+msgstr ""
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/data_transfer/data_transfer.xml:0
+msgid "Import"
+msgstr "Importar"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+#: model:ir.model,name:mtbg_backend_ui.model_mtbg_data_transfer
+msgid "Import / Export"
+msgstr "Importar / exportar"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_missing_tag__color
+msgid "Its column's colour (hex)"
+msgstr "El color de su columna (hex)"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/view_modes/view_modes.js:0
+msgid "Kanban"
+msgstr "Kanban"
+
+#. module: mtbg_backend_ui
+#: model:ir.model,name:mtbg_backend_ui.model_mtbg_board
+msgid "Kanban board"
+msgstr "Tablero kanban"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__key
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__key
+msgid "Key"
+msgstr "Clave"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Labels"
+msgstr "Etiquetas"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Language"
+msgstr "Idioma"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/text_setting/text_setting.xml:0
+msgid "Languages"
+msgstr "Idiomas"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__write_uid
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__write_uid
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__write_date
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__write_date
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Later"
+msgstr "Después"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Light"
+msgstr "Claro"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Light or dark"
+msgstr "Claro u oscuro"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Link text"
+msgstr "Texto del enlace"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/view_modes/view_modes.js:0
+msgid "List"
+msgstr "Lista"
+
+#. module: mtbg_backend_ui
+#: model:ir.model,name:mtbg_backend_ui.model_mtbg_sidebar_mixin
+msgid "List side bar"
+msgstr "Barra lateral de lista"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Live, to the start (days, hours, minutes)"
+msgstr "En vivo, hasta el inicio (días, horas, minutos)"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Live: the card shows your unsaved changes (only you see them)."
+msgstr ""
+"En vivo: la tarjeta muestra tus cambios sin guardar (solo tú los ves)."
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Loading…"
+msgstr "Cargando…"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__res_model
+msgid "Model"
+msgstr "Modelo"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/record_card.py:0
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__name
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
+msgid "New board"
+msgstr "Nuevo tablero"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
+msgid "No board yet."
+msgstr "Aún no hay tablero."
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/list_column_search/list_column_search.xml:0
+msgid "No column matches."
+msgstr "Ninguna columna coincide."
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "No record to show yet."
+msgstr "Aún no hay registros para mostrar."
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "None"
+msgstr "Ninguno"
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/board.py:0
+msgid "Nothing missing"
+msgstr "No falta nada"
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/data_transfer.py:0
+msgid "Nothing to export."
+msgstr "Nada que exportar."
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/record_card/record_card.xml:0
+msgid "Nothing yet."
+msgstr "Aún nada."
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Notices"
+msgstr "Avisos"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Number, bottom right"
+msgstr "Número, abajo a la derecha"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "On top"
+msgstr "Arriba"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.constraint,message:mtbg_backend_ui.constraint_mtbg_user_pref_user_key
+msgid "One value per user and key."
+msgstr ""
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/record_card.py:0
+msgid "Only a manager changes a card's look."
+msgstr "Solo un administrador cambia el aspecto de una tarjeta."
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/text_setting.py:0
+msgid "Only managers can change these texts."
+msgstr ""
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__order
+msgid "Order"
+msgstr "Orden"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/text_setting/text_setting.xml:0
+msgid "Other languages"
+msgstr "Otros idiomas"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__past
+msgid "Past"
+msgstr "Pasado"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Photo"
+msgstr "Foto"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Photo position"
+msgstr "Posición de la foto"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Photo size"
+msgstr "Tamaño de la foto"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Pills, top right:"
+msgstr "Píldoras, arriba a la derecha:"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Preset"
+msgstr "Ajuste predefinido"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Preview"
+msgstr "Vista previa"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Record"
+msgstr "Registro"
+
+#. module: mtbg_backend_ui
+#: model:ir.model,name:mtbg_backend_ui.model_mtbg_card_mixin
+msgid "Record card"
+msgstr "Tarjeta de registro"
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/board.py:0
+msgid "Records"
+msgstr "Registros"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Reload"
+msgstr "Recargar"
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/record_card.py:0
+msgid "Sample (every field filled)"
+msgstr "Ejemplo (todos los campos llenos)"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+#: code:addons/mtbg_backend_ui/static/src/text_setting/text_setting.xml:0
+msgid "Save"
+msgstr "Guardar"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/text_setting/text_setting.js:0
+msgid "Saved"
+msgstr "Guardado"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__scope
+msgid "Scope"
+msgstr "Alcance"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/list_column_search/list_column_search.xml:0
+msgid "Search columns"
+msgstr "Buscar columnas"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/list_column_search/list_column_search.xml:0
+msgid "Search columns…"
+msgstr "Buscar columnas…"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__sequence
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.js:0
+#: code:addons/mtbg_backend_ui/static/src/sidebar_list/sidebar_list.xml:0
+msgid "Settings"
+msgstr "Ajustes"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid ""
+"Short fields side by side in one row under the fields, one line tall (an "
+"icon and the value), in the fields' order."
+msgstr ""
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Show the dropdown"
+msgstr "Mostrar el menú desplegable"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Show the notices"
+msgstr "Mostrar los avisos"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Show the photo"
+msgstr "Mostrar la foto"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/sidebar_list/sidebar_list.xml:0
+msgid "Show the side bar"
+msgstr "Mostrar la barra lateral"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
+msgid "Shows"
+msgstr "Muestra"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Small stats"
+msgstr ""
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Status"
+msgstr "Estado"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.js:0
+msgid "Status pill"
+msgstr "Píldora de estado"
+
+#. module: mtbg_backend_ui
+#: model:ir.model,name:mtbg_backend_ui.model_ir_config_parameter
+msgid "System Parameter"
+msgstr "Parámetro del sistema"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "The bar in the status colour (no status pill)"
+msgstr ""
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_board__group_by
+msgid "The field the columns are, e.g. state, or start_date:month"
+msgstr "El campo que forma las columnas, p. ej. state, o start_date:month"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
+msgid ""
+"The kanban's templates: pick one in the board dropdown above the\n"
+"                                kanban. Each extension brings its own (they go when it is switched off); add yours here.\n"
+"                                A board shows the records its filter allows, in columns, top to bottom in its order, each\n"
+"                                column totalling a number."
+msgstr ""
+"Las plantillas del kanban: elige una en el menú desplegable de tableros sobre el\n"
+"                                kanban. Cada extensión trae las suyas (se van cuando se desactiva); agrega las tuyas aquí.\n"
+"                                Un tablero muestra los registros que permite su filtro, en columnas, de arriba abajo en su orden, y cada\n"
+"                                columna suma un número."
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "The link's text"
+msgstr "El texto del enlace"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_board__scope
+msgid ""
+"The page the board is for, when a model has more than one (its action's "
+"context ``mtbg_scope``, e.g. invoices on the bookings); empty: the model's "
+"own page"
+msgstr ""
+"La página para la que es el tablero, cuando un modelo tiene más de una (el "
+"contexto ``mtbg_scope`` de su acción, p. ej. facturas en las reservas); "
+"vacío: la página propia del modelo"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "The preview's language, and the language of the labels you edit"
+msgstr "El idioma de la vista previa y el idioma de las etiquetas que editas"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/text_setting/text_setting.xml:0
+msgid ""
+"The website has one language. Add languages under Website › Configuration › "
+"Settings to translate this text."
+msgstr ""
+"El sitio web tiene un solo idioma. Agrega idiomas en Sitio web › "
+"Configuración › Ajustes para traducir este texto."
+
+#. module: mtbg_backend_ui
+#: model:ir.model,name:mtbg_backend_ui.model_mtbg_missing_tag
+msgid "Thing missing"
+msgstr "Elemento faltante"
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/board.py:0
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board_mixin__mtbg_missing_ids
+msgid "Things missing"
+msgstr "Lo que falta"
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/record_card.py:0
+msgid "This button is not available on this card any more."
+msgstr "Este botón ya no está disponible en esta tarjeta."
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/board.py:0
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board_mixin__mtbg_time_stage
+msgid "Time to start"
+msgstr "Tiempo para el inicio"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Title"
+msgstr "Título"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Title position"
+msgstr "Posición del título"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Top right, in this order (drag, or the arrows):"
+msgstr "Arriba a la derecha, en este orden (arrastra o usa las flechas):"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_board__order
+msgid "Top to bottom, e.g. start_date asc"
+msgstr "De arriba abajo, p. ej. start_date asc"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__on
+msgid "Tour in Progress"
+msgstr "Tour en curso"
+
+#. module: mtbg_backend_ui
+#: model:ir.model,name:mtbg_backend_ui.model_mtbg_text_setting
+msgid "Translated text setting"
+msgstr "Ajuste de texto traducido"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid ""
+"Under the title, one per line, in this order: drag one (or use the arrows). "
+"The eye shows or hides one."
+msgstr ""
+"Bajo el título, uno por línea, en este orden: arrastra uno (o usa las "
+"flechas). El ojo muestra u oculta uno."
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Unsaved changes"
+msgstr "Cambios sin guardar"
+
+#. module: mtbg_backend_ui
+#: model:ir.model,name:mtbg_backend_ui.model_res_users
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__user_id
+msgid "User"
+msgstr "Usuario"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__value
+msgid "Value"
+msgstr ""
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/view_modes/view_modes.xml:0
+msgid "View"
+msgstr "Vista"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "Warnings the extensions give (a role to fill, a payment due...)."
+msgstr ""
+"Avisos que dan las extensiones (un rol por cubrir, un pago pendiente...)."
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_board__description
+msgid "What the board is for (the settings page shows it)"
+msgstr "Para qué es el tablero (la página de ajustes lo muestra)"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_board_mixin__mtbg_missing_ids
+msgid "What the record's card says it still lacks (refreshed by the boards)"
+msgstr ""
+"Lo que la tarjeta del registro indica que aún falta (actualizado por los "
+"tableros)"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_board_mixin__mtbg_time_stage
+msgid "Where the record is from its start date (refreshed by the boards)"
+msgstr ""
+"Dónde está el registro respecto a su fecha de inicio (actualizado por los "
+"tableros)"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_board__domain
+msgid ""
+"Which records the board shows (a domain, e.g. [('mtbg_stage', 'in', ['new', "
+"'lead'])]); empty: all of them"
+msgstr ""
+"Qué registros muestra el tablero (un dominio, p. ej. [('mtbg_stage', 'in', "
+"['new', 'lead'])]); vacío: todos"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+msgid "e.g. By tour"
+msgstr "p. ej. Por tour"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+msgid "labels. An empty label shows the built-in one."
+msgstr ". Una etiqueta vacía muestra la predeterminada."

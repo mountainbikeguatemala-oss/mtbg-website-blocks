@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- the record card: the title with its pill (beside the photo; across the card with the photo under it; or across
+         the card with the photo and the fields beside each other under it), a
+         small link, its fields one per line (label, then the value, never wrapping), its notices. The whole card opens
+         the record. -->
+    <t t-name="mtbg_tours_core.RecordCard">
+        <div t-if="card" t-ref="root" t-att-style="card.accent ? `--mtbg-accent: ${card.accent};` : false" t-attf-class="mtbg_rc is-photo-{{card.photo_position}} is-size-{{card.photo_size}} is-title-{{card.title_position}}"
+             t-att-class="{'is-link': linked, 'is-framed': linked or props.card, 'has-badge': card.badge, 'is-accent': card.accent}" t-on-click="open" t-att-title="linked ? 'Open' : ''">
+            <t t-if="card.title_position !== 'bar'" t-call="mtbg_tours_core.RecordCardBand"/>
+            <!-- across: the head (title, its fields, the pills) over the photo -->
+            <t t-if="card.title_position === 'top'">
+                <t t-call="mtbg_tours_core.RecordCardHead"/>
+                <div t-if="card.photo" class="mtbg_rc_img mtbg_rc_banner">
+                    <img t-if="card.image" t-att-src="card.image" alt=""/>
+                    <i t-else="" class="fa fa-picture-o fa-2x text-muted"/>
+                </div>
+                <div t-if="card.stat" class="d-flex justify-content-end mt-2"><t t-call="mtbg_tours_core.RecordCardStat"/></div>
+            </t>
+            <!-- across, photo beside: the title and the pills across the card, then the photo and the fields beside it -->
+            <t t-elif="card.title_position === 'across'">
+                <div class="mtbg_rc_head mtbg_rc_titlebar">
+                    <div class="mtbg_rc_body"><t t-call="mtbg_tours_core.RecordCardTitle"/></div>
+                    <t t-call="mtbg_tours_core.RecordCardPills"/>
+                </div>
+                <div class="mtbg_rc_main">
+                    <div t-if="card.photo" class="mtbg_rc_img">
+                        <img t-if="card.image" t-att-src="card.image" alt=""/>
+                        <i t-else="" class="fa fa-picture-o fa-2x text-muted"/>
+                    </div>
+                    <div class="mtbg_rc_body mtbg_rc_fields"><t t-call="mtbg_tours_core.RecordCardLines"/></div>
+                    <t t-call="mtbg_tours_core.RecordCardStat"/>
+                </div>
+            </t>
+            <!-- a bar (owner, 2026-11-07): the title a bar across the top; under it the photo, then the pills at the
+                 right with the fields beside them, a field under them running to the card's right edge -->
+            <t t-elif="card.title_position === 'bar'">
+                <!-- in its status colour (the look's bar_status: no status pill then), the status when hovered -->
+                <div t-attf-class="mtbg_rc_titlebar mtbg_rc_bar {{card.bar_status ? 'is-status is-' + (card.bar_status.level or 'muted') : ''}}"
+                     t-att-style="card.bar_status and card.bar_status.color ? `--mtbg-bar: ${card.bar_status.color};` : false"
+                     t-att-title="card.bar_status ? card.bar_status.text : false"><t t-call="mtbg_tours_core.RecordCardTitle"/></div>
+                <t t-call="mtbg_tours_core.RecordCardBand"/>
+                <div class="mtbg_rc_main">
+                    <div t-if="card.photo" class="mtbg_rc_img">
+                        <img t-if="card.image" t-att-src="card.image" alt=""/>
+                        <i t-else="" class="fa fa-picture-o fa-2x text-muted"/>
+                    </div>
+                    <!-- the small stats first, squeezed beside the pills; the fields under the pills, full width -->
+                    <div class="mtbg_rc_body mtbg_rc_flow">
+                        <t t-call="mtbg_tours_core.RecordCardPills"/>
+                        <t t-call="mtbg_tours_core.RecordCardSmall"/>
+                        <t t-call="mtbg_tours_core.RecordCardLines"/>
+                    </div>
+                    <t t-call="mtbg_tours_core.RecordCardStat"/>
+                </div>
+            </t>
+            <!-- beside: the photo, then the head -->
+            <div t-else="" class="mtbg_rc_main">
+                <div t-if="card.photo" class="mtbg_rc_img">
+                    <img t-if="card.image" t-att-src="card.image" alt=""/>
+                    <i t-else="" class="fa fa-picture-o fa-2x text-muted"/>
+                </div>
+                <t t-call="mtbg_tours_core.RecordCardHead"/>
+                <t t-call="mtbg_tours_core.RecordCardStat"/>
+            </div>
+            <!-- the small stats under the fields (in a bar: at the top, beside the pills) -->
+            <t t-if="card.title_position !== 'bar'" t-call="mtbg_tours_core.RecordCardSmall"/>
+            <!-- the dropdown (a booking's riders): one row each, in the card's own style -->
+            <details t-if="card.details" class="mtbg_rc_details" t-on-click.stop="() => {}">
+                <summary><i class="fa fa-caret-right mtbg_rc_caret"/><t t-esc="card.details.title"/></summary>
+                <div class="mtbg_rc_rows" t-att-style="detailsGrid">
+                    <div t-foreach="card.details.rows" t-as="row" t-key="row_index" class="mtbg_rc_row" t-att-class="{'is-group': row._group}">
+                        <!-- a band across the columns (a departure's manifest: one per booking) -->
+                        <a t-if="row._group and row._link" href="#" class="mtbg_rc_band is-link" t-att-title="'Open ' + row._group"
+                           t-on-click.prevent="(ev) => this.openLink(ev, row._link)" t-esc="row._group"/>
+                        <div t-elif="row._group" class="mtbg_rc_band" t-esc="row._group"/>
+                        <!-- every cell drawn (empty or not), so the columns line up -->
+                        <span t-if="!row._group" t-foreach="card.details.columns" t-as="col" t-key="col.key" t-attf-class="mtbg_rc_cell is-{{col.kind}} is-{{col.key}}"
+                              t-att-class="{'is-row-link': row._link}" t-on-click="(ev) => row._link and this.openLink(ev, row._link)">
+                            <t t-set="value" t-value="row[col.key]"/>
+                            <img t-if="col.kind === 'flag' and value" class="mtbg_rc_flag"
+                                 t-att-src="'/base/static/img/country_flags/' + value + '.png'" alt=""/>
+                            <t t-elif="col.kind === 'check' and value">
+                                <a t-if="value.url" t-att-href="value.url" target="_blank" t-att-class="checkClass(value)"
+                                   t-att-title="col.label + ': ' + (value.title or '')">
+                                    <t t-call="mtbg_tours_core.RecordCardCheck"><t t-set="check" t-value="value"/></t></a>
+                                <span t-else="" t-att-class="checkClass(value)" t-att-title="col.label + (value.title ? ': ' + value.title : '')">
+                                    <t t-call="mtbg_tours_core.RecordCardCheck"><t t-set="check" t-value="value"/></t></span>
+                            </t>
+                            <t t-elif="col.kind === 'pills' and value and value.length">
+                                <span t-foreach="value" t-as="pill" t-key="pill_index" class="mtbg_rc_diet"
+                                      t-att-style="pill.color ? 'background:' + pill.color : ''" t-att-title="pill.title" t-esc="pill.abbr"/>
+                            </t>
+                            <t t-elif="value and value.text !== undefined">
+                                <i t-if="value.icon" t-attf-class="fa {{value.icon}} mtbg_rc_lead"/><span class="mtbg_rc_cut" t-esc="value.text" t-att-title="value.text"/>
+                            </t>
+                            <span t-elif="value" class="mtbg_rc_cut" t-esc="value" t-att-title="col.label + ': ' + value"/>
+                        </span>
+                    </div>
+                </div>
+            </details>
+            <ul t-if="card.notices.length" class="mtbg_rc_notices">
+                <li t-foreach="card.notices" t-as="n" t-key="n_index" t-attf-class="is-{{n.level}}">
+                    <i t-attf-class="fa {{n.level === 'danger' ? 'fa-exclamation-circle' : 'fa-exclamation-triangle'}} me-1"/>
+                    <t t-esc="n.text"/>
+                </li>
+            </ul>
+            <!-- the card's buttons (its values' actions; none: nothing drawn) -->
+            <div t-if="card.actions and card.actions.length" class="mtbg_rc_actions" t-on-click.stop="() => {}">
+                <button t-foreach="card.actions" t-as="a" t-key="a.key" type="button"
+                        t-attf-class="btn btn-sm {{a.primary ? 'btn-primary' : 'btn-outline-secondary'}}"
+                        t-att-disabled="state.busy or props.card" t-on-click.stop="(ev) => this.runAction(ev, a)">
+                    <i t-if="a.icon" t-attf-class="fa {{a.icon}} me-1"/><t t-esc="a.label"/>
+                </button>
+            </div>
+        </div>
+        <div t-elif="state.loaded and props.field" class="text-muted small">Nothing yet.</div>
+    </t>
+
+    <t t-name="mtbg_tours_core.RecordCardSmall">
+        <!-- the small stats (owner, 2026-11-07): short fields side by side in one row, one line tall: an icon and the
+             value (its label when hovered; a field without an icon: its label, small) -->
+        <div t-if="card.small and card.small.length" class="mtbg_rc_small">
+            <div t-foreach="card.small" t-as="cell" t-key="cell.key" t-attf-class="mtbg_rc_small_cell is-{{cell.key}}"
+                 t-att-title="cell.label + ': ' + cell.text">
+                <i t-if="cell.icon" t-attf-class="fa {{cell.icon}} mtbg_rc_small_icon"/>
+                <span t-else="" class="mtbg_rc_small_label" t-esc="cell.label"/>
+                <a t-if="cell.link" href="#" class="mtbg_rc_small_value mtbg_rc_link" t-on-click.prevent="(ev) => this.openLink(ev, cell.link)" t-esc="cell.text"/>
+                <span t-else="" class="mtbg_rc_small_value" t-esc="cell.text"/>
+            </div>
+        </div>
+    </t>
+
+    <!-- a done / not done mark: its own icon (e.g. the participant lists' global form or waiver icon) with a small tick
+         or cross, else a ticked or crossed circle -->
+    <t t-name="mtbg_tours_core.RecordCardCheck">
+        <t t-if="check.icon"><i t-attf-class="fa {{check.icon}}"/><i t-attf-class="fa {{check.ok ? 'fa-check' : 'fa-times'}} mtbg_rc_mark"/></t>
+        <i t-else="" t-attf-class="fa {{check.ok ? 'fa-check-circle' : 'fa-times-circle'}}"/>
+    </t>
+
+    <!-- the head: the title with the big figure and the pills beside it, then the fields across the whole card (owner,
+         2026-11-06: the pills never take a column, the text runs to the card's right border); a card with a badge
+         keeps the column on the right (the badge at its foot) -->
+    <t t-name="mtbg_tours_core.RecordCardHead">
+        <div class="mtbg_rc_head" t-att-class="{'is-pills-inline': !card.badge}">
+            <div class="mtbg_rc_body">
+                <div t-if="!card.badge" class="mtbg_rc_titlerow">
+                    <t t-call="mtbg_tours_core.RecordCardTitle"/>
+                    <t t-call="mtbg_tours_core.RecordCardPills"/>
+                </div>
+                <t t-else="" t-call="mtbg_tours_core.RecordCardTitle"/>
+                <t t-call="mtbg_tours_core.RecordCardLines"/>
+            </div>
+            <t t-if="card.badge" t-call="mtbg_tours_core.RecordCardPills"/>
+        </div>
+    </t>
+
+    <!-- a band under the title (a card's values ``band``, e.g. a multi-day trip's), in its colour -->
+    <t t-name="mtbg_tours_core.RecordCardBand">
+        <!-- with a link (``band.link`` {model, id}): a click opens that record (a day's band: its multi-day booking) -->
+        <div t-if="card.band" class="mtbg_rc_band_top" t-att-class="{'is-link': card.band.link}"
+             t-att-title="card.band.link ? 'Open ' + card.band.text : card.band.text"
+             t-att-style="`background: ${card.band.color}; color: ${card.band.ink};`"
+             t-on-click="(ev) => card.band.link and this.openLink(ev, card.band.link)">
+            <i t-if="card.band.icon" t-attf-class="fa {{card.band.icon}} me-1"/><t t-esc="card.band.text"/>
+            <i t-if="card.band.link" class="fa fa-external-link ms-1 opacity-75"/>
+        </div>
+    </t>
+
+    <t t-name="mtbg_tours_core.RecordCardTitle">
+        <div class="mtbg_rc_title" t-att-class="{'is-one-line': card.title_lines === 1}" t-esc="card.title" t-att-title="card.title"/>
+    </t>
+
+    <!-- the fields: a grid, the labels' column as wide as the longest label; two fields marked 'pair' share a row -->
+    <!-- the number bottom right: its label over it, big -->
+    <t t-name="mtbg_tours_core.RecordCardStat">
+        <div t-if="card.stat" class="mtbg_rc_stat">
+            <span class="mtbg_rc_stat_label" t-esc="card.stat.label"/>
+            <span class="mtbg_rc_stat_value" t-esc="card.stat.text"/>
+        </div>
+    </t>
+
+    <t t-name="mtbg_tours_core.RecordCardLines">
+        <div t-if="card.lines.length" class="mtbg_rc_lines">
+            <t t-foreach="card.lines" t-as="line" t-key="line.key">
+                <div t-if="line.pair" class="mtbg_rc_pair">
+                    <t t-foreach="line.pair" t-as="half" t-key="half.key">
+                        <t t-call="mtbg_tours_core.RecordCardLine"><t t-set="line" t-value="half"/></t>
+                    </t>
+                </div>
+                <t t-else="" t-call="mtbg_tours_core.RecordCardLine"/>
+            </t>
+        </div>
+    </t>
+
+    <t t-name="mtbg_tours_core.RecordCardLine">
+        <div t-attf-class="mtbg_rc_line is-{{line.key}}" t-att-title="(line.hint or line.label ? (line.hint or line.label) + ': ' : '') + line.text">
+            <span t-if="line.label" class="mtbg_rc_label" t-esc="line.label"/>
+            <i t-elif="line.icon" t-attf-class="fa {{line.icon}} mtbg_rc_icon"/>
+            <span t-else="" class="mtbg_rc_label"/>
+            <a t-if="line.link" href="#" class="mtbg_rc_text mtbg_rc_link" t-on-click.prevent="(ev) => this.openLink(ev, line.link)"
+               t-esc="line.text"/>
+            <span t-else="" class="mtbg_rc_text" t-esc="line.text"/>
+        </div>
+    </t>
+
+    <!-- the badge (e.g. the card it is paid with), at the foot of the price and pills' column, as wide as it: a click
+         opens what it stands for -->
+    <t t-name="mtbg_tours_core.RecordCardBadge">
+        <a t-if="card.badge" href="#" t-attf-class="mtbg_rc_badge is-{{card.badge.style or 'full'}}" t-att-title="card.badge.title"
+               t-att-data-brand="card.badge.brand or 'card'" t-on-click.prevent="(ev) => this.openLink(ev, card.badge.link)">
+                <!-- large: a small card in its brand's colours, the number on it -->
+                <t t-if="card.badge.style === 'large'">
+                    <span class="mtbg_rc_paycard_mark" aria-hidden="true"><span/><span/></span>
+                    <span class="mtbg_rc_paycard_brand" t-esc="card.badge.brand_label or ''"/>
+                    <span class="mtbg_rc_paycard_number" t-esc="card.badge.number or card.badge.text"/>
+                </t>
+                <t t-else="">
+                    <i t-attf-class="fa {{card.badge.icon or 'fa-credit-card'}}"/><span t-if="card.badge.text" t-esc="card.badge.text"/>
+                </t>
+            </a>
+    </t>
+
+    <!-- the top right: the big figure and the pills, in the look's order; the badge at the column's foot -->
+    <t t-name="mtbg_tours_core.RecordCardPills">
+        <div t-if="card.corner.length or card.badge" class="mtbg_rc_pills">
+            <t t-foreach="card.corner" t-as="pill" t-key="pill.key">
+                <div t-if="pill.key === 'figure'" class="mtbg_rc_figure" t-esc="pill.text"/>
+                <span t-elif="pillText(pill)" t-attf-class="mtbg_rc_pill is-{{pill.level or 'muted'}} is-{{pill.key}}"
+                      t-att-class="{'is-live': pill.countdown_to}"
+                      t-att-style="pill.color ? `background: ${pill.color}; color: ${pill.ink || '#fff'};` : false">
+                    <i t-if="pill.countdown_to" class="fa fa-clock-o me-1"/><t t-esc="pillText(pill)"/></span>
+            </t>
+            <t t-if="card.badge" t-call="mtbg_tours_core.RecordCardBadge"/>
+        </div>
+    </t>
+</templates>

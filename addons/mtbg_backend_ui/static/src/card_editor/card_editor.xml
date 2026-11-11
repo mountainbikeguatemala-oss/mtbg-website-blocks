@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- Card editor: what a model's card shows (left), the real card live (right) -->
+    <t t-name="mtbg_tours_core.CardEditor">
+        <div class="o_action mtbg_ce h-100 d-flex flex-column">
+            <div t-if="!state.data" class="p-4 text-muted"><i class="fa fa-spinner fa-spin me-1"/>Loading…</div>
+            <t t-else="">
+                <div class="d-flex flex-wrap align-items-center gap-3 px-4 py-2 border-bottom">
+                    <img src="/mtbg_backend_ui/static/description/icon.png" class="mtbg_ce_icon" alt=""/>
+                    <div class="flex-grow-1">
+                        <h2 class="mb-0" t-esc="props.action?.name or state.data.title"/>
+                        <div class="text-muted small"><b t-esc="state.data.title"/>: how a record shows as a card, in its kanban
+                            and on other records' pages. One look for the whole site, always the same width.</div>
+                    </div>
+                    <span t-if="dirty" class="badge text-bg-warning">Unsaved changes</span>
+                    <button class="btn btn-secondary" t-att-disabled="!dirty or state.saving" t-on-click="discard">Discard</button>
+                    <button t-if="canEdit" class="btn btn-primary" t-att-disabled="!dirty or state.saving" t-on-click="save">
+                        <i t-if="state.saving" class="fa fa-spinner fa-spin me-1"/>Save</button>
+                </div>
+                <div t-if="state.lang !== state.data.langs[0]?.code" class="alert alert-info rounded-0 mb-0 py-1 px-4 small">
+                    <i class="fa fa-language me-1"/>Editing the <b t-esc="langName"/>
+                    labels. An empty label shows the built-in one.
+                </div>
+                <div class="mtbg_ce_body flex-grow-1 d-flex">
+                    <!-- settings -->
+                    <div class="mtbg_ce_settings overflow-auto p-4">
+                        <section t-if="canEdit and state.data.presets.length" class="mb-4">
+                            <h5 class="mb-1">Preset</h5>
+                            <div class="text-muted small mb-2">A starting point: its layout and fields, then adjust below.</div>
+                            <select class="form-select form-select-sm" aria-label="Preset" t-on-change="(ev) => { this.applyPreset(ev.target.value); ev.target.value = ''; }">
+                                <option value="">Apply a preset…</option>
+                                <option t-foreach="state.data.presets" t-as="preset" t-key="preset.key" t-att-value="preset.key" t-esc="preset.name"/>
+                            </select>
+                        </section>
+                        <section class="mb-4">
+                            <h5 class="mb-1">Photo</h5>
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" id="mtbg_ce_photo" t-att-checked="state.look.photo"
+                                       t-att-disabled="!canEdit" t-on-change="(ev) => this.change('photo', ev.target.checked)"/>
+                                <label class="form-check-label" for="mtbg_ce_photo">Show the photo</label>
+                            </div>
+                            <div t-if="state.look.photo" class="d-flex flex-wrap gap-3">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Photo position">
+                                    <button type="button" class="btn" t-att-class="state.look.photo_position === 'left' ? 'btn-secondary' : 'btn-outline-secondary'"
+                                            t-att-disabled="!canEdit" t-on-click="() => this.change('photo_position', 'left')">
+                                        <i class="fa fa-columns me-1"/>Beside</button>
+                                    <button type="button" class="btn" t-att-class="state.look.photo_position === 'top' ? 'btn-secondary' : 'btn-outline-secondary'"
+                                            t-att-disabled="!canEdit" t-on-click="() => this.change('photo_position', 'top')">
+                                        <i class="fa fa-window-maximize me-1"/>On top</button>
+                                </div>
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Photo size">
+                                    <t t-foreach="[['s', 'Small'], ['m', 'Medium'], ['l', 'Large']]" t-as="size" t-key="size[0]">
+                                        <button type="button" class="btn" t-att-class="state.look.photo_size === size[0] ? 'btn-secondary' : 'btn-outline-secondary'"
+                                                t-att-disabled="!canEdit" t-on-click="() => this.change('photo_size', size[0])" t-esc="size[1]"/>
+                                    </t>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="mb-4">
+                            <h5 class="mb-1">Title</h5>
+                            <label t-if="state.data.titles.length > 1" class="d-flex align-items-center gap-2 small mb-2">Shows
+                                <select class="form-select form-select-sm" aria-label="Title" t-att-disabled="!canEdit"
+                                        t-on-change="(ev) => this.change('title', ev.target.value)">
+                                    <option t-foreach="state.data.titles" t-as="t" t-key="t.key" t-att-value="t.key"
+                                            t-att-selected="t.key === state.look.title" t-esc="t.label"/>
+                                </select>
+                            </label>
+                            <div class="btn-group btn-group-sm mb-2" role="group" aria-label="Title position">
+                                <button type="button" class="btn" t-att-class="state.look.title_position === 'beside' ? 'btn-secondary' : 'btn-outline-secondary'"
+                                        t-att-disabled="!canEdit" t-on-click="() => this.change('title_position', 'beside')">Beside the photo</button>
+                                <button type="button" class="btn" t-att-class="state.look.title_position === 'top' ? 'btn-secondary' : 'btn-outline-secondary'"
+                                        t-att-disabled="!canEdit" t-on-click="() => this.change('title_position', 'top')">Across, photo under</button>
+                                <button type="button" class="btn" t-att-class="state.look.title_position === 'across' ? 'btn-secondary' : 'btn-outline-secondary'"
+                                        t-att-disabled="!canEdit" t-on-click="() => this.change('title_position', 'across')">Across, photo beside the fields</button>
+                                <button type="button" class="btn" t-att-class="state.look.title_position === 'bar' ? 'btn-secondary' : 'btn-outline-secondary'"
+                                        t-att-disabled="!canEdit" t-on-click="() => this.change('title_position', 'bar')">Bar across the top</button>
+                            </div>
+                            <div t-if="state.look.title_position === 'bar'" class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" id="mtbg_ce_bar_status" t-att-checked="state.look.bar_status"
+                                       t-att-disabled="!canEdit" t-on-change="(ev) => this.change('bar_status', ev.target.checked)"/>
+                                <label class="form-check-label" for="mtbg_ce_bar_status">The bar in the status colour (no status pill)</label>
+                            </div>
+                            <label t-if="state.data.figures.length" class="d-flex align-items-center gap-2 small mb-2">Big figure, top right
+                                <select class="form-select form-select-sm" aria-label="Big figure" t-att-disabled="!canEdit"
+                                        t-on-change="(ev) => this.change('figure', ev.target.value)">
+                                    <option value="" t-att-selected="!state.look.figure">None</option>
+                                    <option t-foreach="state.data.figures" t-as="f" t-key="f.key" t-att-value="f.key"
+                                            t-att-selected="f.key === state.look.figure" t-esc="f.label"/>
+                                </select>
+                            </label>
+                            <label class="d-flex align-items-center gap-2 small mb-2">Number, bottom right
+                                <select class="form-select form-select-sm" aria-label="Number, bottom right" t-att-disabled="!canEdit"
+                                        t-on-change="(ev) => this.change('stat', ev.target.value)">
+                                    <option value="" t-att-selected="!state.look.stat">None</option>
+                                    <option t-foreach="state.data.fields" t-as="f" t-key="f.key" t-att-value="f.key"
+                                            t-att-selected="f.key === state.look.stat" t-esc="f.label"/>
+                                </select>
+                            </label>
+                            <div t-if="state.data.badge_label" class="d-flex align-items-center flex-wrap gap-2 small mb-2">
+                                <span t-esc="state.data.badge_label + ', bottom right'"/>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <t t-foreach="[['none', 'Off'], ['icon', 'Icon'], ['full', 'Icon and last 4'], ['large', 'Large card']]" t-as="b" t-key="b[0]">
+                                        <button type="button" class="btn" t-att-class="state.look.badge === b[0] ? 'btn-secondary' : 'btn-outline-secondary'"
+                                                t-att-disabled="!canEdit" t-on-click="() => this.change('badge', b[0])" t-esc="b[1]"/>
+                                    </t>
+                                </div>
+                            </div>
+                            <div class="small text-muted mb-1">Pills, top right:</div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="mtbg_ce_status" t-att-checked="state.look.pill_status"
+                                       t-att-disabled="!canEdit" t-on-change="(ev) => this.change('pill_status', ev.target.checked)"/>
+                                <label class="form-check-label" for="mtbg_ce_status">Status</label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="mtbg_ce_pill" t-att-checked="state.look.pill_countdown"
+                                       t-att-disabled="!canEdit" t-on-change="(ev) => this.change('pill_countdown', ev.target.checked)"/>
+                                <label class="form-check-label" for="mtbg_ce_pill">Countdown</label>
+                            </div>
+                            <div t-if="state.look.pill_countdown" class="form-check form-switch ms-4">
+                                <input class="form-check-input" type="checkbox" id="mtbg_ce_live" t-att-checked="state.look.pill_live"
+                                       t-att-disabled="!canEdit" t-on-change="(ev) => this.change('pill_live', ev.target.checked)"/>
+                                <label class="form-check-label" for="mtbg_ce_live">Live, to the start (days, hours, minutes)</label>
+                            </div>
+                            <div class="small text-muted mt-2 mb-1">Top right, in this order (drag, or the arrows):</div>
+                            <div t-foreach="cornerItems" t-as="item" t-key="item.key" class="mtbg_ce_line"
+                                 t-att-draggable="canEdit ? 'true' : 'false'" t-on-dragstart="(ev) => this.onDragStart('corner', item_index, ev)"
+                                 t-on-dragover="(ev) => this.onDragOver('corner', ev)" t-on-drop="(ev) => this.onDrop('corner', item_index, ev)">
+                                <i class="fa fa-bars mtbg_ce_grip" aria-hidden="true"/>
+                                <button type="button" class="btn btn-sm btn-light" title="Earlier" t-att-disabled="!canEdit or item_first"
+                                        t-on-click="() => this.moveCorner(item_index, -1)"><i class="fa fa-arrow-up"/></button>
+                                <button type="button" class="btn btn-sm btn-light" title="Later" t-att-disabled="!canEdit or item_last"
+                                        t-on-click="() => this.moveCorner(item_index, 1)"><i class="fa fa-arrow-down"/></button>
+                                <span class="flex-grow-1" t-esc="item.label"/>
+                            </div>
+                        </section>
+                        <section class="mb-4">
+                            <h5 class="mb-1">Small stats</h5>
+                            <div class="text-muted small mb-2">Short fields side by side in one row under the fields, one line tall (an icon and the value), in the fields' order.</div>
+                            <div class="d-flex flex-wrap gap-3">
+                                <div t-foreach="state.look.lines" t-as="line" t-key="line.key" class="form-check">
+                                    <input class="form-check-input" type="checkbox" t-att-id="'mtbg_ce_small_' + line.key"
+                                           t-att-checked="isSmall(line.key)" t-att-disabled="!canEdit or !line.show"
+                                           t-on-change="() => this.toggleSmall(line.key)"/>
+                                    <label class="form-check-label small" t-att-for="'mtbg_ce_small_' + line.key" t-esc="lineLabel(line.key)"/>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="mb-4">
+                            <h5 class="mb-1">Fields</h5>
+                            <div class="text-muted small mb-2">Under the title, one per line, in this order: drag one (or use the arrows). The eye shows or hides one.</div>
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" id="mtbg_ce_line_icons" t-att-checked="state.look.line_icons"
+                                       t-att-disabled="!canEdit" t-on-change="(ev) => this.change('line_icons', ev.target.checked)"/>
+                                <label class="form-check-label" for="mtbg_ce_line_icons">Icons instead of labels (where a field has one)</label>
+                            </div>
+                            <div t-foreach="state.look.lines" t-as="line" t-key="line.key" class="mtbg_ce_line" t-att-class="{'is-off': !line.show}"
+                                 t-att-draggable="canEdit ? 'true' : 'false'" t-on-dragstart="(ev) => this.onDragStart('lines', line_index, ev)"
+                                 t-on-dragover="(ev) => this.onDragOver('lines', ev)" t-on-drop="(ev) => this.onDrop('lines', line_index, ev)">
+                                <i class="fa fa-bars mtbg_ce_grip" aria-hidden="true"/>
+                                <button type="button" class="btn btn-sm btn-light" title="Earlier" t-att-disabled="!canEdit or line_first"
+                                        t-on-click="() => this.moveLine(line_index, -1)"><i class="fa fa-arrow-up"/></button>
+                                <button type="button" class="btn btn-sm btn-light" title="Later" t-att-disabled="!canEdit or line_last"
+                                        t-on-click="() => this.moveLine(line_index, 1)"><i class="fa fa-arrow-down"/></button>
+                                <span class="flex-grow-1" t-esc="lineLabel(line.key)"/>
+                                <button type="button" class="btn btn-sm btn-light" t-att-title="line.show ? 'Hide' : 'Show'" t-att-disabled="!canEdit"
+                                        t-on-click="() => this.toggleLine(line)"><i t-attf-class="fa {{line.show ? 'fa-eye' : 'fa-eye-slash'}}"/></button>
+                            </div>
+                            <div t-if="state.data.link_formats.length" class="mt-3">
+                                <div class="small fw-bold mb-1">The link's text</div>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <select class="form-select form-select-sm w-auto" aria-label="Link text" t-att-disabled="!canEdit"
+                                            t-on-change="(ev) => this.change('link_format', ev.target.value)">
+                                        <option t-foreach="state.data.link_formats" t-as="f" t-key="f.key" t-att-value="f.key"
+                                                t-att-selected="f.key === state.look.link_format" t-esc="f.label"/>
+                                    </select>
+                                    <select class="form-select form-select-sm w-auto" aria-label="Date format" t-att-disabled="!canEdit"
+                                            t-on-change="(ev) => this.change('link_date', ev.target.value)">
+                                        <option t-foreach="state.data.date_formats" t-as="f" t-key="f.key" t-att-value="f.key"
+                                                t-att-selected="f.key === state.look.link_date" t-esc="f.label"/>
+                                    </select>
+                                </div>
+                            </div>
+                            <div t-if="labelled.length" class="mt-3">
+                                <div class="small fw-bold mb-1">Labels <span class="fw-normal text-muted">(<t t-esc="langName"/>)</span></div>
+                                <div class="mtbg_ce_labels">
+                                    <label t-foreach="labelled" t-as="f" t-key="f.key" class="small">
+                                        <span class="text-muted" t-esc="f.label"/>
+                                        <input class="form-control form-control-sm" t-att-value="label(f.key)" t-att-placeholder="f.short"
+                                               t-att-disabled="!canEdit" t-on-change="(ev) => this.setLabel(f.key, ev.target.value)"/></label>
+                                </div>
+                            </div>
+                        </section>
+                        <section t-if="state.data.detail_columns.length" class="mb-4">
+                            <h5 class="mb-1">Dropdown</h5>
+                            <div class="text-muted small mb-2">A list under the fields that opens on click (a booking's riders).</div>
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" id="mtbg_ce_details" t-att-checked="state.look.details"
+                                       t-att-disabled="!canEdit" t-on-change="(ev) => this.change('details', ev.target.checked)"/>
+                                <label class="form-check-label" for="mtbg_ce_details">Show the dropdown</label>
+                            </div>
+                            <t t-if="state.look.details">
+                                <div t-foreach="state.look.detail_columns" t-as="col" t-key="col.key" class="mtbg_ce_line" t-att-class="{'is-off': !col.show}"
+                                     t-att-draggable="canEdit ? 'true' : 'false'" t-on-dragstart="(ev) => this.onDragStart('detail_columns', col_index, ev)"
+                                     t-on-dragover="(ev) => this.onDragOver('detail_columns', ev)" t-on-drop="(ev) => this.onDrop('detail_columns', col_index, ev)">
+                                    <i class="fa fa-bars mtbg_ce_grip" aria-hidden="true"/>
+                                    <button type="button" class="btn btn-sm btn-light" title="Earlier" t-att-disabled="!canEdit or col_first"
+                                            t-on-click="() => this.moveColumn(col_index, -1)"><i class="fa fa-arrow-up"/></button>
+                                    <button type="button" class="btn btn-sm btn-light" title="Later" t-att-disabled="!canEdit or col_last"
+                                            t-on-click="() => this.moveColumn(col_index, 1)"><i class="fa fa-arrow-down"/></button>
+                                    <span class="flex-grow-1" t-esc="columnLabel(col.key)"/>
+                                    <button type="button" class="btn btn-sm btn-light" t-att-title="col.show ? 'Hide' : 'Show'" t-att-disabled="!canEdit"
+                                            t-on-click="() => this.toggleLine(col)"><i t-attf-class="fa {{col.show ? 'fa-eye' : 'fa-eye-slash'}}"/></button>
+                                </div>
+                            </t>
+                        </section>
+                        <section>
+                            <h5 class="mb-1">Notices</h5>
+                            <div class="text-muted small mb-2">Warnings the extensions give (a role to fill, a payment due...).</div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="mtbg_ce_notices" t-att-checked="state.look.notices"
+                                       t-att-disabled="!canEdit" t-on-change="(ev) => this.change('notices', ev.target.checked)"/>
+                                <label class="form-check-label" for="mtbg_ce_notices">Show the notices</label>
+                            </div>
+                        </section>
+                        <section t-if="state.data.transfer and state.data.transfer.length">
+                            <h5 class="mb-1">Import / Export</h5>
+                            <div class="text-muted small mb-2">Every record out as a spreadsheet (the list's columns), or in from one.</div>
+                            <MtbgDataTransfer models="state.data.transfer"/>
+                        </section>
+                    </div>
+                    <!-- live preview: a record's real card -->
+                    <div class="mtbg_ce_preview d-flex flex-column">
+                        <div class="px-3 py-2 border-bottom d-flex flex-wrap align-items-center gap-2">
+                            <strong class="me-auto"><i class="fa fa-eye me-1"/>Preview</strong>
+                            <select class="form-select form-select-sm w-auto mtbg_ce_record" aria-label="Record" t-on-change="(ev) => this.setRecord(ev.target.value)">
+                                <option t-foreach="state.data.records" t-as="rec" t-key="rec.id" t-att-value="rec.id"
+                                        t-att-selected="rec.id === state.recordId" t-esc="rec.name"/>
+                            </select>
+                            <select t-if="state.data.langs.length > 1" class="form-select form-select-sm w-auto" aria-label="Language"
+                                    title="The preview's language, and the language of the labels you edit"
+                                    t-on-change="(ev) => this.setLang(ev.target.value)">
+                                <option t-foreach="state.data.langs" t-as="lang" t-key="lang.code" t-att-value="lang.code"
+                                        t-att-selected="lang.code === state.lang" t-esc="lang.name"/>
+                            </select>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Light or dark">
+                                <button type="button" class="btn" title="Light" t-att-class="!state.dark ? 'btn-secondary' : 'btn-outline-secondary'"
+                                        t-on-click="() => this.setDark(false)"><i class="fa fa-sun-o"/></button>
+                                <button type="button" class="btn" title="Dark" t-att-class="state.dark ? 'btn-secondary' : 'btn-outline-secondary'"
+                                        t-on-click="() => this.setDark(true)"><i class="fa fa-moon-o"/></button>
+                            </div>
+                            <button class="btn btn-sm btn-light" title="Reload" t-on-click="() => this.preview()"><i class="fa fa-refresh"/></button>
+                        </div>
+                        <div t-if="dirty" class="alert alert-warning rounded-0 mb-0 py-1 px-3 small">
+                            <i class="fa fa-bolt me-1"/>Live: the card shows your unsaved changes (only you see them).
+                        </div>
+                        <div class="mtbg_ce_stage flex-grow-1" t-att-class="{'is-dark': state.dark}">
+                            <RecordCard t-if="state.card" card="state.card"/>
+                            <div t-else="" class="text-muted small">No record to show yet.</div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

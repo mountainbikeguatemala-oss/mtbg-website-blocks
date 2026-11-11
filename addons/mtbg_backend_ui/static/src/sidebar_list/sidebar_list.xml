@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- the list with its side bar on the left (not on a phone) -->
+    <t t-name="mtbg_tours_core.SidebarListView" t-inherit="web.ListView" t-inherit-mode="primary">
+        <!-- the cog: the model's settings page (Import / Export there), not Odoo's menu -->
+        <xpath expr="//CogMenu[@t-if='!hasSelectedRecords']" position="replace">
+            <t t-if="!hasSelectedRecords">
+                <button t-if="sidebar.settingsAction" type="button" class="btn btn-link o_mtbg_settings_cog px-1"
+                        title="Settings" aria-label="Settings" t-on-click="openSettings"><i class="fa fa-cog"/></button>
+                <CogMenu t-else=""/>
+            </t>
+        </xpath>
+        <xpath expr="//t[@t-set-slot='control-panel-navigation-additional']" position="inside">
+            <ViewModes mode="'list'" resModel="props.resModel" entries="viewEntries"/>
+        </xpath>
+        <xpath expr="//t[@t-component='props.Renderer']" position="replace">
+            <div class="o_mtbg_sb_layout d-flex align-items-start">
+                <MtbgSidebar t-if="!env.isSmall and hasSidebar" sidebar="sidebar" onSelect.bind="chooseSidebar"/>
+                <div class="o_mtbg_sb_main flex-grow-1 min-w-0">
+                    <t t-component="props.Renderer" t-if="model.isReady"
+                       list="model.root"
+                       activeActions="activeActions"
+                       archInfo="archInfo"
+                       allowSelectors="props.allowSelectors"
+                       editable="editable"
+                       onOpenFormView="onOpenFormView"
+                       hasOpenFormViewButton="hasOpenFormViewButton"
+                       openRecord.bind="openRecord"
+                       noContentHelp="props.info.noContentHelp"
+                       onAdd.bind="createRecord"
+                       optionalActiveFields="optionalActiveFields"
+                       readonly="props.readonly"
+                    />
+                </div>
+            </div>
+        </xpath>
+    </t>
+
+    <t t-name="mtbg_tours_core.Sidebar">
+        <!-- hidden: a thin strip, its button shows it again (the branch chosen still applies, named on hover) -->
+        <nav t-if="display.hidden" class="o_mtbg_sb o_mtbg_sb_hidden border-end" aria-label="Browse">
+            <button type="button" class="btn btn-link o_mtbg_sb_toggle" title="Show the side bar"
+                    aria-label="Show the side bar" aria-expanded="false" t-on-click="toggleHidden">
+                <i class="fa fa-angle-double-right"/>
+            </button>
+            <i t-if="props.sidebar.selected" class="fa fa-filter o_mtbg_sb_hidden_filter"
+               t-att-title="props.sidebar.selected.label"/>
+        </nav>
+        <nav t-else="" class="o_mtbg_sb border-end" aria-label="Browse">
+            <div class="d-flex align-items-center gap-1 mb-1">
+                <a href="#" class="o_mtbg_sb_head o_mtbg_sb_all flex-grow-1 mb-0" t-att-class="{'active': !props.sidebar.selected}"
+                   t-on-click.prevent="() => props.onSelect(null)">
+                    <span class="flex-grow-1 text-truncate"><i class="fa fa-th-list fa-fw me-1"/>All</span>
+                    <span class="badge rounded-pill text-bg-light" t-esc="props.sidebar.total"/>
+                </a>
+                <button type="button" class="btn btn-link o_mtbg_sb_toggle" title="Hide the side bar"
+                        aria-label="Hide the side bar" aria-expanded="true" t-on-click="toggleHidden">
+                    <i class="fa fa-angle-double-left"/>
+                </button>
+            </div>
+            <div t-foreach="props.sidebar.sections" t-as="section" t-key="section.key" class="o_mtbg_sb_group">
+                <div class="o_mtbg_sb_head">
+                    <button type="button" class="btn btn-link o_mtbg_sb_caret" t-att-aria-expanded="isOpen(section, true) ? 'true' : 'false'"
+                            t-att-title="isOpen(section, true) ? 'Fold' : 'Unfold'" t-on-click.prevent="() => this.toggle(section, true)">
+                        <i t-attf-class="fa fa-fw {{isOpen(section, true) ? 'fa-caret-down' : 'fa-caret-right'}}"/>
+                    </button>
+                    <span class="flex-grow-1 text-truncate"><i t-if="section.icon" t-attf-class="fa {{section.icon}} fa-fw me-1"/><t t-esc="section.label"/></span>
+                </div>
+                <ul t-if="isOpen(section, true)" class="list-unstyled mb-0">
+                    <li t-foreach="section.nodes" t-as="node" t-key="node.key">
+                        <t t-call="mtbg_tours_core.SidebarNode"><t t-set="level" t-value="1"/></t>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </t>
+
+    <t t-name="mtbg_tours_core.SidebarNode">
+        <a href="#" t-attf-class="o_mtbg_sb_item is-level-{{level}}" t-att-class="{'active': isChosen(node), 'has-children': node.children and node.children.length}"
+           t-att-title="node.hint or node.label" t-on-click.prevent="() => props.onSelect(node)">
+            <button t-if="node.children and node.children.length" type="button" class="btn btn-link o_mtbg_sb_caret"
+                    t-att-aria-expanded="isOpen(node) ? 'true' : 'false'" t-on-click.stop.prevent="() => this.toggle(node)">
+                <i t-attf-class="fa fa-fw {{isOpen(node) ? 'fa-caret-down' : 'fa-caret-right'}}"/>
+            </button>
+            <span t-if="node.color" class="o_mtbg_sb_dot" t-attf-style="background: {{node.color}};"/>
+            <span class="flex-grow-1 o_mtbg_sb_label" t-esc="node.label"/>
+            <span t-if="node.count !== false and node.count !== undefined" class="o_mtbg_sb_count" t-esc="node.count"/>
+        </a>
+        <ul t-if="node.children and node.children.length and isOpen(node)" class="list-unstyled mb-0">
+            <li t-foreach="node.children" t-as="child" t-key="child.key">
+                <t t-call="mtbg_tours_core.SidebarNode"><t t-set="node" t-value="child"/><t t-set="level" t-value="level + 1"/></t>
+            </li>
+        </ul>
+    </t>
+</templates>

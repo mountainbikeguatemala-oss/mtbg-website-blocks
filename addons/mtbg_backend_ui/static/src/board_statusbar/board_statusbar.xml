@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- the stages' colours for a status bar on the page (the rules: in the page's head) -->
+    <t t-name="mtbg_tours_core.BoardStatusbarColors">
+        <span class="d-none"/>
+    </t>
+</templates>

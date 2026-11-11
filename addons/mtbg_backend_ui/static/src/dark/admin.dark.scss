@@ -1,0 +1,79 @@
+// The admin in dark: what the palette alone does not turn over
+:root {
+    color-scheme: dark;
+    --o-webclient-color-scheme: dark;
+
+    // Bootstrap's subtle colours (alerts, badges, soft backgrounds) dark, their text light
+    @each $name, $bg, $border, $text in (
+        ("primary", #2c2840, #4a4270, #cfc6f0),
+        ("secondary", #2c2f3a, #3a3e4a, #c2c6ce),
+        ("success", #16301e, #2a5a37, #95dba6),
+        ("info", #12323a, #23606d, #9fdfeb),
+        ("warning", #3a2e12, #6b5320, #f3d17f),
+        ("danger", #3a1a1e, #6b2a30, #f4a5a5),
+        ("light", #23262f, #3a3e4a, #dcdfe4),
+        ("dark", #11131a, #2c2f3a, #eceef1),
+    ) {
+        --#{$name}-bg-subtle: #{$bg};
+        --#{$name}-border-subtle: #{$border};
+        --#{$name}-text-emphasis: #{$text};
+    }
+    --highlight-bg: #4a3f12;
+
+    // Tours' own pieces ask for Bootstrap's --bs-* variables (Odoo's are unprefixed; light, they fall back to their
+    // light values): dark, they get these. Surfaces are the sheet's grey, a step above the page.
+    --bs-body-bg: #23262f;
+    --bs-body-color: #eceef1;
+    --bs-body-color-rgb: 236, 238, 241;
+    --bs-body-bg-rgb: 35, 38, 47;
+    --bs-emphasis-color: #ffffff;
+    --bs-heading-color: #ffffff;
+    --bs-secondary-color: rgba(236, 238, 241, .7);
+    --bs-tertiary-color: rgba(236, 238, 241, .5);
+    --bs-secondary-bg: #3a3e4a;
+    --bs-tertiary-bg: #2c2f3a;
+    --bs-border-color: #3a3e4a;
+    --bs-border-color-translucent: rgba(255, 255, 255, .15);
+    --bs-link-color: #b3a6e3;
+    --bs-link-hover-color: #cfc6f0;
+    --bs-primary: #9a8cd0;
+    --bs-primary-rgb: 154, 140, 208;
+    --bs-secondary: #a2a7b2;
+    --bs-success: #3fb950;
+    --bs-success-rgb: 63, 185, 80;
+    --bs-info: #3fc1d9;
+    --bs-info-rgb: 63, 193, 217;
+    --bs-warning: #f0b429;
+    --bs-warning-rgb: 240, 180, 41;
+    --bs-danger: #f26b6b;
+    --bs-danger-rgb: 242, 107, 107;
+    --bs-light: #2c2f3a;
+    --bs-dark: #eceef1;
+    --bs-white: #23262f;
+    --bs-black: #ffffff;
+    @each $name, $bg, $border, $text in (
+        ("primary", #2c2840, #4a4270, #cfc6f0),
+        ("secondary", #2c2f3a, #3a3e4a, #c2c6ce),
+        ("success", #16301e, #2a5a37, #95dba6),
+        ("info", #12323a, #23606d, #9fdfeb),
+        ("warning", #3a2e12, #6b5320, #f3d17f),
+        ("danger", #3a1a1e, #6b2a30, #f4a5a5),
+    ) {
+        --bs-#{$name}-bg-subtle: #{$bg};
+        --bs-#{$name}-border-subtle: #{$border};
+        --bs-#{$name}-text-emphasis: #{$text};
+    }
+}
+
+// Odoo sets the web client's colour scheme to "bright": dark, so the browser draws the scrollbars, inputs and
+// pickers dark too
+.o_web_client {
+    --o-webclient-color-scheme: dark;
+    color-scheme: dark;
+    scrollbar-color: #525764 #1a1c23;
+
+    // pictures and logos drawn for a white ground keep it
+    .o_kanban_image img, .o_field_image img, .oe_avatar img {
+        background-color: #fff;
+    }
+}

@@ -1,0 +1,649 @@
+// the record card (kanban, another record's page, the editor's preview alike): compact, the principal first, always
+// the same width (about a phone's); one row per field, cut short rather than wrapped
+$mtbg-card-width: 24rem;
+
+.mtbg_rc {
+    width: $mtbg-card-width;
+    max-width: 100%;
+    min-width: 0;
+    font-size: .875rem;
+    line-height: 1.35;
+    color: var(--bs-body-color, #212529);
+
+    &.is-framed {
+        border: 1px solid var(--bs-border-color, #dee2e6);
+        border-radius: .6rem;
+        padding: .75rem .85rem;
+        background: var(--bs-body-bg, #fff);
+    }
+
+    &.is-link {
+        cursor: pointer;
+        transition: border-color .15s, box-shadow .15s;
+
+        &:hover {
+            border-color: var(--bs-primary, #714b67);
+            box-shadow: 0 .15rem .6rem rgba(0, 0, 0, .07);
+        }
+    }
+
+    // the head: the title, its link and its fields on the left; the figure and the pills on the right
+    .mtbg_rc_head {
+        flex: 1;
+        display: flex;
+        align-items: flex-start;
+        gap: .6rem;
+        min-width: 0;
+    }
+
+    .mtbg_rc_title {
+        min-width: 0;
+        margin-bottom: .1rem;
+        font-weight: 700;
+        font-size: 1.02rem;
+        line-height: 1.25;
+        // two lines at most
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    // the title and the pills on one row, the fields under them across the card
+    .mtbg_rc_titlerow {
+        display: flex;
+        align-items: flex-start;
+        gap: .5rem;
+        min-width: 0;
+
+        > .mtbg_rc_title { flex: 1 1 auto; }
+        > .mtbg_rc_pills {
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            align-items: center;
+            max-width: 60%;
+        }
+    }
+
+    .mtbg_rc_title.is-one-line {
+        display: block;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .mtbg_rc_pills {
+        flex: none;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: .2rem;
+        max-width: 50%;
+    }
+
+    .mtbg_rc_figure {
+        font-size: 1.3rem;
+        font-weight: 800;
+        line-height: 1.1;
+        letter-spacing: -.01em;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .mtbg_rc_pill {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-top: .05rem;
+        font-size: .72rem;
+        font-weight: 600;
+        line-height: 1.5;
+        padding: 0 .6em;
+        border-radius: 50rem;
+        white-space: nowrap;
+        background: var(--bs-secondary-bg, #e9ecef);
+        color: var(--bs-body-color, #212529);
+
+        &.is-live {
+            font-variant-numeric: tabular-nums;
+        }
+
+        &.is-success { background: var(--bs-success, #198754); color: #fff; }
+        &.is-warning { background: var(--bs-warning, #ffc107); color: #000; }
+        &.is-danger { background: var(--bs-danger, #dc3545); color: #fff; }
+        &.is-info { background: var(--bs-info, #0dcaf0); color: #000; }
+    }
+
+    .mtbg_rc_link {
+        font-size: .8rem;
+    }
+
+    // the photo and the fields
+    .mtbg_rc_main {
+        display: flex;
+        gap: .75rem;
+        min-width: 0;
+    }
+
+    .mtbg_rc_img {
+        flex: none;
+        width: 5.5rem;
+        height: 5.5rem;
+        border-radius: .5rem;
+        overflow: hidden;
+        background: var(--bs-tertiary-bg, #f3f4f6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .mtbg_rc_body {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: .12rem;
+    }
+
+    .mtbg_rc_line {
+        display: flex;
+        align-items: baseline;
+        gap: .4rem;
+        min-width: 0;
+        white-space: nowrap;
+    }
+
+    .mtbg_rc_label {
+        flex: none;
+        width: 4.6rem;
+        font-size: .68rem;
+        text-transform: uppercase;
+        letter-spacing: .03em;
+        color: var(--bs-secondary-color, #6c757d);
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .mtbg_rc_icon {
+        flex: none;
+        width: 1rem;
+        text-align: center;
+        color: var(--bs-secondary-color, #6c757d);
+    }
+
+    .mtbg_rc_text {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    // the dropdown: a row per rider (flag, name, small facts, ticks)
+    .mtbg_rc_details {
+        margin-top: .55rem;
+        border-top: 1px solid var(--bs-border-color, #dee2e6);
+        padding-top: .4rem;
+        font-size: .82rem;
+
+        summary {
+            list-style: none;
+            cursor: pointer;
+            color: var(--bs-secondary-color, #6c757d);
+            font-weight: 600;
+            user-select: none;
+
+            &::-webkit-details-marker { display: none; }
+        }
+
+        .mtbg_rc_caret {
+            width: .8rem;
+            transition: transform .15s;
+        }
+
+        &[open] .mtbg_rc_caret { transform: rotate(90deg); }
+    }
+
+    // a grid: the same columns on every row, text left-justified
+    .mtbg_rc_rows {
+        display: grid;
+        column-gap: .45rem;
+        padding-left: .8rem;
+    }
+
+    .mtbg_rc_row {
+        display: contents;
+    }
+
+    // a band across the columns, dividing the rows (a departure's manifest: one per booking)
+    .mtbg_rc_band {
+        grid-column: 1 / -1;
+        margin: .3rem 0 0 -.8rem;
+        padding: .15rem .8rem;
+        font-size: .75rem;
+        font-weight: 600;
+        color: var(--bs-secondary-color, #6c757d);
+        background: var(--bs-tertiary-bg, #f3f4f6);
+        border-radius: .25rem;
+    }
+    .mtbg_rc_row.is-group + .mtbg_rc_row .mtbg_rc_cell { border-top: 0; }
+    a.mtbg_rc_band { display: block; text-decoration: none; }
+    a.mtbg_rc_band:hover { color: var(--bs-link-color, #0d6efd); text-decoration: underline; }
+    // a row that opens its record (a rider): the whole row reacts
+    .mtbg_rc_cell.is-row-link { cursor: pointer; }
+    .mtbg_rc_row:hover .mtbg_rc_cell.is-row-link { background: var(--bs-tertiary-bg, #f3f4f6); }
+    .mtbg_rc_row:hover .mtbg_rc_cell.is-row-link.is-name { color: var(--bs-link-color, #0d6efd); }
+
+    .mtbg_rc_cell {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: .2rem;
+        min-width: 0;
+        padding: .22rem 0;
+        white-space: nowrap;
+        border-top: 1px dashed var(--bs-border-color, #e9ecef);
+
+        &.is-check { justify-content: center; }
+    }
+
+    .mtbg_rc_row:first-child .mtbg_rc_cell { border-top: 0; }
+
+    .mtbg_rc_cell.is-slot {
+        justify-content: flex-end;
+        color: var(--bs-secondary-color, #6c757d);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .mtbg_rc_cell.is-text:not(.is-name):not(.is-slot) {
+        font-size: .74rem;
+        color: var(--bs-secondary-color, #6c757d);
+    }
+
+    .mtbg_rc_cut {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .mtbg_rc_lead {
+        flex: none;
+        font-size: .8rem;
+        color: var(--bs-warning, #f0ad4e);
+    }
+
+    .mtbg_rc_flag {
+        flex: none;
+        width: 1.1rem;
+        height: .8rem;
+        object-fit: cover;
+        border-radius: .1rem;
+    }
+
+    .mtbg_rc_diet {
+        display: inline-block;
+        padding: 0 .35rem;
+        border-radius: 50rem;
+        background: #6c757d;
+        color: #fff;
+        font-size: .64rem;
+        font-weight: 700;
+        line-height: 1.35;
+    }
+
+    // a done / not done mark, as the participant lists draw it (their global icon look)
+    .mtbg_rc_check {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        line-height: 1;
+        font-size: .95rem;
+        --mtbg-mark: .6em;
+
+        &.is-ok { color: var(--bs-success, #198754); }
+        &.is-missing { color: var(--bs-danger, #dc3545); }
+        &.is-size-s { font-size: .8rem; }
+        &.is-size-l { font-size: 1.15rem; }
+        &.is-mark-m { --mtbg-mark: .75em; }
+        &.is-mark-l { --mtbg-mark: .9em; }
+
+        .mtbg_rc_mark {
+            position: absolute;
+            font-size: var(--mtbg-mark);
+            background: var(--bs-body-bg, #fff);
+            border-radius: 50%;
+            padding: .05em;
+        }
+
+        &.is-at-br .mtbg_rc_mark { right: -.45em; bottom: -.25em; }
+        &.is-at-tr .mtbg_rc_mark { right: -.45em; top: -.3em; }
+        &.is-at-bl .mtbg_rc_mark { left: -.45em; bottom: -.25em; }
+        &.is-at-tl .mtbg_rc_mark { left: -.45em; top: -.3em; }
+        &.is-at-after .mtbg_rc_mark { position: static; margin-left: .15em; background: none; padding: 0; }
+        &.is-at-none .mtbg_rc_mark { display: none; }
+    }
+
+    // the notices
+    .mtbg_rc_actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.375rem;
+        margin-top: 0.5rem;
+        justify-content: flex-end;
+    }
+    .mtbg_rc_notices {
+        list-style: none;
+        margin: .6rem 0 0;
+        padding: .4rem .6rem;
+        border-radius: .4rem;
+        background: var(--bs-tertiary-bg, #f8f9fa);
+        font-size: .8rem;
+
+        li {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        li + li { margin-top: .15rem; }
+        .is-danger { color: var(--bs-danger, #dc3545); }
+        .is-warning { color: var(--bs-warning-text-emphasis, #997404); }
+    }
+
+    // its look: the photo's size and place; the title across the card
+    &.is-size-s .mtbg_rc_img { width: 3.75rem; height: 3.75rem; }
+    &.is-size-l .mtbg_rc_img { width: 7.5rem; height: 7.5rem; }
+
+    &.is-photo-top {
+        .mtbg_rc_main { flex-direction: column; gap: .6rem; }
+        .mtbg_rc_img { width: 100%; height: 8rem; }
+        &.is-size-s .mtbg_rc_img { height: 5.5rem; }
+        &.is-size-l .mtbg_rc_img { height: 11rem; }
+    }
+
+    // across: the photo under the head, the card's width
+    .mtbg_rc_img.mtbg_rc_banner {
+        width: 100%;
+        height: 8rem;
+        margin-top: .6rem;
+    }
+
+    &.is-size-s .mtbg_rc_img.mtbg_rc_banner { height: 5.5rem; }
+    &.is-size-l .mtbg_rc_img.mtbg_rc_banner { height: 11rem; }
+}
+
+// a kanban of cards (class="mtbg_card_kanban"): columns and records as wide as the card
+.mtbg_card_kanban {
+    .o_kanban_group {
+        flex: 0 0 calc(#{$mtbg-card-width} + 1.5rem) !important;
+        width: calc(#{$mtbg-card-width} + 1.5rem) !important;
+        max-width: none !important;
+        transition: flex-basis .2s ease, width .2s ease;
+
+        // collapsed: a narrow strip, the columns after it close up (an accordion)
+        &.o_column_folded {
+            flex: 0 0 3rem !important;
+            width: 3rem !important;
+            min-width: 0 !important;
+            overflow: hidden;
+        }
+    }
+
+    &.o_kanban_ungrouped .o_kanban_record {
+        flex: 0 0 calc(#{$mtbg-card-width} + 1rem) !important;
+        width: calc(#{$mtbg-card-width} + 1rem) !important;
+    }
+}
+
+// across, photo beside: the title bar over the photo and the fields (which run to the card's edge)
+.mtbg_rc.is-title-across {
+    .mtbg_rc_titlebar { margin-bottom: .5rem; }
+    .mtbg_rc_main { align-items: flex-start; }
+    .mtbg_rc_fields { flex: 1 1 auto; min-width: 0; }
+}
+
+// the fields as a grid: the labels' column as wide as the longest label (no wide gap after a short one); a pair of
+// fields shares a row, each half label + value
+.mtbg_rc {
+    .mtbg_rc_lines {
+        display: grid;
+        grid-template-columns: max-content minmax(0, 1fr);
+        column-gap: .5rem;
+        row-gap: .12rem;
+        align-items: baseline;
+        min-width: 0;
+        > .mtbg_rc_line { display: contents; }
+        .mtbg_rc_label { width: auto; }
+    }
+    .mtbg_rc_pair {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        column-gap: .75rem;
+        min-width: 0;
+        > .mtbg_rc_line { display: flex; gap: .4rem; min-width: 0; }
+        // a half is narrow: its value wraps rather than being cut
+        .mtbg_rc_text { white-space: normal; overflow: visible; }
+    }
+}
+
+// the badge bottom right (e.g. the card paid with: its brand's icon, its last 4; or large: a small card in the brand's
+// colours with the number on it)
+.mtbg_rc .mtbg_rc_pills:has(.mtbg_rc_badge) { align-self: stretch; }
+.mtbg_rc .mtbg_rc_badge {
+    margin-top: auto;  // at the foot of the column
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    font-size: .78rem;
+    color: var(--bs-secondary-color, #6c757d);
+    text-decoration: none;
+    font-variant-numeric: tabular-nums;
+
+    // the brand's icon on white, as on the card itself (readable in dark too)
+    .fa { font-size: 1.3rem; line-height: 1; background: #fff; border-radius: 3px; padding: 0 1px; color: #555; }
+    &:hover { color: var(--bs-body-color); }
+
+    // the icon in its brand's colour
+    &[data-brand="visa"] .fa { color: #1a1f71; }
+    &[data-brand="mastercard"] .fa { color: #eb001b; }
+    &[data-brand="amex"] .fa { color: #2e77bc; }
+    &[data-brand="discover"] .fa { color: #ff6000; }
+
+    // large: a card as wide as the price and pills above it (their width, not its own), in the brand's colours
+    &.is-large {
+        align-self: stretch;
+        contain: inline-size;
+        min-width: 4.6rem;
+        aspect-ratio: 1.586;
+        padding: .3rem .4rem;
+        border-radius: .45rem;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: space-between;
+        gap: 0;
+        color: #fff;
+        background: linear-gradient(135deg, #5f6b7a, #343a40);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+        &:hover { color: #fff; filter: brightness(1.08); }
+    }
+    &.is-large[data-brand="visa"] { background: linear-gradient(135deg, #1a1f71, #2b3bb3); }
+    &.is-large[data-brand="mastercard"] { background: linear-gradient(135deg, #1f1f1f, #3b3b3b); }
+    &.is-large[data-brand="amex"] { background: linear-gradient(135deg, #1f6eb3, #4aa3df); }
+    &.is-large[data-brand="discover"] { background: linear-gradient(135deg, #f4f4f4, #dcdcdc); color: #222; }
+    &.is-large[data-brand="discover"]:hover { color: #222; }
+
+    .mtbg_rc_paycard_number { order: 1; font-size: .74rem; font-weight: 700; letter-spacing: .06em; white-space: nowrap; }
+    .mtbg_rc_paycard_brand {
+        order: 2;
+        align-self: flex-end;
+        font-size: .72rem;
+        font-weight: 800;
+        font-style: italic;
+        letter-spacing: .02em;
+        text-transform: uppercase;
+        line-height: 1;
+    }
+    // Mastercard: its two circles instead of a word
+    .mtbg_rc_paycard_mark { display: none; }
+    &.is-large[data-brand="mastercard"] {
+        .mtbg_rc_paycard_brand { display: none; }
+        .mtbg_rc_paycard_mark {
+            order: 2;
+            align-self: flex-end;
+            display: inline-flex;
+            span { width: 1.05rem; height: 1.05rem; border-radius: 50%; display: inline-block; }
+            span:first-child { background: #eb001b; }
+            span:last-child { background: #f79e1b; margin-left: -.42rem; opacity: .9; }
+        }
+    }
+    &.is-large[data-brand="discover"] .mtbg_rc_paycard_brand { color: #ff6000; }
+}
+
+// the number bottom right: its label small over it, the number big
+.mtbg_rc .mtbg_rc_stat {
+    flex: none;
+    align-self: flex-end;
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1.05;
+    text-align: right;
+
+    .mtbg_rc_stat_label {
+        font-size: .66rem;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        color: var(--bs-secondary-color, #6c757d);
+    }
+
+    .mtbg_rc_stat_value {
+        font-size: 1.45rem;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+    }
+}
+
+// a kanban of cards: room between them
+.mtbg_card_kanban .o_kanban_record {
+    margin-bottom: .9rem !important;
+}
+
+// a bar (owner, 2026-11-07): the title a band across the card's top, edge to edge; under it the pills float at the
+// right, the fields beside them shorten to fit and, once under them, run to the card's right edge
+.mtbg_rc.is-title-bar {
+    .mtbg_rc_bar {
+        margin: -.75rem -.85rem .5rem;
+        padding: .4rem .85rem;
+        border-bottom: 1px solid var(--bs-border-color, #dee2e6);
+        border-radius: .6rem .6rem 0 0;
+        background: var(--bs-tertiary-bg, #f3f4f6);
+        .mtbg_rc_title { margin: 0; }
+        // in the status colour, pale (owner, 2026-11-07): the colour mixed into the card's background (light or
+        // dark), the text the card's own; the board's colour if it has one, else the level's
+        &.is-status {
+            --mtbg-bar: var(--bs-secondary, #6c757d);
+            background: color-mix(in srgb, var(--mtbg-bar) 30%, var(--bs-body-bg, #fff));
+            border-bottom-color: color-mix(in srgb, var(--mtbg-bar) 55%, var(--bs-body-bg, #fff));
+            color: var(--bs-body-color, #212529);
+        }
+        &.is-success:not([style]) { --mtbg-bar: var(--bs-success, #198754); }
+        &.is-warning:not([style]) { --mtbg-bar: var(--bs-warning, #ffc107); }
+        &.is-danger:not([style]) { --mtbg-bar: var(--bs-danger, #dc3545); }
+        &.is-info:not([style]) { --mtbg-bar: var(--bs-info, #0dcaf0); }
+    }
+    &:not(.is-framed) .mtbg_rc_bar { margin: 0 0 .5rem; border-radius: .4rem; }
+    .mtbg_rc_main { align-items: flex-start; }
+    .mtbg_rc_flow {
+        display: flow-root;  // the floating pills stay inside
+        > .mtbg_rc_pills {
+            float: right;
+            max-width: 55%;
+            margin: 0 0 .2rem .5rem;
+        }
+    }
+    // the small stats at the top, beside the pills (cut shorter), as wide as they need; the fields under the pills
+    .mtbg_rc_small {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: .55rem;
+        overflow: hidden;
+        font-size: .8rem;
+        margin: 0 0 .3rem;
+        padding: 0;
+        border: 0;
+        .mtbg_rc_small_cell { flex: 0 1 auto; }
+    }
+    .mtbg_rc_flow > .mtbg_rc_lines { clear: right; }
+    // each field its own row: beside the pills it is cut shorter, under them it has the whole width
+    .mtbg_rc_lines {
+        display: block;
+        > .mtbg_rc_line, > .mtbg_rc_pair { overflow: hidden; }
+        > .mtbg_rc_line { display: flex; margin-bottom: .12rem; }
+        > .mtbg_rc_pair { margin-bottom: .12rem; }
+        .mtbg_rc_label { width: 4.2rem; }
+        .mtbg_rc_label:empty { width: 1rem; }  // no label, no icon (a link): in line with the icons' text
+    }
+}
+
+// the small stats: short fields side by side in one row, one line tall (each as wide as the others): an icon, the value
+.mtbg_rc .mtbg_rc_small {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: .4rem;
+    margin-top: .5rem;
+    padding-top: .4rem;
+    border-top: 1px solid var(--bs-border-color, #dee2e6);
+    .mtbg_rc_small_cell { min-width: 0; display: flex; align-items: baseline; gap: .3rem; line-height: 1.35; }
+    .mtbg_rc_small_icon { flex: none; color: var(--bs-secondary-color, #6c757d); }
+    .mtbg_rc_small_label {
+        flex: none;
+        font-size: .62rem;
+        text-transform: uppercase;
+        letter-spacing: .03em;
+        color: var(--bs-secondary-color, #6c757d);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .mtbg_rc_small_value {
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    a.mtbg_rc_small_value { font-size: inherit; }
+}
+
+// an accent (a card's values ``accent``, e.g. a multi-day trip's day): an outline in that colour, on its kanban
+// record (a board) or on the card itself (framed: another record's page, the editor)
+.o_kanban_record.mtbg_rc_accented {
+    box-shadow: 0 0 0 2px var(--mtbg-accent) !important;
+    border-color: var(--mtbg-accent) !important;
+}
+.mtbg_rc.is-accent.is-framed { border: 2px solid var(--mtbg-accent); }
+
+// a band under the title (e.g. a multi-day trip's), in its colour, one line
+.mtbg_rc .mtbg_rc_band_top {
+    margin: 0 0 .5rem;
+    padding: .15rem .6rem;
+    border-radius: .3rem;
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+// in a bar card: right under the bar, edge to edge as it
+.mtbg_rc.is-title-bar.is-framed .mtbg_rc_bar + .mtbg_rc_band_top { margin: -.5rem -.85rem .5rem; border-radius: 0; }
+.mtbg_rc.is-title-bar:not(.is-framed) .mtbg_rc_bar + .mtbg_rc_band_top { margin-top: -.35rem; }
+.mtbg_rc .mtbg_rc_band_top.is-link { cursor: pointer; &:hover { filter: brightness(1.1); text-decoration: underline; } }

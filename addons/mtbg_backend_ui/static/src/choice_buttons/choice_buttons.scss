@@ -1,0 +1,60 @@
+// Core's tones (light and dark): a colour for a kind of thing (an expense's type...), as a pill or a choice button
+.mtbg_tone-slate  { --mtbg-tone: #5b6b8c; }
+.mtbg_tone-purple { --mtbg-tone: #8e44ad; }
+.mtbg_tone-orange { --mtbg-tone: #e67e22; }
+.mtbg_tone-green  { --mtbg-tone: #27ae60; }
+.mtbg_tone-blue   { --mtbg-tone: #2f86c9; }
+.mtbg_tone-red    { --mtbg-tone: #e5534b; }
+.mtbg_tone-teal   { --mtbg-tone: #16a085; }
+.mtbg_tone-grey   { --mtbg-tone: #8a919a; }
+
+// a pill: pale tone behind, the tone's text (readable in light and dark)
+.mtbg_tone_pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 .55em;
+    border-radius: 50rem;
+    font-size: .78rem;
+    font-weight: 600;
+    line-height: 1.6;
+    white-space: nowrap;
+    background: color-mix(in srgb, var(--mtbg-tone) 18%, var(--bs-body-bg, #fff));
+    color: color-mix(in srgb, var(--mtbg-tone) 80%, var(--bs-body-color, #212529));
+    border: 1px solid color-mix(in srgb, var(--mtbg-tone) 35%, transparent);
+}
+
+// the choice buttons: outlined in their tone, the one picked filled
+.mtbg_choice_buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+.mtbg_choice_btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    padding: .45rem .9rem;
+    border-radius: .5rem;
+    font-weight: 600;
+    border: 2px solid var(--mtbg-tone);
+    background: color-mix(in srgb, var(--mtbg-tone) 10%, var(--bs-body-bg, #fff));
+    color: color-mix(in srgb, var(--mtbg-tone) 85%, var(--bs-body-color, #212529));
+    transition: background .12s, color .12s;
+    .fa { color: var(--mtbg-tone); }
+    &:hover { background: color-mix(in srgb, var(--mtbg-tone) 22%, var(--bs-body-bg, #fff)); }
+    &.is-on {
+        background: var(--mtbg-tone);
+        color: #fff;
+        .fa { color: #fff; }
+    }
+}
+
+// a heading in a tone (a section of a page: its icon and a line in the tone)
+.mtbg_tone_heading {
+    display: flex;
+    align-items: baseline;
+    gap: .45rem;
+    padding-bottom: .2rem;
+    border-bottom: 2px solid var(--mtbg-tone);
+    .fa { color: var(--mtbg-tone); }
+}

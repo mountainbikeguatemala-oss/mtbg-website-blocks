@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mtbg_tours_core.ChoiceButtons">
+        <t t-if="props.readonly">
+            <span t-if="current" t-attf-class="mtbg_tone_pill mtbg_tone-{{current.tone}}">
+                <i t-if="current.icon" t-attf-class="fa {{current.icon}} me-1"/><t t-esc="current.label"/>
+            </span>
+        </t>
+        <div t-else="" class="mtbg_choice_buttons" role="radiogroup">
+            <button t-foreach="choices" t-as="c" t-key="c.value" type="button" role="radio"
+                    t-attf-class="mtbg_choice_btn mtbg_tone-{{c.tone}}" t-att-class="{'is-on': current and current.value === c.value}"
+                    t-att-aria-checked="current and current.value === c.value ? 'true' : 'false'" t-on-click="() => this.pick(c.value)">
+                <i t-if="c.icon" t-attf-class="fa {{c.icon}}"/><span t-esc="c.label"/>
+            </button>
+        </div>
+    </t>
+</templates>

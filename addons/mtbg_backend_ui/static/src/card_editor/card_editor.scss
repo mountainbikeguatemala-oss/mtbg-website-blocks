@@ -1,0 +1,111 @@
+// the card editor: settings left, the live card right
+.mtbg_ce {
+    background: var(--body-bg, #fff);
+
+    .mtbg_ce_icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: .5rem;
+    }
+
+    .mtbg_ce_body {
+        min-height: 0;
+    }
+
+    .mtbg_ce_settings {
+        flex: 0 0 26rem;
+        max-width: 26rem;
+        border-right: 1px solid var(--border-color, #dee2e6);
+    }
+
+    .mtbg_ce_grip {
+        cursor: grab;
+        color: var(--bs-secondary-color, #6c757d);
+        padding: 0 .15rem;
+    }
+
+    .mtbg_ce_line[draggable="true"]:active {
+        opacity: .6;
+    }
+
+    .mtbg_ce_line {
+        display: flex;
+        align-items: center;
+        gap: .4rem;
+        padding: .25rem 0;
+
+        &.is-off span {
+            color: var(--bs-secondary-color, #6c757d);
+            text-decoration: line-through;
+        }
+    }
+
+    .mtbg_ce_preview {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .mtbg_ce_record {
+        max-width: 18rem;
+    }
+
+    .mtbg_ce_labels {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: .4rem .75rem;
+
+        label {
+            display: flex;
+            flex-direction: column;
+            gap: .15rem;
+            min-width: 0;
+
+            span {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+    }
+
+    .mtbg_ce_stage {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 2rem 1rem;
+        background: var(--bs-tertiary-bg, #f3f4f6);
+        overflow: auto;
+
+        // dark: the card's colours as on a dark page
+        &.is-dark {
+            --bs-body-bg: #1e2127;
+            --bs-body-color: #e6e8eb;
+            --bs-border-color: #3a3f47;
+            --bs-secondary-bg: #2c3038;
+            --bs-tertiary-bg: #262a31;
+            --bs-secondary-color: #a0a7b1;
+            background: #15171b;
+            color: var(--bs-body-color);
+
+            .mtbg_rc {
+                color: var(--bs-body-color);
+            }
+        }
+    }
+
+    @media (max-width: 991.98px) {
+        .mtbg_ce_body { flex-direction: column; }
+        .mtbg_ce_settings { flex: none; max-width: none; border-right: 0; }
+        .mtbg_ce_preview { order: -1; border-bottom: 1px solid var(--border-color, #dee2e6); }
+    }
+}
+
+// an editor embedded in another page (a settings page's tab): its container may shrink, so the editor's own panes
+// scroll (a flex child's min-height is its content's otherwise)
+.mtbg_ce {
+    min-height: 0;
+}
+
+:has(> .mtbg_ce) {
+    min-height: 0;
+}

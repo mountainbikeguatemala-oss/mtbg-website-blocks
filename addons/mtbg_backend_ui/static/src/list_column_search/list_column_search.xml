@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- the column picker: a search box above its columns (every list) -->
+    <t t-inherit="web.ListRenderer" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_optional_columns_dropdown')]//t[@t-foreach='optionalFieldGroups']" position="before">
+            <div class="o_mtbg_column_search px-2 pb-2 pt-1">
+                <input type="search" class="form-control form-control-sm" placeholder="Search columns…"
+                       aria-label="Search columns" t-att-value="mtbgColumnSearch.term"
+                       t-on-input="onMtbgColumnSearch" t-on-keydown.stop="" t-on-click.stop=""/>
+            </div>
+            <div t-if="mtbgColumnSearch.term and !optionalFieldGroups.length" class="px-3 py-1 text-muted small">
+                No column matches.
+            </div>
+        </xpath>
+    </t>
+</templates>

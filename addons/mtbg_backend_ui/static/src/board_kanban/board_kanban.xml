@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- a kanban of boards: the Board dropdown beside the view switcher -->
+    <t t-name="mtbg_tours_core.BoardKanbanView" t-inherit="web.KanbanView" t-inherit-mode="primary">
+        <!-- the cog: the model's settings page (Import / Export there), not Odoo's menu -->
+        <xpath expr="//CogMenu[@t-if='!hasSelectedRecords']" position="replace">
+            <t t-if="!hasSelectedRecords">
+                <button t-if="boards.settingsAction" type="button" class="btn btn-link o_mtbg_settings_cog px-1"
+                        title="Settings" aria-label="Settings" t-on-click="openSettings"><i class="fa fa-cog"/></button>
+                <CogMenu t-else=""/>
+            </t>
+        </xpath>
+        <xpath expr="//t[@t-set-slot='control-panel-navigation-additional']" position="inside">
+            <ViewModes mode="viewMode" resModel="props.resModel" entries="viewEntries" onMode.bind="setViewMode"/>
+            <!-- Kanban: which board (its columns), to the right of the switcher -->
+            <Dropdown t-if="viewMode === 'kanban'">
+                <button class="btn btn-sm btn-outline-secondary ms-1 o_mtbg_board_pick" title="Board: the columns and their order">
+                    <i class="fa fa-columns me-1"/><t t-esc="board ? board.name : 'Board'"/>
+                </button>
+                <t t-set-slot="content">
+                    <t t-foreach="boards.list" t-as="b" t-key="b.id">
+                        <DropdownItem onSelected="() => this.chooseBoard(b.id)" class="{'active': b.id === boards.id}">
+                            <t t-esc="b.name"/>
+                        </DropdownItem>
+                    </t>
+                    <t t-if="boards.canEdit">
+                        <div t-if="boards.list.length" class="dropdown-divider"/>
+                        <DropdownItem onSelected="() => this.editBoard()"><i class="fa fa-plus me-1"/>New board</DropdownItem>
+                        <DropdownItem t-if="board and !board.cards" onSelected="() => this.editBoard(board)"><i class="fa fa-pencil me-1"/>Edit this board</DropdownItem>
+                    </t>
+                </t>
+            </Dropdown>
+        </xpath>
+        <!-- the side bar on the left, as on the list (Core's rule: every view has it; not on a phone) -->
+        <xpath expr="//t[@t-component='props.Renderer']" position="before">
+            <t t-set="mtbgWithSidebar" t-value="!env.isSmall and hasSidebar"/>
+        </xpath>
+        <xpath expr="//t[@t-component='props.Renderer']" position="attributes">
+            <attribute name="t-if">model.isReady and !mtbgWithSidebar</attribute>
+        </xpath>
+        <xpath expr="//t[@t-component='props.Renderer']" position="after">
+            <div t-if="mtbgWithSidebar" class="o_mtbg_sb_layout d-flex align-items-start">
+                <MtbgSidebar sidebar="sidebar" onSelect.bind="chooseSidebar"/>
+                <div class="o_mtbg_sb_main flex-grow-1 min-w-0">
+                    <t t-component="props.Renderer" t-if="model.isReady"
+                       list="model.root"
+                       archInfo="props.archInfo"
+                       Compiler="props.Compiler"
+                       readonly="props.readonly"
+                       forceGlobalClick="props.forceGlobalClick"
+                       deleteRecord.bind="deleteRecord"
+                       openRecord.bind="openRecord"
+                       noContentHelp="props.info.noContentHelp"
+                       scrollTop.bind="scrollTop"
+                       canQuickCreate="canQuickCreate"
+                       quickCreateState="quickCreateState"
+                       progressBarState="progressBarState"
+                    />
+                </div>
+            </div>
+        </xpath>
+    </t>
+
+    <!-- a column's header: its stage's colour, its total, a fold button -->
+    <t t-name="mtbg_tours_core.BoardKanbanHeader" t-inherit="web.KanbanHeader" t-inherit-mode="primary">
+        <xpath expr="//div[hasclass('o_kanban_header')]" position="attributes">
+            <attribute name="t-att-style">mtbgStyle</attribute>
+            <attribute name="t-att-data-mtbg-board">mtbgBoards ? (mtbgStyle ? 'colored' : 'plain') : false</attribute>
+        </xpath>
+        <xpath expr="//div[@t-if='!group.isFolded']/span[contains(@t-esc, 'group.count')]" position="replace">
+            <span t-if="!props.list.model.useSampleModel" class="o_mtbg_board_count" t-esc="group.count"/>
+        </xpath>
+        <xpath expr="//div[@t-if='group.isFolded']/span[contains(@t-esc, 'group.count')]" position="replace">
+            <span t-if="!props.list.model.useSampleModel" class="o_mtbg_board_count" t-esc="group.count"/>
+        </xpath>
+        <!-- no column settings menu (its Fold is the collapse button) -->
+        <xpath expr="//GroupConfigMenu" position="replace">
+            <button type="button" class="btn btn-sm px-1 o_mtbg_board_fold d-print-none" title="Collapse the column"
+                    aria-label="Collapse the column" t-on-click.stop="toggleGroup">
+                <i class="fa fa-angle-double-left opacity-75 opacity-100-hover"/>
+            </button>
+        </xpath>
+        <xpath expr="//div[hasclass('o_kanban_header_title')]" position="after">
+            <div t-if="(env.isSmall or !group.isFolded) and mtbgTotal" class="o_mtbg_board_total d-flex align-items-baseline gap-2"
+                 t-att-title="mtbgTotal.label">
+                <span class="o_mtbg_board_total_value" t-esc="mtbgTotal.text"/>
+                <span class="o_mtbg_board_total_label text-truncate" t-esc="mtbgTotal.label"/>
+            </div>
+        </xpath>
+    </t>
+
+    <t t-name="mtbg_tours_core.BoardDialog">
+        <Dialog title="props.board ? 'Edit board' : 'New board'" size="'md'">
+            <div class="mb-3">
+                <label class="form-label" for="mtbg_board_name">Name</label>
+                <input id="mtbg_board_name" class="form-control" t-model="state.name" placeholder="e.g. By tour"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="mtbg_board_columns">Columns</label>
+                <select id="mtbg_board_columns" class="form-select" t-model="state.group_by">
+                    <t t-foreach="props.columns" t-as="c" t-key="c.key">
+                        <option t-att-value="c.key" t-esc="c.label"/>
+                    </t>
+                </select>
+            </div>
+            <div class="mb-1">
+                <label class="form-label" for="mtbg_board_sort">Cards, top to bottom</label>
+                <div class="d-flex gap-2">
+                    <select id="mtbg_board_sort" class="form-select" t-model="state.sort">
+                        <t t-foreach="props.sorts" t-as="s" t-key="s.key">
+                            <option t-att-value="s.key" t-esc="s.label"/>
+                        </t>
+                    </select>
+                    <div class="btn-group" role="group" aria-label="Direction">
+                        <button type="button" class="btn text-nowrap" t-att-class="state.asc ? 'btn-secondary' : 'btn-outline-secondary'"
+                                t-on-click="() => this.state.asc = true"><i class="fa fa-sort-amount-asc me-1"/>Ascending</button>
+                        <button type="button" class="btn text-nowrap" t-att-class="state.asc ? 'btn-outline-secondary' : 'btn-secondary'"
+                                t-on-click="() => this.state.asc = false"><i class="fa fa-sort-amount-desc me-1"/>Descending</button>
+                    </div>
+                </div>
+                <div class="form-text">A date ascending: the soonest first.</div>
+            </div>
+            <div class="mt-3">
+                <label class="form-label" for="mtbg_board_total">Column total</label>
+                <select id="mtbg_board_total" class="form-select" t-model="state.total_field">
+                    <option value="">None</option>
+                    <t t-foreach="props.totals" t-as="t" t-key="t.key">
+                        <option t-att-value="t.key" t-esc="t.label"/>
+                    </t>
+                </select>
+            </div>
+            <t t-set-slot="footer">
+                <button class="btn btn-primary" t-on-click="save" t-att-disabled="!state.name.trim()">Save</button>
+                <button t-if="props.onDelete" class="btn btn-outline-danger" t-on-click="remove">Delete</button>
+                <button class="btn btn-secondary" t-on-click="props.close">Cancel</button>
+            </t>
+        </Dialog>
+    </t>
+</templates>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- a model's settings page: its card (editor, preview, Import / Export) and its boards (the kanban's templates) -->
+    <t t-name="mtbg_tours_core.ModelSettings">
+        <div class="o_action o_mtbg_model_settings d-flex flex-column h-100">
+            <ul class="nav nav-tabs px-3 pt-2 flex-shrink-0">
+                <li class="nav-item"><a href="#" class="nav-link" t-att-class="{'active': state.tab === 'card'}"
+                                        t-on-click.prevent="() => this.state.tab = 'card'">
+                    <i class="fa fa-id-card-o me-1"/><t t-esc="cardAction.name"/></a></li>
+                <li t-if="state.boards" class="nav-item"><a href="#" class="nav-link" t-att-class="{'active': state.tab === 'boards'}"
+                                        t-on-click.prevent="() => this.state.tab = 'boards'">
+                    <i class="fa fa-columns me-1"/>Boards</a></li>
+                <li t-foreach="extraTabs" t-as="tab" t-key="tab.key" class="nav-item">
+                    <a href="#" class="nav-link" t-att-class="{'active': state.tab === tab.key}"
+                       t-on-click.prevent="() => this.state.tab = tab.key">
+                        <i t-attf-class="fa {{tab.icon or 'fa-sliders'}} me-1"/><t t-esc="tab.label"/></a></li>
+                <li t-if="more" class="nav-item ms-auto">
+                    <a href="#" class="nav-link" t-on-click.prevent="openMore">
+                        <i class="fa fa-cog me-1"/><t t-esc="more.label"/><i class="fa fa-arrow-right ms-1"/></a></li>
+            </ul>
+            <div class="flex-grow-1 d-flex flex-column" style="min-height: 0;">
+                <div t-if="extraTab" class="overflow-auto p-4"><t t-component="extraTab.Component" model="model"/></div>
+                <CardEditor t-elif="state.tab === 'card' or (state.tab === 'boards' and !state.boards)" action="cardAction"/>
+                <div t-else="" class="overflow-auto p-4">
+                    <div class="d-flex align-items-start gap-3 mb-3">
+                        <div class="flex-grow-1">
+                            <h2 class="mb-1">Boards</h2>
+                            <div class="text-muted small">The kanban's templates: pick one in the board dropdown above the
+                                kanban. Each extension brings its own (they go when it is switched off); add yours here.
+                                A board shows the records its filter allows, in columns, top to bottom in its order, each
+                                column totalling a number.</div>
+                        </div>
+                        <button t-if="state.boards.can_edit" type="button" class="btn btn-primary text-nowrap"
+                                t-on-click="() => this.editBoard()"><i class="fa fa-plus me-1"/>New board</button>
+                    </div>
+                    <table class="table table-sm align-middle o_mtbg_boards_table">
+                        <thead><tr>
+                            <th>Board</th><th>Shows</th><th>Columns</th><th>Order</th><th>Column total</th><th/>
+                        </tr></thead>
+                        <tbody>
+                            <tr t-foreach="state.boards.boards" t-as="board" t-key="board.id">
+                                <td>
+                                    <b t-esc="board.name"/>
+                                    <span t-if="board.origin" class="badge text-bg-light ms-1" t-esc="board.origin"
+                                          title="Comes with this extension"/>
+                                    <div t-if="board.description" class="small text-muted" t-esc="board.description"/>
+                                </td>
+                                <td class="small">
+                                    <t t-if="board.domain.length"><i class="fa fa-filter me-1"/>Filtered</t>
+                                    <t t-else="">All</t>
+                                </td>
+                                <td t-esc="label(state.boards.columns, board.group_by)"/>
+                                <td t-esc="orderLabel(board.order)"/>
+                                <td t-esc="board.total_field ? label(state.boards.totals, board.total_field) : 'None'"/>
+                                <td class="text-end">
+                                    <button t-if="state.boards.can_edit" type="button" class="btn btn-sm btn-light"
+                                            t-on-click="() => this.editBoard(board)"><i class="fa fa-pencil me-1"/>Edit</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p t-if="!state.boards.boards.length" class="text-muted">No board yet.</p>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

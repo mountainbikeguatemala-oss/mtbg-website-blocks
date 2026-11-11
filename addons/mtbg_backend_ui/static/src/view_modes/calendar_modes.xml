@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- a calendar of Core's pages: Core's view switcher (Odoo's is hidden there) -->
+    <t t-inherit="web.CalendarController" t-inherit-mode="extension">
+        <xpath expr="//t[@t-set-slot='control-panel-navigation-additional']" position="inside">
+            <ViewModes t-if="mtbgViewEntries" mode="'calendar'" resModel="props.resModel" entries="mtbgViewEntries"/>
+        </xpath>
+    </t>
+</templates>

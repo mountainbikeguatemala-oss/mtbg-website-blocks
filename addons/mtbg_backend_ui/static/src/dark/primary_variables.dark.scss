@@ -1,0 +1,49 @@
+// The admin in dark (a user's switch, in the user menu): Odoo's palette turned over, compiled into the dark bundle
+// only (web.assets_web_dark), before Odoo's own variables (theirs are !default: these win). Surfaces stay grey, not
+// black; text near white; the brand lightened enough to read on them.
+$o-white: #23262f !default;           // surfaces: the sheet, cards, dropdowns, dialogs
+$o-black: #ffffff !default;           // the strongest text
+
+$o-gray-100: #1a1c23 !default;        // the page behind the surfaces
+$o-gray-200: #2c2f3a !default;
+$o-gray-300: #3a3e4a !default;        // borders
+$o-gray-400: #525764 !default;
+$o-gray-500: #7b808c !default;
+$o-gray-600: #a2a7b2 !default;
+$o-gray-700: #c2c6ce !default;
+$o-gray-800: #dcdfe4 !default;
+$o-gray-900: #eceef1 !default;        // the text
+
+$o-view-background-color: $o-white !default;
+$o-main-link-color: #b3a6e3 !default;
+$o-shadow-color: #000000 !default;
+$o-form-lightsecondary: #555a66 !default;
+
+// the selected row of a search panel / list group (Odoo's is a pale blue, lightened for a white page; its text, the
+// strongest text, is white here): the brand's dark violet, white text on it (contrast about 14:1)
+$o-list-group-active-bg: #2c2840 !default;
+$o-list-group-active-color: #ffffff !default;
+
+// the top menu: its text light on the brand's bar (Odoo derives it from $o-white, the surfaces' grey here)
+$o-navbar-entry-color: rgba(255, 255, 255, .9) !default;
+$o-navbar-entry-color--hover: #ffffff !default;
+$o-navbar-entry-bg--hover: rgba(255, 255, 255, .12) !default;
+
+// text on a coloured background: white or black, never the turned-over ones
+$color-contrast-dark: #000000 !default;
+$color-contrast-light: #ffffff !default;
+
+// the primary button keeps white text
+$o-btns-bs-override: (
+    "primary": (
+        background: #71639e,
+        border: #71639e,
+        color: #ffffff,
+        hover-background: #8174ad,
+        hover-border: #8174ad,
+        hover-color: #ffffff,
+        active-background: #5d5185,
+        active-border: #71639e,
+        active-color: #ffffff,
+    ),
+) !default;
