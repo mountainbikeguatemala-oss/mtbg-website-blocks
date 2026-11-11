@@ -2,6 +2,15 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_gallery-*'`.
 
+## 19.0.0.6.1 (2026-11-11)
+
+- **Fix: a full update from before 0.6.0 stopped.** A site going from before 0.6.0 straight to this release with a
+  full update (`-u all`) reloads the Blog and the Catalog before Tours Website takes over the tours' gallery. Odoo
+  still counted the post form's Gallery photos tab and the media form's focus point as this module's views, and
+  checked them against fields that are only Tours Website's now: "Field mtbg_gallery_upload_ids does not exist". A
+  pre-migrate now passes those two views to Tours Website as soon as this module loads, so Odoo skips them until Tours
+  Website loads. The updater's changed-modules update already worked. Nothing else changes.
+
 ## 19.0.0.6.0 (2026-11-11)
 
 - **Universal: from the Tours repository to Website Blocks** (owner, 2026-11-11, the split: "plain Odoo sites can

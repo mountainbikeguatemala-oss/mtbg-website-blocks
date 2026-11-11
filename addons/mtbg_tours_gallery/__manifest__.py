@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Website — Tiled Gallery',
-    'version': '19.0.0.6.0',
+    'version': '19.0.0.6.1',
     # where the updater gets it (the website blocks pack's repo; owner, 2026-11-11: universal, from the Tours repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     # its section on the Extensions panel: Custom blocks (its main job is website editor blocks)
