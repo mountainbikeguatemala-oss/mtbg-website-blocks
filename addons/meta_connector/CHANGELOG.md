@@ -2,6 +2,10 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'meta_connector-*'`.
 
+## 19.0.1.5.0 · 2026-11-11
+
+- **Stories** (owner, 2026-11-11: "do we have a way to publish instagram / facebook stories?" ... "yes make the story templates"): `_meta_post(kind, caption, image_url, story=True)` posts the picture as a story. Instagram: a `STORIES` media container (no caption: a story shows none), then its publishing. Facebook Page: the photo uploaded unpublished, then `photo_stories`. The same permissions as posts (`instagram_content_publish`, `pages_manage_posts`). A story is gone after 24 hours, so it has no address.
+
 ## 19.0.1.4.2 · 2026-11-11
 
 - **Posting without Marketing** (owner, 2026-11-11, on the shop site: "no posting scopes yet"): the Facebook login asks for the posting permissions (`pages_manage_posts`, `instagram_content_publish` and the reading ones they need), and Set up Meta shows its Posting step, when Marketing is installed **or** Posting is switched on in Settings › Meta. Before, only Marketing turned them on, so a site without it could never get them granted. The setup's posting texts no longer name Marketing.

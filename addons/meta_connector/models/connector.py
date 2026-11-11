@@ -99,10 +99,12 @@ class MetaConnector(models.AbstractModel):
         return self.env["ir.config_parameter"].sudo().get_param("meta_connector.posting") == "1"
 
     @api.model
-    def _meta_post(self, kind, caption, image_url):
+    def _meta_post(self, kind, caption, image_url, story=False):
         """Post ``caption`` with the picture at ``image_url`` (a public address) on the site's Facebook Page
-        (``kind`` "facebook") or Instagram account ("instagram"): {"id", "url"}. Raises UserError with the reason:
-        Posting off, not connected, no Page / account ticked, a permission Meta has not granted, or Meta's answer."""
+        (``kind`` "facebook") or Instagram account ("instagram"): {"id", "url"}. ``story``: the picture as a story
+        instead (no caption: a story shows none; gone after 24 hours, so no address). Raises UserError with the
+        reason: Posting off, not connected, no Page / account ticked, a permission Meta has not granted, or Meta's
+        answer."""
         from odoo.exceptions import UserError
         _ = self.env._
         if kind not in graph.POST_SCOPES:
@@ -124,13 +126,15 @@ class MetaConnector(models.AbstractModel):
         token = page.sudo().page_token
         try:
             if kind == "instagram":
-                result = graph.ig_publish(page.ig_id, token, image_url, caption)
+                result = graph.ig_publish(page.ig_id, token, image_url, caption, story=story)
+            elif story:
+                result = graph.page_photo_story(page.page_id, token, image_url)
             else:
                 result = graph.page_photo_post(page.page_id, token, image_url, caption)
         except graph.GraphError as error:
             raise UserError(str(error)) from error
         post_id = result.get("post_id") or result.get("id") or ""
-        return {"id": post_id, "url": graph.permalink(post_id, token) if post_id else ""}
+        return {"id": post_id, "url": graph.permalink(post_id, token) if post_id and not story else ""}
 
     @api.model
     def _meta_webhook_fields(self):
