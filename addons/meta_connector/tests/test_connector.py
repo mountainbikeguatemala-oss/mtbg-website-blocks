@@ -267,3 +267,32 @@ class TestPostingSwitch(TransactionCase):
         if "mtbg.marketing.item" not in self.env:
             self.assertFalse(Connector._meta_posting_wanted())
             self.assertNotIn("pages_manage_posts", Connector._meta_scopes())
+
+    def test_story_posts(self):
+        """A story (owner, 2026-11-11: "publish instagram / facebook stories"): Instagram's container is a STORIES one
+        with no caption; the Page's photo goes up unpublished, then as a photo story; a story has no address."""
+        from ..models import graph
+        calls = []
+
+        def fake_call(method, path, token, params=None, data=None, **kw):
+            calls.append((path.split("/")[-1], dict(data or {})))
+            return {"id": "77", "post_id": "123_77", "success": True}
+
+        with patch.object(graph, "_call", fake_call):
+            graph.ig_publish("ig1", "tok", "https://x.test/s.png", "never shown", story=True)
+            graph.page_photo_story("123", "tok", "https://x.test/s.png")
+        self.assertEqual(calls[0], ("media", {"image_url": "https://x.test/s.png", "media_type": "STORIES"}))
+        self.assertEqual(calls[1][0], "media_publish")
+        self.assertEqual(calls[2], ("photos", {"url": "https://x.test/s.png", "published": "false"}))
+        self.assertEqual(calls[3], ("photo_stories", {"photo_id": "77"}))
+        ICP = self.env["ir.config_parameter"].sudo()
+        ICP.set_param("meta_connector.posting", "1")
+        Connector = self.env["meta.connector"]
+        app = Connector._meta_app() or self.env["meta.connector.app"].sudo().create({"name": "Test"})
+        app.write({"active": True, "granted_scopes": "pages_show_list,pages_manage_posts"})
+        self.env["meta.connector.page"].sudo().create({"app_id": app.id, "page_id": "123", "use_page": True,
+                                                        "page_token": "test-token", "name": "Example Page"})
+        with patch.object(graph, "page_photo_story", lambda *a: {"post_id": "123_77"}), \
+                patch.object(graph, "permalink", lambda *a: "https://fb.test/never"):
+            self.assertEqual(Connector._meta_post("facebook", "", "https://x.test/s.png", story=True),
+                             {"id": "123_77", "url": ""})

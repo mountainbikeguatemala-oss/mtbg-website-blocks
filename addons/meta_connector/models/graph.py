@@ -273,12 +273,20 @@ def page_photo_post(page_id, page_token, image_url, caption):
     return _call("POST", "/%s/photos" % page_id, page_token, data={"url": image_url, "caption": caption or ""})
 
 
-def ig_publish(ig_id, page_token, image_url, caption, wait=2.0, tries=5):
+def page_photo_story(page_id, page_token, image_url):
+    """A photo story on the Page: the picture uploaded unpublished, then posted as a story. {"post_id", ...}."""
+    photo = _call("POST", "/%s/photos" % page_id, page_token, data={"url": image_url, "published": "false"})
+    return _call("POST", "/%s/photo_stories" % page_id, page_token, data={"photo_id": photo["id"]})
+
+
+def ig_publish(ig_id, page_token, image_url, caption, wait=2.0, tries=5, story=False):
     """A picture posted on the Instagram account: Meta's two steps, a media container (the picture at ``image_url``,
-    public) then its publishing (once Meta has it ready). {"id"} of the post."""
+    public) then its publishing (once Meta has it ready). {"id"} of the post. ``story``: an Instagram story (no
+    caption: a story shows none)."""
     import time
-    container = _call("POST", "/%s/media" % ig_id, page_token, data={"image_url": image_url,
-                                                                      "caption": caption or ""})
+    data = {"image_url": image_url, "media_type": "STORIES"} if story else {"image_url": image_url,
+                                                                            "caption": caption or ""}
+    container = _call("POST", "/%s/media" % ig_id, page_token, data=data)
     for attempt in range(tries):
         try:
             return _call("POST", "/%s/media_publish" % ig_id, page_token, data={"creation_id": container["id"]})
