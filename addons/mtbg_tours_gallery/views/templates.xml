@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The tiles: desktop rows and phone rows (one shows per screen). Each row keeps its shape (aspect-ratio) and
+         its columns their share, so nothing moves while the pictures load; every photo is cropped to its cell at
+         its focus point. A tile links to the full picture, which the page lightbox (page_lightbox.js) opens. -->
+    <template id="tiles" name="Tiled gallery tiles">
+        <div class="mtbg-tg" t-att-data-count="count" t-att-aria-label="gallery_name or None"
+             role="group">
+            <div t-foreach="screens" t-as="layout" t-attf-class="mtbg-tg-layout mtbg-tg-#{layout['screen']}">
+                <div t-foreach="layout['rows']" t-as="row" class="mtbg-tg-row"
+                     t-attf-style="aspect-ratio: #{'%.4f' % row['ratio']}">
+                    <div t-foreach="row['columns']" t-as="col" class="mtbg-tg-col"
+                         t-attf-style="--mtbg-tg-share: #{'%.5f' % col['share']}">
+                        <a t-foreach="col['cells']" t-as="cell"
+                           class="mtbg-tg-cell" t-att-href="cell['photo']['full']"
+                           t-att-data-index="str(cell['photo']['index'])" t-att-data-caption="cell['photo']['caption'] or None"
+                           t-attf-style="flex-grow: #{'%.4f' % cell['grow']}">
+                            <img loading="lazy" t-att-src="cell['photo']['src']"
+                                 t-att-srcset="cell['photo']['srcset'] or None" t-att-sizes="col['sizes']"
+                                 t-att-alt="cell['photo']['alt']"
+                                 t-att-width="cell['photo']['attachment'].mtbg_width"
+                                 t-att-height="cell['photo']['attachment'].mtbg_height"
+                                 t-attf-style="object-position: #{cell['photo']['position']}"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Tiled Gallery block: saved with only its source (data-gallery: "ids:<attachment ids>", or a record's gallery
+         another module offers: "<kind>:<id>", "<kind>:page" (the page's record), e.g. "tour:page") and its corners;
+         the tiles are fetched when the page loads (gallery.js) and never saved. -->
+    <template id="s_mtbg_gallery" name="Tiled Gallery">
+        <section class="s_mtbg_gallery o_not_editable my-3" data-snippet="s_mtbg_gallery" data-name="Tiled Gallery"
+                 data-gallery="" contenteditable="false">
+            <div class="s_mtbg_gallery_placeholder alert alert-info text-center mb-0">
+                <i class="fa fa-th-large me-1"/> Tiled Gallery — choose the photos in the block options.
+            </div>
+        </section>
+    </template>
+
+    <template id="snippets" inherit_id="website.snippets" name="Tiled gallery snippet">
+        <!-- among the inner content blocks, next to the GPX blocks -->
+        <xpath expr="//t[@t-snippet='website.s_chart']" position="after">
+            <t t-snippet="mtbg_tours_gallery.s_mtbg_gallery" string="Tiled Gallery"
+               t-thumbnail="/mtbg_tours_gallery/static/src/img/s_mtbg_gallery.svg">
+                <keywords>gallery, tiled, tiles, mosaic, photos, pictures, album, grid, jetpack</keywords>
+            </t>
+        </xpath>
+    </template>
+
+</odoo>

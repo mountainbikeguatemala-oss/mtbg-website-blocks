@@ -1,0 +1,19 @@
+// the shared photo viewer (static/src/shared/lightbox.js): PhotoSwipe loads its own styles; the caption is ours
+
+// Odoo's website sets every <section> to "height: auto !important" on phones (web.assets_frontend, max-width
+// 767.98px); PhotoSwipe's scroll layer is a <section>, which then collapses to 0 and hides the photos and buttons
+.pswp .pswp__scroll-wrap {
+    height: 100% !important;
+}
+.mtbg-pswp-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+    color: #fff;
+    font-size: 15px;
+    text-align: center;
+    pointer-events: none;
+}

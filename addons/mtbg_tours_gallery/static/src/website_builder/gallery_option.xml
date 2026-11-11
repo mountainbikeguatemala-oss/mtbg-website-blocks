@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mtbg_tours_gallery.TiledGalleryOption">
+        <BuilderRow label.translate="Photos">
+            <BuilderSelect dataAttributeAction="'gallery'" id="'mtbg_gallery_source_opt'">
+                <BuilderSelectItem dataAttributeActionValue="''">Choose…</BuilderSelectItem>
+                <!-- the record galleries other modules offer (e.g. "A tour's gallery") -->
+                <t t-foreach="sources" t-as="source" t-key="source.kind">
+                    <BuilderSelectItem dataAttributeActionValue="sourceValue(source)"><t t-esc="source.label"/></BuilderSelectItem>
+                </t>
+                <BuilderSelectItem dataAttributeActionValue="pickValue">Pictures I choose</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow t-if="domState.source" label="domState.source.record_label">
+            <!-- searchable; the page's own record is saved as "<kind>:page" -->
+            <BuilderMany2One action="'mtbgGalleryRecord'" model="domState.source.model" fields="['name']"
+                             domain="domState.source.domain" allowUnselect="false"
+                             defaultMessage="domState.source.search_label"/>
+        </BuilderRow>
+        <t t-if="domState.picked">
+            <BuilderRow label.translate="Pictures">
+                <BuilderButton type="'success'" className="'flex-grow-1'" preview="false" title.translate="Add pictures"
+                               action="'mtbgGalleryAddPictures'">Add</BuilderButton>
+                <BuilderButton type="'danger'" className="'flex-grow-1'" preview="false" title.translate="Remove every picture"
+                               action="'mtbgGalleryRemovePictures'">Remove all</BuilderButton>
+            </BuilderRow>
+            <BuilderRow label.translate="">
+                <span class="small opacity-75"><t t-esc="domState.count"/> picture(s), in the order added.</span>
+            </BuilderRow>
+        </t>
+        <t t-elif="domState.record and domState.source.add">
+            <BuilderRow label.translate="Pictures">
+                <BuilderButton type="'success'" className="'flex-grow-1'" preview="false"
+                               title="domState.source.add_label" action="'mtbgGalleryAddToRecord'">
+                    <t t-esc="domState.source.add_label"/>
+                </BuilderButton>
+            </BuilderRow>
+            <BuilderRow t-if="domState.source.help" label.translate="">
+                <span class="small opacity-75" t-esc="domState.source.help"/>
+            </BuilderRow>
+        </t>
+        <BuilderRow label.translate="Rounded corners">
+            <BuilderNumberInput styleAction="'--mtbg-tg-radius'" unit="'px'" min="0" max="60" step="1" default="0"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Spacing">
+            <BuilderNumberInput styleAction="'--mtbg-tg-gap'" unit="'px'" min="0" max="40" step="1" default="6"/>
+        </BuilderRow>
+    </t>
+</templates>

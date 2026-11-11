@@ -2,6 +2,14 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_content_blocks-*'`.
 
+## 19.0.0.11.1 (2026-11-11)
+
+- **The website's shared photo viewer, from Tours Core** (owner, 2026-11-11, the split: the Tiled Gallery comes to this
+  repository, and a plain Odoo website has no Tours Core): `@mtbg_tours_content_blocks/shared/lightbox` (PhotoSwipe 5,
+  MIT, bundled in static/lib, loaded on the first photo opened; full screen, swipes, pinch and double-tap zoom, caption,
+  "3 / 15"), unchanged; Tours Core 0.6.1 drops its copy and the Tours extensions that open photos (Itineraries, Reviews)
+  use this one.
+
 ## 19.0.0.11.0 (2026-11-11)
 
 - **The Menu Designer and the top bar icons, from Tours Core** (owner, 2026-11-11: a plain Odoo website installs them

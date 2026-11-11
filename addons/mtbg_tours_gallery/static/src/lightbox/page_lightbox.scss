@@ -1,0 +1,6 @@
+// the viewer's own styles (caption, phones): the website blocks base (mtbg_tours_content_blocks/static/src/shared/lightbox.scss)
+
+// a marked set's photos (data-mtbg-photo-set, e.g. a hotel card's): they open in the lightbox
+html[data-mtbg-lightbox] [data-mtbg-photo-set] img {
+    cursor: zoom-in;
+}

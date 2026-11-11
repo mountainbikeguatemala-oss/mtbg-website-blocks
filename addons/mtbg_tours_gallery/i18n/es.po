@@ -1,0 +1,197 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-24 00:02+0000\n"
+"PO-Revision-Date: 2026-10-24 00:02+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/focus_point/focus_point.xml:0
+msgid "% across,"
+msgstr "% en horizontal,"
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/focus_point/focus_point.xml:0
+msgid "% down"
+msgstr "% en vertical"
+
+#. module: mtbg_tours_gallery
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_gallery.s_mtbg_gallery
+msgid ""
+"<i class=\"fa fa-th-large me-1\"/> Tiled Gallery — choose the photos in the "
+"block options."
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Add"
+msgstr "Añadir"
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Add pictures"
+msgstr "Añadir imágenes"
+
+#. module: mtbg_tours_gallery
+#: model:ir.model,name:mtbg_tours_gallery.model_ir_attachment
+msgid "Attachment"
+msgstr "Adjunto"
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/focus_point/focus_point.xml:0
+msgid "Centre"
+msgstr "Centrar"
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Choose…"
+msgstr "Elegir…"
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/focus_point/focus_point.xml:0
+msgid "Click where the subject is"
+msgstr "Haz clic donde está el motivo"
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/focus_point/focus_point.xml:0
+msgid "Cropped in a wide tile and in a tall one:"
+msgstr "Recortada en un mosaico ancho y en uno alto:"
+
+#. module: mtbg_tours_gallery
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_ir_attachment__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_mtbg_gallery__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: mtbg_tours_gallery
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_ir_attachment__mtbg_focus_x
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_product_document__mtbg_focus_x
+msgid "Focus point (across)"
+msgstr "Punto de enfoque (horizontal)"
+
+#. module: mtbg_tours_gallery
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_ir_attachment__mtbg_focus_y
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_product_document__mtbg_focus_y
+msgid "Focus point (down)"
+msgstr "Punto de enfoque (vertical)"
+
+#. module: mtbg_tours_gallery
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_ir_attachment__id
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_mtbg_gallery__id
+msgid "ID"
+msgstr "ID"
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Photos"
+msgstr "Fotos"
+
+#. module: mtbg_tours_gallery
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_ir_attachment__mtbg_height
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_product_document__mtbg_height
+msgid "Picture height"
+msgstr "Alto de la imagen"
+
+#. module: mtbg_tours_gallery
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_ir_attachment__mtbg_width
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_product_document__mtbg_width
+msgid "Picture width"
+msgstr "Ancho de la imagen"
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Pictures"
+msgstr "Imágenes"
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Pictures I choose"
+msgstr "Imágenes que elijo"
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/focus_point/focus_point.xml:0
+msgid "Pictures only."
+msgstr "Solo imágenes."
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Remove all"
+msgstr "Quitar todas"
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Remove every picture"
+msgstr "Quitar todas las imágenes"
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Rounded corners"
+msgstr "Esquinas redondeadas"
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Spacing"
+msgstr "Espaciado"
+
+#. module: mtbg_tours_gallery
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_gallery.snippets
+msgid "Tiled Gallery"
+msgstr "Galería en mosaico"
+
+#. module: mtbg_tours_gallery
+#: model:ir.model,name:mtbg_tours_gallery.model_mtbg_gallery
+msgid "Tiled gallery"
+msgstr "Galería en mosaico"
+
+#. module: mtbg_tours_gallery
+#: model:ir.model.fields,help:mtbg_tours_gallery.field_ir_attachment__mtbg_focus_x
+#: model:ir.model.fields,help:mtbg_tours_gallery.field_product_document__mtbg_focus_x
+msgid ""
+"Where the subject is, in % from the left: a cropped tile keeps it in frame"
+msgstr ""
+"Dónde está el motivo, en % desde la izquierda: un mosaico recortado lo "
+"mantiene en el encuadre"
+
+#. module: mtbg_tours_gallery
+#: model:ir.model.fields,help:mtbg_tours_gallery.field_ir_attachment__mtbg_focus_y
+#: model:ir.model.fields,help:mtbg_tours_gallery.field_product_document__mtbg_focus_y
+msgid ""
+"Where the subject is, in % from the top: a cropped tile keeps it in frame"
+msgstr ""
+"Dónde está el motivo, en % desde arriba: un mosaico recortado lo mantiene en"
+" el encuadre"
+
+#. module: mtbg_tours_gallery
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_gallery.snippets
+msgid "gallery, tiled, tiles, mosaic, photos, pictures, album, grid, jetpack"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "picture(s), in the order added."
+msgstr "imagen(es), en el orden en que se añadieron."

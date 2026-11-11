@@ -1,0 +1,195 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mtbg_tours_gallery
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-11 07:27+0000\n"
+"PO-Revision-Date: 2026-11-11 07:27+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/focus_point/focus_point.xml:0
+msgid "% across,"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/focus_point/focus_point.xml:0
+msgid "% down"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_gallery.s_mtbg_gallery
+msgid ""
+"<i class=\"fa fa-th-large me-1\"/> Tiled Gallery — choose the photos in the "
+"block options."
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Add"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Add pictures"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#: model:ir.model,name:mtbg_tours_gallery.model_ir_attachment
+msgid "Attachment"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/focus_point/focus_point.xml:0
+msgid "Centre"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Choose…"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/focus_point/focus_point.xml:0
+msgid "Click where the subject is"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/focus_point/focus_point.xml:0
+msgid "Cropped in a wide tile and in a tall one:"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_ir_attachment__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_mtbg_gallery__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_ir_attachment__mtbg_focus_x
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_product_document__mtbg_focus_x
+msgid "Focus point (across)"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_ir_attachment__mtbg_focus_y
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_product_document__mtbg_focus_y
+msgid "Focus point (down)"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_ir_attachment__id
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_mtbg_gallery__id
+msgid "ID"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Photos"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_ir_attachment__mtbg_height
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_product_document__mtbg_height
+msgid "Picture height"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_ir_attachment__mtbg_width
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_product_document__mtbg_width
+msgid "Picture width"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Pictures"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Pictures I choose"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/focus_point/focus_point.xml:0
+msgid "Pictures only."
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Remove all"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Remove every picture"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Rounded corners"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "Spacing"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_gallery.snippets
+msgid "Tiled Gallery"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#: model:ir.model,name:mtbg_tours_gallery.model_mtbg_gallery
+msgid "Tiled gallery"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#: model:ir.model.fields,help:mtbg_tours_gallery.field_ir_attachment__mtbg_focus_x
+#: model:ir.model.fields,help:mtbg_tours_gallery.field_product_document__mtbg_focus_x
+msgid ""
+"Where the subject is, in % from the left: a cropped tile keeps it in frame"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#: model:ir.model.fields,help:mtbg_tours_gallery.field_ir_attachment__mtbg_focus_y
+#: model:ir.model.fields,help:mtbg_tours_gallery.field_product_document__mtbg_focus_y
+msgid ""
+"Where the subject is, in % from the top: a cropped tile keeps it in frame"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_gallery.snippets
+msgid "gallery, tiled, tiles, mosaic, photos, pictures, album, grid, jetpack"
+msgstr ""
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
+msgid "picture(s), in the order added."
+msgstr ""

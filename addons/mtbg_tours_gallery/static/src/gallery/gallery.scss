@@ -1,0 +1,69 @@
+// Tiled gallery: rows keep their shape (aspect-ratio), columns their share, photos fill their cell
+// spacing and corners: the block's options (CSS variables on the block)
+.mtbg-tg {
+    .mtbg-tg-layout {
+        display: flex;
+        flex-direction: column;
+        gap: var(--mtbg-tg-gap, 6px);
+    }
+    .mtbg-tg-phone {
+        display: none;
+    }
+    @media (max-width: 767.98px) {
+        .mtbg-tg-desktop {
+            display: none;
+        }
+        .mtbg-tg-phone {
+            display: flex;
+        }
+    }
+    .mtbg-tg-row {
+        display: flex;
+        gap: var(--mtbg-tg-gap, 6px);
+        width: 100%;
+    }
+    .mtbg-tg-col {
+        display: flex;
+        flex-direction: column;
+        gap: var(--mtbg-tg-gap, 6px);
+        flex: 0 0 auto;
+        width: calc((100% - var(--mtbg-tg-gap, 6px)) * var(--mtbg-tg-share));
+        min-width: 0;
+        &:only-child {
+            width: 100%;
+        }
+    }
+    .mtbg-tg-cell {
+        position: relative;
+        border-radius: var(--mtbg-tg-radius, 0);
+        display: block;
+        flex-basis: 0;
+        min-height: 0;
+        overflow: hidden;
+        background: rgba(127, 127, 127, 0.15);
+        cursor: zoom-in;
+        img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            max-width: none;
+            object-fit: cover;
+            transition: transform 0.35s ease;
+        }
+        &:hover img {
+            transform: scale(1.025);
+        }
+        &:focus-visible {
+            outline: 3px solid var(--o-color-1, #2f6b45);
+            outline-offset: 2px;
+        }
+    }
+}
+
+// corners chosen in 19.0.0.2.0 (presets); since 19.0.0.3.0 a number (inline --mtbg-tg-radius, which wins)
+.s_mtbg_gallery {
+    &.mtbg-tg-r-sm { --mtbg-tg-radius: 4px; }
+    &.mtbg-tg-r-md { --mtbg-tg-radius: 8px; }
+    &.mtbg-tg-r-lg { --mtbg-tg-radius: 16px; }
+}

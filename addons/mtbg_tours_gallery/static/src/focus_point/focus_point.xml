@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mtbg_tours_gallery.FocusPointField">
+        <div t-if="isPicture" class="o_mtbg_focus">
+            <div class="o_mtbg_focus_photo" t-on-click="onClick" title="Click where the subject is">
+                <img t-att-src="src" alt="" draggable="false"/>
+                <span class="o_mtbg_focus_dot" t-attf-style="left: {{x}}%; top: {{y}}%"/>
+            </div>
+            <div class="o_mtbg_focus_side">
+                <div class="text-muted small">Cropped in a wide tile and in a tall one:</div>
+                <div class="o_mtbg_focus_previews">
+                    <div class="o_mtbg_focus_wide"><img t-att-src="src" alt="" t-attf-style="object-position: {{position}}"/></div>
+                    <div class="o_mtbg_focus_tall"><img t-att-src="src" alt="" t-attf-style="object-position: {{position}}"/></div>
+                </div>
+                <div class="small">
+                    <t t-esc="x"/>% across, <t t-esc="y"/>% down
+                    <button t-if="!props.readonly" type="button" class="btn btn-link btn-sm p-0 ms-2" t-on-click="reset">Centre</button>
+                </div>
+            </div>
+        </div>
+        <span t-else="" class="text-muted">Pictures only.</span>
+    </t>
+</templates>
