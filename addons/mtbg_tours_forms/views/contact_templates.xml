@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The contact form, one for the whole site: on the contact page, as a popup, and under the booking form on tour
+         pages (variant = page / popup / sidebar). Its blocks, texts and look: the Form Designer's "contact" form
+         (Tours > Configuration > Extensions > Forms); a known visitor only writes their message. Parameters:
+         variant, tour, placeholder (the message's, when the designer gives it none). -->
+    <template id="contact_form" name="Contact form">
+        <t t-call="mtbg_tours_forms.form">
+            <t t-set="form_key" t-value="'contact'"/>
+        </t>
+    </template>
+
+    <!-- The contact page -->
+    <template id="contact_page" name="Contact page">
+        <t t-call="website.layout">
+            <t t-set="pageName" t-value="'contact-us'"/>
+            <div id="wrap" class="mtbg-contact-page">
+                <section class="container py-5">
+                    <h1 class="mtbg-contact-page__title text-center mb-4">Contact us</h1>
+                    <div class="mtbg-contact-page__card mx-auto">
+                        <t t-call="mtbg_tours_forms.contact_form">
+                            <t t-set="variant" t-value="'page'"/>
+                        </t>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <!-- The phone menu's Contact us button (mtbg_tours_website) opens this panel over the menu: the Menu Contact Form
+         (else the contact form) is drawn into it on the first tap (the Form block, /mtbg_forms/block) -->
+    <template id="mobile_menu_contact" inherit_id="website.template_header_mobile" name="Contact form in the phone menu">
+        <xpath expr="//div[@id='top_menu_collapse_mobile']" position="inside">
+            <div class="mtbg-mmenu-contact-panel o_not_editable" data-variant="menu"
+                 t-att-data-form="'menu_contact' if request.env['mtbg.form'].mtbg_get('menu_contact') else 'contact'"/>
+        </xpath>
+    </template>
+
+    <!-- The chat page (/chat), for links in emails: no menu or footer, the logo, and the website chat opening by itself;
+         the contact form when no chat is available -->
+    <template id="chat_page" name="Chat page">
+        <t t-call="website.layout">
+            <t t-set="pageName" t-value="'chat'"/>
+            <div id="wrap" class="mtbg-chat-page">
+                <section class="container py-5 text-center">
+                    <img t-att-src="'/web/image/website/%s/logo' % website.id" class="mtbg-chat-page__logo mb-4"
+                         t-att-alt="website.name"/>
+                    <h1 class="h3 mb-2">Chat with us</h1>
+                    <p class="text-muted mb-4 mtbg-chat-page__status">Opening the chat…</p>
+                    <a href="#livechat" class="btn btn-primary btn-lg">Open the chat</a>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <!-- The popup: opens from any "Contact" link (#contact, data-mtbg-contact, the footer's Contact us); a different
+         background picture each time it opens -->
+    <template id="contact_popup" inherit_id="website.layout" name="Contact popup">
+        <xpath expr="//div[@id='wrapwrap']" position="inside">
+            <div class="modal fade mtbg-contact-popup" id="mtbg_contact_popup" tabindex="-1" role="dialog" aria-label="Contact us"
+                 aria-hidden="true"
+                 t-att-data-backgrounds="','.join(request.env['mtbg.form.fields'].sudo().mtbg_popup_backgrounds())">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content mtbg-contact-popup__content">
+                        <div class="mtbg-contact-popup__picture" aria-hidden="true"/>
+                        <div class="mtbg-contact-popup__panel">
+                            <button type="button" class="btn-close mtbg-contact-popup__close" data-bs-dismiss="modal" aria-label="Close"/>
+                            <t t-call="mtbg_tours_forms.contact_form">
+                                <t t-set="variant" t-value="'popup'"/>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- The popup forms (the owner, 2026-10-26): a form with "Show as a popup" (Form Designer > Popup) opens on the pages
+         its rule takes, after 3 minutes or on leaving the page (desktop), once a visit; on a page, only the first
+         popup in their order. Its look: "full" (as the newsletter popup since 2025: the form over a photo, a darker
+         top, the logo, the dark bar at the bottom) or "beside" (as the contact popup: the photo beside the form);
+         its pictures turn (one per opening) or stay on the first. A form that signs up for the newsletter also opens
+         from "Subscribe to our Newsletter" (.signupbutton, #newsletter, data-mtbg-newsletter). -->
+    <template id="newsletter_popup" inherit_id="website.layout" name="Popup forms">
+        <xpath expr="//div[@id='wrapwrap']" position="inside">
+            <t t-set="pf" t-value="request.env['mtbg.form'].sudo().mtbg_popup_for_request(main_object)"/>
+            <t t-if="pf">
+                <t t-set="ps" t-value="pf.mtbg_popup()"/>
+                <t t-set="pimages" t-value="pf.mtbg_popup_images()"/>
+                <t t-set="poverlay" t-value="'--mtbg-popup-overlay: %s' % (ps['overlay'] / 100.0)"/>
+                <div t-attf-class="modal fade mtbg-form-popup #{'mtbg-nl' if ps['look'] == 'full' else 'mtbg-contact-popup'}"
+                     id="mtbg_form_popup" tabindex="-1" role="dialog" t-att-aria-label="pf.name" aria-hidden="true" data-auto="1"
+                     t-att-data-form="pf.key" t-att-data-newsletter="'1' if pf.newsletter else None"
+                     t-att-data-backgrounds="','.join(pimages)" t-att-data-rotate="'1' if ps['rotate'] else None"
+                     t-att-data-animation="ps['animation']" t-att-data-backdrop="ps['backdrop'] / 100.0"
+                     t-att-style="poverlay">
+                    <t t-if="ps['look'] == 'full'">
+                        <div class="modal-dialog modal-dialog-centered mtbg-nl__dialog">
+                            <div class="modal-content mtbg-nl__box mtbg-contact-popup__picture"
+                                 t-att-style="'background-image: url(&quot;%s&quot;)' % pimages[0] if pimages else None">
+                                <button type="button" class="mtbg-nl__close" data-bs-dismiss="modal" aria-label="Close"/>
+                                <div class="mtbg-form-popup__body">
+                                    <img t-if="ps['logo']" class="mtbg-nl__logo" t-att-src="ps['logo']" t-att-alt="request.website.name"/>
+                                    <t t-call="mtbg_tours_forms.form">
+                                        <t t-set="form_key" t-value="pf.key"/>
+                                        <t t-set="variant" t-value="'popup'"/>
+                                    </t>
+                                </div>
+                                <div t-if="ps['bar']" class="mtbg-nl__offer"
+                                     t-attf-style="background: #{ps['bar_color']}; color: #{ps['bar_text_color']}">
+                                    <span t-out="pf.popup_bar_text or ''"/>
+                                    <a href="/privacy" t-attf-style="color: #{ps['bar_text_color']}">Privacy Policy</a>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content mtbg-contact-popup__content">
+                                <div class="mtbg-contact-popup__picture" aria-hidden="true"
+                                     t-att-style="'background-image: url(&quot;%s&quot;)' % pimages[0] if pimages else None"/>
+                                <div class="mtbg-contact-popup__panel">
+                                    <button type="button" class="btn-close mtbg-contact-popup__close" data-bs-dismiss="modal" aria-label="Close"/>
+                                    <img t-if="ps['logo']" class="mtbg-form-popup__logo" t-att-src="ps['logo']" t-att-alt="request.website.name"/>
+                                    <t t-call="mtbg_tours_forms.form">
+                                        <t t-set="form_key" t-value="pf.key"/>
+                                        <t t-set="variant" t-value="'popup'"/>
+                                    </t>
+                                    <div t-if="ps['bar']" class="mtbg-form-popup__bar"
+                                         t-attf-style="background: #{ps['bar_color']}; color: #{ps['bar_text_color']}">
+                                        <span t-out="pf.popup_bar_text or ''"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- The texting opt-in (owner, 2026-10-28, PHASE-5 "SMS terms placement"): only a newsletter form (the marketing
+         popup) asks for texts: promotional ones, with the promotional messaging terms (Core's settings page,
+         "Messaging terms"); shown once a mobile number is typed. The other forms ask for none: booking texts are
+         consented to on the booking form. -->
+    <template id="texting_consent" name="Form field: SMS promotions opt-in">
+        <div t-if="texting_marketing" class="mtbg-contact-form__texting" t-att-hidden="None if texting_shown else ''">
+            <label class="mtbg-contact-form__marketing"><input type="checkbox" name="sms_marketing_optin"/>
+                <span class="mtbg-contact-form__marketing-text" t-out="texting_terms"/></label>
+            <p class="mtbg-contact-form__consent mtbg-contact-form__marketing-links">See our
+                <a href="/privacy">Privacy Policy</a> and <a href="/tour-terms-and-conditions">Terms of Service</a>.</p>
+        </div>
+    </template>
+</odoo>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form block: one of the website's forms (Forms page > Form Designer) on any page. The page keeps only the form's
+         key (data-form); the form is drawn on each visit by form_block.js, so the designer's changes show at once. -->
+    <template id="s_mtbg_form" name="Form">
+        <section class="s_mtbg_form pt48 pb48" data-form="contact">
+            <div class="container">
+                <div class="s_mtbg_form_body o_not_editable"/>
+            </div>
+        </section>
+    </template>
+
+    <template id="snippets" inherit_id="website.snippets" name="Form block">
+        <xpath expr="//snippets[@id='snippet_structure']" position="inside">
+            <t t-snippet="mtbg_tours_forms.s_mtbg_form" string="Form" group="contact_and_forms"
+               t-thumbnail="/website/static/src/img/snippets_thumbs/s_website_form.svg">
+                <keywords>form, contact, questions, lead, enquiry, MTBG</keywords>
+            </t>
+        </xpath>
+    </template>
+</odoo>

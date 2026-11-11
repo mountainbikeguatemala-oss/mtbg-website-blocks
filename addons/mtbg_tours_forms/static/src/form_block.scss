@@ -1,0 +1,5 @@
+// Form block: the form on a card of its own width, centred (as on the contact page)
+.s_mtbg_form {
+    .s_mtbg_form_body { max-width: 760px; margin: 0 auto; }
+    .s_mtbg_form_body:empty { min-height: 6rem; }
+}

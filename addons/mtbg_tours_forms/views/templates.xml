@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The mobile number field of every form on the site: the country code picker (flag, dial code; the native list
+         on phones) and the number, checked against the country's mobile number lengths (@mtbg_tours_forms/fields).
+         Parameters: input_id (default mtbg_customer_phone), placeholder, value (a known number, site rule 9),
+         phone_contact_country (its contact's country code: a shared dial code like +1 opens on it), phone_picker (the
+         countries, when already at hand). -->
+    <template id="phone_field" name="Form field: mobile with country code">
+        <t t-set="phone_picker" t-value="phone_picker or request.env['res.country'].mtbg_phone_picker()"/>
+        <t t-set="mobile_label">Mobile</t>
+        <t t-set="phone_open" t-value="request.env['res.country'].mtbg_phone_open(value, phone_contact_country, phone_picker['default']) if request and str(value or '').strip().startswith('+') else phone_picker['default']"/>
+        <t t-set="phone_default" t-value="[c for c in phone_picker['countries'] if c['code'] == phone_open][0]"/>
+        <!-- data-mtbg-open="visitor": opened on the visitor's country (no number yet); a cached page corrects it from
+             the visitor's own session (static/src/phone_visitor.js) -->
+        <div class="mtbg-field mtbg-phone" t-att-data-mtbg-open="None if str(value or '').strip() else 'visitor'">
+            <div class="mtbg-phone__country">
+                <img class="mtbg-phone__flag" t-att-src="phone_default['img']" t-att-alt="phone_default['name']" width="22" height="16"/>
+                <span class="mtbg-phone__dial" t-out="'+' + phone_default['dial']"/>
+                <i class="fa fa-caret-down" aria-hidden="true"/>
+                <!-- only the country it opens on: the others are filled in from the page's one list when the field is
+                     first used (phone_list below; page speed, 2026-10-30: 240 options per field, 3 fields on a tour
+                     page, were a third of its HTML) -->
+                <select class="mtbg-phone__select" aria-label="Country code" autocomplete="tel-country-code"
+                        data-mtbg-lazy="1">
+                    <option t-att-value="phone_default['code']" t-att-data-dial="phone_default['dial']"
+                            t-att-data-lengths="phone_default['lengths']" t-att-data-img="phone_default['img']"
+                            t-att-data-name="phone_default['name']" t-att-selected="True"><t t-out="phone_default['flag']"/> <t t-out="phone_default['name']"/> (+<t t-out="phone_default['dial']"/>)</option>
+                </select>
+            </div>
+            <input type="tel" t-att-id="input_id or 'mtbg_customer_phone'" class="mtbg-phone__input"
+                   autocomplete="tel-national" inputmode="tel" t-att-placeholder="placeholder or mobile_label" t-att-value="value"/>
+        </div>
+    </template>
+
+    <!-- The phone fields' countries, once per page, and the few lines that fill a field's picker with them when it is
+         first touched (pointer, focus, key), when its number already has a dial code, or once the page is idle;
+         window.mtbgPhoneFill(root) fills them at once for scripts that read the options. Inline: the site's script
+         bundle may still be loading when the visitor reaches a form. -->
+    <template id="phone_list" inherit_id="website.layout" name="Form field: the phone countries">
+        <xpath expr="//head" position="inside">
+            <script>(function () {
+    var rows = null;
+    function data() {
+        if (!rows) {
+            var el = document.getElementById("mtbg-phone-countries");
+            if (!el) { return null; }
+            rows = JSON.parse(el.textContent);
+        }
+        return rows;
+    }
+    function fill(select) {
+        if (!select || select.getAttribute("data-mtbg-lazy") !== "1" || !data()) { return; }
+        var current = select.value, list = document.createDocumentFragment();
+        rows.forEach(function (c) {
+            var option = document.createElement("option");
+            option.value = c[0];
+            option.dataset.name = c[1];
+            option.dataset.dial = c[2];
+            option.dataset.lengths = c[3];
+            option.dataset.img = "/base/static/img/country_flags/" + c[0].toLowerCase() + ".png";
+            option.textContent = c[4] + " " + c[1] + " (+" + c[2] + ")";
+            option.selected = c[0] === current;
+            list.appendChild(option);
+        });
+        select.replaceChildren(list);
+        select.value = current;
+        select.removeAttribute("data-mtbg-lazy");
+    }
+    function fillAll(root) {
+        (root || document).querySelectorAll('select.mtbg-phone__select[data-mtbg-lazy="1"]').forEach(fill);
+    }
+    window.mtbgPhoneFill = fillAll;
+    function onTouch(ev) {
+        var field = ev.target.closest ? ev.target.closest(".mtbg-phone") : null;
+        if (field) { fill(field.querySelector(".mtbg-phone__select")); }
+    }
+    ["pointerdown", "mousedown", "touchstart", "focusin", "keydown"].forEach(function (name) {
+        document.addEventListener(name, onTouch, {capture: true, passive: true});
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".mtbg-phone").forEach(function (field) {
+            var input = field.querySelector(".mtbg-phone__input");
+            if (input ? input.value.trim().charAt(0) === "+" : false) { fill(field.querySelector(".mtbg-phone__select")); }
+        });
+    });
+    window.addEventListener("load", function () {
+        var later = window.requestIdleCallback || function (fn) { return setTimeout(fn, 1500); };
+        later(function () { fillAll(); }, {timeout: 4000});
+    });
+})();</script>
+        </xpath>
+        <xpath expr="//body" position="inside">
+            <script type="application/json" id="mtbg-phone-countries" t-out="request.env['res.country'].mtbg_phone_countries_json()"/>
+        </xpath>
+    </template>
+</odoo>

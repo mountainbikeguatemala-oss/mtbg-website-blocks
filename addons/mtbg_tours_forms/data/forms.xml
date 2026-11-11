@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- The contact form (the contact page, the popup, the tour page's sidebar) as the Form Designer's blocks: the
+         form the site had before the designer. A known visitor only writes the message; the texting opt-ins show
+         once a mobile number is typed. -->
+    <record id="form_contact" model="mtbg.form">
+        <field name="name">Contact form</field>
+        <field name="key">contact</field>
+        <field name="handler">contact</field>
+        <field name="variants">page,popup,sidebar,menu</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="form_contact_heading_page" model="mtbg.form.block">
+        <field name="form_id" ref="form_contact"/>
+        <field name="sequence">10</field>
+        <field name="kind">heading</field>
+        <field name="label">Contact form</field>
+        <field name="show_mode">when</field>
+        <field name="show_rule" eval="{'match': 'all', 'conditions': [{'subject': 'variant', 'op': 'is', 'value': 'page'}]}"/>
+    </record>
+    <record id="form_contact_heading_popup" model="mtbg.form.block">
+        <field name="form_id" ref="form_contact"/>
+        <field name="sequence">11</field>
+        <field name="kind">heading</field>
+        <field name="label">Let's plan your ride</field>
+        <field name="help">Questions, dates, a custom trip: tell us and we'll get back to you.</field>
+        <field name="show_mode">when</field>
+        <field name="show_rule" eval="{'match': 'all', 'conditions': [{'subject': 'variant', 'op': 'is', 'value': 'popup'}]}"/>
+    </record>
+    <record id="form_contact_heading_sidebar" model="mtbg.form.block">
+        <field name="form_id" ref="form_contact"/>
+        <field name="sequence">12</field>
+        <field name="kind">heading</field>
+        <field name="label">Questions about this tour?</field>
+        <field name="show_mode">when</field>
+        <field name="show_rule" eval="{'match': 'all', 'conditions': [{'subject': 'variant', 'op': 'is', 'value': 'sidebar'}]}"/>
+    </record>
+    <record id="form_contact_known" model="mtbg.form.block">
+        <field name="form_id" ref="form_contact"/>
+        <field name="sequence">20</field>
+        <field name="kind">known</field>
+        <field name="system" eval="True"/>
+    </record>
+    <!-- one Name field (the owner: never first and last name apart); the old First name's id, so an updated site
+         keeps the block the 19.0.0.3.9 migration made of First / Last name -->
+    <record id="form_contact_first_name" model="mtbg.form.block">
+        <field name="form_id" ref="form_contact"/>
+        <field name="sequence">30</field>
+        <field name="kind">text</field>
+        <field name="key">name</field>
+        <field name="label">Name</field>
+        <field name="system" eval="True"/>
+        <field name="show_mode">unless</field>
+        <field name="show_rule" eval="{'match': 'all', 'conditions': [{'subject': 'known', 'op': 'yes'}]}"/>
+        <field name="require_mode">always</field>
+    </record>
+    <record id="form_contact_phone" model="mtbg.form.block">
+        <field name="form_id" ref="form_contact"/>
+        <field name="sequence">50</field>
+        <field name="kind">phone</field>
+        <field name="key">phone</field>
+        <field name="label">Mobile</field>
+        <field name="system" eval="True"/>
+        <field name="show_mode">unless</field>
+        <field name="show_rule" eval="{'match': 'all', 'conditions': [{'subject': 'known', 'op': 'yes'}]}"/>
+        <field name="require_mode">always</field>
+    </record>
+    <record id="form_contact_email" model="mtbg.form.block">
+        <field name="form_id" ref="form_contact"/>
+        <field name="sequence">60</field>
+        <field name="kind">email</field>
+        <field name="key">email</field>
+        <field name="label">Email</field>
+        <field name="system" eval="True"/>
+        <field name="show_mode">unless</field>
+        <field name="show_rule" eval="{'match': 'all', 'conditions': [{'subject': 'known', 'op': 'yes'}]}"/>
+        <field name="require_mode">always</field>
+    </record>
+    <record id="form_contact_message" model="mtbg.form.block">
+        <field name="form_id" ref="form_contact"/>
+        <field name="sequence">70</field>
+        <field name="kind">textarea</field>
+        <field name="key">message</field>
+        <field name="label">Your message</field>
+        <field name="system" eval="True"/>
+        <field name="require_mode">always</field>
+    </record>
+    <record id="form_contact_texting" model="mtbg.form.block">
+        <field name="form_id" ref="form_contact"/>
+        <field name="sequence">80</field>
+        <field name="kind">texting</field>
+        <field name="system" eval="True"/>
+        <field name="show_mode">when</field>
+        <field name="show_rule" eval="{'match': 'any', 'conditions': [{'subject': 'field:phone', 'op': 'min_digits', 'value': '3'}, {'subject': 'known_phone', 'op': 'yes'}]}"/>
+    </record>
+    <record id="form_contact_submit" model="mtbg.form.block">
+        <field name="form_id" ref="form_contact"/>
+        <field name="sequence">90</field>
+        <field name="kind">submit</field>
+        <field name="label">Send message</field>
+        <field name="system" eval="True"/>
+    </record>
+    <function model="mtbg.form" name="_mtbg_seed_translations"/>
+</odoo>

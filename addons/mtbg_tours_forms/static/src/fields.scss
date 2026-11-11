@@ -1,0 +1,27 @@
+// The shared mobile field (outside the booking form's dark modal, which styles it its own way)
+.mtbg-phone {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+    .mtbg-phone__country {
+        position: relative;
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0 8px;
+        border: 1px solid var(--border-color, #ced4da);
+        border-radius: 6px;
+        font-size: 14px;
+        .mtbg-phone__flag { width: 22px; height: 16px; object-fit: cover; border-radius: 2px; box-shadow: 0 0 0 1px rgba(0, 0, 0, .15); }
+        .fa { font-size: 12px; opacity: .6; }
+    }
+    // the native select covers the button, invisible: its own list (sheet on phones) opens on tap
+    select.mtbg-phone__select {
+        position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;
+        font-size: 16px; // no zoom on iOS
+    }
+    .mtbg-phone__input { flex: 1 1 auto; min-width: 0; }
+}
+.mtbg-riders .mtbg-riders__count { max-width: 4rem; -moz-appearance: textfield; }
+.mtbg-riders .mtbg-riders__count::-webkit-inner-spin-button { -webkit-appearance: none; }

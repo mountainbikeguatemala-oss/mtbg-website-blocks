@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- The Menu Contact Form: what the phone menu's Contact us opens (mobile_menu_contact), its own form so it can
+         change without touching the contact form; one Name field, the navy look of the menu. A known visitor only
+         writes the message; the texting opt-ins show once a mobile number is typed. -->
+    <record id="form_menu_contact" model="mtbg.form">
+        <field name="name">Menu Contact Form</field>
+        <field name="key">menu_contact</field>
+        <field name="handler">contact</field>
+        <field name="variants">menu</field>
+        <field name="sequence">15</field>
+        <!-- dark mode on the menu's navy: nothing behind the form or its fields, light text, a soft border -->
+        <field name="style" eval="{'menu': {'bg': 'transparent', 'text': '#f2f2f2', 'label': '#c9d3dd', 'accent': '#fb88dd',
+                                            'accent_text': '#13283d', 'input_bg': 'transparent', 'input_text': '#ffffff',
+                                            'input_border': '#5b7590', 'step': '#fb88dd', 'padding': 15}}"/>
+    </record>
+    <record id="form_menu_contact_known" model="mtbg.form.block">
+        <field name="form_id" ref="form_menu_contact"/>
+        <field name="sequence">10</field>
+        <field name="kind">known</field>
+        <field name="system" eval="True"/>
+    </record>
+    <record id="form_menu_contact_name" model="mtbg.form.block">
+        <field name="form_id" ref="form_menu_contact"/>
+        <field name="sequence">20</field>
+        <field name="kind">text</field>
+        <field name="key">name</field>
+        <field name="label">Name</field>
+        <field name="system" eval="True"/>
+        <field name="show_mode">unless</field>
+        <field name="show_rule" eval="{'match': 'all', 'conditions': [{'subject': 'known', 'op': 'yes'}]}"/>
+        <field name="require_mode">always</field>
+    </record>
+    <record id="form_menu_contact_phone" model="mtbg.form.block">
+        <field name="form_id" ref="form_menu_contact"/>
+        <field name="sequence">30</field>
+        <field name="kind">phone</field>
+        <field name="key">phone</field>
+        <field name="label">Mobile</field>
+        <field name="system" eval="True"/>
+        <field name="show_mode">unless</field>
+        <field name="show_rule" eval="{'match': 'all', 'conditions': [{'subject': 'known', 'op': 'yes'}]}"/>
+        <field name="require_mode">always</field>
+    </record>
+    <record id="form_menu_contact_email" model="mtbg.form.block">
+        <field name="form_id" ref="form_menu_contact"/>
+        <field name="sequence">40</field>
+        <field name="kind">email</field>
+        <field name="key">email</field>
+        <field name="label">Email</field>
+        <field name="system" eval="True"/>
+        <field name="show_mode">unless</field>
+        <field name="show_rule" eval="{'match': 'all', 'conditions': [{'subject': 'known', 'op': 'yes'}]}"/>
+        <field name="require_mode">always</field>
+    </record>
+    <record id="form_menu_contact_message" model="mtbg.form.block">
+        <field name="form_id" ref="form_menu_contact"/>
+        <field name="sequence">50</field>
+        <field name="kind">textarea</field>
+        <field name="key">message</field>
+        <field name="label">Your message</field>
+        <field name="system" eval="True"/>
+        <field name="require_mode">always</field>
+    </record>
+    <record id="form_menu_contact_texting" model="mtbg.form.block">
+        <field name="form_id" ref="form_menu_contact"/>
+        <field name="sequence">60</field>
+        <field name="kind">texting</field>
+        <field name="system" eval="True"/>
+        <field name="show_mode">when</field>
+        <field name="show_rule" eval="{'match': 'any', 'conditions': [{'subject': 'field:phone', 'op': 'min_digits', 'value': '3'}, {'subject': 'known_phone', 'op': 'yes'}]}"/>
+    </record>
+    <record id="form_menu_contact_submit" model="mtbg.form.block">
+        <field name="form_id" ref="form_menu_contact"/>
+        <field name="sequence">70</field>
+        <field name="kind">submit</field>
+        <field name="label">Send message</field>
+        <field name="system" eval="True"/>
+    </record>
+    <function model="mtbg.form" name="_mtbg_seed_translations" eval="[[ref('form_menu_contact')]]"/>
+</odoo>

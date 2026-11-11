@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The extension's tile opens the Forms page: the Form Designer (every form's blocks, rules and look; live
+         preview) and the sections other extensions add (pre-tour forms and waivers...) -->
+    <record id="action_mtbg_extension_page" model="ir.actions.client">
+        <field name="name">Forms</field>
+        <field name="tag">mtbg_form_designer</field>
+    </record>
+</odoo>

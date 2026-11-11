@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- A Form Designer form on the website: its blocks in order, each step opening a numbered section, every block
+         shown / required by its rules (form.js runs them as the visitor types; the server checks them again).
+         Parameters: form_key (contact...), variant (page / popup / sidebar), tour, placeholder (the message's when
+         its block has none); or form_view (the designer's preview: mtbg.form.mtbg_view of unsaved blocks). Keeps the
+         contact form's classes (mtbg-contact-form__*) for its looks. -->
+    <template id="form" name="Website form (Form Designer)">
+        <t t-set="variant" t-value="variant or 'page'"/>
+        <t t-set="fv" t-value="form_view or request.env['mtbg.form'].mtbg_get(form_key).mtbg_view(variant, tour, placeholder=placeholder) if (form_view or request.env['mtbg.form'].mtbg_get(form_key)) else None"/>
+        <form t-if="fv" t-attf-class="mtbg-contact-form mtbg-form mtbg-contact-form--#{fv['variant']} #{fv['style_classes']}" action="#"
+              novalidate="novalidate" t-att-data-form="fv['form'].key" t-att-data-source="fv['variant']"
+              t-att-data-tour-id="fv['tour'].id if fv['tour'] else None" t-att-data-defs="fv['defs']"
+              t-att-style="fv['style'] or None" t-att-data-preview="'1' if fv.get('preview') else None"
+              t-att-data-preview-known="'1' if fv.get('known') else None"
+              t-att-data-show-all="'1' if fv.get('show_all') else None"
+              t-att-data-steps="'1' if fv.get('steps') else None"
+              t-att-data-preview-ctx="fv['ctx'] if fv.get('preview') else None">
+            <div class="mtbg-contact-form__body">
+                <div t-foreach="fv['sections']" t-as="section" t-attf-class="mtbg-form__section #{'mtbg-rule-off' if section.get('index') in fv.get('ruled_off', ()) else ''}"
+                     t-att-data-block="section.get('index')" t-att-hidden="'' if section.get('index') in fv['hidden'] else None">
+                    <div t-if="section['step']" class="mtbg-form__step">
+                        <span class="mtbg-form__step-num" t-out="section['number']"/>
+                        <div class="mtbg-form__step-text">
+                            <h4 class="mtbg-form__step-title" t-out="section['step'].label"/>
+                            <p t-if="section['step'].help" class="mtbg-form__step-help" t-out="section['step'].help"/>
+                        </div>
+                    </div>
+                    <div class="mtbg-form__grid">
+                        <t t-foreach="section['blocks']" t-as="item" t-call="mtbg_tours_forms.form_block">
+                            <t t-set="index" t-value="item[0]"/>
+                            <t t-set="block" t-value="item[1]"/>
+                        </t>
+                    </div>
+                </div>
+                <!-- bots fill in every field: people never see this one -->
+                <input type="text" name="website_hp" class="mtbg-contact-form__hp" tabindex="-1" autocomplete="off" aria-hidden="true"/>
+            </div>
+            <div class="mtbg-contact-form__thanks" hidden="">
+                <i class="fa fa-check-circle" aria-hidden="true"/>
+                <h3><t t-out="fv['thanks_title'][0]"/><t t-if="len(fv['thanks_title']) &gt; 1"><span class="mtbg-contact-form__thanks-name"/><t t-out="fv['thanks_title'][1]"/></t></h3>
+                <p t-out="fv['form'].thanks_text"/>
+            </div>
+        </form>
+    </template>
+
+    <!-- one block of a form (index: its place in the form, for form.js's rules) -->
+    <template id="form_block" name="Website form: block">
+        <t t-set="block_label" t-value="block.label or ''"/>
+        <!-- the answer we already have (a form that opens filled in) -->
+        <t t-set="answer" t-value="(fv.get('answers') or {}).get(block.key) if block.key else None"/>
+        <t t-set="text_look" t-value="block._mtbg_text_look()"/>
+        <div t-attf-class="mtbg-form__block mtbg-form__block--#{block.kind} #{'is-half' if block.width == 'half' else ''} #{'is-required' if index in fv['required'] else ''} #{'mtbg-rule-off' if index in fv.get('ruled_off', ()) else ''} #{text_look[0]}"
+             t-att-style="text_look[1] or None"
+             t-att-data-block="index" t-att-data-key="block.key or None" t-att-hidden="'' if index in fv['hidden'] else None">
+            <t t-if="block.kind == 'heading'">
+                <!-- a real h3 / h4 / h5: its font and size are the website theme's -->
+                <h4 t-if="block.heading_level == 'h4'" class="mtbg-contact-form__title" t-out="block_label"/>
+                <h5 t-elif="block.heading_level == 'h5'" class="mtbg-contact-form__title" t-out="block_label"/>
+                <h3 t-else="" class="mtbg-contact-form__title" t-out="block_label"/>
+                <p t-if="block.help" class="mtbg-contact-form__subtitle" t-out="block.help"/>
+            </t>
+            <div t-elif="block.kind == 'html'" class="mtbg-form__html" t-out="block.content"/>
+            <!-- a known visitor: their details are kept, shown masked -->
+            <div t-elif="block.kind == 'known'" class="mtbg-contact-form__known" hidden="">
+                <span class="mtbg-contact-form__hello"/>
+                <a href="#" class="mtbg-contact-form__notme">Not you?</a>
+            </div>
+            <t t-elif="block.kind == 'texting'" t-call="mtbg_tours_forms.texting_consent">
+                <t t-set="texting_shown" t-value="True"/>
+                <t t-set="texting_marketing" t-value="fv['form'].newsletter"/>
+                <t t-set="texting_terms" t-value="fv['texting_terms']"/>
+            </t>
+            <t t-elif="block.kind == 'submit'">
+                <div class="mtbg-contact-form__error" role="alert" hidden=""/>
+                <t t-set="send_label">Send</t>
+                <button type="submit" class="btn btn-primary mtbg-contact-form__send" t-out="block_label or send_label"
+                        t-att-data-cfd-track="'newsletter' if fv['form'].newsletter else None"/>
+            </t>
+            <div t-elif="block.kind == 'phone'" class="mtbg-contact-form__field" data-field="phone">
+                <span><t t-out="block_label"/><b class="mtbg-form__req"> *</b></span>
+                <t t-call="mtbg_tours_forms.phone_field">
+                    <t t-set="input_id" t-value="'mtbg_form_%s_%s_%s' % (fv['form'].key, block.key, fv['variant'])"/>
+                    <t t-set="placeholder" t-value="block.placeholder or None"/>
+                    <t t-set="phone_picker" t-value="fv['phone_picker']"/>
+                    <t t-set="value" t-value="answer or None"/>
+                    <!-- the person's own mobile: a shared dial code (+1) opens on their contact's country -->
+                    <t t-set="phone_contact_country" t-value="fv['answers'].get('country') if block.key == 'phone' else None"/>
+                </t>
+                <small t-if="block.help" class="mtbg-form__help" t-out="block.help"/>
+            </div>
+            <label t-elif="block.kind == 'checkbox'" class="mtbg-form__check">
+                <input type="checkbox" t-att-name="block.key" t-att-checked="answer or None"/> <span><t t-out="block_label"/><b class="mtbg-form__req"> *</b></span>
+            </label>
+            <div t-elif="block.kind in ('radio', 'checkboxes')" class="mtbg-contact-form__field" role="group" t-att-aria-label="block_label">
+                <span><t t-out="block_label"/><b class="mtbg-form__req"> *</b></span>
+                <div class="mtbg-form__choices">
+                    <label t-foreach="block._mtbg_choices()" t-as="choice" class="mtbg-form__check">
+                        <input t-att-type="'radio' if block.kind == 'radio' else 'checkbox'" t-att-name="block.key" t-att-value="choice"
+                               t-att-checked="(choice in answer if isinstance(answer, list) else choice == answer) or None"/>
+                        <span t-out="choice"/>
+                    </label>
+                </div>
+                <small t-if="block.help" class="mtbg-form__help" t-out="block.help"/>
+            </div>
+            <label t-elif="block.kind in ('text', 'textarea', 'email', 'number', 'date', 'select')" class="mtbg-contact-form__field">
+                <span><t t-out="block_label"/><b class="mtbg-form__req"> *</b></span>
+                <textarea t-if="block.kind == 'textarea'" t-att-name="block.key" class="form-control"
+                          t-att-rows="3 if fv['variant'] == 'sidebar' else 4"
+                          t-att-placeholder="block.placeholder or (fv['placeholder'] if block.key == 'message' else '') or None"
+                          t-out="answer or ''"/>
+                <select t-elif="block.kind == 'select'" t-att-name="block.key" class="form-select">
+                    <option value="" t-out="block.placeholder or '—'"/>
+                    <option t-foreach="block._mtbg_choices()" t-as="choice" t-att-value="choice" t-out="choice"
+                            t-att-selected="choice == answer or None"/>
+                </select>
+                <input t-else="" t-att-type="{'email': 'email', 'number': 'number', 'date': 'date'}.get(block.kind, 'text')"
+                       t-att-name="block.key" class="form-control" t-att-placeholder="block.placeholder or None"
+                       t-att-value="answer if answer not in (None, False) else None"
+                       t-att-autocomplete="{'name': 'name', 'first_name': 'given-name', 'last_name': 'family-name', 'email': 'email'}.get(block.key, 'email' if block.kind == 'email' else None)"/>
+                <small t-if="block.help" class="mtbg-form__help" t-out="block.help"/>
+            </label>
+        </div>
+    </template>
+
+    <!-- the Form Designer's preview: one form on a page of the website (the designer puts its unsaved blocks in) -->
+    <template id="form_preview" name="Website form preview">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="True"/>
+            <t t-set="no_footer" t-value="True"/>
+            <t t-set="no_livechat" t-value="True"/>
+            <div id="wrap" t-attf-class="mtbg-form-preview mtbg-form-preview--#{variant} mtbg-theme-light" style="--mtbg-footer-room: 0px">
+                <section class="container py-4">
+                    <!-- a popup form: in its popup (its unsaved pictures, overlay, logo and dark bar) -->
+                    <t t-if="popup_settings">
+                        <t t-set="ps" t-value="popup_settings"/>
+                        <t t-set="anim_class" t-value="{'fly': 'mtbg-fly-up', 'fade': 'mtbg-anim-fade', 'zoom': 'mtbg-anim-zoom', 'slide': 'mtbg-anim-slide'}.get(ps['animation'], '') if popup_walk else ''"/>
+                        <!-- the Full preview: the page dimmed behind it, the popup opening as on the site (Play again) -->
+                        <div t-att-class="'mtbg-form-popup-sim' if popup_walk else None"
+                             t-att-style="'--mtbg-popup-backdrop: %s' % (ps['backdrop'] / 100.0) if popup_walk else None">
+                        <button t-if="popup_walk" type="button" class="btn btn-sm btn-light mtbg-form-popup-sim__replay"
+                                onclick="var b=this.parentNode.querySelector('.mtbg-form-popup__anim'); var c=b.dataset.anim; if(c){b.classList.remove(c); void b.offsetWidth; b.classList.add(c);}">
+                            <i class="fa fa-play me-1"/>Play again</button>
+                        <div t-attf-class="mtbg-form-popup mtbg-form-popup--preview #{'mtbg-nl' if ps['look'] == 'full' else 'mtbg-contact-popup'}"
+                             t-att-style="'--mtbg-popup-overlay: %s' % (ps['overlay'] / 100.0)">
+                            <div t-if="ps['look'] == 'full'" t-attf-class="mtbg-nl__box mtbg-contact-popup__picture mtbg-form-popup__anim #{anim_class}" t-att-data-anim="anim_class or None"
+                                 t-att-style="'background-image: url(&quot;%s&quot;)' % popup_images[0] if popup_images else None">
+                                <div class="mtbg-form-popup__body">
+                                    <img t-if="ps['logo']" class="mtbg-nl__logo" t-att-src="ps['logo']" t-att-alt="request.website.name"/>
+                                    <div t-attf-class="mtbg-form-preview__frame mtbg-form-preview__frame--#{variant}" data-mtbg-form-preview="">
+                                        <t t-call="mtbg_tours_forms.form"/>
+                                    </div>
+                                </div>
+                                <div t-if="ps['bar']" class="mtbg-nl__offer" t-attf-style="background: #{ps['bar_color']}; color: #{ps['bar_text_color']}">
+                                    <span t-out="popup_bar_text"/>
+                                    <a href="#" t-attf-style="color: #{ps['bar_text_color']}">Privacy Policy</a>
+                                </div>
+                            </div>
+                            <div t-else="" t-attf-class="mtbg-contact-popup__content mtbg-form-popup__anim #{anim_class}" t-att-data-anim="anim_class or None">
+                                <div class="mtbg-contact-popup__picture" aria-hidden="true"
+                                     t-att-style="'background-image: url(&quot;%s&quot;)' % popup_images[0] if popup_images else None"/>
+                                <div class="mtbg-contact-popup__panel">
+                                    <img t-if="ps['logo']" class="mtbg-form-popup__logo" t-att-src="ps['logo']" t-att-alt="request.website.name"/>
+                                    <div t-attf-class="mtbg-form-preview__frame mtbg-form-preview__frame--#{variant}" data-mtbg-form-preview="">
+                                        <t t-call="mtbg_tours_forms.form"/>
+                                    </div>
+                                    <div t-if="ps['bar']" class="mtbg-form-popup__bar" t-attf-style="background: #{ps['bar_color']}; color: #{ps['bar_text_color']}">
+                                        <span t-out="popup_bar_text"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </t>
+                    <div t-else="" t-attf-class="mtbg-form-preview__frame mtbg-form-preview__frame--#{variant}" data-mtbg-form-preview="">
+                        <t t-call="mtbg_tours_forms.form"/>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mtbg_tours_forms.FormDesigner">
+        <div class="o_action mtbg_fd h-100 d-flex flex-column">
+            <div t-if="!state.data" class="p-4 text-muted"><i class="fa fa-spinner fa-spin me-1"/>Loading…</div>
+            <t t-else="">
+                <div class="mtbg_fd_head d-flex flex-wrap align-items-center gap-3 px-4 py-2 border-bottom">
+                    <img src="/mtbg_tours_forms/static/description/icon.png" class="mtbg_fd_icon" alt=""/>
+                    <div class="flex-grow-1">
+                        <h2 class="mb-0">Forms</h2>
+                        <div class="text-muted small">Every form of the site: its fields, steps, texts and look.</div>
+                    </div>
+                    <!-- every form, by type; each type's last entry makes a new form of it (not while saving: the save
+                         ends by reloading its form, which would undo the switch) -->
+                    <select class="form-select w-auto" aria-label="Form" t-att-disabled="state.saving"
+                            t-on-change="(ev) => this.onFormPick(ev)">
+                        <t t-foreach="formGroups" t-as="group" t-key="group.key">
+                            <optgroup t-att-label="group.label">
+                                <t t-foreach="group.forms" t-as="f" t-key="f.id">
+                                    <option t-att-value="f.id" t-att-selected="form and f.id === form.id" t-esc="f.name"/>
+                                </t>
+                                <option t-att-value="'new:' + group.key" t-esc="group.newLabel"/>
+                            </optgroup>
+                        </t>
+                    </select>
+                    <!-- the open form's name (in the language picked in the preview bar) -->
+                    <input t-if="form" type="text" class="form-control w-auto mtbg_fd_name" aria-label="Form name"
+                           title="The form's name (in this list and the backend)"
+                           t-att-value="text(null, 'name', state.texts)" t-att-placeholder="placeholderOf(null, 'name', state.texts)"
+                           t-on-input="(ev) => this.setText(null, 'name', ev.target.value, state.texts)"/>
+                    <span t-if="isDirty" class="badge text-bg-warning">Unsaved changes</span>
+                    <button class="btn btn-secondary" t-att-disabled="!isDirty or state.saving" t-on-click="discard">Discard</button>
+                    <button class="btn btn-primary" t-att-disabled="!isDirty or state.saving or !form" t-on-click="save">
+                        <i t-if="state.saving" class="fa fa-spinner fa-spin me-1"/>Save
+                    </button>
+                </div>
+                <div class="flex-grow-1 d-flex flex-column mtbg_fd_section">
+                    <div t-if="isTranslating" class="alert alert-info rounded-0 mb-0 py-1 px-4 small">
+                        <i class="fa fa-language me-1"/>Editing the <b t-esc="langInfo.name"/> texts. An empty field
+                        shows the <t t-esc="state.data.langs[0].name"/> text (in grey).
+                    </div>
+                    <div t-if="!form" class="p-4 text-muted">No form yet.</div>
+
+                    <div t-else="" class="mtbg_fd_body flex-grow-1 d-flex">
+                        <div class="mtbg_fd_settings d-flex flex-column">
+                            <ul class="nav nav-tabs px-3 pt-2">
+                                <li class="nav-item"><a href="#" t-attf-class="nav-link {{state.tab === 'blocks' ? 'active' : ''}}"
+                                                        t-on-click.prevent="() => this.state.tab = 'blocks'"><i class="fa fa-th-list me-1"/>Blocks</a></li>
+                                <li t-if="form.has_style" class="nav-item"><a href="#" t-attf-class="nav-link {{state.tab === 'style' ? 'active' : ''}}"
+                                                        t-on-click.prevent="() => this.state.tab = 'style'"><i class="fa fa-paint-brush me-1"/>Style</a></li>
+                                <li class="nav-item"><a href="#" t-attf-class="nav-link {{state.tab === 'messages' ? 'active' : ''}}"
+                                                        t-on-click.prevent="() => this.state.tab = 'messages'"><i class="fa fa-comment-o me-1"/>Messages</a></li>
+                                <li t-if="form.is_website" class="nav-item"><a href="#" t-attf-class="nav-link {{state.tab === 'popup' ? 'active' : ''}}"
+                                                        t-on-click.prevent="() => this.state.tab = 'popup'"><i class="fa fa-window-restore me-1"/>Popup</a></li>
+                                <!-- the tabs the form type's extension adds (registry mtbg_form_designer_extensions) -->
+                                <li t-foreach="extTabs" t-as="extTab" t-key="extTab.id" class="nav-item">
+                                    <a href="#" t-attf-class="nav-link {{state.tab === extTab.id ? 'active' : ''}}"
+                                       t-on-click.prevent="() => this.state.tab = extTab.id"><i t-attf-class="fa {{extTab.icon}} me-1"/><t t-esc="extTab.label"/></a>
+                                </li>
+                            </ul>
+                            <div class="flex-grow-1 overflow-auto p-3">
+                                <!-- blocks -->
+                                <t t-if="state.tab === 'blocks'">
+                                    <div class="text-muted small mb-2">Drag a block by its grip to move it (or focus the grip
+                                        and use the arrow keys). <b>+</b> between two blocks adds a field, a heading, a text
+                                        or a numbered step there; the blocks under a step are its section. The eye hides a
+                                        block everywhere; its rules show or require it only sometimes.</div>
+                                    <t t-call="mtbg_tours_forms.FormDesignerAdd"><t t-set="at" t-value="0"/></t>
+                                    <t t-foreach="rows" t-as="row" t-key="row.block.uid">
+                                        <t t-call="mtbg_tours_forms.FormDesignerRow">
+                                            <t t-set="block" t-value="row.block"/>
+                                        </t>
+                                        <t t-call="mtbg_tours_forms.FormDesignerAdd"><t t-set="at" t-value="row.index + 1"/></t>
+                                    </t>
+                                </t>
+
+                                <!-- style, per variant -->
+                                <t t-if="state.tab === 'style'">
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <span class="small text-muted">The look</span>
+                                        <div class="btn-group btn-group-sm" role="group" aria-label="Variant">
+                                            <t t-foreach="variants" t-as="v" t-key="v.key">
+                                                <button type="button" t-att-class="'btn ' + (state.styleVariant === v.key ? 'btn-secondary' : 'btn-outline-secondary')"
+                                                        t-on-click="() => this.setVariant(v.key)" t-esc="v.label"/>
+                                            </t>
+                                        </div>
+                                        <button type="button" class="btn btn-sm btn-link ms-auto" t-on-click="resetStyle"
+                                                t-att-disabled="!state.style[styleKey]"><i class="fa fa-undo me-1"/>Built-in look</button>
+                                    </div>
+                                    <div t-if="state.dark" class="form-text mt-0 mb-3"><i class="fa fa-moon-o me-1"/>Dark mode: these values
+                                        are the look on dark pages (a tour's Page Theme: Dark). Empty: the light mode's.</div>
+                                    <div t-else="" class="form-text mt-0 mb-3">Empty: the variant's built-in look (in grey).</div>
+                                    <h5 class="mb-2">Colours</h5>
+                                    <div class="mtbg_fd_colors mb-3">
+                                        <t t-foreach="colorTokens" t-as="token" t-key="token.key">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <input type="color" class="form-control form-control-color form-control-sm"
+                                                       t-att-value="colorValue(token.key)"
+                                                       t-on-input="(ev) => this.setColor(token.key, ev.target.value)"/>
+                                                <label class="flex-grow-1 mb-0 small" t-esc="token.label"/>
+                                                <input type="text" class="form-control form-control-sm mtbg_fd_hex" maxlength="11" placeholder="built-in"
+                                                       t-att-value="styleOf(token.key)" t-on-change="(ev) => this.setColor(token.key, ev.target.value)"/>
+                                                <button type="button" class="btn btn-sm btn-link px-1" title="Built-in" t-att-disabled="!styleOf(token.key)"
+                                                        t-on-click="() => this.setStyle(token.key, '')"><i class="fa fa-undo"/></button>
+                                            </div>
+                                        </t>
+                                    </div>
+                                    <h5 class="mb-2">Sizes</h5>
+                                    <t t-foreach="sizeTokens" t-as="token" t-key="token.key">
+                                        <label class="form-label small mb-0 d-flex">
+                                            <span class="flex-grow-1" t-esc="token.label"/>
+                                            <span t-if="styleOf(token.key) !== ''"><t t-esc="styleOf(token.key)"/> <t t-esc="token.unit"/>
+                                                <a href="#" class="ms-1" t-on-click.prevent="() => this.setStyle(token.key, '')"><i class="fa fa-undo"/></a></span>
+                                            <span t-else="" class="text-muted">built-in</span>
+                                        </label>
+                                        <input type="range" class="form-range" t-att-min="token.min" t-att-max="token.max" t-att-step="token.step"
+                                               t-att-value="styleOf(token.key) !== '' ? styleOf(token.key) : token.fallback"
+                                               t-on-input="(ev) => this.setStyle(token.key, ev.target.valueAsNumber)"/>
+                                    </t>
+                                </t>
+
+                                <t t-foreach="extTabs" t-as="extTab" t-key="extTab.id">
+                                    <t t-if="state.tab === extTab.id" t-component="extTab.Component" store="extTab.store"
+                                       panel="extTab.key" formId="form.id" lang="state.lang"/>
+                                </t>
+                                <!-- the form as a website popup: its look, pictures, bar, pages; the popups' order -->
+                                <t t-if="state.tab === 'popup'">
+                                    <t t-set="ps" t-value="state.popup.settings"/>
+                                    <div class="form-check form-switch mb-2">
+                                        <input type="checkbox" class="form-check-input" id="mtbg_fd_popup" t-att-checked="state.popup.on"
+                                               t-on-change="(ev) => this.setPopup('on', ev.target.checked)"/>
+                                        <label class="form-check-label" for="mtbg_fd_popup">Show as a popup
+                                            <span class="d-block small text-muted">It opens by itself after 3 minutes or when the visitor
+                                                leaves the page (computers), once a visit, on the pages below.</span></label>
+                                    </div>
+                                    <div class="form-check form-switch mb-3">
+                                        <input type="checkbox" class="form-check-input" id="mtbg_fd_newsletter" t-att-checked="state.popup.newsletter"
+                                               t-on-change="(ev) => this.setPopup('newsletter', ev.target.checked)"/>
+                                        <label class="form-check-label" for="mtbg_fd_newsletter">Sending it signs up for the newsletter
+                                            <span class="d-block small text-muted">The person is subscribed and tagged Newsletter (a popup
+                                                that does this also opens from "Subscribe to our Newsletter").</span></label>
+                                    </div>
+                                    <t t-if="state.popup.on">
+                                        <button type="button" class="btn btn-sm btn-primary mb-3" t-on-click="previewPopup">
+                                            <i class="fa fa-eye me-1"/>Preview the popup</button>
+                                        <h5 class="mb-2">Look</h5>
+                                        <div class="btn-group btn-group-sm mb-2" role="group" aria-label="Popup look">
+                                            <button type="button" t-att-class="'btn ' + (ps.look === 'full' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                                    t-on-click="() => this.setPopupSetting('look', 'full')">Full photo</button>
+                                            <button type="button" t-att-class="'btn ' + (ps.look !== 'full' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                                    t-on-click="() => this.setPopupSetting('look', 'beside')">Photo beside</button>
+                                        </div>
+                                        <div class="form-text mt-0 mb-2">Full photo: the form over the picture (as the newsletter popup);
+                                            Photo beside: the picture next to the form (as the contact popup).</div>
+                                        <label class="form-label small mb-1">Background pictures</label>
+                                        <div class="d-flex flex-wrap gap-2 mb-1">
+                                            <div t-foreach="ps.images or []" t-as="img" t-key="img_index" class="mtbg_fd_popup_img">
+                                                <img t-att-src="img" alt=""/>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button type="button" class="btn btn-light px-1" title="Earlier" t-att-disabled="img_first"
+                                                            t-on-click="() => this.movePopupImage(img_index, -1)"><i class="fa fa-arrow-left"/></button>
+                                                    <button type="button" class="btn btn-light px-1" title="Later" t-att-disabled="img_last"
+                                                            t-on-click="() => this.movePopupImage(img_index, 1)"><i class="fa fa-arrow-right"/></button>
+                                                    <button type="button" class="btn btn-light px-1 text-danger" title="Remove"
+                                                            t-on-click="() => this.removePopupImage(img_index)"><i class="fa fa-times"/></button>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-sm btn-outline-primary align-self-center" t-on-click="() => this.pickPopupFile('image')">
+                                                <i class="fa fa-upload me-1"/>Add a picture</button>
+                                        </div>
+                                        <div t-if="!(ps.images or []).length" class="form-text mt-0 mb-2">None: the contact popup's pictures.</div>
+                                        <div class="form-check form-switch mb-2">
+                                            <input type="checkbox" class="form-check-input" id="mtbg_fd_rotate" t-att-checked="ps.rotate !== false"
+                                                   t-on-change="(ev) => this.setPopupSetting('rotate', ev.target.checked)"/>
+                                            <label class="form-check-label small" for="mtbg_fd_rotate">Rotate the pictures (a different one each
+                                                time it opens; off: always the first)</label>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <label class="small mb-0">Opens with</label>
+                                            <select class="form-select form-select-sm w-auto" aria-label="Animation"
+                                                    t-on-change="(ev) => this.setPopupSetting('animation', ev.target.value)">
+                                                <t t-foreach="[['fly', 'Fly up'], ['fade', 'Fade in'], ['zoom', 'Zoom in'], ['slide', 'Slide down'], ['none', 'No animation']]" t-as="an" t-key="an[0]">
+                                                    <option t-att-value="an[0]" t-att-selected="(ps.animation || 'fly') === an[0]" t-esc="an[1]"/>
+                                                </t>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <label class="small mb-0">Page dimming</label>
+                                            <input type="range" class="form-range mtbg_fd_text_size" min="0" max="95" step="5"
+                                                   t-att-value="popupBackdrop" t-on-input="(ev) => this.setPopupSetting('backdrop', ev.target.valueAsNumber)"/>
+                                            <span class="small text-muted" t-esc="popupBackdrop + ' %'"/>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <label class="small mb-0">Space between fields</label>
+                                            <input type="range" class="form-range mtbg_fd_text_size" min="0" max="2" step="0.1"
+                                                   t-att-value="popupGap === '' ? 0.6 : popupGap" t-on-input="(ev) => this.setPopupGap(ev.target.valueAsNumber)"/>
+                                            <span class="small text-muted"><t t-if="popupGap !== ''" t-esc="popupGap + ' rem'"/><t t-else="">0.6 rem</t></span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 mb-3">
+                                            <label class="small mb-0">Photo overlay</label>
+                                            <input type="range" class="form-range mtbg_fd_text_size" min="0" max="90" step="5"
+                                                   t-att-value="ps.overlay || 0" t-on-input="(ev) => this.setPopupSetting('overlay', ev.target.valueAsNumber)"/>
+                                            <span class="small text-muted" t-esc="(ps.overlay || 0) + ' %'"/>
+                                        </div>
+                                        <label class="form-label small mb-1">Logo</label>
+                                        <div class="d-flex align-items-center gap-2 mb-3">
+                                            <div class="mtbg_fd_logo"><img t-if="ps.logo" t-att-src="ps.logo" alt="Logo"/>
+                                                <span t-else="" class="small text-muted">No logo</span></div>
+                                            <button type="button" class="btn btn-sm btn-outline-primary" t-on-click="() => this.pickPopupFile('logo')">
+                                                <i class="fa fa-upload me-1"/>Upload</button>
+                                            <button t-if="ps.logo" type="button" class="btn btn-sm btn-link text-danger p-0"
+                                                    t-on-click="() => this.setPopupSetting('logo', '')">Remove</button>
+                                        </div>
+                                        <input type="file" class="d-none" accept="image/png,image/jpeg,image/svg+xml,image/webp" t-ref="popupInput"
+                                               t-on-change="onPopupFileChosen"/>
+                                        <div class="form-check form-switch mb-1">
+                                            <input type="checkbox" class="form-check-input" id="mtbg_fd_bar" t-att-checked="ps.bar"
+                                                   t-on-change="(ev) => this.setPopupSetting('bar', ev.target.checked)"/>
+                                            <label class="form-check-label small" for="mtbg_fd_bar">The dark bar at the bottom</label>
+                                        </div>
+                                        <t t-if="ps.bar">
+                                            <input type="text" class="form-control form-control-sm mb-1" t-att-value="text(null, 'popup_bar_text', state.texts)"
+                                                   placeholder="e.g. Get 10% off your next tour — offer valid for subscribers only."
+                                                   t-on-input="(ev) => this.setText(null, 'popup_bar_text', ev.target.value, state.texts)"/>
+                                            <div class="d-flex align-items-center gap-2 mb-3 small">
+                                                <span>Bar</span>
+                                                <input type="color" class="form-control form-control-color form-control-sm"
+                                                       t-att-value="ps.bar_color or '#111111'" t-on-input="(ev) => this.setPopupSetting('bar_color', ev.target.value)"/>
+                                                <span>Text</span>
+                                                <input type="color" class="form-control form-control-color form-control-sm"
+                                                       t-att-value="ps.bar_text_color or '#ffffff'" t-on-input="(ev) => this.setPopupSetting('bar_text_color', ev.target.value)"/>
+                                            </div>
+                                        </t>
+                                        <h5 class="mb-2">Pages</h5>
+                                        <div class="btn-group btn-group-sm mb-2" role="group" aria-label="Pages">
+                                            <button type="button" t-att-class="'btn ' + (ps.pages !== 'only' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                                    t-on-click="() => this.setPopupSetting('pages', 'all')">All pages</button>
+                                            <button type="button" t-att-class="'btn ' + (ps.pages === 'only' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                                    t-on-click="() => this.setPopupSetting('pages', 'only')">Only these pages</button>
+                                        </div>
+                                        <t t-foreach="ps.pages === 'only' ? ['include', 'exclude'] : ['exclude']" t-as="which" t-key="which">
+                                            <div class="mb-2">
+                                                <div class="small fw-bold mb-1"><t t-if="which === 'include'">Opens on</t><t t-else="">Never on</t></div>
+                                                <div class="d-flex flex-wrap gap-3 mb-1">
+                                                    <div t-foreach="state.data.popup_page_kinds" t-as="k" t-key="k.key" class="form-check mb-0">
+                                                        <input type="checkbox" class="form-check-input" t-att-id="'mtbg_fd_' + which + '_' + k.key"
+                                                               t-att-checked="popupRule(which).kinds.includes(k.key)"
+                                                               t-on-change="() => this.togglePopupKind(which, k.key)"/>
+                                                        <label class="form-check-label small" t-att-for="'mtbg_fd_' + which + '_' + k.key" t-esc="k.label"/>
+                                                    </div>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" t-att-value="popupRule(which).words.join(', ')"
+                                                       placeholder="and pages whose address contains (comma separated), e.g. antigua, enduro"
+                                                       t-on-change="(ev) => this.setPopupWords(which, ev.target.value)"/>
+                                            </div>
+                                        </t>
+                                    </t>
+                                    <h5 class="mb-1 mt-3">All popups</h5>
+                                    <div class="form-text mt-0 mb-2">On a page, only the first popup in this order that takes the page opens.</div>
+                                    <div t-foreach="state.data.popups" t-as="p" t-key="p.id" class="d-flex align-items-center gap-2 mb-1 small">
+                                        <span class="badge text-bg-light" t-esc="p_index + 1"/>
+                                        <span class="flex-grow-1" t-att-class="{'fw-bold': p.id === form.id}" t-esc="p.name"/>
+                                        <span class="text-muted"><t t-if="p.pages === 'only'">some pages</t><t t-else="">all pages</t></span>
+                                        <button type="button" class="btn btn-sm btn-light px-1" title="Earlier" t-att-disabled="p_first"
+                                                t-on-click="() => this.movePopup(p_index, -1)"><i class="fa fa-arrow-up"/></button>
+                                        <button type="button" class="btn btn-sm btn-light px-1" title="Later" t-att-disabled="p_last"
+                                                t-on-click="() => this.movePopup(p_index, 1)"><i class="fa fa-arrow-down"/></button>
+                                    </div>
+                                    <div t-if="!state.data.popups.length" class="small text-muted">No form is a popup yet.</div>
+                                </t>
+
+                                <!-- messages -->
+                                <t t-if="state.tab === 'messages'">
+                                    <div class="form-check form-switch mb-3" title="The steps one at a time: their progress on top, Back / Next under the form">
+                                        <input type="checkbox" class="form-check-input" id="mtbg_fd_steps" t-att-checked="state.stepByStep"
+                                               t-on-change="(ev) => this.setStepByStep(ev.target.checked)"/>
+                                        <label class="form-check-label" for="mtbg_fd_steps">One step at a time
+                                            <span class="d-block small text-muted">Customers see the steps' progress on top and Back / Next
+                                                under the form (off: every step on one page). The full preview always shows it step by step.</span></label>
+                                    </div>
+                                    <t t-if="form.has_header">
+                                        <h5 class="mb-2">Header</h5>
+                                        <label class="form-label small mb-0">Title</label>
+                                        <input type="text" class="form-control form-control-sm mb-2" t-att-value="text(null, 'header_title', state.texts)"
+                                               t-att-placeholder="placeholderOf(null, 'header_title', state.texts) || text(null, 'name', state.texts) || state.texts.name[mainLang]"
+                                               t-on-input="(ev) => this.setText(null, 'header_title', ev.target.value, state.texts)"/>
+                                        <!-- the title's look: its level (the theme's fonts), size, colour, bold, uppercase, alignment -->
+                                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2 mtbg_fd_text">
+                                            <div class="btn-group btn-group-sm" role="group" aria-label="Title level"
+                                                 title="The title's font comes from the website theme">
+                                                <button type="button" t-att-class="'btn ' + (!state.headerLook.level ? 'btn-secondary' : 'btn-outline-secondary')"
+                                                        t-on-click="() => this.setHeaderLook('level', '')" title="As before (H1)">H1</button>
+                                                <t t-foreach="['h2', 'h3', 'h4', 'h5']" t-as="lvl" t-key="lvl">
+                                                    <button type="button" t-att-class="'btn ' + (state.headerLook.level === lvl ? 'btn-secondary' : 'btn-outline-secondary')"
+                                                            t-on-click="() => this.setHeaderLook('level', lvl)" t-esc="lvl.toUpperCase()"/>
+                                                </t>
+                                            </div>
+                                            <t t-call="mtbg_tours_forms.FormDesignerTitleLook">
+                                                <t t-set="look" t-value="state.headerLook"/>
+                                                <t t-set="color" t-value="headerColor"/>
+                                                <t t-set="set" t-value="(key, value) => this.setHeaderLook(key, value)"/>
+                                            </t>
+                                        </div>
+                                        <label class="form-label small mb-0">Subtitle</label>
+                                        <input type="text" class="form-control form-control-sm mb-2" t-att-value="text(null, 'header_subtitle', state.texts)"
+                                               t-att-placeholder="placeholderOf(null, 'header_subtitle', state.texts) || 'Help us dial in your experience.'"
+                                               t-on-input="(ev) => this.setText(null, 'header_subtitle', ev.target.value, state.texts)"/>
+                                        <!-- the subtitle's style: bold, uppercase, alignment -->
+                                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2 mtbg_fd_text">
+                                            <t t-call="mtbg_tours_forms.FormDesignerTitleStyle">
+                                                <t t-set="bold" t-value="state.headerLook.sub_bold"/>
+                                                <t t-set="upper" t-value="state.headerLook.sub_upper"/>
+                                                <t t-set="align" t-value="state.headerLook.sub_align"/>
+                                                <t t-set="set" t-value="(key, value) => this.setHeaderLook('sub_' + key, value)"/>
+                                            </t>
+                                        </div>
+                                        <t t-if="form.handler === 'pretour'">
+                                            <label class="form-label small mb-0">Tour name and date (under the subtitle)</label>
+                                            <div class="d-flex flex-wrap align-items-center gap-2 mb-2 mtbg_fd_text">
+                                                <t t-call="mtbg_tours_forms.FormDesignerTitleStyle">
+                                                    <t t-set="bold" t-value="state.headerLook.tour_bold"/>
+                                                    <t t-set="upper" t-value="state.headerLook.tour_upper"/>
+                                                    <t t-set="align" t-value="state.headerLook.tour_align"/>
+                                                    <t t-set="set" t-value="(key, value) => this.setHeaderLook('tour_' + key, value)"/>
+                                                </t>
+                                            </div>
+                                        </t>
+                                        <label class="form-label small mb-1">Logo</label>
+                                        <div class="d-flex align-items-center gap-3 mb-1">
+                                            <div class="mtbg_fd_logo">
+                                                <img t-if="logoSrc" t-att-src="logoSrc" alt="Logo"/>
+                                                <span t-else="" class="small text-muted">The website's logo</span>
+                                            </div>
+                                            <div class="d-flex flex-column gap-1">
+                                                <button type="button" class="btn btn-sm btn-outline-primary" t-on-click="pickLogo">
+                                                    <i class="fa fa-upload me-1"/><t t-if="logoSrc">Replace</t><t t-else="">Upload a logo</t></button>
+                                                <button t-if="logoSrc" type="button" class="btn btn-sm btn-link text-danger p-0 text-start" t-on-click="removeLogo">
+                                                    <i class="fa fa-times me-1"/>Use the website's logo</button>
+                                            </div>
+                                            <input type="file" class="d-none" accept="image/png,image/jpeg,image/svg+xml,image/webp" t-ref="logoInput"
+                                                   t-on-change="onLogoChosen"/>
+                                        </div>
+                                        <div class="form-text mt-0 mb-4">PNG, SVG or JPEG; dark on the light page (a transparent background suits it best).</div>
+                                        <h5 class="mb-2">After sending</h5>
+                                    </t>
+                                    <label class="form-label small mb-0">Thank-you title</label>
+                                    <input type="text" class="form-control form-control-sm" t-att-value="text(null, 'thanks_title', state.texts)"
+                                           t-att-placeholder="placeholderOf(null, 'thanks_title', state.texts)"
+                                           t-on-input="(ev) => this.setText(null, 'thanks_title', ev.target.value, state.texts)"/>
+                                    <div class="form-text mt-0 mb-3">{name} is ", Ana" when we know the visitor's first name.</div>
+                                    <label class="form-label small mb-0">Thank-you text</label>
+                                    <textarea class="form-control form-control-sm" rows="2" t-att-value="text(null, 'thanks_text', state.texts)"
+                                              t-att-placeholder="placeholderOf(null, 'thanks_text', state.texts)"
+                                              t-on-input="(ev) => this.setText(null, 'thanks_text', ev.target.value, state.texts)"/>
+                                    <!-- the form type's own texts (a pre-tour form's sharing messages...) -->
+                                    <t t-foreach="form.extra_texts or []" t-as="extra" t-key="extra.name">
+                                        <h5 t-if="extra.section" class="mt-4 mb-2" t-esc="extra.section"/>
+                                        <label class="form-label small mb-0 mt-2" t-esc="extra.label"/>
+                                        <textarea t-if="extra.rows &gt; 1" class="form-control form-control-sm" t-att-rows="extra.rows"
+                                                  t-att-value="text(null, extra.name, state.texts)"
+                                                  t-att-placeholder="placeholderOf(null, extra.name, state.texts) || extra.placeholder || ''"
+                                                  t-on-input="(ev) => this.setText(null, extra.name, ev.target.value, state.texts)"/>
+                                        <input t-else="" type="text" class="form-control form-control-sm" t-att-value="text(null, extra.name, state.texts)"
+                                               t-att-placeholder="placeholderOf(null, extra.name, state.texts) || extra.placeholder || ''"
+                                               t-on-input="(ev) => this.setText(null, extra.name, ev.target.value, state.texts)"/>
+                                        <div t-if="extra.help" class="form-text mt-0" t-esc="extra.help"/>
+                                    </t>
+                                </t>
+                            </div>
+                        </div>
+
+                        <!-- live preview -->
+                        <div class="mtbg_fd_preview d-flex flex-column">
+                            <div class="px-3 pt-2 pb-1 d-flex flex-wrap align-items-center gap-2">
+                                <strong class="me-auto"><i class="fa fa-eye me-1"/>Preview</strong>
+                                <select t-if="state.data.langs.length > 1" class="form-select form-select-sm w-auto mtbg_fd_lang" aria-label="Language"
+                                        title="The preview's language, and the language of the texts you edit"
+                                        t-on-change="(ev) => this.setLang(ev.target.value)">
+                                    <t t-foreach="state.data.langs" t-as="lang" t-key="lang.code">
+                                        <option t-att-value="lang.code" t-att-selected="lang.code === state.lang" t-esc="lang.name"/>
+                                    </t>
+                                </select>
+                                <div t-if="state.data.currencies.length > 1" class="btn-group btn-group-sm" role="group" aria-label="Currency">
+                                    <t t-foreach="state.data.currencies" t-as="cur" t-key="cur.key">
+                                        <button type="button" t-att-class="'btn ' + (state.currency === cur.key ? 'btn-secondary' : 'btn-outline-secondary')"
+                                                t-on-click="() => this.setPreviewLook('currency', cur.key)" t-esc="cur.code"/>
+                                    </t>
+                                </div>
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Page look">
+                                    <button type="button" title="Light page" t-att-class="'btn ' + (!state.dark ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.setPreviewLook('dark', false)"><i class="fa fa-sun-o"/></button>
+                                    <button type="button" title="Dark page" t-att-class="'btn ' + (state.dark ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.setPreviewLook('dark', true)"><i class="fa fa-moon-o"/></button>
+                                </div>
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Device">
+                                    <button type="button" class="btn" title="Desktop" t-att-class="state.device === 'desktop' ? 'btn-secondary' : 'btn-outline-secondary'"
+                                            t-on-click="() => this.setDevice('desktop')"><i class="fa fa-desktop"/></button>
+                                    <button type="button" class="btn" title="Phone" t-att-class="state.device === 'mobile' ? 'btn-secondary' : 'btn-outline-secondary'"
+                                            t-on-click="() => this.setDevice('mobile')"><i class="fa fa-mobile"/></button>
+                                </div>
+                                <button class="btn btn-sm btn-light" title="Reload" t-on-click="reloadPreview"><i class="fa fa-refresh"/></button>
+                                <button class="btn btn-sm btn-primary mtbg_fd_walkbtn" title="The form step by step, a sample answer in every field"
+                                        t-on-click="openWalk"><i class="fa fa-play me-1"/>Full preview</button>
+                            </div>
+                            <div class="px-3 pb-2 border-bottom d-flex flex-wrap align-items-center gap-2">
+                                <div t-if="variants.length > 1" class="btn-group btn-group-sm" role="group" aria-label="Variant">
+                                    <t t-foreach="variants" t-as="v" t-key="v.key">
+                                        <button type="button" t-att-class="'btn ' + (state.variant === v.key ? 'btn-secondary' : 'btn-outline-secondary')"
+                                                t-on-click="() => this.setVariant(v.key)" t-esc="v.label"/>
+                                    </t>
+                                </div>
+                                <div t-if="form.variants.length > 1 or form.handler === 'contact'" class="form-check form-switch mb-0 small" title="As a visitor we already know (their details are kept)">
+                                    <input type="checkbox" class="form-check-input" id="mtbg_fd_known" t-att-checked="state.known"
+                                           t-on-change="(ev) => this.setKnown(ev.target.checked)"/>
+                                    <label class="form-check-label" for="mtbg_fd_known">Known visitor</label>
+                                </div>
+                                <div t-if="previewFactSubjects.length" class="dropdown">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                                            title="See the form as a visitor these hold for">Preview as</button>
+                                    <div class="dropdown-menu dropdown-menu-end p-2 mtbg_fd_facts">
+                                        <t t-foreach="previewFactSubjects" t-as="subject" t-key="subject.key">
+                                            <div class="form-check form-switch mb-1">
+                                                <input type="checkbox" class="form-check-input" t-att-id="'mtbg_fd_fact_' + subject.key"
+                                                       t-att-checked="state.facts[subject.key]" t-on-change="(ev) => this.setFact(subject.key, ev.target.checked)"/>
+                                                <label class="form-check-label small text-nowrap" t-att-for="'mtbg_fd_fact_' + subject.key" t-esc="subject.label"/>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="form-check form-switch mb-0 small" title="The blocks their rules hide now, shown faded (click one to edit it)">
+                                    <input type="checkbox" class="form-check-input" id="mtbg_fd_all" t-att-checked="state.showAll"
+                                           t-on-change="(ev) => this.setShowAll(ev.target.checked)"/>
+                                    <label class="form-check-label" for="mtbg_fd_all">Show every block</label>
+                                </div>
+                            </div>
+                            <div t-if="state.dirty" class="alert alert-warning rounded-0 mb-0 py-1 px-3 small">
+                                <i class="fa fa-bolt me-1"/>Live: the preview shows your unsaved changes (only you see them).
+                                Rules react as you type in it; click a block there to edit it.
+                            </div>
+                            <div t-attf-class="mtbg_fd_stage flex-grow-1 mtbg_fd_{{state.device}}" t-ref="stage">
+                                <iframe t-att-key="state.frameKey" t-att-src="previewUrl" t-ref="frame" class="mtbg_fd_frame"
+                                        t-att-style="frameStyle" title="Form preview" t-on-load="onFrameLoad"/>
+                            </div>
+                        </div>
+
+                        <!-- full preview: the form step by step, a sample answer in every field -->
+                        <div t-if="state.walk" class="mtbg_fd_walk" role="dialog" aria-modal="true" aria-label="Full preview"
+                             tabindex="-1" t-on-keydown="onWalkKey">
+                            <div class="mtbg_fd_walk_bar d-flex flex-wrap align-items-center gap-2 px-3 py-2">
+                                <strong><i class="fa fa-play-circle me-1"/>Full preview</strong>
+                                <span class="small text-muted me-auto">As a customer goes through it, step by step, with a
+                                    sample answer in every field; nothing is sent.</span>
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Device">
+                                    <button type="button" class="btn" title="Desktop" t-att-class="state.walk.device === 'desktop' ? 'btn-secondary' : 'btn-outline-secondary'"
+                                            t-on-click="() => this.setWalkDevice('desktop')"><i class="fa fa-desktop"/></button>
+                                    <button type="button" class="btn" title="Phone" t-att-class="state.walk.device === 'mobile' ? 'btn-secondary' : 'btn-outline-secondary'"
+                                            t-on-click="() => this.setWalkDevice('mobile')"><i class="fa fa-mobile"/></button>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-light mtbg_fd_walk_close" title="Close (Esc)" t-on-click="closeWalk"><i class="fa fa-times"/></button>
+                            </div>
+                            <div t-attf-class="mtbg_fd_walk_stage mtbg_fd_walk_{{state.walk.device}}">
+                                <iframe t-att-src="walkUrl" t-ref="walkFrame" class="mtbg_fd_walk_frame" title="Full preview"
+                                        t-on-load="onWalkLoad"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+
+    <!-- "+" between two blocks, and the palette it opens (at: the new block's place) -->
+    <t t-name="mtbg_tours_forms.FormDesignerAdd">
+        <div t-attf-class="mtbg_fd_add {{state.adding === at ? 'is-open' : ''}}">
+            <button type="button" class="mtbg_fd_addbtn" title="Add a block here" t-on-click="() => this.openAdd(at)">
+                <i class="fa fa-plus"/>
+            </button>
+            <div t-if="state.adding === at" class="mtbg_fd_palette">
+                <t t-foreach="addGroups" t-as="group" t-key="group.label">
+                    <div class="mtbg_fd_palette_group" t-esc="group.label"/>
+                    <div class="mtbg_fd_palette_items">
+                        <t t-foreach="group.kinds" t-as="kind" t-key="kind.key">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" t-on-click="() => this.addBlock(kind.key, at)">
+                                <i t-attf-class="fa {{kindIcon(kind.key)}} me-1"/><t t-esc="kind.label"/>
+                            </button>
+                        </t>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+
+    <!-- a block: grip, icon, title, badges, eye; opens for its texts, width, name and rules -->
+    <t t-name="mtbg_tours_forms.FormDesignerRow">
+        <t t-set="field" t-value="isField(block)"/>
+        <div t-attf-class="mtbg_fd_row mtbg_fd_row_{{block.kind}} {{row.inStep ? 'is-in-step' : ''}} {{block.active ? '' : 'is-off'}} {{state.dragging === block.uid ? 'is-dragging' : ''}} {{state.open === block.uid ? 'is-open' : ''}}"
+             t-att-draggable="state.armed === block.uid ? 'true' : 'false'"
+             t-on-dragstart="(ev) => this.onDragStart(ev, block)" t-on-dragover="(ev) => this.onDragOver(ev, block)"
+             t-on-drop.prevent="onDragEnd" t-on-dragend="onDragEnd">
+            <div class="mtbg_fd_row_head" t-on-click.self="() => this.toggleOpen(block)">
+                <i class="fa fa-arrows-v mtbg_fd_grip" tabindex="0" role="button" title="Drag to move (or arrow keys)"
+                   t-on-mousedown="() => this.arm(block)" t-on-mouseup="disarm" t-on-touchstart="() => this.arm(block)"
+                   t-on-keydown="(ev) => this.onGripKey(ev, block)"/>
+                <span t-if="block.kind === 'step'" class="mtbg_fd_stepnum" t-esc="row.number"/>
+                <i t-else="" t-attf-class="fa {{icon(block)}} mtbg_fd_kind" t-att-title="kindOf(block.kind).label"/>
+                <span class="mtbg_fd_title" t-on-click="() => this.toggleOpen(block)">
+                    <t t-esc="title(block)"/>
+                    <span t-if="field and block.width === 'half'" class="badge text-bg-light ms-1">½</span>
+                    <t t-foreach="ruleBadge(block)" t-as="badge" t-key="badge_index">
+                        <span class="badge mtbg_fd_rulebadge ms-1" t-esc="badge"/>
+                    </t>
+                    <span t-if="block.system" class="badge text-bg-light ms-1" title="The form's own block: it can move, not be deleted">form</span>
+                </span>
+                <button t-if="!alwaysOn(block)" type="button" class="btn btn-sm btn-link px-1"
+                        t-att-title="block.active ? 'Hide' : 'Show'" t-on-click="() => this.toggleActive(block)">
+                    <i t-attf-class="fa {{block.active ? 'fa-eye' : 'fa-eye-slash'}}"/>
+                </button>
+                <button type="button" class="btn btn-sm btn-link px-1" title="Settings" t-on-click="() => this.toggleOpen(block)">
+                    <i t-attf-class="fa {{state.open === block.uid ? 'fa-chevron-up' : 'fa-chevron-down'}}"/>
+                </button>
+            </div>
+
+            <div t-if="state.open === block.uid" class="mtbg_fd_more">
+                <!-- texts -->
+                <div t-if="kindOf(block.kind).system and !['known', 'texting', 'submit'].includes(block.kind)" class="small text-muted mb-2">
+                    One of the form's own sections: its fields are the form's (they are saved on the rider). Move it,
+                    hide it or give it a rule<t t-if="lookSchema(block)">, and set its look below</t>; add your own
+                    questions around it with "+".</div>
+                <t t-if="!['known', 'texting', 'html'].includes(block.kind) and !(kindOf(block.kind).system and block.kind !== 'submit')">
+                    <label class="form-label small mb-0" t-esc="block.kind === 'submit' ? 'Button' : (block.kind === 'step' or block.kind === 'heading') ? 'Title' : 'Label'"/>
+                    <input type="text" class="form-control form-control-sm mb-2" t-att-value="text(block, 'label')"
+                           t-att-placeholder="placeholderOf(block, 'label')" t-on-input="(ev) => this.setText(block, 'label', ev.target.value)"/>
+                </t>
+                <t t-if="field and !['checkbox', 'radio', 'checkboxes'].includes(block.kind)">
+                    <label class="form-label small mb-0">Placeholder (in the empty field)</label>
+                    <input type="text" class="form-control form-control-sm mb-2" t-att-value="text(block, 'placeholder')"
+                           t-att-placeholder="placeholderOf(block, 'placeholder')" t-on-input="(ev) => this.setText(block, 'placeholder', ev.target.value)"/>
+                </t>
+                <t t-if="field or block.kind === 'step' or block.kind === 'heading'">
+                    <label class="form-label small mb-0" t-esc="field ? 'Help (under the field)' : 'Subtitle'"/>
+                    <input type="text" class="form-control form-control-sm mb-2" t-att-value="text(block, 'help')"
+                           t-att-placeholder="placeholderOf(block, 'help')" t-on-input="(ev) => this.setText(block, 'help', ev.target.value)"/>
+                </t>
+                <t t-if="block.kind === 'html'">
+                    <label class="form-label small mb-0">Text (HTML: &lt;p&gt;, &lt;b&gt;, &lt;a href&gt;…)</label>
+                    <textarea class="form-control form-control-sm mb-2 font-monospace" rows="4" t-att-value="text(block, 'content')"
+                              t-att-placeholder="placeholderOf(block, 'content')" t-on-input="(ev) => this.setText(block, 'content', ev.target.value)"/>
+                </t>
+                <t t-if="['select', 'radio', 'checkboxes'].includes(block.kind)">
+                    <label class="form-label small mb-0">Choices, one per line</label>
+                    <textarea class="form-control form-control-sm mb-2" rows="4" t-att-value="text(block, 'choices')"
+                              t-att-placeholder="placeholderOf(block, 'choices')" t-on-input="(ev) => this.setText(block, 'choices', ev.target.value)"/>
+                </t>
+                <!-- the block's own look (its settings, e.g. the Fitness / Technical cards) -->
+                <t t-set="look_schema" t-value="lookSchema(block)"/>
+                <div t-if="look_schema" class="mtbg_fd_look border rounded p-2 mb-2">
+                    <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                        <strong class="small me-auto" t-esc="look_schema.title"/>
+                        <button t-if="look_schema.parts.length &gt; 1" type="button" class="btn btn-sm mtbg_fd_look_link"
+                                t-att-class="isLinked(block) ? 'btn-primary' : 'btn-outline-secondary'"
+                                t-att-title="isLinked(block) ? 'Linked: changes apply to both. Click to set each on its own.' : 'Each has its own look. Click to link them (this look goes to the other).'"
+                                t-on-click="() => this.toggleLinked(block)">
+                            <i t-attf-class="fa {{isLinked(block) ? 'fa-link' : 'fa-chain-broken'}} me-1"/>
+                            <t t-if="isLinked(block)">Linked</t><t t-else="">Not linked</t>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-link p-0" title="Back to the look of the tour pages (Tour Stats)"
+                                t-on-click="() => this.resetLook(block)">Reset</button>
+                    </div>
+                    <div t-if="look_schema.parts.length &gt; 1 and !isLinked(block)" class="btn-group btn-group-sm mb-2" role="group">
+                        <t t-foreach="look_schema.parts" t-as="part" t-key="part.key">
+                            <button type="button" t-att-class="'btn ' + (lookPart(block) === part.key ? 'btn-secondary' : 'btn-outline-secondary')"
+                                    t-on-click="() => this.setLookPart(block, part.key)" t-esc="part.label"/>
+                        </t>
+                    </div>
+                    <t t-foreach="look_schema.fields" t-as="f" t-key="f.key">
+                        <div class="d-flex align-items-center gap-2 mb-1 mtbg_fd_look_row">
+                            <label class="small mb-0 mtbg_fd_look_label" t-esc="f.label"/>
+                            <div t-if="f.type === 'bool'" class="form-check form-switch mb-0">
+                                <input type="checkbox" class="form-check-input" t-att-checked="lookValue(block, f)"
+                                       t-on-change="(ev) => this.setLook(block, f, ev.target.checked)"/>
+                            </div>
+                            <div t-elif="f.type === 'select'" class="btn-group btn-group-sm" role="group">
+                                <t t-foreach="f.options" t-as="o" t-key="o.key">
+                                    <button type="button" t-att-class="'btn ' + (lookValue(block, f) === o.key ? 'btn-secondary' : 'btn-outline-secondary')"
+                                            t-on-click="() => this.setLook(block, f, o.key)" t-esc="o.label"/>
+                                </t>
+                            </div>
+                            <t t-elif="f.type === 'range'">
+                                <input type="range" class="form-range flex-grow-1" t-att-min="f.min" t-att-max="f.max" t-att-step="f.step or 1"
+                                       t-att-value="lookValue(block, f)" t-on-input="(ev) => this.setLook(block, f, ev.target.valueAsNumber)"/>
+                                <span class="small text-muted mtbg_fd_look_num"><t t-esc="lookValue(block, f)"/><t t-esc="f.unit or ''"/></span>
+                            </t>
+                            <t t-elif="f.type === 'color'">
+                                <input type="color" class="form-control form-control-color form-control-sm"
+                                       t-att-value="lookValue(block, f) or '#404040'" t-on-input="(ev) => this.setLook(block, f, ev.target.value)"/>
+                                <button t-if="lookValue(block, f)" type="button" class="btn btn-sm btn-link p-0" title="The theme's colour"
+                                        t-on-click="() => this.setLook(block, f, '')">×</button>
+                                <span t-else="" class="small text-muted">theme's</span>
+                            </t>
+                        </div>
+                    </t>
+                </div>
+                <!-- the block's text: a heading's level (the theme's fonts), else its size; its colour per page look -->
+                <div t-if="hasTextLook(block)" class="d-flex flex-wrap align-items-center gap-2 mb-2 mtbg_fd_text">
+                    <t t-if="block.kind === 'heading'">
+                        <label class="small mb-0">Heading</label>
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Heading level"
+                             title="The heading's font and size come from the website theme">
+                            <t t-foreach="['h3', 'h4', 'h5']" t-as="lvl" t-key="lvl">
+                                <button type="button" t-att-class="'btn ' + ((block.heading_level || 'h3') === lvl ? 'btn-secondary' : 'btn-outline-secondary')"
+                                        t-on-click="() => this.setField(block, 'heading_level', lvl)" t-esc="lvl.toUpperCase()"/>
+                            </t>
+                        </div>
+                        <label class="small mb-0 ms-2">Line spacing</label>
+                        <input type="range" class="form-range mtbg_fd_text_size" min="80" max="200" step="5"
+                               t-att-value="block.line_height || 120" t-on-input="(ev) => this.setField(block, 'line_height', ev.target.valueAsNumber)"/>
+                        <span class="small text-muted"><t t-if="block.line_height" t-esc="(block.line_height / 100) + '×'"/><t t-else="">the theme's</t></span>
+                        <button t-if="block.line_height" type="button" class="btn btn-sm btn-link p-0" title="The theme's"
+                                t-on-click="() => this.setField(block, 'line_height', 0)">×</button>
+                    </t>
+                    <label class="small mb-0 ms-2" t-att-title="state.dark ? 'On dark pages (the preview is on dark)' : 'On light pages (the preview is on light)'">
+                        Colour <i t-attf-class="fa {{state.dark ? 'fa-moon-o' : 'fa-sun-o'}}"/></label>
+                    <input type="color" class="form-control form-control-color form-control-sm"
+                           t-att-value="blockColor(block) or '#404040'" t-on-input="(ev) => this.setBlockColor(block, ev.target.value)"/>
+                    <button t-if="blockColor(block)" type="button" class="btn btn-sm btn-link p-0" title="The form's colour"
+                            t-on-click="() => this.setBlockColor(block, '')">×</button>
+                    <span t-else="" class="small text-muted">the form's</span>
+                </div>
+                <!-- a step's title: bold, uppercase, alignment -->
+                <div t-if="block.kind === 'step'" class="d-flex flex-wrap align-items-center gap-2 mb-2 mtbg_fd_text">
+                    <t t-call="mtbg_tours_forms.FormDesignerTitleStyle">
+                        <t t-set="bold" t-value="block.text_bold"/>
+                        <t t-set="upper" t-value="block.text_upper"/>
+                        <t t-set="align" t-value="block.text_align"/>
+                        <t t-set="set" t-value="(key, value) => this.setStepStyle(block, key, value)"/>
+                    </t>
+                </div>
+                <div t-if="block.kind === 'known'" class="small text-muted mb-2">Greets a visitor we already know
+                    (masked phone / email) with a "Not you?" link; give the fields we know a rule "Hidden when a known
+                    visitor is true".</div>
+                <div t-if="block.kind === 'texting'" class="small text-muted mb-2">The SMS and WhatsApp opt-ins with
+                    their consent text (the wording the law needs).</div>
+
+                <div t-if="field" class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                    <label class="small mb-0">Width</label>
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Width">
+                        <button type="button" t-att-class="'btn ' + (block.width !== 'half' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                t-on-click="() => this.setField(block, 'width', 'full')">Full</button>
+                        <button type="button" t-att-class="'btn ' + (block.width === 'half' ? 'btn-secondary' : 'btn-outline-secondary')"
+                                t-on-click="() => this.setField(block, 'width', 'half')">Half</button>
+                    </div>
+                    <label class="small mb-0 ms-3">Name</label>
+                    <input type="text" class="form-control form-control-sm w-auto font-monospace" t-att-value="block.key"
+                           t-att-disabled="block.system" t-att-title="block.system ? 'The form uses this name' : 'Where the answer is kept'"
+                           t-on-change="(ev) => this.setKey(block, ev.target.value)"/>
+                </div>
+
+                <!-- rules -->
+                <t t-call="mtbg_tours_forms.FormDesignerRule">
+                    <t t-set="which" t-value="'show'"/>
+                    <t t-set="rule_title">Show</t>
+                    <t t-set="modes" t-value="state.data.show_modes"/>
+                </t>
+                <t t-if="field" t-call="mtbg_tours_forms.FormDesignerRule">
+                    <t t-set="which" t-value="'require'"/>
+                    <t t-set="rule_title">Answer</t>
+                    <t t-set="modes" t-value="state.data.require_modes"/>
+                </t>
+
+                <div class="d-flex mt-2">
+                    <span class="small text-muted me-auto" t-esc="kindOf(block.kind).label"/>
+                    <button t-if="!block.system" type="button" class="btn btn-sm btn-link text-danger p-0" t-on-click="() => this.remove(block)">
+                        <i class="fa fa-trash me-1"/>Delete</button>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- a rule: the mode (always / only when / except when...) and its conditions -->
+    <t t-name="mtbg_tours_forms.FormDesignerRule">
+        <t t-set="rule" t-value="block[which + '_rule']"/>
+        <t t-set="mode" t-value="block[which + '_mode']"/>
+        <div class="mtbg_fd_rule">
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <label class="small fw-bold mb-0 mtbg_fd_rule_title" t-esc="rule_title"/>
+                <select class="form-select form-select-sm w-auto" t-on-change="(ev) => this.setMode(block, which, ev.target.value)">
+                    <t t-foreach="modes" t-as="m" t-key="m.key">
+                        <option t-att-value="m.key" t-att-selected="mode === m.key" t-esc="m.label"/>
+                    </t>
+                </select>
+                <select t-if="['when', 'unless'].includes(mode) and rule.conditions.length > 1" class="form-select form-select-sm w-auto"
+                        t-on-change="(ev) => this.setField(rule, 'match', ev.target.value)">
+                    <option value="all" t-att-selected="rule.match !== 'any'">all of these hold</option>
+                    <option value="any" t-att-selected="rule.match === 'any'">any of these holds</option>
+                </select>
+            </div>
+            <t t-if="['when', 'unless'].includes(mode)">
+                <t t-foreach="rule.conditions" t-as="condition" t-key="condition_index">
+                    <div class="mtbg_fd_condition">
+                        <select class="form-select form-select-sm" t-on-change="(ev) => this.setCondition(block, condition, 'subject', ev.target.value)">
+                            <optgroup t-if="fieldSubjects(block).length" label="An answer">
+                                <t t-foreach="fieldSubjects(block)" t-as="s" t-key="s.key">
+                                    <option t-att-value="s.key" t-att-selected="condition.subject === s.key" t-esc="s.label"/>
+                                </t>
+                            </optgroup>
+                            <optgroup label="The visit">
+                                <t t-foreach="visitSubjects" t-as="s" t-key="s.key">
+                                    <option t-att-value="s.key" t-att-selected="condition.subject === s.key" t-esc="s.label"/>
+                                </t>
+                            </optgroup>
+                        </select>
+                        <select class="form-select form-select-sm" t-on-change="(ev) => this.setCondition(block, condition, 'op', ev.target.value)">
+                            <t t-foreach="opsFor(condition.subject, block)" t-as="op" t-key="op.key">
+                                <option t-att-value="op.key" t-att-selected="condition.op === op.key" t-esc="op.label"/>
+                            </t>
+                        </select>
+                        <t t-if="needsValue(condition.op)">
+                            <t t-set="choices" t-value="valueChoices(condition, block)"/>
+                            <select t-if="choices" class="form-select form-select-sm" t-on-change="(ev) => this.setCondition(block, condition, 'value', ev.target.value)">
+                                <t t-foreach="choices" t-as="c" t-key="c.key">
+                                    <option t-att-value="c.key" t-att-selected="condition.value === c.key" t-esc="c.label"/>
+                                </t>
+                            </select>
+                            <input t-else="" type="text" class="form-control form-control-sm" t-att-value="condition.value"
+                                   t-on-input="(ev) => this.setCondition(block, condition, 'value', ev.target.value)"/>
+                        </t>
+                        <button type="button" class="btn btn-sm btn-link text-danger px-1" title="Remove"
+                                t-on-click="() => this.removeCondition(block, which, condition)"><i class="fa fa-times"/></button>
+                    </div>
+                </t>
+                <button type="button" class="btn btn-sm btn-link px-0" t-on-click="() => this.addCondition(block, which)">
+                    <i class="fa fa-plus me-1"/>Add a condition</button>
+            </t>
+        </div>
+    </t>
+    <!-- a title's colour (the header's title) and its style -->
+    <t t-name="mtbg_tours_forms.FormDesignerTitleLook">
+        <label class="small mb-0 ms-2" t-att-title="state.dark ? 'On dark pages (the preview is on dark)' : 'On light pages (the preview is on light)'">
+            Colour <i t-attf-class="fa {{state.dark ? 'fa-moon-o' : 'fa-sun-o'}}"/></label>
+        <input type="color" class="form-control form-control-color form-control-sm"
+               t-att-value="color or '#404040'" t-on-input="(ev) => set('color', ev.target.value)"/>
+        <button t-if="color" type="button" class="btn btn-sm btn-link p-0" title="As before" t-on-click="() => set('color', '')">×</button>
+        <span t-else="" class="small text-muted">as before</span>
+        <t t-call="mtbg_tours_forms.FormDesignerTitleStyle">
+            <t t-set="bold" t-value="look.bold"/>
+            <t t-set="upper" t-value="look.upper"/>
+            <t t-set="align" t-value="look.align"/>
+        </t>
+    </t>
+
+    <!-- a title's style: bold, uppercase, alignment (empty: as before, the theme's) -->
+    <t t-name="mtbg_tours_forms.FormDesignerTitleStyle">
+        <div class="btn-group btn-group-sm" role="group" aria-label="Style">
+            <button type="button" t-att-class="'btn ' + (bold ? 'btn-secondary' : 'btn-outline-secondary')" title="Bold"
+                    t-on-click="() => set('bold', !bold)"><i class="fa fa-bold"/></button>
+            <button type="button" t-att-class="'btn ' + (upper ? 'btn-secondary' : 'btn-outline-secondary')" title="Uppercase"
+                    t-on-click="() => set('upper', !upper)">AA</button>
+        </div>
+        <div class="btn-group btn-group-sm" role="group" aria-label="Alignment">
+            <t t-foreach="[['left', 'fa-align-left'], ['center', 'fa-align-center'], ['right', 'fa-align-right']]" t-as="a" t-key="a[0]">
+                <button type="button" t-att-class="'btn ' + (align === a[0] ? 'btn-secondary' : 'btn-outline-secondary')"
+                        t-att-title="a[0] === align ? 'As before' : a[0]" t-on-click="() => set('align', align === a[0] ? '' : a[0])"><i t-attf-class="fa {{a[1]}}"/></button>
+            </t>
+        </div>
+    </t>
+</templates>

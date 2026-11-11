@@ -1,0 +1,220 @@
+// Form Designer forms (mtbg_tours_forms.form): the blocks on a two-column grid (half-width fields side by side),
+// numbered steps, the required star of required fields, and the look as CSS variables: the designer's Style tab
+// sets them on the form (inline); each variant's defaults are in contact_form.scss.
+.mtbg-form {
+    color: var(--mtbg-form-text, inherit);
+    background: var(--mtbg-form-bg, transparent);
+    padding: var(--mtbg-form-padding, 0);
+    border-radius: calc(var(--mtbg-form-radius, 6px) + 4px);
+    font-size: calc(1rem * var(--mtbg-form-font-scale, 1));
+    .mtbg-form__grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: .5rem;
+    }
+    .mtbg-form__block { grid-column: 1 / -1; min-width: 0; &.is-half { grid-column: span 1; } }
+    .mtbg-contact-form__field, .mtbg-form__check { margin-bottom: var(--mtbg-form-gap, .6rem); }
+    .mtbg-contact-form__field > span, .mtbg-form__check > span { color: var(--mtbg-form-label, inherit); }
+    .mtbg-form__req { display: none; color: #d93025; }
+    .is-required .mtbg-form__req { display: inline; }
+    .mtbg-phone__input {
+        padding: .375rem .75rem;
+        border: 1px solid;
+        font-size: 1em;
+        line-height: 1.5;
+        &:focus { outline: 0; box-shadow: 0 0 0 .2rem rgba(0, 116, 212, .2); }
+    }
+    .form-control, .form-select, .mtbg-phone .mtbg-phone__country, .mtbg-phone__input {
+        background-color: var(--mtbg-form-input-bg, var(--bs-body-bg, #fff));
+        color: var(--mtbg-form-input-text, var(--bs-body-color, #212529));
+        border-color: var(--mtbg-form-input-border, var(--bs-border-color, #ced4da));
+        border-radius: var(--mtbg-form-radius, 6px);
+    }
+    // the form's text size (Text size, Style tab) reaches the fields and the button too (Bootstrap sizes them in rem)
+    .form-control, .form-select { font-size: 1em; }
+    .mtbg-contact-form__send { --bs-btn-font-size: 1em; border-radius: var(--mtbg-form-radius, 6px); }
+    // a block's own text size and colour (its settings in the designer); a heading keeps the theme's font and size
+    .mtbg-form__block.has-text-size { font-size: calc(1em * var(--mtbg-block-size, 1)); }
+    // a heading's line spacing (its settings in the designer): its title and subtitle
+    .mtbg-form__block.has-line-height :is(.mtbg-contact-form__title, .mtbg-contact-form__subtitle) { line-height: var(--mtbg-block-line); }
+    .mtbg-form__block.has-text-color {
+        color: var(--mtbg-block-text);
+        :is(.mtbg-contact-form__title, .mtbg-contact-form__subtitle, .mtbg-contact-form__field > span,
+            .mtbg-form__check > span, .mtbg-form__help, .mtbg-form__html *) { color: var(--mtbg-block-text); }
+    }
+    // the headings in the form's Labels and titles colour when the Style tab sets it (else the theme's)
+    &[style*="--mtbg-form-label:"] :is(.mtbg-contact-form__title, .mtbg-contact-form__subtitle) { color: var(--mtbg-form-label); }
+    // the button's colours when the Style tab sets them (the theme paints .btn-primary itself)
+    &.mtbg-form--accent .mtbg-contact-form__send {
+        background-color: var(--mtbg-form-accent) !important;
+        border-color: var(--mtbg-form-accent) !important;
+        color: var(--mtbg-form-accent-text, #fff) !important;
+        &:hover { filter: brightness(.93); }
+    }
+    &.mtbg-form--accent_text .mtbg-contact-form__send { color: var(--mtbg-form-accent-text) !important; }
+    .mtbg-form__help { display: block; margin-top: .15rem; font-size: .78em; opacity: .75; }
+    .mtbg-form__html { margin-bottom: var(--mtbg-form-gap, .6rem); > :last-child { margin-bottom: 0; } }
+    .mtbg-form__check { display: flex; gap: .45rem; align-items: flex-start; input { margin-top: .25rem; } }
+    .mtbg-form__choices { display: flex; flex-wrap: wrap; gap: .25rem 1rem; .mtbg-form__check { margin-bottom: 0; } }
+    // a step: its number in a round badge, its title and subtitle; the blocks under it are its section
+    .mtbg-form__section + .mtbg-form__section { margin-top: .4rem; }
+    .mtbg-form__step { display: flex; gap: .6rem; align-items: flex-start; margin: .2rem 0 .6rem; }
+    .mtbg-form__step-num {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.75rem;
+        height: 1.75rem;
+        border-radius: 50%;
+        background: var(--mtbg-form-step, var(--mtbg-form-accent, #{$primary}));
+        color: var(--mtbg-form-accent-text, #fff);
+        font-weight: 800;
+        font-size: .9em;
+    }
+    .mtbg-form__step-title { margin: .15rem 0 0; color: var(--mtbg-form-label, inherit); }
+    .mtbg-form__step-help { margin: .1rem 0 0; font-size: .82em; opacity: .8; }
+    @media (max-width: 575.98px) { .mtbg-form__block.is-half { grid-column: 1 / -1; } }
+}
+
+// a form on a dark page (a tour's Page Theme: Dark puts .mtbg-theme-dark on the page): the Style tab's Dark look, token
+// by token over the Light one (the form's inline --mtbg-form-dark-* variables; a token it leaves empty: the Light's)
+$mtbg-form-tokens: (bg: bg, text: text, label: label, accent: accent, accent_text: accent-text, input_bg: input-bg,
+                    input_text: input-text, input_border: input-border, step: step, radius: radius, gap: gap,
+                    padding: padding, font_scale: font-scale);
+@each $token, $var in $mtbg-form-tokens {
+    .mtbg-theme-dark .mtbg-form.mtbg-form--dark-#{$token} { --mtbg-form-#{$var}: var(--mtbg-form-dark-#{$var}) !important; }
+}
+.mtbg-theme-dark .mtbg-form.mtbg-form--dark-label :is(.mtbg-contact-form__title, .mtbg-contact-form__subtitle) {
+    color: var(--mtbg-form-label);
+}
+.mtbg-theme-dark .mtbg-form .mtbg-form__block.has-dark-color {
+    color: var(--mtbg-block-text-dark);
+    :is(.mtbg-contact-form__title, .mtbg-contact-form__subtitle, .mtbg-contact-form__field > span,
+        .mtbg-form__check > span, .mtbg-form__help, .mtbg-form__html *) { color: var(--mtbg-block-text-dark); }
+}
+.mtbg-theme-dark .mtbg-form.mtbg-form--dark-accent .mtbg-contact-form__send {
+    background-color: var(--mtbg-form-accent) !important;
+    border-color: var(--mtbg-form-accent) !important;
+    color: var(--mtbg-form-accent-text, #fff) !important;
+    &:hover { filter: brightness(.93); }
+}
+.mtbg-theme-dark .mtbg-form.mtbg-form--dark-accent_text .mtbg-contact-form__send { color: var(--mtbg-form-accent-text) !important; }
+.mtbg-theme-dark .mtbg-contact-form.mtbg-form--dark-input_text .form-control::placeholder {
+    color: color-mix(in srgb, var(--mtbg-form-input-text) 55%, transparent);
+}
+
+// the designer's preview page: the form in its variant's frame
+.mtbg-form-preview { background: #f5f5f5; min-height: 100vh; }
+.mtbg-form-preview__frame {
+    max-width: 560px;
+    margin: 0 auto;
+    &--page { background: #fff; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0, 0, 0, .08); }
+    &--popup { background: #fff; border-radius: 10px; padding: 1.75rem 1.5rem 1.25rem; box-shadow: 0 8px 30px rgba(0, 0, 0, .18); }
+    &--sidebar { max-width: 360px; }
+}
+
+// the Form Designer's preview with "Show every block": a block its rules hide now, shown faded and dashed; a click on
+// any block opens it in the designer
+.mtbg-rule-off {
+    position: relative;
+    opacity: .5;
+    outline: 2px dashed #f0ad4e;
+    outline-offset: 2px;
+    &::before {
+        content: "Hidden by its rule now";
+        position: absolute;
+        top: -.6rem;
+        right: .3rem;
+        z-index: 2;
+        padding: 0 .35rem;
+        border-radius: 3px;
+        background: #f0ad4e;
+        color: #fff;
+        font-size: .65rem;
+        font-weight: 700;
+    }
+}
+.mtbg-designer-pick [data-block]:hover { outline: 2px solid rgba(37, 99, 235, .55); outline-offset: 2px; cursor: pointer; }
+.mtbg-designer-pick [data-block].mtbg-designer-picked { outline: 2px solid #2563eb; outline-offset: 2px; }
+
+// one step at a time (stepper.js): the steps' progress on top, Back / Next under the form
+.mtbg-steps-off { display: none !important; }
+.mtbg-steps {
+    --mtbg-steps-accent: var(--mtbg-form-step, #13283d);
+    display: flex;
+    list-style: none;
+    margin: 4px 0 18px;
+    padding: 0;
+    counter-reset: none;
+    li {
+        position: relative;
+        flex: 1 1 0;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        text-align: center;
+        font-size: .75em;
+        color: #8a8aa0;
+        // the line between two steps
+        &:not(:first-child)::before {
+            content: "";
+            position: absolute;
+            top: 13px;
+            right: 50%;
+            width: 100%;
+            height: 2px;
+            background: #d9d3e6;
+            z-index: 0;
+        }
+        &.is-done, &.is-current { color: var(--mtbg-steps-accent); }
+        &.is-done::before, &.is-current::before { background: var(--mtbg-steps-accent); }
+        &.is-done { cursor: pointer; }
+    }
+    .mtbg-steps__dot {
+        position: relative;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 2px solid #d9d3e6;
+        background: #fff;
+        font-weight: 700;
+        color: #8a8aa0;
+    }
+    .is-done .mtbg-steps__dot { background: var(--mtbg-steps-accent); border-color: var(--mtbg-steps-accent); color: #fff; }
+    .is-current .mtbg-steps__dot { border-color: var(--mtbg-steps-accent); color: var(--mtbg-steps-accent);
+        box-shadow: 0 0 0 4px rgba(19, 40, 61, .12); }
+    .mtbg-steps__title { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .is-current .mtbg-steps__title { font-weight: 700; }
+    @media (max-width: 575.98px) {
+        li:not(.is-current) .mtbg-steps__title { display: none; }
+        .is-current .mtbg-steps__title { white-space: normal; }
+    }
+}
+.mtbg-steps__nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 8px 0 14px;
+    .btn { font-weight: 600; padding: 8px 22px; border-radius: 6px; }
+    .mtbg-steps__back { background: transparent; border: 1px solid currentColor; }
+    .mtbg-steps__next { margin-left: auto; background: var(--mtbg-form-accent, #13283d); color: var(--mtbg-form-accent-text, #fff); }
+}
+
+// a title's own look (the pre-tour header's title, a step's title: models/form.py title_look): its colours (light,
+// and dark pages), bold, uppercase, alignment; its size is its words' span. Nothing set: the theme's.
+.mtbg-title-look {
+    &.has-title-color { color: var(--mtbg-title-color) !important; }
+    &.is-bold { font-weight: 700 !important; }
+    &.is-upper { text-transform: uppercase; letter-spacing: .04em; }
+    &.align-left { text-align: left; }
+    &.align-center { text-align: center; }
+    &.align-right { text-align: right; }
+}
+.mtbg-theme-dark .mtbg-title-look.has-title-dark { color: var(--mtbg-title-color-dark) !important; }

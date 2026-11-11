@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- the same markup as the QWeb field (mtbg_tours_forms.phone_field) -->
+    <t t-name="mtbg_tours_forms.PhoneField">
+        <div class="mtbg-field mtbg-phone">
+            <div class="mtbg-phone__country">
+                <img t-if="country" class="mtbg-phone__flag" t-att-src="country.img" t-att-alt="country.name" width="22" height="16"/>
+                <span class="mtbg-phone__dial" t-out="country ? '+' + country.dial : '+'"/>
+                <i class="fa fa-caret-down" aria-hidden="true"/>
+                <select class="mtbg-phone__select" aria-label="Country code" autocomplete="tel-country-code"
+                        t-model="state.code" t-on-change="report">
+                    <option t-foreach="state.countries" t-as="c" t-key="c.code" t-att-value="c.code"
+                            t-att-selected="c.code === state.code"><t t-out="c.flag"/> <t t-out="c.name"/> (+<t t-out="c.dial"/>)</option>
+                </select>
+            </div>
+            <input type="tel" class="form-control form-control-sm mtbg-phone__input" autocomplete="tel-national"
+                   inputmode="tel" t-att-placeholder="props.placeholder or 'Mobile'" t-model="state.raw" t-on-input="report"/>
+        </div>
+    </t>
+
+</templates>

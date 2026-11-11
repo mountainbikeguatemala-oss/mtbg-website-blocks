@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mtbg_form_user,mtbg.form user,model_mtbg_form,base.group_user,1,0,0,0
+access_mtbg_form_manager,mtbg.form manager,model_mtbg_form,website.group_website_designer,1,1,1,1
+access_mtbg_form_block_user,mtbg.form.block user,model_mtbg_form_block,base.group_user,1,0,0,0
+access_mtbg_form_block_manager,mtbg.form.block manager,model_mtbg_form_block,website.group_website_designer,1,1,1,1

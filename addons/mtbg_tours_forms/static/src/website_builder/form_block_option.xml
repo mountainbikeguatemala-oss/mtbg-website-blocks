@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mtbg_tours_forms.FormBlockOption">
+        <BuilderRow label.translate="Form" tooltip.translate="Which website form this block shows: its fields, texts and look are set in the Forms page's Form Designer">
+            <BuilderSelect dataAttributeAction="'form'">
+                <t t-foreach="state.forms" t-as="form" t-key="form.key">
+                    <BuilderSelectItem dataAttributeActionValue="form.key"><t t-out="form.name"/></BuilderSelectItem>
+                </t>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Fields and look">
+            <a class="btn btn-sm btn-link px-0" href="/odoo/action-mtbg_tours_forms.action_mtbg_extension_page" target="_blank">
+                <i class="fa fa-external-link me-1"/>Edit the forms
+            </a>
+        </BuilderRow>
+    </t>
+</templates>

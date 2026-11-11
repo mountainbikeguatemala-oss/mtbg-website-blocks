@@ -1,0 +1,234 @@
+// The contact forms: page (white card, as the original contact page), popup (a photo beside the form, a new photo
+// each time), sidebar (the dark booking form's look, under it on tour pages)
+.mtbg-contact-form {
+    .mtbg-contact-form__title { margin-bottom: .25rem; }
+    .mtbg-contact-form__subtitle { opacity: .8; margin-bottom: .75rem; }
+    .mtbg-contact-form__row { display: flex; gap: .5rem; > * { flex: 1 1 0; min-width: 0; } }
+    .mtbg-contact-form__field { display: block; margin-bottom: .6rem; width: 100%;
+        > span { display: block; font-size: .85em; font-weight: 600; margin-bottom: .2rem; b { color: #d93025; } }
+    }
+    .mtbg-contact-form__known {
+        display: flex; flex-wrap: wrap; gap: .5rem; align-items: baseline; margin-bottom: .6rem;
+        padding: .5rem .65rem; border-radius: 6px; background: rgba(30, 158, 80, .1);
+    }
+    .mtbg-contact-form__optins { display: flex; flex-wrap: wrap; gap: .25rem 1rem; font-size: .9em; margin: .2rem 0 .4rem;
+        label { display: inline-flex; gap: .35rem; align-items: center; }
+    }
+    .mtbg-contact-form__terms { display: flex; gap: .4rem; align-items: flex-start; font-size: .9em; margin-bottom: .6rem; }
+    .mtbg-contact-form__consent { font-size: .72em; line-height: 1.35; opacity: .75; margin-bottom: .6rem; }
+    .mtbg-contact-form__marketing { display: flex; gap: .4rem; align-items: flex-start; font-size: .8em; line-height: 1.35;
+        margin-bottom: .6rem; input { margin-top: .2em; } }
+    .mtbg-contact-form__hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+    .mtbg-contact-form__error { color: #d93025; font-size: .9em; margin-bottom: .5rem; }
+    .mtbg-contact-form__send { width: 100%; font-weight: 700; }
+    .mtbg-contact-form__thanks { text-align: center; padding: 1.5rem .5rem;
+        .fa { font-size: 2.5em; color: #1e9e50; margin-bottom: .5rem; }
+    }
+    .is-invalid { border-color: #d93025 !important; }
+}
+
+// the contact page: the original's white card
+.mtbg-contact-page {
+    background: #f5f5f5;
+    .mtbg-contact-page__title { text-transform: uppercase; }
+    .mtbg-contact-page__card { max-width: 560px; background: #fff; border-radius: 8px; padding: 1.5rem;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, .08); }
+}
+
+// the popups: the photo beside the form (on phones, a band on top)
+.mtbg-contact-popup {
+    .mtbg-contact-popup__content { display: flex; flex-direction: row; overflow: hidden; border: 0; border-radius: 10px;
+        min-height: 520px; }
+    .mtbg-contact-popup__picture { flex: 0 0 42%; background: #13283d center / cover no-repeat;
+        transition: background-image .3s; }
+    .mtbg-contact-popup__panel { position: relative; flex: 1 1 auto; padding: 1.75rem 1.5rem 1.25rem; overflow-y: auto;
+        max-height: 90vh; }
+    .mtbg-contact-popup__close { position: absolute; top: .75rem; right: .75rem; }
+    @media (max-width: 767.98px) {
+        .mtbg-contact-popup__content { flex-direction: column; min-height: 0; }
+        .mtbg-contact-popup__picture { flex-basis: 140px; }
+    }
+}
+
+// the tour page's sidebar: under the booking form, in its colours (the Form Designer's Style tab overrides them)
+.mtbg-contact-form--sidebar {
+    --mtbg-form-bg: #2b2b2b;
+    --mtbg-form-text: #f2f2f2;
+    --mtbg-form-input-bg: #1f1f1f;
+    --mtbg-form-input-text: #f2f2f2;
+    --mtbg-form-input-border: #555;
+    --mtbg-form-accent: #0074d4;
+    --mtbg-form-padding: 16px;
+    margin-top: 16px;
+    border-radius: 10px;
+    .form-control::placeholder { color: #9a9a9a; }
+    // the consent link follows the Style tab: the accent, lightened on a dark form and darkened on a light one
+    .mtbg-contact-form__consent a { color: #9ecbff; color: color-mix(in srgb, var(--mtbg-form-accent) 55%, var(--mtbg-form-text)); }
+    // Send message is the sidebar's second button: an outline in normal weight, so Book Now (above it, the site's most
+    // important button) stands out; a button colour set on the Style tab paints it instead
+    .mtbg-contact-form__send { font-weight: 400; }
+    &:not(.mtbg-form--accent) .mtbg-contact-form__send {
+        background-color: transparent !important;
+        border: 1px solid rgba(255, 255, 255, .3) !important;
+        color: #c9c9c9 !important;
+        box-shadow: none !important;
+        &:hover, &:focus-visible { background-color: rgba(255, 255, 255, .08) !important; border-color: rgba(255, 255, 255, .5) !important; color: #fff !important; }
+    }
+    &.mtbg-form--accent .mtbg-contact-form__send {
+        background-color: var(--mtbg-form-accent) !important;
+        border-color: var(--mtbg-form-accent) !important;
+        color: var(--mtbg-form-accent-text, #fff) !important;
+    }
+}
+
+// The newsletter popup, as the original (2025): an 850 × 700 photo box (a different photo each time), the white
+// title, white fields with icons, a yellow button, the black offer bar, a transparent close X, the fly-up
+.mtbg-nl {
+    --bs-backdrop-opacity: .8;
+    .mtbg-nl__dialog { max-width: unquote("min(850px, calc(100vw - 24px))"); }
+    .mtbg-nl__box {
+        position: relative; min-height: unquote("min(700px, calc(100dvh - 24px))"); border: 0; border-radius: 0; overflow: hidden;
+        color: #fff; background: #222 center / cover no-repeat; display: flex; flex-direction: column;
+        // the photo, a little darker at the top for the title and the fields
+        &::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+            background: linear-gradient(180deg, rgba(0, 0, 0, .45) 0%, rgba(0, 0, 0, .15) 55%, rgba(0, 0, 0, 0) 100%); }
+    }
+    // a transparent X over the photo: white strokes with a shadow, still a 40px tap target
+    .mtbg-nl__close {
+        position: absolute; top: 0; right: 0; width: 40px; height: 40px; border: 0; background: transparent; z-index: 3;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .6));
+        &::before, &::after { content: ""; position: absolute; left: 19px; top: 9px; width: 2px; height: 22px;
+            background: #fff; transform: rotate(45deg); }
+        &::after { transform: rotate(-45deg); }
+        &:hover::before, &:hover::after { background: #fff; }
+        &:focus-visible { outline: 2px solid #fff; outline-offset: -4px; }
+    }
+    .mtbg-newsletter-form { position: relative; z-index: 1; flex: 1 1 auto; overflow-y: auto; padding: 48px 56px 24px; }
+    .mtbg-nl__logo { display: block; max-width: unquote("min(440px, 86%)"); margin: 0 auto 6px; }
+    .mtbg-nl__title-text { text-align: center; color: #fff; margin: 0 0 12px; letter-spacing: .01em;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, .45); }
+    .mtbg-nl__subtitle { text-align: center; color: #fff; margin-bottom: 18px; text-shadow: 0 1px 3px rgba(0, 0, 0, .6); }
+    .mtbg-contact-form__row { gap: 12px; }
+    .mtbg-nl__input { position: relative; display: block; width: 100%; margin-bottom: 14px;
+        .fa { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #9a9a9a; }
+        .fa + .form-control { padding-left: 30px; }
+        .form-control { border-radius: 2px; border: 0; height: 40px; font-size: 1.05rem; }
+    }
+    .mtbg-nl__phone { margin-bottom: 14px;
+        .mtbg-phone__country { background: #fff; color: #222; border: 0; border-radius: 2px; }
+        .mtbg-phone__input { border: 0; border-radius: 2px; height: 40px; }
+    }
+    .mtbg-contact-form__texting { background: rgba(0, 0, 0, .55); border-radius: 4px; padding: 10px 12px; margin-bottom: 14px;
+        .mtbg-contact-form__consent { opacity: .9; color: #f2f2f2; a { color: #fff; } }
+        .mtbg-contact-form__marketing { color: #f2f2f2; } }
+    .mtbg-contact-form__known { background: rgba(0, 0, 0, .5); color: #fff; a { color: #ffcf00; } }
+    .mtbg-contact-form__error { color: #fff; background: rgba(217, 48, 37, .85); border-radius: 3px; padding: 4px 8px; }
+    .mtbg-nl__send { display: block; width: auto; min-width: 140px; margin: 6px auto 0; background: #ffcc00; color: #fff;
+        border: 0; border-radius: 4px; font-size: 1.15rem; font-weight: 400; padding: 10px 32px;
+        &:hover { background: #f2bf00; color: #fff; } }
+    .mtbg-contact-form__thanks { color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, .6); }
+    .mtbg-nl__offer { position: relative; z-index: 2; flex: 0 0 auto; min-height: 65px; display: flex; flex-wrap: wrap;
+        align-items: center; justify-content: center; gap: .25em; padding: 12px 20px; background: #111; color: #fff;
+        text-align: center; font-size: 1.05em;
+        a { color: #fff; text-decoration: underline; text-underline-offset: 2px; } }
+    .mtbg-fly-up { animation: mtbgFlyUp 380ms ease-out both; }
+    @media (max-width: 575.98px) {
+        // phones: full screen (the owner), like the booking popups; the photo box fills the screen
+        .mtbg-nl__dialog { max-width: none; width: 100vw; height: 100dvh; margin: 0; }
+        .mtbg-nl__box { min-height: 100dvh; height: 100dvh; }
+        .mtbg-nl__close { top: env(safe-area-inset-top, 0px); }
+        // the form block centred in the screen; the spacers shrink to nothing when it is taller, so it scrolls
+        // from the top and nothing is cut off
+        .mtbg-newsletter-form { display: flex; flex-direction: column;
+            padding: calc(44px + env(safe-area-inset-top, 0px)) 18px 16px;
+            &::before, &::after { content: ""; flex: 1 0 0; } }
+        .mtbg-contact-form__row { flex-direction: column; gap: 0; }
+        .mtbg-nl__offer { font-size: .86em; }
+    }
+}
+@keyframes mtbgFlyUp {
+    from { opacity: 0; transform: translateY(24px) scale(.985); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .mtbg-nl .mtbg-fly-up { animation: none; } }
+
+// The chat page (/chat): no menu, banner or footer, the logo above the chat (it opens by itself)
+body:has(.mtbg-chat-page) {
+    header#top, footer#bottom, .mtbg-next-tour-banner, .o_footer_copyright { display: none !important; }
+}
+.mtbg-chat-page { min-height: 70vh; display: flex; align-items: center;
+    .mtbg-chat-page__logo { max-width: unquote("min(320px, 70vw)"); max-height: 120px; object-fit: contain; } }
+
+// a look from the designer's Style tab (any variant): the placeholders and the consent link follow its colours
+.mtbg-contact-form[style*="--mtbg-form-input-text"] .form-control::placeholder {
+    color: color-mix(in srgb, var(--mtbg-form-input-text) 55%, transparent);
+}
+.mtbg-contact-form[style*="--mtbg-form-accent"] .mtbg-contact-form__consent a {
+    color: color-mix(in srgb, var(--mtbg-form-accent) 70%, var(--mtbg-form-text, currentColor));
+}
+// the phone menu's look ('menu' variant): no card of its own, on the menu's navy (the designer gives its colours)
+.mtbg-mmenu-contact-panel .mtbg-contact-form {
+    font-size: 16px; // 16px inputs: no zoom on iOS
+    .form-control, .form-select { font-size: 16px; }
+}
+
+// The popup forms (views/contact_templates.xml newsletter_popup): any Form Designer form, in the newsletter popup's
+// frame (full: the form over the photo) or the contact popup's (beside); the photo darkened by the popup's overlay
+// (--mtbg-popup-overlay, 0..0.9: darker at the top on the full look, even beside the form)
+.mtbg-form-popup {
+    &.mtbg-nl .mtbg-nl__box::before {
+        background: linear-gradient(180deg, rgba(0, 0, 0, var(--mtbg-popup-overlay, .45)) 0%,
+            rgba(0, 0, 0, calc(var(--mtbg-popup-overlay, .45) / 3)) 55%, rgba(0, 0, 0, 0) 100%);
+    }
+    .mtbg-form-popup__body { position: relative; z-index: 1; flex: 1 1 auto; overflow-y: auto; padding: 48px 56px 24px; }
+    // the form over the photo: no box of its own, white words (the Form Designer's Style tab, Popup, can change them)
+    &.mtbg-nl .mtbg-contact-form {
+        --mtbg-form-bg: transparent;
+        --mtbg-form-text: #fff;
+        --mtbg-form-label: #fff;
+        background: transparent;
+        color: #fff;
+        .mtbg-form__block--heading { text-align: center; text-shadow: 0 2px 6px rgba(0, 0, 0, .45); }
+        .mtbg-contact-form__title, .mtbg-contact-form__subtitle { color: #fff; }
+        .form-control, .form-select { border: 0; border-radius: 2px; }
+        .mtbg-contact-form__texting { background: rgba(0, 0, 0, .55); border-radius: 4px; padding: 10px 12px; }
+        .mtbg-contact-form__send { display: block; width: auto; min-width: 140px; margin: 6px auto 0; padding: 10px 32px;
+            font-size: 1.15rem; font-weight: 400; }
+        .mtbg-contact-form__thanks { color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, .6); }
+    }
+    &.mtbg-contact-popup .mtbg-contact-popup__picture { position: relative;
+        &::after { content: ""; position: absolute; inset: 0; background: #000; opacity: var(--mtbg-popup-overlay, 0); pointer-events: none; }
+    }
+    .mtbg-form-popup__logo { display: block; max-width: 60%; max-height: 72px; margin: 0 auto .75rem; }
+    .mtbg-form-popup__bar { margin: .75rem -1.5rem -1.25rem; padding: 12px 20px; text-align: center; }
+    @media (max-width: 575.98px) {
+        .mtbg-form-popup__body { display: flex; flex-direction: column; padding: calc(44px + env(safe-area-inset-top, 0px)) 18px 16px;
+            &::before, &::after { content: ""; flex: 1 0 0; } }
+    }
+}
+// the Form Designer's preview of a popup form: its popup drawn in place (not a modal), at its real size
+.mtbg-form-popup--preview {
+    &.mtbg-nl .mtbg-nl__box { max-width: 850px; min-height: 640px; margin: 0 auto; }
+    &.mtbg-contact-popup .mtbg-contact-popup__content { max-width: 800px; margin: 0 auto; background: #fff;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, .25); }
+    .mtbg-form-preview__frame { background: transparent; box-shadow: none; padding: 0; max-width: none; }
+}
+// a popup form's entrance (its Animation setting): fly up (as since 2025), fade, zoom, slide down, none
+.mtbg-form-popup {
+    .mtbg-fly-up { animation: mtbgFlyUp 380ms ease-out both; }
+    .mtbg-anim-fade { animation: mtbgFade 320ms ease-out both; }
+    .mtbg-anim-zoom { animation: mtbgZoom 320ms ease-out both; }
+    .mtbg-anim-slide { animation: mtbgSlide 380ms ease-out both; }
+}
+@keyframes mtbgFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes mtbgZoom { from { opacity: 0; transform: scale(.88); } to { opacity: 1; transform: none; } }
+@keyframes mtbgSlide { from { opacity: 0; transform: translateY(-40px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .mtbg-form-popup :is(.mtbg-fly-up, .mtbg-anim-fade, .mtbg-anim-zoom, .mtbg-anim-slide) { animation: none; } }
+
+// the designer's Full preview of a popup form: the page dimmed behind it, the popup opening as on the site
+.mtbg-form-popup-sim {
+    position: fixed; inset: 0; z-index: 1050; display: flex; align-items: center; justify-content: center; padding: 12px;
+    background: rgba(0, 0, 0, var(--mtbg-popup-backdrop, .8)); overflow-y: auto;
+    > .mtbg-form-popup { width: 100%; }
+    .mtbg-form-popup-sim__replay { position: fixed; top: 12px; left: 12px; z-index: 2; }
+}
