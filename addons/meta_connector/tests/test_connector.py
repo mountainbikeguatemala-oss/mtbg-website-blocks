@@ -250,3 +250,20 @@ class TestSendBody(TransactionCase):
         self.assertEqual(graph.json.loads(call["data"]["message"])["attachment"]["type"], "image")
         self.assertIn("filedata", call["files"])
         self.assertNotIn("reply_to", self.post(text="Hi", reply_to_top=True)["data"])
+
+
+@tagged("post_install", "-at_install")
+class TestPostingSwitch(TransactionCase):
+    """Posting on in Settings asks for the posting permissions, with or without an app that posts."""
+
+    def test_switch_asks_for_posting_permissions(self):
+        from ..models import graph
+        Connector = self.env["meta.connector"]
+        ICP = self.env["ir.config_parameter"].sudo()
+        ICP.set_param("meta_connector.posting", "1")
+        self.assertTrue(Connector._meta_posting_wanted())
+        self.assertTrue(set(graph.POSTING_SCOPES) <= set(Connector._meta_scopes()))
+        ICP.set_param("meta_connector.posting", "0")
+        if "mtbg.marketing.item" not in self.env:
+            self.assertFalse(Connector._meta_posting_wanted())
+            self.assertNotIn("pages_manage_posts", Connector._meta_scopes())

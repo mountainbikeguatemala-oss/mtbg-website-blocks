@@ -1,6 +1,6 @@
 {
     "name": "Meta Connector",
-    "version": "19.0.1.4.1",
+    "version": "19.0.1.4.2",
     "category": "Productivity/Connectors",
     "summary": "One Facebook login for every app using your Facebook Pages and Instagram accounts: setup, Pages and "
                "tokens, webhook; the website's Instagram Feed block",

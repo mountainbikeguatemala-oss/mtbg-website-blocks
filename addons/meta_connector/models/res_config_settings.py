@@ -16,9 +16,10 @@ class ResConfigSettings(models.TransientModel):
     meta_fb_photos = fields.Boolean(string="Facebook contact photos")
     meta_wa_login = fields.Boolean(string="WhatsApp sends with the Meta login")
     meta_posting = fields.Boolean(string="Posting",
-                                  help="Apps (e.g. Marketing) post on the Facebook Page and the Instagram account. "
-                                       "Off by default: its permissions (pages_manage_posts, "
-                                       "instagram_content_publish) need Meta's app review, then a new Facebook login.")
+                                  help="This site posts on the Facebook Page and the Instagram account (e.g. with Marketing). "
+                                       "On: Set up Meta asks for the posting permissions (pages_manage_posts, "
+                                       "instagram_content_publish) at the next Facebook login. Other people than "
+                                       "the Meta app's own admins need Meta's app review first.")
     meta_ig_status = fields.Char(string="Instagram account", compute="_compute_meta_status")
     meta_fb_status = fields.Char(string="Facebook Page", compute="_compute_meta_status")
     meta_wa_status = fields.Char(string="WhatsApp", compute="_compute_meta_status")

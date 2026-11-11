@@ -2,6 +2,10 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'meta_connector-*'`.
 
+## 19.0.1.4.2 · 2026-11-11
+
+- **Posting without Marketing** (owner, 2026-11-11, on the shop site: "no posting scopes yet"): the Facebook login asks for the posting permissions (`pages_manage_posts`, `instagram_content_publish` and the reading ones they need), and Set up Meta shows its Posting step, when Marketing is installed **or** Posting is switched on in Settings › Meta. Before, only Marketing turned them on, so a site without it could never get them granted. The setup's posting texts no longer name Marketing.
+
 ## 19.0.1.4.1 · 2026-11-11
 
 - Moved to the universal extensions repository (owner, 2026-11-11: extensions that are not only for running tours live in their own repository, installable without Tours Core). Its manifest names its new repository, so the updater takes it from there; nothing else changes (no data, no behaviour). Author: MTBG Tours contributors; the tests use example names.
