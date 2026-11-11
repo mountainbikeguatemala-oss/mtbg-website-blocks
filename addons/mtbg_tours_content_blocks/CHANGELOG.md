@@ -2,6 +2,12 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_content_blocks-*'`.
 
+## 19.0.0.11.2 (2026-11-11)
+
+- Shared JavaScript for the website blocks: `@mtbg_tours_content_blocks/shared/chat` (the website chat hidden under a
+  full-screen layer, as Tours Core's), for Forms now that it needs no Tours Core (owner, 2026-11-11). Nothing changes on
+  a page.
+
 ## 19.0.0.11.1 (2026-11-11)
 
 - **The website's shared photo viewer, from Tours Core** (owner, 2026-11-11, the split: the Tiled Gallery comes to this

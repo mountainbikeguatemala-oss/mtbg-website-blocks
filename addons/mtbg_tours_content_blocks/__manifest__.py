@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Tours — Reusable Blocks',
-    'version': '19.0.0.11.1',
+    'version': '19.0.0.11.2',
     # where the updater gets it (the website blocks pack's repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     # its section on the Extensions panel: Custom blocks (its main job is website editor blocks)
@@ -46,8 +46,8 @@ Part of the MTBG website blocks: needs only Odoo's website (Tours plugs its page
     'assets': {
         'web.assets_frontend': [
             # shared JavaScript for the website's extensions (owner, 2026-11-03: shared javascript in the base):
-            # @mtbg_tours_content_blocks/shared/... (the photo viewer); PhotoSwipe itself (static/lib) loads on the
-            # first photo opened
+            # @mtbg_tours_content_blocks/shared/... (the photo viewer, the chat under layers);
+            # PhotoSwipe itself (static/lib) loads on the first photo opened
             'mtbg_tours_content_blocks/static/src/shared/*',
             'mtbg_tours_content_blocks/static/src/snippets/s_mtbg_content_block/content_block.scss',
             'mtbg_tours_content_blocks/static/src/snippets/s_mtbg_group/group.scss',
