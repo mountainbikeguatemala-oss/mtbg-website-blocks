@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="zoho_connector.ZohoCard">
+        <div class="o_mtbg_zoho_cards w-100">
+            <div t-if="!state.data" class="text-muted small"><i class="fa fa-spinner fa-spin me-1"/>Loading…</div>
+            <div t-foreach="cards" t-as="card" t-key="card.key" class="o_mtbg_zoho_card border rounded p-3 mb-2">
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    <strong class="me-auto" t-esc="card.title"/>
+                    <span t-attf-class="badge {{statusClass(card)}}" t-esc="statusLabel(card)"/>
+                    <span class="small text-muted" t-esc="versionText(card)"/>
+                </div>
+                <div class="text-muted small mt-1" t-esc="card.summary"/>
+                <div class="d-flex flex-wrap align-items-center gap-3 mt-2">
+                    <t t-if="card.app">
+                        <div class="form-check form-switch mb-0">
+                            <input type="checkbox" class="form-check-input" t-att-id="'mtbg_zc_on_' + card.key"
+                                   t-att-checked="card.on" t-att-disabled="state.busy"
+                                   t-on-change="(ev) => this.setSwitch(card, 'enabled', ev.target.checked)"/>
+                            <label class="form-check-label" t-att-for="'mtbg_zc_on_' + card.key" t-esc="onLabel(card)"/>
+                        </div>
+                        <div t-if="card.has_writes" class="form-check form-switch mb-0">
+                            <input type="checkbox" class="form-check-input" t-att-id="'mtbg_zc_wr_' + card.key"
+                                   t-att-checked="card.writes" t-att-disabled="state.busy"
+                                   t-on-change="(ev) => this.setSwitch(card, 'writes', ev.target.checked)"/>
+                            <label class="form-check-label" t-att-for="'mtbg_zc_wr_' + card.key">Writes allowed</label>
+                        </div>
+                        <span class="small text-muted" t-esc="sharedText(card)"/>
+                    </t>
+                </div>
+                <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
+                    <button t-if="card.can_sync" type="button" class="btn btn-sm btn-secondary" t-att-disabled="state.busy"
+                            t-on-click="() => this.sync(card)"><i class="fa fa-refresh me-1"/>Sync now</button>
+                    <button t-foreach="card.links" t-as="link" t-key="link.index" type="button" class="btn btn-sm btn-link px-1"
+                            t-on-click="() => this.open(card, link)"><i class="fa fa-arrow-right me-1"/><t t-esc="link.title"/></button>
+                    <button t-if="card.errors" type="button" class="btn btn-sm btn-link text-danger px-1"
+                            t-on-click="() => this.errors(card)"><i class="fa fa-exclamation-triangle me-1"/><t t-esc="errorsText(card)"/></button>
+                    <button t-if="card.can_install" type="button" class="btn btn-sm btn-primary ms-auto" t-att-disabled="state.busy"
+                            t-on-click="() => this.install(card, 'install')" t-att-title="card.newest"><i class="fa fa-download me-1"/>Install</button>
+                    <button t-if="card.can_update" type="button" class="btn btn-sm btn-primary ms-auto" t-att-disabled="state.busy"
+                            t-on-click="() => this.install(card, 'update')" t-att-title="card.newest"><i class="fa fa-arrow-up me-1"/>Update</button>
+                </div>
+                <div t-if="card.status === 'needs'" class="small text-muted mt-1" t-esc="needsText(card)"/>
+            </div>
+            <div t-if="state.data and props.card === 'others' and !cards.length" class="text-muted small">No other Zoho integration on this server or on GitHub.</div>
+        </div>
+    </t>
+
+    <t t-name="zoho_connector.ZohoSection">
+        <div class="d-flex flex-wrap gap-2">
+            <button type="button" class="btn btn-secondary btn-sm" t-on-click="() => this.open('log')"><i class="fa fa-list me-1"/>Sync Log</button>
+            <button type="button" class="btn btn-secondary btn-sm" t-on-click="() => this.open('refs')"><i class="fa fa-link me-1"/>References</button>
+        </div>
+    </t>
+</templates>
