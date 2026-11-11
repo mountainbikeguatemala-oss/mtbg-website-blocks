@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="google_connector.Cards">
+        <div class="o_google_cards d-flex flex-column gap-2 w-100">
+            <div t-foreach="state.cards" t-as="card" t-key="card.code" class="o_google_card border rounded p-2"
+                 t-att-class="{ 'opacity-75': !card.installed }">
+                <div class="d-flex align-items-center gap-2">
+                    <strong t-esc="card.label"/>
+                    <span t-if="card.version" class="badge text-bg-light" t-esc="card.version"/>
+                    <span class="badge ms-auto o_google_card_status"
+                          t-att-class="card.status === 'ready' ? 'text-bg-success' : (['off', 'not_installed'].includes(card.status) ? 'text-bg-secondary' : 'text-bg-danger')"
+                          t-esc="card.status_label"/>
+                </div>
+                <div class="small text-muted mt-1" t-esc="card.description"/>
+                <div t-if="card.installed" class="d-flex flex-wrap align-items-center gap-3 mt-2 small">
+                    <div class="form-check form-switch m-0">
+                        <input class="form-check-input o_google_card_on" type="checkbox" t-att-checked="card.on"
+                               t-on-change="() => this.toggle(card, 'on')"/>
+                        <label class="form-check-label">On</label>
+                    </div>
+                    <div t-if="card.has_writes" class="form-check form-switch m-0">
+                        <input class="form-check-input o_google_card_writes" type="checkbox" t-att-checked="card.writes_allowed"
+                               t-att-disabled="!card.on" t-on-change="() => this.toggle(card, 'writes_allowed')"/>
+                        <label class="form-check-label">Writes allowed</label>
+                    </div>
+                    <span t-if="card.account" class="text-muted"><i class="fa fa-google me-1"/><t t-esc="card.account"/></span>
+                    <a t-if="card.settings" href="#" class="ms-auto" t-on-click.prevent="() => this.openSettings(card)">Settings</a>
+                </div>
+                <div t-else="" class="mt-2">
+                    <button type="button" class="btn btn-sm btn-secondary" t-on-click="() => this.install(card)">Install</button>
+                </div>
+            </div>
+            <div t-if="!state.cards.length" class="text-muted small">No Google app installed yet.</div>
+        </div>
+    </t>
+</templates>

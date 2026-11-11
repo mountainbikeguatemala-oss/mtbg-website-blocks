@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="meta_connector.InstagramFeedOption">
+        <BuilderRow label.translate="Posts">
+            <BuilderSelect dataAttributeAction="'count'">
+                <BuilderSelectItem dataAttributeActionValue="'4'">4</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'6'">6</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'8'">8</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'12'">12</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Header">
+            <BuilderSelect dataAttributeAction="'header'">
+                <BuilderSelectItem dataAttributeActionValue="'none'">None</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'profile'">Profile</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'followers'">Profile and followers</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Layout">
+            <BuilderSelect dataAttributeAction="'layout'">
+                <BuilderSelectItem id="'meta_feed_grid'" dataAttributeActionValue="'grid'">Grid</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'row'">One row</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Columns" level="1" t-if="isActiveItem('meta_feed_grid')">
+            <BuilderSelect dataAttributeAction="'cols'">
+                <BuilderSelectItem dataAttributeActionValue="'auto'">Automatic</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'2'">2</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'3'">3</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'4'">4</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'5'">5</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'6'">6</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Columns on phone" level="1" t-if="isActiveItem('meta_feed_grid')">
+            <BuilderSelect dataAttributeAction="'colsSm'">
+                <BuilderSelectItem dataAttributeActionValue="'auto'">Automatic</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'1'">1</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'2'">2</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'3'">3</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Tile shape">
+            <BuilderSelect dataAttributeAction="'shape'">
+                <BuilderSelectItem dataAttributeActionValue="'square'">Square (1:1)</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'portrait'">Portrait (4:5)</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'landscape'">Landscape (16:9)</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Corners">
+            <BuilderNumberInput styleAction="'--meta-feed-radius'" unit="'px'" min="0" max="30" step="1" default="4"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Max width">
+            <BuilderSelect dataAttributeAction="'width'">
+                <BuilderSelectItem dataAttributeActionValue="'full'">Full</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'1200'">1200 px</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'900'">900 px</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'600'">600 px</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Follow button">
+            <BuilderSelect dataAttributeAction="'follow'">
+                <BuilderSelectItem dataAttributeActionValue="'1'">Show</BuilderSelectItem>
+                <BuilderSelectItem dataAttributeActionValue="'0'">Hide</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+        <BuilderRow label.translate="Spacing">
+            <BuilderNumberInput styleAction="'--meta-feed-gap'" unit="'px'" min="0" max="30" step="1" default="6"/>
+        </BuilderRow>
+    </t>
+</templates>

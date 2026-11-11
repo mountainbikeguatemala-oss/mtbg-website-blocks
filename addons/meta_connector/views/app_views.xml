@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The connection: its form is the setup -->
+    <record id="view_meta_connector_app_form" model="ir.ui.view">
+        <field name="name">meta.connector.app.form</field>
+        <field name="model">meta.connector.app</field>
+        <field name="arch" type="xml">
+            <form string="Set up Meta" create="0" delete="0">
+                <header>
+                    <button name="action_reconnect" type="object" string="Log in with Facebook again" icon="fa-refresh"
+                            invisible="step != 'done'"/>
+                    <button name="action_change_pages" type="object" string="Change the Pages" icon="fa-list"
+                            invisible="step != 'done'"/>
+                    <button name="action_register_webhooks" type="object" string="Register the webhook" icon="fa-bolt"
+                            invisible="step != 'done' or webhook_state == 'ok'"/>
+                    <field name="step" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title d-flex align-items-center gap-2">
+                        <i class="fa fa-facebook-square fa-2x" style="color:#0866ff" title="Facebook"/>
+                        <i class="fa fa-instagram fa-2x" style="color:#d62976" title="Instagram"/>
+                        <h1 class="flex-grow-1 mb-0"><field name="name"/></h1>
+                    </div>
+                    <field name="https" invisible="1"/>
+                    <field name="message_kind" invisible="1"/>
+                    <div class="alert alert-success" role="alert" invisible="not message or message_kind != 'success'">
+                        <field name="message" class="text-break"/>
+                    </div>
+                    <div class="alert alert-danger" role="alert" invisible="not message or message_kind != 'danger'">
+                        <field name="message" class="text-break"/>
+                    </div>
+                    <div class="alert alert-info" role="alert" invisible="not message or message_kind != 'info'">
+                        <field name="message" class="text-break"/>
+                    </div>
+
+                    <!-- 1. the app -->
+                    <div invisible="step != 'app'">
+                        <p class="lead">Facebook and Instagram connect through a free Meta app of your own. Making it takes five minutes, once:</p>
+                        <ol>
+                            <li>Open <a href="https://developers.facebook.com/apps/creation/" target="_blank">developers.facebook.com › Create app</a>, logged in as an admin of your Facebook Page.</li>
+                            <li>Use case: <b>Other</b> › app type: <b>Business</b> › give it a name (e.g. “<i>Odoo</i>”) and your business portfolio.</li>
+                            <li>In the app's dashboard, add the products <b>Messenger</b> and <b>Instagram</b> (“Set up”).</li>
+                            <li>Add the product <b>Facebook Login for Business</b> › Settings › <b>Valid OAuth Redirect URIs</b>: paste <field name="redirect_url" widget="CopyClipboardChar" class="d-inline-block"/></li>
+                            <li>App settings › <b>Basic</b>: copy the <b>App ID</b> and the <b>App Secret</b> (“Show”) here.</li>
+                        </ol>
+                        <group>
+                            <field name="app_id" placeholder="e.g. 1234567890123456"/>
+                            <field name="app_secret" password="True"/>
+                        </group>
+                        <p class="text-muted small">Meta does not need to review the app: it only works with your own Pages.</p>
+                    </div>
+
+                    <!-- 2. the login -->
+                    <div invisible="step != 'login'">
+                        <p class="lead">Log in with the Facebook account that manages your Pages. When Facebook asks, <b>tick every Page and Instagram account</b> you want here, and allow every permission.</p>
+                        <div class="alert alert-warning" role="alert" invisible="https">
+                            Facebook only sends the login back to an https address. This Odoo is not on https: use the token below instead (or open Odoo on its https address).
+                        </div>
+                        <button name="action_login" type="object" class="btn btn-primary btn-lg my-2" icon="fa-facebook-official"
+                                string="Connect with Facebook"/>
+                        <group class="mt-3">
+                            <field name="app_name"/>
+                            <field name="user_name" invisible="not user_name"/>
+                        </group>
+                        <details class="mt-2">
+                            <summary class="text-muted">No https yet? Paste a token instead</summary>
+                            <p class="small mt-2">
+                                <a href="https://developers.facebook.com/tools/explorer/" target="_blank">Graph API Explorer</a>:
+                                choose your app, “User Token”, add these permissions, “Generate Access Token”, then paste it here:
+                            </p>
+                            <p class="small"><field name="scopes" readonly="1"/></p>
+                            <group>
+                                <field name="manual_token" password="True"/>
+                            </group>
+                            <button name="action_use_token" type="object" string="Use this token" class="btn-secondary"/>
+                        </details>
+                        <details class="mt-2">
+                            <summary class="text-muted">Facebook asks for a configuration ID?</summary>
+                            <group class="mt-2">
+                                <field name="config_id"/>
+                            </group>
+                        </details>
+                    </div>
+
+                    <!-- 3. the Pages -->
+                    <div invisible="step != 'pages'">
+                        <p class="lead">Tick what this site uses: messages in Communication Flows, the website's Instagram feed…</p>
+                        <field name="page_ids" nolabel="1">
+                            <list editable="bottom" create="0" delete="0">
+                                <field name="name" readonly="1"/>
+                                <field name="use_page" widget="boolean_toggle"/>
+                                <field name="ig_username" readonly="1"/>
+                                <field name="use_instagram" widget="boolean_toggle" readonly="not ig_id"/>
+                                <field name="ig_id" column_invisible="1"/>
+                                <field name="state" widget="badge" decoration-success="state == 'connected'" decoration-danger="state == 'disconnected'"/>
+                            </list>
+                        </field>
+                        <p class="text-muted small">An Instagram account shows when it is a professional (business or creator) account linked to the Page. Not there? Instagram › Settings › Account type and tools › Switch to professional, then link it to the Page, and log in again.</p>
+                    </div>
+
+                    <!-- 4. posting (Marketing installed) -->
+                    <div invisible="step != 'posting'">
+                        <field name="posting_wanted" invisible="1"/>
+                        <p class="lead">Posting: Marketing posts new tours on your Facebook Page and Instagram account.</p>
+                        <ol>
+                            <li>In <a href="https://developers.facebook.com/apps/" target="_blank">Meta for Developers</a>, open your app › <b>Use cases</b> › <b>Add use cases</b>: add <b>Manage everything on your Page</b> and the <b>Instagram API</b> use case (Manage messaging &amp; content on Instagram). In each, add the permissions <code>pages_manage_posts</code>, <code>pages_read_engagement</code>, <code>pages_show_list</code>, <code>instagram_basic</code> and <code>instagram_content_publish</code>.</li>
+                            <li>Your Instagram account must be a professional (business) account linked to the Facebook Page: in <a href="https://business.facebook.com/" target="_blank">Meta Business Suite</a> › Settings › Instagram accounts, connect it to the Page (or the Page's Settings › Linked accounts › Instagram).</li>
+                            <li>For other people than the app's admins and testers, Meta must approve those permissions (<b>App Review</b>): until then posting works for the app's own roles only.</li>
+                            <li>Log in with Facebook again (button below) and tick the Page and the Instagram account when Facebook asks; then <b>Check</b>.</li>
+                        </ol>
+                        <div class="mb-2"><b>Permissions asked:</b> <field name="scopes" class="d-inline"/></div>
+                        <field name="posting_checks" nolabel="1"/>
+                        <div class="d-flex gap-2 mt-3">
+                            <button name="action_reconnect" type="object" string="Log in with Facebook again" class="btn-secondary" icon="fa-facebook-official"/>
+                            <button name="action_check_posting" type="object" string="Check" class="btn-primary"/>
+                            <button name="action_finish_posting" type="object" string="Finish"/>
+                        </div>
+                    </div>
+
+                    <!-- 5. done -->
+                    <div invisible="step != 'done'">
+                        <field name="page_ids" nolabel="1" readonly="1">
+                            <list>
+                                <field name="name"/>
+                                <field name="use_page" widget="boolean"/>
+                                <field name="ig_username"/>
+                                <field name="use_instagram" widget="boolean"/>
+                                <field name="state" widget="badge" decoration-success="state == 'connected'" decoration-danger="state == 'disconnected'"/>
+                                <field name="state_reason" optional="show"/>
+                            </list>
+                        </field>
+                        <div invisible="not posting_wanted" class="mt-2">
+                            <b>Posting (Marketing):</b> <field name="posting_checks" nolabel="1"/>
+                        </div>
+                        <group>
+                            <field name="app_name"/>
+                            <field name="user_name"/>
+                            <field name="user_token_expires" invisible="not user_token_expires"/>
+                            <field name="granted_scopes" invisible="not granted_scopes"/>
+                            <field name="webhook_state"/>
+                            <field name="human_agent"/>
+                        </group>
+                    </div>
+                    <div class="d-flex gap-2 mt-4" invisible="step == 'done'">
+                        <button name="action_check_app" type="object" string="Check the app" class="btn-primary" invisible="step != 'app'"/>
+                        <button name="action_save_pages" type="object" string="Save" class="btn-primary" invisible="step != 'pages'"/>
+                        <button name="action_back" type="object" string="Back" invisible="step == 'app'"/>
+                    </div>
+                    <group string="Webhook" invisible="step not in ('pages', 'done') or webhook_state in ('ok', 'none')">
+                        <div colspan="2" class="text-muted">
+                            Odoo registers the webhook itself when it is on https: messages then arrive at once. Until then they arrive every 10 minutes. To register it by hand: App dashboard › Messenger (and Instagram) › Webhooks:
+                        </div>
+                        <field name="webhook_url" widget="CopyClipboardChar"/>
+                        <field name="verify_token" widget="CopyClipboardChar"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_meta_connector_app" model="ir.actions.act_window">
+        <field name="name">Meta</field>
+        <field name="res_model">meta.connector.app</field>
+        <field name="view_mode">form</field>
+    </record>
+
+    <record id="action_meta_setup" model="ir.actions.server">
+        <field name="name">Set up Meta</field>
+        <field name="model_id" ref="model_meta_connector_app"/>
+        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_start()</field>
+    </record>
+
+    <record id="action_meta_feed_refresh" model="ir.actions.server">
+        <field name="name">Refresh the Instagram feed</field>
+        <field name="model_id" ref="model_meta_connector_media"/>
+        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_refresh()</field>
+    </record>
+
+    <!-- Settings › Meta (the apps link here: "Open Meta settings") -->
+    <record id="action_meta_settings" model="ir.actions.act_window">
+        <field name="name">Meta</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'module': 'meta_connector', 'bin_size': False}</field>
+    </record>
+
+    <record id="res_config_settings_view_form_meta" model="ir.ui.view">
+        <field name="name">res.config.settings.form.meta</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Meta" string="Meta" name="meta_connector" logo="/meta_connector/static/description/icon.png"
+                     groups="base.group_system">
+                    <block title="Meta connection" name="meta_connection">
+                        <setting string="Meta connection" help="One Facebook login for Facebook and Instagram, and for every use below. Meta keys are entered only in Set up Meta.">
+                            <div class="d-flex flex-wrap gap-2 mt-2">
+                                <button name="%(meta_connector.action_meta_setup)d" type="action" class="btn btn-primary btn-sm"
+                                        icon="fa-facebook-official" string="Set up Meta"/>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Instagram" name="meta_instagram">
+                        <setting string="Instagram account" help="The Instagram professional account linked to your Facebook Page.">
+                            <i class="fa fa-instagram me-1" style="color:#d62976" title="Instagram"/><field name="meta_ig_status" class="d-inline"/>
+                        </setting>
+                        <setting string="Instagram Feed block" help="The website block “Instagram Feed” shows your latest posts, kept here and refreshed every hour.">
+                            <field name="meta_ig_feed"/>
+                            <div class="d-flex flex-wrap gap-2 mt-2" invisible="not meta_ig_feed">
+                                <button name="%(meta_connector.action_meta_feed_refresh)d" type="action" class="btn btn-secondary btn-sm"
+                                        icon="fa-refresh" string="Refresh now"/>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Facebook" name="meta_facebook">
+                        <setting string="Facebook Page" help="The Facebook Page this site uses.">
+                            <i class="fa fa-facebook-square me-1" style="color:#0866ff" title="Facebook"/><field name="meta_fb_status" class="d-inline"/>
+                        </setting>
+                    </block>
+                    <block title="Posting" name="meta_posting">
+                        <setting string="Posting" help="Apps (e.g. Marketing) post on the Facebook Page and the Instagram account. Its permissions need Meta's app review, then log in with Facebook again in Set up Meta.">
+                            <field name="meta_posting"/>
+                        </setting>
+                    </block>
+                    <field name="meta_wa_installed" invisible="1"/>
+                    <block title="WhatsApp" name="meta_whatsapp" invisible="not meta_wa_installed">
+                        <setting string="WhatsApp Cloud numbers" help="The WhatsApp Business numbers on Meta's Cloud API that use this Meta app.">
+                            <i class="fa fa-whatsapp me-1" style="color:#25d366" title="WhatsApp"/><field name="meta_wa_status" class="d-inline"/>
+                        </setting>
+                        <setting string="WhatsApp sends with the Meta login" help="The numbers send with this login instead of their own token, once the login never expires (Facebook Login for Business) and has the WhatsApp permissions. Off: each number keeps its own token.">
+                            <field name="meta_wa_login"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

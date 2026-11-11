@@ -1,0 +1,69 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-30 08:31+0000\n"
+"PO-Revision-Date: 2026-10-30 08:31+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: mtbg_tours_visit
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_visit.res_config_settings_view_form
+msgid ""
+"Anonymous page views are recorded by a light script once the page has "
+"loaded, so pages can be cached. Off: recorded while the page is built."
+msgstr ""
+"Las visitas anónimas las registra un script ligero cuando la página ha "
+"cargado, para que las páginas se puedan guardar en caché. Desactivado: se "
+"registran mientras se construye la página."
+
+#. module: mtbg_tours_visit
+#: model:ir.model,name:mtbg_tours_visit.model_res_config_settings
+msgid "Config Settings"
+msgstr "Ajustes de configuración"
+
+#. module: mtbg_tours_visit
+#: model:ir.model.fields,field_description:mtbg_tours_visit.field_ir_http__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_visit.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_visit.field_website__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: mtbg_tours_visit
+#: model:ir.model,name:mtbg_tours_visit.model_ir_http
+msgid "HTTP Routing"
+msgstr "Enrutamiento HTTP"
+
+#. module: mtbg_tours_visit
+#: model:ir.model.fields,field_description:mtbg_tours_visit.field_ir_http__id
+#: model:ir.model.fields,field_description:mtbg_tours_visit.field_res_config_settings__id
+#: model:ir.model.fields,field_description:mtbg_tours_visit.field_website__id
+msgid "ID"
+msgstr "ID"
+
+#. module: mtbg_tours_visit
+#: model:ir.model.fields,help:mtbg_tours_visit.field_res_config_settings__mtbg_visit_by_script
+msgid ""
+"On: an anonymous visitor's page view is recorded by a light script once the "
+"page has loaded, so pages can be cached. Off: recorded while the page is "
+"built (Odoo's way)."
+msgstr ""
+"Activado: la visita de una página por un visitante anónimo la registra un "
+"script ligero cuando la página ha cargado, para que las páginas se puedan "
+"guardar en caché. Desactivado: se registra mientras se construye la página "
+"(como lo hace Odoo)."
+
+#. module: mtbg_tours_visit
+#: model:ir.model.fields,field_description:mtbg_tours_visit.field_res_config_settings__mtbg_visit_by_script
+msgid "Visits recorded by the page's script"
+msgstr "Visitas registradas por el script de la página"
+
+#. module: mtbg_tours_visit
+#: model:ir.model,name:mtbg_tours_visit.model_website
+msgid "Website"
+msgstr "Sitio web"

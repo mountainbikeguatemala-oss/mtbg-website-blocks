@@ -1,0 +1,1255 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* meta_connector
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-26 18:30+0000\n"
+"PO-Revision-Date: 2026-10-26 18:30+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/res_config_settings.py:0
+msgid "%(names)s: disconnected, log in with Facebook again in Set up Meta."
+msgstr ""
+"%(names)s: desconectado, vuelve a iniciar sesión con Facebook en Configurar "
+"Meta."
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/feed/feed.js:0
+msgid "%s followers"
+msgstr "%s seguidores"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/feed/feed.js:0
+msgid "%s posts"
+msgstr "%s publicaciones"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/res_config_settings.py:0
+msgid "%s: connected."
+msgstr "%s: conectado."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ", logged in as an admin of your Facebook Page."
+msgstr ", con la sesión iniciada como administrador de su página de Facebook."
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "1200 px"
+msgstr "1200 px"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "600 px"
+msgstr "600 px"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "900 px"
+msgstr "900 px"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+":\n"
+"                                choose your app, “User Token”, add these permissions, “Generate Access Token”, then paste it here:"
+msgstr ""
+":\n"
+"                                elija su app, “User Token”, agregue estos permisos, “Generate Access Token” y péguelo aquí:"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+"<i class=\"fa fa-facebook-square fa-2x\" style=\"color:#0866ff\" title=\"Facebook\"/>\n"
+"                        <i class=\"fa fa-instagram fa-2x\" style=\"color:#d62976\" title=\"Instagram\"/>"
+msgstr ""
+"<i class=\"fa fa-facebook-square fa-2x\" style=\"color:#0866ff\" title=\"Facebook\"/>\n"
+"                        <i class=\"fa fa-instagram fa-2x\" style=\"color:#d62976\" title=\"Instagram\"/>"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid ""
+"<i class=\"fa fa-facebook-square me-1\" style=\"color:#0866ff\" "
+"title=\"Facebook\"/>"
+msgstr ""
+"<i class=\"fa fa-facebook-square me-1\" style=\"color:#0866ff\" "
+"title=\"Facebook\"/>"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid "<i class=\"fa fa-instagram me-1\" style=\"color:#d62976\" title=\"Instagram\"/>"
+msgstr "<i class=\"fa fa-instagram me-1\" style=\"color:#d62976\" title=\"Instagram\"/>"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.s_meta_instagram_feed
+msgid ""
+"<i class=\"fa fa-instagram me-1\"/> Instagram Feed: your latest posts show "
+"here (Settings › Meta)."
+msgstr ""
+"<i class=\"fa fa-instagram me-1\"/> Feed de Instagram: sus últimas "
+"publicaciones aparecen aquí (Ajustes › Meta)."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid "<i class=\"fa fa-whatsapp me-1\" style=\"color:#25d366\" title=\"WhatsApp\"/>"
+msgstr "<i class=\"fa fa-whatsapp me-1\" style=\"color:#25d366\" title=\"WhatsApp\"/>"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__active
+msgid "Active"
+msgstr "Activo"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+"Add the product <b>Facebook Login for Business</b> › Settings › <b>Valid "
+"OAuth Redirect URIs</b>: paste"
+msgstr ""
+"Agregue el producto <b>Facebook Login for Business</b> › Configuración › "
+"<b>URI de redireccionamiento de OAuth válidos</b>: pegue"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_media__media_type__carousel_album
+msgid "Album"
+msgstr "Álbum"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+"An Instagram account shows when it is a professional (business or creator) "
+"account linked to the Page. Not there? Instagram › Settings › Account type "
+"and tools › Switch to professional, then link it to the Page, and log in "
+"again."
+msgstr ""
+"Una cuenta de Instagram aparece cuando es una cuenta profesional (de empresa"
+" o de creador) vinculada a la página. ¿No aparece? Instagram › Configuración"
+" › Tipo de cuenta y herramientas › Cambiar a cuenta profesional, vincúlela a"
+" la página e inicie sesión otra vez."
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__app_id
+msgid "App"
+msgstr "App"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__app_id
+msgid "App ID"
+msgstr "ID de la app"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__app_name
+msgid "App Name (Meta)"
+msgstr "Nombre de la app (Meta)"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__app_secret
+msgid "App Secret"
+msgstr "Clave secreta de la app"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+"App settings › <b>Basic</b>: copy the <b>App ID</b> and the <b>App "
+"Secret</b> (“Show”) here."
+msgstr ""
+"Configuración de la app › <b>Básica</b>: copie aquí el <b>identificador de "
+"la app</b> y la <b>clave secreta</b> (“Mostrar”)."
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "App “%s” found. Now the Facebook login."
+msgstr "App “%s” encontrada. Ahora el inicio de sesión de Facebook."
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Automatic"
+msgstr "Automático"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "Back"
+msgstr "Atrás"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__can_message
+msgid "Can Message"
+msgstr "Puede enviar mensajes"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__caption
+msgid "Caption"
+msgstr "Texto"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "Change the Pages"
+msgstr "Cambiar las páginas"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "Check the app"
+msgstr "Comprobar la app"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Columns"
+msgstr "Columnas"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Columns on phone"
+msgstr "Columnas en el teléfono"
+
+#. module: meta_connector
+#: model:ir.model,name:meta_connector.model_res_config_settings
+msgid "Config Settings"
+msgstr "Ajustes de configuración"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "Connect with Facebook"
+msgstr "Conectar con Facebook"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_page__state__connected
+msgid "Connected"
+msgstr "Conectado"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__user_name
+msgid "Connected as"
+msgstr "Conectado como"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid ""
+"Connected as %(who)s: %(count)s Page(s) found. Tick what this site uses."
+msgstr ""
+"Conectado como %(who)s: %(count)s página(s) encontrada(s). Marque lo que usa"
+" este sitio."
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid ""
+"Connected as %s, but Facebook gave no Page: log in again and tick every Page"
+" (and Instagram account) when Facebook asks which ones the app may use."
+msgstr ""
+"Conectado como %s, pero Facebook no dio ninguna página: inicie sesión otra "
+"vez y marque todas las páginas (y cuentas de Instagram) cuando Facebook "
+"pregunte cuáles puede usar la app."
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Corners"
+msgstr "Esquinas"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__create_uid
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__create_uid
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__create_date
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__create_date
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_page__state__disconnected
+msgid "Disconnected"
+msgstr "Desconectado"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector__display_name
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__display_name
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__display_name
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__display_name
+#: model:ir.model.fields,field_description:meta_connector.field_res_config_settings__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_app__step__done
+msgid "Done"
+msgstr "Hecho"
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_meta_connector_app__user_token_expires
+msgid "Empty: never (the Pages' tokens never expire either)."
+msgstr "Vacío: nunca (los tokens de las páginas tampoco caducan)."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid "Facebook"
+msgstr "Facebook"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "Facebook & Instagram"
+msgstr "Facebook e Instagram"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__name
+#: model:ir.model.fields,field_description:meta_connector.field_res_config_settings__meta_fb_status
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid "Facebook Page"
+msgstr "Página de Facebook"
+
+#. module: meta_connector
+#: model:ir.model,name:meta_connector.model_meta_connector_page
+msgid "Facebook Page (and its Instagram account)"
+msgstr "Página de Facebook (y su cuenta de Instagram)"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__page_id
+msgid "Facebook Page ID"
+msgstr "ID de la página de Facebook"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+"Facebook and Instagram connect through a free Meta app of your own. Making "
+"it takes five minutes, once:"
+msgstr ""
+"Facebook e Instagram se conectan a través de una app de Meta propia y "
+"gratuita. Crearla toma cinco minutos, una sola vez:"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "Facebook asks for a configuration ID?"
+msgstr "¿Facebook pide un ID de configuración?"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_res_config_settings__meta_fb_chat
+msgid "Facebook chat"
+msgstr "Chat de Facebook"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_res_config_settings__meta_fb_photos
+msgid "Facebook contact photos"
+msgstr "Fotos de contactos de Facebook"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "Facebook did not accept the login: %s"
+msgstr "Facebook no aceptó el inicio de sesión: %s"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "Facebook ended the login."
+msgstr "Facebook terminó la sesión."
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_app__step__login
+msgid "Facebook login"
+msgstr "Inicio de sesión de Facebook"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "Facebook login cancelled or refused: %s"
+msgstr "Inicio de sesión de Facebook cancelado o rechazado: %s"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+"Facebook only sends the login back to an https address. This Odoo is not on "
+"https: use the token below instead (or open Odoo on its https address)."
+msgstr ""
+"Facebook solo devuelve el inicio de sesión a una dirección https. Este Odoo "
+"no está en https: use el token de abajo (o abra Odoo en su dirección https)."
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/feed/feed.js:0
+msgid "Follow @%s"
+msgstr "Seguir a @%s"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Follow button"
+msgstr "Botón Seguir"
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_meta_connector_app__granted_targets
+msgid ""
+"For each permission limited to some assets, their IDs (e.g. the WhatsApp "
+"business accounts the login reaches)."
+msgstr ""
+"Para cada permiso limitado a algunos activos, sus ID (p. ej. las cuentas de "
+"WhatsApp Business a las que llega el inicio de sesión)."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_meta_connector_app__manual_token
+msgid ""
+"From Meta's Graph API Explorer (the app selected, the permissions of the "
+"list): for an Odoo that is not on https yet."
+msgstr ""
+"Del Graph API Explorer de Meta (con la app seleccionada y los permisos de la"
+" lista): para un Odoo que todavía no está en https."
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Full"
+msgstr "Completo"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__granted_targets
+msgid "Granted Targets"
+msgstr "Activos concedidos"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "Graph API Explorer"
+msgstr "Graph API Explorer"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Grid"
+msgstr "Cuadrícula"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Header"
+msgstr "Encabezado"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Hide"
+msgstr "Ocultar"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__https
+msgid "Https"
+msgstr "Https"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__human_agent
+msgid "Human Agent permission"
+msgstr "Permiso Human Agent"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector__id
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__id
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__id
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__id
+#: model:ir.model.fields,field_description:meta_connector.field_res_config_settings__id
+msgid "ID"
+msgstr "ID"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__ig_picture_url
+msgid "Ig Picture Url"
+msgstr "Imagen de Instagram"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__image_id
+msgid "Image"
+msgstr "Imagen"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+"In the app's dashboard, add the products <b>Messenger</b> and "
+"<b>Instagram</b> (“Set up”)."
+msgstr ""
+"En el panel de la app, agregue los productos <b>Messenger</b> e "
+"<b>Instagram</b> (“Configurar”)."
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_app__message_kind__info
+msgid "Info"
+msgstr "Información"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid "Instagram"
+msgstr "Instagram"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__ig_username
+msgid "Instagram Account"
+msgstr "Cuenta de Instagram"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__ig_id
+msgid "Instagram Account ID"
+msgstr "ID de la cuenta de Instagram"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.snippets
+msgid "Instagram Feed"
+msgstr "Feed de Instagram"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_res_config_settings__meta_ig_feed
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid "Instagram Feed block"
+msgstr "Bloque Feed de Instagram"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__ig_followers
+msgid "Instagram Followers"
+msgstr "Seguidores de Instagram"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__ig_name
+msgid "Instagram Name"
+msgstr "Nombre de Instagram"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__ig_avatar_id
+msgid "Instagram Photo"
+msgstr "Foto de Instagram"
+
+#. module: meta_connector
+#: model:ir.model,name:meta_connector.model_meta_connector_media
+msgid "Instagram Post (cached)"
+msgstr "Publicación de Instagram (guardada)"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__ig_posts
+msgid "Instagram Posts"
+msgstr "Publicaciones de Instagram"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_res_config_settings__meta_ig_status
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid "Instagram account"
+msgstr "Cuenta de Instagram"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_res_config_settings__meta_ig_chat
+msgid "Instagram chat"
+msgstr "Chat de Instagram"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_res_config_settings__meta_ig_photos
+msgid "Instagram contact photos"
+msgstr "Fotos de contactos de Instagram"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/feed/feed.js:0
+msgid "Instagram post"
+msgstr "Publicación de Instagram"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Landscape (16:9)"
+msgstr "Horizontal (16:9)"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__write_uid
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__write_uid
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__write_date
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__write_date
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Layout"
+msgstr "Diseño"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__legacy_urls
+msgid "Legacy Urls"
+msgstr "Direcciones anteriores"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "Log in with Facebook again"
+msgstr "Iniciar sesión con Facebook otra vez"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "Log in with Facebook again: the Pages keep everything they had."
+msgstr ""
+"Inicie sesión con Facebook de nuevo: las páginas conservan todo lo que "
+"tenían."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+"Log in with the Facebook account that manages your Pages. When Facebook "
+"asks, <b>tick every Page and Instagram account</b> you want here, and allow "
+"every permission."
+msgstr ""
+"Inicie sesión con la cuenta de Facebook que administra sus páginas. Cuando "
+"Facebook pregunte, <b>marque todas las páginas y cuentas de Instagram</b> "
+"que quiere aquí, y acepte todos los permisos."
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__config_id
+msgid "Login Configuration ID"
+msgstr "ID de configuración del inicio de sesión"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__user_token_expires
+msgid "Login Expires"
+msgstr "El inicio de sesión caduca"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Max width"
+msgstr "Ancho máximo"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__media_id
+msgid "Media"
+msgstr "Medio"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__media_type
+msgid "Media Type"
+msgstr "Tipo"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__message
+msgid "Message"
+msgstr "Mensaje"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__message_kind
+msgid "Message Kind"
+msgstr "Tipo de mensaje"
+
+#. module: meta_connector
+#: model:ir.actions.act_window,name:meta_connector.action_meta_connector_app
+#: model:ir.actions.act_window,name:meta_connector.action_meta_settings
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid "Meta"
+msgstr "Meta"
+
+#. module: meta_connector
+#: model:ir.model,name:meta_connector.model_meta_connector_app
+msgid "Meta Connection"
+msgstr "Conexión con Meta"
+
+#. module: meta_connector
+#: model:ir.model,name:meta_connector.model_meta_connector
+msgid "Meta Connector"
+msgstr "Conector de Meta"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_res_config_settings__meta_wa_installed
+msgid "Meta Wa Installed"
+msgstr "WhatsApp de Meta instalado"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_app__step__app
+msgid "Meta app"
+msgstr "App de Meta"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid "Meta connection"
+msgstr "Conexión con Meta"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "Meta does not know this App ID and secret: %s"
+msgstr "Meta no conoce este ID y clave secreta de la app: %s"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+"Meta does not need to review the app: it only works with your own Pages."
+msgstr ""
+"Meta no necesita revisar la app: solo trabaja con sus propias páginas."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_meta_connector_app__human_agent
+msgid ""
+"Meta granted the app the Human Agent permission (App Review): staff may "
+"answer up to 7 days after the customer's last message instead of 24 hours."
+msgstr ""
+"Meta concedió a la app el permiso Human Agent (revisión de la app): el "
+"personal puede responder hasta 7 días después del último mensaje del cliente"
+" en lugar de 24 horas."
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid ""
+"Meta only calls public https addresses: open Odoo on its https address "
+"(System parameter web.base.url), then try again. Until then, messages arrive"
+" every 10 minutes."
+msgstr ""
+"Meta solo llama a direcciones https públicas: abra Odoo en su dirección "
+"https (parámetro del sistema web.base.url) e inténtelo de nuevo. Mientras "
+"tanto, los mensajes llegan cada 10 minutos."
+
+#. module: meta_connector
+#: model:ir.actions.server,name:meta_connector.ir_cron_meta_health_ir_actions_server
+msgid "Meta: check the connection"
+msgstr "Meta: revisar la conexión"
+
+#. module: meta_connector
+#: model:ir.actions.server,name:meta_connector.ir_cron_meta_instagram_feed_ir_actions_server
+msgid "Meta: refresh the Instagram feed"
+msgstr "Meta: actualizar el feed de Instagram"
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_meta_connector_app__legacy_urls
+msgid ""
+"Moved from Communication Flows: keeps the addresses its Meta app knows."
+msgstr ""
+"Trasladada desde Communication Flows: conserva las direcciones que conoce su"
+" app de Meta."
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/res_config_settings.py:0
+msgid "No Facebook Page ticked: Set up Meta › Change the Pages."
+msgstr ""
+"Ninguna página de Facebook marcada: Configurar Meta › Cambiar las páginas."
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/res_config_settings.py:0
+msgid "No Instagram account ticked: Set up Meta › Change the Pages."
+msgstr ""
+"Ninguna cuenta de Instagram marcada: Configurar Meta › Cambiar las páginas."
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "No app on this site needs Meta's webhook."
+msgstr "Ninguna app de este sitio necesita el webhook de Meta."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "No https yet? Paste a token instead"
+msgstr "¿Todavía sin https? Pegue un token"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "None"
+msgstr "Ninguno"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_page__state__new
+msgid "Not checked"
+msgstr "Sin revisar"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/res_config_settings.py:0
+msgid "Not connected yet: Set up Meta."
+msgstr "Aún sin conectar: Configurar Meta."
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_app__webhook_state__none
+msgid "Not set"
+msgstr "Sin configurar"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__redirect_url
+msgid "OAuth Redirect URL"
+msgstr "URL de redirección de OAuth"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__oauth_state
+msgid "Oauth State"
+msgstr "Estado de OAuth"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+"Odoo registers the webhook itself when it is on https: messages then arrive "
+"at once. Until then they arrive every 10 minutes. To register it by hand: "
+"App dashboard › Messenger (and Instagram) › Webhooks:"
+msgstr ""
+"Odoo registra el webhook por sí mismo cuando está en https: los mensajes "
+"llegan entonces al instante. Mientras tanto llegan cada 10 minutos. Para "
+"registrarlo a mano: panel de la app › Messenger (e Instagram) › Webhooks:"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid ""
+"One Facebook login for Facebook and Instagram, and for every use below. Meta"
+" keys are entered only in Set up Meta."
+msgstr ""
+"Un solo inicio de sesión de Facebook para Facebook e Instagram, y para cada "
+"uso de abajo. Las claves de Meta solo se ingresan en Configurar Meta."
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "One row"
+msgstr "Una fila"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid ""
+"Only administrators can connect Facebook and Instagram (it stores Meta "
+"keys)."
+msgstr ""
+"Solo los administradores pueden conectar Facebook e Instagram (guarda claves"
+" de Meta)."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_meta_connector_app__config_id
+msgid ""
+"Only for apps that ask for one (Facebook Login for Business > "
+"Configurations): leave empty otherwise."
+msgstr ""
+"Solo para las apps que lo piden (Facebook Login for Business > "
+"Configuraciones): si no, déjelo vacío."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "Open"
+msgstr "Abrir"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__manual_token
+msgid "Or paste a user token"
+msgstr "O pegue un token de usuario"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__page_id
+msgid "Page"
+msgstr "Página"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__page_token
+msgid "Page Token"
+msgstr "Token de la página"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__page_ids
+#: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_app__step__pages
+msgid "Pages"
+msgstr "Páginas"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "Paste the App ID and the App Secret (App settings › Basic)."
+msgstr ""
+"Pegue el ID de la app y la clave secreta (Configuración de la app › Básica)."
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "Paste the token first."
+msgstr "Pegue primero el token."
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__permalink
+msgid "Permalink"
+msgstr "Enlace"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__scopes
+msgid "Permissions"
+msgstr "Permisos"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__granted_scopes
+msgid "Permissions Granted"
+msgstr "Permisos concedidos"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_media__media_type__image
+msgid "Photo"
+msgstr "Foto"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__picture_url
+msgid "Picture Url"
+msgstr "URL de la imagen"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_app__webhook_state__manual
+msgid "Polling only"
+msgstr "Solo consultas periódicas"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Portrait (4:5)"
+msgstr "Vertical (4:5)"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__posted_at
+msgid "Posted At"
+msgstr "Publicado el"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Posts"
+msgstr "Publicaciones"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_app__message_kind__danger
+msgid "Problem"
+msgstr "Problema"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Profile"
+msgstr "Perfil"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Profile and followers"
+msgstr "Perfil y seguidores"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid "Refresh now"
+msgstr "Actualizar ahora"
+
+#. module: meta_connector
+#: model:ir.actions.server,name:meta_connector.action_meta_feed_refresh
+msgid "Refresh the Instagram feed"
+msgstr "Actualizar el feed de Instagram"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "Register the webhook"
+msgstr "Registrar el webhook"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_app__webhook_state__ok
+msgid "Registered"
+msgstr "Registrado"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "Save"
+msgstr "Guardar"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/feed/feed.js:0
+msgid "See the post on Instagram"
+msgstr "Ver la publicación en Instagram"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+#: model:ir.actions.server,name:meta_connector.action_meta_setup
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "Set up Meta"
+msgstr "Configurar Meta"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Show"
+msgstr "Mostrar"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Spacing"
+msgstr "Espaciado"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Square (1:1)"
+msgstr "Cuadrado (1:1)"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__state
+msgid "State"
+msgstr "Estado"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__state_reason
+msgid "State Reason"
+msgstr "Motivo del estado"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__step
+msgid "Step"
+msgstr "Paso"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_app__message_kind__success
+msgid "Success"
+msgstr "Éxito"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid "The Facebook Page this site uses."
+msgstr "La página de Facebook que usa este sitio."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid "The Instagram professional account linked to your Facebook Page."
+msgstr "La cuenta profesional de Instagram vinculada a tu página de Facebook."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid ""
+"The WhatsApp Business numbers on Meta's Cloud API that use this Meta app."
+msgstr ""
+"Los números de WhatsApp Business en la Cloud API de Meta que usan esta app "
+"de Meta."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_meta_connector_page__ig_avatar_id
+msgid "The account's profile photo, kept here (WebP) for the feed's header."
+msgstr ""
+"La foto de perfil de la cuenta, guardada aquí (WebP) para el encabezado del "
+"feed."
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "The last Facebook login did not give this Page."
+msgstr "El último inicio de sesión de Facebook no incluyó esta página."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid ""
+"The numbers send with this login instead of their own token, once the login "
+"never expires (Facebook Login for Business) and has the WhatsApp "
+"permissions. Off: each number keeps its own token."
+msgstr ""
+"Los números envían con este inicio de sesión en lugar de su propio token, "
+"una vez que el inicio de sesión no caduca nunca (Facebook Login for "
+"Business) y tiene los permisos de WhatsApp. Desactivado: cada número "
+"conserva su propio token."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid ""
+"The website block “Instagram Feed” shows your latest posts, kept here and "
+"refreshed every hour."
+msgstr ""
+"El bloque del sitio web “Feed de Instagram” muestra sus últimas "
+"publicaciones, guardadas aquí y actualizadas cada hora."
+
+#. module: meta_connector
+#: model:ir.model.constraint,message:meta_connector.constraint_meta_connector_page_page_unique
+msgid "This Page is already in the connection."
+msgstr "Esta página ya está en la conexión."
+
+#. module: meta_connector
+#: model:ir.model.constraint,message:meta_connector.constraint_meta_connector_media_media_unique
+msgid "This post is already kept."
+msgstr "Esta publicación ya está guardada."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_meta_connector_page__use_page
+msgid "This site uses the Facebook Page (e.g. Messenger)."
+msgstr "Este sitio usa la página de Facebook (p. ej. Messenger)."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_meta_connector_page__use_instagram
+msgid "This site uses the Page's Instagram account (messages, the feed)."
+msgstr ""
+"Este sitio usa la cuenta de Instagram de la página (mensajes, el feed)."
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "This site uses: %s."
+msgstr "Este sitio usa: %s."
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "Tick at least one Page or Instagram account."
+msgstr "Marque al menos una página o cuenta de Instagram."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+"Tick what this site uses: messages in Communication Flows, the website's "
+"Instagram feed…"
+msgstr ""
+"Marque lo que usa este sitio: mensajes en Communication Flows, el feed de "
+"Instagram del sitio web…"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__tile_id
+msgid "Tile"
+msgstr "Miniatura"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+msgid "Tile shape"
+msgstr "Forma de las miniaturas"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__use_instagram
+msgid "Use Instagram"
+msgstr "Usar Instagram"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+"Use case: <b>Other</b> › app type: <b>Business</b> › give it a name (e.g. "
+"“<i>Odoo</i>”) and your business portfolio."
+msgstr ""
+"Caso de uso: <b>Other</b> › tipo de app: <b>Business</b> › póngale un nombre"
+" (p. ej. “<i>Odoo</i>”) y su portafolio comercial."
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__use_page
+msgid "Use the Page"
+msgstr "Usar la página"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "Use this token"
+msgstr "Usar este token"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__user_token
+msgid "User Token"
+msgstr "User Token"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__verify_token
+msgid "Verify Token"
+msgstr "Token de verificación"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_media__media_type__video
+msgid "Video"
+msgstr "Video"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "Webhook"
+msgstr "Webhook"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__webhook_url
+msgid "Webhook Callback URL"
+msgstr "URL del webhook"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__webhook_state
+msgid "Webhook State"
+msgstr "Estado del webhook"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "Webhook registered: messages arrive at once."
+msgstr "Webhook registrado: los mensajes llegan al instante."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_meta_connector_app__granted_scopes
+msgid ""
+"What the login may do (Meta's answer, checked at each login and every day)."
+msgstr ""
+"Lo que puede hacer el inicio de sesión (respuesta de Meta, comprobada en "
+"cada inicio de sesión y cada día)."
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_res_config_settings__meta_wa_status
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid "WhatsApp"
+msgstr "WhatsApp"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid "WhatsApp Cloud numbers"
+msgstr "Números de WhatsApp Cloud"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_res_config_settings__meta_wa_login
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid "WhatsApp sends with the Meta login"
+msgstr "WhatsApp envía con el inicio de sesión de Meta"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid ""
+"Without the webhook, new messages arrive every 10 minutes (see the Webhook "
+"box)."
+msgstr ""
+"Sin el webhook, los mensajes nuevos llegan cada 10 minutos (vea el recuadro "
+"Webhook)."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "developers.facebook.com › Create app"
+msgstr "developers.facebook.com › Crear app"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "e.g. 1234567890123456"
+msgstr "p. ej. 1234567890123456"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.snippets
+msgid "instagram, feed, posts, photos, social, follow, grid"
+msgstr "instagram, feed, publicaciones, fotos, redes, seguir, cuadrícula"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "no answer"
+msgstr "sin respuesta"

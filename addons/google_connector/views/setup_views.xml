@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_google_connector_setup_form" model="ir.ui.view">
+        <field name="name">google.connector.setup.form</field>
+        <field name="model">google.connector.setup</field>
+        <field name="arch" type="xml">
+            <form string="Set up Google" create="0" duplicate="0" delete="0">
+                <!-- the buttons in the header (not a footer, which Odoo shows in dialogs only): the wizard opens as a
+                     page, also when Google's sign-in comes back to it -->
+                <header>
+                    <button name="action_next" type="object" string="Next" class="btn-primary" invisible="step == 'first' or (step == 'check' and not first_app_ids)"/>
+                    <button name="action_finish" type="object" string="Done" class="btn-primary" invisible="step != 'first' and not (step == 'check' and not first_app_ids)"/>
+                    <button name="action_back" type="object" string="Back" invisible="step == 'project'"/>
+                    <field name="step" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <field name="has_secret" invisible="1"/>
+                    <field name="has_maps_key" invisible="1"/>
+                    <field name="has_server_key" invisible="1"/>
+                    <field name="server_key_on" invisible="1"/>
+                    <field name="maps_on" invisible="1"/>
+                    <!-- 1. the Google Cloud project -->
+                    <div invisible="step != 'project'">
+                        <h2>1. The Google Cloud project</h2>
+                        <field name="project_html" readonly="1"/>
+                        <group>
+                            <field name="project_id" placeholder="e.g. elite-wonder-512610-m8"/>
+                        </group>
+                    </div>
+                    <!-- 2. apps -->
+                    <div invisible="step != 'apps'">
+                        <h2>2. The apps</h2>
+                        <p class="text-muted">Switch on the apps to use: the next steps follow from them (their APIs, their access). "Writes allowed" lets an app also send or change things in Google; without it, it only reads.</p>
+                        <field name="app_ids">
+                            <list editable="bottom" create="false" delete="false">
+                                <field name="label"/>
+                                <field name="description"/>
+                                <field name="installed" column_invisible="True"/>
+                                <field name="on" widget="boolean_toggle" readonly="not installed"/>
+                                <field name="writes_allowed" widget="boolean_toggle" readonly="not installed or not on"/>
+                                <field name="status" widget="badge" decoration-success="status == 'ready'"
+                                       decoration-danger="status in ('missing', 'no_account', 'no_key')"/>
+                            </list>
+                        </field>
+                        <label for="scopes_text"/>
+                        <field name="scopes_text" readonly="1"/>
+                    </div>
+                    <!-- 3. the APIs -->
+                    <div invisible="step != 'apis'">
+                        <h2>3. Switch on the APIs</h2>
+                        <field name="apis_html" readonly="1"/>
+                    </div>
+                    <!-- 4. the consent screen -->
+                    <div invisible="step != 'consent'">
+                        <h2>4. The consent screen</h2>
+                        <field name="consent_html" readonly="1"/>
+                        <label for="scope_strings"/>
+                        <field name="scope_strings" widget="CopyClipboardText" readonly="1"/>
+                    </div>
+                    <!-- 5. the OAuth client -->
+                    <div invisible="step != 'client'">
+                        <h2>5. The OAuth client</h2>
+                        <field name="client_html" readonly="1"/>
+                        <group class="mt-3">
+                            <field name="client_id" placeholder="123-abc.apps.googleusercontent.com"/>
+                            <field name="client_secret" password="True"/>
+                            <div colspan="2" class="text-muted small" invisible="not has_secret">A secret is saved: leave it empty to keep it.</div>
+                        </group>
+                    </div>
+                    <!-- 7. Google accounts -->
+                    <div invisible="step != 'accounts'">
+                        <h2>7. Sign in</h2>
+                        <p class="text-muted">Sign in with each Google account the apps use (e.g. the company's Gmail) and allow everything Google asks. Switched on an app since? Press Reconnect on its account: Google then asks for the new access.</p>
+                        <button name="action_connect" type="object" string="Sign in a Google account" class="btn-primary mb-3"/>
+                        <field name="account_ids" readonly="1">
+                            <list>
+                                <field name="email"/>
+                                <field name="state" widget="badge" decoration-success="state == 'connected'"
+                                       decoration-danger="state == 'error'"/>
+                                <field name="state_reason"/>
+                                <button name="action_connect" type="object" string="Reconnect" icon="fa-refresh"/>
+                            </list>
+                        </field>
+                    </div>
+                    <!-- 6. API keys: Maps (billing and key), the server key (PageSpeed) -->
+                    <div invisible="step != 'maps'">
+                        <h2>6. API keys</h2>
+                        <div invisible="not maps_on">
+                            <h3>Google Maps: billing and key</h3>
+                            <field name="maps_html" readonly="1"/>
+                            <group>
+                                <field name="maps_key" password="True"/>
+                                <div colspan="2" class="text-muted small" invisible="not has_maps_key">A key is saved: leave it empty to keep it.</div>
+                            </group>
+                        </div>
+                        <div invisible="not server_key_on">
+                            <h3>Server key (PageSpeed Insights)</h3>
+                            <ol>
+                                <li>Open <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener">Credentials</a> in the same project and press <b>Create credentials › API key</b>.</li>
+                                <li>Open the new key: <b>Application restrictions</b> None (this site calls Google from its server), <b>API restrictions</b> Restrict key to <b>PageSpeed Insights API</b>, Save.</li>
+                                <li>Copy the key here. It is a different key from the Maps one: the Maps key is limited to your website's pages.</li>
+                            </ol>
+                            <group>
+                                <field name="server_key" password="True"/>
+                                <div colspan="2" class="text-muted small" invisible="not has_server_key">A key is saved: leave it empty to keep it.</div>
+                            </group>
+                        </div>
+                    </div>
+                    <!-- 8. check -->
+                    <div invisible="step != 'check'">
+                        <h2>8. Check access</h2>
+                        <p class="text-muted">Each app that is on, and whether its Google account granted what it needs. "Missing access" names what is missing: add it in step 4 (Data access) if it is not there, then Reconnect the account in step 7.</p>
+                        <field name="check_html" readonly="1"/>
+                    </div>
+                    <!-- 9. what an app shows only after its first read from Google -->
+                    <div invisible="step != 'first'">
+                        <h2>9. First sync</h2>
+                        <p class="text-muted">These apps show nothing until they read Google once: open each one and run its first sync. Google Contacts and Gmail only read from Google (nothing is sent, no one is messaged). Google Calendar's Sync now writes to Google Calendar and invites the staff to their shifts: run it only when you mean to.</p>
+                        <field name="first_app_ids" readonly="1">
+                            <list>
+                                <field name="label" string="App"/>
+                                <field name="first_sync_note" string="Before it shows anything"/>
+                                <field name="settings_action" column_invisible="True"/>
+                                <button name="action_open_settings" type="object" string="Open" icon="fa-arrow-right"
+                                        invisible="not settings_action"/>
+                            </list>
+                        </field>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_google_setup" model="ir.actions.act_window">
+        <field name="name">Set up Google</field>
+        <field name="res_model">google.connector.setup</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{"default_step": "project"}</field>
+    </record>
+    <record id="action_google_setup_accounts" model="ir.actions.act_window">
+        <field name="name">Set up Google</field>
+        <field name="res_model">google.connector.setup</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{"default_step": "accounts"}</field>
+    </record>
+    <record id="action_google_setup_check" model="ir.actions.act_window">
+        <field name="name">Set up Google</field>
+        <field name="res_model">google.connector.setup</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{"default_step": "check"}</field>
+    </record>
+</odoo>

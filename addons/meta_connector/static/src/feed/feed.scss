@@ -1,0 +1,131 @@
+// Instagram Feed block: square tiles in the section's own colours (no card: it sits on light or dark sections,
+// the footer too)
+.s_meta_instagram_feed {
+    --meta-feed-gap: 6px;
+    --meta-feed-cols: 3;
+    --meta-feed-radius: 4px;
+    --meta-feed-ratio: 1;
+
+    // block options (website editor): tile shape, columns on phone / desktop (else automatic), max width
+    &[data-shape="portrait"] {
+        --meta-feed-ratio: 4 / 5;
+    }
+    &[data-shape="landscape"] {
+        --meta-feed-ratio: 16 / 9;
+    }
+    @for $i from 1 through 3 {
+        &[data-cols-sm="#{$i}"] .o_meta_feed_grid {
+            --meta-feed-cols: #{$i};
+        }
+    }
+    @include media-breakpoint-up(md) {
+        @for $i from 2 through 6 {
+            &[data-cols="#{$i}"] .o_meta_feed_grid {
+                --meta-feed-cols: #{$i};
+            }
+        }
+    }
+    @each $width in (1200, 900, 600) {
+        &[data-width="#{$width}"] .o_meta_feed_generated {
+            max-width: #{$width}px;
+            margin-inline: auto;
+        }
+    }
+
+    .o_meta_feed_tiles {
+        gap: var(--meta-feed-gap);
+    }
+    .o_meta_feed_grid {
+        display: grid;
+        grid-template-columns: repeat(var(--meta-feed-cols), minmax(0, 1fr));
+    }
+    .o_meta_feed_n4, .o_meta_feed_n8 {
+        --meta-feed-cols: 2;
+    }
+    @include media-breakpoint-up(md) {
+        .o_meta_feed_n4, .o_meta_feed_n8 {
+            --meta-feed-cols: 4;
+        }
+        .o_meta_feed_n6, .o_meta_feed_n12 {
+            --meta-feed-cols: 6;
+        }
+    }
+    .o_meta_feed_row {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        .o_meta_feed_tile {
+            flex: 0 0 calc((100% - 2 * var(--meta-feed-gap)) / 3);
+            scroll-snap-align: start;
+        }
+        @include media-breakpoint-up(md) {
+            .o_meta_feed_tile {
+                flex-basis: 0;
+                flex-grow: 1;
+                min-width: 120px;
+            }
+        }
+    }
+    .o_meta_feed_tile {
+        position: relative;
+        display: block;
+        aspect-ratio: var(--meta-feed-ratio);
+        overflow: hidden;
+        border-radius: var(--meta-feed-radius);
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        &:hover img, &:focus-visible img {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+    }
+    .o_meta_feed_kind {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        color: #fff;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+    }
+    // the header: the section's own colours
+    .o_meta_feed_header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+        color: inherit;
+        text-decoration: none;
+        &:hover .o_meta_feed_handle {
+            text-decoration: underline;
+        }
+    }
+    .o_meta_feed_avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex: none;
+    }
+    .o_meta_feed_handle {
+        font-weight: 600;
+    }
+    .o_meta_feed_name, .o_meta_feed_counts {
+        font-size: 0.875em;
+        opacity: 0.8;
+    }
+    // the section's text colour, on any background (light or dark)
+    .o_meta_feed_follow {
+        color: inherit;
+        border: 1px solid currentColor;
+        border-radius: 999px;
+        padding-inline: 1rem;
+        &:hover, &:focus-visible {
+            color: inherit;
+            background-color: color-mix(in srgb, currentColor 12%, transparent);
+        }
+    }
+}

@@ -1,0 +1,1124 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-26 01:40+0000\n"
+"PO-Revision-Date: 2026-10-26 01:40+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/connector.py:0
+msgid ""
+"%(account)s has not granted %(app)s the access it needs: Reconnect in Set up"
+" Google."
+msgstr ""
+"%(account)s no ha concedido a %(app)s el acceso que necesita: vuelva a "
+"conectar en Configurar Google."
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid ""
+"%(audience)s: User type External, then Publish app so the status reads In "
+"production. Stay in production: in Testing, Google ends the sign-in every 7 "
+"days. Google then shows \"Google hasn't verified this app\" once at sign-in:"
+" Advanced › Go to the app; that is expected for your own app."
+msgstr ""
+"%(audience)s: tipo de usuario Externo, luego Publicar la app para que el "
+"estado diga En producción. Manténgala en producción: en Prueba, Google "
+"termina el inicio de sesión cada 7 días. Google mostrará una vez al iniciar "
+"sesión \"Google no verificó esta app\": Avanzado › Ir a la app; es normal "
+"para su propia app."
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid ""
+"%(billing)s: link a billing account to the project (Maps does not work "
+"without it)."
+msgstr ""
+"%(billing)s: vincule una cuenta de facturación al proyecto (Maps no funciona"
+" sin ella)."
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid ""
+"%(branding)s: the app name your team sees when signing in (e.g. Odoo), a "
+"support email, and this site's domain under Authorized domains."
+msgstr ""
+"%(branding)s: el nombre de la app que su equipo ve al iniciar sesión (p. ej."
+" Odoo), un correo de asistencia y el dominio de este sitio en Dominios "
+"autorizados."
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid "%(client)s: Application type Web application, any name (e.g. Odoo)."
+msgstr ""
+"%(client)s: tipo de aplicación Aplicación web, cualquier nombre (p. ej. "
+"Odoo)."
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid ""
+"%(credentials)s: Create credentials › API key. Restrict it: API restrictions"
+" to the Maps APIs of step 3; Application restrictions to Websites, this "
+"site's domain(s) only. Browsers see the key (address search): the "
+"restriction is what protects it."
+msgstr ""
+"%(credentials)s: Crear credenciales › Clave de API. Restrínjala: "
+"Restricciones de API a las API de Maps del paso 3; Restricciones de "
+"aplicación a Sitios web, solo el/los dominio(s) de este sitio. Los "
+"navegadores ven la clave (búsqueda de direcciones): la restricción es lo que"
+" la protege."
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid ""
+"%(scopes)s: Add or remove scopes › Manually add scopes: paste the WHOLE box "
+"below (every scope, comma-separated), Add to table, Update, Save. A scope "
+"missing here makes Google refuse the sign-in."
+msgstr ""
+"%(scopes)s: Agregar o quitar permisos › Agregar permisos manualmente: pegue "
+"TODO el cuadro de abajo (cada permiso, separados por comas), Agregar a la "
+"tabla, Actualizar, Guardar. Un permiso que falte aquí hace que Google "
+"rechace el inicio de sesión."
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/account.py:0
+msgid "%s is not connected to Google."
+msgstr "%s no está conectado a Google."
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/connector.py:0
+msgid ""
+"%s may not change anything in Google: allow writes in Settings › Google."
+msgstr ""
+"%s no puede cambiar nada en Google: permita la escritura en Ajustes › "
+"Google."
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_setup__step__project
+msgid "1. Project"
+msgstr "1. Proyecto"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "1. The Google Cloud project"
+msgstr "1. El proyecto de Google Cloud"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "123-abc.apps.googleusercontent.com"
+msgstr "123-abc.apps.googleusercontent.com"
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_setup__step__apps
+msgid "2. Apps"
+msgstr "2. Apps"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "2. The apps"
+msgstr "2. Las apps"
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_setup__step__apis
+msgid "3. APIs"
+msgstr "3. API"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "3. Switch on the APIs"
+msgstr "3. Active las API"
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_setup__step__consent
+msgid "4. Consent screen"
+msgstr "4. Pantalla de consentimiento"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "4. The consent screen"
+msgstr "4. La pantalla de consentimiento"
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_setup__step__client
+msgid "5. OAuth client"
+msgstr "5. Cliente de OAuth"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "5. The OAuth client"
+msgstr "5. El cliente de OAuth"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "6. Google Maps: billing and key"
+msgstr "6. Google Maps: facturación y clave"
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_setup__step__maps
+msgid "6. Maps key"
+msgstr "6. Clave de Maps"
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_setup__step__accounts
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "7. Sign in"
+msgstr "7. Iniciar sesión"
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_setup__step__check
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "8. Check access"
+msgstr "8. Comprobar el acceso"
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_setup__step__first
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "9. First sync"
+msgstr "9. Primera sincronización"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid ""
+"A Google account can only make a few projects (Google's limit): reuse the "
+"existing one rather than making a new one each time."
+msgstr ""
+"Una cuenta de Google solo puede crear unos pocos proyectos (límite de "
+"Google): reutilice el existente en lugar de crear uno nuevo cada vez."
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "A key is saved: leave it empty to keep it."
+msgstr "Hay una clave guardada: déjelo vacío para conservarla."
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "A secret is saved: leave it empty to keep it."
+msgstr "Hay un secreto guardado: déjelo vacío para conservarlo."
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__scopes_text
+msgid "Access Google will ask for"
+msgstr "Acceso que pedirá Google"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_account__access_token
+msgid "Access Token"
+msgstr "Token de acceso"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_account__active
+msgid "Active"
+msgstr "Activo"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__apis_html
+msgid "Apis Html"
+msgstr "Apis Html"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_log__app_code
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "App"
+msgstr "App"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_account__app_ids
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__app_ids
+#: model_terms:ir.ui.view,arch_db:google_connector.res_config_settings_view_form_google
+msgid "Apps"
+msgstr "Apps"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__first_app_ids
+msgid "Apps to read once"
+msgstr "Apps por leer una vez"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid "Audience"
+msgstr "Público"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__redirect_uri
+msgid "Authorized Redirect URI"
+msgstr "URI de redireccionamiento autorizado"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__redirect_uris
+msgid "Authorized Redirect URIs"
+msgstr "URI de redireccionamiento autorizados"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "Back"
+msgstr "Atrás"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "Before it shows anything"
+msgstr "Antes de que muestre algo"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid "Billing"
+msgstr "Facturación"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid "Branding"
+msgstr "Desarrollo de la marca"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__calls_day
+msgid "Calls Day"
+msgstr "Llamadas por día"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__calls_today
+msgid "Calls Today"
+msgstr "Llamadas hoy"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__check_html
+msgid "Check Html"
+msgstr "HTML de comprobación"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.res_config_settings_view_form_google
+msgid "Check access"
+msgstr "Comprobar acceso"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__client_html
+msgid "Client Html"
+msgstr "Client Html"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid "Clients"
+msgstr "Clientes"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__code
+msgid "Code"
+msgstr "Código"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_account__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: google_connector
+#: model:ir.model,name:google_connector.model_res_config_settings
+msgid "Config Settings"
+msgstr "Ajustes de configuración"
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_account__state__connected
+msgid "Connected"
+msgstr "Conectado"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__consent_html
+msgid "Consent Html"
+msgstr "Consent Html"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid ""
+"Copy its Client ID and Client secret here (an existing client: %(clients)s, "
+"open it). Odoo checks them with Google."
+msgstr ""
+"Copie aquí su ID de cliente y su secreto de cliente (un cliente existente: "
+"%(clients)s, ábralo). Odoo los comprueba con Google."
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid ""
+"Copy the project's ID (the picker's ID column, e.g. elite-wonder-512610-m8) "
+"into the field below: every link of the next steps then opens in that "
+"project."
+msgstr ""
+"Copie el ID del proyecto (la columna ID del selector, p. ej. elite-"
+"wonder-512610-m8) en el campo de abajo: cada enlace de los pasos siguientes "
+"se abrirá en ese proyecto."
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid "Create an OAuth client"
+msgstr "Crear un cliente de OAuth"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_log__created
+msgid "Created"
+msgstr "Creado"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_account__create_uid
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__create_uid
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_log__create_uid
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_account__create_date
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__create_date
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_log__create_date
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid "Credentials"
+msgstr "Credenciales"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid "Data access"
+msgstr "Acceso a los datos"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__description
+msgid "Description"
+msgstr "Descripción"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_account_list
+msgid "Disconnect"
+msgstr "Desconectar"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector__display_name
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_account__display_name
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__display_name
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_log__display_name
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__display_name
+#: model:ir.model.fields,field_description:google_connector.field_res_config_settings__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_log__state__done
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "Done"
+msgstr "Hecho"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.res_config_settings_view_form_google
+msgid ""
+"Each Google app: on or off, and whether it may change things in Google."
+msgstr ""
+"Cada app de Google: activada o no, y si puede cambiar cosas en Google."
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid ""
+"Each app that is on, and whether its Google account granted what it needs. "
+"\"Missing access\" names what is missing: add it in step 4 (Data access) if "
+"it is not there, then Reconnect the account in step 7."
+msgstr ""
+"Cada app activada y si su cuenta de Google concedió lo que necesita. \"Falta"
+" acceso\" indica lo que falta: agréguelo en el paso 4 (Acceso a los datos) "
+"si no está, luego vuelva a conectar la cuenta en el paso 7."
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_account__email
+msgid "Email"
+msgstr "Correo electrónico"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_log__failed
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_log__state__failed
+msgid "Failed"
+msgstr "Fallido"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_log__finished_at
+msgid "Finished At"
+msgstr "Terminado el"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__first_sync_note
+msgid "First Sync Note"
+msgstr "Nota de primera sincronización"
+
+#. module: google_connector
+#: model:ir.actions.act_window,name:google_connector.action_google_settings
+#: model_terms:ir.ui.view,arch_db:google_connector.res_config_settings_view_form_google
+msgid "Google"
+msgstr "Google"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__account_id
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_log__account_id
+msgid "Google Account"
+msgstr "Cuenta de Google"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__account_ids
+msgid "Google Accounts"
+msgstr "Cuentas de Google"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__project_id
+msgid "Google Cloud Project ID"
+msgstr "ID del proyecto de Google Cloud"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid "Google Cloud's project picker"
+msgstr "el selector de proyectos de Google Cloud"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_res_config_settings__google_connected_count
+msgid "Google Connected Count"
+msgstr "Cuentas de Google conectadas"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_res_config_settings__google_has_client
+msgid "Google Has Client"
+msgstr "Tiene cliente de Google"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/account.py:0
+#: code:addons/google_connector/wizard/setup.py:0
+msgid "Google account"
+msgstr "Cuenta de Google"
+
+#. module: google_connector
+#: model:ir.model,name:google_connector.model_google_connector_account
+msgid "Google account (Google connector)"
+msgstr "Cuenta de Google (conector de Google)"
+
+#. module: google_connector
+#: model:ir.actions.act_window,name:google_connector.action_google_connector_account
+#: model_terms:ir.ui.view,arch_db:google_connector.res_config_settings_view_form_google
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_account_list
+msgid "Google accounts"
+msgstr "Cuentas de Google"
+
+#. module: google_connector
+#: model:ir.model,name:google_connector.model_google_connector_app
+msgid "Google app (Google connector)"
+msgstr "App de Google (conector de Google)"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.res_config_settings_view_form_google
+msgid "Google apps"
+msgstr "Apps de Google"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.res_config_settings_view_form_google
+msgid "Google connection"
+msgstr "Conexión con Google"
+
+#. module: google_connector
+#: model:ir.model,name:google_connector.model_google_connector
+msgid "Google connector"
+msgstr "Conector de Google"
+
+#. module: google_connector
+#: model:ir.actions.server,name:google_connector.ir_cron_google_log_clean_ir_actions_server
+msgid "Google connector: clean the sync log"
+msgstr "Conector de Google: limpiar el registro de sincronización"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid "Google does not accept this client: %s"
+msgstr "Google no acepta este cliente: %s"
+
+#. module: google_connector
+#: model:ir.actions.act_window,name:google_connector.action_google_connector_log
+#: model:ir.model,name:google_connector.model_google_connector_log
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_log_list
+msgid "Google sync log"
+msgstr "Registro de sincronización de Google"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_account__granted_scopes
+msgid "Granted Scopes"
+msgstr "Permisos otorgados"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__has_maps_key
+msgid "Has Maps Key"
+msgstr "Tiene clave de Maps"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__has_secret
+msgid "Has Secret"
+msgstr "Tiene secreto"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector__id
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_account__id
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__id
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_log__id
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__id
+#: model:ir.model.fields,field_description:google_connector.field_res_config_settings__id
+msgid "ID"
+msgstr "ID"
+
+#. module: google_connector
+#. odoo-javascript
+#: code:addons/google_connector/static/src/cards.xml:0
+msgid "Install"
+msgstr "Instalar"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__installed
+msgid "Installed"
+msgstr "Instalada"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__label
+msgid "Label"
+msgstr "Etiqueta"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_account__write_uid
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__write_uid
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_log__write_uid
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_account__write_date
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__write_date
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_log__write_date
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: google_connector
+#: model:ir.model.fields,help:google_connector.field_google_connector_setup__client_secret
+#: model:ir.model.fields,help:google_connector.field_google_connector_setup__maps_key
+msgid "Left empty: the one saved stays."
+msgstr "Si se deja vacío, se conserva el guardado."
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__maps_key
+msgid "Maps API Key"
+msgstr "Clave de API de Maps"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__maps_html
+msgid "Maps Html"
+msgstr "Maps Html"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__maps_on
+msgid "Maps On"
+msgstr "Maps activado"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid ""
+"Maps needs billing switched on in the project (a card on file; Google's free"
+" monthly credit usually covers a tour operator). Without Maps, no billing is"
+" needed."
+msgstr ""
+"Maps necesita la facturación activada en el proyecto (una tarjeta "
+"registrada; el crédito mensual gratuito de Google suele cubrir a un operador"
+" de tours). Sin Maps no se necesita facturación."
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_app__status__missing
+msgid "Missing access"
+msgstr "Falta acceso"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__module
+msgid "Module"
+msgstr "Módulo"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_account__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__needs_account
+msgid "Needs Account"
+msgstr "Necesita cuenta"
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_account__state__error
+msgid "Needs attention"
+msgstr "Requiere atención"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "Next"
+msgstr "Siguiente"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/connector.py:0
+msgid "No Google OAuth client yet: Set up Google."
+msgstr "Aún no hay cliente de OAuth de Google: Configurar Google."
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_app__status__no_account
+msgid "No Google account"
+msgstr "Sin cuenta de Google"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/connector.py:0
+msgid "No Google account is connected for %s: Set up Google."
+msgstr "No hay ninguna cuenta de Google conectada para %s: Configurar Google."
+
+#. module: google_connector
+#. odoo-javascript
+#: code:addons/google_connector/static/src/cards.xml:0
+msgid "No Google app installed yet."
+msgstr "Aún no hay ninguna app de Google instalada."
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_app__status__no_key
+msgid "No Maps key"
+msgstr "Sin clave de Maps"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/connector.py:0
+msgid "No Maps key yet for %s: Set up Google (step 4)."
+msgstr "Aún no hay clave de Maps para %s: Configurar Google (paso 4)."
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid "No app is switched on yet (step 2)."
+msgstr "Aún no hay ninguna app activada (paso 2)."
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_account__state__draft
+msgid "Not connected"
+msgstr "No conectado"
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_app__status__not_installed
+msgid "Not installed"
+msgstr "No instalada"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_log__note
+msgid "Note"
+msgstr "Nota"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__client_id
+msgid "OAuth Client ID"
+msgstr "ID de cliente de OAuth"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__client_secret
+msgid "OAuth Client Secret"
+msgstr "Secreto de cliente de OAuth"
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_app__status__off
+msgid "Off"
+msgstr "Desactivado"
+
+#. module: google_connector
+#. odoo-javascript
+#: code:addons/google_connector/static/src/cards.xml:0
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__on
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_app__status__ready
+msgid "On"
+msgstr "Activado"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.res_config_settings_view_form_google
+msgid ""
+"One Google login for every Google app: the Cloud client, the Google "
+"accounts, the Maps key. Credentials are entered only in Set up Google."
+msgstr ""
+"Un solo inicio de sesión de Google para todas las apps de Google: el cliente"
+" de Cloud, las cuentas de Google, la clave de Maps. Las credenciales solo se"
+" introducen en Configurar Google."
+
+#. module: google_connector
+#: model:ir.model.constraint,message:google_connector.constraint_google_connector_app_code_unique
+msgid "One row per Google app."
+msgstr "Una fila por app de Google."
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/connector.py:0
+msgid "Only administrators can change the Google connection."
+msgstr "Solo los administradores pueden cambiar la conexión con Google."
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid ""
+"Only this path is used (/google_connector/oauth): an older one in the "
+"client, e.g. /cfd/gvoice/oauth, is not used any more and can stay or go."
+msgstr ""
+"Solo se usa esta ruta (/google_connector/oauth): una anterior en el cliente,"
+" p. ej. /cfd/gvoice/oauth, ya no se usa y puede quedarse o quitarse."
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "Open"
+msgstr "Abrir"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid ""
+"Open %(pick)s and choose the project all the Google apps will use, or "
+"%(create)s one. One project for everything: Gmail, Contacts, Calendar, Maps."
+msgstr ""
+"Abra %(pick)s y elija el proyecto que usarán todas las apps de Google, o "
+"%(create)s uno. Un solo proyecto para todo: Gmail, Contactos, Calendar, "
+"Maps."
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid ""
+"Open each API below and press Enable (an API already on shows Manage: "
+"nothing to do). An app whose API is off gets an error from Google."
+msgstr ""
+"Abra cada API de abajo y pulse Habilitar (una API ya activada muestra "
+"Administrar: nada que hacer). Una app cuya API está desactivada recibe un "
+"error de Google."
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_log__operation
+msgid "Operation"
+msgstr "Operación"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid "Paste the OAuth client ID first."
+msgstr "Pegue primero el ID de cliente de OAuth."
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid "Paste the OAuth client secret."
+msgstr "Pegue el secreto de cliente de OAuth."
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid "Paste the key below."
+msgstr "Pegue la clave abajo."
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__project_html
+msgid "Project Html"
+msgstr "Project Html"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__read_scopes
+msgid "Read Scopes"
+msgstr "Ámbitos de lectura"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_account_list
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "Reconnect"
+msgstr "Volver a conectar"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_account__refresh_token
+msgid "Refresh Token"
+msgstr "Token de actualización"
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_log__state__running
+msgid "Running"
+msgstr "En uso"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__scope_strings
+msgid "Scopes to add"
+msgstr "Permisos por agregar"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_account__sequence
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+#: model:ir.actions.act_window,name:google_connector.action_google_setup
+#: model:ir.actions.act_window,name:google_connector.action_google_setup_accounts
+#: model:ir.actions.act_window,name:google_connector.action_google_setup_check
+#: model:ir.model,name:google_connector.model_google_connector_setup
+#: model_terms:ir.ui.view,arch_db:google_connector.res_config_settings_view_form_google
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "Set up Google"
+msgstr "Configurar Google"
+
+#. module: google_connector
+#. odoo-javascript
+#: code:addons/google_connector/static/src/cards.xml:0
+msgid "Settings"
+msgstr "Ajustes"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__settings_action
+msgid "Settings Action"
+msgstr "Acción de ajustes"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "Sign in a Google account"
+msgstr "Iniciar sesión con una cuenta de Google"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid ""
+"Sign in with each Google account the apps use (e.g. the company's Gmail) and"
+" allow everything Google asks. Switched on an app since? Press Reconnect on "
+"its account: Google then asks for the new access."
+msgstr ""
+"Inicie sesión con cada cuenta de Google que usan las apps (p. ej. el Gmail "
+"de la empresa) y permita todo lo que Google pida. ¿Activó una app después? "
+"Pulse Volver a conectar en su cuenta: Google pedirá el nuevo acceso."
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_log__skipped
+msgid "Skipped"
+msgstr "Omitido"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_log__started_at
+msgid "Started At"
+msgstr "Iniciado el"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_account__state
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_log__state
+msgid "State"
+msgstr "Estado"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_account__state_reason
+msgid "State Reason"
+msgstr "Motivo del estado"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__status
+msgid "Status"
+msgstr "Estado"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__step
+msgid "Step"
+msgstr "Paso"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid ""
+"Switch on the apps to use: the next steps follow from them (their APIs, "
+"their access). \"Writes allowed\" lets an app also send or change things in "
+"Google; without it, it only reads."
+msgstr ""
+"Active las apps que va a usar: los pasos siguientes dependen de ellas (sus "
+"API, su acceso). \"Escritura permitida\" deja que una app también envíe o "
+"cambie cosas en Google; sin ella, solo lee."
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.res_config_settings_view_form_google
+msgid "Sync log"
+msgstr "Registro de sincronización"
+
+#. module: google_connector
+#: model:ir.model.fields,help:google_connector.field_google_connector_account__email
+msgid "The Google account signed in (filled in at sign-in)."
+msgstr ""
+"La cuenta de Google con la que se inició sesión (se rellena al iniciar "
+"sesión)."
+
+#. module: google_connector
+#: model:ir.model.fields,help:google_connector.field_google_connector_app__account_id
+msgid "The Google account the app uses (the first connected one when empty)."
+msgstr ""
+"La cuenta de Google que usa la app (la primera conectada si está vacío)."
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/connector.py:0
+msgid "The Google app %s is off (Settings › Google)."
+msgstr "La app de Google %s está desactivada (Ajustes › Google)."
+
+#. module: google_connector
+#: model:ir.model.fields,help:google_connector.field_google_connector_app__writes_allowed
+msgid ""
+"The app may also create, change or send in Google (else it only reads)."
+msgstr ""
+"La app también puede crear, cambiar o enviar en Google (si no, solo lee)."
+
+#. module: google_connector
+#: model:ir.model.fields,help:google_connector.field_google_connector_app__on
+msgid "The app may call Google."
+msgstr "La app puede llamar a Google."
+
+#. module: google_connector
+#: model:ir.model.fields,help:google_connector.field_google_connector_app__module
+msgid "The module that brings the app."
+msgstr "El módulo que trae la app."
+
+#. module: google_connector
+#: model:ir.model.fields,help:google_connector.field_google_connector_setup__project_id
+msgid ""
+"The project's ID (not its name), e.g. elite-wonder-512610-m8: Google Cloud's"
+" project picker shows it. Every link of this setup then opens in that "
+"project."
+msgstr ""
+"El ID del proyecto (no su nombre), p. ej. elite-wonder-512610-m8: lo muestra"
+" el selector de proyectos de Google Cloud. Cada enlace de esta configuración"
+" se abrirá en ese proyecto."
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid ""
+"These apps show nothing until they read Google once: open each one and run "
+"its first sync. Google Contacts and Gmail only read from Google (nothing is "
+"sent, no one is messaged). Google Calendar's Sync now writes to Google "
+"Calendar and invites the staff to their shifts: run it only when you mean "
+"to."
+msgstr ""
+"Estas apps no muestran nada hasta leer Google una vez: abra cada una y "
+"ejecute su primera sincronización. Google Contactos y Gmail solo leen de "
+"Google (no se envía nada, no se escribe a nadie). Sincronizar ahora de "
+"Google Calendar escribe en Google Calendar e invita al personal a sus "
+"turnos: ejecútelo solo cuando quiera hacerlo."
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_account__token_expiry
+msgid "Token Expiry"
+msgstr "Vencimiento del token"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid ""
+"Under Authorized redirect URIs, press Add URI for EACH address below (one "
+"per address this site is opened on: the current one, and e.g. www. when it "
+"goes live), then Create. A sign-in from an address missing here fails with "
+"redirect_uri_mismatch."
+msgstr ""
+"En URI de redireccionamiento autorizados, pulse Agregar URI para CADA "
+"dirección de abajo (una por cada dirección en la que se abre este sitio: la "
+"actual y, p. ej., www. al salir en vivo), luego Crear. Un inicio de sesión "
+"desde una dirección que falte aquí falla con redirect_uri_mismatch."
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_log__updated
+msgid "Updated"
+msgstr "Actualizado"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/connector.py:0
+msgid "Used by: %s"
+msgstr "Usado por: %s"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__uses_maps_key
+msgid "Uses Maps Key"
+msgstr "Usa la clave de Maps"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__version
+msgid "Version"
+msgstr "Versión"
+
+#. module: google_connector
+#: model:ir.model.fields,help:google_connector.field_google_connector_app__first_sync_note
+msgid "What the app shows only after its first read from Google."
+msgstr "Lo que la app muestra solo después de su primera lectura de Google."
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__write_scopes
+msgid "Write Scopes"
+msgstr "Ámbitos de escritura"
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__writes_allowed
+msgid "Writes Allowed"
+msgstr "Escritura permitida"
+
+#. module: google_connector
+#. odoo-javascript
+#: code:addons/google_connector/static/src/cards.xml:0
+msgid "Writes allowed"
+msgstr "Escritura permitida"
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/setup.py:0
+msgid "create"
+msgstr "cree"
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "e.g. elite-wonder-512610-m8"
+msgstr "p. ej. elite-wonder-512610-m8"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_google_connector
+msgid "Google Connector"
+msgstr "Conector de Google"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_google_connector
+msgid ""
+"One Google login for every Google app (Gmail, Voice, Calendar, Maps): setup "
+"wizard, switches, shared client with limits and retries, sync log"
+msgstr ""
+"Un solo inicio de sesión de Google para todas las apps de Google (Gmail, "
+"Voice, Calendar, Maps): asistente de configuración, interruptores, cliente "
+"compartido con límites y reintentos, registro de sincronización"

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Instagram Feed block: saved with only its options (data-count, data-layout, data-follow, data-header, data-cols,
+         data-cols-sm, data-shape, data-width); its posts are
+         fetched when the page loads (static/src/feed/feed.js), from the copies the connector keeps, never saved. -->
+    <template id="s_meta_instagram_feed" name="Instagram Feed">
+        <section class="s_meta_instagram_feed o_not_editable my-3" data-snippet="s_meta_instagram_feed"
+                 data-name="Instagram Feed" data-count="6" data-layout="grid" data-follow="1"
+                 data-header="followers" data-cols="auto" data-cols-sm="auto" data-shape="square" data-width="full" contenteditable="false">
+            <div class="s_meta_instagram_feed_placeholder text-center small py-3 opacity-75">
+                <i class="fa fa-instagram me-1"/> Instagram Feed: your latest posts show here (Settings › Meta).
+            </div>
+        </section>
+    </template>
+
+    <template id="snippets" inherit_id="website.snippets" name="Meta Instagram feed snippet">
+        <xpath expr="//t[@t-snippet='website.s_chart']" position="after">
+            <t t-snippet="meta_connector.s_meta_instagram_feed" string="Instagram Feed"
+               t-thumbnail="/meta_connector/static/src/img/s_meta_instagram_feed.svg">
+                <keywords>instagram, feed, posts, photos, social, follow, grid</keywords>
+            </t>
+        </xpath>
+    </template>
+</odoo>

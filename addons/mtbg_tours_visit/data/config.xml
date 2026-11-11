@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- on by default (owner's page speed plan, 2026-10-30); Settings › Website turns it off -->
+    <record id="param_visit_by_script" model="ir.config_parameter">
+        <field name="key">mtbg_tours.visit_by_script</field>
+        <field name="value">True</field>
+    </record>
+</odoo>

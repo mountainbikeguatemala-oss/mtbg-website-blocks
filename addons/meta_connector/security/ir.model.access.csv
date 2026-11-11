@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_meta_connector_app_admin,meta.connector.app admin,model_meta_connector_app,base.group_system,1,1,1,1
+access_meta_connector_page_admin,meta.connector.page admin,model_meta_connector_page,base.group_system,1,1,1,1
+access_meta_connector_page_user,meta.connector.page user,model_meta_connector_page,base.group_user,1,0,0,0
+access_meta_connector_media_admin,meta.connector.media admin,model_meta_connector_media,base.group_system,1,1,1,1

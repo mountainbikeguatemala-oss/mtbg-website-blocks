@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_cloudflare" model="ir.ui.view">
+        <field name="name">res.config.settings.form.cloudflare</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Cloudflare" string="Cloudflare" name="cloudflare_connector"
+                     logo="/cloudflare_connector/static/description/icon.png" groups="base.group_system">
+                    <block title="Set up" name="cloudflare_setup">
+                        <setting string="Set up from Odoo" help="Paste one setup token: Odoo finds the account, creates this site's R2 bucket with its lock, makes its own narrow keys, tests them and deletes the setup token. Run it again any time.">
+                            <div class="content-group">
+                                <div class="mt8">
+                                    <button name="%(cloudflare_connector.action_cloudflare_setup_wizard)d" type="action" string="Set up Cloudflare" icon="fa-magic" class="btn btn-primary btn-sm"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Cloudflare account" name="cloudflare_account">
+                        <setting string="Account" help="Filled in by Set up Cloudflare. The API token can only purge the cache of the site’s zone (Edge Cache uses it).">
+                            <div class="content-group">
+                                <div class="row mt8">
+                                    <label for="cloudflare_account_id" class="col-lg-4 o_light_label"/>
+                                    <field name="cloudflare_account_id" class="col-lg-8"/>
+                                </div>
+                                <div class="row mt8">
+                                    <label for="cloudflare_zone_name" class="col-lg-4 o_light_label"/>
+                                    <field name="cloudflare_zone_name" class="col-lg-8"/>
+                                </div>
+                                <div class="row mt8">
+                                    <label for="cloudflare_zone_id" class="col-lg-4 o_light_label"/>
+                                    <field name="cloudflare_zone_id" class="col-lg-8"/>
+                                </div>
+                                <div class="row mt8">
+                                    <label for="cloudflare_api_token" class="col-lg-4 o_light_label"/>
+                                    <field name="cloudflare_api_token" password="True" class="col-lg-8"/>
+                                </div>
+                                <div class="mt8">
+                                    <button name="action_cloudflare_check_token" type="object" string="Check API token"
+                                            icon="fa-plug" class="btn-link"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="R2 storage" name="cloudflare_r2">
+                        <setting string="R2 bucket" help="Filled in by Set up Cloudflare. Other extensions (for example off-site backups) store their files in this bucket. Enter values by hand only for a bucket set up outside Odoo.">
+                            <div class="content-group">
+                                <div class="row mt8">
+                                    <label for="cloudflare_r2_bucket" class="col-lg-4 o_light_label"/>
+                                    <field name="cloudflare_r2_bucket" class="col-lg-8"/>
+                                </div>
+                                <div class="row mt8">
+                                    <label for="cloudflare_r2_access_key_id" class="col-lg-4 o_light_label"/>
+                                    <field name="cloudflare_r2_access_key_id" password="True" class="col-lg-8"/>
+                                </div>
+                                <div class="row mt8">
+                                    <label for="cloudflare_r2_secret_access_key" class="col-lg-4 o_light_label"/>
+                                    <field name="cloudflare_r2_secret_access_key" password="True" class="col-lg-8"/>
+                                </div>
+                                <div class="row mt8">
+                                    <label for="cloudflare_r2_endpoint" class="col-lg-4 o_light_label"/>
+                                    <field name="cloudflare_r2_endpoint" class="col-lg-8" placeholder="https://&lt;account ID&gt;.r2.cloudflarestorage.com"/>
+                                </div>
+                                <div class="mt8">
+                                    <button name="action_cloudflare_check_r2" type="object" string="Test R2 connection"
+                                            icon="fa-plug" class="btn-link"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="Last check">
+                            <field name="cloudflare_status" readonly="1"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

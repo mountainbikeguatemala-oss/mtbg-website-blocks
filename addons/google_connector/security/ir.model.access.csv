@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_google_connector_account_admin,google.connector.account admin,model_google_connector_account,base.group_system,1,1,1,1
+access_google_connector_account_user,google.connector.account user,model_google_connector_account,base.group_user,1,0,0,0
+access_google_connector_app_admin,google.connector.app admin,model_google_connector_app,base.group_system,1,1,1,1
+access_google_connector_app_user,google.connector.app user,model_google_connector_app,base.group_user,1,0,0,0
+access_google_connector_log_admin,google.connector.log admin,model_google_connector_log,base.group_system,1,1,1,1
+access_google_connector_setup_admin,google.connector.setup admin,model_google_connector_setup,base.group_system,1,1,1,1

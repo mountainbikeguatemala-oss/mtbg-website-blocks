@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- a page Odoo tracks, for an anonymous visitor: a few lines in the page itself record the view as soon as the
+         page's content is there (or when the visitor leaves first). Not in the site's JavaScript bundle: that loads
+         last (several MB), and visitors who left before it never counted (0.1.1). -->
+    <template id="layout_visit_tag" inherit_id="website.layout" name="Visits recorded by the page's script">
+        <xpath expr="//head/meta[last()]" position="after">
+            <t t-if="website" t-set="mtbg_visit" t-value="website._mtbg_visit_tag(main_object, response_template)"/>
+            <t t-if="mtbg_visit">
+                <meta name="mtbg-visit" t-att-data-page="mtbg_visit['page'] or None"/>
+                <script>(function () {
+    var sent = false;
+    function send() {
+        if (sent) { return; }
+        sent = true;
+        var tag = document.querySelector('meta[name="mtbg-visit"]');
+        var body = JSON.stringify({url: location.href, title: document.title, referrer: document.referrer,
+                                   page_id: parseInt((tag ? tag.getAttribute("data-page") : "") || "0", 10) || 0});
+        try {
+            if (navigator.sendBeacon) {
+                if (navigator.sendBeacon("/mtbg/visit", new Blob([body], {type: "text/plain"}))) { return; }
+            }
+        } catch (e) { /* the fallback below */ }
+        try {
+            fetch("/mtbg/visit", {method: "POST", body: body, keepalive: true, credentials: "same-origin",
+                                  headers: {"Content-Type": "text/plain"}});
+        } catch (e) { /* nothing more to do */ }
+    }
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", send, {once: true});
+    } else {
+        send();
+    }
+    addEventListener("pagehide", send, {once: true});
+})();</script>
+            </t>
+        </xpath>
+    </template>
+</odoo>

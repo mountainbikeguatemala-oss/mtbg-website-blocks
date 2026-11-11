@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="cloudflare_setup_wizard_form" model="ir.ui.view">
+        <field name="name">cloudflare.setup.wizard.form</field>
+        <field name="model">cloudflare.setup.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Set up Cloudflare">
+                <div invisible="log" class="alert alert-info" role="alert">
+                    <p><strong>Three steps, nothing to look for on Cloudflare.</strong></p>
+                    <ol class="mb-2">
+                        <li>Press <em>Create the token on Cloudflare</em>: the page opens with the permissions already filled in.</li>
+                        <li>Press <em>Review token</em>, then <em>Create Token</em>, and copy the token.</li>
+                        <li>Paste it below and press <em>Set up</em>. Odoo deletes it in Cloudflare when it is done.</li>
+                    </ol>
+                    <button name="action_open_dashboard" type="object" class="btn btn-primary" icon="fa-external-link"
+                            string="Create the token on Cloudflare"/>
+                </div>
+                <group invisible="log">
+                    <group>
+                        <field name="setup_token" password="True"/>
+                        <field name="bucket_name"/>
+                        <field name="lock_days"/>
+                        <field name="lock_prefixes" invisible="lock_days &lt;= 0"/>
+                        <field name="location_hint"/>
+                    </group>
+                    <group>
+                        <field name="create_purge_token"/>
+                        <field name="zone_name" invisible="not create_purge_token"/>
+                        <field name="delete_setup_token"/>
+                        <field name="account_id" placeholder="Only if the token sees several accounts"/>
+                    </group>
+                </group>
+                <div invisible="not log">
+                    <div class="alert alert-success" role="alert" invisible="not done">Cloudflare is set up.</div>
+                    <div class="alert alert-warning" role="alert" invisible="done">The setup stopped. What it finished is kept; fix the cause and run it again.</div>
+                    <field name="log" nolabel="1" widget="text" class="font-monospace"/>
+                </div>
+                <field name="done" invisible="1"/>
+                <footer>
+                    <button name="action_run" type="object" string="Set up" class="btn-primary" invisible="log"/>
+                    <button string="Close" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_cloudflare_setup_wizard" model="ir.actions.act_window">
+        <field name="name">Set up Cloudflare</field>
+        <field name="res_model">cloudflare.setup.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
