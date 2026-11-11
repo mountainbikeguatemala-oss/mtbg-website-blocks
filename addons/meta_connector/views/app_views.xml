@@ -98,10 +98,10 @@
                         <p class="text-muted small">An Instagram account shows when it is a professional (business or creator) account linked to the Page. Not there? Instagram › Settings › Account type and tools › Switch to professional, then link it to the Page, and log in again.</p>
                     </div>
 
-                    <!-- 4. posting (Marketing installed) -->
+                    <!-- 4. posting (an app posts, or Posting is on in Settings) -->
                     <div invisible="step != 'posting'">
                         <field name="posting_wanted" invisible="1"/>
-                        <p class="lead">Posting: Marketing posts new tours on your Facebook Page and Instagram account.</p>
+                        <p class="lead">Posting: this site posts on your Facebook Page and Instagram account.</p>
                         <ol>
                             <li>In <a href="https://developers.facebook.com/apps/" target="_blank">Meta for Developers</a>, open your app › <b>Use cases</b> › <b>Add use cases</b>: add <b>Manage everything on your Page</b> and the <b>Instagram API</b> use case (Manage messaging &amp; content on Instagram). In each, add the permissions <code>pages_manage_posts</code>, <code>pages_read_engagement</code>, <code>pages_show_list</code>, <code>instagram_basic</code> and <code>instagram_content_publish</code>.</li>
                             <li>Your Instagram account must be a professional (business) account linked to the Facebook Page: in <a href="https://business.facebook.com/" target="_blank">Meta Business Suite</a> › Settings › Instagram accounts, connect it to the Page (or the Page's Settings › Linked accounts › Instagram).</li>
@@ -130,7 +130,7 @@
                             </list>
                         </field>
                         <div invisible="not posting_wanted" class="mt-2">
-                            <b>Posting (Marketing):</b> <field name="posting_checks" nolabel="1"/>
+                            <b>Posting:</b> <field name="posting_checks" nolabel="1"/>
                         </div>
                         <group>
                             <field name="app_name"/>
@@ -222,7 +222,7 @@
                         </setting>
                     </block>
                     <block title="Posting" name="meta_posting">
-                        <setting string="Posting" help="Apps (e.g. Marketing) post on the Facebook Page and the Instagram account. Its permissions need Meta's app review, then log in with Facebook again in Set up Meta.">
+                        <setting string="Posting" help="This site posts on the Facebook Page and the Instagram account (e.g. with Marketing). On: log in with Facebook again in Set up Meta to grant the posting permissions. People other than the Meta app's admins need Meta's app review first.">
                             <field name="meta_posting"/>
                         </setting>
                     </block>

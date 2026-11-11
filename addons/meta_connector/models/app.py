@@ -5,7 +5,7 @@ Meta): each step says exactly what to do in Meta and checks it at once.
 1. app:   the Meta app's ID and secret (a free app, made once: the step lists the clicks);
 2. login: "Connect with Facebook" (or a pasted token): a long-lived login, so the Pages' tokens never expire;
 3. pages: tick the Pages and Instagram accounts this site uses (the apps then use them: messages, the feed...);
-4. posting: only when an app posts (Marketing installed): the Meta app's use cases, the Instagram account linked
+4. posting: only when an app posts (Marketing installed) or Posting is on in Settings: the Meta app's use cases, the Instagram account linked
    to the Page, a new login with the posting permissions, then a check of each (green / red);
 5. done.
 
@@ -294,7 +294,7 @@ class MetaConnectorApp(models.Model):
         if webhook == "manual":
             notes.append(_("Without the webhook, new messages arrive every 10 minutes (see the Webhook box)."))
         if self.env["meta.connector"]._meta_posting_wanted():
-            notes.append(_("Now Posting (Marketing): the Meta app's use cases, then a new Facebook login."))
+            notes.append(_("Now Posting: the Meta app's use cases, then a new Facebook login."))
             return self._say("\n".join(notes), "success", "posting")
         return self._say("\n".join(notes), "success", "done")
 

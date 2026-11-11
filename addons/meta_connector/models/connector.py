@@ -87,8 +87,10 @@ class MetaConnector(models.AbstractModel):
     @api.model
     def _meta_posting_wanted(self):
         """An app posts on the Page and Instagram (owner, 2026-11-10: "if marketing is installed"): the setup has a
-        Posting step and the login asks for the posting permissions. A soft check: no dependency."""
-        return "mtbg.marketing.item" in self.env
+        Posting step and the login asks for the posting permissions. A soft check: no dependency. Posting switched
+        on in Settings counts too (owner, 2026-11-11: a site without Marketing, e.g. a shop, still wants the Page's
+        and Instagram's posting permissions granted)."""
+        return "mtbg.marketing.item" in self.env or self._meta_posting_on()
 
     # ------------------------------------------------------------------ posting (apps call it, e.g. Marketing)
     @api.model
