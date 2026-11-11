@@ -2,6 +2,9 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_content_blocks-*'`.
 
+## 19.0.0.11.3 · 2026-11-11
+- Reusable blocks, page templates and their lines declared to Cloudflare Page Cache (0.8.0 of Cloudflare Page Cache: it moves to the universal repository and installs without Tours; each extension says itself what of it the pages show, no dependency either way: `models/edge_cache.py`). Tests run only where the page cache is installed. No behaviour change.
+
 ## 19.0.0.11.2 (2026-11-11)
 
 - Shared JavaScript for the website blocks: `@mtbg_tours_content_blocks/shared/chat` (the website chat hidden under a

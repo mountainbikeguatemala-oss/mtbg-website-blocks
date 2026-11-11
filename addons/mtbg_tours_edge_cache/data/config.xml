@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- off until the owner has entered the Cloudflare token and set the cache rules (page speed, phase 3) -->
+    <record id="param_edge_cache" model="ir.config_parameter">
+        <field name="key">mtbg_tours.edge_cache</field>
+        <field name="value">False</field>
+    </record>
+    <record id="param_edge_cache_ttl" model="ir.config_parameter">
+        <field name="key">mtbg_tours.edge_cache_ttl</field>
+        <field name="value">2592000</field>
+    </record>
+    <record id="param_edge_cache_paths" model="ir.config_parameter">
+        <field name="key">mtbg_tours.edge_cache_paths</field>
+        <field name="value">/ /blog</field>
+    </record>
+</odoo>

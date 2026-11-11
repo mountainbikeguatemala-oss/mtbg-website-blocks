@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.mtbg.edge.cache</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="website.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='website_settings']" position="inside">
+                <setting id="mtbg_edge_cache" help="Anonymous visitors get these pages from Cloudflare's cache; an edit to anything they show (pages, menus, and what the installed extensions put on them) empties it. Prices, spaces and statuses load live, never cached.">
+                    <field name="mtbg_edge_cache"/>
+                    <div class="content-group">
+                        <div class="row mt8">
+                            <label class="col-lg-4 o_light_label" for="mtbg_edge_cache_connection"/>
+                            <field name="mtbg_edge_cache_connection" class="col-lg-8" readonly="1"/>
+                        </div>
+                        <div class="row mt8">
+                            <label class="col-lg-4 o_light_label" for="mtbg_edge_cache_paths"/>
+                            <field name="mtbg_edge_cache_paths" class="col-lg-8"/>
+                        </div>
+                        <div class="row mt8">
+                            <label class="col-lg-4 o_light_label" for="mtbg_edge_cache_ttl"/>
+                            <field name="mtbg_edge_cache_ttl" class="col-lg-8"/>
+                        </div>
+                        <details class="mt8">
+                            <summary>Live values: never kept by Cloudflare</summary>
+                            <field name="mtbg_edge_cache_live_values" nolabel="1" readonly="1"/>
+                        </details>
+                        <div class="mt8">
+                            <button name="action_mtbg_edge_cache_purge" type="object" string="Purge cache now" class="btn-secondary" icon="fa-refresh"/>
+                            <button name="action_mtbg_edge_cache_log" type="object" string="Purge log" class="btn-link" icon="fa-list"/>
+                        </div>
+                    </div>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="edge_cache_log_list" model="ir.ui.view">
+        <field name="name">mtbg.edge.cache.log.list</field>
+        <field name="model">mtbg.edge.cache.log</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="false" decoration-danger="not ok">
+                <header>
+                    <button name="action_mtbg_purge_now" type="object" string="Purge cache now" class="btn-primary"
+                            icon="fa-refresh" display="always"/>
+                </header>
+                <field name="create_date" string="When"/>
+                <field name="ok"/>
+                <field name="reason"/>
+                <field name="message"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_edge_cache_log" model="ir.actions.act_window">
+        <field name="name">Cloudflare purges</field>
+        <field name="res_model">mtbg.edge.cache.log</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

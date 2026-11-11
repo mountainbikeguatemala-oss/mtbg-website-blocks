@@ -1,0 +1,370 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mtbg_tours_edge_cache
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-04 05:11+0000\n"
+"PO-Revision-Date: 2026-11-04 05:11+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,help:mtbg_tours_edge_cache.field_res_config_settings__mtbg_edge_cache_token
+msgid ""
+"A token of the zone with the permission Zone › Cache Purge › Purge, nothing "
+"else."
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,help:mtbg_tours_edge_cache.field_res_config_settings__mtbg_edge_cache_paths
+msgid ""
+"Addresses separated by spaces, each in every language too (/blog is /es/blog"
+" as well). Ending in /: that address alone; else the address and everything "
+"under it (/tours: the catalog, its categories and every tour page). The "
+"website's own pages (Website › Pages) are kept wherever they are, unless "
+"they are behind a password, a login or a group."
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,help:mtbg_tours_edge_cache.field_res_config_settings__mtbg_edge_cache
+msgid ""
+"Anonymous visitors get the listed pages from Cloudflare's cache; any change "
+"empties it. Off: every page is built for every visitor (Cloudflare keeps "
+"nothing)."
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_edge_cache.res_config_settings_view_form
+msgid ""
+"Anonymous visitors get these pages from Cloudflare's cache; an edit to "
+"tours, departures, pages or menus empties it. Prices, spaces and statuses "
+"load live, never cached."
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/edge_cache.py:0
+msgid "Changes saved"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_res_config_settings__mtbg_edge_cache_token
+msgid "Cloudflare API token"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_res_config_settings__mtbg_edge_cache_zone
+msgid "Cloudflare Zone ID"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/edge_cache.py:0
+msgid "Cloudflare could not be reached: %s"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/edge_cache.py:0
+msgid "Cloudflare did not purge: %s"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/edge_cache.py:0
+msgid "Cloudflare emptied the page cache."
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_mtbg_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_res_config_settings__mtbg_edge_cache
+msgid "Cloudflare page cache"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_mtbg_edge_cache_change
+msgid "Cloudflare page cache: a change to purge"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_mtbg_edge_cache_log
+msgid "Cloudflare page cache: purges"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_mtbg_edge_cache_live_values
+msgid "Cloudflare page cache: the live values"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.actions.act_window,name:mtbg_tours_edge_cache.action_edge_cache_log
+msgid "Cloudflare purges"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/edge_cache.py:0
+msgid "Cloudflare refused: %s"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_change__create_date
+msgid "Create Date"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_log__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_log__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_ir_config_parameter__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_ir_http__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_ir_ui_view__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_change__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_live_values__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_log__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_source_mixin__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_live__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_tour__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_tour_category__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_tour_departure__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_tour_region__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_tours_content_block__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_website__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_website_menu__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_website_page__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_log__ok
+msgid "Done"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_change__during_update
+msgid "During Update"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,help:mtbg_tours_edge_cache.field_res_config_settings__mtbg_edge_cache_ttl
+msgid ""
+"Every edit in Odoo empties Cloudflare's cache at once, and prices, seats and"
+" dates come to the pages live: a page can stay a month (Cloudflare drops "
+"copies nobody asks for sooner)."
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_ir_http
+msgid "HTTP Routing"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_ir_config_parameter__id
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_ir_http__id
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_ir_ui_view__id
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache__id
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_change__id
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_live_values__id
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_log__id
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_source_mixin__id
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_live__id
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_tour__id
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_tour_category__id
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_tour_departure__id
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_tour_region__id
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_tours_content_block__id
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_res_config_settings__id
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_website__id
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_website_menu__id
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_website_page__id
+msgid "ID"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_log__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_log__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_mtbg_live
+msgid "Live prices for the website"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_res_config_settings__mtbg_edge_cache_live_values
+msgid "Live values"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_edge_cache.res_config_settings_view_form
+msgid "Live values: never kept by Cloudflare"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_log__message
+msgid "Message"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/edge_cache.py:0
+msgid "Only an administrator can empty the page cache."
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_website_page
+msgid "Page"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_res_config_settings__mtbg_edge_cache_paths
+msgid "Pages Cloudflare may keep"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_edge_cache.edge_cache_log_list
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_edge_cache.res_config_settings_view_form
+msgid "Purge cache now"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_edge_cache.res_config_settings_view_form
+msgid "Purge log"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/edge_cache.py:0
+msgid "Purged by hand"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_log__reason
+msgid "Reason"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_mtbg_tours_content_block
+msgid "Reusable content block"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_res_config_settings__mtbg_edge_cache_ttl
+msgid "Seconds Cloudflare keeps a page"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_mtbg_edge_cache_source_mixin
+msgid "Shown on cached pages"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/res_config_settings.py:0
+msgid "Switched off"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/res_config_settings.py:0
+msgid "Switched on"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_ir_config_parameter
+msgid "System Parameter"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/edge_cache.py:0
+msgid "The Zone ID or the API token is missing."
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,help:mtbg_tours_edge_cache.field_res_config_settings__mtbg_edge_cache_live_values
+msgid ""
+"The prices, spaces and statuses the pages load after they open: never kept "
+"by Cloudflare."
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_mtbg_tour_departure
+msgid "Tour Departure"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_mtbg_tour
+msgid "Tour Product"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_mtbg_tour_category
+msgid "Tour category"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_mtbg_tour_region
+msgid "Tour region"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_ir_ui_view
+msgid "View"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_website
+msgid "Website"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_website_menu
+msgid "Website Menu"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.actions.server,name:mtbg_tours_edge_cache.cron_edge_cache_purge_ir_actions_server
+msgid "Website: empty Cloudflare's page cache after changes"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.actions.server,name:mtbg_tours_edge_cache.cron_edge_cache_banner_ir_actions_server
+msgid "Website: empty Cloudflare's page cache when the site notice changes"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.actions.server,name:mtbg_tours_edge_cache.cron_edge_cache_warm_home_ir_actions_server
+msgid "Website: re-fill Cloudflare's copy of the homepages"
+msgstr ""
+
+#. module: mtbg_tours_edge_cache
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_edge_cache.edge_cache_log_list
+msgid "When"
+msgstr ""

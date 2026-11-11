@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- a page Cloudflare may keep: its script loads the visitor's own form token (static/src/js/session.js) -->
+    <template id="layout_cached_tag" inherit_id="website.layout" name="Cloudflare page cache: cached page tag">
+        <xpath expr="//head/meta[last()]" position="after">
+            <meta t-if="request and request.env['ir.http']._mtbg_edge_cacheable_request()" name="mtbg-cached"/>
+        </xpath>
+    </template>
+</odoo>
