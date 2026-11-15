@@ -8,6 +8,7 @@
  *   loadLightbox();                                         // e.g. on pointerdown: starts loading early
  *   await openLightbox(images.map(slideFromImage), index);  // slides: {src, width, height, alt, caption, element}
  *   openLightbox(links.map(slideFromLink), index);          // links to photos, each with its thumbnail inside
+ *   openLightbox([slide, videoSlide({src, poster, width, height})], 0, {download: {label}});  // opt-in (0.11.4)
  */
 import { loadCSS, loadJS } from "@web/core/assets";
 
@@ -61,8 +62,45 @@ export function slideFromLink(link) {
     };
 }
 
-/** Open ``slides`` at ``index``; resolves with the viewer (one at a time: an open one closes first). */
-export async function openLightbox(slides, index = 0, { onClose } = {}) {
+/** A video slide (opt-in, 0.11.4): PhotoSwipe's own HTML slide holding a <video controls playsinline> at the video's
+ * real shape (it fits the screen, letterboxed); no zoom. ``{src, poster, width, height, downloadUrl}``. */
+export function videoSlide({ src, poster = "", width = 0, height = 0, ...rest }) {
+    const video = document.createElement("video");
+    video.className = "mtbg-pswp-video";
+    video.controls = true;
+    video.playsInline = true;
+    video.setAttribute("playsinline", "");
+    video.preload = "metadata";
+    video.src = src;
+    if (poster) {
+        video.poster = poster;
+    }
+    if (width && height) {
+        video.style.aspectRatio = `${width} / ${height}`;
+    }
+    const box = document.createElement("div");
+    box.className = "mtbg-pswp-video-box";
+    box.appendChild(video);
+    return { ...rest, type: "video", html: box.outerHTML, videoSrc: src };
+}
+
+/** The Download button's default (opt-in, 0.11.4): the slide's ``downloadUrl`` (served as an attachment) fetched by
+ * an invisible link: the page stays, nothing opens in a new tab. */
+export function downloadSlide(slide) {
+    const a = document.createElement("a");
+    a.href = slide.downloadUrl;
+    a.rel = "nofollow";
+    a.setAttribute("download", "");
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+}
+
+/** Open ``slides`` at ``index``; resolves with the viewer (one at a time: an open one closes first).
+ * Opt-in (0.11.4, nothing changes without them): ``download: {label, onClick(slide)}``: a Download button in the top
+ * bar for slides with a ``downloadUrl`` (onClick: else ``downloadSlide``); video slides from ``videoSlide()``, paused
+ * when swiped away. */
+export async function openLightbox(slides, index = 0, { onClose, download } = {}) {
     await loadLightbox();
     current?.destroy();
     const pswp = new window.PhotoSwipe({
@@ -78,6 +116,30 @@ export async function openLightbox(slides, index = 0, { onClose } = {}) {
         loop: true,
     });
     pswp.on("uiRegister", () => {
+        if (download) {
+            pswp.ui.registerElement({
+                name: "mtbg-download",
+                order: 8,
+                isButton: true,
+                tagName: "button",
+                title: download.label || "Download",
+                ariaLabel: download.label || "Download",
+                className: "mtbg-pswp-download",
+                html: `<i class="fa fa-download" aria-hidden="true"></i><span>${(download.label || "Download")
+                    .replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c])}</span>`,
+                onInit: (el) => {
+                    pswp.on("change", () => {
+                        el.hidden = !pswp.currSlide?.data.downloadUrl;
+                    });
+                },
+                onClick: (ev) => {
+                    const slide = pswp.currSlide?.data;
+                    if (slide?.downloadUrl) {
+                        (download.onClick || downloadSlide)(slide, ev);
+                    }
+                },
+            });
+        }
         pswp.ui.registerElement({
             name: "mtbg-caption",
             order: 9,
@@ -92,6 +154,18 @@ export async function openLightbox(slides, index = 0, { onClose } = {}) {
             },
         });
     });
+    // video slides (opt-in): the one swiped away pauses
+    if (slides.some((slide) => slide.type === "video")) {
+        const pauseOthers = () => {
+            pswp.element?.querySelectorAll("video.mtbg-pswp-video").forEach((video) => {
+                if (!pswp.currSlide?.container.contains(video)) {
+                    video.pause();
+                }
+            });
+        };
+        pswp.on("change", pauseOthers);
+        pswp.on("close", () => pswp.element?.querySelectorAll("video.mtbg-pswp-video").forEach((v) => v.pause()));
+    }
     pswp.on("destroy", () => {
         if (current === pswp) {
             current = null;

@@ -68,9 +68,26 @@
     &.mtbg-tg-r-lg { --mtbg-tg-radius: 16px; }
 }
 
-// justified rows (19.0.0.6.2, for pages that call services.layout.justified, e.g. a client photo album): the
-// columns share the row by their photos' shapes (flex-grow), the gaps included; a short last row keeps its height
+// justified rows (19.0.0.6.2, 6.3: for pages that call services.layout.justified, e.g. a client photo album): one
+// layout per screen (phone < 576 px, tablet 576-991 px, desktop >= 992 px); the columns share the row by their
+// photos' shapes (flex-grow), the gaps included; a row narrower than the page (a short last row, a lone portrait on
+// a phone) is centred. The gallery block's own layouts (.mtbg-tg-desktop / .mtbg-tg-phone) are untouched.
+.mtbg-tg.mtbg-tg-justified {
+    .mtbg-tg-j-phone, .mtbg-tg-j-tablet, .mtbg-tg-j-desktop {
+        display: none;
+    }
+    @media (max-width: 575.98px) {
+        .mtbg-tg-j-phone { display: flex; }
+    }
+    @media (min-width: 576px) and (max-width: 991.98px) {
+        .mtbg-tg-j-tablet { display: flex; }
+    }
+    @media (min-width: 992px) {
+        .mtbg-tg-j-desktop { display: flex; }
+    }
+}
 .mtbg-tg .mtbg-tg-row.mtbg-tg-just {
+    margin-inline: auto;
     .mtbg-tg-col {
         width: auto;
         flex: var(--mtbg-tg-share) 1 0;

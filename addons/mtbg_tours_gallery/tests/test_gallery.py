@@ -6,7 +6,7 @@ import PIL.WebPImagePlugin  # noqa: F401
 
 from odoo.tests import HttpCase, TransactionCase, new_test_user, tagged
 
-from ..services.layout import JUST_TARGET, justified, layout, patterns
+from ..services.layout import justified, layout, patterns
 
 
 def _picture(width, height, fmt='PNG'):
@@ -295,6 +295,25 @@ class TestTiledGalleryBlock(HttpCase):
         """
         self.browser_js('/gallery-page', code, ready=self.READY.replace('mtbg-tg-desktop', 'mtbg-tg-phone'), timeout=60)
 
+    def test_site_lightbox_has_no_download(self):
+        """A site gallery's viewer stays as it was (content blocks 0.11.4's Download and video slides are opt-in, for
+        the client photo album only)."""
+        self._gallery_page()
+        code = """
+            const deadline = Date.now() + 20000;
+            let clicked = false;
+            (function attempt() {
+                const img = document.querySelector('.mtbg-tg-desktop .mtbg-tg-cell img');
+                if (img && !clicked) { clicked = true; img.click(); }
+                if (document.querySelector('.pswp--open .pswp__counter')) {
+                    if (document.querySelector('.pswp .mtbg-pswp-download, .pswp video')) { console.error('a site gallery got the album extras'); }
+                    else { console.log('test successful'); }
+                } else if (Date.now() > deadline) { console.error('lightbox did not open'); }
+                else { setTimeout(attempt, 300); }
+            })();
+        """
+        self.browser_js('/gallery-page', code, ready=self.READY, timeout=60)
+
     def test_gallery_loads_when_scrolled_near(self):
         """0.5.9 (owner, 2026-11-10: "there is no reason to load the gallery until the page scrolls that far down"):
         a gallery far below the first screen fetches nothing until the page scrolls near it; then its tiles come."""
@@ -329,36 +348,49 @@ class TestTiledGalleryBlock(HttpCase):
 
 @tagged('post_install', '-at_install', 'mtbg')
 class TestJustified(TransactionCase):
-    """Justified rows for other pages (19.0.0.6.2): equal-height rows, shapes kept (crop only for extremes), phones 2
-    or 3 a row, never one tile across the screen; the block's own layout untouched."""
+    """Justified rows for other pages (19.0.0.6.3, owner 2026-11-15: "tiles are too small and the gifs are still
+    cropped heavily"), with real shapes: portraits 3:4, landscapes 4:3, a 9:16 and a 16:9 video."""
 
-    def test_rows_keep_shapes(self):
-        photos = _photos(1.5, 1.5, 0.75, 1.5, 0.75, 0.75, 1.5, 1.5)
-        rows = justified(photos, 'desktop')
-        self.assertEqual(sum(len(r['columns']) for r in rows), len(photos))
+    P, L, V916, V169 = 0.75, 4 / 3, 9 / 16, 16 / 9
+
+    def shapes(self, rows):
+        return [[round(c['share'] * r['ratio'], 4) for c in r['columns']] for r in rows]
+
+    def test_every_shape_kept(self):
+        mix = _photos(self.P, self.L, self.V916, self.P, self.V169, self.L, self.P, self.P, self.V916)
+        for screen in ('phone', 'tablet', 'desktop'):
+            rows = justified(mix, screen)
+            got = [x for row in self.shapes(rows) for x in row]
+            self.assertEqual(got, [round(p['ratio'], 4) for p in mix], "%s: no crop, in order" % screen)
+
+    def test_phone_big_tiles(self):
+        mix = _photos(self.P, self.L, self.V916, self.P, self.V169, self.P, self.V916, self.L, self.P)
+        rows = justified(mix, 'phone')
+        self.assertTrue(all(len(r['columns']) <= 2 for r in rows), "at most 2 a row")
         for row in rows:
-            ratios = [c['cells'][0]['photo']['ratio'] for c in row['columns']]
-            self.assertAlmostEqual(row['ratio'], sum(ratios))
-            for col, ratio in zip(row['columns'], ratios):
-                self.assertAlmostEqual(col['share'], ratio / sum(ratios), msg="no crop: each at its shape")
-        self.assertTrue(all(r['ratio'] >= JUST_TARGET['desktop'] for r in rows[:-1]))
+            ratios = [c['share'] * row['ratio'] for c in row['columns']]
+            if any(r > 1.05 for r in ratios):
+                self.assertEqual((len(ratios), row['width']), (1, 1.0), "a landscape alone, full width")
+            height = row['width'] / row['ratio']  # in screen widths
+            self.assertGreaterEqual(height, 0.55, "big tiles")
+            self.assertLessEqual(height, 0.91)
+        lone = justified(_photos(self.V916), 'phone')[0]
+        self.assertAlmostEqual(lone['width'], self.V916 * 0.9, msg="a tall video alone: centred, 0.9 widths tall")
+        pair = justified(_photos(self.V916, self.P), 'phone')
+        self.assertEqual(len(pair), 1, "a tall video paired with a portrait")
 
-    def test_phone_two_or_three(self):
-        for ratios in ((0.75,) * 7, (1.5,) * 5, (0.5625, 1.78, 0.75, 1.33, 1.5, 0.5625, 1.0)):
-            rows = justified(_photos(*ratios), 'phone')
-            self.assertTrue(all(len(r['columns']) >= 2 for r in rows), ratios)
-            self.assertTrue(all(len(r['columns']) <= 4 for r in rows), ratios)  # (3, or 4 with a lone last one)
-        one = justified(_photos(0.75), 'phone')
-        self.assertLess(one[0]['width'], 1, "a single photo is not stretched across the screen")
-
-    def test_extremes_cropped_a_little(self):
-        rows = justified(_photos(0.3, 1.5, 6.0), 'desktop')
-        shapes = [c['share'] * r['ratio'] for r in rows for c in r['columns']]
-        self.assertAlmostEqual(shapes[0], 0.5)
-        self.assertAlmostEqual(shapes[2], 3.2)
+    def test_desktop_and_tablet(self):
+        mix = _photos(*([self.P, self.L] * 8))
+        for screen, most in (('desktop', 4), ('tablet', 3)):
+            rows = justified(mix, screen)
+            self.assertTrue(all(len(r['columns']) <= most for r in rows), screen)
+        desktop = justified(mix, 'desktop')
+        self.assertTrue(all(r['ratio'] <= 3.5 + 4 / 3 for r in desktop))
+        # ~320 px rows on a ~1110 px page
+        self.assertTrue(all(1110 / r['ratio'] >= 250 for r in desktop[:-1]))
 
     def test_short_last_row_keeps_its_height(self):
-        rows = justified(_photos(1.5, 1.5, 1.5, 1.0), 'desktop')
+        rows = justified(_photos(self.L, self.L, self.L, self.P), 'desktop')
         self.assertEqual(rows[0]['width'], 1.0)
         self.assertLess(rows[-1]['width'], 1.0)
 

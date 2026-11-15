@@ -2,6 +2,10 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_content_blocks-*'`.
 
+## 19.0.0.11.4 (2026-11-15)
+
+- **The shared photo viewer's opt-ins** (owner, 2026-11-15: the client photo album "should use existing lightbox code with panning, pinch to zoom animation between each photo, the only difference for customer gallery is the download button"): `openLightbox(slides, index, {download: {label, onClick(slide)}})` adds a Download button to the top bar (44 px tall) for slides with a `downloadUrl` (default: `downloadSlide()`, an attachment link: the page stays); `videoSlide({src, poster, width, height})` makes a PhotoSwipe HTML slide with a `<video controls playsinline>` at the video's own shape (letterboxed, no zoom), paused when swiped away or closed. Without them nothing changes: the site's galleries and viewers look and work as before.
+
 ## 19.0.0.11.3 · 2026-11-11
 - Reusable blocks, page templates and their lines declared to Cloudflare Page Cache (0.8.0 of Cloudflare Page Cache: it moves to the universal repository and installs without Tours; each extension says itself what of it the pages show, no dependency either way: `models/edge_cache.py`). Tests run only where the page cache is installed. No behaviour change.
 

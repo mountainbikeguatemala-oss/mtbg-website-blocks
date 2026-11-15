@@ -17,3 +17,40 @@
     text-align: center;
     pointer-events: none;
 }
+
+// opt-in (0.11.4): the Download button (a page that asks for it, e.g. a client photo album) and video slides
+.pswp .pswp__button.mtbg-pswp-download {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: auto;
+    height: 44px;
+    margin: 6px 8px 0 0;
+    padding: 0 16px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #1f2328;
+    font-size: 16px;
+    font-weight: 600;
+    opacity: 1;
+    &[hidden] {
+        display: none;
+    }
+}
+.pswp .mtbg-pswp-video-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 56px 0 12px;
+    box-sizing: border-box;
+}
+.pswp video.mtbg-pswp-video {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    background: #000;
+}

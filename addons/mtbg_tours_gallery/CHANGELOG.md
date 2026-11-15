@@ -2,6 +2,11 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_gallery-*'`.
 
+## 19.0.0.6.3 (2026-11-15)
+
+- **Justified rows, bigger on phones** (owner, 2026-11-15: "tiles are too small and the gifs are still cropped heavily"): `justified()` now has three screens: phones (< 576 px) at most 2 a row, a landscape alone at full width, two portraits (or a portrait and a tall video) sharing a row, a lone portrait centred about 0.9 screen widths tall; tablets (576-991 px) at most 3 a row; desktops at most 4, rows about 320 px tall. Every photo keeps its exact shape (no crop but a few pixels at the gaps; no clamp any more). Layouts `.mtbg-tg-j-phone/-tablet/-desktop` inside `.mtbg-tg.mtbg-tg-justified`; narrow rows centred. The gallery block's own layouts are untouched.
+- A site gallery's viewer keeps no Download and no video slides (test).
+
 ## 19.0.0.6.2 (2026-11-15)
 
 - **Justified rows for other pages** (owner, 2026-11-15: the client photo album "should show the gifs scaled and

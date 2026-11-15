@@ -82,45 +82,70 @@ def layout(photos, screen='desktop'):
     return rows
 
 
-# ------------------------------------------------------------------ justified rows (19.0.0.6.2)
-# For any page (e.g. Tour Photos' client album), not the gallery block: rows of equal height, each photo at its own
-# shape side by side, the row exactly as wide as the page (so nothing is cropped, but for extreme shapes: at most
-# about 12 %). Phones: 2 or 3 a row, never one tile stretched across the screen. A row's width / height is aimed at
-# TARGET; a short last row keeps that height (narrower than the page) instead of growing tall.
-JUST_TARGET = {'desktop': 4.0, 'phone': 2.2}
-JUST_MOST = {'desktop': 6, 'phone': 3}
-JUST_LEAST = {'desktop': 1, 'phone': 2}
-JUST_RATIO = (0.5, 3.2)  # a photo's shape is kept inside these (taller or wider: cropped to them, e.g. a 9:16 video
-                         # preview is 0.5625: kept)
+# ------------------------------------------------------------------ justified rows (19.0.0.6.2, 6.3)
+# For any page (e.g. Tour Photos' client album), not the gallery block: each photo or video at its own shape, side by
+# side in rows of equal height, so nothing is cropped (a few pixels at the gaps). Three screens (owner, 2026-11-15:
+# "tiles are too small and the gifs are still cropped heavily"):
+#   phone (< 576 px): big tiles, at most 2 a row: a landscape alone, full width; two portraits (or a portrait and a
+#     tall video) share a row; a portrait left alone is centred, about 0.9 of the screen's width tall;
+#   tablet (576-991 px): rows aimed at about 0.42 of the width tall, at most 3 a row;
+#   desktop (>= 992 px): rows aimed at ~320 px tall (a ~1110 px page), at most 4 a row.
+# A short last row keeps its height (narrower than the page, centred) instead of growing tall.
+JUST_SCREENS = ('phone', 'tablet', 'desktop')
+JUST_TARGET = {'tablet': 2.4, 'desktop': 3.5}  # a row's width / height aimed at
+JUST_MOST = {'tablet': 3, 'desktop': 4}
+PHONE_LANDSCAPE = 1.05  # wider than this: a row of its own on a phone
+PHONE_LONE_HEIGHT = 0.9  # a lone portrait on a phone: this many screen widths tall (centred)
+
+
+def _just_row(group, width=1.0):
+    total = sum(r for _p, r in group)
+    return {'pattern': 'justified', 'ratio': total, 'width': width,
+            'columns': [{'share': r / total, 'cells': [{'photo': p, 'grow': 100}]} for p, r in group]}
+
+
+def _phone_rows(items):
+    rows, i = [], 0
+    while i < len(items):
+        photo, ratio = items[i]
+        if ratio > PHONE_LANDSCAPE:
+            rows.append(_just_row([items[i]]))
+            i += 1
+            continue
+        nxt = items[i + 1] if i + 1 < len(items) else None
+        if nxt and nxt[1] <= PHONE_LANDSCAPE:
+            rows.append(_just_row([items[i], nxt]))
+            i += 2
+            continue
+        # a portrait alone: centred, PHONE_LONE_HEIGHT widths tall
+        rows.append(_just_row([items[i]], width=min(1.0, ratio * PHONE_LONE_HEIGHT)))
+        i += 1
+    return rows
 
 
 def justified(photos, screen='desktop'):
-    """Justified rows for photos [{'ratio': width / height, ...}] on 'desktop' or 'phone', in the Tiled Gallery's
-    markup (rows of columns of one cell): [{'pattern': 'justified', 'ratio', 'width' (the row's share of the page:
-    1, or less for a short last row), 'columns': [{'share', 'cells': [{'photo', 'grow'}]}]}]. Render the rows with
-    the class ``mtbg-tg-just`` (columns then share the row by their shapes, gaps included) and the row's ``width``
-    when below 1."""
-    target, most, least = JUST_TARGET[screen], JUST_MOST[screen], JUST_LEAST[screen]
+    """Justified rows for photos [{'ratio': width / height, ...}] on 'phone', 'tablet' or 'desktop' (see above), in
+    the Tiled Gallery's markup (rows of columns of one cell): [{'pattern': 'justified', 'ratio' (the row's width /
+    height), 'width' (its share of the page: 1, or less for a short last row or a lone portrait on a phone),
+    'columns': [{'share', 'cells': [{'photo', 'grow'}]}]}]. Every photo keeps its shape. Render inside
+    ``.mtbg-tg.mtbg-tg-justified``, one ``.mtbg-tg-j-<screen>`` layout per screen, rows with the class
+    ``mtbg-tg-just`` and their ``width`` when below 1."""
+    items = [(p, max(0.2, min(5.0, float(p['ratio'])))) for p in photos if p.get('ratio')]
+    if screen == 'phone':
+        return _phone_rows(items)
+    target, most = JUST_TARGET[screen], JUST_MOST[screen]
     groups, row, total = [], [], 0.0
-    for photo in photos:
-        ratio = _clamp(photo['ratio'], *JUST_RATIO)
-        row.append((photo, ratio))
-        total += ratio
-        if (total >= target and len(row) >= least) or len(row) >= most:
+    for item in items:
+        row.append(item)
+        total += item[1]
+        if total >= target or len(row) >= most:
             groups.append(row)
             row, total = [], 0.0
     if row:
-        if len(row) < least and groups:
-            groups[-1].extend(row)  # (a phone's lone last photo joins the row before)
-        else:
-            groups.append(row)
+        groups.append(row)
     rows = []
     for i, group in enumerate(groups):
         total = sum(r for _p, r in group)
         last = i == len(groups) - 1
-        width = min(1.0, total / target) if last and total < target * 0.75 else 1.0
-        rows.append({
-            'pattern': 'justified', 'ratio': total, 'width': width,
-            'columns': [{'share': r / total, 'cells': [{'photo': p, 'grow': 100}]} for p, r in group],
-        })
+        rows.append(_just_row(group, min(1.0, total / target) if last and total < target * 0.75 else 1.0))
     return rows
