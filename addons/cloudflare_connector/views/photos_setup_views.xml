@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="cloudflare_photos_setup_wizard_form" model="ir.ui.view">
+        <field name="name">cloudflare.photos.setup.wizard.form</field>
+        <field name="model">cloudflare.photos.setup.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Set up photos storage">
+                <header>
+                    <field name="step" widget="statusbar" statusbar_visible="connect,review,done"/>
+                </header>
+                <field name="done" invisible="1"/>
+                <div invisible="step != 'connect'">
+                    <div class="alert alert-info" role="alert">
+                        <p><strong>A bucket of its own for the photos shown online.</strong> The backups bucket has a lock
+                            (nothing deleted for some days); photos expire and are deleted, so they get their own bucket,
+                            with no lock.</p>
+                        <ol class="mb-2">
+                            <li>Press <em>Create the token on Cloudflare</em>, then <em>Review token</em> › <em>Create Token</em>, and copy it.</li>
+                            <li>Paste it below, check the names and press <em>Next</em>. The token is deleted in Cloudflare at the end.</li>
+                        </ol>
+                        <button name="action_open_dashboard" type="object" class="btn btn-primary" icon="fa-external-link"
+                                string="Create the token on Cloudflare"/>
+                    </div>
+                    <group>
+                        <field name="setup_token" password="True" placeholder="Paste the token here"/>
+                        <field name="bucket_name"/>
+                        <field name="location_hint"/>
+                        <field name="domain" placeholder="photos.example.com"/>
+                        <field name="origin" placeholder="https://www.example.com"/>
+                    </group>
+                </div>
+                <div invisible="step != 'review'">
+                    <p>Odoo will, in account <field name="account_name" class="oe_inline" readonly="1"/>:</p>
+                    <ul>
+                        <li>create the bucket <b><field name="bucket_name" class="oe_inline" readonly="1"/></b> (no lock), or keep it if it exists;</li>
+                        <li>connect its public address <b><field name="domain" class="oe_inline" readonly="1"/></b>;</li>
+                        <li>delete <code>tours/</code> after 60 days and <code>inbox/</code> after 14 days (lifecycle rules);</li>
+                        <li>let <field name="origin" class="oe_inline" readonly="1"/> upload (PUT) and download (GET, HEAD) photos (CORS);</li>
+                        <li>make the site's key for the bucket, and a key for the photo server, shown once;</li>
+                        <li>test the bucket, then delete the setup token in Cloudflare.</li>
+                    </ul>
+                </div>
+                <div invisible="step != 'done'">
+                    <field name="log" readonly="1" nolabel="1"/>
+                    <div invisible="not nas_access_key_id" class="alert alert-warning mt-3" role="alert">
+                        <p><strong>The photo server's key, shown once: copy it now</strong> into the photo server's
+                            config.env (R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY). Odoo does not keep it.</p>
+                        <group>
+                            <field name="nas_access_key_id" readonly="1" class="font-monospace"/>
+                            <field name="nas_secret_access_key" readonly="1" class="font-monospace"/>
+                            <field name="nas_endpoint" readonly="1"/>
+                        </group>
+                    </div>
+                </div>
+                <footer>
+                    <button name="action_connect" type="object" string="Next" class="btn-primary" invisible="step != 'connect'"/>
+                    <button name="action_back" type="object" string="Back" invisible="step != 'review'"/>
+                    <button name="action_run" type="object" string="Set up" class="btn-primary" invisible="step != 'review'"/>
+                    <button name="action_finish" type="object" string="Done" class="btn-primary" invisible="step != 'done'"/>
+                    <button string="Cancel" special="cancel" invisible="step == 'done'"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_cloudflare_photos_setup_wizard" model="ir.actions.act_window">
+        <field name="name">Set up photos storage</field>
+        <field name="res_model">cloudflare.photos.setup.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

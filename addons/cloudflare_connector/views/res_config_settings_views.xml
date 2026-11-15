@@ -72,6 +72,27 @@
                             <field name="cloudflare_status" readonly="1"/>
                         </setting>
                     </block>
+                    <!-- the photos bucket (1.6.0): its own bucket, no lock, a public address -->
+                    <block title="Photos storage" name="cloudflare_photos">
+                        <setting string="Photos bucket" help="A bucket of its own for the photos shown online (no lock: they expire), with its public address, its lifecycle and CORS rules, the site's key and a key for the photo server.">
+                            <div class="content-group">
+                                <div class="row mt8">
+                                    <label for="cloudflare_photos_bucket" class="col-lg-4 o_light_label"/>
+                                    <field name="cloudflare_photos_bucket" class="col-lg-8" readonly="1"/>
+                                </div>
+                                <div class="row mt8">
+                                    <label for="cloudflare_photos_domain" class="col-lg-4 o_light_label"/>
+                                    <field name="cloudflare_photos_domain" class="col-lg-8" readonly="1"/>
+                                </div>
+                                <div class="mt8 d-flex gap-2">
+                                    <button name="%(cloudflare_connector.action_cloudflare_photos_setup_wizard)d" type="action"
+                                            string="Set up photos storage" icon="fa-magic" class="btn btn-primary btn-sm"/>
+                                    <button name="action_cloudflare_check_photos" type="object" string="Test photos storage"
+                                            icon="fa-plug" class="btn btn-secondary btn-sm" invisible="not cloudflare_photos_bucket"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
                 </app>
             </xpath>
         </field>

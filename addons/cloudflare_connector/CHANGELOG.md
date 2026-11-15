@@ -1,5 +1,12 @@
 # Cloudflare Connector
 
+## 19.0.1.6.0 (2026-11-14)
+
+- **Set up photos storage** (owner, 2026-11-14: "I don't see photo R2 settings in the cloudflare connector"): from a setup token, a bucket of its own for the photos shown online, `<site>-photos`, with NO lock (the backups bucket has one; photos expire and are deleted); its public custom domain (default `photos.<short domain or zone>`); lifecycle rules (`tours/` deleted after 60 days, `inbox/` after 14); CORS (PUT with Content-Type, GET, HEAD from the site's address); the site's own key for that bucket, kept apart from the backups key (`r2_photos_*`); a second key for the photo server, object read and write on that bucket only, shown ONCE in the wizard (never saved, never logged); a test; the setup token deleted.
+- Settings › Cloudflare: a Photos storage block (the bucket, its public address, Set up photos storage, Test photos storage).
+- `cloudflare.r2.photos_client()`, `photos_configured()`, `photos_domain()`; the shortcuts (presign_put, download_url, list_objects, remove) take `photos=True` (the photos bucket, else the main one).
+- Neutralize clears the photos keys too. Tests: every Cloudflare call answered in the test (none made).
+
 ## 19.0.1.5.1 (2026-11-14)
 
 - **Presigned uploads**: `R2Client.presign_put(key, expires, content_type)` and `cloudflare.r2.presign_put(...)` give a short-lived PUT link (the Content-Type is signed, so the upload must send that type), for a browser uploading straight to the bucket (Tour photos' cellular upload). The bucket needs a CORS rule allowing PUT from the site. GET links are unchanged.

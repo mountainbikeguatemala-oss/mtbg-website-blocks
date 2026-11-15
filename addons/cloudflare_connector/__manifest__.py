@@ -1,6 +1,6 @@
 {
     "name": "Cloudflare Connector",
-    "version": "19.0.1.5.1",
+    "version": "19.0.1.6.0",
     "category": "Productivity/Connectors",
     "mtbg_tours_section": "connectors",
     "summary": "One Cloudflare connection: the account, its API token and R2 storage, for every extension that uses "
@@ -30,6 +30,7 @@ It depends on no product: it can be installed on any Odoo site.
     "data": [
         "security/ir.model.access.csv",
         "views/setup_views.xml",
+        "views/photos_setup_views.xml",
         "views/res_config_settings_views.xml",
     ],
     "installable": True,

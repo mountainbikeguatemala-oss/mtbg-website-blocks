@@ -52,7 +52,43 @@ class CloudflareR2(models.AbstractModel):
         except R2Error as e:
             raise UserError(_("Cloudflare R2 is not set up yet: Settings › Cloudflare. (%s)", e)) from e
 
-    # Shortcuts for the common calls (each returns what the client returns).
+    # The photos bucket (1.6.0, "Set up photos storage"): its own keys, apart from the backups bucket's; without one,
+    # the main bucket
+    @api.model
+    def photos_configured(self):
+        """The photos bucket is set up (its own bucket and key)."""
+        return all(_param(self.env, "r2_photos_" + k) for k in ("bucket", "access_key_id", "secret_access_key"))
+
+    @api.model
+    def photos_client(self):
+        """An R2Client for the photos bucket; the main bucket's when no photos bucket is set up."""
+        if not self.photos_configured():
+            return self.client()
+        if not self.env.su and not self.env.user.has_group("base.group_system"):
+            raise AccessError(_("Only administrators can use the Cloudflare R2 connection."))
+        try:
+            return R2Client(_param(self.env, "r2_photos_account_id") or _param(self.env, "account_id"),
+                            _param(self.env, "r2_photos_access_key_id"),
+                            _param(self.env, "r2_photos_secret_access_key"), _param(self.env, "r2_photos_bucket"),
+                            endpoint=_param(self.env, "r2_endpoint") or None)
+        except R2Error as e:
+            raise UserError(_("Cloudflare R2 is not set up yet: Settings › Cloudflare. (%s)", e)) from e
+
+    @api.model
+    def photos_bucket(self):
+        """The photos bucket's name, '' when none is set up."""
+        return _param(self.env, "r2_photos_bucket")
+
+    @api.model
+    def photos_domain(self):
+        """The photos bucket's public address (https://...), '' when none."""
+        domain = _param(self.env, "r2_photos_domain")
+        return "https://%s" % domain if domain else ""
+
+    def _pick(self, bucket, photos):
+        return self.photos_client() if photos else self.client(bucket)
+
+    # Shortcuts for the common calls (each returns what the client returns; ``photos``: the photos bucket).
     @api.model
     def upload_file(self, key, path, bucket=None, content_type="application/octet-stream"):
         return self.client(bucket).put_file(key, path, content_type)
@@ -66,28 +102,28 @@ class CloudflareR2(models.AbstractModel):
         return self.client(bucket).get_file(key, path)
 
     @api.model
-    def list_objects(self, prefix="", bucket=None):
-        return self.client(bucket).list(prefix)
+    def list_objects(self, prefix="", bucket=None, photos=False):
+        return self._pick(bucket, photos).list(prefix)
 
     @api.model
     def stat(self, key, bucket=None):
         return self.client(bucket).head(key)
 
     @api.model
-    def remove(self, key, bucket=None):
-        return self.client(bucket).delete(key)
+    def remove(self, key, bucket=None, photos=False):
+        return self._pick(bucket, photos).delete(key)
 
     @api.model
-    def download_url(self, key, expires=3600, filename=None, bucket=None):
+    def download_url(self, key, expires=3600, filename=None, bucket=None, photos=False):
         """A private, short-lived download link (signed; the bucket stays private). Administrators only."""
-        return self.client(bucket).presign_get(key, expires, filename)
+        return self._pick(bucket, photos).presign_get(key, expires, filename)
 
 
     @api.model
-    def presign_put(self, key, expires=3600, content_type="application/octet-stream", bucket=None):
+    def presign_put(self, key, expires=3600, content_type="application/octet-stream", bucket=None, photos=False):
         """A private, short-lived upload link (1.5.1: a PUT with that Content-Type). Administrators only (the caller
         decides who may upload, and where)."""
-        return self.client(bucket).presign_put(key, expires, content_type)
+        return self._pick(bucket, photos).presign_put(key, expires, content_type)
 
 
 class CloudflareApi(models.AbstractModel):
@@ -190,6 +226,27 @@ class ResConfigSettings(models.TransientModel):
     cloudflare_zone_id = fields.Char("Zone ID", config_parameter=P + "zone_id")
     cloudflare_zone_name = fields.Char("Zone", config_parameter=P + "zone_name")
     cloudflare_status = fields.Char("Connection status", compute="_compute_cloudflare_status")
+    # the photos bucket (1.6.0): made by Set up photos storage; shown, never typed
+    cloudflare_photos_bucket = fields.Char("Photos bucket", compute="_compute_cloudflare_photos")
+    cloudflare_photos_domain = fields.Char("Photos public address", compute="_compute_cloudflare_photos")
+
+    def _compute_cloudflare_photos(self):
+        bucket, domain = _param(self.env, "r2_photos_bucket"), _param(self.env, "r2_photos_domain")
+        for rec in self:
+            rec.cloudflare_photos_bucket = bucket
+            rec.cloudflare_photos_domain = domain
+
+    def action_cloudflare_check_photos(self):
+        """Test photos storage: a write, a read and a delete in the photos bucket."""
+        self.ensure_one()
+        if not self.env["cloudflare.r2"].photos_configured():
+            raise UserError(_("No photos bucket yet: press Set up photos storage."))
+        try:
+            self.env["cloudflare.r2"].photos_client().check()
+        except (R2Error, UserError) as e:
+            raise UserError(_("Photos storage check failed: %s", e)) from e
+        return self._cloudflare_notify(_("Photos storage works: bucket %s accepted a write, a read and a delete.",
+                                         _param(self.env, "r2_photos_bucket")))
 
     def _compute_cloudflare_status(self):
         status = self.env["ir.config_parameter"].sudo().get_param(P + "last_check") or _("Not checked yet")
