@@ -1,0 +1,427 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* immich_connector
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-15 05:00+0000\n"
+"PO-Revision-Date: 2026-11-15 05:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "<b>Immich</b> on it (the photo app guides and the office use)."
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid ""
+"<span invisible=\"not immich_token_set\">A token is set.</span>\n"
+"                                <span invisible=\"immich_token_set\">No token yet.</span>"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid ""
+"A <b>storage bucket</b> for the photos shown online (Settings › Cloudflare: "
+"an R2 bucket)."
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "A NAS (or any always-on computer) at the office with <b>Docker</b>."
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+msgid "A port is a number from 1 to 65535."
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid "API key"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "Back"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "Cancel"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields.selection,name:immich_connector.selection__immich_setup_wizard__step__check
+msgid "Check"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "Check again"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model,name:immich_connector.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid "Connected (Immich %s)."
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_connector__display_name
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__display_name
+#: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid ""
+"Download the photo server's files: <code>config.env</code> (this site's address, the token, the\n"
+"                        bucket; fill in the blank secrets), <code>docker-compose.yml</code>, the sync service and\n"
+"                        <code>README.md</code> with the install steps. Keep the zip private."
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "Download the zip"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields.selection,name:immich_connector.selection__immich_setup_wizard__step__files
+msgid "Files"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "Finish"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid ""
+"For an Immich the website can reach: albums are made from here at once. "
+"Needs an API key (Immich › Account settings › API keys)."
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_connector__id
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__id
+#: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__id
+msgid "ID"
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid "Immich"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__immich_api_key
+msgid "Immich API key"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__immich_url
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid "Immich URL"
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid "Immich did not answer: %s"
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid ""
+"Immich is not reachable from the internet in the settings (Settings › "
+"Immich)."
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid "Immich on the internet"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model,name:immich_connector.model_immich_connector
+msgid "Immich photo server connection"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__immich_port
+msgid "Immich port"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__immich_public_mode
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid "Immich reachable from the internet"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,help:immich_connector.field_res_config_settings__immich_url
+msgid ""
+"Immich's address (on the office network), for album links: "
+"<this>/albums/<id>"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid "Immich's address, for album links (its address on the office network)."
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid ""
+"Install the files on the photo server and start it. Waiting for the photo "
+"server to call in…"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,help:immich_connector.field_immich_setup_wizard__lan_address
+msgid "Its address on the office network, e.g. 192.168.1.20"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__last_seen
+msgid "Last call-in"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid "Last call-in:"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "Make the token"
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+msgid "Make the token first."
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid "New photo server token (shown once: copy it now)"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid "New token"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "Next"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "No call yet."
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,help:immich_connector.field_res_config_settings__immich_public_mode
+msgid ""
+"Odoo can reach Immich itself (an API key below): albums are made from here "
+"at once instead of waiting for the photo server"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields.selection,name:immich_connector.selection__immich_setup_wizard__step__network
+msgid "Office network"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__immich_upload_url
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid "Office upload page URL"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__wifi_name
+#: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__immich_wifi_name
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid "Office wifi name"
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid "Only an administrator makes the photo server's token."
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid "Photo server"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__lan_address
+msgid "Photo server address"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__immich_last_seen
+msgid "Photo server last called in"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__immich_token_set
+msgid "Photo server token set"
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+#: model:ir.actions.act_window,name:immich_connector.action_immich_setup_wizard
+#: model:ir.model,name:immich_connector.model_immich_setup_wizard
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "Set up the photo server"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "Shown once: it goes into the zip of the next step."
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid "Staff are told to connect to it before uploading at the office."
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,help:immich_connector.field_res_config_settings__immich_wifi_name
+msgid "Staff are told to connect to this wifi before uploading at the office"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__step
+msgid "Step"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid "Test connection"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid ""
+"The photo server signs every call with this token. Making a new one stops "
+"the old one."
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid "The photo server's current token stops working. Make a new one?"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,help:immich_connector.field_res_config_settings__immich_upload_url
+msgid "The photo server's upload page on the office network"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid "The photo server's upload page on the office network."
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid ""
+"This wizard saves the office addresses, makes the photo server's token and gives you a zip with\n"
+"                        its files and settings."
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__token
+#: model:ir.model.fields.selection,name:immich_connector.selection__immich_setup_wizard__step__token
+msgid "Token"
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+msgid ""
+"Type the photo server's address on the office network, e.g. 192.168.1.20."
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__upload_port
+msgid "Upload page port"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid ""
+"What is needed, the office addresses, the token and a zip with the photo "
+"server's files, then a check that it calls in."
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields.selection,name:immich_connector.selection__immich_setup_wizard__step__intro
+msgid "What you need"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid ""
+"Your guides' photos go to a photo server at the office; the website shows "
+"them online. You need:"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid "http://192.168.1.50:2283"
+msgstr ""
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid "http://192.168.1.50:8090"
+msgstr ""
