@@ -1,5 +1,10 @@
 # Cloudflare Connector
 
+## 19.0.1.5.1 (2026-11-14)
+
+- **Presigned uploads**: `R2Client.presign_put(key, expires, content_type)` and `cloudflare.r2.presign_put(...)` give a short-lived PUT link (the Content-Type is signed, so the upload must send that type), for a browser uploading straight to the bucket (Tour photos' cellular upload). The bucket needs a CORS rule allowing PUT from the site. GET links are unchanged.
+- Tests: the PUT link's signature worked out again in the test.
+
 ## 19.0.1.5.0 (2026-11-11)
 
 - **Set up Cloudflare is a guided wizard** (owner, 2026-11-11: "it should guide creation of bucket for R2"), in four steps with Back and Next:

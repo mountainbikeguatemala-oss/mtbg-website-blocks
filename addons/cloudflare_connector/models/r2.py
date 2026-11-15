@@ -115,16 +115,21 @@ def sign_v4(method, host, path, query, headers, payload_sha256, access_key, secr
     return "AWS4-HMAC-SHA256 Credential=%s/%s, SignedHeaders=%s, Signature=%s" % (access_key, scope, signed, signature)
 
 
-def presign_v4(host, path, access_key, secret_key, region, service, now, expires, extra_query=None):
-    """A presigned GET URL's query string (AWS Signature Version 4, query-string signing, UNSIGNED-PAYLOAD)."""
+def presign_v4(host, path, access_key, secret_key, region, service, now, expires, extra_query=None, method="GET",
+               content_type=None):
+    """A presigned URL's query string (AWS Signature Version 4, query-string signing, UNSIGNED-PAYLOAD): a GET, or
+    a PUT (1.5.1) whose ``content_type`` is signed too (the upload must send that Content-Type)."""
     amz_date = now.strftime("%Y%m%dT%H%M%SZ")
     day = now.strftime("%Y%m%d")
     scope = "%s/%s/%s/aws4_request" % (day, region, service)
     query = dict(extra_query or {})
     query.update({"X-Amz-Algorithm": "AWS4-HMAC-SHA256", "X-Amz-Credential": "%s/%s" % (access_key, scope),
-                  "X-Amz-Date": amz_date, "X-Amz-Expires": str(int(expires)), "X-Amz-SignedHeaders": "host"})
+                  "X-Amz-Date": amz_date, "X-Amz-Expires": str(int(expires)),
+                  "X-Amz-SignedHeaders": "content-type;host" if content_type else "host"})
     canon_query = "&".join("%s=%s" % (_uri_encode(k), _uri_encode(str(v))) for k, v in sorted(query.items()))
-    canonical = "\n".join(["GET", path, canon_query, "host:%s\n" % host, "host", "UNSIGNED-PAYLOAD"])
+    headers = ("content-type:%s\nhost:%s\n" % (content_type.strip(), host)) if content_type else "host:%s\n" % host
+    signed = "content-type;host" if content_type else "host"
+    canonical = "\n".join([method, path, canon_query, headers, signed, "UNSIGNED-PAYLOAD"])
     to_sign = "\n".join(["AWS4-HMAC-SHA256", amz_date, scope, hashlib.sha256(canonical.encode()).hexdigest()])
 
     def _h(key, msg):
@@ -266,6 +271,16 @@ class R2Client:
         extra = {"response-content-disposition": 'attachment; filename="%s"' % filename} if filename else None
         query = presign_v4(self.host, self._path(key), self.access_key_id, self.secret_access_key, self.region,
                            self.service, datetime.datetime.now(datetime.timezone.utc), expires, extra)
+        return "%s%s?%s" % (self.endpoint, self._path(key), query)
+
+    def presign_put(self, key, expires=3600, content_type="application/octet-stream"):
+        """A private upload link to ``key`` (1.5.1): a PUT of the file's bytes with exactly this Content-Type works
+        for ``expires`` seconds (max 7 days), no login needed (e.g. a phone uploading straight to the bucket; the
+        bucket needs a CORS rule allowing PUT from the site)."""
+        expires = max(1, min(int(expires), 7 * 24 * 3600))
+        query = presign_v4(self.host, self._path(key), self.access_key_id, self.secret_access_key, self.region,
+                           self.service, datetime.datetime.now(datetime.timezone.utc), expires, method="PUT",
+                           content_type=content_type)
         return "%s%s?%s" % (self.endpoint, self._path(key), query)
 
     def head(self, key):

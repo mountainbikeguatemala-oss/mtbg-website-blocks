@@ -209,3 +209,34 @@ class TestPresign(TransactionCase):
         self.assertIn("X-Amz-Expires=3600", url)
         self.assertIn("response-content-disposition=attachment%3B%20filename%3D%22x.dump%22", url)
         self.assertIn("X-Amz-Signature=", url)
+
+    def test_client_upload_link(self):
+        """1.5.1: a presigned PUT signs the method and the Content-Type (the upload must send that type)."""
+        import hashlib
+        import hmac
+        from urllib.parse import parse_qsl, urlsplit
+        c = R2Client("acc", "KEY", "SECRET", "bucket")
+        url = c.presign_put("inbox/1-x/day-1/7/a b.jpg", 600, content_type="image/jpeg")
+        parts = urlsplit(url)
+        self.assertEqual(parts.netloc, "acc.r2.cloudflarestorage.com")
+        self.assertEqual(parts.path, "/bucket/inbox/1-x/day-1/7/a%20b.jpg")
+        query = dict(parse_qsl(parts.query))
+        self.assertEqual(query["X-Amz-SignedHeaders"], "content-type;host")
+        self.assertEqual(query["X-Amz-Expires"], "600")
+        # the signature, worked out again here (AWS Signature V4, query signing)
+        signature = query.pop("X-Amz-Signature")
+        enc = lambda v: r2mod._uri_encode(v)  # noqa: E731
+        canon_query = "&".join("%s=%s" % (enc(k), enc(v)) for k, v in sorted(query.items()))
+        canonical = "\n".join(["PUT", parts.path, canon_query,
+                               "content-type:image/jpeg\nhost:acc.r2.cloudflarestorage.com\n", "content-type;host",
+                               "UNSIGNED-PAYLOAD"])
+        day = query["X-Amz-Date"][:8]
+        scope = "%s/auto/s3/aws4_request" % day
+        to_sign = "\n".join(["AWS4-HMAC-SHA256", query["X-Amz-Date"], scope,
+                             hashlib.sha256(canonical.encode()).hexdigest()])
+        key = b"AWS4SECRET"
+        for part in (day, "auto", "s3", "aws4_request"):
+            key = hmac.new(key, part.encode(), hashlib.sha256).digest()
+        self.assertEqual(signature, hmac.new(key, to_sign.encode(), hashlib.sha256).hexdigest())
+        # a GET link is as before (host only)
+        self.assertIn("X-Amz-SignedHeaders=host&", c.presign_get("a.jpg", 60) + "&")

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_immich" model="ir.ui.view">
+        <field name="name">res.config.settings.form.immich</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Immich" string="Immich" name="immich_connector" groups="base.group_system">
+                    <block title="Photo server" name="immich_setup">
+                        <setting string="Set up the photo server" help="What is needed, the office addresses, the token and a zip with the photo server's files, then a check that it calls in.">
+                            <button name="%(immich_connector.action_immich_setup_wizard)d" type="action"
+                                    string="Set up the photo server" icon="fa-magic" class="btn btn-primary btn-sm"/>
+                            <div class="text-muted small mt-2">
+                                <field name="immich_token_set" invisible="1"/>
+                                <span invisible="not immich_token_set">A token is set.</span>
+                                <span invisible="immich_token_set">No token yet.</span>
+                                <span invisible="not immich_last_seen"> Last call-in: <field name="immich_last_seen" readonly="1" class="oe_inline"/></span>
+                            </div>
+                            <button name="action_immich_new_token" type="object" string="New token" icon="fa-key"
+                                    class="btn-link px-0" confirm="The photo server's current token stops working. Make a new one?"/>
+                        </setting>
+                        <setting string="Office upload page URL" help="The photo server's upload page on the office network.">
+                            <field name="immich_upload_url" placeholder="http://192.168.1.50:8090"/>
+                        </setting>
+                        <setting string="Office wifi name" help="Staff are told to connect to it before uploading at the office.">
+                            <field name="immich_wifi_name"/>
+                        </setting>
+                        <setting string="Immich URL" help="Immich's address, for album links (its address on the office network).">
+                            <field name="immich_url" placeholder="http://192.168.1.50:2283"/>
+                        </setting>
+                    </block>
+                    <block title="Immich on the internet" name="immich_public">
+                        <setting string="Immich reachable from the internet" help="For an Immich the website can reach: albums are made from here at once. Needs an API key (Immich › Account settings › API keys).">
+                            <field name="immich_public_mode"/>
+                            <div invisible="not immich_public_mode" class="mt-2">
+                                <field name="immich_api_key" password="True" placeholder="API key"/>
+                                <button name="action_immich_test" type="object" string="Test connection"
+                                        icon="fa-plug" class="btn-link px-0"/>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,28 @@
+# Tour photo service for the NAS. Start with:  docker compose --env-file config.env up -d --build
+# (--env-file lets this file read UPLOAD_PORT; both containers read every setting from config.env.)
+name: tour-photos
+services:
+  photos-sync:
+    container_name: photos-sync
+    build: ./app
+    image: tour-photos-service:1
+    command: ["/app/sync.py"]
+    env_file: config.env
+    volumes:
+      - ./data:/data        # state + your watermark.png
+      - ./work:/work        # temporary files while a day is processed
+    restart: unless-stopped
+  photos-upload:
+    container_name: photos-upload
+    image: tour-photos-service:1
+    depends_on: [photos-sync]
+    command: ["/app/upload.py"]
+    env_file: config.env
+    environment:
+      - LISTEN_PORT=8090
+    volumes:
+      - ./data:/data
+      - ./work:/work
+    ports:
+      - "${UPLOAD_PORT:-8090}:8090"   # office upload page: http://<NAS address>:<UPLOAD_PORT>
+    restart: unless-stopped

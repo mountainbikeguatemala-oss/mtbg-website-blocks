@@ -83,6 +83,13 @@ class CloudflareR2(models.AbstractModel):
         return self.client(bucket).presign_get(key, expires, filename)
 
 
+    @api.model
+    def presign_put(self, key, expires=3600, content_type="application/octet-stream", bucket=None):
+        """A private, short-lived upload link (1.5.1: a PUT with that Content-Type). Administrators only (the caller
+        decides who may upload, and where)."""
+        return self.client(bucket).presign_put(key, expires, content_type)
+
+
 class CloudflareApi(models.AbstractModel):
     _name = "cloudflare.api"
     _description = "Cloudflare API"

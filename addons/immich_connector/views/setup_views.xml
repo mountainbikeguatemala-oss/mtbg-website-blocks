@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_immich_setup_wizard" model="ir.ui.view">
+        <field name="name">immich.setup.wizard.form</field>
+        <field name="model">immich.setup.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Set up the photo server">
+                <field name="step" widget="statusbar" readonly="1"/>
+                <div invisible="step != 'intro'">
+                    <p>Your guides' photos go to a photo server at the office; the website shows them online. You need:</p>
+                    <ul>
+                        <li>A NAS (or any always-on computer) at the office with <b>Docker</b>.</li>
+                        <li><b>Immich</b> on it (the photo app guides and the office use).</li>
+                        <li>A <b>storage bucket</b> for the photos shown online (Settings › Cloudflare: an R2 bucket).</li>
+                    </ul>
+                    <p>This wizard saves the office addresses, makes the photo server's token and gives you a zip with
+                        its files and settings.</p>
+                </div>
+                <group invisible="step != 'network'">
+                    <field name="lan_address" placeholder="192.168.1.50"/>
+                    <field name="immich_port"/>
+                    <field name="upload_port"/>
+                    <field name="wifi_name"/>
+                </group>
+                <div invisible="step != 'token'">
+                    <p>The photo server signs every call with this token. Making a new one stops the old one.</p>
+                    <button name="action_token" type="object" string="Make the token" icon="fa-key"
+                            class="btn-primary" invisible="token"/>
+                    <div invisible="not token">
+                        <p class="mb-1">Shown once: it goes into the zip of the next step.</p>
+                        <field name="token" readonly="1" class="font-monospace"/>
+                    </div>
+                </div>
+                <div invisible="step != 'files'">
+                    <p>Download the photo server's files: <code>config.env</code> (this site's address, the token, the
+                        bucket; fill in the blank secrets), <code>docker-compose.yml</code>, the sync service and
+                        <code>README.md</code> with the install steps. Keep the zip private.</p>
+                    <button name="action_download" type="object" string="Download the zip" icon="fa-download"
+                            class="btn-primary"/>
+                </div>
+                <div invisible="step != 'check'">
+                    <p>Install the files on the photo server and start it. Waiting for the photo server to call in…</p>
+                    <group>
+                        <field name="last_seen" readonly="1"/>
+                    </group>
+                    <p invisible="last_seen" class="text-muted">No call yet.</p>
+                    <button name="action_check" type="object" string="Check again" icon="fa-refresh"/>
+                </div>
+                <footer>
+                    <button name="action_back" type="object" string="Back" invisible="step == 'intro'"/>
+                    <button name="action_next" type="object" string="Next" class="btn-primary"
+                            invisible="step == 'check'"/>
+                    <button name="action_finish" type="object" string="Finish" class="btn-primary"
+                            invisible="step != 'check'"/>
+                    <button string="Cancel" special="cancel" invisible="step == 'check'"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_immich_setup_wizard" model="ir.actions.act_window">
+        <field name="name">Set up the photo server</field>
+        <field name="res_model">immich.setup.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
