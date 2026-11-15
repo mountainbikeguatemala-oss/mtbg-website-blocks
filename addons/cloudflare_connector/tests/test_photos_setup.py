@@ -67,7 +67,7 @@ class TestPhotosSetup(TransactionCase):
         self.assertEqual(body[("POST", base + "/domains/custom")]["zoneId"], "zone-co")
         rules = body[("PUT", base + "/lifecycle")]["rules"]
         self.assertEqual([(r["conditions"]["prefix"], r["deleteObjectsTransition"]["condition"]["maxAge"])
-                          for r in rules], [("tours/", 60 * 86400), ("inbox/", 14 * 86400)])
+                          for r in rules], [("tours/", 60 * 86400), ("inbox/", 14 * 86400), ("staging/", 120 * 86400)])
         cors = body[("PUT", base + "/cors")]["rules"][0]
         self.assertEqual(cors["allowed"]["origins"], ["https://www.example.com"])
         self.assertEqual(sorted(cors["allowed"]["methods"]), ["GET", "HEAD", "PUT"])

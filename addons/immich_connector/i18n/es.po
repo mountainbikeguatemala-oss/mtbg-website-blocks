@@ -363,13 +363,6 @@ msgstr ""
 "oficina."
 
 #. module: immich_connector
-#: model:ir.model.fields,help:immich_connector.field_res_config_settings__immich_wifi_name
-msgid "Staff are told to connect to this wifi before uploading at the office"
-msgstr ""
-"Se le indica al personal que se conecte a este wifi antes de subir fotos en "
-"la oficina"
-
-#. module: immich_connector
 #: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__step
 msgid "Step"
 msgstr "Paso"
@@ -465,3 +458,23 @@ msgstr "http://192.168.1.50:2283"
 #: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
 msgid "http://192.168.1.50:8090"
 msgstr "http://192.168.1.50:8090"
+
+#. module: immich_connector
+#: model:ir.model.fields,help:immich_connector.field_immich_setup_wizard__wifi_name
+msgid ""
+"Several networks (e.g. 2.4 GHz and 5 GHz behind the same router): separate "
+"them with commas"
+msgstr ""
+"Varias redes (p. ej. 2.4 GHz y 5 GHz detrás del mismo router): sepárelas con"
+" comas"
+
+#. module: immich_connector
+#: model:ir.model.fields,help:immich_connector.field_res_config_settings__immich_wifi_name
+msgid ""
+"The office wifi network staff are told to connect to before uploading. "
+"Several (e.g. one 2.4 GHz and one 5 GHz, behind the same router): separate "
+"them with commas"
+msgstr ""
+"La red wifi de la oficina a la que se le indica al personal que se conecte "
+"antes de subir fotos. Varias (p. ej. una de 2.4 GHz y una de 5 GHz, detrás "
+"del mismo router): sepárelas con comas"

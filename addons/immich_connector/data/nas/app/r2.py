@@ -278,6 +278,11 @@ class R2Client:
             raise
         return {"size": int(r.headers.get("Content-Length") or 0), "etag": r.headers.get("ETag", "").strip('"')}
 
+    def copy(self, src_key, dst_key):
+        """Server-side copy inside the bucket (no download/upload through the NAS). NAS addition, 2026-11-15."""
+        src = "/%s/%s" % (self.bucket, _uri_encode(src_key.lstrip("/"), safe="-_.~/"))
+        self._request("PUT", dst_key, headers={"x-amz-copy-source": src})
+
     def delete(self, key):
         self._request("DELETE", key, ok=(200, 204))
 

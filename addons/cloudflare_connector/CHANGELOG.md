@@ -1,5 +1,9 @@
 # Cloudflare Connector
 
+## 19.0.1.6.1 (2026-11-15)
+
+- Set up photos storage adds a third lifecycle rule: `staging/` deleted after 120 days (Tour photos' previews: every photo staged as it comes into the album, before Send to clients). A bucket set up before keeps its rules: add this one on the bucket's Settings in the Cloudflare dashboard.
+
 ## 19.0.1.6.0 (2026-11-14)
 
 - **Set up photos storage** (owner, 2026-11-14: "I don't see photo R2 settings in the cloudflare connector"): from a setup token, a bucket of its own for the photos shown online, `<site>-photos`, with NO lock (the backups bucket has one; photos expire and are deleted); its public custom domain (default `photos.<short domain or zone>`); lifecycle rules (`tours/` deleted after 60 days, `inbox/` after 14); CORS (PUT with Content-Type, GET, HEAD from the site's address); the site's own key for that bucket, kept apart from the backups key (`r2_photos_*`); a second key for the photo server, object read and write on that bucket only, shown ONCE in the wizard (never saved, never logged); a test; the setup token deleted.

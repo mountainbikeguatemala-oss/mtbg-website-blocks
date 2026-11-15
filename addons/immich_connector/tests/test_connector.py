@@ -53,6 +53,8 @@ class TestImmichConnector(TransactionCase):
         settings.execute()
         self.assertEqual(self.C._upload_url(), "http://192.168.1.50:8090")
         self.assertEqual(self.C._wifi_name(), "Office")
+        self.ICP.set_param("immich_connector.wifi_name", "Office 2G, Office 5G ,")
+        self.assertEqual(self.C._wifi_names(), ["Office 2G", "Office 5G"], "several networks, separated by commas")
         self.assertEqual(self.C._album_url("abc"), "http://192.168.1.50:2283/albums/abc")
         self.assertFalse(self.C._public_mode(), "no API key: not public")
         with self.assertRaises(UserError):
@@ -118,3 +120,20 @@ class TestImmichConnector(TransactionCase):
         self.assertFalse(wizard.last_seen and wizard.last_seen > fields.Datetime.now() + timedelta(minutes=1))
         wizard.action_finish()
         self.assertFalse(wizard.token, "the token leaves the wizard")
+
+    def test_at_office(self):
+        from unittest.mock import MagicMock
+        token = self.C._new_token()
+        request = MagicMock()
+        request.httprequest.headers = {"Authorization": "Bearer " + token}
+        request.httprequest.remote_addr = "203.0.113.7"
+        self.assertTrue(self.C._check_bearer(request))
+        self.assertTrue(self.C._at_office("203.0.113.7"), "the same address, the photo server just called")
+        self.assertFalse(self.C._at_office("198.51.100.9"), "another address")
+        self.assertFalse(self.C._at_office(""))
+        request.httprequest.remote_addr = "203.0.113.99"  # the office's 4G router got a new address
+        self.assertTrue(self.C._check_bearer(request))
+        self.assertTrue(self.C._at_office("203.0.113.99"))
+        self.C._set_fresh("immich_connector.last_seen",
+                          fields.Datetime.to_string(fields.Datetime.now() - timedelta(minutes=16)))
+        self.assertFalse(self.C._at_office("203.0.113.99"), "the photo server has not called for 16 minutes")

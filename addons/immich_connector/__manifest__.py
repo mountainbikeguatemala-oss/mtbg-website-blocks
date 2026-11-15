@@ -1,6 +1,6 @@
 {
     "name": "Immich Connector",
-    "version": "19.0.1.0.1",
+    "version": "19.0.1.0.2",
     "category": "Productivity/Connectors",
     "mtbg_tours_section": "connectors",
     "summary": "One connection to an office photo server running Immich: its token, its office upload page and wifi, "

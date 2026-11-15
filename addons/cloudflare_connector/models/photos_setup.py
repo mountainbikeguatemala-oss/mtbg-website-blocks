@@ -33,7 +33,7 @@ from .setup import BUCKET_RE, PG_BUCKET_ITEM_WRITE, R2_OFF_CODES, _bucket_slug, 
 _logger = logging.getLogger(__name__)
 
 PHOTOS = P + "r2_photos_"  # the photos bucket's parameters: bucket, access_key_id, secret_access_key, token_id, domain
-LIFECYCLE = [("tours/", 60), ("inbox/", 14)]
+LIFECYCLE = [("tours/", 60), ("inbox/", 14), ("staging/", 120)]  # staging: the previews (Tour photos 0.1.3)
 STEPS = [("connect", "Connect"), ("review", "Review"), ("done", "Done")]
 DOMAIN_RE = re.compile(r"^(?=.{4,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$")
 

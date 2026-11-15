@@ -34,7 +34,7 @@
                     <ul>
                         <li>create the bucket <b><field name="bucket_name" class="oe_inline" readonly="1"/></b> (no lock), or keep it if it exists;</li>
                         <li>connect its public address <b><field name="domain" class="oe_inline" readonly="1"/></b>;</li>
-                        <li>delete <code>tours/</code> after 60 days and <code>inbox/</code> after 14 days (lifecycle rules);</li>
+                        <li>delete <code>tours/</code> after 60 days, <code>inbox/</code> after 14 and <code>staging/</code> after 120 (lifecycle rules);</li>
                         <li>let <field name="origin" class="oe_inline" readonly="1"/> upload (PUT) and download (GET, HEAD) photos (CORS);</li>
                         <li>make the site's key for the bucket, and a key for the photo server, shown once;</li>
                         <li>test the bucket, then delete the setup token in Cloudflare.</li>

@@ -27,6 +27,9 @@ from zoneinfo import ZoneInfo
 
 import requests
 
+import zipfile
+
+import process
 from process import process_day
 from r2 import R2Client
 
@@ -36,8 +39,8 @@ log = logging.getLogger("tour-photos")
 def E(*names, default=None):
     """First non-empty setting among ``names`` (the generic name first, older names after)."""
     for n in names:
-        v = os.environ.get(n)
-        if v not in (None, ""):
+        v = (os.environ.get(n) or "").strip().strip('"').strip("'").strip()  # pasted values: spaces, CR, quotes
+        if v:
             return v
     return default
 
@@ -409,67 +412,321 @@ def still_marked(site, dep_id, n):
     return False
 
 
-def publish_day(im, site, r2, dep, day, aid, st):
+SITE_WM = os.path.join(os.path.dirname(STATE), "watermark-site.png")
+
+
+def refresh_watermark(site, st):
+    """API section 12/12b: the watermark uploaded on the website wins over config. Checked every round; the PNG is
+    downloaded only when its version changes. 404 = none uploaded -> WATERMARK_PATH (or no watermark)."""
+    try:
+        r = site.s.get(SITE + "/watermark", timeout=30)
+        if r.status_code == 404:
+            if st.get("wm"):
+                log.info("website watermark removed: using the NAS file")
+            st["wm"] = None
+            return
+        r.raise_for_status()
+        info = r.json()
+        if not info.get("ok"):
+            return
+        if not st.get("wm") or st["wm"].get("version") != info.get("version") or not os.path.exists(SITE_WM):
+            url = info.get("url") or "/mtbg/photos/api/v1/watermark.png"
+            png = site.s.get(url if url.startswith("http") else SITE.split("/mtbg/")[0] + url, timeout=60)
+            png.raise_for_status()
+            tmp = SITE_WM + ".tmp"
+            with open(tmp, "wb") as f:
+                f.write(png.content)
+            from PIL import Image
+            Image.open(tmp).verify()  # a real image, not an error page
+            os.replace(tmp, SITE_WM)
+            log.info("website watermark %s downloaded (%s, %s%% of short edge)", str(info.get("version"))[:8],
+                     info.get("anchor"), info.get("size_pct"))
+        st["wm"] = {k: info.get(k) for k in ("version", "anchor", "offset_x_pct", "offset_y_pct", "size_pct",
+                                             "opacity")}
+    except Exception as e:  # keep the last good one
+        log.warning("watermark check failed: %s", e)
+
+
+def refresh_quality(site, st):
+    """Quality settings from the website (GET /quality); 404 = not set there -> config defaults."""
+    import process
+    try:
+        r = site.s.get(SITE + "/quality", timeout=30)
+        if r.status_code == 404:
+            return
+        r.raise_for_status()
+        q = r.json()
+        if q.get("ok"):
+            if (st.get("quality") or {}).get("version") != q.get("version"):
+                log.info("quality settings from the website: photos %spx q%s, videos %spx crf %s max %skbps",
+                         (q.get("photo") or {}).get("long_edge"), (q.get("photo") or {}).get("jpeg_quality"),
+                         (q.get("video") or {}).get("long_edge"), (q.get("video") or {}).get("crf"),
+                         (q.get("video") or {}).get("max_bitrate_kbps"))
+            st["quality"] = q
+            process.set_quality(q)
+    except Exception as e:  # keep the last values
+        log.warning("quality check failed: %s", e)
+        if st.get("quality"):
+            process.set_quality(st["quality"])
+
+
+def watermark_for(st):
+    """(path, placement) to use now: the website's, else config's."""
+    import process
+    wm = st.get("wm")
+    if wm and os.path.exists(SITE_WM):
+        process.set_watermark(wm.get("anchor"), wm.get("offset_x_pct"), wm.get("offset_y_pct"), wm.get("size_pct"),
+                              wm.get("opacity"))
+        return SITE_WM
+    return WATERMARK if os.path.exists(WATERMARK) else None
+
+
+def manifest_item(p, key):
+    """One photos[] item of the synced manifest (API section 3 + 10)."""
+    item = {"type": p["type"], "key": key(p["file"]), "width": p["width"], "height": p["height"],
+            "taken": p["taken"]}
+    if p["type"] == "video":
+        item.update(poster_key=key(p["poster"]), preview_key=key(p["preview"]), duration=p["duration"],
+                    bytes=p["bytes"])
+    return item
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Staging (owner 2026-11-15): every photo/video is processed and uploaded as soon as it is in a day album, under
+# staging/<id>-<random>/day-N/ (no lifecycle clock running for clients). "Publish day" then only copies the staged
+# files to tours/... inside R2, builds the header + zip from copies kept on the NAS, and tells the website.
+# Items removed/archived/hidden in Immich are deleted from staging. Watermark/quality changes re-stage items.
+STAGE_BUDGET = int(float(E("STAGE_MINUTES", default="4")) * 60)   # processing time per sync round
+CACHE = os.path.join(WORK, "cache")
+VIDEO_TYPES = {".mp4": "video/mp4", ".jpg": "image/jpeg", ".webp": "image/webp"}
+
+
+def visible_assets(info):
+    """Album items that get published: photos/videos not trashed, archived, hidden or locked (the moving part of a
+    Live Photo is a hidden asset, so it is left out too)."""
+    return [a for a in info.get("assets", []) if a.get("type") in ("IMAGE", "VIDEO") and not a.get("isTrashed")
+            and not a.get("isArchived") and a.get("visibility", "timeline") == "timeline"]
+
+
+def stage_prefix(dep, n):
+    """The website's staging_prefix (API section 13) when given, else derived the same way."""
+    base = dep.get("staging_prefix") or "staging/" + (dep["prefix"][len("tours/"):] if dep["prefix"].startswith("tours/")
+                                                      else dep["prefix"])
+    return "%sday-%d/" % (base if base.endswith("/") else base + "/", n)
+
+
+def item_files(item):
+    """Files of a processed item that go to R2 (relative to its cache dir)."""
+    return [item["file"], item["poster"], item["preview"]] if item["type"] == "video" else [item["file"]]
+
+
+def drop_staged(r2, day_cache, meta):
+    for f in meta.get("files", []):
+        try:
+            if r2:
+                r2.delete(meta["prefix"] + os.path.basename(f))
+        except Exception as e:
+            log.warning("staging delete %s: %s", f, e)
+    for f in meta.get("files", []) + ([meta["item"].get("full")] if meta.get("item", {}).get("full") else []):
+        try:
+            os.remove(os.path.join(day_cache, f))
+        except OSError:
+            pass
+
+
+def stage_asset(im, r2, a, dep, n, day_cache, sig, wm_path):
+    """Download the original, process it, upload its web files to staging. Returns the staged meta."""
+    tmp = os.path.join(WORK, "dl")
+    os.makedirs(tmp, exist_ok=True)
+    ext = (os.path.splitext(a.get("originalFileName") or "")[1] or ".jpg").lower()
+    src = os.path.join(tmp, a["id"] + ext)
+    try:
+        im.download(a["id"], src)
+        item = process.process_item(src, day_cache, a["id"], wm_path)
+    finally:
+        try:
+            os.remove(src)
+        except OSError:
+            pass
+    pre = stage_prefix(dep, n)
+    files = item_files(item)
+    if r2:
+        for f in files:
+            path = os.path.join(day_cache, f)
+            r2.put_file(pre + os.path.basename(f), path, VIDEO_TYPES.get(os.path.splitext(f)[1], "image/jpeg"))
+    if not item.get("taken"):
+        item["taken"] = a.get("localDateTime") or a.get("fileCreatedAt")
+    return {"sig": sig, "item": item, "files": files, "prefix": pre, "uploaded": bool(r2)}
+
+
+def stage_day(im, r2, dep, day, aid, st, deadline=None, force_all=False):
+    """Bring a day's staging in line with its album. Returns (assets, staged dict) for publishing."""
+    n = day["day"]
+    key = "%d:%d" % (dep["id"], n)
+    staged = st.setdefault("staged", {}).setdefault(key, {})
+    day_cache = os.path.join(CACHE, "%d-day-%d" % (dep["id"], n))
     info = im.album(aid)
-    # Publish the album exactly as the admin left it: removed photos are not in the album; archived, hidden,
-    # locked or trashed ones are skipped.
-    assets = [a for a in info.get("assets", []) if a.get("type") == "IMAGE" and not a.get("isTrashed")
-              and not a.get("isArchived") and a.get("visibility", "timeline") == "timeline"]
-    if not assets:
+    assets = visible_assets(info)
+    ids = {a["id"] for a in assets}
+    for gone in [x for x in staged if x not in ids]:          # removed / archived / hidden in Immich
+        drop_staged(r2, day_cache, staged.pop(gone))
+    wm_path = watermark_for(st)
+    sig = process.settings_sig(wm_path)
+    for a in sorted(assets, key=lambda a: a.get("fileCreatedAt") or ""):
+        meta = staged.get(a["id"])
+        if meta and meta.get("sig") == sig and (meta.get("uploaded") or not r2):
+            continue
+        if deadline and time.time() > deadline and not force_all:
+            break
+        if meta:                                               # settings changed: redo
+            drop_staged(r2, day_cache, meta)
+        try:
+            staged[a["id"]] = stage_asset(im, r2, a, dep, n, day_cache, sig, wm_path)
+            log.info("staged %s (%s) for departure %s day %s", a.get("originalFileName"), a.get("type"), dep["id"], n)
+        except Exception as e:
+            log.error("staging %s failed: %s", a.get("originalFileName"), e)
+            if force_all:
+                raise
+        save_state(st)
+    return info, assets, staged, day_cache
+
+
+def report_staged(site, r2, dep, day, info, assets, staged, day_cache, st):
+    """Tell the website what a day would look like if sent now (for "Preview album"; owner 2026-11-15).
+    Same manifest shape as /synced, but keys under staging/. The header is staged too. Sent only on change."""
+    n = day["day"]
+    items = [dict(staged[a["id"]]["item"], _id=a["id"]) for a in assets
+             if a["id"] in staged and staged[a["id"]].get("uploaded")]
+    items.sort(key=lambda it: (it.get("taken") or "9999", it["_id"]))
+    pre = stage_prefix(dep, n)
+    photos = [it for it in items if it["type"] == "photo"]
+    cov = next((it for it in photos if it["_id"] == info.get("albumThumbnailAssetId")), photos[0] if photos else None)
+    sig = repr(([it["_id"] for it in items], cov and cov["_id"], len(assets),
+                [staged[it["_id"]].get("sig") for it in items]))
+    rep = st.setdefault("staged_report", {})
+    k = "%d:%d" % (dep["id"], n)
+    if rep.get(k) == sig:
+        return
+    head = None
+    if items:
+        head_src = os.path.join(day_cache, cov["file"] if cov else items[0]["poster"])
+        hp = os.path.join(day_cache, "header.jpg")
+        head = process.make_header(head_src, hp)
+        r2.put_file(pre + "cover.jpg", hp, "image/jpeg")
+    key = lambda f: pre + os.path.basename(f)  # noqa: E731
+    body = {"date": day["date"], "count": len(items), "pending": max(0, len(assets) - len(items)),
+            "cover": {"key": pre + "cover.jpg", "width": head["width"], "height": head["height"]} if head else None,
+            "photos": [manifest_item(it, key) for it in items]}
+    r = site.s.post(SITE + "/departures/%d/days/%d/staged" % (dep["id"], n), json=body, timeout=60)
+    if r.status_code == 404 and "No such departure" not in r.text:
+        if not st.get("staged_route_missing"):
+            log.info("website has no /staged route yet: preview data not sent (staging continues)")
+        st["staged_route_missing"] = True
+        return
+    st.pop("staged_route_missing", None)
+    if r.ok:
+        rep[k] = sig
+        log.info("preview updated for departure %s day %s: %d items (%d still processing)", dep["id"], n,
+                 len(items), body["pending"])
+    else:
+        log.warning("staged report %s day %s: %s %s", dep["id"], n, r.status_code, r.text[:200])
+
+
+def stage_round(im, site, r2, deps, albums, st):
+    """Background: stage what's new in albums of days not published yet (time-boxed per round)."""
+    deadline = time.time() + STAGE_BUDGET
+    for dep in deps:
+        for day in dep["days"]:
+            if time.time() > deadline:
+                return
+            aid = albums.get((dep["id"], day["day"]))
+            if not aid or day["state"] in ("synced", "uploading", "ready"):
+                continue                       # ready/uploading days are handled by publish_day
+            try:
+                info, assets, staged, day_cache = stage_day(im, r2, dep, day, aid, st, deadline)
+                if assets or staged:
+                    report_staged(site, r2, dep, day, info, assets, staged, day_cache, st)
+            except Exception as e:
+                log.warning("staging departure %s day %s: %s", dep["id"], day["day"], e)
+
+
+def publish_day(im, site, r2, dep, day, aid, st):
+    n = day["day"]
+    info = im.album(aid)
+    if not visible_assets(info):
         log.warning("album %s is ready but has no photos", info["albumName"])
         return
-    n = day["day"]
     if not DRY:
         site.uploading(dep["id"], n)  # from here staff can no longer undo "ready"
         if not still_marked(site, dep["id"], n):
             log.info("departure %s day %s: ready was undone, skipping", dep["id"], n)
             return
-    work = os.path.join(WORK, "%d-day-%d" % (dep["id"], n))
-    shutil.rmtree(work, ignore_errors=True)
-    src, out = os.path.join(work, "src"), os.path.join(work, "out")
-    os.makedirs(src)
-    cover_name = None
-    for a in assets:
-        ext = os.path.splitext(a.get("originalFileName") or "")[1] or ".jpg"
-        fname = a["id"] + ext.lower()
-        im.download(a["id"], os.path.join(src, fname))
-        if a["id"] == info.get("albumThumbnailAssetId"):
-            cover_name = fname
-    m = process_day(src, out, WATERMARK, cover_name)
+    # Anything not staged yet (or staged with old settings) is done now.
+    info, assets, staged, day_cache = stage_day(im, r2, dep, day, aid, st, force_all=True)
+    items = [dict(staged[a["id"]]["item"], _id=a["id"]) for a in assets if a["id"] in staged]
+    if not items:
+        raise RuntimeError("nothing could be processed for this day")
+    items.sort(key=lambda it: (it.get("taken") or "9999", it["_id"]))
     prefix = dep["prefix"]
     day_prefix = "%sday-%d/" % (prefix, n)
-    uploads = [(os.path.join(out, p["file"]), day_prefix + os.path.basename(p["file"]), "image/jpeg")
-               for p in m["photos"]]
-    uploads.append((os.path.join(out, "header.jpg"), day_prefix + "cover.jpg", "image/jpeg"))
-    uploads.append((os.path.join(out, "day.zip"), "%sday-%d.zip" % (prefix, n), "application/zip"))
-    if DRY:
-        log.info("DRY would upload %d objects under %s", len(uploads), day_prefix)
-        return
-    for path, key, ctype in uploads:
-        r2.put_file(key, path, ctype)
-    for path, key, _ctype in uploads:  # verify every object before telling the website
-        h = r2.head(key)
+    pre = stage_prefix(dep, n)
+    # 1. copy staged files into the client gallery (inside R2, nothing re-uploaded)
+    copies = [(pre + os.path.basename(f), day_prefix + os.path.basename(f), os.path.join(day_cache, f))
+              for it in items for f in item_files(it)]
+    for src_key, dst_key, _p in copies:
+        r2.copy(src_key, dst_key)
+    # 2. header: the album cover if it is a photo, else the first photo, else the first video's poster
+    photos = [it for it in items if it["type"] == "photo"]
+    cov = next((it for it in photos if it["_id"] == info.get("albumThumbnailAssetId")), photos[0] if photos else None)
+    head_src = os.path.join(day_cache, cov["file"] if cov else items[0]["poster"])
+    header_path = os.path.join(day_cache, "header.jpg")
+    head = process.make_header(head_src, header_path)
+    # 3. zip of the photos (copies kept on the NAS), numbered in display order
+    zip_path = os.path.join(day_cache, "day.zip")
+    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_STORED) as z:
+        for i, it in enumerate(photos, 1):
+            z.write(os.path.join(day_cache, it["full"]), "%04d.jpg" % i)
+    uploads = [(header_path, day_prefix + "cover.jpg", "image/jpeg"),
+               (zip_path, "%sday-%d.zip" % (prefix, n), "application/zip")]
+    for path, k, ctype in uploads:
+        r2.put_file(k, path, ctype)
+    # 4. verify every object before telling the website
+    for _s, k, path in copies + [(None, k, p) for p, k, _c in uploads]:
+        h = r2.head(k)
         if not h or h["size"] != os.path.getsize(path):
-            raise RuntimeError("R2 verify failed for %s" % key)
+            raise RuntimeError("R2 verify failed for %s" % k)
+    key = lambda f: day_prefix + os.path.basename(f)  # noqa: E731
     manifest = {
         "date": day["date"],
-        "count": m["count"],
-        "cover": {"key": day_prefix + "cover.jpg", "width": m["header"]["width"], "height": m["header"]["height"]},
-        "zip": {"key": "%sday-%d.zip" % (prefix, n), "bytes": m["zip"]["bytes"]},
-        "photos": [{"key": day_prefix + os.path.basename(p["file"]), "width": p["width"], "height": p["height"],
-                    "taken": p["taken"]} for p in m["photos"]],
+        "count": len(items),
+        "cover": {"key": day_prefix + "cover.jpg", "width": head["width"], "height": head["height"]},
+        "zip": {"key": "%sday-%d.zip" % (prefix, n), "bytes": os.path.getsize(zip_path)},
+        "photos": [manifest_item(it, key) for it in items],
     }
     res = site.synced(dep["id"], n, manifest)
     stamp = datetime.now(TZ).strftime("%Y-%m-%d %H:%M")
     desc = SYNCED_RE.sub("", info.get("description") or "")
-    desc += "\n✓ synced %s · %d photos · %s" % (stamp, m["count"], res.get("short_url", ""))
+    videos = sum(1 for it in items if it["type"] == "video")
+    what = "%d photos" % (len(items) - videos) + (" · %d videos" % videos if videos else "")
+    desc += "\n✓ synced %s · %s · %s" % (stamp, what, res.get("short_url", ""))
     im.update_album(aid, description=desc)
-    st["synced"]["%d:%d" % (dep["id"], n)] = {"at": stamp, "count": m["count"]}
-    log.info("published %s: %d photos, state=%s", info["albumName"], m["count"], res.get("photos_state"))
-    shutil.rmtree(work, ignore_errors=True)
+    st["synced"]["%d:%d" % (dep["id"], n)] = {"at": stamp, "count": len(items)}
+    log.info("published %s: %s, state=%s", info["albumName"], what, res.get("photos_state"))
+    # 5. clean up: staging objects and the NAS copies of this day
+    for src_key in [c[0] for c in copies] + [pre + "cover.jpg"]:
+        try:
+            r2.delete(src_key)
+        except Exception:
+            pass
+    st["staged"].pop("%d:%d" % (dep["id"], n), None)
+    st.get("staged_report", {}).pop("%d:%d" % (dep["id"], n), None)
+    shutil.rmtree(day_cache, ignore_errors=True)
+    save_state(st)
 
 
 def run_once(im, site, r2, st):
+    refresh_watermark(site, st)
+    refresh_quality(site, st)
     try:
         apply_changes(im, site, st)
     except Exception:
@@ -484,6 +741,11 @@ def run_once(im, site, r2, st):
     email_to_user = {(u.get("email") or "").lower(): u["id"] for u in users}
     if E("SORT_PARTNER_PHOTOS", default="0") == "1":  # off: guides choose what they upload (office page / cellular)
         sort_photos(im, deps, albums, email_to_user, st)
+    if r2 is not None:
+        try:
+            stage_round(im, site, r2, deps, albums, st)
+        except Exception:
+            log.error("staging round failed:\n%s", traceback.format_exc())
     for dep in deps:
         for day in dep["days"]:
             aid = albums.get((dep["id"], day["day"]))
@@ -495,7 +757,10 @@ def run_once(im, site, r2, st):
             # "#ready" typed in the album (Tours-account albums: only admins can edit them) starts processing.
             ready = day["state"] in ("ready", "uploading") or (
                 day["state"] in ("none", "uploaded") and READY_RE.search(im.album(aid).get("description") or ""))
-            if ready:
+            if ready and r2 is None:
+                log.warning("departure %s day %s is ready, but R2 is not set up: publishing waits",
+                            dep["id"], day["day"])
+            elif ready:
                 try:
                     publish_day(im, site, r2, dep, day, aid, st)
                 except Exception:
@@ -508,8 +773,13 @@ def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     im = Immich(E("IMMICH_API_KEY", default=""))
     site = Site(E("NAS_TOKEN", "WEBSITE_TOKEN", default=""))
-    r2 = None if DRY else R2Client(E("R2_ACCOUNT_ID"), E("R2_ACCESS_KEY_ID"), E("R2_SECRET_ACCESS_KEY"),
-                                   E("R2_BUCKET", default="tour-photos"))
+    r2 = None
+    if not DRY:
+        try:
+            r2 = R2Client(E("R2_ACCOUNT_ID"), E("R2_ACCESS_KEY_ID"), E("R2_SECRET_ACCESS_KEY"),
+                          E("R2_BUCKET", default="tour-photos"))
+        except Exception as e:  # albums, upload page and sorting still work; publishing waits for R2
+            log.warning("R2 not set up (%s): albums run, publishing and the mobile inbox wait for R2 keys", e)
     log.info("tour-photos sync as Immich user %s, website %s, every %ss%s",
              im.me().get("email"), SITE, INTERVAL, " (DRY RUN)" if DRY else "")
     st = load_state()

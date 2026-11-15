@@ -8,6 +8,9 @@ services:
     image: tour-photos-service:1
     command: ["/app/sync.py"]
     env_file: config.env
+    # Optional: Intel/AMD graphics speeds up video a lot. Delete these two lines if your NAS has no /dev/dri.
+    devices:
+      - /dev/dri:/dev/dri
     volumes:
       - ./data:/data        # state + your watermark.png
       - ./work:/work        # temporary files while a day is processed

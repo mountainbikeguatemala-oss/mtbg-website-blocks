@@ -34,7 +34,8 @@ class ImmichSetupWizard(models.TransientModel):
     lan_address = fields.Char("Photo server address", help="Its address on the office network, e.g. 192.168.1.20")
     immich_port = fields.Integer("Immich port", default=2283)
     upload_port = fields.Integer("Upload page port", default=8090)
-    wifi_name = fields.Char("Office wifi name")
+    wifi_name = fields.Char("Office wifi name", help="Several networks (e.g. 2.4 GHz and 5 GHz behind the same router): "
+                                                     "separate them with commas")
     token = fields.Char(readonly=True)
     last_seen = fields.Datetime("Last call-in", compute="_compute_last_seen")
 
@@ -73,7 +74,8 @@ class ImmichSetupWizard(models.TransientModel):
         ICP = self.env["ir.config_parameter"].sudo()
         ICP.set_param("immich_connector.immich_url", "http://%s:%d" % (address, self.immich_port))
         ICP.set_param("immich_connector.upload_url", "http://%s:%d" % (address, self.upload_port))
-        ICP.set_param("immich_connector.wifi_name", (self.wifi_name or "").strip())
+        ICP.set_param("immich_connector.wifi_name", ", ".join(
+            n.strip() for n in (self.wifi_name or "").split(",") if n.strip()))
 
     def action_next(self):
         self.ensure_one()

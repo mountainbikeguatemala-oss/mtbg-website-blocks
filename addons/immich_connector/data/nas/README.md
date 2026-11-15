@@ -72,7 +72,9 @@ shared with them.
 1. Copy this whole folder to the NAS, e.g. to `/volume1/docker/tour-photos` (any shared folder for Docker).
 2. Copy `config.env.example` to `config.env` and fill in every line marked REQUIRED. (If the website's setup
    wizard gave you a `config.env`, use that and add only the secrets it left empty.)
-3. Create a folder `data` next to `config.env` and put your logo in it as `data/watermark.png`.
+3. Watermark: upload your logo on the website (Tours > Configuration > Tour photos). The service fetches it and
+   its placement by itself. (Alternative: put the PNG in a folder `data` next to `config.env` as
+   `data/watermark.png`.)
 4. Start it.
    - **With SSH:** in the folder, run
      ```
@@ -107,6 +109,8 @@ docker compose --env-file config.env run --rm -e BACKFILL_FROM=2026-07-01 photos
 
 ## Everyday use
 
+- Photos **and videos** are accepted (photos up to 50 MB, videos up to 2 GB each). Videos are published as a
+  web MP4 with a poster and a short looping preview; they are not in the download zips.
 - Guides upload from the Staff App: on the office wifi through the upload page, or over mobile data (the NAS
   collects those every 15 minutes).
 - Guides press **Done uploading**. Nothing is published yet.

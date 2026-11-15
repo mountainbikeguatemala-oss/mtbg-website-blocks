@@ -1,5 +1,11 @@
 # Immich Connector
 
+## 19.0.1.0.2 (2026-11-15)
+
+- The office's public address is kept from the photo server's calls (the request's real client address, as the site reads every visitor's; refreshed as soon as it changes), with `_at_office(ip)`: yes only when the photo server called within the last 15 minutes from that address. Never shown to anyone; neutralize clears it.
+- "Office wifi name" takes several networks separated by commas (`_wifi_names()`), in the settings and the wizard.
+- The photo server's files (Set up the photo server's zip) brought up to date: the office upload page's "Back to the Staff App" and "Done" (back to the Staff App's tour, or its link), the watermark and quality from the website, the README.
+
 ## 19.0.1.0.1 (2026-11-14)
 
 - Spanish (es.po and .pot): the settings and the "Set up the photo server" wizard.

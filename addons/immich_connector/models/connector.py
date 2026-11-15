@@ -15,6 +15,8 @@ from odoo.exceptions import AccessError, UserError
 P = "immich_connector."
 TOKEN = P + "nas_token_hash"
 LAST_SEEN = P + "last_seen"
+OFFICE_IP = P + "office_ip"  # the office's public address, from the photo server's calls (never shown to anyone)
+AT_OFFICE_FOR = timedelta(minutes=15)  # the photo server called in this recently: its address still counts
 SEEN_EVERY = timedelta(minutes=1)
 
 
@@ -47,6 +49,12 @@ class ImmichConnector(models.AbstractModel):
     @api.model
     def _wifi_name(self):
         return self._param("wifi_name")
+
+    @api.model
+    def _wifi_names(self):
+        """The office wifi networks (several, separated by commas: e.g. a 2.4 GHz and a 5 GHz network behind the same
+        router), in order."""
+        return [name.strip() for name in self._wifi_name().split(",") if name.strip()]
 
     @api.model
     def _immich_url(self):
@@ -100,25 +108,39 @@ class ImmichConnector(models.AbstractModel):
             return False
         if not self._check_token(header[7:].strip()):
             return False
-        self._mark_seen()
+        self._mark_seen(None if isinstance(request, str) else request.httprequest.remote_addr)
         return True
 
     @api.model
-    def _mark_seen(self):
-        """When the photo server last called in: kept with a direct write (no cache cleared), at most once a minute."""
+    def _mark_seen(self, ip=None):
+        """When the photo server last called in, and from which public address (the office's: the request's real
+        client address, as the site reads every visitor's, behind its proxy): kept with direct writes (no cache
+        cleared), at most once a minute; the address as soon as it changes (the office's 4G router)."""
         if getattr(self.env.cr, "readonly", False):
             return  # (a read-only request: the next call records it)
         now = fields.Datetime.now()
         last = self._last_seen()
-        if last and now - last < SEEN_EVERY:
+        if ip and ip != _fresh(self.env, OFFICE_IP):
+            self._set_fresh(OFFICE_IP, ip)
+        elif last and now - last < SEEN_EVERY:
             return
-        value = fields.Datetime.to_string(now)
-        self.env.cr.execute("UPDATE ir_config_parameter SET value = %s WHERE key = %s", [value, LAST_SEEN])
+        self._set_fresh(LAST_SEEN, fields.Datetime.to_string(now))
+
+    @api.model
+    def _set_fresh(self, key, value):
+        self.env.cr.execute("UPDATE ir_config_parameter SET value = %s WHERE key = %s", [value, key])
         if not self.env.cr.rowcount:
             self.env.cr.execute(
                 "INSERT INTO ir_config_parameter (key, value, create_uid, write_uid, create_date, write_date) "
                 "VALUES (%s, %s, 1, 1, now() at time zone 'UTC', now() at time zone 'UTC') "
-                "ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value", [LAST_SEEN, value])
+                "ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value", [key, value])
+
+    @api.model
+    def _at_office(self, ip):
+        """Whether ``ip`` (a staff member's request) is the office's: the photo server called in within the last 15
+        minutes from that same public address. Only yes or no ever leaves here."""
+        last, office = self._last_seen(), _fresh(self.env, OFFICE_IP)
+        return bool(ip and office and last and fields.Datetime.now() - last <= AT_OFFICE_FOR and ip == office)
 
     @api.model
     def _last_seen(self):
@@ -132,7 +154,9 @@ class ResConfigSettings(models.TransientModel):
     immich_upload_url = fields.Char("Office upload page URL", config_parameter=P + "upload_url",
                                     help="The photo server's upload page on the office network")
     immich_wifi_name = fields.Char("Office wifi name", config_parameter=P + "wifi_name",
-                                   help="Staff are told to connect to this wifi before uploading at the office")
+                                   help="The office wifi network staff are told to connect to before uploading. "
+                                        "Several (e.g. one 2.4 GHz and one 5 GHz, behind the same router): separate "
+                                        "them with commas")
     immich_url = fields.Char("Immich URL", config_parameter=P + "immich_url",
                              help="Immich's address (on the office network), for album links: <this>/albums/<id>")
     immich_public_mode = fields.Boolean("Immich reachable from the internet", config_parameter=P + "public_mode",
