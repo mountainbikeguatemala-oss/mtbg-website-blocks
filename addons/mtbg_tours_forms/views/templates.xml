@@ -32,24 +32,30 @@
         </div>
     </template>
 
-    <!-- The phone fields' countries, once per page, and the few lines that fill a field's picker with them when it is
-         first touched (pointer, focus, key), when its number already has a dial code, or once the page is idle;
-         window.mtbgPhoneFill(root) fills them at once for scripts that read the options. Inline: the site's script
-         bundle may still be loading when the visitor reaches a form. -->
+    <!-- The phone fields' countries and the few lines that fill a field's picker with them when it is first touched
+         (pointer, focus, key), when its number already has a dial code, or once the page is idle; the countries come
+         from a file in the page's language the browser keeps (0.6.1: fetched only by a page with a phone field, once
+         its HTML is read, no longer 10 KB in every page); window.mtbgPhoneFill(root) fills them, at once when the list
+         is there (it returns a promise, kept when they are filled). Inline: the site's script bundle may still be
+         loading when the visitor reaches a form. -->
     <template id="phone_list" inherit_id="website.layout" name="Form field: the phone countries">
         <xpath expr="//head" position="inside">
-            <script>(function () {
-    var rows = null;
-    function data() {
-        if (!rows) {
-            var el = document.getElementById("mtbg-phone-countries");
-            if (!el) { return null; }
-            rows = JSON.parse(el.textContent);
+            <script t-att-data-mtbg-phone-countries="request.env['res.country'].mtbg_phone_countries_url()">(function () {
+    var url = document.currentScript ? document.currentScript.getAttribute("data-mtbg-phone-countries") : null;
+    var rows = null, loading = null;
+    function load() {
+        if (rows) { return Promise.resolve(rows); }
+        if (!loading) {
+            loading = (url ? fetch(url) : Promise.reject(new Error("no list")))
+                .then(function (r) { if (!r.ok) { throw new Error(r.status); } return r.json(); })
+                .then(function (list) { rows = list; return rows; })
+                .catch(function () { loading = null; return null; });  // (tried again on the next touch)
         }
-        return rows;
+        return loading;
     }
     function fill(select) {
-        if (!select || select.getAttribute("data-mtbg-lazy") !== "1" || !data()) { return; }
+        if (!select || select.getAttribute("data-mtbg-lazy") !== "1") { return Promise.resolve(); }
+        if (!rows) { return load().then(function () { if (rows) { return fill(select); } }); }
         var current = select.value, list = document.createDocumentFragment();
         rows.forEach(function (c) {
             var option = document.createElement("option");
@@ -65,9 +71,11 @@
         select.replaceChildren(list);
         select.value = current;
         select.removeAttribute("data-mtbg-lazy");
+        return Promise.resolve();
     }
     function fillAll(root) {
-        (root || document).querySelectorAll('select.mtbg-phone__select[data-mtbg-lazy="1"]').forEach(fill);
+        var selects = (root || document).querySelectorAll('select.mtbg-phone__select[data-mtbg-lazy="1"]');
+        return Promise.all([].map.call(selects, fill));
     }
     window.mtbgPhoneFill = fillAll;
     function onTouch(ev) {
@@ -78,6 +86,8 @@
         document.addEventListener(name, onTouch, {capture: true, passive: true});
     });
     document.addEventListener("DOMContentLoaded", function () {
+        if (!document.querySelector('select.mtbg-phone__select[data-mtbg-lazy="1"]')) { return; }
+        load();  // (a page with a phone field: the list on its way before the visitor reaches it)
         document.querySelectorAll(".mtbg-phone").forEach(function (field) {
             var input = field.querySelector(".mtbg-phone__input");
             if (input ? input.value.trim().charAt(0) === "+" : false) { fill(field.querySelector(".mtbg-phone__select")); }
@@ -88,9 +98,6 @@
         later(function () { fillAll(); }, {timeout: 4000});
     });
 })();</script>
-        </xpath>
-        <xpath expr="//body" position="inside">
-            <script type="application/json" id="mtbg-phone-countries" t-out="request.env['res.country'].mtbg_phone_countries_json()"/>
         </xpath>
     </template>
 </odoo>

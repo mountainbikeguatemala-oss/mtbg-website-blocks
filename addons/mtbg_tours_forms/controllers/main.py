@@ -11,6 +11,21 @@ class MtbgFormFields(http.Controller):
         """The mobile field's countries (dial code, number lengths) and the one it opens on (the visitor's)."""
         return request.env['res.country'].mtbg_phone_picker()
 
+    @http.route('/mtbg_forms/phone_countries/<string:lang>/<string:version>', type='http', auth='public',
+                sitemap=False, readonly=True)
+    def phone_countries(self, lang, version):
+        """The phone fields' countries in a language (models/fields.py ``mtbg_phone_countries_url``): the same for
+        everyone; its address changes with the list, so the browser keeps it."""
+        if not request.env['res.lang']._lang_get(lang):
+            raise request.not_found()
+        rows = request.env['res.country'].with_context(lang=lang).mtbg_phone_countries_json()
+        current = request.env['res.country'].with_context(lang=lang).mtbg_phone_countries_url().rsplit('/', 1)[1]
+        # (an older address, from a page kept before the list changed: today's list, kept briefly)
+        age = 31536000 if version == current else 3600
+        return request.make_response(str(rows), headers=[
+            ('Content-Type', 'application/json; charset=utf-8'),
+            ('Cache-Control', 'public, max-age=%d%s' % (age, ', immutable' if version == current else ''))])
+
     @http.route(['/contact-us'], type='http', auth='public', website=True, sitemap=True)
     def contact_page(self, **kw):
         """The contact page (the same form opens as a popup and sits under the booking form on tour pages)."""

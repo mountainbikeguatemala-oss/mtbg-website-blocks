@@ -16,25 +16,32 @@
             if (!select || select.dataset.mtbgPicked || (input && input.value.trim()) || select.value === country) {
                 return;
             }
-            if (window.mtbgPhoneFill) {
-                window.mtbgPhoneFill(field);  // (the picker's other countries come when it is first used)
-            }
-            var option = select.querySelector('option[value="' + country + '"]');
-            if (!option) {
-                return;
-            }
-            select.value = country;
-            var flag = field.querySelector(".mtbg-phone__flag");
-            var dial = field.querySelector(".mtbg-phone__dial");
-            if (flag && option.dataset.img) {
-                flag.src = option.dataset.img;
-                flag.alt = option.dataset.name || "";
-            }
-            if (dial && option.dataset.dial) {
-                dial.textContent = "+" + option.dataset.dial;
-            }
-            select.dispatchEvent(new Event("change", {bubbles: true}));
+            // (the picker's other countries come when it is first used: from a file, 0.6.1)
+            Promise.resolve(window.mtbgPhoneFill && window.mtbgPhoneFill(field)).then(function () {
+                pick(field, select, input, country);
+            });
         });
+    }
+
+    function pick(field, select, input, country) {
+        if (select.dataset.mtbgPicked || (input && input.value.trim()) || select.value === country) {
+            return;  // (the visitor chose or typed while the list came)
+        }
+        var option = select.querySelector('option[value="' + country + '"]');
+        if (!option) {
+            return;
+        }
+        select.value = country;
+        var flag = field.querySelector(".mtbg-phone__flag");
+        var dial = field.querySelector(".mtbg-phone__dial");
+        if (flag && option.dataset.img) {
+            flag.src = option.dataset.img;
+            flag.alt = option.dataset.name || "";
+        }
+        if (dial && option.dataset.dial) {
+            dial.textContent = "+" + option.dataset.dial;
+        }
+        select.dispatchEvent(new Event("change", {bubbles: true}));
     }
 
     document.addEventListener("change", function (ev) {

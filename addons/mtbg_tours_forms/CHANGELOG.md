@@ -2,6 +2,16 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_forms-*'`.
 
+## 19.0.0.6.1 (2026-11-14)
+
+- **The phone fields' countries are a file, no longer in every page** (page speed, priority 2). Every page carried
+  the country code picker's list inline (about 10 KB, 4 KB compressed), with or without a phone field. Now the list
+  is a JSON file per language (`/mtbg_forms/phone_countries/<lang>/<version>`). The browser keeps it for a year, and
+  its address changes when the list changes. Only a page with a phone field fetches it, as soon as its HTML is read,
+  and the pickers fill as before: on first touch, when the number already has a dial code, or once the page is idle.
+  `window.mtbgPhoneFill(root)` now returns a promise that resolves once the pickers are filled. The cached page's
+  visitor country (phone_visitor.js) waits for it. Cloudflare Page Cache serves the file without a session cookie.
+
 ## 19.0.0.6.0 (2026-11-11)
 
 - **Joins the universal repository** (owner, 2026-11-11, the split, step 3): its folder moves from the Tours repository

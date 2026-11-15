@@ -6,6 +6,7 @@ already gave us.
 """
 import json
 import re
+from hashlib import sha1
 
 import phonenumbers
 from markupsafe import Markup
@@ -52,6 +53,9 @@ def _request_country_code():
 
 class ResCountry(models.Model):
     _inherit = 'res.country'
+    # (Cloudflare Page Cache, where installed: the picker's countries are the same file for everyone, given without a
+    # session cookie; no dependency either way)
+    _mtbg_edge_cache_static_prefixes = ('/mtbg_forms/phone_countries/',)
 
     @tools.ormcache('self.env.lang')
     def _mtbg_phone_countries(self):
@@ -85,6 +89,13 @@ class ResCountry(models.Model):
         (views/templates.xml phone_list): [[code, name, dial code, lengths, flag], ...] by name."""
         rows = [[c, n, d, ','.join(map(str, lens)), _flag(c)] for c, n, d, lens in self._mtbg_phone_countries()]
         return Markup(json.dumps(rows, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/'))
+
+    @tools.ormcache('self.env.lang')
+    def mtbg_phone_countries_url(self):
+        """Where a page's script gets the picker's countries in its language (0.6.1: a file the browser keeps, fetched
+        only by a page with a phone field, no longer 10 KB in every page): its address changes with the list."""
+        version = sha1(str(self.mtbg_phone_countries_json()).encode()).hexdigest()[:10]
+        return '/mtbg_forms/phone_countries/%s/%s' % (self.env.lang or 'en_US', version)
 
     def mtbg_phone_open(self, phone, contact_country=None, default=None):
         """The country a picker opens on for a number on file ("+1 443…"): on a dial code several countries share,
