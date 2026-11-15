@@ -1,5 +1,9 @@
 # Immich Connector
 
+## 19.0.1.0.4 (2026-11-15)
+
+- The photo server's files brought up to date: every photo and video format is accepted on the office upload page (the type is taken from the file name, so a phone sending no type is fine), originals kept as sent; HEIC/HEIF, AVIF, WebP, PNG, TIFF, GIF and BMP converted to the web JPEG, DNG/RAW through their built-in preview; HEIC capture times read; HDR video tone-mapped; photos up to 200 MB.
+
 ## 19.0.1.0.3 (2026-11-15)
 
 - The photo server's files (Set up the photo server's zip) brought up to date: the office upload page reports what each guide sent (`POST /tickets/<ticket>/uploaded`), staged items carry the asset id, the uploader and a thumbnail (with pending items), the deletions queue (`GET /deletions`, `POST /deletions/done`), and the Dockerfile with the Intel video driver.

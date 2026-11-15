@@ -202,14 +202,32 @@ def day_album(im, site, dep_id, day_no, fallback_name=None):
 
 def exif_time(path):
     try:
-        from PIL import Image
-        exif = Image.open(path).getexif()
-        dt = exif.get_ifd(0x8769).get(36867) or exif.get(306)
+        dt = process.exif_taken(path)  # JPEG, HEIC/HEIF, AVIF, TIFF, DNG
         if dt and len(dt) >= 19:
             return datetime.strptime(dt[:19], "%Y:%m:%d %H:%M:%S").replace(tzinfo=TZ)
     except Exception:
         pass
     return None
+
+
+def convert_for_immich(path):
+    """A copy Immich will take: video -> MP4 (stream copy, else H.264), image -> JPEG q95. None if impossible."""
+    base = os.path.splitext(path)[0]
+    if process.is_video(path):
+        out = base + ".conv.mp4"
+        for codec in (["-c", "copy"], ["-c:v", "libx264", "-crf", "18", "-preset", "fast", "-c:a", "aac"]):
+            try:
+                process._run([process.FFMPEG, "-y", "-v", "error", "-i", path] + codec + ["-movflags", "+faststart", out])
+                return out
+            except Exception:
+                pass
+        return None
+    out = base + ".conv.jpg"
+    try:
+        process.load(path).save(out, "JPEG", quality=95)
+        return out
+    except Exception:
+        return None
 
 
 def import_photo(im, path, filename, album_id, guide=None, taken=None, modified=None):
@@ -218,9 +236,24 @@ def import_photo(im, path, filename, album_id, guide=None, taken=None, modified=
     user's own key, so the guide goes in the description ("Uploaded by <name> (<email>)")."""
     modified = modified or datetime.now(timezone.utc)
     created = exif_time(path) or taken or modified
-    with open(path, "rb") as f:
-        r = im.s.post(IMMICH + "/assets", timeout=600, files={"assetData": (filename, f)}, data={
-            "fileCreatedAt": created.isoformat(), "fileModifiedAt": modified.isoformat(), "filename": filename})
+
+    def post(p, fn):
+        with open(p, "rb") as f:
+            return im.s.post(IMMICH + "/assets", timeout=600, files={"assetData": (fn, f)}, data={
+                "fileCreatedAt": created.isoformat(), "fileModifiedAt": modified.isoformat(), "filename": fn})
+    r = post(path, filename)
+    if r.status_code == 400 and "unsupported" in r.text.lower():
+        # Every format is accepted from guides (owner 2026-11-15); the few Immich refuses (e.g. a bare .hevc
+        # stream) are rewrapped as MP4 / converted to JPEG here, and that copy goes in.
+        conv = convert_for_immich(path)
+        if conv:
+            try:
+                r = post(conv, os.path.splitext(filename)[0] + os.path.splitext(conv)[1])
+            finally:
+                try:
+                    os.remove(conv)
+                except OSError:
+                    pass
     if r.status_code >= 400:
         raise RuntimeError("Immich upload %s %s" % (r.status_code, r.text[:200]))
     res = r.json()  # {"id", "status": "created" | "duplicate"}
@@ -597,6 +630,10 @@ def stage_day(im, r2, dep, day, aid, st, deadline=None, force_all=False):
         try:
             staged[a["id"]] = stage_asset(im, r2, a, dep, n, day_cache, sig, wm_path)
             log.info("staged %s (%s) for departure %s day %s", a.get("originalFileName"), a.get("type"), dep["id"], n)
+        except process.Unsupported as e:   # e.g. RAW without a preview: stays in Immich, not in the web gallery
+            staged[a["id"]] = {"sig": sig, "skip": True, "files": [], "uploaded": True, "by": uploaded_by(a),
+                               "name": a.get("originalFileName")}
+            log.warning("not for the web gallery: %s (%s)", a.get("originalFileName"), e)
         except Exception as e:
             log.error("staging %s failed: %s", a.get("originalFileName"), e)
             if force_all:
@@ -610,7 +647,7 @@ def report_staged(site, r2, dep, day, info, assets, staged, day_cache, st):
     Same manifest shape as /synced, but keys under staging/. The header is staged too. Sent only on change."""
     n = day["day"]
     items = [dict(staged[a["id"]]["item"], _id=a["id"]) for a in assets
-             if a["id"] in staged and staged[a["id"]].get("uploaded")]
+             if a["id"] in staged and staged[a["id"]].get("uploaded") and not staged[a["id"]].get("skip")]
     items.sort(key=lambda it: (it.get("taken") or "9999", it["_id"]))
     pre = stage_prefix(dep, n)
     photos = [it for it in items if it["type"] == "photo"]
@@ -630,7 +667,7 @@ def report_staged(site, r2, dep, day, info, assets, staged, day_cache, st):
     key = lambda f: pre + os.path.basename(f)  # noqa: E731
     done_ids = {it["_id"] for it in items}
     pending = [{"asset_id": a["id"], "uploaded_by": uploaded_by(a), "name": a.get("originalFileName")}
-               for a in assets if a["id"] not in done_ids]
+               for a in assets if a["id"] not in done_ids and not staged.get(a["id"], {}).get("skip")]
     photos = []
     for it in items:
         m = manifest_item(it, key)
@@ -740,7 +777,8 @@ def publish_day(im, site, r2, dep, day, aid, st):
             return
     # Anything not staged yet (or staged with old settings) is done now.
     info, assets, staged, day_cache = stage_day(im, r2, dep, day, aid, st, force_all=True)
-    items = [dict(staged[a["id"]]["item"], _id=a["id"]) for a in assets if a["id"] in staged]
+    items = [dict(staged[a["id"]]["item"], _id=a["id"]) for a in assets
+             if a["id"] in staged and not staged[a["id"]].get("skip")]
     if not items:
         raise RuntimeError("nothing could be processed for this day")
     items.sort(key=lambda it: (it.get("taken") or "9999", it["_id"]))

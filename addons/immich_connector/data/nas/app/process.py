@@ -7,7 +7,9 @@ For one album day it writes, into an output folder:
   manifest.json     {"count", "photos": [{"file","w","h"}], "header": {...}, "zip": {...}}
 
 Usage: python process.py <originals_dir> <out_dir> <watermark.png> [--cover NAME]
-Originals: JPEG, PNG, HEIC/HEIF (iPhone), WebP. Video and other files are skipped.
+Originals: any image format (owner 2026-11-15): JPEG, PNG, HEIC/HEIF (iPhone), AVIF, WebP, TIFF, GIF, BMP; RAW
+(DNG and other TIFF-based RAW) through its embedded preview JPEG; anything else Pillow can't open through ffmpeg.
+A file nothing can decode raises Unsupported: it stays in Immich but is left out of the web gallery.
 """
 import argparse
 import json
@@ -24,7 +26,12 @@ try:
     import pillow_heif
 
     pillow_heif.register_heif_opener()
-except ImportError:  # HEIC then unsupported; JPEG still works
+    if hasattr(pillow_heif, "register_avif_opener"):
+        try:
+            pillow_heif.register_avif_opener()
+        except Exception:  # libheif without an AV1 decoder: ffmpeg fallback below
+            pass
+except ImportError:  # HEIC then via the ffmpeg fallback; JPEG still works
     pass
 
 _env = os.environ.get
@@ -41,13 +48,136 @@ WM_OFF_X_PCT = float(_env("WATERMARK_OFFSET_X_PCT") or 3)   # inward from the an
 WM_OFF_Y_PCT = float(_env("WATERMARK_OFFSET_Y_PCT") or 3)   # inward from the anchored side, % of photo height
 WM_OPACITY = float(_env("WATERMARK_OPACITY") or 0.85)       # multiplier on the PNG's own alpha
 TZ = ZoneInfo(_env("TIMEZONE") or _env("TZ") or "UTC")
-EXTS = {".jpg", ".jpeg", ".png", ".heic", ".heif", ".webp"}
+EXTS = {".jpg", ".jpeg", ".jfif", ".png", ".heic", ".heif", ".hif", ".avif", ".webp", ".tif", ".tiff", ".gif", ".bmp"}
+RAW_EXTS = {".dng", ".cr2", ".nef", ".nrw", ".arw", ".srf", ".sr2", ".orf", ".rw2", ".raf", ".pef", ".srw", ".erf",
+            ".kdc", ".dcr", ".3fr", ".iiq", ".mos", ".mef", ".rwl", ".x3f", ".cr3", ".gpr"}
+EXTS |= RAW_EXTS
+
+
+class Unsupported(Exception):
+    """Nothing here can decode the file: keep it in Immich, leave it out of the web gallery."""
+
+
+def _raw_preview(path):
+    """Largest embedded JPEG preview of a TIFF-based RAW (DNG, CR2, NEF, ARW, ORF, RW2, PEF...), as a PIL image with
+    the RAW's orientation applied; None if there is none. Pure Python: walks IFD0, its SubIFDs and next IFDs."""
+    import io
+    import struct
+    with open(path, "rb") as f:
+        data = f.read()
+    if data[:2] == b"II":
+        e = "<"
+    elif data[:2] == b"MM":
+        e = ">"
+    else:
+        return None
+    if struct.unpack(e + "H", data[2:4])[0] not in (42, 0x4F52, 0x5352, 0x55):  # TIFF / ORF / RW2
+        return None
+    sizes = {1: 1, 2: 1, 3: 2, 4: 4, 5: 8, 7: 1, 9: 4, 10: 8, 13: 4}
+    cands, seen, todo, orient = [], set(), [struct.unpack(e + "I", data[4:8])[0]], 1
+    while todo and len(seen) < 64:
+        off = todo.pop()
+        if off in seen or off <= 0 or off + 2 > len(data):
+            continue
+        seen.add(off)
+        n = struct.unpack(e + "H", data[off:off + 2])[0]
+        tags = {}
+        for i in range(min(n, 512)):
+            ent = off + 2 + 12 * i
+            if ent + 12 > len(data):
+                break
+            tag, typ, cnt = struct.unpack(e + "HHI", data[ent:ent + 8])
+            sz = sizes.get(typ, 1) * cnt
+            voff = ent + 8 if sz <= 4 else struct.unpack(e + "I", data[ent + 8:ent + 12])[0]
+            if typ in (3, 4, 13) and cnt < 1024:
+                fmt = "H" if typ == 3 else "I"
+                try:
+                    tags[tag] = list(struct.unpack(e + fmt * cnt, data[voff:voff + sz]))
+                except struct.error:
+                    pass
+        if off == struct.unpack(e + "I", data[4:8])[0] and tags.get(274):
+            orient = tags[274][0]
+        todo += tags.get(330, [])                            # SubIFDs
+        nxt = off + 2 + 12 * n
+        if nxt + 4 <= len(data):
+            todo.append(struct.unpack(e + "I", data[nxt:nxt + 4])[0])
+        if 513 in tags and 514 in tags:                      # JPEGInterchangeFormat / Length
+            cands.append((tags[513][0], tags[514][0]))
+        if tags.get(259, [0])[0] in (6, 7) and 273 in tags and 279 in tags and len(tags[273]) == 1:
+            cands.append((tags[273][0], tags[279][0]))       # one-strip JPEG
+    best = None
+    for o, ln in cands:
+        blob = data[o:o + ln]
+        if blob[:3] != b"\xff\xd8\xff":
+            continue
+        try:
+            im = Image.open(io.BytesIO(blob))
+            im.load()                                        # lossless-JPEG raw data (SOF3) fails here: skipped
+        except Exception:
+            continue
+        if best is None or im.width * im.height > best.width * best.height:
+            best = im
+    if best is None or max(best.size) < 640:                 # a tiny thumbnail is not a gallery photo
+        return None
+    t = {2: Image.FLIP_LEFT_RIGHT, 3: Image.ROTATE_180, 4: Image.FLIP_TOP_BOTTOM, 5: Image.TRANSPOSE,
+         6: Image.ROTATE_270, 7: Image.TRANSVERSE, 8: Image.ROTATE_90}.get(orient)
+    best = ImageOps.exif_transpose(best)                     # the preview's own EXIF, if it has one
+    return best.transpose(t) if t and not best.getexif().get(274) else best
+
+
+def _ffmpeg_image(path):
+    """Last resort for formats Pillow can't read (AVIF without plugin, odd HEIF, JPEG XL...): ffmpeg -> PNG."""
+    import tempfile
+    fd, png = tempfile.mkstemp(suffix=".png")
+    os.close(fd)
+    try:
+        _run([FFMPEG, "-y", "-v", "error", "-i", path, "-frames:v", "1", png])
+        im = Image.open(png)
+        im.load()
+        return im
+    except Exception:
+        return None
+    finally:
+        try:
+            os.remove(png)
+        except OSError:
+            pass
+
+
+def _rgb(img):
+    """Any mode -> RGB: transparency onto white, 16-bit scaled down, palette/CMYK/LAB converted."""
+    if img.mode.startswith("I;16") or img.mode == "I":
+        img = img.convert("I").point(lambda v: v * (1 / 256.0)).convert("L")
+    if img.mode in ("RGBA", "LA", "PA") or (img.mode == "P" and "transparency" in img.info):
+        img = img.convert("RGBA")
+        bg = Image.new("RGB", img.size, (255, 255, 255))
+        bg.paste(img, mask=img.getchannel("A"))
+        return bg
+    return img.convert("RGB")
 
 
 def load(path):
-    img = Image.open(path)
-    img = ImageOps.exif_transpose(img)  # phones store rotation in EXIF
-    return img.convert("RGB")
+    """Any image file -> upright RGB PIL image, or raise Unsupported."""
+    ext = os.path.splitext(path)[1].lower()
+    img = None
+    if ext in RAW_EXTS:
+        try:
+            img = _raw_preview(path)
+        except Exception:
+            img = None
+        if img is None:
+            raise Unsupported("RAW file without a usable embedded preview")
+        return _rgb(img)
+    try:
+        img = Image.open(path)
+        img.seek(0)                                          # first frame of GIF / multi-page TIFF
+        img = ImageOps.exif_transpose(img)                   # phones store rotation in EXIF
+        return _rgb(img)
+    except Exception:
+        img = _ffmpeg_image(path)
+    if img is None:
+        raise Unsupported("no decoder for %s" % (ext or "this file"))
+    return _rgb(img)
 
 
 def set_watermark(anchor=None, offset_x_pct=None, offset_y_pct=None, size_pct=None, opacity=None):
@@ -134,7 +264,8 @@ def capture_key(path):
 
 
 # ---- Videos (owner 2026-11-14): web MP4 + poster + looping animated WebP preview; not in the day zip ----------
-VIDEO_EXTS = {".mp4", ".mov", ".m4v", ".3gp", ".mkv", ".webm", ".avi"}
+VIDEO_EXTS = {".mp4", ".mov", ".m4v", ".3gp", ".3g2", ".mkv", ".webm", ".avi", ".mts", ".m2ts", ".mpg", ".mpeg",
+              ".wmv", ".flv", ".hevc", ".h265", ".h264"}
 VIDEO_EDGE = int(_env("WEB_VIDEO_LONG_EDGE") or 1280)
 VIDEO_BITRATE = _env("VIDEO_BITRATE") or "2M"            # owner: heavy compression, 720p; this is the cap
 VIDEO_CRF = _env("VIDEO_CRF") or "28"                     # quality target (higher = smaller); capped by bitrate
@@ -190,7 +321,8 @@ def probe(path):
     tags = dict(d.get("format", {}).get("tags", {}), **v.get("tags", {}))
     dur = float(d.get("format", {}).get("duration") or v.get("duration") or 0)
     return {"width": w, "height": h, "duration": dur, "created": tags.get("creation_time"), "rotation": rot,
-            "audio": any(s.get("codec_type") == "audio" for s in d["streams"])}
+            "audio": any(s.get("codec_type") == "audio" for s in d["streams"]),
+            "hdr": v.get("color_transfer") in ("arib-std-b67", "smpte2084")}  # iPhone HDR (HLG) / HDR10
 
 
 def even(n):
@@ -219,11 +351,14 @@ def process_video(path, out, name, wm_path):
             mw, mh = m.size
         wm_w, wm_h, x, y = wm_box(w, h, mw, mh)
     mp4 = os.path.join(out, "web", name + ".mp4")
+    # HDR phone video -> SDR BT.709 first, or it plays washed out in browsers
+    tm = ("zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=hable:desat=0,"
+          "zscale=t=bt709:m=bt709:r=tv,format=yuv420p," if info.get("hdr") else "")
     if not wm_path:
-        fc = "[0:v]scale=%d:%d,setsar=1,format=yuv420p[out]" % (w, h)
+        fc = "[0:v]%sscale=%d:%d,setsar=1,format=yuv420p[out]" % (tm, w, h)
     else:
-        fc = ("[0:v]scale=%d:%d,setsar=1[v];[1:v]scale=%d:%d,format=rgba,colorchannelmixer=aa=%.3f[wm];"
-              "[v][wm]overlay=%d:%d,format=yuv420p[out]" % (w, h, wm_w, wm_h, WM_OPACITY, x, y))
+        fc = ("[0:v]%sscale=%d:%d,setsar=1[v];[1:v]scale=%d:%d,format=rgba,colorchannelmixer=aa=%.3f[wm];"
+              "[v][wm]overlay=%d:%d,format=yuv420p[out]" % (tm, w, h, wm_w, wm_h, WM_OPACITY, x, y))
     tail = []
     if info["audio"]:
         tail += ["-map", "0:a:0", "-c:a", "aac", "-b:a", "%dk" % AUDIO_KBPS, "-ac", "2"]
@@ -235,7 +370,7 @@ def process_video(path, out, name, wm_path):
     soft = [FFMPEG, "-y", "-v", "error", "-i", path] + wm_in + ["-filter_complex", fc, "-map", "[out]"] + tail
     # Fast path: the Intel graphics chip decodes and shrinks (5K H.265 off action cams is the slow part on the
     # CPU); only the small result is watermarked and encoded on the CPU. Rotated phone video takes the CPU path.
-    if os.path.exists(VAAPI) and not info.get("rotation"):
+    if os.path.exists(VAAPI) and not info.get("rotation") and not info.get("hdr"):
         hw_scale = "[0:v]scale_vaapi=w=%d:h=%d:format=nv12,hwdownload,format=nv12,setsar=1" % (w, h)
         hfc = fc.replace("[0:v]scale=%d:%d,setsar=1" % (w, h), hw_scale, 1)
         hw = [FFMPEG, "-y", "-v", "error", "-hwaccel", "vaapi", "-hwaccel_device", VAAPI,

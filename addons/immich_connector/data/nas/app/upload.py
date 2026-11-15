@@ -29,9 +29,12 @@ except ImportError:
 
 log = logging.getLogger("tour-photos-upload")
 PORT = int(E("LISTEN_PORT", "UPLOAD_PORT", default="8090"))  # inside the container; compose maps UPLOAD_PORT
-MAX_PHOTO = int(float(E("UPLOAD_MAX_PHOTO_MB", "UPLOAD_MAX_MB", default="50")) * 1024 * 1024)
+MAX_PHOTO = int(float(E("UPLOAD_MAX_PHOTO_MB", "UPLOAD_MAX_MB", default="200")) * 1024 * 1024)
 MAX_VIDEO = int(float(E("UPLOAD_MAX_VIDEO_MB", default="2048")) * 1024 * 1024)
-VIDEO_EXT = {".mp4", ".mov", ".m4v", ".3gp", ".mkv", ".webm", ".avi"}
+VIDEO_EXT = {".mp4", ".mov", ".m4v", ".3gp", ".3g2", ".mkv", ".webm", ".avi", ".mts", ".m2ts", ".mpg", ".mpeg",
+             ".wmv", ".flv", ".hevc", ".h265", ".h264"}
+# Every format is accepted (owner 2026-11-15); type is decided by extension first, the browser's MIME second
+# (iOS/Android often send "" or application/octet-stream for HEIC/DNG).
 TMP = E("UPLOAD_TMP", default="/work/upload-tmp")
 
 im = Immich(E("IMMICH_API_KEY", default=""))
@@ -171,8 +174,10 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(403, '{"ok":false,"error":"ticket"}')
         size = int(self.headers.get("Content-Length") or 0)
         name = os.path.basename(unquote(self.headers.get("X-File-Name") or "photo.jpg"))[:200] or "photo.jpg"
-        is_video = (self.headers.get("X-File-Type") or "").startswith("video/") or \
-            os.path.splitext(name)[1].lower() in VIDEO_EXT
+        ext = os.path.splitext(name)[1].lower()
+        is_video = ext in VIDEO_EXT or (not ext and (self.headers.get("X-File-Type") or "").startswith("video/"))
+        if not ext:  # keep a usable extension when the phone sent none
+            name += ".mp4" if is_video else ".jpg"
         if size <= 0 or size > (MAX_VIDEO if is_video else MAX_PHOTO):
             return self.send(413, '{"ok":false,"error":"size"}')
         try:
@@ -212,7 +217,7 @@ PAGE = r"""<!doctype html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tour photos</title>
 <style>
-:root{--bg:#f6f6f4;--fg:#1f1f1f;--muted:#6b6b6b;--card:#fff;--line:#e3e3df;--accent:#1a73e8;--ok:#1a73e8;--bad:#c62828;--tile:#e9e7e2}
+:root{--bg:#f6f6f4;--fg:#1f1f1f;--muted:#6b6b6b;--card:#fff;--line:#e3e3df;--accent:#007bff;--ok:#007bff;--bad:#c62828;--tile:#e9e7e2}
 @media (prefers-color-scheme:dark){:root{--bg:#161616;--fg:#eee;--muted:#9a9a9a;--card:#222;--line:#333;--tile:#2b2b2b}}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--fg)}
 main{max-width:720px;margin:0 auto;padding:16px 16px 110px}
@@ -263,7 +268,7 @@ li.done .s{color:var(--ok)}li.err .s{color:var(--bad)}.bar5{height:5px;backgroun
 </style></head><body><main>
 <button class="back" id="back"></button>
 <h1 id="t"></h1><p class="sub" id="d"></p>
-<input id="f" type="file" accept="image/*,video/*" multiple hidden>
+<input id="f" type="file" accept="image/*,image/heic,image/heif,image/avif,image/webp,image/tiff,image/x-adobe-dng,.heic,.heif,.avif,.dng,video/*,.mov,.mp4,.m4v,.hevc" multiple hidden>
 <section id="vPick"><label class="pick" for="f" id="pickl"></label><p class="sub" id="hint" style="margin-top:10px"></p></section>
 <section id="vReview" hidden>
  <div class="bar"><span class="count" id="count"></span>
@@ -299,7 +304,9 @@ $("d").textContent=INFO.date+" · "+L.day+" "+INFO.day+(INFO.guide?" · "+L.by+"
 $("back").textContent=L.back;$("pickl").textContent=L.pick;$("hint").textContent=L.hint;$("all").textContent=L.all;$("none").textContent=L.none;
 $("more").textContent=L.more;$("retry").textContent=L.retry;$("again").textContent=L.again;$("done").textContent=L.done;
 const mb=b=>(b/1048576).toFixed(b<10485760?1:0);
-const isVid=f=>(f.type||"").startsWith("video/")||/\.(mp4|mov|m4v|3gp|mkv|webm|avi)$/i.test(f.name);
+const VEXT=/\.(mp4|mov|m4v|3gp|3g2|mkv|webm|avi|mts|m2ts|mpg|mpeg|wmv|flv|hevc|h265|h264)$/i;
+const isVid=f=>VEXT.test(f.name)||(!/\.[a-z0-9]{2,5}$/i.test(f.name)&&(f.type||"").startsWith("video/"));
+const ftype=f=>{const m=/\.([a-z0-9]{2,5})$/i.exec(f.name);return m?m[1].toUpperCase():(f.type||"file");};
 const tooBig=f=>f.size>(isVid(f)?MAXV:MAXP);
 const fmtDur=t=>{t=Math.max(0,Math.round(t||0));return (t/60|0)+":"+String(t%60).padStart(2,"0");};
 let picked=[], items=[], running=0, t0=0, sent0=0, leaving=false, xhrs=new Set(), seq=0, batchOk=0; const MAX=2;
@@ -316,7 +323,7 @@ function addFiles(list){
 function tile(p){
  const el=document.createElement("div");el.className="tile"+(p.sel?" on":"");el.__p=p;p.el=el;
  el.innerHTML='<div class="ph"><b>'+(isVid(p.f)?"🎬":"🖼")+'</b><span></span></div><span class="cb">✓</span><button class="rm" aria-label="remove">✕</button>';
- el.querySelector(".ph span").textContent=p.f.name+" · "+mb(p.f.size)+" MB";
+ el.querySelector(".ph span").textContent=p.f.name+" · "+ftype(p.f)+" · "+mb(p.f.size)+" MB";
  if(tooBig(p.f)){const b=document.createElement("div");b.className="big";b.textContent=L.big;el.appendChild(b);}
  el.querySelector(".cb").onclick=e=>{e.stopPropagation();toggle(p);};
  el.querySelector(".rm").onclick=e=>{e.stopPropagation();remove(p);};
@@ -350,7 +357,7 @@ function thumb(p){
 function lightbox(p){
  const url=URL.createObjectURL(p.f),lb=document.createElement("div");lb.className="lb";
  const m=isVid(p.f)?Object.assign(document.createElement("video"),{src:url,controls:true,playsInline:true,autoplay:true}):Object.assign(document.createElement("img"),{src:url});
- m.onerror=()=>{m.replaceWith(Object.assign(document.createElement("div"),{textContent:p.f.name+" · "+mb(p.f.size)+" MB",style:"color:#ddd;padding:20px;text-align:center"}));};
+ m.onerror=()=>{m.replaceWith(Object.assign(document.createElement("div"),{textContent:p.f.name+" · "+ftype(p.f)+" · "+mb(p.f.size)+" MB",style:"color:#ddd;padding:20px;text-align:center"}));};
  const x=Object.assign(document.createElement("button"),{className:"x",textContent:"✕"}),nm=Object.assign(document.createElement("div"),{className:"nm",textContent:p.f.name});
  const close=()=>{if(m.pause)m.pause();lb.remove();URL.revokeObjectURL(url);};
  x.onclick=close;lb.onclick=e=>{if(e.target===lb)close();};lb.append(m,x,nm);document.body.appendChild(lb);
