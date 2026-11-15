@@ -1,5 +1,9 @@
 # Immich Connector
 
+## 19.0.1.0.3 (2026-11-15)
+
+- The photo server's files (Set up the photo server's zip) brought up to date: the office upload page reports what each guide sent (`POST /tickets/<ticket>/uploaded`), staged items carry the asset id, the uploader and a thumbnail (with pending items), the deletions queue (`GET /deletions`, `POST /deletions/done`), and the Dockerfile with the Intel video driver.
+
 ## 19.0.1.0.2 (2026-11-15)
 
 - The office's public address is kept from the photo server's calls (the request's real client address, as the site reads every visitor's; refreshed as soon as it changes), with `_at_office(ip)`: yes only when the photo server called within the last 15 minutes from that address. Never shown to anyone; neutralize clears it.

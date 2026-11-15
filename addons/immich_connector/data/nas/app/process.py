@@ -297,7 +297,10 @@ def process_item(path, out, name, wm_path):
     wm_path = wm_path if wm_path and os.path.exists(wm_path) else None
     os.makedirs(os.path.join(out, "web"), exist_ok=True)
     if is_video(path):
-        return process_video(path, out, name, wm_path)
+        item = process_video(path, out, name, wm_path)
+        make_thumb(os.path.join(out, item["poster"]), os.path.join(out, "web", name + "-thumb.jpg"))
+        item["thumb"] = "web/%s-thumb.jpg" % name
+        return item
     wm = Image.open(wm_path).convert("RGBA") if wm_path else None
     img = load(path)
     web = watermark(fit(img, WEB_EDGE), wm)
@@ -305,8 +308,16 @@ def process_item(path, out, name, wm_path):
     os.makedirs(os.path.join(out, "full"), exist_ok=True)
     big = fit(img, ZIP_EDGE) if ZIP_EDGE else img
     watermark(big, wm).save(os.path.join(out, "full", name + ".jpg"), "JPEG", quality=FULL_QUALITY, optimize=True)
-    return {"type": "photo", "file": "web/%s.jpg" % name, "full": "full/%s.jpg" % name, "width": web.width,
-            "height": web.height, "taken": taken_iso(path), "src": os.path.basename(path)}
+    make_thumb(os.path.join(out, "web", name + ".jpg"), os.path.join(out, "web", name + "-thumb.jpg"))
+    return {"type": "photo", "file": "web/%s.jpg" % name, "full": "full/%s.jpg" % name, "thumb": "web/%s-thumb.jpg" % name,
+            "width": web.width, "height": web.height, "taken": taken_iso(path), "src": os.path.basename(path)}
+
+
+def make_thumb(src_jpg, dest, size=400):
+    """~400 px staff thumbnail (already watermarked: made from the web copy / video poster)."""
+    im = Image.open(src_jpg).convert("RGB")
+    im.thumbnail((size, size), Image.LANCZOS)
+    im.save(dest, "JPEG", quality=78, optimize=True, progressive=True)
 
 
 def make_header(src_jpg, dest):

@@ -81,6 +81,30 @@ def back_url(r):
     return root + "/staff"
 
 
+_route_missing = {"uploaded": False}
+
+
+def report_uploaded(t, n):
+    try:
+        r = site.s.post(site_api() + "/tickets/%s/uploaded" % t, json={"count": n}, timeout=20)
+        if r.status_code == 404 and "ticket" not in r.text.lower():
+            if not _route_missing["uploaded"]:
+                log.info("website has no /tickets/<t>/uploaded route yet: upload counts not sent")
+            _route_missing["uploaded"] = True
+        elif r.ok:
+            _route_missing["uploaded"] = False
+            log.info("reported %d uploaded files for ticket %s...", n, t[:6])
+        else:
+            log.warning("upload count report: %s %s", r.status_code, r.text[:200])
+    except Exception as e:
+        log.warning("upload count report failed: %s", e)
+
+
+def site_api():
+    import sync
+    return sync.SITE
+
+
 def to_immich(path, filename, last_modified_ms, tk):
     modified = datetime.fromtimestamp(last_modified_ms / 1000, timezone.utc) if last_modified_ms else None
     with _lock:  # one album lookup/create at a time (two files arrive together)
@@ -119,6 +143,24 @@ class Handler(BaseHTTPRequestHandler):
         page = PAGE.replace("__INFO__", json.dumps(info)).replace("__MAXPHOTO__", str(MAX_PHOTO)) \
             .replace("__MAXVIDEO__", str(MAX_VIDEO))
         return self.send(200, page, "text/html")
+
+    def do_POST(self):
+        """POST /upload/batch?t=..  {"count": n} after each finished batch -> the website adds n to the guide's
+        upload count for this ticket (owner 2026-11-15: the guide's task completes from upload counts)."""
+        u = urlparse(self.path)
+        if u.path != "/upload/batch":
+            return self.send(404, '{"ok":false}')
+        t = parse_qs(u.query).get("t", [""])[0]
+        if not ticket(t):
+            return self.send(403, '{"ok":false,"error":"ticket"}')
+        try:
+            n = int(json.loads(self.rfile.read(min(int(self.headers.get("Content-Length") or 0), 1000)) or b"{}")
+                    .get("count", 0))
+        except (ValueError, TypeError):
+            n = 0
+        if n > 0:
+            report_uploaded(t, n)
+        return self.send(200, '{"ok":true}')
 
     def do_PUT(self):
         u = urlparse(self.path)
@@ -170,7 +212,7 @@ PAGE = r"""<!doctype html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tour photos</title>
 <style>
-:root{--bg:#f6f6f4;--fg:#1f1f1f;--muted:#6b6b6b;--card:#fff;--line:#e3e3df;--accent:#d35400;--ok:#2e7d32;--bad:#c62828;--tile:#e9e7e2}
+:root{--bg:#f6f6f4;--fg:#1f1f1f;--muted:#6b6b6b;--card:#fff;--line:#e3e3df;--accent:#1a73e8;--ok:#1a73e8;--bad:#c62828;--tile:#e9e7e2}
 @media (prefers-color-scheme:dark){:root{--bg:#161616;--fg:#eee;--muted:#9a9a9a;--card:#222;--line:#333;--tile:#2b2b2b}}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--fg)}
 main{max-width:720px;margin:0 auto;padding:16px 16px 110px}
@@ -182,6 +224,7 @@ button{font:inherit;cursor:pointer}
 .bar{position:sticky;top:0;z-index:3;background:var(--bg);padding:10px 0;display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-bottom:1px solid var(--line);margin-bottom:10px}
 .bar .count{flex:1 1 100%;font-weight:700}
 .chip{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:14px}
+#more{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 @media (min-width:600px){.grid{grid-template-columns:repeat(4,1fr)}}
 .tile{position:relative;aspect-ratio:1/1;background:var(--tile);border-radius:8px;overflow:hidden;outline:3px solid transparent;transition:opacity .15s}
@@ -214,6 +257,7 @@ ul{list-style:none;padding:0;margin:0}li{background:var(--card);border:1px solid
 .row{display:flex;justify-content:space-between;gap:8px;font-size:14px}.n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.s{flex:none;color:var(--muted)}
 li.done .s{color:var(--ok)}li.err .s{color:var(--bad)}.bar5{height:5px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:6px}.bar5 i{display:block;height:100%;width:0;background:var(--accent)}
 .btn2{margin-top:10px;width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:16px}
+#again{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700;padding:16px;font-size:18px}
 .donebtn{margin-top:12px;width:100%;padding:16px;border-radius:12px;border:0;background:var(--ok);color:#fff;font-size:18px;font-weight:700}
 [hidden]{display:none!important}
 </style></head><body><main>
@@ -258,7 +302,9 @@ const mb=b=>(b/1048576).toFixed(b<10485760?1:0);
 const isVid=f=>(f.type||"").startsWith("video/")||/\.(mp4|mov|m4v|3gp|mkv|webm|avi)$/i.test(f.name);
 const tooBig=f=>f.size>(isVid(f)?MAXV:MAXP);
 const fmtDur=t=>{t=Math.max(0,Math.round(t||0));return (t/60|0)+":"+String(t%60).padStart(2,"0");};
-let picked=[], items=[], running=0, t0=0, sent0=0, leaving=false, xhrs=new Set(), seq=0; const MAX=2;
+let picked=[], items=[], running=0, t0=0, sent0=0, leaving=false, xhrs=new Set(), seq=0, batchOk=0; const MAX=2;
+function reportBatch(){ if(batchOk<1) return; const n=batchOk; batchOk=0;
+ fetch("/upload/batch?t="+encodeURIComponent(T),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({count:n}),keepalive:true}).catch(()=>{}); }
 function show(v){["vPick","vReview","vProg"].forEach(x=>$(x).hidden=x!==v);$("goBar").hidden=v!=="vReview";}
 
 /* ---------------- review grid ---------------- */
@@ -335,9 +381,9 @@ function send(it){running++;it.st="up";it.sent=0;label(it);const x=new XMLHttpRe
  x.open("PUT","/upload/file?t="+encodeURIComponent(T));x.setRequestHeader("X-File-Name",encodeURIComponent(it.f.name));
  x.setRequestHeader("X-File-Type",it.f.type||"");x.setRequestHeader("X-Last-Modified",String(it.f.lastModified||0));
  x.upload.onprogress=e=>{it.sent=e.loaded;label(it);render();};
- x.onload=()=>{let r={};try{r=JSON.parse(x.responseText)}catch(e){}it.st=x.status==200&&r.ok?(r.status=="duplicate"?"dup":"done"):"err";end(it);};
+ x.onload=()=>{let r={};try{r=JSON.parse(x.responseText)}catch(e){}it.st=x.status==200&&r.ok?(r.status=="duplicate"?"dup":"done"):"err";if(fin(it))batchOk++;end(it);};
  x.onerror=x.onabort=()=>{it.st="err";end(it);};xhrs.add(x);x.onloadend=()=>xhrs.delete(x);x.send(it.f);}
-function end(it){running--;label(it);pump();}
+function end(it){running--;label(it);pump();if(!busy())reportBatch();}
 $("retry").onclick=()=>{t0=Date.now();sent0=items.reduce((a,i)=>a+(fin(i)?i.f.size:0),0);items.filter(i=>i.st=="err").forEach(i=>{i.st="wait";label(i)});pump();};
 $("again").onclick=()=>$("f").click();
 setInterval(()=>{if(running)render();},1000);
@@ -347,7 +393,7 @@ $("f").onchange=e=>{if(e.target.files.length)addFiles(e.target.files);e.target.v
 function goBack(){
  if(busy()){if(!confirm(L.stop))return;items.forEach(i=>{if(i.st=="wait")i.st="err";});xhrs.forEach(x=>{try{x.abort()}catch(e){}});}
  else if(picked.some(p=>p.sel)&&!confirm(L.discard))return;
- leaving=true;try{window.close();}catch(e){}setTimeout(()=>{if(!window.closed)location.href=INFO.back;},300);
+ reportBatch();leaving=true;try{window.close();}catch(e){}setTimeout(()=>{if(!window.closed)location.href=INFO.back;},300);
 }
 $("back").onclick=goBack;$("done").onclick=goBack;
 window.addEventListener("beforeunload",e=>{if(!leaving&&(busy()||picked.some(p=>p.sel))){e.preventDefault();e.returnValue=L.leave;return L.leave;}});

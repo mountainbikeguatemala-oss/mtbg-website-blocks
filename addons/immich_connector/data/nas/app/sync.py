@@ -226,8 +226,9 @@ def import_photo(im, path, filename, album_id, guide=None, taken=None, modified=
     res = r.json()  # {"id", "status": "created" | "duplicate"}
     guide = guide or {}
     if res.get("status") == "created" and (guide.get("name") or guide.get("email")):
-        im.req("PUT", "/assets/%s" % res["id"], json={"description": "Uploaded by %s%s" % (
-            guide.get("name") or "guide", " (%s)" % guide["email"] if guide.get("email") else "")})
+        im.req("PUT", "/assets/%s" % res["id"], json={"description": "Uploaded by %s%s%s" % (
+            guide.get("name") or "guide", " (%s)" % guide["email"] if guide.get("email") else "",
+            " [staff:%s]" % guide["id"] if guide.get("id") else "")})
     im.add_assets(album_id, [res["id"]])
     return res.get("status", "created")
 
@@ -501,6 +502,18 @@ CACHE = os.path.join(WORK, "cache")
 VIDEO_TYPES = {".mp4": "video/mp4", ".jpg": "image/jpeg", ".webp": "image/webp"}
 
 
+UPLOADER_RE = re.compile(r"Uploaded by .*?(?:\(([^)\s]+@[^)\s]+)\))?\s*(?:\[staff:(\d+)\])?\s*$", re.M)
+
+
+def uploaded_by(a):
+    """{"id", "email"} of the staff member who uploaded an asset (from its "Uploaded by" description), or None."""
+    desc = (a.get("exifInfo") or {}).get("description") or a.get("description") or ""
+    m = UPLOADER_RE.search(desc)
+    if not m or not (m.group(1) or m.group(2)):
+        return None
+    return {"id": int(m.group(2)) if m.group(2) else None, "email": m.group(1)}
+
+
 def visible_assets(info):
     """Album items that get published: photos/videos not trashed, archived, hidden or locked (the moving part of a
     Live Photo is a hidden asset, so it is left out too)."""
@@ -549,14 +562,15 @@ def stage_asset(im, r2, a, dep, n, day_cache, sig, wm_path):
         except OSError:
             pass
     pre = stage_prefix(dep, n)
-    files = item_files(item)
+    files = item_files(item) + ([item["thumb"]] if item.get("thumb") else [])
     if r2:
         for f in files:
             path = os.path.join(day_cache, f)
             r2.put_file(pre + os.path.basename(f), path, VIDEO_TYPES.get(os.path.splitext(f)[1], "image/jpeg"))
     if not item.get("taken"):
         item["taken"] = a.get("localDateTime") or a.get("fileCreatedAt")
-    return {"sig": sig, "item": item, "files": files, "prefix": pre, "uploaded": bool(r2)}
+    return {"sig": sig, "item": item, "files": files, "prefix": pre, "uploaded": bool(r2), "by": uploaded_by(a),
+            "name": a.get("originalFileName")}
 
 
 def stage_day(im, r2, dep, day, aid, st, deadline=None, force_all=False):
@@ -614,9 +628,18 @@ def report_staged(site, r2, dep, day, info, assets, staged, day_cache, st):
         head = process.make_header(head_src, hp)
         r2.put_file(pre + "cover.jpg", hp, "image/jpeg")
     key = lambda f: pre + os.path.basename(f)  # noqa: E731
-    body = {"date": day["date"], "count": len(items), "pending": max(0, len(assets) - len(items)),
+    done_ids = {it["_id"] for it in items}
+    pending = [{"asset_id": a["id"], "uploaded_by": uploaded_by(a), "name": a.get("originalFileName")}
+               for a in assets if a["id"] not in done_ids]
+    photos = []
+    for it in items:
+        m = manifest_item(it, key)
+        m.update(asset_id=it["_id"], uploaded_by=staged[it["_id"]].get("by"),
+                 thumb_key=key(it["thumb"]) if it.get("thumb") else None)
+        photos.append(m)
+    body = {"date": day["date"], "count": len(items), "pending": len(pending), "pending_items": pending,
             "cover": {"key": pre + "cover.jpg", "width": head["width"], "height": head["height"]} if head else None,
-            "photos": [manifest_item(it, key) for it in items]}
+            "photos": photos}
     r = site.s.post(SITE + "/departures/%d/days/%d/staged" % (dep["id"], n), json=body, timeout=60)
     if r.status_code == 404 and "No such departure" not in r.text:
         if not st.get("staged_route_missing"):
@@ -624,12 +647,66 @@ def report_staged(site, r2, dep, day, info, assets, staged, day_cache, st):
         st["staged_route_missing"] = True
         return
     st.pop("staged_route_missing", None)
+    if r.status_code == 422 and not st.get("staged_extra_off"):
+        log.warning("website refused the extra /staged fields (422): resending without them")
+        st["staged_extra_off"] = True
+    if r.status_code == 422 or st.get("staged_extra_off"):
+        for ph in body["photos"]:
+            for f in ("asset_id", "uploaded_by", "thumb_key"):
+                ph.pop(f, None)
+        body.pop("pending_items", None)
+        r = site.s.post(SITE + "/departures/%d/days/%d/staged" % (dep["id"], n), json=body, timeout=60)
     if r.ok:
         rep[k] = sig
         log.info("preview updated for departure %s day %s: %d items (%d still processing)", dep["id"], n,
                  len(items), body["pending"])
     else:
         log.warning("staged report %s day %s: %s %s", dep["id"], n, r.status_code, r.text[:200])
+
+
+def process_deletions(im, site, r2, deps, albums, st):
+    """API section 14: deletions asked for on the website (guide: own uploads; admin: any). Each asset leaves the
+    day album and goes to Immich's trash (restorable 30 days); its staged files go; the preview is re-sent."""
+    r = site.s.get(SITE + "/deletions", timeout=30)
+    if r.status_code == 404:
+        if not st.get("deletions_route_missing"):
+            log.info("website has no /deletions route yet")
+        st["deletions_route_missing"] = True
+        return
+    st.pop("deletions_route_missing", None)
+    r.raise_for_status()
+    items = r.json().get("items") or []
+    if not items:
+        return
+    done, touched = [], set()
+    for d in items:
+        try:
+            dep_id, n, asset = int(d["departure_id"]), int(d["day"]), d["asset_id"]
+            aid = albums.get((dep_id, n)) or day_album(im, site, dep_id, n)
+            try:
+                im.req("DELETE", "/albums/%s/assets" % aid, json={"ids": [asset]})
+            except RuntimeError as e:
+                log.warning("remove %s from album: %s", asset, e)
+            im.req("DELETE", "/assets", json={"ids": [asset], "force": False})   # to Immich trash
+            k = "%d:%d" % (dep_id, n)
+            meta = st.get("staged", {}).get(k, {}).pop(asset, None)
+            if meta:
+                drop_staged(r2, os.path.join(CACHE, "%d-day-%d" % (dep_id, n)), meta)
+            st.get("staged_report", {}).pop(k, None)   # force a fresh preview for that day
+            touched.add((dep_id, n))
+            done.append(d["id"])
+            log.info("deleted asset %s from departure %s day %s (in Immich trash)", asset, dep_id, n)
+        except Exception as e:
+            log.error("deletion %s failed: %s", d, e)
+    for dep in deps:                                   # re-send the preview of the days that changed
+        for day in dep["days"]:
+            if (dep["id"], day["day"]) in touched and albums.get((dep["id"], day["day"])):
+                info, assets, staged, day_cache = stage_day(im, r2, dep, day, albums[(dep["id"], day["day"])], st,
+                                                            time.time() + 60)
+                report_staged(site, r2, dep, day, info, assets, staged, day_cache, st)
+    if done:
+        site.req("POST", "/deletions/done", json={"ids": done})
+    save_state(st)
 
 
 def stage_round(im, site, r2, deps, albums, st):
@@ -713,7 +790,8 @@ def publish_day(im, site, r2, dep, day, aid, st):
     st["synced"]["%d:%d" % (dep["id"], n)] = {"at": stamp, "count": len(items)}
     log.info("published %s: %s, state=%s", info["albumName"], what, res.get("photos_state"))
     # 5. clean up: staging objects and the NAS copies of this day
-    for src_key in [c[0] for c in copies] + [pre + "cover.jpg"]:
+    thumbs = [pre + os.path.basename(it["thumb"]) for it in items if it.get("thumb")]
+    for src_key in [c[0] for c in copies] + thumbs + [pre + "cover.jpg"]:
         try:
             r2.delete(src_key)
         except Exception:
@@ -742,6 +820,10 @@ def run_once(im, site, r2, st):
     if E("SORT_PARTNER_PHOTOS", default="0") == "1":  # off: guides choose what they upload (office page / cellular)
         sort_photos(im, deps, albums, email_to_user, st)
     if r2 is not None:
+        try:
+            process_deletions(im, site, r2, deps, albums, st)
+        except Exception:
+            log.error("deletions round failed:\n%s", traceback.format_exc())
         try:
             stage_round(im, site, r2, deps, albums, st)
         except Exception:
