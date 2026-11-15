@@ -80,3 +80,47 @@ def layout(photos, screen='desktop'):
         rows.append(_row(pattern, photos[start:start + size], screen))
         start += size
     return rows
+
+
+# ------------------------------------------------------------------ justified rows (19.0.0.6.2)
+# For any page (e.g. Tour Photos' client album), not the gallery block: rows of equal height, each photo at its own
+# shape side by side, the row exactly as wide as the page (so nothing is cropped, but for extreme shapes: at most
+# about 12 %). Phones: 2 or 3 a row, never one tile stretched across the screen. A row's width / height is aimed at
+# TARGET; a short last row keeps that height (narrower than the page) instead of growing tall.
+JUST_TARGET = {'desktop': 4.0, 'phone': 2.2}
+JUST_MOST = {'desktop': 6, 'phone': 3}
+JUST_LEAST = {'desktop': 1, 'phone': 2}
+JUST_RATIO = (0.5, 3.2)  # a photo's shape is kept inside these (taller or wider: cropped to them, e.g. a 9:16 video
+                         # preview is 0.5625: kept)
+
+
+def justified(photos, screen='desktop'):
+    """Justified rows for photos [{'ratio': width / height, ...}] on 'desktop' or 'phone', in the Tiled Gallery's
+    markup (rows of columns of one cell): [{'pattern': 'justified', 'ratio', 'width' (the row's share of the page:
+    1, or less for a short last row), 'columns': [{'share', 'cells': [{'photo', 'grow'}]}]}]. Render the rows with
+    the class ``mtbg-tg-just`` (columns then share the row by their shapes, gaps included) and the row's ``width``
+    when below 1."""
+    target, most, least = JUST_TARGET[screen], JUST_MOST[screen], JUST_LEAST[screen]
+    groups, row, total = [], [], 0.0
+    for photo in photos:
+        ratio = _clamp(photo['ratio'], *JUST_RATIO)
+        row.append((photo, ratio))
+        total += ratio
+        if (total >= target and len(row) >= least) or len(row) >= most:
+            groups.append(row)
+            row, total = [], 0.0
+    if row:
+        if len(row) < least and groups:
+            groups[-1].extend(row)  # (a phone's lone last photo joins the row before)
+        else:
+            groups.append(row)
+    rows = []
+    for i, group in enumerate(groups):
+        total = sum(r for _p, r in group)
+        last = i == len(groups) - 1
+        width = min(1.0, total / target) if last and total < target * 0.75 else 1.0
+        rows.append({
+            'pattern': 'justified', 'ratio': total, 'width': width,
+            'columns': [{'share': r / total, 'cells': [{'photo': p, 'grow': 100}]} for p, r in group],
+        })
+    return rows

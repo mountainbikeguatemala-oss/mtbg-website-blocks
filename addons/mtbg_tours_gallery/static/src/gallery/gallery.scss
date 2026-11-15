@@ -67,3 +67,12 @@
     &.mtbg-tg-r-md { --mtbg-tg-radius: 8px; }
     &.mtbg-tg-r-lg { --mtbg-tg-radius: 16px; }
 }
+
+// justified rows (19.0.0.6.2, for pages that call services.layout.justified, e.g. a client photo album): the
+// columns share the row by their photos' shapes (flex-grow), the gaps included; a short last row keeps its height
+.mtbg-tg .mtbg-tg-row.mtbg-tg-just {
+    .mtbg-tg-col {
+        width: auto;
+        flex: var(--mtbg-tg-share) 1 0;
+    }
+}

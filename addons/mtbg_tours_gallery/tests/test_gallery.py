@@ -6,7 +6,7 @@ import PIL.WebPImagePlugin  # noqa: F401
 
 from odoo.tests import HttpCase, TransactionCase, new_test_user, tagged
 
-from ..services.layout import layout, patterns
+from ..services.layout import JUST_TARGET, justified, layout, patterns
 
 
 def _picture(width, height, fmt='PNG'):
@@ -325,3 +325,44 @@ class TestTiledGalleryBlock(HttpCase):
             })();
         """
         self.browser_js('/far-gallery-page', code, ready="document.readyState === 'complete'", timeout=60)
+
+
+@tagged('post_install', '-at_install', 'mtbg')
+class TestJustified(TransactionCase):
+    """Justified rows for other pages (19.0.0.6.2): equal-height rows, shapes kept (crop only for extremes), phones 2
+    or 3 a row, never one tile across the screen; the block's own layout untouched."""
+
+    def test_rows_keep_shapes(self):
+        photos = _photos(1.5, 1.5, 0.75, 1.5, 0.75, 0.75, 1.5, 1.5)
+        rows = justified(photos, 'desktop')
+        self.assertEqual(sum(len(r['columns']) for r in rows), len(photos))
+        for row in rows:
+            ratios = [c['cells'][0]['photo']['ratio'] for c in row['columns']]
+            self.assertAlmostEqual(row['ratio'], sum(ratios))
+            for col, ratio in zip(row['columns'], ratios):
+                self.assertAlmostEqual(col['share'], ratio / sum(ratios), msg="no crop: each at its shape")
+        self.assertTrue(all(r['ratio'] >= JUST_TARGET['desktop'] for r in rows[:-1]))
+
+    def test_phone_two_or_three(self):
+        for ratios in ((0.75,) * 7, (1.5,) * 5, (0.5625, 1.78, 0.75, 1.33, 1.5, 0.5625, 1.0)):
+            rows = justified(_photos(*ratios), 'phone')
+            self.assertTrue(all(len(r['columns']) >= 2 for r in rows), ratios)
+            self.assertTrue(all(len(r['columns']) <= 4 for r in rows), ratios)  # (3, or 4 with a lone last one)
+        one = justified(_photos(0.75), 'phone')
+        self.assertLess(one[0]['width'], 1, "a single photo is not stretched across the screen")
+
+    def test_extremes_cropped_a_little(self):
+        rows = justified(_photos(0.3, 1.5, 6.0), 'desktop')
+        shapes = [c['share'] * r['ratio'] for r in rows for c in r['columns']]
+        self.assertAlmostEqual(shapes[0], 0.5)
+        self.assertAlmostEqual(shapes[2], 3.2)
+
+    def test_short_last_row_keeps_its_height(self):
+        rows = justified(_photos(1.5, 1.5, 1.5, 1.0), 'desktop')
+        self.assertEqual(rows[0]['width'], 1.0)
+        self.assertLess(rows[-1]['width'], 1.0)
+
+    def test_block_layout_unchanged(self):
+        """The gallery block keeps its own rows (Jetpack's rectangular style)."""
+        self.assertEqual([r['pattern'] for r in layout(_photos(1.5, 1, 1, 1.5, 0.75, 1, 1, 1), 'desktop')],
+                         ['big_left', 'big_right', 'pair'])

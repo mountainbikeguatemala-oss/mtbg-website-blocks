@@ -2,6 +2,16 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_gallery-*'`.
 
+## 19.0.0.6.2 (2026-11-15)
+
+- **Justified rows for other pages** (owner, 2026-11-15: the client photo album "should show the gifs scaled and
+  cropped slightly to make justified grid. this should probably be part of the gallery extension itself"):
+  `services.layout.justified(photos, screen)` lays out photos of known shapes (`ratio` = width / height) in rows of
+  equal height, each at its own shape side by side (a crop only for extreme shapes: kept between 1:2 and 3.2:1), a
+  short last row keeping its height. Phones: 2 or 3 a row, never one tile across the screen. Its rows use the Tiled
+  Gallery's markup with the row class `mtbg-tg-just` (new CSS: the columns share the row by their shapes, the gaps
+  included). The gallery block's own layout, look and lightbox are unchanged.
+
 ## 19.0.0.6.1 (2026-11-11)
 
 - **Fix: a full update from before 0.6.0 stopped.** A site going from before 0.6.0 straight to this release with a
