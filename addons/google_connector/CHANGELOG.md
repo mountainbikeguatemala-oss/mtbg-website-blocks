@@ -2,6 +2,12 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'google_connector-*'`.
 
+## 19.0.1.6.0 · 2026-11-14
+
+- **Google Photos** (owner, 2026-11-14: tour photo albums can be kept in Google Photos; the Google calls live in the connector). `google.photos` serves any app that declares Google Photos access through `_google_app_specs` (read `photoslibrary.readonly.appcreateddata`; write `photoslibrary.appendonly` + `photoslibrary.edit.appcreateddata`): `_gp_app(code)`, `_gp_ready(code, write=False)`, `create_album(code, title)`, `rename_album(code, album_id, title)`, `upload(code, album_id, filename, data, mimetype, description=None)` (a photo or a video, bytes or a stream with the caller's mimetype; a raw upload up to 8 MB, else Google's resumable protocol, read and sent a chunk at a time: 8 MB chunks, 32 MB over 256 MB; a photo at most 200 MB, a video 2 GB), `batch_create(code, album_id, items)` (50 a call; a refused item does not stop the others), `album_info(code, album_id)` (one count: Google's album has only the total), `list_album(code, album_id, limit=None)` (every page; each item's `type` photo or video, `duration` when Google gives one, `video_status`) and `fetch_image(code, base_url, width=1200)` (base URLs expire within the hour: never kept). Errors are `GoogleError`; every call is in the sync log, with the connector's limits and retries.
+- Google allows an app to see only the albums and photos it created, and no sharing through the API since 2025-03-31: the administrator makes the share link in Google Photos. The app's card and Set up Google › APIs (the Photos Library API, one link) say so; the consent step explains the three accesses in plain words.
+- The client can return Google's whole response (`full=True`), for the resumable upload's address.
+
 ## 19.0.1.5.2 · 2026-11-11
 
 - Moved to the universal extensions repository (owner, 2026-11-11: extensions that are not only for running tours live in their own repository, installable without Tours Core). Its manifest names its new repository, so the updater takes it from there; nothing else changes (no data, no behaviour). Author: MTBG Tours contributors.

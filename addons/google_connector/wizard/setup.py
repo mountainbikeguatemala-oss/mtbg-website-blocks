@@ -12,8 +12,9 @@ from urllib.parse import quote, urlparse
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
-from ..models.catalog import APIS
+from ..models.catalog import APIS, PHOTOS_APIS, PHOTOS_NOTE
 from ..models.connector import OAUTH_PATH
+from ..models.photos import uses_photos
 
 STEPS = [("project", "1. Project"), ("apps", "2. Apps"), ("apis", "3. APIs"), ("consent", "4. Consent screen"),
          ("client", "5. OAuth client"), ("maps", "6. API keys"), ("accounts", "7. Sign in"),
@@ -32,6 +33,11 @@ SCOPE_WORDS = {
     "https://www.googleapis.com/auth/contacts.other.readonly": "Read Google's other contacts (people emailed)",
     "https://www.googleapis.com/auth/business.manage": "Google Business Profile (the reviews; Google offers no "
                                                        "read-only access, the reviews app only reads)",
+    "https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata": "Read the Google Photos albums and "
+                                                                              "photos this app created",
+    "https://www.googleapis.com/auth/photoslibrary.appendonly": "Create Google Photos albums and upload photos",
+    "https://www.googleapis.com/auth/photoslibrary.edit.appcreateddata": "Change the Google Photos albums this app "
+                                                                         "created (e.g. their title)",
     "openid": "Sign in",
     "https://www.googleapis.com/auth/userinfo.email": "Your Google address",
 }
@@ -156,9 +162,13 @@ class GoogleConnectorSetup(models.TransientModel):
                   "every link of the next steps then opens in that project."))
             rows = []
             for app in wizard.app_ids.filtered("on"):
-                for api_id, label in APIS.get(app.code, []):
-                    rows.append(Markup("<li>%s <span class='text-muted'>(%s)</span></li>") % (
-                        link(console("apis/library/%s" % api_id, project), label), app.label))
+                photos = uses_photos("%s %s" % (app.read_scopes or "", app.write_scopes or ""))
+                apis = APIS.get(app.code) or (PHOTOS_APIS if photos else [])
+                for api_id, label in apis:
+                    rows.append(Markup("<li>%s <span class='text-muted'>(%s)</span>%s</li>") % (
+                        link(console("apis/library/%s" % api_id, project), label), app.label,
+                        Markup("<br/><span class='small text-muted'>%s</span>") % self.env._(PHOTOS_NOTE)
+                        if photos and api_id == PHOTOS_APIS[0][0] else ""))
             wizard.apis_html = (Markup("<p>%s</p><ol>%s</ol>") % (
                 _("Open each API below and press Enable (an API already on shows Manage: nothing to do). An app "
                   "whose API is off gets an error from Google."), Markup("").join(rows))) if rows else \

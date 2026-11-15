@@ -36,6 +36,12 @@ APIS = {
     "pagespeed": [("pagespeedonline.googleapis.com", "PageSpeed Insights API")],
 }
 
+# an app with Google Photos access (photoslibrary scopes, any app code): the API it needs and what its card says
+PHOTOS_APIS = [("photoslibrary.googleapis.com", "Photos Library API")]
+PHOTOS_NOTE = ("Google Photos: the Photos Library API must be enabled in the Google Cloud project. Google lets the app "
+               "see only the albums and photos it created itself; a share link is made in Google Photos "
+               "(Share › Create link) and pasted in Odoo.")
+
 # what an app shows only after its first read from Google (Set up Google's last step: say so, and open it there)
 FIRST_SYNC = {
     "contacts": "The Google photo source stays empty until Google Contacts is read once: Open, Check (reads Google "

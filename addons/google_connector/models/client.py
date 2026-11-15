@@ -85,9 +85,10 @@ class GoogleClient:
                               retryable=True)
 
     # calls
-    def request(self, method, url, params=None, json_body=None, data=None, headers=None, raw=False, timeout=None):
+    def request(self, method, url, params=None, json_body=None, data=None, headers=None, raw=False, timeout=None,
+                full=False):
         """``json_body``: sent as JSON; ``data``: a form or bytes. Returns the parsed JSON (dict), or the bytes
-        when ``raw`` or not JSON."""
+        when ``raw`` or not JSON; ``full``: the response itself (its headers, e.g. a resumable upload's address)."""
         last = None
         refreshed = False
         for attempt in range(RETRIES + 1):
@@ -117,6 +118,8 @@ class GoogleClient:
                 error = self._error(response)
                 error.args = (self._hide_key(str(error)),) + error.args[1:]
                 raise error
+            if full:
+                return response
             if raw or not response.content:
                 return response.content if raw else {}
             try:

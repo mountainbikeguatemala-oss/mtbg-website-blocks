@@ -1,6 +1,6 @@
 {
     "name": "Google Connector",
-    "version": "19.0.1.5.2",
+    "version": "19.0.1.6.0",
     "category": "Productivity/Connectors",
     "summary": "One Google login for every Google app (Gmail, Voice, Calendar, Maps): setup wizard, switches, shared "
                "client with limits and retries, sync log",
@@ -19,6 +19,9 @@ plug into it.
 
 * Events for the Google apps (mtbg.google.broadcast): a record announces what happened to it and each app listens;
   the apps bring the events and the records that announce them (the connector names no business model).
+* Google Photos (google.photos, the Photos Library API): albums an app creates, renames, uploads into, lists and
+  reads pictures of, for any app that declares Google Photos access (only the albums the app created; share links
+  are made in Google Photos).
 """,
     "author": "MTBG Tours contributors",
     "license": "LGPL-3",

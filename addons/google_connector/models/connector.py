@@ -20,7 +20,8 @@ from urllib.parse import urlencode
 from odoo import _, api, fields, models
 from odoo.exceptions import AccessError, UserError
 
-from .catalog import CATALOG
+from .catalog import CATALOG, PHOTOS_NOTE
+from .photos import uses_photos
 from .client import GoogleClient, GoogleError, email_from_id_token, token_request
 
 AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
@@ -61,6 +62,9 @@ class GoogleConnector(models.AbstractModel):
             if spec.get("uses"):
                 description = "%s\n%s" % (description, self.env._("Used by: %s", ", ".join(spec["uses"]))) \
                     if description else self.env._("Used by: %s", ", ".join(spec["uses"]))
+            if uses_photos(" ".join((spec.get("read_scopes") or []) + (spec.get("write_scopes") or []))):
+                description = "%s\n%s" % (description, self.env._(PHOTOS_NOTE)) if description \
+                    else self.env._(PHOTOS_NOTE)
             values = {"label": spec.get("label") or code, "description": description or False,
                       "module": spec.get("module") or False, "sequence": spec.get("sequence", 10),
                       "read_scopes": " ".join(spec.get("read_scopes") or []) or False,
