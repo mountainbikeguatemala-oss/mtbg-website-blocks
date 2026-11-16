@@ -336,3 +336,179 @@ class TestSecureAddress(TransactionCase):
         if "ModuleNotFoundError" in out.stderr:
             self.skipTest("the photo service's libraries are not installed here: %s" % out.stderr.splitlines()[-1])
         self.assertEqual(out.stdout.split("\n")[:2], ['200 {"ok":true}', '200 {"ok":true}'], out.stderr[-500:])
+
+
+@tagged("post_install", "-at_install")
+class TestOfficeTls(TransactionCase):
+    """The secure office address' health (19.0.1.2.0): the photo server's checks (``X-Office-Tls``), Settings ›
+    Immich's line, one alert per problem, cleared when it works again."""
+
+    def setUp(self):
+        super().setUp()
+        self.C = self.env["immich.connector"].sudo()
+        self.ICP = self.env["ir.config_parameter"].sudo()
+        self.ICP.set_param("immich_connector.office_base", "https://nas.ex.co:8443")
+        for key in ("office_tls", "office_tls_watch", "office_tls_incident"):
+            self.C._set_fresh("immich_connector." + key, "")
+        self.token = self.C._new_token()
+        self.n = 0
+        # the activity fallback (no Alert Feed) unless a test says otherwise
+        feed = patch.object(type(self.env["immich.connector"]), "_office_tls_alert_feed", lambda self: False)
+        feed.start()
+        self.addCleanup(feed.stop)
+        self.admin = self.env.ref("base.user_admin")
+
+    def call(self, **report):
+        """A photo server call carrying a new check."""
+        import json
+        self.n += 1
+        request = MagicMock()
+        request.httprequest.remote_addr = "203.0.113.7"
+        headers = {"Authorization": "Bearer " + self.token}
+        if report:
+            report.setdefault("checked_at", "2026-11-16T15:%02d:00+00:00" % self.n)
+            headers["X-Office-Tls"] = json.dumps(report)
+        request.httprequest.headers = headers
+        self.C._set_fresh("immich_connector.last_seen",  # a call-in that counts (at most one a minute)
+                          fields.Datetime.to_string(fields.Datetime.now() - timedelta(minutes=2)))
+        self.assertTrue(self.C._check_bearer(request))
+
+    def back(self, key, **delta):
+        import json
+        value = self.C._office_tls()
+        value[key] = fields.Datetime.to_string(fields.Datetime.to_datetime(value[key]) - timedelta(**delta))
+        self.C._set_fresh("immich_connector.office_tls", json.dumps(value))
+
+    def activities(self):
+        return self.env["mail.activity"].sudo().search([
+            ("res_model", "=", "res.partner"), ("res_id", "=", self.env.company.partner_id.id),
+            ("summary", "ilike", "Secure office address")])
+
+    def status(self):
+        return self.env["res.config.settings"].create({}).immich_office_tls_status
+
+    def test_healthy(self):
+        expires = (fields.Date.today() + timedelta(days=90))
+        self.call(ping_ok=True, cert_expires=expires.isoformat())
+        self.assertFalse(self.C._office_tls_problem())
+        self.assertFalse(self.activities())
+        status = self.status()
+        self.assertTrue(status.startswith("Secure office address: ✓ working · certificate until "), status)
+        settings = self.env["res.config.settings"].create({})
+        self.assertTrue(settings.immich_office_tls_ok)
+        self.assertEqual(settings.immich_office_tls_cert, expires)
+        self.assertTrue(settings.immich_office_tls_checked)
+        self.call(ping_ok="yes", checked_at="x")
+        self.assertTrue(self.C._office_tls()["ping_ok"], "a malformed check is ignored")
+
+    def test_failing_twice_alerts_once_then_clears(self):
+        self.call(ping_ok=False, ping_error="connection refused", cert_expires="2027-02-14")
+        self.assertFalse(self.C._office_tls_problem(), "one failed check: no alert yet")
+        self.assertIn("✗ not answering since", self.status())
+        self.assertIn("connection refused", self.status())
+        self.back("failing_since", minutes=15)
+        same = self.C._office_tls()["checked_at"]
+        self.call(ping_ok=False, ping_error="connection refused", checked_at=same)
+        self.assertEqual(self.C._office_tls()["fails"], 1, "the same check sent again is not counted twice")
+        self.call(ping_ok=False, ping_error="connection refused")
+        problem = self.C._office_tls_problem()
+        self.assertEqual(problem["code"], "ping")
+        self.assertIn("connection refused", problem["detail"])
+        self.assertIn("tour-photos-tls", problem["detail"])
+        first = self.activities()
+        self.assertTrue(first and self.admin in first.user_id, "a to-do for the Settings administrators")
+        self.assertEqual(len(first), len(set(first.user_id.ids)), "one each")
+        self.call(ping_ok=False, ping_error="connection refused")
+        self.assertEqual(self.activities(), first, "the same problem: no new alert")
+        self.call(ping_ok=True, cert_expires="2027-02-14")
+        self.assertFalse(self.activities(), "works again: the alert goes")
+        self.assertFalse(self.ICP.get_param("immich_connector.office_tls_incident"))
+
+    def test_realert_at_most_daily(self):
+        self.call(ping_ok=False, ping_error="timeout")
+        self.back("failing_since", minutes=20)
+        self.call(ping_ok=False, ping_error="timeout")
+        self.activities().unlink()  # someone marked it done; the problem goes on
+        self.call(ping_ok=False, ping_error="timeout")
+        self.assertFalse(self.activities(), "not again the same day")
+        import json
+        incident = json.loads(self.ICP.get_param("immich_connector.office_tls_incident"))
+        incident["alerted_at"] = fields.Datetime.to_string(fields.Datetime.now() - timedelta(hours=25))
+        self.C._set_fresh("immich_connector.office_tls_incident", json.dumps(incident))
+        self.call(ping_ok=False, ping_error="timeout")
+        self.assertTrue(self.activities(), "a day later: again")
+
+    def test_certificate_ending(self):
+        self.call(ping_ok=True, cert_expires=(fields.Date.today() + timedelta(days=10)).isoformat())
+        problem = self.C._office_tls_problem()
+        self.assertEqual(problem["code"], "cert")
+        self.assertIn("Cloudflare token", problem["detail"])
+        self.assertTrue(self.activities())
+        self.call(ping_ok=True, cert_expires=(fields.Date.today() + timedelta(days=89)).isoformat())
+        self.assertFalse(self.C._office_tls_problem())
+        self.assertFalse(self.activities(), "renewed: cleared")
+
+    def test_missing_reports(self):
+        self.call()  # an old photo server: calls in, no check
+        self.assertTrue(self.ICP.get_param("immich_connector.office_tls_watch"), "a check is expected from now")
+        self.assertFalse(self.C._office_tls_problem())
+        self.assertIn("no check from the photo server yet", self.status())
+        self.C._set_fresh("immich_connector.office_tls_watch",
+                          fields.Datetime.to_string(fields.Datetime.now() - timedelta(hours=25)))
+        self.assertEqual(self.C._office_tls_problem()["code"], "missing")
+        self.C._set_fresh("immich_connector.last_seen",
+                          fields.Datetime.to_string(fields.Datetime.now() - timedelta(hours=3)))
+        self.assertFalse(self.C._office_tls_problem(), "the photo server not calling in at all: not this alert")
+        self.call(ping_ok=True, cert_expires="2027-02-14")
+        self.assertFalse(self.C._office_tls_problem())
+        self.back("received_at", hours=25)
+        self.assertEqual(self.C._office_tls_problem()["code"], "missing", "checks stopped coming")
+
+    def test_no_https_no_alert(self):
+        for base in ("", "http://192.168.1.50:8090"):
+            self.ICP.set_param("immich_connector.office_base", base)
+            self.ICP.set_param("immich_connector.upload_url", base)
+            self.call(ping_ok=False, ping_error="refused")
+            self.back("failing_since", minutes=30)
+            self.call(ping_ok=False, ping_error="refused")
+            self.assertFalse(self.C._office_tls_problem(), base or "empty")
+            self.assertFalse(self.activities())
+            self.assertEqual(self.status(), "")
+            self.assertFalse(self.ICP.get_param("immich_connector.office_tls_watch"))
+
+    def test_alert_feed_source(self):
+        """With the Alert Feed: its alert (an alert source), no to-dos."""
+        with patch.object(type(self.env["immich.connector"]), "_office_tls_alert_feed", lambda self: True):
+            self.call(ping_ok=True, cert_expires=(fields.Date.today() + timedelta(days=5)).isoformat())
+            self.assertFalse(self.activities())
+        spec = [s for s in self.env["immich.connector"]._mtbg_alert_sources() if s["code"] == "immich_office_tls"]
+        self.assertEqual(len(spec), 1)
+        alerts = self.env["immich.connector"]._mtbg_alerts_office_tls(None, fields.Date.today())
+        self.assertEqual([a["key"] for a in alerts], ["cert"])
+        if "mtbg.alert.rule" in self.env:
+            rule = self.env["mtbg.alert.rule"].sudo().with_context(active_test=False)
+            rule._mtbg_sync_sources()
+            rule = rule.search([("code", "=", "immich_office_tls")])
+            self.assertTrue(rule, "the Alert Feed has its rule")
+            found = self.env["mtbg.alert.feed"].sudo()._mtbg_run_rules(rule.filtered("active"), fields.Date.today())
+            self.assertEqual([a["key"] for a in found], ["immich_office_tls:cert"] if rule.active else [])
+
+    def test_nas_check(self):
+        """The photo server's check (office_tls.py): nothing without NAS_HOSTNAME; a name that doesn't resolve is a
+        failed check with the reason."""
+        code = ("import sys, json\nsys.path.insert(0, sys.argv[1])\nimport office_tls\n"
+                "office_tls.TIMEOUT = 2\nprint(json.dumps(office_tls.check()))\n")
+        env = {k: v for k, v in os.environ.items() if not k.startswith("NAS_")}
+        out = subprocess.run([sys.executable, "-I", "-c", code, APP], capture_output=True, text=True, timeout=60,
+                             env=env, cwd="/")
+        self.assertEqual(out.stdout.strip(), "null", out.stderr[-500:])
+        env.update(NAS_HOSTNAME="nas.example.invalid", NAS_HTTPS_PORT="8443", NAS_LAN_IP="127.0.0.1",
+                   IMMICH_URL="")
+        out = subprocess.run([sys.executable, "-I", "-c", code, APP], capture_output=True, text=True, timeout=90,
+                             env=env, cwd="/")
+        import json
+        report = json.loads(out.stdout.strip() or "{}")
+        self.assertIs(report.get("ping_ok"), False, out.stderr[-500:])
+        self.assertIn("does not resolve", report["ping_error"])
+        self.assertIn("127.0.0.1", report["ping_error"], "the photo server's own address tried too")
+        self.assertTrue(report["checked_at"])

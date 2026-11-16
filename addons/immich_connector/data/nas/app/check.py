@@ -11,6 +11,7 @@ import time
 
 from PIL import Image
 
+import office_tls
 import sync
 from r2 import R2Client
 
@@ -57,6 +58,17 @@ def main():
             "(no transparency: use a PNG with a transparent background)"))
     except Exception as e:
         report("Watermark", False, "put your PNG logo at WATERMARK_PATH (%s)" % str(e)[:120])
+    # Secure office address (tls/): only with NAS_HOSTNAME
+    try:
+        tls = office_tls.check()
+        if tls is None:
+            report("Secure", True, "NAS_HOSTNAME not set: no secure office address (phones use mobile data)")
+        else:
+            report("Secure", tls["ping_ok"], "https://%s:%s/ping %s" % (
+                office_tls.settings() + ("answers, certificate until %s" % tls.get("cert_expires", "?")
+                                         if tls["ping_ok"] else tls.get("ping_error", ""),)))
+    except Exception as e:
+        report("Secure", False, str(e)[:120])
     # Time zone
     report("Time zone", True, "%s (now %s)" % (sync.TZ, sync.datetime.now(sync.TZ).strftime("%Y-%m-%d %H:%M %z")))
     print("\nAll good." if ok else "\nFix the PROBLEM lines, then run this check again.")

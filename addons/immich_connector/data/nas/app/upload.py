@@ -8,7 +8,7 @@ also answers /ping and the CORS headers for the website; plain http :8090 keeps 
   PUT  /upload/file?t=..   -> body = the file; headers X-File-Name (URI-encoded), X-Last-Modified (ms), X-File-Type
                               -> Immich (Tours account) + the day's album; description "Uploaded by <guide>"
                               -> {"ok":true,"status":"created"|"duplicate"}
-  POST /upload/batch?t=..  -> {"count":n} after each batch: the website adds n to the guide's upload count
+  POST /upload/batch?t=..  -> {"count":n,"duplicates":d} after each batch: the website adds n - d to the guide's count
 The browser sends one file per request (2 at a time) so each file has its own progress bar and a failed file can
 be retried alone. Capture time: EXIF from the file (Immich reads it too); fileCreatedAt falls back to the phone's
 last-modified time.
@@ -92,16 +92,19 @@ def back_url(r):
 _route_missing = {"uploaded": False}
 
 
-def report_uploaded(t, n):
+def report_uploaded(t, n, dup=0):
+    """API section 16: duplicates = how many of the n files Immich already had (the website adds n - dup)."""
     try:
-        r = site.s.post(site_api() + "/tickets/%s/uploaded" % t, json={"count": n}, timeout=20)
+        r = site.s.post(site_api() + "/tickets/%s/uploaded" % t, json={"count": n, "duplicates": dup}, timeout=20)
+        if r.status_code == 422:  # website before Tour Photos 0.1.6: count only
+            r = site.s.post(site_api() + "/tickets/%s/uploaded" % t, json={"count": n}, timeout=20)
         if r.status_code == 404 and "ticket" not in r.text.lower():
             if not _route_missing["uploaded"]:
                 log.info("website has no /tickets/<t>/uploaded route yet: upload counts not sent")
             _route_missing["uploaded"] = True
         elif r.ok:
             _route_missing["uploaded"] = False
-            log.info("reported %d uploaded files for ticket %s...", n, t[:6])
+            log.info("reported %d uploaded files (%d duplicates) for ticket %s...", n, dup, t[:6])
         else:
             log.warning("upload count report: %s %s", r.status_code, r.text[:200])
     except Exception as e:
@@ -162,12 +165,13 @@ class Handler(BaseHTTPRequestHandler):
         if not ticket(t):
             return self.send(403, '{"ok":false,"error":"ticket"}')
         try:
-            n = int(json.loads(self.rfile.read(min(int(self.headers.get("Content-Length") or 0), 1000)) or b"{}")
-                    .get("count", 0))
-        except (ValueError, TypeError):
-            n = 0
+            body = json.loads(self.rfile.read(min(int(self.headers.get("Content-Length") or 0), 1000)) or b"{}")
+            n = int(body.get("count", 0))
+            d = min(max(int(body.get("duplicates", 0)), 0), max(n, 0))
+        except (ValueError, TypeError, AttributeError):
+            n, d = 0, 0
         if n > 0:
-            report_uploaded(t, n)
+            report_uploaded(t, n, d)
         return self.send(200, '{"ok":true}')
 
     def do_PUT(self):
@@ -314,9 +318,9 @@ const isVid=f=>VEXT.test(f.name)||(!/\.[a-z0-9]{2,5}$/i.test(f.name)&&(f.type||"
 const ftype=f=>{const m=/\.([a-z0-9]{2,5})$/i.exec(f.name);return m?m[1].toUpperCase():(f.type||"file");};
 const tooBig=f=>f.size>(isVid(f)?MAXV:MAXP);
 const fmtDur=t=>{t=Math.max(0,Math.round(t||0));return (t/60|0)+":"+String(t%60).padStart(2,"0");};
-let picked=[], items=[], running=0, t0=0, sent0=0, leaving=false, xhrs=new Set(), seq=0, batchOk=0; const MAX=2;
-function reportBatch(){ if(batchOk<1) return; const n=batchOk; batchOk=0;
- fetch("/upload/batch?t="+encodeURIComponent(T),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({count:n}),keepalive:true}).catch(()=>{}); }
+let picked=[], items=[], running=0, t0=0, sent0=0, leaving=false, xhrs=new Set(), seq=0, batchOk=0, batchDup=0; const MAX=2;
+function reportBatch(){ if(batchOk<1) return; const n=batchOk,d=batchDup; batchOk=0; batchDup=0;
+ fetch("/upload/batch?t="+encodeURIComponent(T),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({count:n,duplicates:d}),keepalive:true}).catch(()=>{}); }
 function show(v){["vPick","vReview","vProg"].forEach(x=>$(x).hidden=x!==v);$("goBar").hidden=v!=="vReview";}
 
 /* ---------------- review grid ---------------- */
@@ -393,7 +397,7 @@ function send(it){running++;it.st="up";it.sent=0;label(it);const x=new XMLHttpRe
  x.open("PUT","/upload/file?t="+encodeURIComponent(T));x.setRequestHeader("X-File-Name",encodeURIComponent(it.f.name));
  x.setRequestHeader("X-File-Type",it.f.type||"");x.setRequestHeader("X-Last-Modified",String(it.f.lastModified||0));
  x.upload.onprogress=e=>{it.sent=e.loaded;label(it);render();};
- x.onload=()=>{let r={};try{r=JSON.parse(x.responseText)}catch(e){}it.st=x.status==200&&r.ok?(r.status=="duplicate"?"dup":"done"):"err";if(fin(it))batchOk++;end(it);};
+ x.onload=()=>{let r={};try{r=JSON.parse(x.responseText)}catch(e){}it.st=x.status==200&&r.ok?(r.status=="duplicate"?"dup":"done"):"err";if(fin(it)){batchOk++;if(it.st=="dup")batchDup++;}end(it);};
  x.onerror=x.onabort=()=>{it.st="err";end(it);};xhrs.add(x);x.onloadend=()=>xhrs.delete(x);x.send(it.f);}
 function end(it){running--;label(it);pump();if(!busy())reportBatch();}
 $("retry").onclick=()=>{t0=Date.now();sent0=items.reduce((a,i)=>a+(fin(i)?i.f.size:0),0);items.filter(i=>i.st=="err").forEach(i=>{i.st="wait";label(i)});pump();};

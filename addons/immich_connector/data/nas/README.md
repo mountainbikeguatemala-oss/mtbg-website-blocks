@@ -163,6 +163,31 @@ docker compose --env-file config.env run --rm -e BACKFILL_FROM=2026-07-01 photos
 - You choose the photos in Immich (remove, archive or hide what clients should not get) and set the cover.
 - You press **Publish day**. Only then are photos resized, watermarked, uploaded and sent.
 - A cancelled departure: its empty albums are deleted; albums that have photos are kept and renamed "(cancelled)".
+- The day's header: chosen in Immich (**Set as album cover**) or on the website, the last choice wins; the service
+  carries a website choice over to the Immich album cover.
+- Timing (`config.env`): a full round every `POLL_MINUTES`; while departures are being uploaded or sent, those are
+  checked every `TIGHT_SYNC_SECONDS` (45); `STAGE_MINUTES` of processing per round. `EARLY_SYNCED=1` reports a
+  sent day as online before its download zip is ready (only with a website that accepts it; default 0).
+
+## Maintenance (the secure office address)
+
+If the secure office address stops working, phones at the office quietly upload over mobile data (slow). The
+photo service checks it every 15 minutes (`NAS_HOSTNAME` in `config.env`) and the website shows the result in
+Settings > Immich ("Secure office address: ✓ working · certificate until …"); staff are warned when it fails twice
+in a row, when the certificate has less than 20 days left, or when no check arrived for 24 hours.
+
+- **The Cloudflare token: do not delete it.** The certificate renews itself every ~60 days with the token in
+  `tls/tls.env`. Name it clearly in Cloudflare (e.g. "photo server certificate - do not delete"). If it was
+  deleted or expired: make a new one (Edit zone DNS, your domain only), put it in `tls/tls.env`, then in the `tls`
+  folder `docker compose up -d --force-recreate`.
+- **Reserve the NAS's office address on the router** (DHCP reservation): the DNS record `nas.<your domain>` points
+  to it. If the address ever changes, change the record (Cloudflare) and `NAS_LAN_IP` in `config.env`.
+- **After a router reset or replacement:** its DNS rebinding protection is usually back on; allow your domain
+  again (Step 4b, point 6) and reserve the NAS's address again.
+- **Back up `tls/data`** (the certificate and its account) with `tls/.env` and `tls/tls.env`: Let's Encrypt limits
+  how many new certificates a name gets per week, so a reinstall should reuse them.
+- **Restart the https front:** in the `tls` folder, `docker compose up -d` (or `docker restart tour-photos-tls`);
+  then the setup check (Step 5) shows the `Secure` line.
 
 ## Troubleshooting
 

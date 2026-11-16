@@ -1,6 +1,6 @@
 {
     "name": "Immich Connector",
-    "version": "19.0.1.1.1",
+    "version": "19.0.1.2.0",
     "category": "Productivity/Connectors",
     "mtbg_tours_section": "connectors",
     "summary": "One connection to an office photo server running Immich: its token, its office upload page and wifi, "
@@ -21,6 +21,10 @@ One connection to a photo server (a NAS running Immich and a small sync service)
   settings, secrets left blank; docker-compose.yml; the sync service; the https front; the install steps), then
   "Waiting for the photo server to call in" and the https check from a phone at the office.
 * The office secure address (``_office_base()``): the https base the Staff App uploads to straight from the app.
+* Its health: the photo server checks its own ``https://<name>/ping`` every 15 minutes and sends the result on its
+  calls (``X-Office-Tls``); Settings › Immich shows it, and a problem (no answer twice in a row, the certificate
+  ending within 20 days, no check for a day) is one alert for staff: in the Alert Feed when installed (soft), else a
+  to-do for the Settings administrators; cleared when it works again.
 * Secrets stay with administrators and are cleared on a copy of the site (neutralize).
 
 It depends on no product: it can be installed on any Odoo site.

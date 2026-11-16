@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 12:00+0000\n"
-"PO-Revision-Date: 2026-11-16 12:00+0000\n"
+"POT-Creation-Date: 2026-11-16 20:03+0000\n"
+"PO-Revision-Date: 2026-11-16 20:03+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -146,6 +146,11 @@ msgstr "Puede crear el DNS"
 #: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
 msgid "Cancel"
 msgstr "Cancelar"
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__immich_office_tls_cert
+msgid "Certificate until"
+msgstr "Certificado hasta"
 
 #. module: immich_connector
 #: model:ir.model.fields.selection,name:immich_connector.selection__immich_setup_wizard__step__check
@@ -548,6 +553,80 @@ msgstr "Dirección segura de la oficina"
 
 #. module: immich_connector
 #. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid "Secure office address (photo server)"
+msgstr "Dirección segura de la oficina (servidor de fotos)"
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__immich_office_tls_checked
+msgid "Secure office address last checked"
+msgstr "Última comprobación de la dirección segura de la oficina"
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid "Secure office address not answering"
+msgstr "La dirección segura de la oficina no responde"
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__immich_office_tls_status
+msgid "Secure office address status"
+msgstr "Estado de la dirección segura de la oficina"
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__immich_office_tls_ok
+msgid "Secure office address working"
+msgstr "Dirección segura de la oficina funcionando"
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid "Secure office address: no check from the photo server"
+msgstr ""
+"Dirección segura de la oficina: sin comprobación del servidor de fotos"
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid ""
+"Secure office address: no check from the photo server yet (its files need "
+"NAS_HOSTNAME: Set up the photo server's new zip)."
+msgstr ""
+"Dirección segura de la oficina: todavía sin comprobación del servidor de "
+"fotos (sus archivos necesitan NAS_HOSTNAME: el nuevo zip de Configurar el "
+"servidor de fotos)."
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid "Secure office address: the certificate ends %s"
+msgstr "Dirección segura de la oficina: el certificado vence el %s"
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid "Secure office address: ✓ working (checked %s)"
+msgstr "Dirección segura de la oficina: ✓ funciona (comprobado %s)"
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid ""
+"Secure office address: ✓ working · certificate until %(date)s (checked "
+"%(when)s)"
+msgstr ""
+"Dirección segura de la oficina: ✓ funciona · certificado hasta %(date)s "
+"(comprobado %(when)s)"
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid "Secure office address: ✗ not answering since %(since)s: %(error)s"
+msgstr ""
+"Dirección segura de la oficina: ✗ no responde desde %(since)s: %(error)s"
+
+#. module: immich_connector
+#. odoo-python
 #: code:addons/immich_connector/models/setup.py:0
 #: model:ir.actions.act_window,name:immich_connector.action_immich_setup_wizard
 #: model:ir.model,name:immich_connector.model_immich_setup_wizard
@@ -571,6 +650,27 @@ msgid "Shown once: it goes into the zip of the next step."
 msgstr "Se muestra una sola vez: va dentro del zip del siguiente paso."
 
 #. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid ""
+"Since %(since)s phones at the office upload over mobile data (slow): "
+"%(error)s. Check, in this order: the photo server is on and its https front "
+"runs (restart tour-photos-tls: in its tls folder, docker compose up -d); the"
+" router still lets the name resolve to the photo server (after a router "
+"reset: allow the domain in its DNS rebind protection again); the photo "
+"server kept its reserved office address; the Cloudflare token in tls/tls.env"
+" still exists."
+msgstr ""
+"Desde %(since)s los teléfonos en la oficina suben por datos móviles (lento):"
+" %(error)s. Revisa, en este orden: que el servidor de fotos esté encendido y"
+" su acceso https funcione (reinicia tour-photos-tls: en su carpeta tls, "
+"docker compose up -d); que el router siga resolviendo el nombre al servidor "
+"de fotos (tras reiniciar el router: vuelve a permitir el dominio en su "
+"protección contra DNS rebinding); que el servidor de fotos conserve su "
+"dirección reservada en la oficina; que el token de Cloudflare en tls/tls.env"
+" siga existiendo."
+
+#. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
 msgid "Staff are told to connect to it before uploading at the office."
 msgstr ""
@@ -588,6 +688,22 @@ msgid "Test connection"
 msgstr "Probar la conexión"
 
 #. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid ""
+"The certificate renews by itself through Cloudflare, and has not. Check that"
+" the Cloudflare token in tls/tls.env still exists (Cloudflare › My Profile ›"
+" API Tokens, Edit zone DNS: never delete it), make a new one there if needed"
+" and put it in tls/tls.env, then restart tour-photos-tls (docker compose up "
+"-d --force-recreate in its tls folder)."
+msgstr ""
+"El certificado se renueva solo a través de Cloudflare, y no lo ha hecho. "
+"Revisa que el token de Cloudflare en tls/tls.env siga existiendo (Cloudflare"
+" › My Profile › API Tokens, Edit zone DNS: nunca lo borres), crea uno nuevo "
+"ahí si hace falta y ponlo en tls/tls.env, luego reinicia tour-photos-tls "
+"(docker compose up -d --force-recreate en su carpeta tls)."
+
+#. module: immich_connector
 #: model:ir.model.fields,help:immich_connector.field_res_config_settings__immich_wifi_name
 msgid ""
 "The office wifi network staff are told to connect to before uploading. "
@@ -597,6 +713,23 @@ msgstr ""
 "La red wifi de la oficina a la que se le indica al personal que se conecte "
 "antes de subir fotos. Varias (p. ej. una de 2.4 GHz y una de 5 GHz, detrás "
 "del mismo router): sepárelas con comas"
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid ""
+"The photo server calls in but has sent no check of the secure office address"
+" since %(since)s, so nobody would notice if phones at the office upload over"
+" mobile data. Update the photo server's files (Settings › Immich › Set up "
+"the photo server, the new zip: NAS_HOSTNAME and NAS_HTTPS_PORT in "
+"config.env), then restart photos-sync."
+msgstr ""
+"El servidor de fotos se comunica pero no ha enviado ninguna comprobación de "
+"la dirección segura de la oficina desde %(since)s, así que nadie notaría si "
+"los teléfonos en la oficina suben por datos móviles. Actualiza los archivos "
+"del servidor de fotos (Ajustes › Immich › Configurar el servidor de fotos, "
+"el nuevo zip: NAS_HOSTNAME y NAS_HTTPS_PORT en config.env) y luego reinicia "
+"photos-sync."
 
 #. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
@@ -642,6 +775,19 @@ msgstr ""
 "La dirección https del servidor de fotos, solo en la red de la oficina: los "
 "teléfonos suben a ella desde la Staff App. La define Configurar el servidor "
 "de fotos."
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid ""
+"The photo server's secure office address (https, for uploads straight from "
+"the Staff App at the office) stopped answering, its certificate ends within "
+"20 days, or the photo server sent no check for a day."
+msgstr ""
+"La dirección segura de la oficina del servidor de fotos (https, para subir "
+"directamente desde la Staff App en la oficina) dejó de responder, su "
+"certificado vence en menos de 20 días, o el servidor de fotos no envió "
+"ninguna comprobación en un día."
 
 #. module: immich_connector
 #: model:ir.model.fields,help:immich_connector.field_res_config_settings__immich_upload_url

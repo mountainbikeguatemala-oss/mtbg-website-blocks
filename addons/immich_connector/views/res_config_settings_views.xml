@@ -17,6 +17,11 @@
                                 <span invisible="immich_token_set">No token yet.</span>
                                 <span invisible="not immich_last_seen"> Last call-in: <field name="immich_last_seen" readonly="1" class="oe_inline"/></span>
                             </div>
+                            <div class="small mt-1" invisible="not immich_office_tls_status">
+                                <field name="immich_office_tls_ok" invisible="1"/>
+                                <span class="text-success" invisible="not immich_office_tls_ok"><field name="immich_office_tls_status" readonly="1" class="oe_inline"/></span>
+                                <span class="text-danger" invisible="immich_office_tls_ok"><field name="immich_office_tls_status" readonly="1" class="oe_inline"/></span>
+                            </div>
                             <button name="action_immich_new_token" type="object" string="New token" icon="fa-key"
                                     class="btn-link px-0" confirm="The photo server's current token stops working. Make a new one?"/>
                         </setting>

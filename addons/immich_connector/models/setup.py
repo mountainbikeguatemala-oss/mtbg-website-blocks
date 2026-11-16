@@ -336,7 +336,16 @@ class ImmichSetupWizard(models.TransientModel):
             "R2_ACCOUNT_ID": ICP.get_param("cloudflare_connector.account_id") or "",
             "R2_BUCKET": ICP.get_param("cloudflare_connector.r2_bucket") or "",
             "PUBLIC_BASE_URL": "",
+            # the sync's timing (the example's defaults; an extension that knows its website accepts the early
+            # report sets EARLY_SYNCED to 1 in its own _bundle_values)
+            "TIGHT_SYNC_SECONDS": "45",
+            "EARLY_SYNCED": "0",
         }
+        hostname = Connector._param("nas_hostname")
+        if hostname:  # the secure office address' check (office_tls.py): the same name and port as tls/.env
+            lan_ip = self._lan_ip(urlparse(Connector._immich_url() or "").hostname or "")
+            values.update(NAS_HOSTNAME=hostname, NAS_HTTPS_PORT=Connector._param("https_port") or "443",
+                          NAS_LAN_IP=lan_ip)
         upload_port = Connector._param("upload_port")
         if upload_port.isdigit():
             values["UPLOAD_PORT"] = upload_port

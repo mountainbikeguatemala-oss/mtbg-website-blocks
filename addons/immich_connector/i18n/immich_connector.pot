@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 19:23+0000\n"
-"PO-Revision-Date: 2026-11-16 19:23+0000\n"
+"POT-Creation-Date: 2026-11-16 20:03+0000\n"
+"PO-Revision-Date: 2026-11-16 20:03+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -125,6 +125,11 @@ msgstr ""
 #. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
 msgid "Cancel"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__immich_office_tls_cert
+msgid "Certificate until"
 msgstr ""
 
 #. module: immich_connector
@@ -503,6 +508,73 @@ msgstr ""
 
 #. module: immich_connector
 #. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid "Secure office address (photo server)"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__immich_office_tls_checked
+msgid "Secure office address last checked"
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid "Secure office address not answering"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__immich_office_tls_status
+msgid "Secure office address status"
+msgstr ""
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__immich_office_tls_ok
+msgid "Secure office address working"
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid "Secure office address: no check from the photo server"
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid ""
+"Secure office address: no check from the photo server yet (its files need "
+"NAS_HOSTNAME: Set up the photo server's new zip)."
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid "Secure office address: the certificate ends %s"
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid "Secure office address: ✓ working (checked %s)"
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid ""
+"Secure office address: ✓ working · certificate until %(date)s (checked "
+"%(when)s)"
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid "Secure office address: ✗ not answering since %(since)s: %(error)s"
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
 #: code:addons/immich_connector/models/setup.py:0
 #: model:ir.actions.act_window,name:immich_connector.action_immich_setup_wizard
 #: model:ir.model,name:immich_connector.model_immich_setup_wizard
@@ -524,6 +596,19 @@ msgid "Shown once: it goes into the zip of the next step."
 msgstr ""
 
 #. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid ""
+"Since %(since)s phones at the office upload over mobile data (slow): "
+"%(error)s. Check, in this order: the photo server is on and its https front "
+"runs (restart tour-photos-tls: in its tls folder, docker compose up -d); the"
+" router still lets the name resolve to the photo server (after a router "
+"reset: allow the domain in its DNS rebind protection again); the photo "
+"server kept its reserved office address; the Cloudflare token in tls/tls.env"
+" still exists."
+msgstr ""
+
+#. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
 msgid "Staff are told to connect to it before uploading at the office."
 msgstr ""
@@ -539,11 +624,33 @@ msgid "Test connection"
 msgstr ""
 
 #. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid ""
+"The certificate renews by itself through Cloudflare, and has not. Check that"
+" the Cloudflare token in tls/tls.env still exists (Cloudflare › My Profile ›"
+" API Tokens, Edit zone DNS: never delete it), make a new one there if needed"
+" and put it in tls/tls.env, then restart tour-photos-tls (docker compose up "
+"-d --force-recreate in its tls folder)."
+msgstr ""
+
+#. module: immich_connector
 #: model:ir.model.fields,help:immich_connector.field_res_config_settings__immich_wifi_name
 msgid ""
 "The office wifi network staff are told to connect to before uploading. "
 "Several (e.g. one 2.4 GHz and one 5 GHz, behind the same router): separate "
 "them with commas"
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid ""
+"The photo server calls in but has sent no check of the secure office address"
+" since %(since)s, so nobody would notice if phones at the office upload over"
+" mobile data. Update the photo server's files (Settings › Immich › Set up "
+"the photo server, the new zip: NAS_HOSTNAME and NAS_HTTPS_PORT in "
+"config.env), then restart photos-sync."
 msgstr ""
 
 #. module: immich_connector
@@ -578,6 +685,15 @@ msgstr ""
 msgid ""
 "The photo server's https address, only on the office network: phones upload "
 "to it from the Staff App. Set by Set up the photo server."
+msgstr ""
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/connector.py:0
+msgid ""
+"The photo server's secure office address (https, for uploads straight from "
+"the Staff App at the office) stopped answering, its certificate ends within "
+"20 days, or the photo server sent no check for a day."
 msgstr ""
 
 #. module: immich_connector
