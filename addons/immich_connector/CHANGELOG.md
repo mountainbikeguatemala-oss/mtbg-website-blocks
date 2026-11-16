@@ -1,5 +1,9 @@
 # Immich Connector
 
+## 19.0.1.1.1 (2026-11-16)
+
+- Fix the released `tls/Caddyfile` (checked with `caddy validate` on the real image at the office): the site origins are matched with a CEL expression (a `header Origin` matcher refuses a space-separated list), and the certificate skips Caddy's local DNS pre-check (`propagation_delay 30s`, `propagation_timeout -1`, no `resolvers`: many routers intercept LAN DNS); the proxy streams big uploads (`flush_interval -1`, 15 min read/write timeouts).
+
 ## 19.0.1.1.0 (2026-11-16)
 
 - The secure office address (owner-approved, 2026-11-16): a secure (https) page can't send to the photo server's plain `http://<office address>:8090`, so office uploads from the Staff App went over the internet. "Set up the photo server" now sets up `https://nas.<domain>[:port]`, which only works on the office network:

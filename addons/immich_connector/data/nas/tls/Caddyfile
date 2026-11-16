@@ -1,7 +1,9 @@
 # The photo server's secure office address: https://{$NAS_HOSTNAME}:{$NAS_HTTPS_PORT}
-# - a real certificate (Let's Encrypt) proved through Cloudflare DNS (CLOUDFLARE_API_TOKEN, in tls.env)
+# - a real certificate (Let's Encrypt) proved through Cloudflare DNS (CLOUDFLARE_API_TOKEN, in tls.env; a real token:
+#   a placeholder is refused at start). No local propagation pre-check: many routers intercept LAN DNS
 # - /ping answered here: {"ok":true} (the Staff App's "am I on the office network" probe)
-# - CORS for the website (SITE_ORIGINS, space-separated): the Staff App, an https page on the website, uploads here
+# - CORS for the website (SITE_ORIGINS, space-separated; matched with a CEL expression: a plain
+#   `header Origin` matcher can't take a space-separated list): the Staff App, an https page on the website, uploads here
 # - everything else goes to the office upload page (tour-photos-upload:8090 on the Immich network)
 {
 	admin off
@@ -11,10 +13,11 @@
 {$NAS_HOSTNAME}:{$NAS_HTTPS_PORT} {
 	tls {
 		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
-		resolvers 1.1.1.1 1.0.0.1
+		propagation_delay 30s
+		propagation_timeout -1
 	}
 
-	@site header Origin {$SITE_ORIGINS}
+	@site expression `{http.request.header.Origin} in "{$SITE_ORIGINS}".split(" ")`
 	header @site {
 		Access-Control-Allow-Origin "{http.request.header.Origin}"
 		Access-Control-Allow-Private-Network true
@@ -24,7 +27,7 @@
 
 	@preflight {
 		method OPTIONS
-		header Origin {$SITE_ORIGINS}
+		expression `{http.request.header.Origin} in "{$SITE_ORIGINS}".split(" ")`
 	}
 	handle @preflight {
 		header Access-Control-Allow-Methods "GET, POST, PUT, OPTIONS"
@@ -40,6 +43,12 @@
 	}
 
 	handle {
-		reverse_proxy tour-photos-upload:8090
+		reverse_proxy tour-photos-upload:8090 {
+			flush_interval -1
+			transport http {
+				read_timeout 15m
+				write_timeout 15m
+			}
+		}
 	}
 }

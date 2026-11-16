@@ -276,8 +276,12 @@ class TestSecureAddress(TransactionCase):
         for text in ("{$NAS_HOSTNAME}:{$NAS_HTTPS_PORT}", "dns cloudflare {env.CLOUDFLARE_API_TOKEN}",
                      "handle /ping", '{"ok":true}', "Access-Control-Allow-Private-Network true", "Vary Origin",
                      '"GET, POST, PUT, OPTIONS"', '"Content-Type, X-File-Name, X-Last-Modified, X-File-Type"',
-                     "Access-Control-Max-Age 600", "respond 204", "reverse_proxy tour-photos-upload:8090"):
+                     "Access-Control-Max-Age 600", "respond 204", "reverse_proxy tour-photos-upload:8090",
+                     'expression `{http.request.header.Origin} in "{$SITE_ORIGINS}".split(" ")`',
+                     "propagation_timeout -1"):
             self.assertIn(text, caddy)
+        self.assertNotIn("header Origin {$SITE_ORIGINS}", caddy, "Caddy 2.10 refuses a space-separated header matcher")
+        self.assertNotIn("resolvers", caddy, "LAN DNS is often intercepted: no local pre-check resolvers")
         compose = archive.read("photo-server/tls/docker-compose.yml").decode()
         for text in ("tour-photos-tls:2.10.2-cf", "./Caddyfile:/etc/caddy/Caddyfile:ro",
                      "${NAS_HTTPS_PORT:-443}:${NAS_HTTPS_PORT:-443}", "env_file: tls.env", "immich_default"):
