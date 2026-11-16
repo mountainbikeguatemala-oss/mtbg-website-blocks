@@ -1,0 +1,26 @@
+# The photo server's https front (its own compose project). In this folder, with .env and tls.env next to it:
+#   docker compose up -d --build
+# It joins Immich's network (where the office upload page answers as tour-photos-upload:8090).
+name: tour-photos-tls
+services:
+  tour-photos-tls:
+    container_name: tour-photos-tls
+    build: .
+    image: tour-photos-tls:2.10.2-cf
+    env_file: tls.env          # CLOUDFLARE_API_TOKEN (secret)
+    environment:
+      - NAS_HOSTNAME=${NAS_HOSTNAME}
+      - NAS_HTTPS_PORT=${NAS_HTTPS_PORT:-443}
+      - SITE_ORIGINS=${SITE_ORIGINS}
+    ports:
+      - "${NAS_HTTPS_PORT:-443}:${NAS_HTTPS_PORT:-443}"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./data:/data           # the certificate (keep it: Let's Encrypt limits new ones)
+      - ./config:/config
+    networks: [immich]
+    restart: unless-stopped
+networks:
+  immich:
+    external: true
+    name: ${IMMICH_NETWORK:-immich_default}

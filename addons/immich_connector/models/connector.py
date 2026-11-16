@@ -47,6 +47,19 @@ class ImmichConnector(models.AbstractModel):
         return self._param("upload_url").rstrip("/")
 
     @api.model
+    def _office_base(self):
+        """The photo server's secure office address (https, office network only), e.g. https://nas.example.com, no
+        trailing slash: the Staff App probes ``<base>/ping`` and uploads to ``<base>/upload/file`` straight from the
+        app. False when only a plain http address is set (a secure page cannot send to it)."""
+        for value in (self._param("office_base"), self._upload_url()):
+            value = value.rstrip("/")
+            if value.endswith("/upload"):
+                value = value[:-len("/upload")]
+            if value.startswith("https://"):
+                return value
+        return False
+
+    @api.model
     def _wifi_name(self):
         return self._param("wifi_name")
 
@@ -153,6 +166,10 @@ class ResConfigSettings(models.TransientModel):
 
     immich_upload_url = fields.Char("Office upload page URL", config_parameter=P + "upload_url",
                                     help="The photo server's upload page on the office network")
+    immich_office_base = fields.Char("Office secure address", config_parameter=P + "office_base",
+                                     help="The photo server's https address on the office network (e.g. "
+                                          "https://nas.example.com): the Staff App uploads to it straight from the "
+                                          "app. Set by Set up the photo server")
     immich_wifi_name = fields.Char("Office wifi name", config_parameter=P + "wifi_name",
                                    help="The office wifi network staff are told to connect to before uploading. "
                                         "Several (e.g. one 2.4 GHz and one 5 GHz, behind the same router): separate "

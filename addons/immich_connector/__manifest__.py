@@ -1,6 +1,6 @@
 {
     "name": "Immich Connector",
-    "version": "19.0.1.0.4",
+    "version": "19.0.1.1.0",
     "category": "Productivity/Connectors",
     "mtbg_tours_section": "connectors",
     "summary": "One connection to an office photo server running Immich: its token, its office upload page and wifi, "
@@ -15,9 +15,12 @@ One connection to a photo server (a NAS running Immich and a small sync service)
 * Immich's address on the office network, for album links (``<Immich URL>/albums/<id>``).
 * Optional: "Immich reachable from the internet", with an API key: a small client (create, read and rename albums,
   Test connection), so an extension can make albums itself instead of waiting for the photo server.
-* Set up the photo server (a wizard): what is needed, the office addresses, the token, a zip with the server's files
-  (config.env filled in from this site's settings, secrets left blank; docker-compose.yml; the sync service; the
-  install steps), then "Waiting for the photo server to call in".
+* Set up the photo server (a wizard): what is needed, the office addresses, the secure office address
+  (``https://nas.<domain>``, office network only: the DNS record made through Cloudflare or shown to add by hand, the
+  certificate's Cloudflare token), the token, a zip with the server's files (config.env filled in from this site's
+  settings, secrets left blank; docker-compose.yml; the sync service; the https front; the install steps), then
+  "Waiting for the photo server to call in" and the https check from a phone at the office.
+* The office secure address (``_office_base()``): the https base the Staff App uploads to straight from the app.
 * Secrets stay with administrators and are cleared on a copy of the site (neutralize).
 
 It depends on no product: it can be installed on any Odoo site.

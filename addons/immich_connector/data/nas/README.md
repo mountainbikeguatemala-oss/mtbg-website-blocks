@@ -62,9 +62,11 @@ shared with them.
 
 ## Step 3: Website
 
-1. Settings > **Immich** > **Set up the photo server**: the wizard makes the website token (`NAS_TOKEN`, shown once) and can download a filled-in `config.env` for you.
-2. In the same settings, set **Office upload page URL** to `http://<your NAS address>:8090`, e.g.
-   `http://192.168.1.50:8090`. Tip: give the NAS a fixed address in your router so this never changes.
+1. Settings > **Immich** > **Set up the photo server**: the wizard saves the office addresses, the secure office
+   address (Step 4b), makes the website token (`NAS_TOKEN`, shown once) and downloads a zip with `config.env`,
+   `tls/.env` and `tls/tls.env` filled in. Tip: give the NAS a fixed address in your router so it never changes.
+2. On Finish, **Office upload page URL** becomes the secure office address, e.g. `https://nas.example.com` (or
+   `https://nas.example.com:8443`). Without a secure address it stays `http://<your NAS address>:8090`.
 3. Set the **public photo address** to your `PUBLIC_BASE_URL`.
 
 ## Step 4: Install on the NAS
@@ -84,6 +86,48 @@ shared with them.
      this folder so it uses `docker-compose.yml`, and start it. If the app has no "env file" option, change the
      port line in `docker-compose.yml` from `${UPLOAD_PORT:-8090}` to the number you want, e.g. `8090`.
 5. Two containers appear: `photos-sync` and `photos-upload`. Both restart by themselves after a NAS reboot.
+   `photos-upload` also joins Immich's Docker network (`IMMICH_NETWORK`, default `immich_default`) as
+   `tour-photos-upload`, for the https front below. If Immich's network has another name (`docker network ls`), set
+   `IMMICH_NETWORK` in `config.env` and `tls/.env`.
+
+## Step 4b: The secure office address (https)
+
+The Staff App is an https page, and a browser does not let an https page send to a plain `http://` address. So
+the photo server gets its own https address that **only works on the office network**, e.g.
+`https://nas.example.com`. At the office, phones then upload from the app straight to the NAS: the photos never
+go over the internet.
+
+1. **DNS record** (the wizard can make it in Cloudflare): type `A`, name `nas.<your domain>`, address = the NAS's
+   office address (e.g. `192.168.1.50`), proxy status **DNS only** (grey cloud). The name is public; the address
+   is private, so it answers only inside the office.
+2. **Certificate**: the front gets a real Let's Encrypt certificate by proving the domain through Cloudflare DNS
+   (DNS-01), so nothing has to be opened to the internet. It needs a Cloudflare API token:
+   Cloudflare > My Profile > API Tokens > Create Token > **Edit zone DNS**, Zone Resources: only your domain. The wizard writes it into
+   `tls/tls.env` (`CLOUDFLARE_API_TOKEN`); keep that file private.
+3. **Port**: `NAS_HTTPS_PORT` in `tls/.env`, 443 by default. Many NAS systems keep 80 and 443 for their own pages;
+   then use e.g. `8443` (the address becomes `https://nas.example.com:8443`, and the wizard's "HTTPS port" field
+   has to say the same).
+4. **Start it** (after the photo service, which creates its network link): in the `tls` folder, run
+   ```
+   docker compose up -d --build
+   ```
+   A container `tour-photos-tls` appears (the official Caddy 2.10.2 image built with the Cloudflare DNS module,
+   tagged `tour-photos-tls:2.10.2-cf`). The first certificate takes up to a minute: `docker logs tour-photos-tls`.
+   The certificate is kept in `tls/data` and renews by itself.
+5. **What it does** (`tls/Caddyfile`): `GET /ping` answers `{"ok":true}` itself; every other request goes to the
+   upload page (`tour-photos-upload:8090`): `GET /upload?t=<ticket>`, `PUT /upload/file?t=<ticket>` (the file;
+   headers `X-File-Name` URI-encoded, `X-File-Type`, `X-Last-Modified` in ms), `POST /upload/batch?t=<ticket>`
+   (`{"count": n}` after each batch). For the website's addresses (`SITE_ORIGINS`, space-separated, e.g.
+   `https://www.example.com https://example.com`) every answer carries the CORS headers
+   (`Access-Control-Allow-Origin` = that address, `Vary: Origin`, `Access-Control-Allow-Private-Network: true`),
+   and a preflight (`OPTIONS`) gets `204` with methods `GET, POST, PUT, OPTIONS`, headers
+   `Content-Type, X-File-Name, X-Last-Modified, X-File-Type`, max age 600. Other addresses get no CORS headers.
+   The plain `http://<NAS address>:8090` keeps working on the office network.
+6. **Router (DNS rebinding protection)**: some routers refuse public names that point to a private address. If
+   `nas.<your domain>` does not resolve on the office wifi but does elsewhere, allow it: on OpenWrt (e.g. GL.iNet)
+   Network > DHCP and DNS > Filter > **Domain whitelist** (dnsmasq `rebind_domain`), add your domain, e.g.
+   `uci add_list dhcp.@dnsmasq[0].rebind_domain='example.com'; uci commit dhcp; /etc/init.d/dnsmasq restart`.
+   Phones with "private DNS" (Android) or a VPN may skip the office's DNS; they still resolve the public record.
 
 ## Step 5: Test
 
@@ -95,10 +139,12 @@ shared with them.
    and deletes it again; it changes nothing else.
 2. Within 5 minutes, Immich (logged in as Tours) shows albums for your upcoming departures, named like
    `2026-11-14 · Tour name` or `· Day 2` for multi-day tours. Each departure on the website links to its albums.
-3. On a phone on the office wifi, open a departure day in the Staff App and tap **Upload photos**. Pick a few
+3. With the secure office address: on a phone on the office wifi open `https://nas.<your domain>/ping` (with the
+   port, if not 443). It must say `{"ok":true}` with a padlock (a valid certificate).
+4. On a phone on the office wifi, open a departure day in the Staff App and tap **Upload photos**. Pick a few
    photos: each shows its progress and then **Done**. They appear in that day's album in Immich.
-4. In Immich, remove any photos you don't want, and pick the header with **Set as album cover**.
-5. On the website, press **Publish day**. Within 5 minutes the album description in Immich ends with
+5. In Immich, remove any photos you don't want, and pick the header with **Set as album cover**.
+6. On the website, press **Publish day**. Within 5 minutes the album description in Immich ends with
    `✓ synced … photos …` and the website shows the day as synced. When every day of the departure is synced,
    the clients' email goes out (only if you have turned that email on).
 
@@ -120,7 +166,10 @@ docker compose --env-file config.env run --rm -e BACKFILL_FROM=2026-07-01 photos
 
 ## Troubleshooting
 
-- **See what it is doing:** `docker logs --tail 100 photos-sync` (and `photos-upload`).
+- **See what it is doing:** `docker logs --tail 100 photos-sync` (and `photos-upload`, `tour-photos-tls`).
+- **The /ping check fails at the office:** the name must resolve to the NAS (`nslookup nas.<your domain>` on the
+  office network; see the router note in Step 4b), the port must be the one in `tls/.env`, and
+  `docker logs tour-photos-tls` shows whether the certificate was issued (a refused token: check its zone).
 - **The upload page says the link expired:** links from the Staff App last 12 hours; open it again. The page
   only works on the office network.
 - **Nothing publishes:** the day must be *Publish day* on the website (not only "Done uploading"), and the album

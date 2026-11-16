@@ -21,7 +21,10 @@
                                     class="btn-link px-0" confirm="The photo server's current token stops working. Make a new one?"/>
                         </setting>
                         <setting string="Office upload page URL" help="The photo server's upload page on the office network.">
-                            <field name="immich_upload_url" placeholder="http://192.168.1.50:8090"/>
+                            <field name="immich_upload_url" placeholder="https://nas.example.com"/>
+                        </setting>
+                        <setting string="Office secure address" help="The photo server's https address, only on the office network: phones upload to it from the Staff App. Set by Set up the photo server.">
+                            <field name="immich_office_base" placeholder="https://nas.example.com"/>
                         </setting>
                         <setting string="Office wifi name" help="Staff are told to connect to it before uploading at the office.">
                             <field name="immich_wifi_name"/>

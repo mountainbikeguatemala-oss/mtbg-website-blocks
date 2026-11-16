@@ -1,5 +1,8 @@
 # Tour photo service for the NAS. Start with:  docker compose --env-file config.env up -d --build
 # (--env-file lets this file read UPLOAD_PORT; both containers read every setting from config.env.)
+# The secure office address (https, for uploads straight from the Staff App) is a separate project in tls/: it
+# reaches the upload page as tour-photos-upload:8090 on Immich's network (IMMICH_NETWORK, default immich_default:
+# the network of Immich's own docker-compose project "immich").
 name: tour-photos
 services:
   photos-sync:
@@ -28,4 +31,12 @@ services:
       - ./work:/work
     ports:
       - "${UPLOAD_PORT:-8090}:8090"   # office upload page: http://<NAS address>:<UPLOAD_PORT>
+    networks:
+      default:
+      immich:
+        aliases: [tour-photos-upload]  # the https front (tls/) proxies to this name
     restart: unless-stopped
+networks:
+  immich:
+    external: true
+    name: ${IMMICH_NETWORK:-immich_default}

@@ -16,12 +16,59 @@
                     <p>This wizard saves the office addresses, makes the photo server's token and gives you a zip with
                         its files and settings.</p>
                 </div>
-                <group invisible="step != 'network'">
-                    <field name="lan_address" placeholder="192.168.1.50"/>
-                    <field name="immich_port"/>
-                    <field name="upload_port"/>
-                    <field name="wifi_name"/>
-                </group>
+                <div invisible="step != 'network'">
+                    <group>
+                        <field name="lan_address" placeholder="192.168.1.50"/>
+                        <field name="immich_port"/>
+                        <field name="upload_port"/>
+                        <field name="wifi_name"/>
+                    </group>
+                    <group string="Secure office address">
+                        <field name="nas_domain" placeholder="example.com"/>
+                        <field name="nas_hostname" readonly="1" class="font-monospace"/>
+                        <field name="https_port" invisible="not nas_domain"/>
+                    </group>
+                    <p class="text-muted">Phones can only upload from the Staff App to an <b>https</b> address. The
+                        secure office address gives the photo server one: it only works on the office network, so at
+                        the office photos go straight from the phone to the photo server and never over the internet.
+                        Leave the domain empty to skip it (uploads from the app then go over the internet).</p>
+                </div>
+                <div invisible="step != 'secure'">
+                    <p>Two things make <b><field name="nas_hostname" readonly="1" class="oe_inline font-monospace"/></b>
+                        work: a DNS record that points it to the photo server, and a certificate.</p>
+                    <h5>1. The DNS record</h5>
+                    <p class="mb-1">A public record that points to the photo server's office address (it answers
+                        only on the office network). Add it in Cloudflare › your domain › DNS › Records:</p>
+                    <table class="table table-sm w-auto font-monospace mb-2">
+                        <tr><th>Type</th><th>Name</th><th>IPv4 address</th><th>Proxy status</th></tr>
+                        <tr><td>A</td><td><field name="nas_hostname" readonly="1" class="oe_inline"/></td>
+                            <td><field name="lan_address" readonly="1" class="oe_inline"/></td>
+                            <td>DNS only (grey cloud)</td></tr>
+                    </table>
+                    <div invisible="not can_create_dns" class="mb-2">
+                        <button name="action_dns_create" type="object" string="Create the record" icon="fa-globe"
+                                class="btn-secondary"/>
+                        <span class="text-muted small ms-2">With the token below, or the Cloudflare connector's.</span>
+                    </div>
+                    <field name="can_create_dns" invisible="1"/>
+                    <field name="dns_result" readonly="1" invisible="not dns_result" nolabel="1"/>
+                    <h5 class="mt-3">2. The certificate</h5>
+                    <p class="mb-1">The photo server gets its own certificate (Let's Encrypt) by proving the domain
+                        through Cloudflare, so it needs a Cloudflare API token that can edit this domain's DNS:
+                        <a href="https://dash.cloudflare.com/profile/api-tokens" target="_blank">Cloudflare › My
+                        Profile › API Tokens</a> › Create Token › "Edit zone DNS" template, Zone Resources: only this
+                        domain. Paste it here: it goes only into the zip's <code>tls/tls.env</code> and leaves this
+                        wizard on Finish.</p>
+                    <group>
+                        <field name="dns_token" password="True" placeholder="Cloudflare API token"/>
+                    </group>
+                    <h5 class="mt-3">3. Check</h5>
+                    <button name="action_resolve" type="object" string="Check the name" icon="fa-search"
+                            class="btn-secondary"/>
+                    <field name="resolve_result" readonly="1" invisible="not resolve_result" nolabel="1"/>
+                    <p class="text-muted small mt-2">This checks from here that the name points to the photo server.
+                        The https check happens on a phone at the office, on the last step.</p>
+                </div>
                 <div invisible="step != 'token'">
                     <p>The photo server signs every call with this token. Making a new one stops the old one.</p>
                     <button name="action_token" type="object" string="Make the token" icon="fa-key"
@@ -33,8 +80,9 @@
                 </div>
                 <div invisible="step != 'files'">
                     <p>Download the photo server's files: <code>config.env</code> (this site's address, the token, the
-                        bucket; fill in the blank secrets), <code>docker-compose.yml</code>, the sync service and
-                        <code>README.md</code> with the install steps. Keep the zip private.</p>
+                        bucket, the secure office address and its certificate token; fill in the blank secrets),
+                        <code>docker-compose.yml</code>, the sync service, the https front and <code>README.md</code>
+                        with the install steps. Keep the zip private.</p>
                     <button name="action_download" type="object" string="Download the zip" icon="fa-download"
                             class="btn-primary"/>
                 </div>
@@ -45,6 +93,11 @@
                     </group>
                     <p invisible="last_seen" class="text-muted">No call yet.</p>
                     <button name="action_check" type="object" string="Check again" icon="fa-refresh"/>
+                    <div invisible="not ping_url" class="mt-3">
+                        <p class="mb-1">Then, on a phone on the office wifi, open
+                            <field name="ping_url" widget="url" readonly="1" class="oe_inline"/>: it must say
+                            <code>{"ok":true}</code>. Finish makes it the office upload page.</p>
+                    </div>
                 </div>
                 <footer>
                     <button name="action_back" type="object" string="Back" invisible="step == 'intro'"/>

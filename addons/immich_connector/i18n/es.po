@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-15 05:00+0000\n"
-"PO-Revision-Date: 2026-11-15 05:00+0000\n"
+"POT-Creation-Date: 2026-11-16 12:00+0000\n"
+"PO-Revision-Date: 2026-11-16 12:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -17,11 +17,52 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+msgid ""
+"%s is not a domain of this Cloudflare account (or the token cannot see it)."
+msgstr ""
+"%s no es un dominio de esta cuenta de Cloudflare (o el token no lo ve)."
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "1. The DNS record"
+msgstr "1. El registro DNS"
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "2. The certificate"
+msgstr "2. El certificado"
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "3. Check"
+msgstr "3. Comprobar"
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid ""
+": it must say\n"
+"                            <code>{\"ok\":true}</code>. Finish makes it the office upload page."
+msgstr ""
+": debe decir\n"
+"                            <code>{\"ok\":true}</code>. Finalizar la convierte en la página de subida de la oficina."
+
+#. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
 msgid "<b>Immich</b> on it (the photo app guides and the office use)."
 msgstr ""
 "<b>Immich</b> instalado en él (la app de fotos que usan los guías y la "
 "oficina)."
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid ""
+"<span class=\"text-muted small ms-2\">With the token below, or the "
+"Cloudflare connector's.</span>"
+msgstr ""
+"<span class=\"text-muted small ms-2\">Con el token de abajo, o el del "
+"conector de Cloudflare.</span>"
 
 #. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
@@ -34,12 +75,26 @@ msgstr ""
 
 #. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "A"
+msgstr "A"
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
 msgid ""
 "A <b>storage bucket</b> for the photos shown online (Settings › Cloudflare: "
 "an R2 bucket)."
 msgstr ""
 "Un <b>bucket de almacenamiento</b> para las fotos que se muestran en línea "
 "(Ajustes › Cloudflare: un bucket de R2)."
+
+#. module: immich_connector
+#: model:ir.model.fields,help:immich_connector.field_immich_setup_wizard__dns_token
+msgid ""
+"A Cloudflare API token with Zone › DNS › Edit on this domain only. It goes "
+"into the zip's tls/tls.env and leaves this wizard on Finish"
+msgstr ""
+"Un token de API de Cloudflare con Zona › DNS › Editar solo en este dominio. "
+"Va en el tls/tls.env del zip y sale de este asistente al Finalizar"
 
 #. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
@@ -49,10 +104,28 @@ msgstr ""
 "<b>Docker</b>."
 
 #. module: immich_connector
+#: model:ir.model.fields,help:immich_connector.field_immich_setup_wizard__nas_domain
+msgid ""
+"A domain of yours on Cloudflare (e.g. your short-link domain). The secure "
+"office address is nas.<this domain>"
+msgstr ""
+"Un dominio tuyo en Cloudflare (p. ej. tu dominio de enlaces cortos). La "
+"dirección segura de la oficina es nas.<este dominio>"
+
+#. module: immich_connector
 #. odoo-python
 #: code:addons/immich_connector/models/setup.py:0
 msgid "A port is a number from 1 to 65535."
 msgstr "Un puerto es un número del 1 al 65535."
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid ""
+"A public record that points to the photo server's office address (it answers\n"
+"                        only on the office network). Add it in Cloudflare › your domain › DNS › Records:"
+msgstr ""
+"Un registro público que apunta a la dirección del servidor de fotos en la oficina (solo responde\n"
+"                        en la red de la oficina). Agrégalo en Cloudflare › tu dominio › DNS › Registros:"
 
 #. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
@@ -65,6 +138,11 @@ msgid "Back"
 msgstr "Atrás"
 
 #. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__can_create_dns
+msgid "Can Create Dns"
+msgstr "Puede crear el DNS"
+
+#. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
 msgid "Cancel"
 msgstr "Cancelar"
@@ -75,9 +153,50 @@ msgid "Check"
 msgstr "Comprobar"
 
 #. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__ping_url
+msgid "Check address"
+msgstr "Dirección de comprobación"
+
+#. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
 msgid "Check again"
 msgstr "Comprobar de nuevo"
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "Check the name"
+msgstr "Comprobar el nombre"
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "Cloudflare API token"
+msgstr "Token de API de Cloudflare"
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+msgid "Cloudflare did not answer: %s"
+msgstr "Cloudflare no respondió: %s"
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+msgid "Cloudflare refused the call: %s"
+msgstr "Cloudflare rechazó la llamada: %s"
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__dns_token
+msgid "Cloudflare token for the certificate"
+msgstr "Token de Cloudflare para el certificado"
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid ""
+"Cloudflare › My\n"
+"                        Profile › API Tokens"
+msgstr ""
+"Cloudflare › Mi\n"
+"                        perfil › Tokens de API"
 
 #. module: immich_connector
 #: model:ir.model,name:immich_connector.model_res_config_settings
@@ -91,6 +210,11 @@ msgid "Connected (Immich %s)."
 msgstr "Conectado (Immich %s)."
 
 #. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "Create the record"
+msgstr "Crear el registro"
+
+#. module: immich_connector
 #: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__create_uid
 msgid "Created by"
 msgstr "Creado por"
@@ -101,6 +225,11 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "DNS only (grey cloud)"
+msgstr "Solo DNS (nube gris)"
+
+#. module: immich_connector
 #: model:ir.model.fields,field_description:immich_connector.field_immich_connector__display_name
 #: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__display_name
 #: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__display_name
@@ -108,15 +237,27 @@ msgid "Display Name"
 msgstr "Nombre para mostrar"
 
 #. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__dns_result
+msgid "Dns Result"
+msgstr "Resultado del DNS"
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__nas_domain
+msgid "Domain"
+msgstr "Dominio"
+
+#. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
 msgid ""
 "Download the photo server's files: <code>config.env</code> (this site's address, the token, the\n"
-"                        bucket; fill in the blank secrets), <code>docker-compose.yml</code>, the sync service and\n"
-"                        <code>README.md</code> with the install steps. Keep the zip private."
+"                        bucket, the secure office address and its certificate token; fill in the blank secrets),\n"
+"                        <code>docker-compose.yml</code>, the sync service, the https front and <code>README.md</code>\n"
+"                        with the install steps. Keep the zip private."
 msgstr ""
-"Descargue los archivos del servidor de fotos: <code>config.env</code> (la dirección de este sitio, el token, el\n"
-"                        bucket; complete los secretos en blanco), <code>docker-compose.yml</code>, el servicio de sincronización y\n"
-"                        <code>README.md</code> con los pasos de instalación. Mantenga el zip en privado."
+"Descarga los archivos del servidor de fotos: <code>config.env</code> (la dirección de este sitio, el token, el\n"
+"                        bucket, la dirección segura de la oficina y el token de su certificado; completa los secretos vacíos),\n"
+"                        <code>docker-compose.yml</code>, el servicio de sincronización, el acceso https y <code>README.md</code>\n"
+"                        con los pasos de instalación. Guarda el zip en privado."
 
 #. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
@@ -144,11 +285,31 @@ msgstr ""
 " Claves de API)."
 
 #. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+msgid ""
+"Go back to Office network: the photo server's IP address and a domain are "
+"needed."
+msgstr ""
+"Vuelve a Red de la oficina: se necesitan la dirección IP del servidor de "
+"fotos y un dominio."
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__https_port
+msgid "HTTPS port"
+msgstr "Puerto HTTPS"
+
+#. module: immich_connector
 #: model:ir.model.fields,field_description:immich_connector.field_immich_connector__id
 #: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__id
 #: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__id
 msgid "ID"
 msgstr "ID"
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "IPv4 address"
+msgstr "Dirección IPv4"
 
 #. module: immich_connector
 #. odoo-python
@@ -266,6 +427,11 @@ msgid "Make the token first."
 msgstr "Primero cree el token."
 
 #. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "Name"
+msgstr "Nombre"
+
+#. module: immich_connector
 #. odoo-python
 #: code:addons/immich_connector/models/connector.py:0
 msgid "New photo server token (shown once: copy it now)"
@@ -302,6 +468,12 @@ msgid "Office network"
 msgstr "Red de la oficina"
 
 #. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__immich_office_base
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid "Office secure address"
+msgstr "Dirección segura de la oficina"
+
+#. module: immich_connector
 #: model:ir.model.fields,field_description:immich_connector.field_res_config_settings__immich_upload_url
 #: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
 msgid "Office upload page URL"
@@ -319,6 +491,19 @@ msgstr "Nombre del wifi de la oficina"
 #: code:addons/immich_connector/models/connector.py:0
 msgid "Only an administrator makes the photo server's token."
 msgstr "Solo un administrador crea el token del servidor de fotos."
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid ""
+"Phones can only upload from the Staff App to an <b>https</b> address. The\n"
+"                        secure office address gives the photo server one: it only works on the office network, so at\n"
+"                        the office photos go straight from the phone to the photo server and never over the internet.\n"
+"                        Leave the domain empty to skip it (uploads from the app then go over the internet)."
+msgstr ""
+"Los teléfonos solo pueden subir desde la Staff App a una dirección <b>https</b>. La\n"
+"                        dirección segura de la oficina le da una al servidor de fotos: solo funciona en la red de la oficina, así que en\n"
+"                        la oficina las fotos van directo del teléfono al servidor de fotos y nunca por internet.\n"
+"                        Deja el dominio vacío para omitirla (entonces las subidas desde la app van por internet)."
 
 #. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
@@ -341,6 +526,27 @@ msgid "Photo server token set"
 msgstr "Token del servidor de fotos configurado"
 
 #. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "Proxy status"
+msgstr "Estado del proxy"
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__resolve_result
+msgid "Resolve Result"
+msgstr "Resultado de la comprobación"
+
+#. module: immich_connector
+#: model:ir.model.fields.selection,name:immich_connector.selection__immich_setup_wizard__step__secure
+msgid "Secure address"
+msgstr "Dirección segura"
+
+#. module: immich_connector
+#: model:ir.model.fields,field_description:immich_connector.field_immich_setup_wizard__nas_hostname
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "Secure office address"
+msgstr "Dirección segura de la oficina"
+
+#. module: immich_connector
 #. odoo-python
 #: code:addons/immich_connector/models/setup.py:0
 #: model:ir.actions.act_window,name:immich_connector.action_immich_setup_wizard
@@ -349,6 +555,15 @@ msgstr "Token del servidor de fotos configurado"
 #: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
 msgid "Set up the photo server"
 msgstr "Configurar el servidor de fotos"
+
+#. module: immich_connector
+#: model:ir.model.fields,help:immich_connector.field_immich_setup_wizard__wifi_name
+msgid ""
+"Several networks (e.g. 2.4 GHz and 5 GHz behind the same router): separate "
+"them with commas"
+msgstr ""
+"Varias redes (p. ej. 2.4 GHz y 5 GHz detrás del mismo router): sepárelas con"
+" comas"
 
 #. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
@@ -373,6 +588,26 @@ msgid "Test connection"
 msgstr "Probar la conexión"
 
 #. module: immich_connector
+#: model:ir.model.fields,help:immich_connector.field_res_config_settings__immich_wifi_name
+msgid ""
+"The office wifi network staff are told to connect to before uploading. "
+"Several (e.g. one 2.4 GHz and one 5 GHz, behind the same router): separate "
+"them with commas"
+msgstr ""
+"La red wifi de la oficina a la que se le indica al personal que se conecte "
+"antes de subir fotos. Varias (p. ej. una de 2.4 GHz y una de 5 GHz, detrás "
+"del mismo router): sepárelas con comas"
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid ""
+"The photo server gets its own certificate (Let's Encrypt) by proving the domain\n"
+"                        through Cloudflare, so it needs a Cloudflare API token that can edit this domain's DNS:"
+msgstr ""
+"El servidor de fotos obtiene su propio certificado (Let's Encrypt) demostrando el dominio\n"
+"                        a través de Cloudflare, así que necesita un token de API de Cloudflare que pueda editar el DNS de este dominio:"
+
+#. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
 msgid ""
 "The photo server signs every call with this token. Making a new one stops "
@@ -388,6 +623,27 @@ msgstr ""
 "El token actual del servidor de fotos dejará de funcionar. ¿Crear uno nuevo?"
 
 #. module: immich_connector
+#: model:ir.model.fields,help:immich_connector.field_res_config_settings__immich_office_base
+msgid ""
+"The photo server's https address on the office network (e.g. "
+"https://nas.example.com): the Staff App uploads to it straight from the app."
+" Set by Set up the photo server"
+msgstr ""
+"La dirección https del servidor de fotos en la red de la oficina (p. ej. "
+"https://nas.example.com): la Staff App sube a ella directo desde la app. La "
+"define Configurar el servidor de fotos"
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
+msgid ""
+"The photo server's https address, only on the office network: phones upload "
+"to it from the Staff App. Set by Set up the photo server."
+msgstr ""
+"La dirección https del servidor de fotos, solo en la red de la oficina: los "
+"teléfonos suben a ella desde la Staff App. La define Configurar el servidor "
+"de fotos."
+
+#. module: immich_connector
 #: model:ir.model.fields,help:immich_connector.field_res_config_settings__immich_upload_url
 msgid "The photo server's upload page on the office network"
 msgstr "La página de subida del servidor de fotos en la red de la oficina"
@@ -396,6 +652,40 @@ msgstr "La página de subida del servidor de fotos en la red de la oficina"
 #: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
 msgid "The photo server's upload page on the office network."
 msgstr "La página de subida del servidor de fotos en la red de la oficina."
+
+#. module: immich_connector
+#: model:ir.model.fields,help:immich_connector.field_immich_setup_wizard__https_port
+msgid ""
+"The port the photo server answers https on. Keep 443 unless the NAS already "
+"uses it (then e.g. 8443: the address becomes https://nas.<domain>:8443)"
+msgstr ""
+"El puerto en el que el servidor de fotos responde https. Deja 443 salvo que "
+"el NAS ya lo use (entonces p. ej. 8443: la dirección queda "
+"https://nas.<dominio>:8443)"
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+msgid ""
+"The secure office address needs the photo server's IP address on the office "
+"network (e.g. 192.168.1.20), not a name."
+msgstr ""
+"La dirección segura de la oficina necesita la dirección IP del servidor de "
+"fotos en la red de la oficina (p. ej. 192.168.1.20), no un nombre."
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "Then, on a phone on the office wifi, open"
+msgstr "Luego, en un teléfono conectado al wifi de la oficina, abre"
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid ""
+"This checks from here that the name points to the photo server.\n"
+"                        The https check happens on a phone at the office, on the last step."
+msgstr ""
+"Esto comprueba desde aquí que el nombre apunta al servidor de fotos.\n"
+"                        La comprobación https se hace en un teléfono en la oficina, en el último paso."
 
 #. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
@@ -411,6 +701,43 @@ msgstr ""
 #: model:ir.model.fields.selection,name:immich_connector.selection__immich_setup_wizard__step__token
 msgid "Token"
 msgstr "Token"
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "Two things make"
+msgstr "Dos cosas hacen funcionar"
+
+#. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "Type"
+msgstr "Tipo"
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+msgid ""
+"Type a domain of yours for the secure office address, e.g. example.com."
+msgstr ""
+"Escribe un dominio tuyo para la dirección segura de la oficina, p. ej. "
+"example.com."
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+msgid "Type the Cloudflare token below first, or add the record by hand."
+msgstr ""
+"Primero escribe el token de Cloudflare de abajo, o agrega el registro a "
+"mano."
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+msgid ""
+"Type the Cloudflare token for the certificate first (Zone › DNS › Edit on "
+"%s)."
+msgstr ""
+"Primero escribe el token de Cloudflare para el certificado (Zona › DNS › "
+"Editar en %s)."
 
 #. module: immich_connector
 #. odoo-python
@@ -450,31 +777,81 @@ msgstr ""
 "web las muestra en línea. Necesita:"
 
 #. module: immich_connector
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
+msgid "example.com"
+msgstr "example.com"
+
+#. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
 msgid "http://192.168.1.50:2283"
 msgstr "http://192.168.1.50:2283"
 
 #. module: immich_connector
 #: model_terms:ir.ui.view,arch_db:immich_connector.res_config_settings_view_form_immich
-msgid "http://192.168.1.50:8090"
-msgstr "http://192.168.1.50:8090"
+msgid "https://nas.example.com"
+msgstr "https://nas.example.com"
 
 #. module: immich_connector
-#: model:ir.model.fields,help:immich_connector.field_immich_setup_wizard__wifi_name
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
 msgid ""
-"Several networks (e.g. 2.4 GHz and 5 GHz behind the same router): separate "
-"them with commas"
+"work: a DNS record that points it to the photo server, and a certificate."
 msgstr ""
-"Varias redes (p. ej. 2.4 GHz y 5 GHz detrás del mismo router): sepárelas con"
-" comas"
+": un registro DNS que la apunta al servidor de fotos, y un certificado."
 
 #. module: immich_connector
-#: model:ir.model.fields,help:immich_connector.field_res_config_settings__immich_wifi_name
+#: model_terms:ir.ui.view,arch_db:immich_connector.view_immich_setup_wizard
 msgid ""
-"The office wifi network staff are told to connect to before uploading. "
-"Several (e.g. one 2.4 GHz and one 5 GHz, behind the same router): separate "
-"them with commas"
+"› Create Token › \"Edit zone DNS\" template, Zone Resources: only this\n"
+"                        domain. Paste it here: it goes only into the zip's <code>tls/tls.env</code> and leaves this\n"
+"                        wizard on Finish."
 msgstr ""
-"La red wifi de la oficina a la que se le indica al personal que se conecte "
-"antes de subir fotos. Varias (p. ej. una de 2.4 GHz y una de 5 GHz, detrás "
-"del mismo router): sepárelas con comas"
+"› Crear token › plantilla \"Editar DNS de zona\", Recursos de zona: solo este\n"
+"                        dominio. Pégalo aquí: va solo en el <code>tls/tls.env</code> del zip y sale de este\n"
+"                        asistente al Finalizar."
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+msgid "✓ %(name)s → %(ip)s, the photo server."
+msgstr "✓ %(name)s → %(ip)s, el servidor de fotos."
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+msgid "✓ Record corrected: %(name)s → %(ip)s (DNS only)."
+msgstr "✓ Registro corregido: %(name)s → %(ip)s (solo DNS)."
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+msgid "✓ Record created: %(name)s → %(ip)s (DNS only)."
+msgstr "✓ Registro creado: %(name)s → %(ip)s (solo DNS)."
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+msgid "✓ The record is already there: %(name)s → %(ip)s (DNS only)."
+msgstr "✓ El registro ya existe: %(name)s → %(ip)s (solo DNS)."
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+msgid "✗ %(error)s Add the record by hand (below)."
+msgstr "✗ %(error)s Agrega el registro a mano (abajo)."
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+msgid ""
+"✗ %(name)s → %(found)s, not the photo server (%(ip)s). Correct the record."
+msgstr ""
+"✗ %(name)s → %(found)s, no es el servidor de fotos (%(ip)s). Corrige el "
+"registro."
+
+#. module: immich_connector
+#. odoo-python
+#: code:addons/immich_connector/models/setup.py:0
+msgid "✗ %s is not found yet. A new record can take a few minutes; try again."
+msgstr ""
+"✗ %s todavía no se encuentra. Un registro nuevo puede tardar unos minutos; "
+"vuelve a intentarlo."

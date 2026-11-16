@@ -1,0 +1,45 @@
+# The photo server's secure office address: https://{$NAS_HOSTNAME}:{$NAS_HTTPS_PORT}
+# - a real certificate (Let's Encrypt) proved through Cloudflare DNS (CLOUDFLARE_API_TOKEN, in tls.env)
+# - /ping answered here: {"ok":true} (the Staff App's "am I on the office network" probe)
+# - CORS for the website (SITE_ORIGINS, space-separated): the Staff App, an https page on the website, uploads here
+# - everything else goes to the office upload page (tour-photos-upload:8090 on the Immich network)
+{
+	admin off
+	auto_https disable_redirects
+}
+
+{$NAS_HOSTNAME}:{$NAS_HTTPS_PORT} {
+	tls {
+		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+		resolvers 1.1.1.1 1.0.0.1
+	}
+
+	@site header Origin {$SITE_ORIGINS}
+	header @site {
+		Access-Control-Allow-Origin "{http.request.header.Origin}"
+		Access-Control-Allow-Private-Network true
+		Vary Origin
+		defer
+	}
+
+	@preflight {
+		method OPTIONS
+		header Origin {$SITE_ORIGINS}
+	}
+	handle @preflight {
+		header Access-Control-Allow-Methods "GET, POST, PUT, OPTIONS"
+		header Access-Control-Allow-Headers "Content-Type, X-File-Name, X-Last-Modified, X-File-Type"
+		header Access-Control-Max-Age 600
+		respond 204
+	}
+
+	handle /ping {
+		header Content-Type application/json
+		header Cache-Control no-store
+		respond `{"ok":true}` 200
+	}
+
+	handle {
+		reverse_proxy tour-photos-upload:8090
+	}
+}

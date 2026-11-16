@@ -1,9 +1,14 @@
 """Office upload page (NAS, LAN only): guides upload a departure day's photos from their phone.
 
-The Staff App opens  http://<nas>:8090/upload?t=<ticket>  (ticket = one departure day, valid 12 h).
+The Staff App opens  <base>/upload?t=<ticket>  (ticket = one departure day, valid 12 h), or uploads from the app itself
+when <base> is the secure office address (https://nas.<domain>[:port], through the https front in ../tls/, which
+also answers /ping and the CORS headers for the website; plain http :8090 keeps working on the office network).
+  GET  /ping, /health      -> 200 {"ok":true}
   GET  /upload?t=..        -> checks the ticket with the website, serves the page (EN/ES)
-  PUT  /upload/file?t=..   -> body = the file; headers X-File-Name (URI-encoded), X-Last-Modified (ms)
+  PUT  /upload/file?t=..   -> body = the file; headers X-File-Name (URI-encoded), X-Last-Modified (ms), X-File-Type
                               -> Immich (Tours account) + the day's album; description "Uploaded by <guide>"
+                              -> {"ok":true,"status":"created"|"duplicate"}
+  POST /upload/batch?t=..  -> {"count":n} after each batch: the website adds n to the guide's upload count
 The browser sends one file per request (2 at a time) so each file has its own progress bar and a failed file can
 be retried alone. Capture time: EXIF from the file (Immich reads it too); fileCreatedAt falls back to the phone's
 last-modified time.
@@ -133,7 +138,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         u = urlparse(self.path)
-        if u.path == "/health":
+        if u.path in ("/ping", "/health"):
             return self.send(200, '{"ok":true}')
         if u.path != "/upload":
             return self.send(404, PAGE_ERROR, "text/html")

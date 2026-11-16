@@ -1,5 +1,14 @@
 # Immich Connector
 
+## 19.0.1.1.0 (2026-11-16)
+
+- The secure office address (owner-approved, 2026-11-16): a secure (https) page can't send to the photo server's plain `http://<office address>:8090`, so office uploads from the Staff App went over the internet. "Set up the photo server" now sets up `https://nas.<domain>[:port]`, which only works on the office network:
+  - Office network: "Secure office address" (`nas.` + a domain: the short-link domain by default, else the Cloudflare zone, else the website's; editable; empty = skip) and "HTTPS port" (443; e.g. 8443 when the NAS keeps 443 for itself).
+  - New step "Secure address": the DNS record (A `nas.<domain>` → the photo server's office address, DNS only), with "Create the record" through Cloudflare (the token typed here, or the Cloudflare connector's saved one; a soft check, no new dependency) or added by hand; the certificate's Cloudflare token (Zone › DNS › Edit), kept on the wizard's row only and blanked on Finish; "Check the name" (it must resolve to the photo server).
+  - The zip: `tls/` (its own compose project `tour-photos-tls`: Caddy 2.10.2 with the Cloudflare DNS module, a Let's Encrypt certificate by DNS-01, `/ping`, CORS for the website's origins with private network access, proxy to the upload page on Immich's network), `tls/.env` (NAS_HOSTNAME, NAS_HTTPS_PORT, SITE_ORIGINS) and `tls/tls.env` (CLOUDFLARE_API_TOKEN, the only place the token goes); the upload page also answers `GET /ping` and joins Immich's network as `tour-photos-upload`; README Step 4b (with the router DNS-rebind note).
+  - Check: the https check from a phone on the office wifi (`https://nas.<domain>/ping`); Finish sets "Office upload page URL" to the https address.
+- New setting "Office secure address" and `immich.connector._office_base()`: the https base for the Staff App, False with only plain http.
+
 ## 19.0.1.0.4 (2026-11-15)
 
 - The photo server's files brought up to date: every photo and video format is accepted on the office upload page (the type is taken from the file name, so a phone sending no type is fine), originals kept as sent; HEIC/HEIF, AVIF, WebP, PNG, TIFF, GIF and BMP converted to the web JPEG, DNG/RAW through their built-in preview; HEIC capture times read; HDR video tone-mapped; photos up to 200 MB.
