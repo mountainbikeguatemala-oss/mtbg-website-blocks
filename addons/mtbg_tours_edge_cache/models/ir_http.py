@@ -24,6 +24,9 @@ PAGE_MODELS = ('website.page',)
 # while the server is down or updating (502/503/504 or no answer), Cloudflare keeps answering a kept page past its
 # time instead of an error, for up to a week (0.6.7; Cloudflare ignores it while its "Always Online" is on)
 STALE_IF_ERROR = 7 * 86400
+# 0.9.0: a change purges page addresses only (pages.py); a kept page whose address is not on that list (a blog's page
+# 2, a tag, a filter or campaign in the query string) cannot be purged, so Cloudflare keeps it an hour at most
+SHORT_TTL = 3600
 
 
 class IrHttp(models.AbstractModel):
@@ -44,12 +47,25 @@ class IrHttp(models.AbstractModel):
             cls._mtbg_empty_live_values(response)
         if cls._mtbg_edge_cacheable(response):
             ttl = request.env['mtbg.edge.cache']._mtbg_params()['ttl']
+            if ttl > SHORT_TTL and not cls._mtbg_purgeable_address():
+                ttl = SHORT_TTL
             response.headers['Cache-Control'] = 'public, max-age=0, s-maxage=%d, stale-if-error=%d' % (
                 ttl, STALE_IF_ERROR)
             # the same page for every visitor: no cookie (the session is made by /mtbg/session or /mtbg/visit)
             response.headers.remove('Set-Cookie')
             request.future_response.headers.remove('Set-Cookie')
             request.session.can_save = False
+
+    @classmethod
+    def _mtbg_purgeable_address(cls):
+        """This page's address is one a change purges (pages.py), without a query string."""
+        if request.httprequest.query_string:
+            return False
+        try:
+            return request.httprequest.path in request.env['mtbg.edge.cache'].sudo()._mtbg_known_paths()
+        except Exception:  # noqa: BLE001 - never in the way of the page: kept the short time
+            _logger.exception("Cloudflare page cache: the page list could not be made")
+            return False
 
     @classmethod
     def _mtbg_static_prefixes(cls):

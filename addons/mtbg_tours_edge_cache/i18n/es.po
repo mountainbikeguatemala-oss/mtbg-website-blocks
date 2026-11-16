@@ -386,3 +386,245 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_edge_cache.edge_cache_log_list
 msgid "When"
 msgstr "Cuándo"
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/edge_cache.py:0
+msgid "%(failed)s of %(count)s addresses not purged: %(error)s"
+msgstr "%(failed)s de %(count)s direcciones no se vaciaron: %(error)s"
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_log__url_count
+msgid "Addresses"
+msgstr "Direcciones"
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,help:mtbg_tours_edge_cache.field_res_config_settings__mtbg_edge_cache_paths
+msgid ""
+"Addresses separated by spaces, each in every language too (/blog is /es/blog"
+" as well). Ending in /: that address alone; else the address and everything "
+"under it (/blog: the blog and every post). The website's own pages (Website "
+"› Pages) are kept wherever they are, unless they are behind a password, a "
+"login or a group."
+msgstr ""
+"Direcciones separadas por espacios, cada una también en todos los idiomas "
+"(/blog es también /es/blog). Terminada en /: solo esa dirección; si no, la "
+"dirección y todo lo que está debajo (/blog: el blog y cada artículo). Las "
+"páginas propias del sitio web (Sitio web › Páginas) se guardan estén donde "
+"estén, salvo si están detrás de una contraseña, un inicio de sesión o un "
+"grupo."
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,help:mtbg_tours_edge_cache.field_res_config_settings__mtbg_edge_cache_warm_paths
+msgid ""
+"Addresses separated by spaces, each in every language too, as for the pages "
+"Cloudflare may keep. After a purge, and every night at the re-fill time, "
+"these pages are asked for again one at a time, as a visitor would, so the "
+"first visitors find them ready."
+msgstr ""
+"Direcciones separadas por espacios, cada una también en todos los idiomas, "
+"como en las páginas que Cloudflare puede guardar. Después de vaciar la "
+"caché, y cada noche a la hora de recarga, estas páginas se vuelven a pedir "
+"una por una, como lo haría un visitante, para que los primeros visitantes "
+"las encuentren listas."
+
+#. module: mtbg_tours_edge_cache
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_edge_cache.res_config_settings_view_form
+msgid ""
+"Anonymous visitors get these pages from Cloudflare's cache; an edit to "
+"anything they show (pages, menus, and what the installed extensions put on "
+"them) empties it. Prices, spaces and statuses load live, never cached."
+msgstr ""
+"Los visitantes anónimos reciben estas páginas desde la caché de Cloudflare; "
+"cualquier edición de lo que muestran (páginas, menús y lo que ponen las "
+"extensiones instaladas) la vacía. Precios, cupos y estados se cargan en "
+"vivo, nunca en caché."
+
+#. module: mtbg_tours_edge_cache
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_edge_cache.edge_cache_log_list
+msgid "By"
+msgstr "Por"
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_log__request_count
+msgid "Calls"
+msgstr "Llamadas"
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/res_config_settings.py:0
+msgid "Cloudflare Connector is not installed"
+msgstr "Cloudflare Connector no está instalado"
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/edge_cache.py:0
+msgid ""
+"Cloudflare Connector is not installed: install it, then Settings › "
+"Cloudflare › Set up Cloudflare."
+msgstr ""
+"Cloudflare Connector no está instalado: instálalo y luego ve a Ajustes › "
+"Cloudflare › Configurar Cloudflare."
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_res_config_settings__mtbg_edge_cache_connection
+msgid "Cloudflare connection"
+msgstr "Conexión con Cloudflare"
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/edge_cache.py:0
+msgid "Cloudflare did not purge."
+msgstr "Cloudflare no vació la caché."
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/edge_cache.py:0
+msgid "Cloudflare emptied everything it kept of the site."
+msgstr "Cloudflare vació todo lo que guardaba del sitio."
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/edge_cache.py:0
+msgid "Cloudflare emptied its copies of the pages."
+msgstr "Cloudflare vació sus copias de las páginas."
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model,name:mtbg_tours_edge_cache.model_mtbg_edge_cache_warm
+msgid "Cloudflare page cache: a page to re-fill"
+msgstr "Caché de páginas de Cloudflare: una página por recargar"
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_log__scope
+msgid "Emptied"
+msgstr "Vaciado"
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields.selection,name:mtbg_tours_edge_cache.selection__mtbg_edge_cache_log__scope__pages
+msgid "Every page"
+msgstr "Todas las páginas"
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields.selection,name:mtbg_tours_edge_cache.selection__mtbg_edge_cache_log__scope__everything
+msgid "Everything"
+msgstr "Todo"
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/edge_cache.py:0
+msgid "Everything purged by hand"
+msgstr "Todo vaciado a mano"
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,help:mtbg_tours_edge_cache.field_res_config_settings__mtbg_edge_cache_warm_time
+msgid ""
+"In the business's time zone (UTC where none is set). Before the nightly "
+"speed log (02:30)."
+msgstr ""
+"En la zona horaria del negocio (UTC si no hay ninguna). Antes del registro "
+"de velocidad nocturno (02:30)."
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_warm__lang
+msgid "Lang"
+msgstr "Idioma"
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/edge_cache.py:0
+msgid "Modules updated"
+msgstr "Módulos actualizados"
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_res_config_settings__mtbg_edge_cache_warm_time
+msgid "Nightly re-fill time"
+msgstr "Hora de recarga nocturna"
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/res_config_settings.py:0
+msgid "Not set up: Settings › Cloudflare › Set up Cloudflare"
+msgstr "Sin configurar: Ajustes › Cloudflare › Configurar Cloudflare"
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_res_config_settings__mtbg_edge_cache_warm_paths
+msgid "Pages to re-fill"
+msgstr "Páginas por recargar"
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_warm__path
+msgid "Path"
+msgstr "Ruta"
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_change__paths
+msgid "Paths"
+msgstr "Rutas"
+
+#. module: mtbg_tours_edge_cache
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_edge_cache.edge_cache_log_list
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_edge_cache.res_config_settings_view_form
+msgid "Purge everything"
+msgstr "Vaciar todo"
+
+#. module: mtbg_tours_edge_cache
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_edge_cache.edge_cache_log_list
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_edge_cache.res_config_settings_view_form
+msgid ""
+"Purge everything Cloudflare keeps of the site, scripts, styles and pictures "
+"too, at every Cloudflare location? The next visitors get slower pages until "
+"it fills again. For emergencies only: a change already empties the pages it "
+"touches."
+msgstr ""
+"¿Vaciar todo lo que Cloudflare guarda del sitio, también scripts, estilos e "
+"imágenes, en todas las ubicaciones de Cloudflare? Los próximos visitantes "
+"recibirán páginas más lentas hasta que se vuelva a llenar. Solo para "
+"emergencias: un cambio ya vacía las páginas que toca."
+
+#. module: mtbg_tours_edge_cache
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_edge_cache.edge_cache_log_list
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_edge_cache.res_config_settings_view_form
+msgid "Purge pages now"
+msgstr "Vaciar las páginas ahora"
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields.selection,name:mtbg_tours_edge_cache.selection__mtbg_edge_cache_log__scope__some
+msgid "Some pages"
+msgstr "Algunas páginas"
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/edge_cache.py:0
+msgid "The website has no address (Website › Settings › Domain)."
+msgstr "El sitio web no tiene dirección (Sitio web › Ajustes › Dominio)."
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,help:mtbg_tours_edge_cache.field_res_config_settings__mtbg_edge_cache_connection
+msgid ""
+"The zone and its cache-purge token come from Cloudflare Connector (Settings "
+"› Cloudflare › Set up Cloudflare)."
+msgstr ""
+"La zona y su token para vaciar la caché vienen de Cloudflare Connector "
+"(Ajustes › Cloudflare › Configurar Cloudflare)."
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.actions.server,name:mtbg_tours_edge_cache.cron_edge_cache_warm_queue_ir_actions_server
+msgid "Website: re-fill Cloudflare's copies of purged pages"
+msgstr "Sitio web: recargar las copias de Cloudflare de las páginas vaciadas"
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.actions.server,name:mtbg_tours_edge_cache.cron_edge_cache_warm_home_ir_actions_server
+msgid "Website: re-fill Cloudflare's copies of the pages every night"
+msgstr ""
+"Sitio web: recargar cada noche las copias de Cloudflare de las páginas"
+
+#. module: mtbg_tours_edge_cache
+#: model:ir.model.fields,field_description:mtbg_tours_edge_cache.field_mtbg_edge_cache_log__reason
+msgid "Why"
+msgstr "Motivo"
+
+#. module: mtbg_tours_edge_cache
+#. odoo-python
+#: code:addons/mtbg_tours_edge_cache/models/res_config_settings.py:0
+msgid "Zone %s (Settings › Cloudflare)"
+msgstr "Zona %s (Ajustes › Cloudflare)"

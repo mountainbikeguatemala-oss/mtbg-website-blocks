@@ -1,9 +1,9 @@
 {
     'name': 'MTBG Website — Cloudflare Page Cache',
-    'version': '19.0.0.8.0',
+    'version': '19.0.0.9.0',
     'category': 'Website/Website',
     'summary': "Anonymous visitors get the public pages from Cloudflare's cache; Odoo says what may be cached and "
-               "empties the cache on every change",
+               "empties the changed pages on every change",
     'description': """
 Ships switched OFF: Settings › Website › Cloudflare page cache. Needs no other extension than Visits by Script: any
 Odoo website can use it.
@@ -15,9 +15,12 @@ Odoo website can use it.
   page is untouched.
 * The form token of a cached page comes from ``/mtbg/session`` when a visitor starts filling a form
   (``window.mtbgSession``), with their country for the phone field.
-* An edit to a website page, view, menu, the website's settings or the blog empties Cloudflare's cache (the zone's
-  "purge everything", through Cloudflare Connector), once per save, with a one-minute catch-up job. Every purge is
-  logged.
+* An edit to a website page, view, menu, the website's settings or the blog empties Cloudflare's copies of the
+  pages (0.9.0: page addresses only, from the sitemap in every language, 30 a call, through Cloudflare Connector;
+  never its scripts, styles or pictures): the edited page alone for a page's own content, else every page; once per
+  save, with a one-minute catch-up job. "Purge everything" stays a button for emergencies. Every purge is logged.
+* The purged pages under "Pages to re-fill" (default: the homepages and /tours) are asked for again in the
+  background, and every night at the re-fill time (default 02:00 in the business's time zone).
 * Other extensions say themselves what of theirs the pages show (0.8.0, no dependency either way): the models to
   watch, system parameter prefixes, public file addresses, what changes by itself, and the live values (prices,
   availability, statuses loaded after the page opens: listed under the settings, never kept by Cloudflare). See

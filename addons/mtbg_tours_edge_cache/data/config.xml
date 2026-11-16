@@ -13,4 +13,13 @@
         <field name="key">mtbg_tours.edge_cache_paths</field>
         <field name="value">/ /blog</field>
     </record>
+    <!-- 0.9.0: the pages asked for again after a purge and every night, and when (business time zone, else UTC) -->
+    <record id="param_edge_cache_warm_paths" model="ir.config_parameter">
+        <field name="key">mtbg_tours.edge_cache_warm_paths</field>
+        <field name="value">/ /tours</field>
+    </record>
+    <record id="param_edge_cache_warm_time" model="ir.config_parameter">
+        <field name="key">mtbg_tours.edge_cache_warm_time</field>
+        <field name="value">2.0</field>
+    </record>
 </odoo>

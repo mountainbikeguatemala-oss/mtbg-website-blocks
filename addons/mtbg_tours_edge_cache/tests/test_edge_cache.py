@@ -3,8 +3,9 @@ import html
 import re
 import os
 from datetime import timedelta
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, call, patch
 
+from odoo import fields
 from odoo.exceptions import AccessError, UserError
 from odoo.service.model import call_kw
 from odoo.tools.misc import file_path
@@ -13,6 +14,7 @@ from odoo.tests.common import Opener
 
 from odoo.addons.mtbg_tours_edge_cache.models import edge_cache, live_values
 from odoo.addons.mtbg_tours_edge_cache.models import ir_http as edge_ir_http
+from odoo.addons.mtbg_tours_edge_cache.models import pages as edge_pages
 from odoo.addons.mtbg_tours_edge_cache.models import sources as edge_sources
 
 UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/130.0 Safari/537.36'
@@ -103,6 +105,18 @@ class TestEdgeCachePages(HttpCase):
             self.assertFalse(cookies, f"{path}: no cookie on a page every visitor gets")
             self.assertIn('name="mtbg-cached"', response.text, path)
 
+    def test_unpurgeable_addresses_kept_an_hour(self):
+        """0.9.0: a change purges page addresses; one not on the list, or with a query string, cannot be purged by
+        address: Cloudflare keeps it an hour at most."""
+        _settings(self.env, ttl=2592000)
+        edge_pages.forget(self.env.cr.dbname)
+        self._visitor()
+        self.assertIn('s-maxage=2592000', self._get('/edge-ride')[1], "a listed page: the month")
+        self.assertIn('s-maxage=%d' % edge_ir_http.SHORT_TTL, self._get('/edge-ride?utm_source=x')[1])
+        with patch.object(type(self.env['mtbg.edge.cache']), '_mtbg_known_paths', autospec=True,
+                          return_value=frozenset()):
+            self.assertIn('s-maxage=%d' % edge_ir_http.SHORT_TTL, self._get('/edge-ride')[1], "not on the list")
+
     def test_other_pages_and_requests_not_cached(self):
         _settings(self.env)
         self._visitor()
@@ -183,8 +197,9 @@ window.mtbgSession.then((data) => {
 
 @tagged('post_install', '-at_install', 'mtbg')
 class TestEdgeCachePurge(TransactionCase):
-    """A change shown on the pages empties Cloudflare's cache once the save is committed, at most every 10 s per
-    worker; the one-minute job sends what is left."""
+    """A change shown on the pages empties Cloudflare's copies of those pages once the save is committed, at most every
+    10 s per worker; the one-minute job sends what is left. 0.9.0: page addresses only (30 a call), never "purge
+    everything"; a page's own content: that page alone; anything else: every page, by the job."""
 
     @classmethod
     def setUpClass(cls):
@@ -193,9 +208,16 @@ class TestEdgeCachePurge(TransactionCase):
         cls.Change = cls.env['mtbg.edge.cache.change'].sudo()
         cls.Log = cls.env['mtbg.edge.cache.log'].sudo()
         website = cls.env['website'].get_current_website()
+        website.domain = 'https://www.example.com'
         # (a menu entry: shown on every page; 0.8.0: any watched record, the Tours ones declared by their extensions)
         cls.tour = cls.env['website.menu'].create({'name': 'Purge Ride', 'url': '/purge-ride',
                                                    'parent_id': website.menu_id.id, 'website_id': website.id})
+        # (a website page: its own content is shown on that page alone)
+        cls.page = cls.env['website.page'].create({
+            'url': '/purge-page', 'is_published': True, 'name': 'Purge page', 'type': 'qweb',
+            'key': 'mtbg_tours_edge_cache.purge_page', 'website_id': website.id,
+            'arch': '<t t-call="website.layout"><div id="wrap">Purge page</div></t>'})
+        cls.prefixes = [prefix for _code, prefix in cls.Cache._mtbg_languages(website)]
 
     def setUp(self):
         super().setUp()
@@ -205,6 +227,9 @@ class TestEdgeCachePurge(TransactionCase):
         offline = patch.object(edge_cache.requests, 'post', side_effect=AssertionError("Cloudflare called"))
         offline.start()
         self.addCleanup(offline.stop)
+        sleep = patch.object(edge_cache.time, 'sleep')
+        self.sleep = sleep.start()
+        self.addCleanup(sleep.stop)
         self.env.cr.postcommit.clear()
 
     def _ready(self, on=True):
@@ -212,8 +237,11 @@ class TestEdgeCachePurge(TransactionCase):
         with self._cloudflare():
             _settings(self.env, on=on)
             self._commit()
+            self.Cache._mtbg_purge_pending()
+        self.Cache._mtbg_sync_jobs()
         edge_cache._last.clear()
         self.Change.search([]).unlink()
+        self.env['mtbg.edge.cache.warm'].sudo().search([]).unlink()
 
     def _cloudflare(self, success=True):
         answer = MagicMock(status_code=200 if success else 403)
@@ -224,28 +252,112 @@ class TestEdgeCachePurge(TransactionCase):
         self.env.flush_all()
         self.env.cr.postcommit.run()
 
-    def test_change_purges_once_after_commit(self):
+    def _bodies(self, post):
+        return [call.kwargs['json'] for call in post.call_args_list]
+
+    def _purged(self, post):
+        bodies = self._bodies(post)
+        self.assertFalse([b for b in bodies if 'files' not in b], "page addresses only, never everything")
+        self.assertTrue(all(len(b['files']) <= edge_cache.PURGE_BATCH for b in bodies), "30 a call at most")
+        return [url for b in bodies for url in b['files']]
+
+    def _page_urls(self, path):
+        return sorted('https://www.example.com' + self.Cache._mtbg_in_lang(path, prefix) for prefix in self.prefixes)
+
+    def _edit_page(self, text):
+        self.page.view_id.arch = '<t t-call="website.layout"><div id="wrap">%s</div></t>' % text
+
+    def test_page_content_purges_that_page_after_commit(self):
         self._ready()
         with self._cloudflare() as post:
-            self.tour.name = 'Purge Ride 2'
-            self.tour.url = '/purge-ride-2'
+            self._edit_page('Purge page 2')
             self.assertEqual(post.call_count, 0, "nothing before the commit")
             self._commit()
-        self.assertEqual(post.call_count, 1, "one purge for the save")
+        self.assertEqual(post.call_count, 1, "one call for the save")
         url, kw = post.call_args[0][0], post.call_args[1]
         self.assertEqual(url, PURGE_URL)
-        self.assertEqual(kw['json'], {'purge_everything': True})
+        self.assertEqual(sorted(kw['json']['files']), self._page_urls('/purge-page'), "the page in every language")
         self.assertEqual(kw['headers']['Authorization'], 'Bearer TOKEN')
         self.assertFalse(self.Change.search([]), "nothing left to purge")
-        self.assertTrue(self.Log.search([], limit=1).ok)
+        log = self.Log.search([], limit=1)
+        self.assertEqual((log.ok, log.scope, log.url_count), (True, 'some', len(self.prefixes)))
+        self.assertEqual(log.create_uid, self.env.user, "who")
+
+    def test_global_change_purges_every_page_by_the_job(self):
+        """A menu (shown on every page): every page address, by the one-minute job called at once; never everything."""
+        self._ready()
+        cron = self.env.ref('mtbg_tours_edge_cache.cron_edge_cache_purge')
+        Trigger = self.env['ir.cron.trigger'].sudo()
+        before = Trigger.search_count([('cron_id', '=', cron.id)])
+        with self._cloudflare() as post:
+            self.tour.name = 'Purge Ride 2'
+            self._edit_page('Purge page 3')  # (with a page's content in the same save: still every page)
+            self._commit()
+            self.assertEqual(post.call_count, 0, "never in the saving request")
+            self.assertEqual(Trigger.search_count([('cron_id', '=', cron.id)]) - before, 1, "the job, now")
+            self.assertTrue(self.Cache._mtbg_purge_pending())
+        urls = self._purged(post)
+        expected = ['https://www.example.com' + p for p in self.Cache._mtbg_page_paths()]
+        self.assertEqual(sorted(urls), sorted(expected))
+        self.assertEqual(post.call_count, -(-len(expected) // edge_cache.PURGE_BATCH))
+        for path in ('/', '/purge-page'):
+            for url in self._page_urls(path):
+                self.assertIn(url, urls)
+        self.assertFalse([u for u in urls if '/web/assets/' in u or '/web/image/' in u])
+        log = self.Log.search([], limit=1)
+        self.assertEqual((log.ok, log.scope, log.url_count), (True, 'pages', len(expected)))
+        self.assertFalse(self.Change.search([]))
+
+    def test_one_save_widens_its_row(self):
+        """One row a save: two pages' content, then every page once something global is saved too."""
+        self._ready()
+        other = self.env['website.page'].create({
+            'url': '/purge-other', 'is_published': True, 'name': 'Purge other', 'type': 'qweb',
+            'key': 'mtbg_tours_edge_cache.purge_other', 'website_id': self.page.website_id.id,
+            'arch': '<t t-call="website.layout"><div id="wrap">Other</div></t>'})
+        self.env.cr.postcommit.clear()
+        self.Change.search([]).unlink()
+        self._edit_page('A')
+        other.view_id.arch = '<t t-call="website.layout"><div id="wrap">Other 2</div></t>'
+        rows = self.Change.search([])
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows.paths.split(), ['/purge-other', '/purge-page'])
+        self.tour.name = 'Purge Ride wide'
+        self.env.invalidate_all()
+        self.assertFalse(rows.paths, "every page")
+        self.env.cr.postcommit.clear()
+
+    def test_batches_spacing_and_retries(self):
+        _settings(self.env)
+        paths = ['/p%02d' % i for i in range(65)]
+        with self._cloudflare() as post, patch.object(type(self.Cache), '_mtbg_page_paths', autospec=True,
+                                                      return_value=paths):
+            self.assertTrue(self.Cache._mtbg_purge('test'))
+        self.assertEqual([len(b['files']) for b in self._bodies(post)], [30, 30, 5])
+        self.assertIn(call(edge_cache.PURGE_GAP), self.sleep.call_args_list, "a pause between two calls")
+        # a refused call: tried again, then the purge stops there, logged
+        answers = []
+        for ok in (False, True, True, False, False, False):
+            answer = MagicMock(status_code=200 if ok else 500)
+            answer.json.return_value = {'success': ok, 'errors': [] if ok else [{'message': 'busy'}]}
+            answers.append(answer)
+        with patch.object(edge_cache.requests, 'post', side_effect=answers) as post, \
+                patch.object(type(self.Cache), '_mtbg_page_paths', autospec=True, return_value=paths):
+            self.assertFalse(self.Cache._mtbg_purge('test'))
+        self.assertEqual(post.call_count, 6, "1 refused + 1 taken, 1 taken, 3 refused")
+        log = self.Log.search([], limit=1)
+        self.assertFalse(log.ok)
+        self.assertIn('5 of 65', log.message)
+        self.assertIn('busy', log.message)
 
     def test_module_updates_purge_once_when_over(self):
         """0.6.2: while modules are installed or upgraded (every module's templates written again), changes are
-        only noted; the one-minute job purges once the updates have been quiet UPDATE_QUIET seconds."""
+        only noted; the one-minute job purges once the updates have been quiet UPDATE_QUIET seconds: every page
+        (0.9.0: never everything)."""
         self._ready()
         with self._cloudflare() as post, patch.object(type(self.Cache), '_mtbg_updating', autospec=True,
                                                       return_value=True):
-            self.tour.name = 'Purge Ride update'
+            self._edit_page('During an update')
             self._commit()
             self.assertEqual(post.call_count, 0, "no purge after the save during an update")
             noted = self.Change.search([])
@@ -254,7 +366,10 @@ class TestEdgeCachePurge(TransactionCase):
             self.env.cr.execute("UPDATE mtbg_edge_cache_change SET create_date = create_date - interval '4 minutes'")
             self.env.invalidate_all()
             self.assertTrue(self.Cache._mtbg_purge_pending())
-            self.assertEqual(post.call_count, 1, "one purge for the whole update")
+        urls = self._purged(post)
+        self.assertEqual(len(urls), len(self.Cache._mtbg_page_paths()), "every page, once")
+        log = self.Log.search([], limit=1)
+        self.assertEqual((log.scope, log.reason), ('pages', 'Modules updated'))
         self.assertFalse(self.Change.search([]))
 
     def test_updating_detected(self):
@@ -264,9 +379,9 @@ class TestEdgeCachePurge(TransactionCase):
     def test_spacing_then_the_job(self):
         self._ready()
         with self._cloudflare() as post:
-            self.tour.name = 'A'
+            self._edit_page('A')
             self._commit()
-            self.tour.name = 'B'
+            self._edit_page('B')
             self._commit()
             self.assertEqual(post.call_count, 1, "a second purge seconds later waits for the job")
             self.assertTrue(self.Change.search([]))
@@ -279,9 +394,9 @@ class TestEdgeCachePurge(TransactionCase):
     def test_refused_kept_for_the_job(self):
         self._ready()
         with self._cloudflare(success=False) as post:
-            self.tour.name = 'C'
+            self._edit_page('C')
             self._commit()
-        self.assertEqual(post.call_count, 1)
+        self.assertEqual(post.call_count, edge_cache.PURGE_TRIES, "tried again")
         self.assertTrue(self.Change.search([]), "kept for the next try")
         log = self.Log.search([], limit=1)
         self.assertFalse(log.ok)
@@ -292,11 +407,13 @@ class TestEdgeCachePurge(TransactionCase):
         with self._cloudflare() as post:
             self.tour.name = 'D'
             self._commit()
+            self.Cache._mtbg_purge_pending()
             self.assertFalse(post.called, "switched off")
         self._ready()
         with self._cloudflare() as post:
             self.env['res.partner'].create({'name': 'Not on a page'})
             self._commit()
+            self.Cache._mtbg_purge_pending()
             self.assertFalse(post.called, "a change no page shows")
 
     def test_neutralize(self):
@@ -361,12 +478,31 @@ class TestEdgeCacheButtons(TransactionCase):
             settings = self._settings_record()
             result = settings.action_mtbg_edge_cache_purge()
         self.assertEqual(result['params']['type'], 'success')
-        self.assertEqual(post.call_args.kwargs['json'], {'purge_everything': True})
+        self.assertTrue(all('files' in c.kwargs['json'] for c in post.call_args_list), "the pages, not everything")
         log = self.env['mtbg.edge.cache.log'].search([], limit=1)
-        self.assertEqual((log.ok, log.reason), (True, 'Purged by hand'))
+        self.assertEqual((log.ok, log.reason, log.scope), (True, 'Purged by hand', 'pages'))
         answer.json.return_value = {'success': False, 'errors': [{'message': 'Bad token'}]}
         with patch.object(edge_cache.requests, 'post', return_value=answer), self.assertRaises(UserError):
             self._settings_record().action_mtbg_edge_cache_purge()
+
+    def test_purge_everything_button(self):
+        """0.9.0: the emergency button, confirmed first: Cloudflare's "purge everything", logged."""
+        answer = MagicMock(status_code=200)
+        answer.json.return_value = {'success': True, 'errors': []}
+        with patch.object(edge_cache.requests, 'post', return_value=answer) as post:
+            _connector(self.env)
+            result = self._settings_record().action_mtbg_edge_cache_purge_everything()
+        self.assertEqual(result['params']['type'], 'success')
+        self.assertEqual([c.kwargs['json'] for c in post.call_args_list], [{'purge_everything': True}])
+        log = self.env['mtbg.edge.cache.log'].search([], limit=1)
+        self.assertEqual((log.ok, log.scope, log.create_uid), (True, 'everything', self.env.user))
+        for view in ('mtbg_tours_edge_cache.res_config_settings_view_form', 'mtbg_tours_edge_cache.edge_cache_log_list'):
+            arch = self.env.ref(view).arch
+            self.assertRegex(arch, r'name="action_mtbg(_edge_cache)?_purge_everything"[^>]*confirm=', view)
+        user = new_test_user(self.env, 'edge_editor2', groups='base.group_user,website.group_website_designer')
+        with patch.object(edge_cache.requests, 'post', return_value=answer) as post, self.assertRaises(AccessError):
+            self.env['mtbg.edge.cache.log'].with_user(user).action_mtbg_purge_everything()
+        self.assertFalse(post.called)
 
     def test_purge_now_from_the_log(self):
         """The purge log's own button (0.5.1), administrators only."""
@@ -376,7 +512,8 @@ class TestEdgeCacheButtons(TransactionCase):
         with patch.object(edge_cache.requests, 'post', return_value=answer) as post:
             # as the web client calls a list's header button: with the selected rows' ids (none)
             result = call_kw(self.env['mtbg.edge.cache.log'], 'action_mtbg_purge_now', [[]], {})
-        self.assertEqual((result['params']['type'], post.call_count), ('success', 1))
+        self.assertEqual(result['params']['type'], 'success')
+        self.assertTrue(post.called)
         arch = self.env.ref('mtbg_tours_edge_cache.edge_cache_log_list').arch
         self.assertIn('action_mtbg_purge_now', arch)
         user = new_test_user(self.env, 'edge_editor', groups='base.group_user,website.group_website_designer')
@@ -387,70 +524,200 @@ class TestEdgeCacheButtons(TransactionCase):
 
 @tagged('post_install', '-at_install', 'mtbg')
 class TestEdgeCacheRefill(TransactionCase):
-    """0.3.0: the homepages (/ and /es) asked for again through Cloudflare, as an anonymous visitor without cookies:
-    nightly and a minute after a purge; the other pages fill on their first visit."""
+    """0.9.0: after a purge its pages under "Pages to re-fill" (the homepages, /tours) are queued and asked for again
+    through Cloudflare a minute later, one at a time, as an anonymous visitor without cookies; every one of them each
+    night at the re-fill time (business time zone, else UTC), within a time cap."""
 
     def setUp(self):
         super().setUp()
         self.Cache = self.env['mtbg.edge.cache']
-        self.env['website'].get_current_website().domain = 'https://www.example.com'
-        _settings(self.env)
+        self.Warm = self.env['mtbg.edge.cache.warm'].sudo()
+        self.website = self.env['website'].get_current_website()
+        self.website.domain = 'https://www.example.com'
+        _settings(self.env, paths='/ /es/ /blog /tours')
+        self.env['ir.config_parameter'].sudo().set_param('mtbg_tours.edge_cache_warm_paths', '/ /tours')
+        self.Warm.search([]).unlink()
         sleep = patch.object(edge_cache.time, 'sleep')
-        sleep.start()
+        self.sleep = sleep.start()
         self.addCleanup(sleep.stop)
+        self.prefixes = [prefix for _code, prefix in self.Cache._mtbg_languages(self.website)]
+        self.homes = ['/' if not prefix else prefix for prefix in self.prefixes]
 
     def _get(self):
         answer = MagicMock(status_code=200, headers={'cf-cache-status': 'MISS'})
         return patch.object(edge_cache.requests, 'get', return_value=answer)
 
-    def test_homepages_only(self):
+    def _pages(self):
+        return patch.object(type(self.Cache), '_mtbg_page_paths', autospec=True, return_value=sorted(
+            self.homes + ['/blog', '/tours/a-ride'] + ['%s/tours/a-ride' % p for p in self.prefixes if p]
+            + ['%s/blog' % p for p in self.prefixes if p]))
+
+    def test_the_homepages_and_tours_queued_and_asked_for(self):
+        with self._pages():
+            targets = self.Cache._mtbg_warm_targets()
+        paths = [path for path, _code in targets]
+        for home in self.homes:
+            self.assertIn(home, paths, "every homepage")
+        self.assertIn('/tours/a-ride', paths)
+        self.assertFalse([p for p in paths if '/blog' in p], "only the pages to re-fill")
+        self.assertEqual(self.Cache._mtbg_warm_queue(targets), len(targets))
+        self.assertEqual(self.Cache._mtbg_warm_queue(targets), 0, "once each")
         with self._get() as get:
             done = self.Cache._mtbg_warm()
-        self.assertIn('/', done)
-        self.assertFalse([p for p in done if p.startswith(('/blog', '/es/blog'))], "the homepages alone")
-        if self.env['website'].get_current_website().language_ids.filtered(lambda l: l.url_code == 'es'):
-            self.assertIn('/es', done, "the Spanish homepage at its own address (/es/ redirects to it)")
+        self.assertEqual(sorted(done), sorted(paths))
+        self.assertFalse(self.Warm.search([]), "the queue emptied")
+        self.assertEqual(get.call_count, len(paths), "one request a page")
+        self.assertEqual(self.sleep.call_count, len(paths), "a pause after each: one at a time")
         url, kw = get.call_args_list[0][0][0], get.call_args_list[0][1]
-        self.assertEqual(url, 'https://www.example.com/')
-        self.assertEqual(kw['headers']['Accept-Language'], 'en')
+        self.assertTrue(url.startswith('https://www.example.com/'))
         self.assertNotIn('Cookie', kw['headers'], "never as a visitor with a session, never logged in")
         self.assertNotIn('cookies', kw)
         self.assertFalse(kw['allow_redirects'])
+        by_url = {c[0][0]: c[1]['headers']['Accept-Language'] for c in get.call_args_list}
+        self.assertEqual(by_url['https://www.example.com/'], self.website.default_lang_id.code.split('_')[0])
+        for code, prefix in self.Cache._mtbg_languages(self.website)[1:]:
+            self.assertEqual(by_url['https://www.example.com' + prefix], code.split('_')[0], "the page's language")
+
+    def test_time_cap(self):
+        self.Cache._mtbg_warm_queue([('/', 'en_US'), ('/tours/a-ride', 'en_US')])
+        cron = self.env.ref('mtbg_tours_edge_cache.cron_edge_cache_warm_queue')
+        Trigger = self.env['ir.cron.trigger'].sudo()
+        before = Trigger.search_count([('cron_id', '=', cron.id)])
+        with self._get() as get, patch.object(edge_cache, 'WARM_MAX', -1):
+            self.assertEqual(self.Cache._mtbg_warm(), {})
+        self.assertFalse(get.called)
+        self.assertEqual(self.Warm.search_count([]), 2, "left for the next run")
+        self.assertEqual(Trigger.search_count([('cron_id', '=', cron.id)]) - before, 1, "a minute later")
 
     def test_only_where_the_cache_keeps_it(self):
         _settings(self.env, paths='/blog')
-        with self._get() as get:
-            self.assertEqual(self.Cache._mtbg_warm(), {})
-        self.assertFalse(get.called)
-
-    def test_off_asks_for_nothing(self):
+        with self._pages():
+            paths = [path for path, _code in self.Cache._mtbg_warm_targets()]
+        self.assertFalse([p for p in paths if '/tours/' in p], "not kept by Cloudflare: not asked for")
         _settings(self.env, on=False)
+        self.Cache._mtbg_warm_queue([('/', 'en_US')])
         with self._get() as get:
             self.assertEqual(self.Cache._mtbg_warm(), {})
-        self.assertFalse(get.called)
+        self.assertFalse(get.called, "switched off: nothing asked for")
+        self.assertFalse(self.Warm.search([]))
 
-    def test_purge_brings_the_refill_forward_once(self):
+    def test_purge_queues_its_pages_and_brings_the_refill_forward(self):
         _needs_connector(self)
-        self.env.ref('mtbg_tours_edge_cache.cron_edge_cache_warm_home').active = True
-        Trigger = self.env['ir.cron.trigger']
-        before = Trigger.search_count([])
+        cron = self.env.ref('mtbg_tours_edge_cache.cron_edge_cache_warm_queue')
+        cron.active = True
+        Trigger = self.env['ir.cron.trigger'].sudo()
+        before = Trigger.search_count([('cron_id', '=', cron.id)])
         answer = MagicMock(status_code=200)
         answer.json.return_value = {'success': True}
-        with patch.object(edge_cache.requests, 'post', return_value=answer):
+        with patch.object(edge_cache.requests, 'post', return_value=answer), self._pages():
+            self.assertTrue(self.Cache._mtbg_purge('test', paths=['/tours/a-ride']))
+        self.assertEqual(sorted(self.Warm.search([]).mapped('path')),
+                         sorted(self.Cache._mtbg_in_lang('/tours/a-ride', p) for p in self.prefixes),
+                         "the purged page, in every language")
+        self.assertEqual(Trigger.search_count([('cron_id', '=', cron.id)]) - before, 1)
+        with patch.object(edge_cache.requests, 'post', return_value=answer), self._pages():
             self.assertTrue(self.Cache._mtbg_purge('test'))
-        self.assertEqual(Trigger.search_count([]) - before, 1)
+        with self._pages():
+            self.assertEqual(set(self.Warm.search([]).mapped('path')),
+                             {path for path, _code in self.Cache._mtbg_warm_targets()}, "every page re-filled")
+
+    def test_nightly_queues_every_page(self):
+        with self._pages(), self._get() as get:
+            done = self.Cache._mtbg_warm_night()
+        self.assertIn('/', done)
+        self.assertIn('/tours/a-ride', done)
+        self.assertEqual(get.call_count, len(done))
+
+    def test_nightly_time(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        now = fields.Datetime.to_datetime('2026-11-16 12:00:00')
+        ICP.set_param('mtbg_tours.operator_tz', False)
+        ICP.set_param('mtbg_tours.edge_cache_warm_time', '2.0')
+        self.assertEqual(str(self.Cache._mtbg_next_warm(now)), '2026-11-17 02:00:00', "UTC where no time zone")
+        ICP.set_param('mtbg_tours.operator_tz', 'America/Guatemala')
+        self.assertEqual(str(self.Cache._mtbg_next_warm(now)), '2026-11-17 08:00:00', "02:00 in Guatemala")
+        ICP.set_param('mtbg_tours.edge_cache_warm_time', '1.5')
+        self.assertEqual(str(self.Cache._mtbg_next_warm(now)), '2026-11-17 07:30:00')
+        cron = self.Cache._mtbg_schedule_warm()
+        self.assertEqual((cron.interval_number, cron.interval_type), (1, 'days'))
+        self.assertEqual((cron.nextcall.hour, cron.nextcall.minute), (7, 30))
+        ICP.set_param('mtbg_tours.operator_tz', 'UTC')
+        self.assertEqual((cron.nextcall.hour, cron.nextcall.minute), (1, 30), "the time zone changed: moved")
+        self.env['res.config.settings'].create({'mtbg_edge_cache_warm_time': 2.0}).execute()
+        self.assertEqual((cron.nextcall.hour, cron.nextcall.minute), (2, 0), "the settings saved: moved")
 
     def test_switch_turns_the_jobs_on_and_off(self):
         answer = MagicMock(status_code=200)
         answer.json.return_value = {'success': True}
         crons = [self.env.ref('mtbg_tours_edge_cache.%s' % x) for x in self.Cache.JOBS]
-        self.assertEqual(len(crons), 3, "the catch-up purge, the homepages' re-fill, the site notice's check (0.6.1)")
+        self.assertEqual(len(crons), 4, "the catch-up purge, the nightly re-fill, the site notice's check (0.6.1), "
+                                        "the re-fill queue (0.9.0)")
         _settings(self.env, on=False)
         with patch.object(edge_cache.requests, 'post', return_value=answer):
             self.env['res.config.settings'].create({'mtbg_edge_cache': True}).execute()
             self.assertTrue(all(c.active for c in crons))
             self.env['res.config.settings'].create({'mtbg_edge_cache': False}).execute()
             self.assertFalse(any(c.active for c in crons))
+
+
+@tagged('post_install', '-at_install', 'mtbg')
+class TestEdgeCachePageList(TransactionCase):
+    """0.9.0: the page addresses a purge empties: the sitemap, the homepages, the website's pages and the listed
+    entries, each in every language (a record with a translated name at its address in that language)."""
+
+    def setUp(self):
+        super().setUp()
+        self.Cache = self.env['mtbg.edge.cache']
+        self.website = self.env['website'].get_current_website()
+        _settings(self.env, paths='/ /blog')
+        self.env['website.page'].create({
+            'url': '/list-page', 'is_published': True, 'name': 'List page', 'type': 'qweb', 'website_indexed': False,
+            'key': 'mtbg_tours_edge_cache.list_page', 'website_id': self.website.id,
+            'arch': '<t t-call="website.layout"><div id="wrap">List</div></t>'})
+        self.prefixes = [prefix for _code, prefix in self.Cache._mtbg_languages(self.website)]
+
+    def test_every_language(self):
+        paths = self.Cache._mtbg_page_paths()
+        for prefix in self.prefixes:
+            self.assertIn(self.Cache._mtbg_in_lang('/', prefix), paths)
+            self.assertIn(self.Cache._mtbg_in_lang('/list-page', prefix), paths, "a page not in the sitemap too")
+            self.assertIn(self.Cache._mtbg_in_lang('/blog', prefix), paths, "the listed entries")
+        self.assertFalse([p for p in paths if p.startswith(('/web/', '/website/image'))], "pages only")
+        self.assertEqual(len(paths), len(set(paths)))
+
+    def test_translated_record_addresses(self):
+        if 'blog.post' not in self.env or len(self.prefixes) < 2:
+            self.skipTest("needs the blog and a second language")
+        code, prefix = self.Cache._mtbg_languages(self.website)[1]
+        blog = self.env['blog.blog'].create({'name': 'List Journal'})
+        blog.with_context(lang=code).name = 'Diario Lista'
+        self.env['blog.post'].create({'name': 'List post', 'blog_id': blog.id, 'is_published': True})
+        paths = self.Cache._mtbg_page_paths()
+        self.assertTrue([p for p in paths if p.startswith(prefix + '/blog/diario-lista-')],
+                        "the blog's address in that language")
+        self.assertTrue([p for p in paths if p.startswith('/blog/list-journal-')])
+
+    def test_scope_of_some_pages(self):
+        paths = self.Cache._mtbg_scope_paths(['/a-page'])
+        self.assertEqual(sorted(paths), sorted(self.Cache._mtbg_in_lang('/a-page', p) for p in self.prefixes))
+
+    def test_declared_pages(self):
+        """``_mtbg_edge_cache_pages(vals)`` on a watched model: its pages alone; None or a failure: every page."""
+        partner = self.env['res.partner'].create({'name': 'Declared'})
+        cls = type(partner)
+        cls._mtbg_edge_cache_pages = lambda rec, vals: ['/declared/%s' % rec.id]
+        self.addCleanup(delattr, cls, '_mtbg_edge_cache_pages')
+        self.assertEqual(edge_sources.declared_pages(partner, {'name': 1}), ['/declared/%s' % partner.id])
+        cls._mtbg_edge_cache_pages = lambda rec, vals: None
+        self.assertIsNone(edge_sources.declared_pages(partner, {'name': 1}))
+        cls._mtbg_edge_cache_pages = lambda rec, vals: 1 / 0
+        with self.assertLogs(edge_sources._logger.name, 'ERROR'):
+            self.assertIsNone(edge_sources.declared_pages(partner, {'name': 1}), "a failing declaration: every page")
+        view = self.env['website.page'].search([('url', '=', '/list-page')]).view_id
+        self.assertEqual(view._mtbg_edge_cache_pages({'arch': 1}), ['/list-page'], "a page's own content")
+        self.assertIsNone(view._mtbg_edge_cache_pages({'arch': 1, 'key': 1}))
+        self.assertIsNone(view._mtbg_edge_cache_pages(None), "created or deleted")
+        self.assertIsNone(self.env.ref('website.layout')._mtbg_edge_cache_pages({'arch': 1}), "a shared template")
 
 
 @tagged('post_install', '-at_install', 'mtbg')
@@ -614,6 +881,9 @@ class TestEdgeCacheSiteNotice(TransactionCase):
         post = patch.object(edge_cache.requests, 'post', return_value=answer)
         self.post = post.start()
         self.addCleanup(post.stop)
+        sleep = patch.object(edge_cache.time, 'sleep')
+        sleep.start()
+        self.addCleanup(sleep.stop)
 
     def _signature(self, value):
         return patch.object(type(self.Cache), '_mtbg_banner_signature', autospec=True, return_value=value)
@@ -662,7 +932,8 @@ class TestEdgeCacheSiteNotice(TransactionCase):
         self.assertFalse(self.post.called, "the purge waits for the commit")
         with self._signature('b'):
             self.assertTrue(self.Cache._mtbg_purge_pending())
-        self.assertEqual(self.post.call_count, 1)
+        self.assertTrue(self.post.called)
+        self.assertTrue(all('files' in c.kwargs['json'] for c in self.post.call_args_list), "every page")
 
     def test_off_and_without_site_notice(self):
         _settings(self.env, on=False)
@@ -886,7 +1157,8 @@ class TestEdgeCacheConnector(TransactionCase):
                 patch.object(type(self.env['cloudflare.api']), 'purge', autospec=True,
                              side_effect=lambda rec, **kw: {'ok': True, 'requests': 1, 'error': ''}) as purge:
             self.assertTrue(self.env['mtbg.edge.cache']._mtbg_purge('test'))
-        self.assertEqual(purge.call_args.kwargs, {'everything': True})
+        self.assertEqual(list(purge.call_args.kwargs), ['urls'], "page addresses (0.9.0)")
+        self.assertLessEqual(len(purge.call_args.kwargs['urls']), edge_cache.PURGE_BATCH)
         self.assertFalse(post.called, "no Cloudflare call of its own")
 
     def test_not_set_up_is_logged(self):

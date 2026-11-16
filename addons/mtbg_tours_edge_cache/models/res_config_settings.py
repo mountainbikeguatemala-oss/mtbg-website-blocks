@@ -22,6 +22,15 @@ class ResConfigSettings(models.TransientModel):
              "that address alone; else the address and everything under it (/blog: the blog and every post). The website's own pages (Website › Pages) are kept wherever they are, unless "
              "they are behind a password, a login or a group.")
 
+    mtbg_edge_cache_warm_paths = fields.Char(
+        string="Pages to re-fill", config_parameter='mtbg_tours.edge_cache_warm_paths', default='/ /tours',
+        help="Addresses separated by spaces, each in every language too, as for the pages Cloudflare may keep. After "
+             "a purge, and every night at the re-fill time, these pages are asked for again one at a time, as a "
+             "visitor would, so the first visitors find them ready.")
+    mtbg_edge_cache_warm_time = fields.Float(
+        string="Nightly re-fill time", config_parameter='mtbg_tours.edge_cache_warm_time', default=2.0,
+        help="In the business's time zone (UTC where none is set). Before the nightly speed log (02:30).")
+
     mtbg_edge_cache_live_values = fields.Html(
         string="Live values", compute='_compute_mtbg_edge_cache_live_values', sanitize=False,
         help="The prices, spaces and statuses the pages load after they open: never kept by Cloudflare.")
@@ -49,14 +58,22 @@ class ResConfigSettings(models.TransientModel):
         super().set_values()
         on = self.env['mtbg.edge.cache']._mtbg_params()['on']
         self.env['mtbg.edge.cache']._mtbg_sync_jobs()
+        self.env['mtbg.edge.cache']._mtbg_schedule_warm()
         if on != was_on:
             self.env['mtbg.edge.cache']._mtbg_purge(self.env._("Switched on") if on else self.env._("Switched off"))
 
     def action_mtbg_edge_cache_purge(self):
-        """The "Purge cache now" button (0.5.1; was "Test purge"): the values typed saved first, then the purge."""
+        """The "Purge pages now" button (0.5.1; was "Test purge"): the values typed saved first, then the purge of
+        every page (0.9.0)."""
         self.ensure_one()
         self.execute()
         return self.env['mtbg.edge.cache.log'].action_mtbg_purge_now()
+
+    def action_mtbg_edge_cache_purge_everything(self):
+        """The emergency "Purge everything" button (0.9.0, confirmed first)."""
+        self.ensure_one()
+        self.execute()
+        return self.env['mtbg.edge.cache.log'].action_mtbg_purge_everything()
 
     def action_mtbg_edge_cache_log(self):
         """The Purge log button (an object button: it is called on the settings record)."""

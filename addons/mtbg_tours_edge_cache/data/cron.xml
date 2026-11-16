@@ -13,16 +13,28 @@
         <field name="interval_type">minutes</field>
         <field name="active" eval="False"/>
     </record>
-    <!-- the homepages' re-fill (0.3.0): every night at 00:05 in Guatemala (UTC-6, no daylight saving: Cloudflare drops
-         copies nobody asked for), and a minute after each purge (brought forward); switched on and off with the cache -->
+    <!-- the nightly re-fill (0.9.0: the homepages and the "Pages to re-fill", at the re-fill time, default 02:00 in the
+         business's time zone: Cloudflare drops copies nobody asked for; its time is set by the settings and the
+         19.0.0.9.0 migration); switched on and off with the cache -->
     <record id="cron_edge_cache_warm_home" model="ir.cron">
-        <field name="name">Website: re-fill Cloudflare's copy of the homepages</field>
+        <field name="name">Website: re-fill Cloudflare's copies of the pages every night</field>
+        <field name="model_id" ref="model_mtbg_edge_cache"/>
+        <field name="state">code</field>
+        <field name="code">model._mtbg_warm_night()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="nextcall" eval="(DateTime.now() + relativedelta(hours=-6) + relativedelta(days=1)).strftime('%Y-%m-%d 06:05:00')"/>
+        <field name="active" eval="False"/>
+    </record>
+    <!-- the re-fill queue (0.9.0): the pages of a purge asked for again a minute later (brought forward by the purge),
+         one at a time, within a time cap; hourly it only looks for what is left. With the cache. -->
+    <record id="cron_edge_cache_warm_queue" model="ir.cron">
+        <field name="name">Website: re-fill Cloudflare's copies of purged pages</field>
         <field name="model_id" ref="model_mtbg_edge_cache"/>
         <field name="state">code</field>
         <field name="code">model._mtbg_warm()</field>
         <field name="interval_number">1</field>
-        <field name="interval_type">days</field>
-        <field name="nextcall" eval="(DateTime.now() + relativedelta(hours=-6) + relativedelta(days=1)).strftime('%Y-%m-%d 06:05:00')"/>
+        <field name="interval_type">hours</field>
         <field name="active" eval="False"/>
     </record>
     <!-- the site notice changed by itself (0.6.1, owner: "yes when banner changes"): a departure full from bookings,
