@@ -19,7 +19,9 @@ import json
 import logging
 import os
 import re
+import queue
 import shutil
+import threading
 import time
 import traceback
 from datetime import datetime, timedelta, timezone
@@ -205,11 +207,23 @@ def load_state():
         return {"albums": {}, "synced": {}}
 
 
+_STATE_LOCK = threading.Lock()   # the zip worker (section 18.3) and the main loop both save the state
+
+
 def save_state(st):
-    tmp = STATE + ".tmp"
-    with open(tmp, "w") as f:
-        json.dump(st, f, indent=1)
-    os.replace(tmp, STATE)
+    with _STATE_LOCK:
+        for attempt in range(20):        # the other thread may be changing the state right now: try again
+            try:
+                data = json.dumps(st, indent=1)
+                break
+            except RuntimeError:
+                time.sleep(0.05)
+        else:
+            raise RuntimeError("state kept changing while saving")
+        tmp = STATE + ".tmp"
+        with open(tmp, "w") as f:
+            f.write(data)
+        os.replace(tmp, STATE)
 
 
 def album_name(dep, day):
@@ -996,10 +1010,12 @@ def report_staged(site, r2, dep, day, info, assets, staged, day_cache, st):
             log.warning("website refused the extra /staged fields (422): resending without them (retried hourly)")
         st["staged_extra_off"] = time.time()
     if r.status_code == 422:
+        # slim retry keeps the asset ids (photos[] and pending_items[]): Odoo spots late changes by them (19.4)
         for ph in body["photos"]:
-            for f in ("asset_id", "uploaded_by", "thumb_key", "uploaded"):
+            for f in ("uploaded_by", "thumb_key", "uploaded"):
                 ph.pop(f, None)
-        for f in ("pending_items", "failed", "skipped"):
+        body["pending_items"] = [{"asset_id": x["asset_id"]} for x in body.get("pending_items") or []]
+        for f in ("failed", "skipped"):
             body.pop(f, None)
         r = site.s.post(SITE + "/departures/%d/days/%d/staged" % (dep["id"], n), json=body, timeout=60)
     if r.ok:
@@ -1086,7 +1102,8 @@ def publish_day(im, site, r2, dep, day, aid, st):
     n = day["day"]
     info = im.album(aid)
     if not visible_assets(info):
-        log.warning("album %s is ready but has no photos", info["albumName"])
+        log.warning("album %s is ready but has no photos: nothing sent (the website can't take a day with 0 "
+                    "photos; add photos to the album, or undo the resync/ready on the website)", info["albumName"])
         return
     k = "%d:%d" % (dep["id"], n)
     resume_zip = k in st.get("zip_pending", {})       # sent early, zip not done yet (restart): finish the zip
@@ -1147,6 +1164,58 @@ def publish_day(im, site, r2, dep, day, aid, st):
         save_state(st)
         res = site.synced(dep["id"], n, manifest)
         log.info("online %s (zip follows): state=%s", info["albumName"], res.get("photos_state"))
+    job = {"dep": dep, "n": n, "aid": aid, "info": info, "items": items, "photos": photos, "day_cache": day_cache,
+           "manifest": manifest, "copies": copies, "pre": pre, "prefix": prefix, "k": k,
+           "resync": bool(day.get("resync")), "cover_key": cover_key}
+    if EARLY_SYNCED:   # the clients have it: the zip goes up in the background, the light rounds keep polling
+        start_zip(im, site, r2, st, job)
+        return
+    finish_zip(im, site, r2, st, job)
+
+
+# Zip of an early-synced day (section 18.3), one at a time in a background thread. zip_pending in the state makes a
+# restart redo it (publish_day again: copies + /synced are idempotent). ZIP_ACTIVE: days the worker has right now,
+# so the main loop doesn't publish them a second time meanwhile.
+ZIP_ACTIVE = set()
+_ZIPQ = queue.Queue()
+_zip_worker = None
+
+
+def start_zip(im, site, r2, st, job):
+    global _zip_worker
+    ZIP_ACTIVE.add(job["k"])
+    _ZIPQ.put((im, site, r2, st, job))
+    if _zip_worker is None or not _zip_worker.is_alive():
+        _zip_worker = threading.Thread(target=_zip_loop, name="zip", daemon=True)
+        _zip_worker.start()
+
+
+def _zip_loop():
+    while True:
+        im, site, r2, st, job = _ZIPQ.get()
+        t0 = time.time()
+        try:
+            finish_zip(im, site, r2, st, job)
+            log.info("zip for departure %s day %s done in %ds", job["dep"]["id"], job["n"], time.time() - t0)
+        except Exception:
+            log.error("zip for departure %s day %s failed (retried next round):\n%s", job["dep"]["id"], job["n"],
+                      traceback.format_exc())
+        finally:
+            ZIP_ACTIVE.discard(job["k"])
+
+
+def finish_zip(im, site, r2, st, job):
+    """Zip of the day's photos -> R2 -> /synced with "zip" -> album note, state, staging clean-up."""
+    dep, n, aid, info, items, photos = job["dep"], job["n"], job["aid"], job["info"], job["items"], job["photos"]
+    day_cache, manifest, copies, pre, prefix, k = (job["day_cache"], job["manifest"], job["copies"], job["pre"],
+                                                   job["prefix"], job["k"])
+
+    def verify(objs):
+        for k_, path in objs:
+            h = r2.head(k_)
+            if not h or h["size"] != os.path.getsize(path):
+                raise RuntimeError("R2 verify failed for %s" % k_)
+
     # 3. zip of the photos (copies kept on the NAS), numbered in display order
     zip_path = os.path.join(day_cache, "day.zip")
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_STORED) as z:
@@ -1175,10 +1244,27 @@ def publish_day(im, site, r2, dep, day, aid, st):
             r2.delete(src_key)
         except Exception:
             pass
+    if job.get("resync"):
+        delete_orphans(r2, "%sday-%d/" % (prefix, n), {c[1] for c in copies} | {job["cover_key"], zip_key})
     st["staged"].pop("%d:%d" % (dep["id"], n), None)
     st.get("staged_report", {}).pop("%d:%d" % (dep["id"], n), None)
     shutil.rmtree(day_cache, ignore_errors=True)
     save_state(st)
+
+
+def delete_orphans(r2, day_prefix, keep):
+    """API 19.3: after a re-publish, the day's objects that the new manifest no longer lists (removed photos, an
+    older header) go. Only under this day's own folder; never when the keep list is empty."""
+    if not keep or not day_prefix.startswith("tours/") or not day_prefix.endswith("/"):
+        return
+    gone = [o["key"] for o in r2.list(day_prefix) if o["key"] not in keep]
+    for k_ in gone:
+        try:
+            r2.delete(k_)
+        except Exception as e:
+            log.warning("orphan %s not deleted: %s", k_, e)
+    if gone:
+        log.info("resync: deleted %d old object(s) under %s", len(gone), day_prefix)
 
 
 def run_once(im, site, r2, st, full=True):
@@ -1235,12 +1321,15 @@ def run_days(im, site, r2, deps, albums, st):
             aid = albums.get((dep["id"], day["day"]))
             if not aid or (day["state"] == "synced" and "%d:%d" % (dep["id"], day["day"]) not in zip_pending):
                 continue
+            if "%d:%d" % (dep["id"], day["day"]) in ZIP_ACTIVE:    # its zip is going up in the background
+                continue
             # Ready = Staff App / record page ("ready"), or "#ready" in the Immich album description.
             # "uploading" = a previous round started but did not finish (crash, restart): resume it.
             # "uploaded" (guides pressed Done) is NOT approval: only the admin's "Publish day" (state "ready") or
             # "#ready" typed in the album (Tours-account albums: only admins can edit them) starts processing.
             ready = day["state"] in ("ready", "uploading") or "%d:%d" % (dep["id"], day["day"]) in zip_pending or (
-                day["state"] in ("none", "uploaded") and READY_RE.search(im.album(aid).get("description") or ""))
+                day["state"] in ("none", "uploaded") and not day.get("watch")   # 19.4: finalized + online
+                and READY_RE.search(im.album(aid).get("description") or ""))
             if ready and r2 is None:
                 log.warning("departure %s day %s is ready, but R2 is not set up: publishing waits",
                             dep["id"], day["day"])

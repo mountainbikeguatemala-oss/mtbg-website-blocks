@@ -1,5 +1,9 @@
 # Immich Connector
 
+## 19.0.1.2.1 (2026-11-16)
+
+- The photo server's sync (data/nas/app/sync.py) matches the office: the "Download all" zip is built and uploaded by a background worker after an early /synced (EARLY_SYNCED=1), so the 45-second tight-sync rounds keep going; thread-safe state saves; days being zipped are skipped and a restart redoes a pending zip. Tour Photos §19: finalized ("watch") days are staged without the #ready check; the slim /staged retry keeps asset ids; a resync deletes the published files no longer in the album; an emptied album is logged.
+
 ## 19.0.1.2.0 (2026-11-16)
 
 - **The secure office address is watched** (owner-approved, 2026-11-16): if its https front breaks (certificate not renewed, the Cloudflare token deleted, a router reset turning DNS rebind protection back on, the container down), phones at the office quietly upload over mobile data; now somebody is told.
