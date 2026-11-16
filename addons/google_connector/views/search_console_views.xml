@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- the app's settings (the Search Console card's Settings) -->
+    <record id="view_search_console_setup_form" model="ir.ui.view">
+        <field name="name">google.search.console.setup.form</field>
+        <field name="model">google.search.console.setup</field>
+        <field name="arch" type="xml">
+            <form string="Google Search Console">
+                <field name="needs_reconnect" invisible="1"/>
+                <div class="alert alert-warning" role="alert" invisible="not problem">
+                    <field name="problem" readonly="1"/>
+                    <div invisible="not needs_reconnect" class="mt-2">
+                        <button name="action_reconnect" type="object" class="btn btn-primary btn-sm" icon="fa-google"
+                                string="Reconnect the Google account"/>
+                    </div>
+                </div>
+                <p class="text-muted">
+                    Setup: switch the app on (Settings › Google), Reconnect the Google account that owns the website's
+                    property in Search Console to grant read access to Search Console, then choose the property below
+                    and Save: a URL-prefix property (https://www.example.com/) or a domain property (sc-domain:, offered
+                    first when there is one).
+                </p>
+                <group>
+                    <field name="status"/>
+                    <field name="site_id" options="{'no_create': True, 'no_open': True}"
+                           placeholder="Reconnect first: the properties come from Google"/>
+                    <field name="site_count" string="Properties found"/>
+                    <field name="progress" invisible="not progress"/>
+                    <field name="summary" invisible="not summary" string="SEO summary"/>
+                </group>
+                <footer>
+                    <button name="action_save" type="object" string="Save" class="btn-primary"/>
+                    <button name="action_import_now" type="object" string="Import now" invisible="not site_id"/>
+                    <button name="action_refresh" type="object" string="Find properties again"/>
+                    <button name="action_open_report" type="object" string="Open the report" class="btn-link"/>
+                    <button special="cancel" string="Close" class="btn-link"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_search_console_setup" model="ir.actions.act_window">
+        <field name="name">Google Search Console</field>
+        <field name="res_model">google.search.console.setup</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- the days: clicks and impressions, average position -->
+    <record id="view_search_console_day_search" model="ir.ui.view">
+        <field name="name">google.search.console.day.search</field>
+        <field name="model">google.search.console.day</field>
+        <field name="arch" type="xml">
+            <search string="Search Console">
+                <field name="site_id"/>
+                <filter name="chosen" string="Imported property" domain="[('site_id.selected', '=', True)]"/>
+                <separator/>
+                <filter name="date" string="Date" date="date"/>
+                <group>
+                    <filter name="by_date" string="Day" context="{'group_by': 'date:day'}"/>
+                    <filter name="by_week" string="Week" context="{'group_by': 'date:week'}"/>
+                    <filter name="by_month" string="Month" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="view_search_console_day_graph" model="ir.ui.view">
+        <field name="name">google.search.console.day.graph</field>
+        <field name="model">google.search.console.day</field>
+        <field name="arch" type="xml">
+            <graph string="Search Console: clicks and impressions" type="line" sample="1">
+                <field name="date" interval="day"/>
+                <field name="clicks" type="measure"/>
+                <field name="impressions" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record id="view_search_console_day_position_graph" model="ir.ui.view">
+        <field name="name">google.search.console.day.graph.position</field>
+        <field name="model">google.search.console.day</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <graph string="Search Console: average position" type="line">
+                <field name="date" interval="day"/>
+                <field name="position" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record id="view_search_console_day_pivot" model="ir.ui.view">
+        <field name="name">google.search.console.day.pivot</field>
+        <field name="model">google.search.console.day</field>
+        <field name="arch" type="xml">
+            <pivot string="Search Console">
+                <field name="date" interval="month" type="row"/>
+                <field name="clicks" type="measure"/>
+                <field name="impressions" type="measure"/>
+                <field name="ctr" type="measure" widget="percentage"/>
+                <field name="position" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="view_search_console_day_list" model="ir.ui.view">
+        <field name="name">google.search.console.day.list</field>
+        <field name="model">google.search.console.day</field>
+        <field name="arch" type="xml">
+            <list string="Search Console" create="false" edit="false" delete="false">
+                <field name="date"/>
+                <field name="site_id" optional="hide"/>
+                <field name="clicks" sum="Clicks"/>
+                <field name="impressions" sum="Impressions"/>
+                <field name="ctr" widget="percentage"/>
+                <field name="position"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_search_console_day" model="ir.actions.act_window">
+        <field name="name">Search Console</field>
+        <field name="res_model">google.search.console.day</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="context">{'search_default_chosen': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No Search Console figures yet</p>
+            <p>Settings › Google › Google Search Console: Reconnect the Google account that owns the property, then
+                choose the property. The last 16 months come in over the next hours, and every night after that.</p>
+        </field>
+    </record>
+    <record id="action_search_console_position" model="ir.actions.act_window">
+        <field name="name">Search Console: average position</field>
+        <field name="res_model">google.search.console.day</field>
+        <field name="view_mode">graph,list</field>
+        <field name="view_id" ref="view_search_console_day_position_graph"/>
+        <field name="context">{'search_default_chosen': 1}</field>
+    </record>
+
+    <!-- the rows: top queries and pages, countries, devices -->
+    <record id="view_search_console_row_search" model="ir.ui.view">
+        <field name="name">google.search.console.row.search</field>
+        <field name="model">google.search.console.row</field>
+        <field name="arch" type="xml">
+            <search string="Search Console rows">
+                <field name="key"/>
+                <field name="site_id"/>
+                <filter name="chosen" string="Imported property" domain="[('site_id.selected', '=', True)]"/>
+                <separator/>
+                <filter name="queries" string="Queries" domain="[('kind', '=', 'query')]"/>
+                <filter name="pages" string="Pages" domain="[('kind', '=', 'page')]"/>
+                <filter name="countries" string="Countries" domain="[('kind', '=', 'country')]"/>
+                <filter name="devices" string="Devices" domain="[('kind', '=', 'device')]"/>
+                <separator/>
+                <filter name="mobile" string="Mobile" domain="[('kind', '=', 'device'), ('key', '=', 'MOBILE')]"/>
+                <filter name="desktop" string="Desktop" domain="[('kind', '=', 'device'), ('key', '=', 'DESKTOP')]"/>
+                <filter name="tablet" string="Tablet" domain="[('kind', '=', 'device'), ('key', '=', 'TABLET')]"/>
+                <separator/>
+                <filter name="date" string="Date" date="date"/>
+                <group>
+                    <filter name="by_key" string="Query / Page / Country / Device" context="{'group_by': 'key'}"/>
+                    <filter name="by_kind" string="Kind" context="{'group_by': 'kind'}"/>
+                    <filter name="by_date" string="Day" context="{'group_by': 'date:day'}"/>
+                    <filter name="by_week" string="Week" context="{'group_by': 'date:week'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="view_search_console_row_pivot" model="ir.ui.view">
+        <field name="name">google.search.console.row.pivot</field>
+        <field name="model">google.search.console.row</field>
+        <field name="arch" type="xml">
+            <pivot string="Search Console: top queries and pages">
+                <field name="key" type="row"/>
+                <field name="clicks" type="measure"/>
+                <field name="impressions" type="measure"/>
+                <field name="ctr" type="measure" widget="percentage"/>
+                <field name="position" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="view_search_console_row_graph" model="ir.ui.view">
+        <field name="name">google.search.console.row.graph</field>
+        <field name="model">google.search.console.row</field>
+        <field name="arch" type="xml">
+            <graph string="Search Console rows" type="bar" order="desc">
+                <field name="key"/>
+                <field name="clicks" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record id="view_search_console_row_list" model="ir.ui.view">
+        <field name="name">google.search.console.row.list</field>
+        <field name="model">google.search.console.row</field>
+        <field name="arch" type="xml">
+            <list string="Search Console rows" create="false" edit="false" delete="false">
+                <field name="date"/>
+                <field name="site_id" optional="hide"/>
+                <field name="kind"/>
+                <field name="key" class="text-break"/>
+                <field name="clicks" sum="Clicks"/>
+                <field name="impressions" sum="Impressions"/>
+                <field name="ctr" widget="percentage"/>
+                <field name="position"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_search_console_rows" model="ir.actions.act_window">
+        <field name="name">Search Console: queries and pages</field>
+        <field name="res_model">google.search.console.row</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="context">{'search_default_chosen': 1, 'search_default_queries': 1}</field>
+        <field name="help" type="html">
+            <p>Pick a Date period and, in Comparison, Previous period: every query or page shows its change. Filters:
+                Queries, Pages, Countries, Devices.</p>
+        </field>
+    </record>
+
+    <!-- menus: Website › Reporting when Website is installed, else their own (Website is no dependency) -->
+    <record id="menu_search_console_root" model="ir.ui.menu">
+        <field name="name">Search Console</field>
+        <field name="sequence">90</field>
+        <field name="web_icon">google_connector,static/description/icon.png</field>
+        <field name="group_ids" eval="[(6, 0, [ref('base.group_system')])]"/>
+        <field name="active" eval="not ref('website.menu_reporting', raise_if_not_found=False)"/>
+    </record>
+    <record id="menu_search_console_performance" model="ir.ui.menu">
+        <field name="name">Search Console</field>
+        <field name="sequence">40</field>
+        <field name="parent_id" eval="ref('website.menu_reporting', raise_if_not_found=False) or ref('menu_search_console_root')"/>
+        <field name="action" ref="action_search_console_day"/>
+    </record>
+    <record id="menu_search_console_rows" model="ir.ui.menu">
+        <field name="name">Search Console Queries</field>
+        <field name="sequence">41</field>
+        <field name="parent_id" eval="ref('website.menu_reporting', raise_if_not_found=False) or ref('menu_search_console_root')"/>
+        <field name="action" ref="action_search_console_rows"/>
+    </record>
+    <record id="menu_search_console_position" model="ir.ui.menu">
+        <field name="name">Search Console Position</field>
+        <field name="sequence">42</field>
+        <field name="parent_id" eval="ref('website.menu_reporting', raise_if_not_found=False) or ref('menu_search_console_root')"/>
+        <field name="action" ref="action_search_console_position"/>
+    </record>
+</odoo>

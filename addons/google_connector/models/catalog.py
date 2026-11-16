@@ -34,6 +34,7 @@ APIS = {
                 ("mybusinessbusinessinformation.googleapis.com", "My Business Business Information API"),
                 ("mybusiness.googleapis.com", "Google My Business API (reviews)")],
     "pagespeed": [("pagespeedonline.googleapis.com", "PageSpeed Insights API")],
+    "search_console": [("searchconsole.googleapis.com", "Google Search Console API")],
 }
 
 # an app with Google Photos access (photoslibrary scopes, any app code): the API it needs and what its card says
@@ -51,6 +52,9 @@ FIRST_SYNC = {
                 "every change within the minute.",
     "reviews": "No review comes in until the review account finds its locations: Reviews › Accounts › the Google "
                "account › Find Locations, then Sync Now. After that the reviews sync every day.",
+    "search_console": "Nothing is in the Search Console reports until the property is chosen: Open, choose the "
+                      "property (sc-domain: preferred), Save. The last 16 months then come in over the next hours, "
+                      "and the last days are read again every night.",
     "gmail": "New mail arrives within a few minutes of signing in. Older mail: Communication Flows › Channels › "
              "Gmail (or Google Voice) › history sync, for the period you choose.",
 }

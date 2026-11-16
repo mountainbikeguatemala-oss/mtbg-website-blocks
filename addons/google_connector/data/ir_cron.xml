@@ -9,4 +9,14 @@
         <field name="interval_type">days</field>
         <field name="active" eval="True"/>
     </record>
+    <!-- hourly: the nightly import once a day early in the morning, the 16 months' history a chunk an hour -->
+    <record id="ir_cron_search_console" model="ir.cron">
+        <field name="name">Google connector: Search Console import</field>
+        <field name="model_id" ref="model_google_search_console_site"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_import()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
 </odoo>

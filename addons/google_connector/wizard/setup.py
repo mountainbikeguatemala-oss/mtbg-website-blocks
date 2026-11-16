@@ -38,6 +38,8 @@ SCOPE_WORDS = {
     "https://www.googleapis.com/auth/photoslibrary.appendonly": "Create Google Photos albums and upload photos",
     "https://www.googleapis.com/auth/photoslibrary.edit.appcreateddata": "Change the Google Photos albums this app "
                                                                          "created (e.g. their title)",
+    "https://www.googleapis.com/auth/webmasters.readonly": "Read Google Search Console (the website's searches: "
+                                                           "clicks, impressions, positions)",
     "openid": "Sign in",
     "https://www.googleapis.com/auth/userinfo.email": "Your Google address",
 }

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-04 05:11+0000\n"
-"PO-Revision-Date: 2026-11-04 05:11+0000\n"
+"POT-Creation-Date: 2026-11-16 23:09+0000\n"
+"PO-Revision-Date: 2026-11-16 23:09+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -67,11 +67,23 @@ msgstr ""
 
 #. module: google_connector
 #. odoo-python
+#: code:addons/google_connector/models/photos.py:0
+msgid "%(file)s is over the %(limit)s limit."
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
 #: code:addons/google_connector/wizard/setup.py:0
 msgid ""
 "%(scopes)s: Add or remove scopes › Manually add scopes: paste the WHOLE box "
 "below (every scope, comma-separated), Add to table, Update, Save. A scope "
 "missing here makes Google refuse the sign-in."
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/photos.py:0
+msgid "%s is empty."
 msgstr ""
 
 #. module: google_connector
@@ -85,6 +97,14 @@ msgstr ""
 #: code:addons/google_connector/models/connector.py:0
 msgid ""
 "%s may not change anything in Google: allow writes in Settings › Google."
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/search_console.py:0
+msgid ""
+"%s: nothing imported yet (the first import comes within the hour once the "
+"app is ready)."
 msgstr ""
 
 #. module: google_connector
@@ -143,13 +163,9 @@ msgid "5. The OAuth client"
 msgstr ""
 
 #. module: google_connector
-#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
-msgid "6. Google Maps: billing and key"
-msgstr ""
-
-#. module: google_connector
 #: model:ir.model.fields.selection,name:google_connector.selection__google_connector_setup__step__maps
-msgid "6. Maps key"
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "6. API keys"
 msgstr ""
 
 #. module: google_connector
@@ -172,6 +188,12 @@ msgstr ""
 
 #. module: google_connector
 #. odoo-python
+#: code:addons/google_connector/models/photos.py:0
+msgid "A Google Photos album needs a title."
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
 #: code:addons/google_connector/wizard/setup.py:0
 msgid ""
 "A Google account can only make a few projects (Google's limit): reuse the "
@@ -189,6 +211,11 @@ msgid "A secret is saved: leave it empty to keep it."
 msgstr ""
 
 #. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_site__permission
+msgid "Access"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__scopes_text
 msgid "Access Google will ask for"
 msgstr ""
@@ -201,6 +228,11 @@ msgstr ""
 #. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_account__active
 msgid "Active"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model,name:google_connector.model_mtbg_google_broadcaster
+msgid "Announces its changes to the Google apps"
 msgstr ""
 
 #. module: google_connector
@@ -245,8 +277,24 @@ msgid "Authorized Redirect URIs"
 msgstr ""
 
 #. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_day__position
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_row__position
+msgid "Average Position"
+msgstr ""
+
+#. module: google_connector
 #: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
 msgid "Back"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_site__backfill_done
+msgid "Backfill Done"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_site__backfill_next
+msgid "Backfill Next"
 msgstr ""
 
 #. module: google_connector
@@ -267,8 +315,21 @@ msgid "Branding"
 msgstr ""
 
 #. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_day__ctr
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_row__ctr
+msgid "CTR"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_app__calls_day
 msgid "Calls Day"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,help:google_connector.field_google_connector_app__uses_server_key
+msgid ""
+"Calls Google from the server with the connector's server API key (e.g. "
+"PageSpeed Insights), no Google account."
 msgstr ""
 
 #. module: google_connector
@@ -287,6 +348,14 @@ msgid "Check access"
 msgstr ""
 
 #. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_day__clicks
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_row__clicks
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_day_list
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_list
+msgid "Clicks"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__client_html
 msgid "Client Html"
 msgstr ""
@@ -295,6 +364,11 @@ msgstr ""
 #. odoo-python
 #: code:addons/google_connector/wizard/setup.py:0
 msgid "Clients"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_setup_form
+msgid "Close"
 msgstr ""
 
 #. module: google_connector
@@ -331,12 +405,29 @@ msgid ""
 msgstr ""
 
 #. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid ""
+"Copy the key here. It is a different key from the Maps one: the Maps key is "
+"limited to your website's pages."
+msgstr ""
+
+#. module: google_connector
 #. odoo-python
 #: code:addons/google_connector/wizard/setup.py:0
 msgid ""
 "Copy the project's ID (the picker's ID column, e.g. elite-wonder-512610-m8) "
 "into the field below: every link of the next steps then opens in that "
 "project."
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_search
+msgid "Countries"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_search_console_row__kind__country
+msgid "Country"
 msgstr ""
 
 #. module: google_connector
@@ -355,6 +446,10 @@ msgstr ""
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_app__create_uid
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_log__create_uid
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__create_uid
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_day__create_uid
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_row__create_uid
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_setup__create_uid
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_site__create_uid
 msgid "Created by"
 msgstr ""
 
@@ -363,12 +458,17 @@ msgstr ""
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_app__create_date
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_log__create_date
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__create_date
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_day__create_date
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_row__create_date
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_setup__create_date
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_site__create_date
 msgid "Created on"
 msgstr ""
 
 #. module: google_connector
 #. odoo-python
 #: code:addons/google_connector/wizard/setup.py:0
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
 msgid "Credentials"
 msgstr ""
 
@@ -379,8 +479,37 @@ msgid "Data access"
 msgstr ""
 
 #. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_day__date
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_row__date
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_day_search
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_search
+msgid "Date"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_day_search
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_search
+msgid "Day"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_app__description
 msgid "Description"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_search
+msgid "Desktop"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_search_console_row__kind__device
+msgid "Device"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_search
+msgid "Devices"
 msgstr ""
 
 #. module: google_connector
@@ -394,6 +523,14 @@ msgstr ""
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_app__display_name
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_log__display_name
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__display_name
+#: model:ir.model.fields,field_description:google_connector.field_google_photos__display_name
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_day__display_name
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_row__display_name
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_setup__display_name
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_site__display_name
+#: model:ir.model.fields,field_description:google_connector.field_ir_ui_menu__display_name
+#: model:ir.model.fields,field_description:google_connector.field_mtbg_google_broadcast__display_name
+#: model:ir.model.fields,field_description:google_connector.field_mtbg_google_broadcaster__display_name
 #: model:ir.model.fields,field_description:google_connector.field_res_config_settings__display_name
 msgid "Display Name"
 msgstr ""
@@ -424,9 +561,19 @@ msgid "Email"
 msgstr ""
 
 #. module: google_connector
+#: model:ir.model,name:google_connector.model_mtbg_google_broadcast
+msgid "Events for the Google apps"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_log__failed
 #: model:ir.model.fields.selection,name:google_connector.selection__google_connector_log__state__failed
 msgid "Failed"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_setup_form
+msgid "Find properties again"
 msgstr ""
 
 #. module: google_connector
@@ -435,8 +582,18 @@ msgid "Finished At"
 msgstr ""
 
 #. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_site__first_day
+msgid "First Day"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_app__first_sync_note
 msgid "First Sync Note"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_search_console_site__permission__sitefulluser
+msgid "Full user"
 msgstr ""
 
 #. module: google_connector
@@ -475,6 +632,59 @@ msgstr ""
 #. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_res_config_settings__google_has_client
 msgid "Google Has Client"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "Google Maps: billing and key"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model,name:google_connector.model_google_photos
+msgid "Google Photos (Google connector)"
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/photos.py:0
+msgid "Google Photos did not start the upload."
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/photos.py:0
+msgid "Google Photos did not take %(file)s: %(error)s"
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/photos.py:0
+msgid "Google Photos gave no photo back."
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/photos.py:0
+msgid "Google Photos gave no upload token."
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/search_console_setup.py:0
+#: model:ir.actions.act_window,name:google_connector.action_search_console_setup
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_setup_form
+msgid "Google Search Console"
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/search_console.py:0
+msgid "Google Search Console is off (Settings › Google)."
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model,name:google_connector.model_google_search_console_setup
+msgid "Google Search Console settings"
 msgstr ""
 
 #. module: google_connector
@@ -517,6 +727,11 @@ msgid "Google connector"
 msgstr ""
 
 #. module: google_connector
+#: model:ir.actions.server,name:google_connector.ir_cron_search_console_ir_actions_server
+msgid "Google connector: Search Console import"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.actions.server,name:google_connector.ir_cron_google_log_clean_ir_actions_server
 msgid "Google connector: clean the sync log"
 msgstr ""
@@ -528,10 +743,63 @@ msgid "Google does not accept this client: %s"
 msgstr ""
 
 #. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/business_profile.py:0
+msgid ""
+"Google hasn't approved Business Profile API access for this project yet "
+"(quota 0). Request access in Google, then try again."
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/business_profile.py:0
+msgid "Google is busy (too many requests): try again in a few minutes."
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/search_console.py:0
+msgid ""
+"Google refused %(site)s: the connected Google account must be an Owner or "
+"Full user of this property in Search Console, and the Google Search Console "
+"API must be enabled in the Google Cloud project (Set up Google › APIs). "
+"Google said: %(error)s"
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/business_profile.py:0
+msgid ""
+"Google refused: the Business Profile APIs are not enabled in the Google "
+"Cloud project, or the Google account has not granted access. Check Set up "
+"Google (APIs, then Reconnect). Google said: %s"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.actions.act_window,name:google_connector.action_google_connector_log
 #: model:ir.model,name:google_connector.model_google_connector_log
 #: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_log_list
 msgid "Google sync log"
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/search_console.py:0
+msgid ""
+"Google's Search Console quota is reached for now: the import tries again at "
+"its next run. Google said: %s"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,help:google_connector.field_google_search_console_day__position
+msgid "Google's average position that day (1 = the top result)."
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/business_profile.py:0
+#: code:addons/google_connector/models/search_console.py:0
+msgid "Google: %s"
 msgstr ""
 
 #. module: google_connector
@@ -550,13 +818,64 @@ msgid "Has Secret"
 msgstr ""
 
 #. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__has_server_key
+msgid "Has Server Key"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_google_connector__id
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_account__id
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_app__id
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_log__id
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__id
+#: model:ir.model.fields,field_description:google_connector.field_google_photos__id
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_day__id
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_row__id
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_setup__id
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_site__id
+#: model:ir.model.fields,field_description:google_connector.field_ir_ui_menu__id
+#: model:ir.model.fields,field_description:google_connector.field_mtbg_google_broadcast__id
+#: model:ir.model.fields,field_description:google_connector.field_mtbg_google_broadcaster__id
 #: model:ir.model.fields,field_description:google_connector.field_res_config_settings__id
 msgid "ID"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_setup_form
+msgid "Import now"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_site__selected
+msgid "Imported"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_day_search
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_search
+msgid "Imported property"
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/search_console.py:0
+msgid "Imported: %(first)s to %(last)s (the whole history Google keeps)."
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/search_console.py:0
+msgid ""
+"Imported: %(first)s to %(last)s; the older history is still coming (a chunk "
+"an hour)."
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_day__impressions
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_row__impressions
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_day_list
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_list
+msgid "Impressions"
 msgstr ""
 
 #. module: google_connector
@@ -571,8 +890,38 @@ msgid "Installed"
 msgstr ""
 
 #. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_row__kind
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_search
+msgid "Kind"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_app__label
 msgid "Label"
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/search_console.py:0
+msgid ""
+"Last %(days)s days to %(end)s: %(clicks)s clicks%(dc)s, %(impr)s "
+"impressions%(di)s, CTR %(ctr).1f%%%(dctr)s, average position "
+"%(pos).1f%(dpos)s (vs the %(days)s days before)."
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_site__last_day
+msgid "Last Day"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_site__last_error
+msgid "Last Error"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_site__last_import
+msgid "Last Import"
 msgstr ""
 
 #. module: google_connector
@@ -580,6 +929,10 @@ msgstr ""
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_app__write_uid
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_log__write_uid
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__write_uid
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_day__write_uid
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_row__write_uid
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_setup__write_uid
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_site__write_uid
 msgid "Last Updated by"
 msgstr ""
 
@@ -588,13 +941,23 @@ msgstr ""
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_app__write_date
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_log__write_date
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__write_date
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_day__write_date
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_row__write_date
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_setup__write_date
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_site__write_date
 msgid "Last Updated on"
 msgstr ""
 
 #. module: google_connector
 #: model:ir.model.fields,help:google_connector.field_google_connector_setup__client_secret
 #: model:ir.model.fields,help:google_connector.field_google_connector_setup__maps_key
+#: model:ir.model.fields,help:google_connector.field_google_connector_setup__server_key
 msgid "Left empty: the one saved stays."
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_site__listed
+msgid "Listed"
 msgstr ""
 
 #. module: google_connector
@@ -622,6 +985,11 @@ msgid ""
 msgstr ""
 
 #. module: google_connector
+#: model:ir.model,name:google_connector.model_ir_ui_menu
+msgid "Menu"
+msgstr ""
+
+#. module: google_connector
 #. odoo-python
 #: code:addons/google_connector/wizard/setup.py:0
 #: model:ir.model.fields.selection,name:google_connector.selection__google_connector_app__status__missing
@@ -629,8 +997,18 @@ msgid "Missing access"
 msgstr ""
 
 #. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_search
+msgid "Mobile"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_app__module
 msgid "Module"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_day_search
+msgid "Month"
 msgstr ""
 
 #. module: google_connector
@@ -644,6 +1022,11 @@ msgid "Needs Account"
 msgstr ""
 
 #. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_setup__needs_reconnect
+msgid "Needs Reconnect"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields.selection,name:google_connector.selection__google_connector_account__state__error
 msgid "Needs attention"
 msgstr ""
@@ -651,6 +1034,11 @@ msgstr ""
 #. module: google_connector
 #: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
 msgid "Next"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_app__status__no_key
+msgid "No API key"
 msgstr ""
 
 #. module: google_connector
@@ -671,26 +1059,54 @@ msgid "No Google account is connected for %s: Set up Google."
 msgstr ""
 
 #. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/search_console.py:0
+msgid ""
+"No Google account is connected: Set up Google › Sign in, with the account "
+"that owns the property in Search Console."
+msgstr ""
+
+#. module: google_connector
 #. odoo-javascript
 #: code:addons/google_connector/static/src/cards.xml:0
 msgid "No Google app installed yet."
 msgstr ""
 
 #. module: google_connector
-#: model:ir.model.fields.selection,name:google_connector.selection__google_connector_app__status__no_key
-msgid "No Maps key"
+#. odoo-python
+#: code:addons/google_connector/models/connector.py:0
+msgid "No Maps key yet for %s: Set up Google › API keys."
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.actions.act_window,help:google_connector.action_search_console_day
+msgid "No Search Console figures yet"
 msgstr ""
 
 #. module: google_connector
 #. odoo-python
-#: code:addons/google_connector/models/connector.py:0
-msgid "No Maps key yet for %s: Set up Google (step 4)."
+#: code:addons/google_connector/models/search_console.py:0
+msgid ""
+"No Search Console property chosen yet: Settings › Google › Google Search "
+"Console › Settings, choose the property."
 msgstr ""
 
 #. module: google_connector
 #. odoo-python
 #: code:addons/google_connector/wizard/setup.py:0
 msgid "No app is switched on yet (step 2)."
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/connector.py:0
+msgid "No server API key yet for %s: Set up Google › API keys."
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/photos.py:0
+msgid "Not a Google Photos picture address."
 msgstr ""
 
 #. module: google_connector
@@ -704,8 +1120,19 @@ msgid "Not installed"
 msgstr ""
 
 #. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_search_console_site__permission__siteunverifieduser
+msgid "Not verified"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_log__note
 msgid "Note"
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/search_console.py:0
+msgid "Nothing imported yet."
 msgstr ""
 
 #. module: google_connector
@@ -744,6 +1171,16 @@ msgid "One row per Google app."
 msgstr ""
 
 #. module: google_connector
+#: model:ir.model.constraint,message:google_connector.constraint_google_search_console_site_name_unique
+msgid "One row per Search Console property."
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.constraint,message:google_connector.constraint_google_search_console_day_site_date_unique
+msgid "One row per property and day."
+msgstr ""
+
+#. module: google_connector
 #. odoo-python
 #: code:addons/google_connector/models/connector.py:0
 msgid "Only administrators can change the Google connection."
@@ -779,8 +1216,36 @@ msgid ""
 msgstr ""
 
 #. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid ""
+"Open the new key: <b>Application restrictions</b> None (this site calls "
+"Google from its server), <b>API restrictions</b> Restrict key to "
+"<b>PageSpeed Insights API</b>, Save."
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_setup_form
+msgid "Open the report"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_log__operation
 msgid "Operation"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_search_console_site__permission__siteowner
+msgid "Owner"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_search_console_row__kind__page
+msgid "Page"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_search
+msgid "Pages"
 msgstr ""
 
 #. module: google_connector
@@ -802,8 +1267,54 @@ msgid "Paste the key below."
 msgstr ""
 
 #. module: google_connector
+#: model_terms:ir.actions.act_window,help:google_connector.action_search_console_rows
+msgid ""
+"Pick a Date period and, in Comparison, Previous period: every query or page shows its change. Filters:\n"
+"                Queries, Pages, Countries, Devices."
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_setup__problem
+msgid "Problem"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_setup__progress
+msgid "Progress"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__project_html
 msgid "Project Html"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_setup_form
+msgid "Properties found"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_day__site_id
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_row__site_id
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_setup__site_id
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_site__name
+msgid "Property"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_search
+msgid "Queries"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_search_console_row__kind__query
+msgid "Query"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_row__key
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_search
+msgid "Query / Page / Country / Device"
 msgstr ""
 
 #. module: google_connector
@@ -818,8 +1329,29 @@ msgid "Reconnect"
 msgstr ""
 
 #. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_setup_form
+msgid "Reconnect first: the properties come from Google"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_setup_form
+msgid "Reconnect the Google account"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_account__refresh_token
 msgid "Refresh Token"
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/photos.py:0
+msgid "Renaming a Google Photos album needs the album and a title."
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields.selection,name:google_connector.selection__google_search_console_site__permission__siterestricteduser
+msgid "Restricted user"
 msgstr ""
 
 #. module: google_connector
@@ -828,14 +1360,111 @@ msgid "Running"
 msgstr ""
 
 #. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_setup_form
+msgid "SEO summary"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_setup_form
+msgid "Save"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__scope_strings
 msgid "Scopes to add"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.actions.act_window,name:google_connector.action_search_console_day
+#: model:ir.ui.menu,name:google_connector.menu_search_console_performance
+#: model:ir.ui.menu,name:google_connector.menu_search_console_root
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_day_list
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_day_pivot
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_day_search
+msgid "Search Console"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.ui.menu,name:google_connector.menu_search_console_position
+msgid "Search Console Position"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.ui.menu,name:google_connector.menu_search_console_rows
+msgid "Search Console Queries"
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/search_console.py:0
+msgid ""
+"Search Console access is not granted yet: Settings › Google › Google "
+"accounts › Reconnect (the account that owns the property), then accept "
+"Search Console."
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model,name:google_connector.model_google_search_console_day
+msgid "Search Console day"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model,name:google_connector.model_google_search_console_site
+msgid "Search Console property"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model,name:google_connector.model_google_search_console_row
+msgid "Search Console row"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_graph
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_list
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_search
+msgid "Search Console rows"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.actions.act_window,name:google_connector.action_search_console_position
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_day_position_graph
+msgid "Search Console: average position"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_day_graph
+msgid "Search Console: clicks and impressions"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.actions.act_window,name:google_connector.action_search_console_rows
+msgid "Search Console: queries and pages"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_pivot
+msgid "Search Console: top queries and pages"
 msgstr ""
 
 #. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_account__sequence
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_app__sequence
 msgid "Sequence"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__server_key
+msgid "Server API Key"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__server_key_on
+msgid "Server Key On"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "Server key (PageSpeed Insights)"
 msgstr ""
 
 #. module: google_connector
@@ -862,6 +1491,22 @@ msgid "Settings Action"
 msgstr ""
 
 #. module: google_connector
+#: model_terms:ir.actions.act_window,help:google_connector.action_search_console_day
+msgid ""
+"Settings › Google › Google Search Console: Reconnect the Google account that owns the property, then\n"
+"                choose the property. The last 16 months come in over the next hours, and every night after that."
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_setup_form
+msgid ""
+"Setup: switch the app on (Settings › Google), Reconnect the Google account that owns the website's\n"
+"                    property in Search Console to grant read access to Search Console, then choose the property below\n"
+"                    and Save: a URL-prefix property (https://www.example.com/) or a domain property (sc-domain:, offered\n"
+"                    first when there is one)."
+msgstr ""
+
+#. module: google_connector
 #: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
 msgid "Sign in a Google account"
 msgstr ""
@@ -872,6 +1517,11 @@ msgid ""
 "Sign in with each Google account the apps use (e.g. the company's Gmail) and"
 " allow everything Google asks. Switched on an app since? Press Reconnect on "
 "its account: Google then asks for the new access."
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_setup__site_count
+msgid "Site Count"
 msgstr ""
 
 #. module: google_connector
@@ -899,12 +1549,18 @@ msgstr ""
 #. odoo-python
 #: code:addons/google_connector/wizard/setup.py:0
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_app__status
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_setup__status
 msgid "Status"
 msgstr ""
 
 #. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_setup__step
 msgid "Step"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_search_console_setup__summary
+msgid "Summary"
 msgstr ""
 
 #. module: google_connector
@@ -921,8 +1577,18 @@ msgid "Sync log"
 msgstr ""
 
 #. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_search
+msgid "Tablet"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields,help:google_connector.field_google_connector_account__email
 msgid "The Google account signed in (filled in at sign-in)."
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,help:google_connector.field_google_search_console_site__listed
+msgid "The Google account still sees it in Search Console."
 msgstr ""
 
 #. module: google_connector
@@ -937,6 +1603,21 @@ msgid "The Google app %s is off (Settings › Google)."
 msgstr ""
 
 #. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/search_console.py:0
+msgid ""
+"The Google sign-in is no longer valid: Settings › Google › Google accounts ›"
+" Reconnect. Google said: %s"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,help:google_connector.field_google_search_console_setup__site_id
+msgid ""
+"The Search Console property to import: a domain property (sc-domain:) counts"
+" every address of the domain (www, without www, http and https)."
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields,help:google_connector.field_google_connector_app__writes_allowed
 msgid ""
 "The app may also create, change or send in Google (else it only reads)."
@@ -948,8 +1629,28 @@ msgid "The app may call Google."
 msgstr ""
 
 #. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/wizard/search_console_setup.py:0
+msgid ""
+"The connected Google account sees no property in Search Console: it must be "
+"an Owner or Full user of the website's property (Search Console › Settings ›"
+" Users and permissions)."
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields,help:google_connector.field_google_connector_app__module
 msgid "The module that brings the app."
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,help:google_connector.field_google_search_console_site__backfill_next
+msgid "The newest day still to read of the 16 months' history."
+msgstr ""
+
+#. module: google_connector
+#. odoo-python
+#: code:addons/google_connector/models/photos.py:0
+msgid "The photo ended before its size (%(sent)s of %(size)s bytes)."
 msgstr ""
 
 #. module: google_connector
@@ -958,6 +1659,11 @@ msgid ""
 "The project's ID (not its name), e.g. elite-wonder-512610-m8: Google Cloud's"
 " project picker shows it. Every link of this setup then opens in that "
 "project."
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,help:google_connector.field_google_search_console_site__selected
+msgid "The property imported every night."
 msgstr ""
 
 #. module: google_connector
@@ -1002,8 +1708,24 @@ msgid "Uses Maps Key"
 msgstr ""
 
 #. module: google_connector
+#: model:ir.model.fields,field_description:google_connector.field_google_connector_app__uses_server_key
+msgid "Uses Server Key"
+msgstr ""
+
+#. module: google_connector
 #: model:ir.model.fields,field_description:google_connector.field_google_connector_app__version
 msgid "Version"
+msgstr ""
+
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_day_search
+#: model_terms:ir.ui.view,arch_db:google_connector.view_search_console_row_search
+msgid "Week"
+msgstr ""
+
+#. module: google_connector
+#: model:ir.model.fields,help:google_connector.field_google_search_console_site__permission
+msgid "What the Google account may see of the property in Search Console."
 msgstr ""
 
 #. module: google_connector
@@ -1038,14 +1760,14 @@ msgstr ""
 msgid "e.g. elite-wonder-512610-m8"
 msgstr ""
 
-#. module: base
-#: model:ir.module.module,shortdesc:base.module_google_connector
-msgid "Google Connector"
+#. module: google_connector
+#: model_terms:ir.ui.view,arch_db:google_connector.view_google_connector_setup_form
+msgid "in the same project and press <b>Create credentials › API key</b>."
 msgstr ""
 
-#. module: base
-#: model:ir.module.module,summary:base.module_google_connector
+#. module: google_connector
+#: model:ir.model.fields,help:google_connector.field_google_search_console_site__name
 msgid ""
-"One Google login for every Google app (Gmail, Voice, Calendar, Maps): setup "
-"wizard, switches, shared client with limits and retries, sync log"
+"sc-domain:example.com (a domain property) or a URL prefix "
+"(https://www.example.com/)."
 msgstr ""

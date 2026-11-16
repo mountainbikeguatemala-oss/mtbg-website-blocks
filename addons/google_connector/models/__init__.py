@@ -8,3 +8,4 @@ from . import business_profile
 from . import pagespeed
 from . import broadcast
 from . import photos
+from . import search_console

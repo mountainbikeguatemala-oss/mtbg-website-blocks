@@ -12,6 +12,8 @@
                           t-esc="card.status_label"/>
                 </div>
                 <div class="small text-muted mt-1" t-esc="card.description"/>
+                <div t-if="card.summary" class="small mt-1 o_google_card_summary"><i class="fa fa-line-chart me-1"/><t t-esc="card.summary"/></div>
+                <div t-if="card.error" class="small text-danger mt-1 o_google_card_error"><i class="fa fa-exclamation-triangle me-1"/><t t-esc="card.error"/></div>
                 <div t-if="card.installed" class="d-flex flex-wrap align-items-center gap-3 mt-2 small">
                     <div class="form-check form-switch m-0">
                         <input class="form-check-input o_google_card_on" type="checkbox" t-att-checked="card.on"
