@@ -33,6 +33,7 @@ import zipfile
 
 import office_tls
 import process
+import receipts
 from process import process_day
 from r2 import R2Client
 
@@ -1302,6 +1303,11 @@ def run_once(im, site, r2, st, full=True):
     run_days(im, site, r2, deps, albums, st)
     ack_changes(site, st)
     save_state(st)
+    if receipts.enabled():                    # receipts -> accounting folder (owner 2026-11-16)
+        try:
+            receipts.run(im)
+        except Exception:
+            log.error("receipts round failed:\n%s", traceback.format_exc())
 
 
 def run_days(im, site, r2, deps, albums, st):

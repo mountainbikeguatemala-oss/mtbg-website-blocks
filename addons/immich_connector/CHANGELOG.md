@@ -1,5 +1,9 @@
 # Immich Connector
 
+## 19.0.1.2.2 (2026-11-16)
+
+- The photo server's app matches the office: new optional receipts job (data/nas/app/receipts.py, run at the end of full sync rounds, off unless RECEIPTS_DIR is set): receipts and payment screenshots found with Immich's CLIP scores are copied to a folder and the photo goes to Immich's trash; borderline ones go to the album "Receipts – check"; anything put in the album "Receipts" is moved; only the account's own photos, never tour day albums; duplicates skipped by checksum. The image adds pg8000 (reads the CLIP scores from Immich's database). config.env.example documents the settings.
+
 ## 19.0.1.2.1 (2026-11-16)
 
 - The photo server's sync (data/nas/app/sync.py) matches the office: the "Download all" zip is built and uploaded by a background worker after an early /synced (EARLY_SYNCED=1), so the 45-second tight-sync rounds keep going; thread-safe state saves; days being zipped are skipped and a restart redoes a pending zip. Tour Photos §19: finalized ("watch") days are staged without the #ready check; the slim /staged retry keeps asset ids; a resync deletes the published files no longer in the album; an emptied album is logged.
