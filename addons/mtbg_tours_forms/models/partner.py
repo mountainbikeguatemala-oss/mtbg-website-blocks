@@ -1,6 +1,13 @@
+import logging
+import uuid
+
 import phonenumbers
+from markupsafe import Markup
 
 from odoo import fields, models
+
+_logger = logging.getLogger(__name__)
+WEB_FORM = 'web_form'
 
 
 def mtbg_phone_region(phone, picked=None):
@@ -75,11 +82,49 @@ class ResPartner(models.Model):
 
 # ---------------------------------------------------------------------- with or without Tours Core (Forms 0.5.0)
 # Tours Core brings the contact rule (one contact per person, the most complete details win, each change in the
-# contact's chatter: ``mtbg_contact_from``), one open lead per person (``mtbg_lead_for``) and the first-touch lead
-# source (``_mtbg_set_lead_source``). Where it is installed Forms uses them; on a plain website the same calls do the
-# simple thing (found by email or mobile, else made; a new lead; the form's source on the lead).
+# contact's chatter: ``mtbg_contact_from``) and the first-touch lead source (``_mtbg_set_lead_source``). Where it is
+# installed Forms uses them; on a plain website the same calls do the simple thing (found by email or mobile, else
+# made; the form's source found or made). Since 0.7.0 a sent form makes no CRM lead (owner, 2026-11-16: Odoo's CRM
+# retired): ``_mtbg_forms_keep`` below.
 class ResPartnerForms(models.Model):
     _inherit = 'res.partner'
+
+    def _mtbg_forms_keep(self, title, message='', answers=(), where='', form=None, topic='', question=True):
+        """A sent form kept (0.7.0): a note in the contact's chatter, always (so Forms works alone: the title, the form
+        and where it was sent from, the message, the form's own questions), and for a question (``question``: not a
+        newsletter signup) the contact's message on the Website form channel when Communication Flows is installed (in
+        their feed and the inbox, unread, to answer; its ``meta``: subject, topic, form, where, answers). Never fails
+        the form. Returns the message (empty for a signup; False without Communication Flows)."""
+        self.ensure_one()
+        partner = self.sudo()
+        answers = [(str(label), str(value)) for label, value in answers or ()]
+        lines = Markup('').join(Markup('<li><b>%s:</b> %s</li>') % (label, value) for label, value in answers)
+        heading = Markup('<b>%s</b>') % title
+        if form or where:
+            heading += Markup(' <span class="text-muted">(%s)</span>') % ', '.join(
+                filter(None, [form.name if form else '', where]))
+        body = heading + (Markup('<p>%s</p>') % message if message else Markup('')) \
+            + (Markup('<ul>%s</ul>') % lines if lines else Markup(''))
+        partner.message_post(body=body, subtype_xmlid='mail.mt_note')
+        Message = self.env.get('omni.message')
+        if not question or Message is None or not hasattr(Message, '_cfd_archive_form_message'):
+            return Message.browse() if Message is not None else False
+        text = '\n'.join(line for line in [str(message or '').strip()]
+                          + ['%s: %s' % (label, value) for label, value in answers] if line)
+        try:
+            with self.env.cr.savepoint():
+                env = partner.with_context(lang=partner.lang or self.env.lang).env
+                subject = env._("Question about %s", topic) if topic else env._("Your question")
+                kept = Message.sudo()._cfd_archive_form_message(
+                    partner, text, subject=subject, ref='form:%s:%s' % (form.id if form else 0, uuid.uuid4().hex))
+                if kept:
+                    kept.meta = dict(kept.meta or {}, topic=topic or '', form=form.name if form else '',
+                                     form_id=form.id if form else 0, where=where or '',
+                                     answers=[list(a) for a in answers])
+                return kept
+        except Exception:  # noqa: BLE001 - the form is sent whatever happens here
+            _logger.exception("Website form message of contact %s not kept in the archive", partner.id)
+            return Message.browse()
 
     def _mtbg_forms_contact(self, values, source):
         """The contact of a form: Core's contact rule where installed, else found by email or mobile, else made."""

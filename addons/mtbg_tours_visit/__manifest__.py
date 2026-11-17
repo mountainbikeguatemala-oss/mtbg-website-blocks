@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Tours — Visits by Script',
-    'version': '19.0.0.1.5',
+    'version': '19.0.0.1.6',
     'category': 'Website/Website',
     'summary': "The website's visits recorded by a light script after the page loads, so pages can be cached",
     'description': """

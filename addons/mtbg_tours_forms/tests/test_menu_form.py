@@ -30,8 +30,9 @@ class TestMenuContactForm(HttpCase):
             'name': 'Mia Menu', 'email': 'mia.menu@example.com', 'phone': '+502 5555 6060', 'message': 'Hi from the menu',
             'source': 'menu'}})
         self.assertTrue(result.get('ok'), result)
-        lead = self.env['crm.lead'].search([('email_from', '=', 'mia.menu@example.com')])
-        self.assertEqual(lead.partner_id.name, 'Mia Menu')
+        partner = self.env['res.partner'].search([('email', '=', 'mia.menu@example.com')])
+        self.assertEqual(partner.name, 'Mia Menu')
+        self.assertTrue(partner.message_ids.filtered(lambda m: 'Hi from the menu' in str(m.body)))
         missing = self.make_jsonrpc_request('/mtbg_forms/submit/menu_contact', {'values': {
             'name': 'M', 'email': 'm@example.com', 'phone': '+502 5555 6061', 'message': 'x', 'source': 'menu'}})
         self.assertEqual(set(missing.get('errors') or {}), {'name'})

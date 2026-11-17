@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Website — Forms',
-    'version': '19.0.0.6.2',
+    'version': '19.0.0.7.0',
     # where the updater gets it (the universal repo; owner, 2026-11-11: universal, from the Tours repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     'category': 'Website',
@@ -21,8 +21,9 @@ site, show / required rules (on the other answers, a known visitor, the page var
 variant, with a live preview. First form on it: the contact form (page, popup, a page's sidebar).
 
 Needs only Odoo's website and the website blocks with the admin look (since 0.5.0 / 0.6.0, owner 2026-11-11; in the
-universal repository since 0.6.0). With Tours installed it uses Tours Core's contact rule, one
-open lead per person and first-touch lead sources; Booking Form brings the tour pages (the tour sidebar form's
+universal repository since 0.6.0). A sent form is kept on the contact: a note in their chatter, and with
+Communication Flows their message on the Website form channel (0.7.0: no CRM lead, Odoo's CRM retired). With Tours
+installed it uses Tours Core's contact rule and first-touch lead sources; Booking Form brings the tour pages (the tour sidebar form's
 subject, the popups' tour and rental page rules, the designer's tour previews) and the messaging terms' editor.
 """,
     'data': [

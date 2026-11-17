@@ -78,9 +78,15 @@ class TestFormDesigner(TransactionCase):
                   'message': 'Hello', 'trip': 'Day ride', 'source': 'page'}
         self.assertTrue(self.env['mtbg.form.fields'].mtbg_contact_submit(values)['ok'],
                         "nights is hidden for a day ride: not asked")
-        lead = self.env['crm.lead'].search([('email_from', '=', 'lia.form@example.com')])
-        self.assertEqual(lead.mtbg_form_answers, {'trip': 'Day ride'})
-        self.assertIn('Which trip?', str(lead.description))
+        # 0.7.0: the form's own questions with the message (the contact's note; their Website form message)
+        partner = self.env['res.partner'].search([('email', '=', 'lia.form@example.com')])
+        note = partner.message_ids.filtered(lambda m: 'Which trip?' in str(m.body))
+        self.assertEqual(len(note), 1)
+        self.assertIn('Day ride', str(note.body))
+        if 'omni.message' in self.env:
+            message = self.env['omni.message'].search([('partner_id', '=', partner.id), ('channel', '=', 'web_form')])
+            self.assertEqual(message.meta.get('answers'), [['Which trip?', 'Day ride']])
+            self.assertIn('Which trip?: Day ride', message.body)
         result = self.env['mtbg.form.fields'].mtbg_contact_submit(dict(values, trip='Multi-day'))
         self.assertEqual(set(result['errors']), {'nights'}, "shown by its rule, and required")
         result = self.env['mtbg.form.fields'].mtbg_contact_submit(dict(values, trip='Bus'))
@@ -277,7 +283,7 @@ class TestNewWebsiteForm(HttpCase):
         self.assertIn(f'data-form="{form.key}"', html)
         self.assertIn('mtbg-contact-form__send', html)
         self.assertEqual(self.make_jsonrpc_request('/mtbg_forms/block', {'key': 'nope'})['html'], '')
-        # a visitor sends it: a contact and a lead, as with the contact form
+        # a visitor sends it: a contact and its message, as with the contact form
         result = self.make_jsonrpc_request(f'/mtbg_forms/submit/{form.key}', {'values': {
             'name': 'Nova Block', 'email': 'nova.block@example.com', 'phone': '+502 5555 3030',
             'message': 'Hello from a new form', 'source': 'page'}})

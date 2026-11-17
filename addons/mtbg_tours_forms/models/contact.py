@@ -2,7 +2,8 @@
 
 A message sent from any of them finds the client by email or phone, or makes a new contact, its details by Core's
 contact rule (the most complete wins, each change in the contact's chatter); keeps the SMS / WhatsApp opt-ins with
-their wording; and adds the message to the person's one open CRM lead (Core's ``mtbg_lead_for``). A visitor we already know is not asked for
+their wording; and keeps the message on the contact (a chatter note and, with Communication Flows, their Website form
+message: 0.7.0, no CRM lead). A visitor we already know is not asked for
 their details again (site rule 9): the form shows them masked and the server uses the contact it knows.
 """
 import logging
@@ -208,11 +209,10 @@ class MtbgFormFields(models.AbstractModel):
         self._mtbg_subscribe_newsletter(partner, values)
         partner._mtbg_forms_set_source('newsletter')  # first touch only (Core, where installed)
         self._mtbg_link_visitor(partner)
-        self.env['crm.lead']._mtbg_forms_lead(partner, {
-            'name': self.env._("Newsletter signup: %s", partner.name), 'type': 'lead', 'partner_id': partner.id,
-            'contact_name': partner.name, 'email_from': partner.email, 'phone': partner.phone,
-            'description': self.env._("Signed up for the newsletter (website popup)."), 'referred': 'Newsletter Form',
-        })
+        # 0.7.0 (owner, 2026-11-16: Odoo's CRM retired): no lead, a note in the contact's chatter
+        partner._mtbg_forms_keep(self.env._("Newsletter signup"),
+                                 message=self.env._("Signed up for the newsletter (website popup)."),
+                                 where='Newsletter Form', question=False)
         return {'ok': True, 'first_name': (partner.name or '').split(' ')[0]}
 
     @api.model
@@ -246,6 +246,8 @@ class ResPartner(models.Model):
             lambda f: not f.newsletter and 'page' in (f.variants or ''))[:1]
         by_referred = {'Newsletter Form': newsletter, 'phone menu': menu or contact, 'contact page': contact,
                        'contact popup': contact, 'tour page': contact, 'website': contact}
+        if 'crm.lead' not in self.env or 'referred' not in self.env['crm.lead']._fields:
+            return evidence  # (Odoo's CRM retired: the leads from before only while it is installed)
         Lead = self.env['crm.lead'].sudo().with_context(active_test=False)
         for lead in Lead.search([('partner_id', 'in', self.ids), ('source_id', '=', False),
                                  ('referred', 'in', list(by_referred))], order='create_date, id'):

@@ -1061,12 +1061,6 @@ msgid "Newsletter signup"
 msgstr "Suscripción al boletín"
 
 #. module: mtbg_tours_forms
-#. odoo-python
-#: code:addons/mtbg_tours_forms/models/contact.py:0
-msgid "Newsletter signup: %s"
-msgstr "Suscripción al boletín: %s"
-
-#. module: mtbg_tours_forms
 #: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_partner__mtbg_newsletter_date
 #: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_users__mtbg_newsletter_date
 msgid "Newsletter since"
@@ -1902,17 +1896,6 @@ msgstr ""
 "                    su texto de consentimiento (la redacción que exige la ley)."
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form_block__key
-msgid ""
-"The answer's name (letters, digits, _); the form's standard ones "
-"(first_name, email, phone, message...) go to the contact, the others to the "
-"lead"
-msgstr ""
-"El nombre de la respuesta (letras, dígitos, _); las estándar del formulario "
-"(first_name, email, phone, message...) van al contacto, las demás a la "
-"oportunidad"
-
-#. module: mtbg_tours_forms
 #: model:ir.model.fields,help:mtbg_tours_forms.field_crm_lead__mtbg_form_answers
 msgid "The answers to a website form's own questions"
 msgstr "Las respuestas a las preguntas propias de un formulario del sitio web"
@@ -2221,12 +2204,6 @@ msgstr "Formularios del sitio web"
 #: code:addons/mtbg_tours_forms/models/form.py:0
 msgid "Website message"
 msgstr "Mensaje desde el sitio web"
-
-#. module: mtbg_tours_forms
-#: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form__handler
-msgid "What a sent form does (a contact and a CRM lead...)"
-msgstr ""
-"Qué hace un formulario enviado (un contacto y una oportunidad del CRM...)"
 
 #. module: mtbg_tours_forms
 #: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form__key
@@ -2564,3 +2541,28 @@ msgstr ""
 #: code:addons/mtbg_tours_forms/models/form_designer.py:0
 msgid "You are not allowed to change the website forms."
 msgstr ""
+
+#. module: mtbg_tours_forms
+#: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form_block__key
+msgid ""
+"The answer's name (letters, digits, _); the form's standard ones "
+"(first_name, email, phone, message...) go to the contact, the others with "
+"their message"
+msgstr ""
+"El nombre de la respuesta (letras, dígitos, _); las estándar del formulario "
+"(first_name, email, phone, message...) van al contacto, las demás con su "
+"mensaje"
+
+#. module: mtbg_tours_forms
+#: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form__handler
+msgid ""
+"What a sent form does (a contact, a note in its chatter, their message...)"
+msgstr ""
+"Lo que hace un formulario enviado (un contacto, una nota en su historial, su"
+" mensaje...)"
+
+#. module: mtbg_tours_forms
+#. odoo-python
+#: code:addons/mtbg_tours_forms/models/partner.py:0
+msgid "Your question"
+msgstr "Tu pregunta"

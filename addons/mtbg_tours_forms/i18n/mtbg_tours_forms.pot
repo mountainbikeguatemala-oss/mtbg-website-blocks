@@ -1031,12 +1031,6 @@ msgid "Newsletter signup"
 msgstr ""
 
 #. module: mtbg_tours_forms
-#. odoo-python
-#: code:addons/mtbg_tours_forms/models/contact.py:0
-msgid "Newsletter signup: %s"
-msgstr ""
-
-#. module: mtbg_tours_forms
 #: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_partner__mtbg_newsletter_date
 #: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_users__mtbg_newsletter_date
 msgid "Newsletter since"
@@ -1851,14 +1845,6 @@ msgid ""
 msgstr ""
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form_block__key
-msgid ""
-"The answer's name (letters, digits, _); the form's standard ones "
-"(first_name, email, phone, message...) go to the contact, the others to the "
-"lead"
-msgstr ""
-
-#. module: mtbg_tours_forms
 #: model:ir.model.fields,help:mtbg_tours_forms.field_crm_lead__mtbg_form_answers
 msgid "The answers to a website form's own questions"
 msgstr ""
@@ -2149,11 +2135,6 @@ msgstr ""
 #. odoo-python
 #: code:addons/mtbg_tours_forms/models/form.py:0
 msgid "Website message"
-msgstr ""
-
-#. module: mtbg_tours_forms
-#: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form__handler
-msgid "What a sent form does (a contact and a CRM lead...)"
 msgstr ""
 
 #. module: mtbg_tours_forms
@@ -2475,4 +2456,24 @@ msgstr ""
 #. odoo-python
 #: code:addons/mtbg_tours_forms/models/form_designer.py:0
 msgid "You are not allowed to change the website forms."
+msgstr ""
+
+#. module: mtbg_tours_forms
+#: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form_block__key
+msgid ""
+"The answer's name (letters, digits, _); the form's standard ones "
+"(first_name, email, phone, message...) go to the contact, the others with "
+"their message"
+msgstr ""
+
+#. module: mtbg_tours_forms
+#: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form__handler
+msgid ""
+"What a sent form does (a contact, a note in its chatter, their message...)"
+msgstr ""
+
+#. module: mtbg_tours_forms
+#. odoo-python
+#: code:addons/mtbg_tours_forms/models/partner.py:0
+msgid "Your question"
 msgstr ""

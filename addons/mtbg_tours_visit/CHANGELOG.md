@@ -2,6 +2,11 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_visit-*'`.
 
+## 19.0.0.1.6 · 2026-11-16
+
+- Tests only: the page-view tests switch off the redirect of Odoo's stock /contactus page that Forms 19.0.0.7.0 adds
+  and bring the page back (Odoo's CRM retired), so they still view that page. No change on a site.
+
 ## 19.0.0.1.5 · 2026-11-11
 
 - Moved to the universal extensions repository (owner, 2026-11-11: extensions that are not only for running tours live in their own repository, installable without Tours Core). Its manifest names its new repository, so the updater takes it from there; nothing else changes (no data, no behaviour).

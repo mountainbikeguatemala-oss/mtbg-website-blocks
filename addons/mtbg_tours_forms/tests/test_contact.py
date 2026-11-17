@@ -1,5 +1,4 @@
 from odoo.tests import HttpCase, TransactionCase, tagged
-from odoo.tools import html2plaintext
 
 
 @tagged('post_install', '-at_install', 'mtbg')
@@ -9,7 +8,10 @@ class TestContactForms(TransactionCase):
         super().setUp()
         self.Fields = self.env['mtbg.form.fields']
 
-    def test_contact_finds_by_phone_first_and_opens_a_lead(self):
+    def _notes(self, partner):
+        return partner.message_ids.filtered(lambda m: m.subtype_id == self.env.ref('mail.mt_note'))
+
+    def test_contact_finds_by_phone_first_and_keeps_the_message(self):
         known = self.env['res.partner'].create({'name': 'Rita Known', 'phone': '+502 5555 2020'})
         result = self.Fields.mtbg_contact_submit({
             'name': 'Rita Other', 'email': 'rita.new@example.com', 'phone': '+502 5555 2020',
@@ -19,32 +21,74 @@ class TestContactForms(TransactionCase):
         self.assertEqual(known.name, 'Rita Known', "a known name is not changed")
         if 'mtbg_whatsapp_opt_in' in known._fields:  # (Tours Core's field)
             self.assertFalse(known.mtbg_whatsapp_opt_in, "the contact forms take no texting consent (the booking form does)")
-        lead = self.env['crm.lead'].search([('partner_id', '=', known.id)])
-        self.assertEqual(html2plaintext(lead.description), 'Do you ride in December?')
-        # the lead source (owner, 2026-11-08: which web form): the form's own, on the contact and its lead
-        self.assertTrue(lead.source_id.name.startswith('Web form: '), lead.source_id.name)
+        # 0.7.0: no CRM lead; the message in a note in the contact's chatter (Forms alone keeps it so)
+        if 'crm.lead' in self.env:
+            self.assertFalse(self.env['crm.lead'].search_count([('partner_id', '=', known.id)]), "no lead any more")
+        note = self._notes(known).filtered(lambda m: 'Do you ride in December?' in str(m.body))
+        self.assertEqual(len(note), 1, self._notes(known).mapped('body'))
+        self.assertIn('Website message', str(note.body))
+        self.assertIn('contact page', str(note.body))
+        # the lead source (owner, 2026-11-08: which web form): the form's own
+        form = self.env['mtbg.form'].search([('key', '=', 'contact')], limit=1)
+        self.assertTrue(form.lead_source_id.name.startswith('Web form: '), form.lead_source_id.name)
         if 'mtbg_lead_source_id' in known._fields:  # Tours Core: the contact's first touch too
-            self.assertEqual(lead.source_id, known.mtbg_lead_source_id)
+            self.assertEqual(form.lead_source_id, known.mtbg_lead_source_id)
             whatsapp = known._mtbg_set_lead_source('whatsapp')
             self.assertNotEqual(known.mtbg_lead_source_id, whatsapp, "first touch: the form's kept")
+        # with Communication Flows: their message on the Website form channel, to answer
+        if 'omni.message' in self.env:
+            message = self.env['omni.message'].search([('partner_id', '=', known.id), ('channel', '=', 'web_form')])
+            self.assertEqual(len(message), 1)
+            self.assertEqual(message.body, 'Do you ride in December?')
+            self.assertEqual(message.meta.get('subject'), 'Your question')
+            self.assertEqual(message.meta.get('where'), 'contact page')
+            self.assertTrue(message.external_id.startswith('form:%s:' % form.id), message.external_id)
 
     def test_the_submission_goes_to_the_hook(self):
-        """0.6.2: what they wrote this time reaches Communications' hook (context mtbg_form_submission)."""
+        """0.6.2: what they wrote this time reaches Communications' hook; 0.7.0: on the contact
+        (``_mtbg_form_submitted(form, submission, message)``)."""
         from unittest.mock import patch
-        Lead = type(self.env['crm.lead'])
+        Partner = type(self.env['res.partner'])
         got = []
 
-        def hook(leads):
-            got.append(dict(leads.env.context.get('mtbg_form_submission') or {}))
-        with patch.object(Lead, '_mtbg_contact_form_submitted', hook, create=True):
+        def hook(partners, form, submission, message):
+            got.append((partners, form, dict(submission), message))
+        with patch.object(Partner, '_mtbg_form_submitted', hook, create=True):
             result = self.Fields.mtbg_contact_submit({
                 'name': 'Hana Hook', 'email': 'hana.hook@example.com', 'phone': '+502 5555 2031', 'message': 'Is the volcano ride hard?',
                 'source': 'page'})
-        self.assertTrue(result['ok'])
-        self.assertEqual(len(got), 1)
-        self.assertEqual(got[0]['message'], 'Is the volcano ride hard?')
-        self.assertEqual(got[0]['tour'], '')
-        self.assertEqual(got[0]['answers'], [])
+            self.assertTrue(result['ok'])
+            self.Fields.mtbg_newsletter_submit({'name': 'Hana Hook', 'email': 'hana.hook@example.com'})
+        self.assertEqual(len(got), 1, "never for a newsletter signup")
+        partner, form, submission, message = got[0]
+        self.assertEqual(partner.email, 'hana.hook@example.com')
+        self.assertEqual(form.key, 'contact')
+        self.assertEqual(submission['message'], 'Is the volcano ride hard?')
+        self.assertEqual(submission['tour'], '')
+        self.assertEqual(submission['answers'], [])
+        if 'omni.message' in self.env:
+            self.assertEqual(message.body, 'Is the volcano ride hard?')
+
+    def test_crm_extras_retired(self):
+        """0.7.0: /contactus redirects to /contact-us (once; one already there is kept); the Lead Generation Bot is
+        archived."""
+        Rewrite = self.env['website.rewrite'].with_context(active_test=False)
+        Rewrite.search([('url_from', '=', '/contactus')]).unlink()
+        pages = self.env['website.page'].with_context(active_test=False).search([('url', '=', '/contactus')])
+        pages.active = True
+        done = self.env['mtbg.form']._mtbg_retire_crm_extras()
+        self.assertFalse(pages.filtered('active'), "the stock page archived: the redirect answers")
+        self.assertEqual(done['redirects'], len(pages))
+        rewrites = Rewrite.search([('url_from', '=', '/contactus')])
+        self.assertEqual(len(rewrites), len(pages))
+        if rewrites:
+            self.assertEqual(set(rewrites.mapped('url_to')), {'/contact-us'})
+            self.assertEqual(set(rewrites.mapped('redirect_type')), {'301'})
+            rewrites.active = False
+        self.assertEqual(self.env['mtbg.form']._mtbg_retire_crm_extras()['redirects'], 0, "switched off: kept so")
+        bot = self.env.ref('crm_livechat.chatbot_script_lead_generation_bot', raise_if_not_found=False)
+        if bot:
+            self.assertFalse(bot.with_context(active_test=False).active)
 
     def test_contact_checks_its_fields(self):
         result = self.Fields.mtbg_contact_submit({'name': 'X', 'email': 'nope', 'phone': '555', 'message': ''})
@@ -58,6 +102,13 @@ class TestContactForms(TransactionCase):
         partner = self.env['res.partner'].search([('email', '=', 'nia@example.com')])
         self.assertTrue(partner.mtbg_newsletter)
         self.assertIn('Newsletter', partner.category_id.mapped('name'))
+        # 0.7.0: a note, no lead, no message to answer
+        self.assertTrue(self._notes(partner).filtered(lambda m: 'Newsletter signup' in str(m.body)))
+        if 'crm.lead' in self.env:
+            self.assertFalse(self.env['crm.lead'].search_count([('partner_id', '=', partner.id)]))
+        if 'omni.message' in self.env:
+            self.assertFalse(self.env['omni.message'].search_count([('partner_id', '=', partner.id),
+                                                                    ('channel', '=', 'web_form')]))
         if 'mtbg_lead_source_id' in partner._fields:  # (Tours Core's first touch)
             self.assertEqual(partner.mtbg_lead_source_id, self.env.ref('utm.utm_source_newsletter'),
                              "came by the newsletter")

@@ -2,6 +2,22 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_forms-*'`.
 
+## 19.0.0.7.0 (2026-11-16)
+
+- **No more CRM leads** (owner, 2026-11-16: Odoo's CRM retired, step A). A sent contact form keeps what the person
+  wrote on their contact. It always posts a note in their chatter, so Forms keeps it without anything else: the title
+  ("Question about <tour>" / "Website message"), the form and the page it came from, the message and the form's own
+  questions. With Communication Flows it is also their message on the "Website form" channel, in their feed and the
+  inbox, to answer. Its `meta` holds subject, topic, form, page and answers; its ref is `form:<form id>:<token>`.
+  Communications' hook is now `res.partner._mtbg_form_submitted(form, submission, message)`. A newsletter signup
+  (popup or form) gets the note only.
+- On update: Odoo's stock contact page **/contactus redirects (301) to /contact-us**, the forms' contact page (a
+  redirect under Website > Configuration > Redirects, on each website that has the page; the stock page is archived,
+  as Odoo serves a redirect only where no page answers; to undo, unarchive it. One already there is left as it is).
+  The live chat's stock **Lead Generation Bot** (crm_livechat) is archived.
+- The leads from before still give the Source Channel history while the CRM is installed. The `website_crm`
+  dependency stays until 19.0.0.7.1.
+
 ## 19.0.0.6.2 (2026-11-16)
 
 - **A contact form's question can be answered** (owner, 2026-11-16: "there is no way to get back to her in the

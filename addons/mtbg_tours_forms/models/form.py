@@ -12,8 +12,6 @@ import json
 import re
 from datetime import date
 
-from markupsafe import Markup
-
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
@@ -233,7 +231,7 @@ class MtbgForm(models.Model):
     key = fields.Char(required=True, help="What the website asks for: contact, newsletter, chat, booking")
     sequence = fields.Integer(default=10)
     handler = fields.Selection([('contact', 'Contact form')], required=True, default='contact',
-                               help="What a sent form does (a contact and a CRM lead...)")
+                               help="What a sent form does (a contact, a note in its chatter, their message...)")
     variants = fields.Char(default='page', help="Where the form shows, comma separated (page,popup,sidebar): the "
                                                   "designer's preview and the Style tab offer each")
     block_ids = fields.One2many('mtbg.form.block', 'form_id', string='Blocks', copy=True)
@@ -652,8 +650,8 @@ class MtbgForm(models.Model):
         return extra
 
     def _mtbg_submit_contact(self, values, ctx):
-        """The contact forms: the client (known, or by phone then email), the SMS / WhatsApp opt-ins and a CRM lead
-        with the message and the form's own questions."""
+        """The contact forms: the client (known, or by phone then email), the SMS / WhatsApp opt-ins, and the message
+        with the form's own questions kept on the contact (a chatter note; their Website form message, 0.7.0)."""
         Fields = self.env['mtbg.form.fields']
         # only the box this form shows (a newsletter form: promotions; the others: none), so the wording kept is the
         # one the visitor read
@@ -683,7 +681,7 @@ class MtbgForm(models.Model):
                                                           'newsletter' if self.newsletter else
                                                           'question' if tour_given else 'contact')
         Fields._mtbg_set_opt_ins(partner, values)
-        source = partner._mtbg_forms_set_source(self._mtbg_lead_source())  # first touch only (Core, where installed)
+        partner._mtbg_forms_set_source(self._mtbg_lead_source())  # first touch only (Core, where installed)
         Fields._mtbg_link_visitor(partner)
         partner._mtbg_fill_country(values.get('phone_country'), clean.get('phone'))  # the country picked with the mobile (the latest they chose)
         tour = self._mtbg_subject(values.get('tour_id'))
@@ -692,35 +690,57 @@ class MtbgForm(models.Model):
             ctx.get('variant'), _("website"))
         title = _("Question about %s", tour.name) if tour else _("Website message")
         if self.newsletter:
-            # a newsletter form (e.g. the newsletter popup): subscribed, tagged, its lead as the popup's always was
+            # a newsletter form (e.g. the newsletter popup): subscribed, tagged, noted as the popup's always was
             Fields._mtbg_subscribe_newsletter(partner, values)
             title, where = _("Newsletter signup"), 'Newsletter Form'
         standard = {'name', 'first_name', 'last_name', 'email', 'phone', 'message', 'sms_optin', 'whatsapp_optin',
                     'sms_marketing_optin'}
         extra = self._mtbg_extra_answers(clean, standard)
-        description = Markup('<p>%s</p>') % (clean.get('message') or '')
-        if extra:
-            description += Markup('<ul>%s</ul>') % Markup('').join(
-                Markup('<li><b>%s:</b> %s</li>') % (label, value) for label, value in extra)
-        lead = self.env['crm.lead']._mtbg_forms_lead(partner, {  # one open lead per person (Core)
-            'name': '%s: %s' % (title, partner.name), 'type': 'lead', 'partner_id': partner.id,
-            'contact_name': partner.name, 'email_from': partner.email, 'phone': partner.phone,
-            'description': description if (clean.get('message') or extra or not self.newsletter) else
-            _("Signed up for the newsletter (%s).", self.name), 'referred': where,
-            'mtbg_form_answers': {key: value for key, value in clean.items() if key not in standard} or False,
-            'source_id': source.id or False,
-        })
-        if not lead.source_id and source:  # their open lead, from before without a source
-            lead.source_id = source
-        # the automatic reply (Communications' "Website Contact" flow, when installed; never for a newsletter signup)
-        # 0.6.2: what they wrote this time (the lead keeps one person's questions together), so Communications keeps
-        # it as their message to answer (owner, 2026-11-16: "there is no way to get back to her in the system")
-        if not self.newsletter and hasattr(lead, '_mtbg_contact_form_submitted'):
-            lead.with_context(mtbg_form_submission={
+        message = clean.get('message') or ''
+        if self.newsletter and not message and not extra:
+            message = _("Signed up for the newsletter (%s).", self.name)
+        # 0.7.0 (owner, 2026-11-16: Odoo's CRM retired): no lead. A note in the contact's chatter, and a question kept
+        # as the contact's message on the Website form channel (Communication Flows), to answer
+        kept = partner._mtbg_forms_keep(title, message=message, answers=extra, where=where, form=self,
+                                        topic=tour.name if tour else '', question=not self.newsletter)
+        # the automatic reply and the answer (Communications' "Website Contact" flow, when installed; never for a
+        # newsletter signup): what they wrote this time (owner, 2026-11-16: "there is no way to get back to her in
+        # the system")
+        if not self.newsletter and hasattr(partner, '_mtbg_form_submitted'):
+            partner.sudo()._mtbg_form_submitted(self, {
                 'message': clean.get('message') or '', 'answers': [[label, str(value)] for label, value in extra],
                 'tour': tour.name if tour else '', 'form': self.name or '', 'where': where,
-            })._mtbg_contact_form_submitted()
+            }, kept or None)
         return {'ok': True, 'first_name': (partner.name or '').split(' ')[0]}
+
+
+class MtbgFormCrmRetired(models.Model):
+    """Odoo's CRM retired (0.7.0, owner 2026-11-16: "redirect /contactus to the suite's contact page and switch off the
+    Lead Generation Bot")."""
+    _inherit = 'mtbg.form'
+
+    @api.model
+    def _mtbg_retire_crm_extras(self):
+        """On update (existing sites): Odoo's stock contact page /contactus redirects (301) to the contact page of
+        the forms, /contact-us, on every website that has it: the stock page is archived (Odoo serves a redirect only
+        where no page answers; to undo: unarchive it) and a redirect is added (a redirect of /contactus already there,
+        on or off, is left as it is, and so is its page); the live chat's stock "Lead Generation Bot" (crm_livechat)
+        is archived. Returns what it did."""
+        done = {'redirects': 0, 'bot': False}
+        Rewrite = self.env['website.rewrite'].sudo().with_context(active_test=False)
+        for page in self.env['website.page'].sudo().search([('url', '=', '/contactus')]):
+            website = page.website_id
+            if Rewrite.search_count([('url_from', '=', '/contactus'), ('website_id', 'in', (website.id, False))]):
+                continue
+            Rewrite.create({'name': 'Contact page (Odoo CRM retired)', 'url_from': '/contactus', 'url_to': '/contact-us',
+                            'redirect_type': '301', 'website_id': website.id or False})
+            page.active = False
+            done['redirects'] += 1
+        bot = self.env.ref('crm_livechat.chatbot_script_lead_generation_bot', raise_if_not_found=False)
+        if bot and bot.active:
+            bot.sudo().active = False
+            done['bot'] = True
+        return done
 
 
 class MtbgFormBlock(models.Model):
@@ -732,7 +752,7 @@ class MtbgFormBlock(models.Model):
     sequence = fields.Integer(default=10)
     kind = fields.Selection(KINDS, required=True, default='text')
     key = fields.Char(help="The answer's name (letters, digits, _); the form's standard ones (first_name, email, "
-                           "phone, message...) go to the contact, the others to the lead")
+                           "phone, message...) go to the contact, the others with their message")
     label = fields.Char(translate=True)
     placeholder = fields.Char(translate=True)
     help = fields.Char(translate=True, help="Small text under the field (a step or heading: its subtitle)")

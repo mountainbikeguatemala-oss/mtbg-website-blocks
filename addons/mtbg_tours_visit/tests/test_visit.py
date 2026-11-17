@@ -25,6 +25,10 @@ class TestVisitByScript(HttpCase):
         super().setUpClass()
         cls.set_registry_readonly_mode(False)  # (as Odoo's visitor tests: the page's request records the visitor)
         cls.ICP = cls.env['ir.config_parameter'].sudo()
+        # (Forms 0.7.0 redirects /contactus to /contact-us, its stock page archived: that page itself is viewed here)
+        cls.env['website.rewrite'].sudo().search([('url_from', '=', '/contactus')]).write({'active': False})
+        cls.env['website.page'].sudo().with_context(active_test=False).search(
+            [('url', '=', '/contactus')]).write({'active': True})
         cls.page = cls.env['website.page'].search([('url', '=', '/contactus')], limit=1)
         cls.page.view_id.track = True
         cls.Visitor = cls.env['website.visitor'].sudo()
