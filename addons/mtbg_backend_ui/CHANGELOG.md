@@ -2,6 +2,20 @@
 
 Every version of this module, newest first. Tags: `git tag -l 'mtbg_backend_ui-*'`.
 
+## 19.0.0.2.0 (2026-11-16)
+
+- **The admin on a phone** (owner, 2026-11-16: "All these fields should be larger and more mobile friendly across
+  Odoo on mobile"): one stylesheet (``static/src/mobile/mobile_fields.scss``, in ``web.assets_backend``, so in the dark
+  bundle too) for screens below 768px wide. Form and dialog fields (text, number, monetary, date, many2one with its
+  buttons, selection, text areas, file name and buttons, and Bootstrap's ``form-control`` / ``form-select`` on the
+  suite's own pages and dialogs) at least 48px high with 16px text (no iOS zoom); labels at 16px; checkboxes and
+  radios 24px; the form's status bar and sheet buttons, the control panel's buttons, list and board record buttons and
+  every dialog button 48px; the autocomplete list's rows 44px; dialogs the full width with their buttons in a sticky
+  footer (above the phone's home bar). Sizes only, the theme's colours, so light and dark both follow. Desktop
+  unchanged. Not in the Staff App (``mtbg_sa``) nor in a dialog opened while it is on screen.
+- Test: a browser tour opens a contact's form in a dialog at 390px (light and dark: input 44px+ high, 16px+ text,
+  the dialog button 44px+, sticky footer, nothing while the Staff App is on screen) and at 1366px (Odoo's size).
+
 ## 19.0.0.1.0 (2026-11-11)
 
 - **New: the admin look, from Tours Core 0.7.0** (owner, 2026-11-11: one universal admin module, the approved exception

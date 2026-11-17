@@ -1,0 +1,144 @@
+// The admin on a phone (owner, 2026-11-16: "All these fields should be larger and more mobile friendly across Odoo on
+// mobile"): on a small screen (Odoo's env.isSmall, below 768px) every form field, dialog field and button is a finger
+// sized target. Sizes only: the colours stay the theme's, so light and dark (the dark bundle compiles this again with
+// its own variables) both follow. Desktop is untouched (everything sits in the media query).
+// Not inside the Staff App (mtbg_sa: phone first, its own styles), nor in a dialog opened while it is on screen.
+
+$mtbg-m-tap: 48px;       // a tap target's height
+$mtbg-m-font: 16px;      // the smallest text in a field (iOS zooms in below 16px)
+$mtbg-m-check: 24px;     // a checkbox or a radio
+
+@include media-breakpoint-down(md) {
+    body.o_web_client:not(:has(.mtbg_sa)) {
+
+        // ---- fields: text, number, monetary, date, many2one, selection, file name, search
+        .o_field_widget input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]),
+        .o_field_widget select,
+        .o_field_widget textarea,
+        .o_field_widget .o_input,
+        .o_datetime_input,
+        // the suite's own pages and dialogs (Bootstrap's fields, the small ones too)
+        .o_action_manager input.form-control,
+        .o_action_manager select.form-select,
+        .o_action_manager textarea.form-control,
+        .modal-body input.form-control,
+        .modal-body select.form-select,
+        .modal-body textarea.form-control,
+        .modal-body select.o_input {
+            min-height: $mtbg-m-tap;
+            font-size: $mtbg-m-font;
+            line-height: 1.4;
+            padding: 0.5rem 0.75rem;
+        }
+        .o_field_widget textarea {
+            min-height: 6rem;
+        }
+        // a many2one: its buttons (open the record, the dropdown caret) as tall as the field
+        .o_field_many2one .o_external_button,
+        .o_field_many2one .o_dropdown_button,
+        .o_field_many2one_selection .o_dropdown_button {
+            min-height: $mtbg-m-tap;
+            min-width: $mtbg-m-tap;
+        }
+        // the search box and the autocomplete list (many2one, search)
+        .o_searchview_input {
+            font-size: $mtbg-m-font;
+        }
+        .o-autocomplete--dropdown-menu .dropdown-item,
+        .o-autocomplete--dropdown-menu .ui-menu-item > a {
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            font-size: $mtbg-m-font;
+        }
+
+        // a file: the Upload / pencil / trash / download buttons
+        .o_field_binary .btn,
+        .o_field_image .btn,
+        .o_field_widget .o_select_file_button {
+            min-height: $mtbg-m-tap;
+            min-width: $mtbg-m-tap;
+            font-size: $mtbg-m-font;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        // ---- labels and read-only values: readable
+        .o_form_view .o_form_label,
+        .o_form_view .o_field_widget,
+        .modal-body .o_form_label,
+        .modal-body label {
+            font-size: $mtbg-m-font;
+        }
+
+        // ---- checkboxes and radios
+        .o_field_widget .form-check-input,
+        .modal-body .form-check-input,
+        .o_form_view .form-check-input {
+            width: $mtbg-m-check;
+            height: $mtbg-m-check;
+            margin-top: 0;
+        }
+        .o_field_widget .form-check,
+        .modal-body .form-check {
+            min-height: $mtbg-m-tap;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding-left: 0;
+            .form-check-input {
+                float: none;
+                margin-left: 0;
+                flex: 0 0 auto;
+            }
+        }
+
+        // ---- buttons: the form's header and status bar, the control panel, lists and boards, dialogs
+        .o_form_view .o_form_statusbar .btn,
+        .o_form_view .o_form_sheet .btn:not(.btn-link):not(.oe_stat_button),
+        .o_control_panel .o_control_panel_main_buttons .btn,
+        .o_control_panel .o_cp_buttons .btn,
+        .o_list_view .o_list_button .btn,
+        .o_kanban_view .o_kanban_record .btn:not(.btn-link),
+        .modal .modal-body .btn:not(.btn-link):not(.o_external_button):not(.o_dropdown_button),
+        .modal .modal-footer .btn {
+            min-height: $mtbg-m-tap;
+            font-size: $mtbg-m-font;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        .o_kanban_view .o_kanban_record .btn-link,
+        .o_list_view .o_list_button .btn-link,
+        .modal .modal-body .btn-link,
+        .modal .btn-close {
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        // ---- dialogs: the full width (Odoo already makes them full screen on a phone), the buttons always in reach
+        .modal .modal-dialog {
+            max-width: 100%;
+            margin: 0;
+        }
+        .modal .modal-content {
+            border-radius: 0;
+        }
+        .modal .modal-body {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        .modal .modal-footer {
+            position: sticky;
+            bottom: 0;
+            z-index: 1;
+            background-color: inherit;
+            padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
+            gap: 0.5rem;
+            .btn {
+                flex: 1 1 40%;
+                margin: 0;
+            }
+        }
+    }
+}
