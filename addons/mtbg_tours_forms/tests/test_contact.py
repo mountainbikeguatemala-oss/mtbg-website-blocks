@@ -28,6 +28,24 @@ class TestContactForms(TransactionCase):
             whatsapp = known._mtbg_set_lead_source('whatsapp')
             self.assertNotEqual(known.mtbg_lead_source_id, whatsapp, "first touch: the form's kept")
 
+    def test_the_submission_goes_to_the_hook(self):
+        """0.6.2: what they wrote this time reaches Communications' hook (context mtbg_form_submission)."""
+        from unittest.mock import patch
+        Lead = type(self.env['crm.lead'])
+        got = []
+
+        def hook(leads):
+            got.append(dict(leads.env.context.get('mtbg_form_submission') or {}))
+        with patch.object(Lead, '_mtbg_contact_form_submitted', hook, create=True):
+            result = self.Fields.mtbg_contact_submit({
+                'name': 'Hana Hook', 'email': 'hana.hook@example.com', 'phone': '+502 5555 2031', 'message': 'Is the volcano ride hard?',
+                'source': 'page'})
+        self.assertTrue(result['ok'])
+        self.assertEqual(len(got), 1)
+        self.assertEqual(got[0]['message'], 'Is the volcano ride hard?')
+        self.assertEqual(got[0]['tour'], '')
+        self.assertEqual(got[0]['answers'], [])
+
     def test_contact_checks_its_fields(self):
         result = self.Fields.mtbg_contact_submit({'name': 'X', 'email': 'nope', 'phone': '555', 'message': ''})
         self.assertFalse(result['ok'])

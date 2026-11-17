@@ -2,6 +2,13 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_forms-*'`.
 
+## 19.0.0.6.2 (2026-11-16)
+
+- **A contact form's question can be answered** (owner, 2026-11-16: "there is no way to get back to her in the
+  system"). The form now hands what the person wrote this time (their message, the form's own questions and the tour
+  of the page) to Communications' hook in context `mtbg_form_submission`, on their CRM lead. Communications keeps it as
+  the contact's message, so staff can answer it by email or WhatsApp. Without Communications nothing changes.
+
 ## 19.0.0.6.1 (2026-11-14)
 
 - **The phone fields' countries are a file, no longer in every page** (page speed, priority 2). Every page carried

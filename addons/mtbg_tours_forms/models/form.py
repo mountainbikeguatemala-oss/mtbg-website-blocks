@@ -713,8 +713,13 @@ class MtbgForm(models.Model):
         if not lead.source_id and source:  # their open lead, from before without a source
             lead.source_id = source
         # the automatic reply (Communications' "Website Contact" flow, when installed; never for a newsletter signup)
+        # 0.6.2: what they wrote this time (the lead keeps one person's questions together), so Communications keeps
+        # it as their message to answer (owner, 2026-11-16: "there is no way to get back to her in the system")
         if not self.newsletter and hasattr(lead, '_mtbg_contact_form_submitted'):
-            lead._mtbg_contact_form_submitted()
+            lead.with_context(mtbg_form_submission={
+                'message': clean.get('message') or '', 'answers': [[label, str(value)] for label, value in extra],
+                'tour': tour.name if tour else '', 'form': self.name or '', 'where': where,
+            })._mtbg_contact_form_submitted()
         return {'ok': True, 'first_name': (partner.name or '').split(' ')[0]}
 
 
