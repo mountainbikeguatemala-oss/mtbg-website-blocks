@@ -2,6 +2,12 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_forms-*'`.
 
+## 19.0.0.7.1 (2026-11-16)
+
+- **No Odoo CRM** (release B): Forms no longer depends on `website_crm`; it depends on `utm` for the forms' sources.
+  The lead's Form Answers field and the leads' Source Channel history go. On update, the CRM leads that have form
+  answers on a site without Communications are logged: nothing moves them there.
+
 ## 19.0.0.7.0 (2026-11-16)
 
 - **No more CRM leads** (owner, 2026-11-16: Odoo's CRM retired, step A). A sent contact form keeps what the person

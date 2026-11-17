@@ -412,11 +412,6 @@ msgid "Country code"
 msgstr "Código de país"
 
 #. module: mtbg_tours_forms
-#: model:ir.model,website_form_label:mtbg_tours_forms.model_crm_lead
-msgid "Create an Opportunity"
-msgstr "Crear una oportunidad"
-
-#. module: mtbg_tours_forms
 #: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__create_uid
 #: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__create_uid
 msgid "Created by"
@@ -630,11 +625,6 @@ msgstr "Campos y aspecto"
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_forms.snippets
 msgid "Form"
 msgstr "Formulario"
-
-#. module: mtbg_tours_forms
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_crm_lead__mtbg_form_answers
-msgid "Form Answers"
-msgstr "Respuestas del formulario"
 
 #. module: mtbg_tours_forms
 #: model:ir.model,name:mtbg_tours_forms.model_mtbg_form_designer
@@ -905,11 +895,6 @@ msgstr "Después"
 #: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0
 msgid "Layout"
 msgstr "Diseño"
-
-#. module: mtbg_tours_forms
-#: model:ir.model,name:mtbg_tours_forms.model_crm_lead
-msgid "Lead"
-msgstr "Iniciativa"
 
 #. module: mtbg_tours_forms
 #: model:ir.model.fields.selection,name:mtbg_tours_forms.selection__mtbg_form_block__text_align__left
@@ -1894,11 +1879,6 @@ msgid ""
 msgstr ""
 "Los consentimientos de SMS y WhatsApp con\n"
 "                    su texto de consentimiento (la redacción que exige la ley)."
-
-#. module: mtbg_tours_forms
-#: model:ir.model.fields,help:mtbg_tours_forms.field_crm_lead__mtbg_form_answers
-msgid "The answers to a website form's own questions"
-msgstr "Las respuestas a las preguntas propias de un formulario del sitio web"
 
 #. module: mtbg_tours_forms
 #: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form_block__look

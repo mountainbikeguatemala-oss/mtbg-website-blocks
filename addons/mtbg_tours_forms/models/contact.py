@@ -233,30 +233,6 @@ class MtbgFormFields(models.AbstractModel):
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    def _mtbg_source_evidence(self):
-        """Their source channel from history (Core): a lead a website form made for them (before Source Channel
-        existed: "Website message", "Question about …", "Newsletter signup"), its form's source. A lead keeps where it
-        came from (``referred``), not its form: the contact forms by variant, the newsletter form for a signup."""
-        evidence = super()._mtbg_source_evidence()
-        Form = self.env['mtbg.form'].sudo().with_context(active_test=False)
-        forms = Form.search([], order='sequence, id')
-        newsletter = forms.filtered('newsletter')[:1]
-        menu = forms.filtered(lambda f: not f.newsletter and (f.variants or '').split(',') == ['menu'])[:1]
-        contact = forms.filtered(lambda f: f.key == 'contact')[:1] or forms.filtered(
-            lambda f: not f.newsletter and 'page' in (f.variants or ''))[:1]
-        by_referred = {'Newsletter Form': newsletter, 'phone menu': menu or contact, 'contact page': contact,
-                       'contact popup': contact, 'tour page': contact, 'website': contact}
-        if 'crm.lead' not in self.env or 'referred' not in self.env['crm.lead']._fields:
-            return evidence  # (Odoo's CRM retired: the leads from before only while it is installed)
-        Lead = self.env['crm.lead'].sudo().with_context(active_test=False)
-        for lead in Lead.search([('partner_id', 'in', self.ids), ('source_id', '=', False),
-                                 ('referred', 'in', list(by_referred))], order='create_date, id'):
-            form = by_referred.get(lead.referred)
-            if form:
-                evidence.append({'partner_id': lead.partner_id.id, 'date': lead.create_date,
-                                 'source': form._mtbg_lead_source()})
-        return evidence
-
     mtbg_newsletter = fields.Boolean(string='Newsletter', help="Signed up for the newsletter")
     mtbg_newsletter_date = fields.Datetime(string='Newsletter since')
 

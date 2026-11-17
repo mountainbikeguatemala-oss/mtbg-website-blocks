@@ -404,11 +404,6 @@ msgid "Country code"
 msgstr ""
 
 #. module: mtbg_tours_forms
-#: model:ir.model,website_form_label:mtbg_tours_forms.model_crm_lead
-msgid "Create an Opportunity"
-msgstr ""
-
-#. module: mtbg_tours_forms
 #: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__create_uid
 #: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__create_uid
 msgid "Created by"
@@ -615,11 +610,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__form_id
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_forms.snippets
 msgid "Form"
-msgstr ""
-
-#. module: mtbg_tours_forms
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_crm_lead__mtbg_form_answers
-msgid "Form Answers"
 msgstr ""
 
 #. module: mtbg_tours_forms
@@ -881,11 +871,6 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0
 msgid "Layout"
-msgstr ""
-
-#. module: mtbg_tours_forms
-#: model:ir.model,name:mtbg_tours_forms.model_crm_lead
-msgid "Lead"
 msgstr ""
 
 #. module: mtbg_tours_forms
@@ -1842,11 +1827,6 @@ msgstr ""
 msgid ""
 "The SMS and WhatsApp opt-ins with\n"
 "                    their consent text (the wording the law needs)."
-msgstr ""
-
-#. module: mtbg_tours_forms
-#: model:ir.model.fields,help:mtbg_tours_forms.field_crm_lead__mtbg_form_answers
-msgid "The answers to a website form's own questions"
 msgstr ""
 
 #. module: mtbg_tours_forms

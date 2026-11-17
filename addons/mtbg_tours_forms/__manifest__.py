@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Website — Forms',
-    'version': '19.0.0.7.0',
+    'version': '19.0.0.7.1',
     # where the updater gets it (the universal repo; owner, 2026-11-11: universal, from the Tours repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     'category': 'Website',
@@ -12,7 +12,8 @@
     # the website blocks' shared JavaScript (the chat under layers: Reusable Blocks 0.11.2) and the admin look's
     # translated text settings (0.1.0); updater 19.0.0.6.0+
     'mtbg_tours_requires': {'mtbg_tours_content_blocks': '19.0.0.11.2', 'mtbg_backend_ui': '19.0.0.1.0'},
-    'depends': ['mtbg_backend_ui', 'mtbg_tours_content_blocks', 'website', 'website_crm', 'phone_validation',
+    # 0.7.1 (owner, 2026-11-16: Odoo's CRM retired): no website_crm (a sent form is kept on the contact, 0.7.0)
+    'depends': ['mtbg_backend_ui', 'mtbg_tours_content_blocks', 'website', 'utm', 'phone_validation',
                 'im_livechat'],
     'description': """
 The customer fields every form shares, and the Forms page (this extension's tile): every form of the site in one place, with the sections other extensions add (pre-tour forms and waivers); its Form Designer: each website form's blocks
@@ -22,7 +23,7 @@ variant, with a live preview. First form on it: the contact form (page, popup, a
 
 Needs only Odoo's website and the website blocks with the admin look (since 0.5.0 / 0.6.0, owner 2026-11-11; in the
 universal repository since 0.6.0). A sent form is kept on the contact: a note in their chatter, and with
-Communication Flows their message on the Website form channel (0.7.0: no CRM lead, Odoo's CRM retired). With Tours
+Communication Flows their message on the Website form channel (0.7.0: no CRM lead; 0.7.1: no CRM at all). With Tours
 installed it uses Tours Core's contact rule and first-touch lead sources; Booking Form brings the tour pages (the tour sidebar form's
 subject, the popups' tour and rental page rules, the designer's tour previews) and the messaging terms' editor.
 """,

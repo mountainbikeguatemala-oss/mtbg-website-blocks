@@ -832,9 +832,3 @@ class MtbgFormBlock(models.Model):
         return {'kind': self.kind, 'key': self.key or '',
                 'label': self.label or '', 'show': [self.show_mode, _rule(self.show_rule)],
                 'require': [self.require_mode, _rule(self.require_rule)], 'choices': self._mtbg_choices()}
-
-
-class CrmLead(models.Model):
-    _inherit = 'crm.lead'
-
-    mtbg_form_answers = fields.Json(string='Form Answers', help="The answers to a website form's own questions")

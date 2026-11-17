@@ -164,14 +164,3 @@ class UtmSource(models.Model):
         if not name:
             return self.browse()
         return self.sudo().search([('name', '=', name)], limit=1) or self.sudo().create({'name': name})
-
-
-class CrmLead(models.Model):
-    _inherit = 'crm.lead'
-
-    def _mtbg_forms_lead(self, partner, values):
-        """The lead of a form: the person's one open lead where Core is installed, else a new lead."""
-        Lead = self.sudo()
-        if hasattr(Lead, 'mtbg_lead_for'):
-            return Lead.mtbg_lead_for(partner, values)
-        return Lead.create(dict(values, partner_id=partner.id) if partner else values)
