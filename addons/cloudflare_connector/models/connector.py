@@ -22,7 +22,10 @@ _logger = logging.getLogger(__name__)
 
 P = "cloudflare_connector."
 API = "https://api.cloudflare.com/client/v4"
-PURGE_BATCH = 30      # URLs (or prefixes, hosts) per purge request: the smallest limit across Cloudflare plans
+PURGE_BATCH = 30      # URLs per purge request (Cloudflare: 100 on every plan, 500 on Enterprise; 30 keeps well inside)
+# prefixes, hosts or tags per purge request (2.0.1; Cloudflare's documentation, 2026-11: 100 on every plan). Fewer calls
+# matter: on the Free plan these purges share 5 requests a minute (a burst of 25)
+PURGE_BATCH_OTHER = 100
 PURGE_TIMEOUT = 10
 PURGE_TRIES = 4       # on 429 (rate limited): wait Retry-After (capped), then try again
 
@@ -155,11 +158,14 @@ class CloudflareApi(models.AbstractModel):
         return {"id": _param(self.env, "zone_id"), "name": _param(self.env, "zone_name")}
 
     @api.model
-    def purge(self, everything=False, urls=None, prefixes=None, hosts=None, zone_id=None):
-        """Empty Cloudflare's cache for the site's zone: everything, or the given URLs / URL prefixes / hosts.
+    def purge(self, everything=False, urls=None, prefixes=None, hosts=None, zone_id=None, tags=None):
+        """Empty Cloudflare's cache for the site's zone: everything, or the given URLs / URL prefixes / hosts /
+        cache tags (2.0.1).
 
-        Lists are sent in batches of 30; a rate-limited request (429) waits and is tried again. It never raises (a
-        purge must not break the save that asked for it): returns {'ok': bool, 'requests': int, 'error': str}.
+        URLs are sent 30 a request, prefixes, hosts and tags 100 a request; a rate-limited request (429) waits and is
+        tried again. A prefix is a host and a path without a scheme or query string (``www.example.com/blog``: that
+        address and everything under it, whatever its query string or cache key). It never raises (a purge must not
+        break the save that asked for it): returns {'ok': bool, 'requests': int, 'error': str}.
         """
         if not self.env.su and not self.env.user.has_group("base.group_system"):
             return {"ok": False, "requests": 0, "error": _("Only administrators (or the system) can purge the cache.")}
@@ -171,9 +177,10 @@ class CloudflareApi(models.AbstractModel):
             bodies = [{"purge_everything": True}]
         else:
             bodies = []
-            for key, items in (("files", urls), ("prefixes", prefixes), ("hosts", hosts)):
+            for key, items in (("files", urls), ("prefixes", prefixes), ("hosts", hosts), ("tags", tags)):
                 items = [x for x in (items or []) if x]
-                bodies += [{key: items[i:i + PURGE_BATCH]} for i in range(0, len(items), PURGE_BATCH)]
+                size = PURGE_BATCH if key == "files" else PURGE_BATCH_OTHER
+                bodies += [{key: items[i:i + size]} for i in range(0, len(items), size)]
         sent = 0
         for body in bodies:
             for attempt in range(PURGE_TRIES):

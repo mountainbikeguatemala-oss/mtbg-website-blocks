@@ -4,6 +4,7 @@ import re
 from odoo import models
 from odoo.http import request
 
+from .edge_cache import page_tag, site_tag
 from .live_values import empty_filled
 from .sources import declared
 
@@ -51,10 +52,21 @@ class IrHttp(models.AbstractModel):
                 ttl = SHORT_TTL
             response.headers['Cache-Control'] = 'public, max-age=0, s-maxage=%d, stale-if-error=%d' % (
                 ttl, STALE_IF_ERROR)
+            # 2.0.1: what a purge empties this copy by, whatever its cache key or query string (edge_cache.py); never
+            # seen by the visitor (Cloudflare removes it)
+            response.headers['Cache-Tag'] = cls._mtbg_cache_tags()
             # the same page for every visitor: no cookie (the session is made by /mtbg/session or /mtbg/visit)
             response.headers.remove('Set-Cookie')
             request.future_response.headers.remove('Set-Cookie')
             request.session.can_save = False
+
+    @classmethod
+    def _mtbg_cache_tags(cls):
+        """``<the site's pages tag>,<this address' tag>`` (the address without its language part: Odoo has already
+        taken it off, /es/x is served as /x)."""
+        host = request.httprequest.host
+        path = request.env['mtbg.edge.cache']._mtbg_without_lang(request.httprequest.path)
+        return '%s,%s' % (site_tag(host), page_tag(host, path))
 
     @classmethod
     def _mtbg_purgeable_address(cls):

@@ -49,7 +49,8 @@
         <field name="name">mtbg.edge.cache.log.list</field>
         <field name="model">mtbg.edge.cache.log</field>
         <field name="arch" type="xml">
-            <list create="false" edit="false" decoration-danger="not ok">
+            <list create="false" edit="false" decoration-danger="not ok and check != 'waiting'"
+                  decoration-muted="check == 'waiting'">
                 <header>
                     <button name="action_mtbg_purge_now" type="object" string="Purge pages now" class="btn-primary"
                             icon="fa-refresh" display="always"/>
@@ -59,6 +60,7 @@
                 </header>
                 <field name="create_date" string="When"/>
                 <field name="ok"/>
+                <field name="check"/>
                 <field name="scope"/>
                 <field name="url_count"/>
                 <field name="request_count" optional="hide"/>

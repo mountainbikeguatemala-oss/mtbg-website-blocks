@@ -38,5 +38,5 @@ class TestContentBlocksEdgeCache(_EdgeCacheHooks):
         if not block:
             self.skipTest('no content block here')
         self.calls.reset_mock()
-        block.write({'name': block.name})
+        block.write({'name': (block.name or '') + ' 2'})
         self.assertTrue(self.calls.called)

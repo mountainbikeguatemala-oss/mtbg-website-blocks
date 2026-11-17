@@ -7,7 +7,7 @@ photos) and, since 19.0.2.0.0, the website's page cache. It depends only on Odoo
 
 | Part | Where | What |
 |---|---|---|
-| Account, API token, cache purge | `models/connector.py` (`cloudflare.api`) | Settings › Cloudflare; purge by URL in batches of 30 |
+| Account, API token, cache purge | `models/connector.py` (`cloudflare.api`) | Settings › Cloudflare; purge everything, or by URL (30 a call), prefix, host or cache tag (100 a call) |
 | R2 storage | `models/r2.py` (`cloudflare.r2`) | S3-compatible client; Set up Cloudflare / Set up photos storage wizards |
 | Page cache | `models/edge_cache.py`, `ir_http.py`, `pages.py`, `sources.py`, `live_values.py` | Settings › Website › Cloudflare page cache (ships OFF) |
 
@@ -31,5 +31,20 @@ asked on 2026-11-16 for it to be merged into this connector, because the fewest 
   `'mtbg.edge.cache' in env`. Only the Python path of the helpers changed: `odoo.addons.cloudflare_connector.models.*`.
 * Visits by Script (`mtbg_tours_visit`) is no longer a dependency. Where it is installed, cached pages keep counting
   visits.
+
+## How a page purge empties Cloudflare (19.0.2.0.1)
+
+A purge by single URL only matches a copy stored under Cloudflare's default cache key. A cache rule with a custom
+cache key (for example campaign links sharing one copy) or a rule that does not match the purge request makes it
+match nothing, while Cloudflare still answers OK. So page purges use:
+
+* cache tags: every cached page carries `Cache-Tag: pages-<site>,page-<address>` (Cloudflare strips it before the
+  visitor). Every page = one tag call; some pages = their own tags (every language at once);
+* prefixes (`www.example.com/tours/a-ride`) for each address except the homepage, 100 a call: they also empty copies
+  made before the pages carried tags.
+
+After the purge, up to 3 of the purged pages are asked for as a visitor. A copy Cloudflare still serves from its cache,
+older than the purge, is logged "Cloudflare said OK but the page is still cached" (Checked: Still cached), never Done.
+A save's own purge is checked by the one-minute job.
 
 `deploy/` holds the holding page nginx serves while Odoo restarts or updates (see `deploy/README.md`).

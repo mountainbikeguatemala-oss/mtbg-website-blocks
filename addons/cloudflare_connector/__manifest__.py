@@ -1,6 +1,6 @@
 {
     "name": "Cloudflare Connector",
-    "version": "19.0.2.0.0",
+    "version": "19.0.2.0.1",
     "category": "Productivity/Connectors",
     "mtbg_tours_section": "connectors",
     "summary": "One Cloudflare connection: the account, its API token, R2 storage and the website's page cache, for "
@@ -17,16 +17,17 @@ One Cloudflare connection, like Google and Meta have theirs:
 * ``cloudflare.r2``: an S3-compatible client for R2 (AWS Signature V4, streamed multipart uploads, SHA-256 checked
   by R2 on every upload). Other extensions use it through a soft check, e.g. off-site backups.
 * ``cloudflare.api``: calls to the Cloudflare REST API with the saved token, and the cache purge for the site's
-  zone (everything, or URLs / prefixes / hosts in batches of 30, waiting on rate limits; it never raises).
+  zone (everything, or URLs, prefixes, hosts or cache tags in batches, waiting on rate limits; it never raises).
 * **Website page cache** (19.0.2.0.0: formerly the extension "Cloudflare Page Cache", ``mtbg_tours_edge_cache``,
   merged in with its data and settings; owner, 2026-11-16: the fewest extensions). Ships switched OFF: Settings ›
   Website › Cloudflare page cache. Odoo marks the pages Cloudflare may keep (anonymous GET pages on the list of
   addresses and the website's own public pages; never for a logged-in user, cookie ``mtbg_auth``; never in debug or
   the editor): no cookie and ``Cache-Control: public, max-age=0, s-maxage=<seconds>, stale-if-error=604800``. A
   cached page's form token comes from ``/mtbg/session`` (``window.mtbgSession``). An edit to a website page, view,
-  menu, the website's settings or the blog empties Cloudflare's copies of the pages (page addresses only, from the
-  sitemap in every language, 30 a call); the purged "Pages to re-fill" are asked for again in the background and
-  every night. Every purge is logged. Other extensions say themselves what of theirs the pages show (models,
+  menu, the website's settings or the blog empties Cloudflare's copies of the pages (19.0.2.0.1: by the pages' cache
+  tags and address prefixes, whatever the cache rules' cache key; never scripts, styles or pictures), then a few of
+  them are asked for to check Cloudflare really emptied them; the purged "Pages to re-fill" are asked for again in the
+  background and every night. Every purge is logged, with what changed. Other extensions say themselves what of theirs the pages show (models,
   system parameter prefixes, public files, what changes by itself, live values), no dependency either way: see
   models/sources.py and models/live_values.py. Visits by Script (``mtbg_tours_visit``), where installed, keeps
   cached pages counting visits.

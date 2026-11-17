@@ -21,6 +21,13 @@ what of it a page shows (0.8.0: no dependency either way), on its own models:
 0.9.0: a change empties Cloudflare's copies of page addresses only (pages.py), never its scripts, styles or
 pictures. Here, an edit to a website page's own content (its template, in the editor or translated) empties that page
 alone; everything else (menus, the website's settings, other templates, a module update) every page.
+
+2.0.1 (www, 2026-11-17: "Changes saved · Every page" every hour and after many saves, nothing on the pages changed):
+a write or a translation empties the cache only when a watched field's value really changed (the values before and
+after compared; a binary field always counts), and not when the only change is a read-only date and time (a stamp
+such as a menu's "last rendered" or a record's "synced at": no page shows those). A system parameter written with its
+own value notes nothing either. Each change notes what it was (the model, the system parameter's key), shown in the
+purge log ("Changed: website.menu"), so a change that keeps emptying the pages can be found.
 """
 import logging
 
@@ -61,6 +68,80 @@ def declared_pages(records, vals=None):
 VIEW_CONTENT = {'arch', 'arch_db', 'arch_base', 'arch_prev', 'arch_updated'}
 
 
+def _cache(env, source):
+    """The page cache, told what changed (2.0.1: in the context, so ``_mtbg_changed`` keeps its arguments)."""
+    return env['mtbg.edge.cache'].with_context(mtbg_edge_cache_source=source)
+
+
+def _value(record, name):
+    value = record[name]
+    if isinstance(value, models.BaseModel):
+        return tuple(value.ids)
+    return value
+
+
+def before_write(records, vals, watched=None):
+    """{record id: {field: value}} of the watched fields ``vals`` writes, read before the write (2.0.1), or None:
+    nothing to compare (a binary or unknown field written, or the values could not be read: the change counts)."""
+    if not records or not vals:
+        return None
+    names = [name for name in vals if watched is None or name in watched]
+    if not names:
+        return None
+    try:
+        fields_ = records._fields
+        if any(name not in fields_ or fields_[name].type == 'binary' for name in names):
+            return None
+        return {record.id: {name: _value(record, name) for name in names} for record in records}
+    except Exception:  # noqa: BLE001 - never in the way of the save: the change counts
+        return None
+
+
+def _bookkeeping(field):
+    """A read-only date and time (a stamp: last rendered, synced at...): never what a page shows."""
+    return field.type == 'datetime' and field.readonly
+
+
+def really_changed(records, vals, before):
+    """``vals`` without the fields whose value is the same as ``before`` the write (and without the stamps); ``vals``
+    as given when there is nothing to compare (``before`` None)."""
+    if before is None or vals is None:
+        return vals
+    try:
+        changed = set()
+        for record in records:
+            old = before.get(record.id)
+            if old is None:
+                return vals
+            changed.update(name for name, value in old.items() if _value(record, name) != value)
+    except Exception:  # noqa: BLE001
+        return vals
+    return {name: vals[name] for name in vals if name in changed and not _bookkeeping(records._fields[name])}
+
+
+def before_translation(records, field_name, translations):
+    """{(record id, language): value} of ``field_name`` in the languages ``translations`` changes, or None."""
+    try:
+        if field_name not in records._fields or records._fields[field_name].type == 'binary':
+            return None
+        return {(record.id, lang): record.with_context(lang=lang)[field_name]
+                for record in records for lang in (translations or {})}
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def translation_changed(records, field_name, before):
+    """A translation changed a value (True when there is nothing to compare)."""
+    if before is None:
+        return True
+    try:
+        records.invalidate_recordset([field_name])
+        return any(records.browse(rid).with_context(lang=lang)[field_name] != value
+                   for (rid, lang), value in before.items())
+    except Exception:  # noqa: BLE001
+        return True
+
+
 def param_prefixes(env):
     """The system parameter prefixes whose change empties the cache, kept per registry."""
     registry = env.registry
@@ -77,10 +158,13 @@ class _MtbgEdgeCacheSource(models.AbstractModel):
     _name = 'mtbg.edge.cache.source.mixin'
     _description = 'Shown on cached pages'
 
-    def _mtbg_edge_changed(self, vals=None):
+    def _mtbg_edge_changed(self, vals=None, before=None):
         watched = getattr(self, '_mtbg_edge_fields', None)
+        vals = really_changed(self, vals, before)
+        if vals is not None and not vals:
+            return  # (2.0.1: written with the values it had: nothing a page shows changed)
         if vals is None or watched is None or watched & set(vals):
-            self.env['mtbg.edge.cache']._mtbg_changed(declared_pages(self, vals))
+            _cache(self.env, self._name)._mtbg_changed(declared_pages(self, vals))
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -89,8 +173,9 @@ class _MtbgEdgeCacheSource(models.AbstractModel):
         return records
 
     def write(self, vals):
+        before = before_write(self, vals, getattr(self, '_mtbg_edge_fields', None))
         result = super().write(vals)
-        self._mtbg_edge_changed(vals)
+        self._mtbg_edge_changed(vals, before)
         return result
 
     def unlink(self):
@@ -99,8 +184,10 @@ class _MtbgEdgeCacheSource(models.AbstractModel):
 
     def _update_field_translations(self, field_name, translations, digest=None, source_lang=''):
         # (a text translated in the translation dialog or the website editor, not through write)
+        before = before_translation(self, field_name, translations)
         result = super()._update_field_translations(field_name, translations, digest=digest, source_lang=source_lang)
-        self._mtbg_edge_changed({field_name: True})
+        if translation_changed(self, field_name, before):
+            self._mtbg_edge_changed({field_name: True})
         return result
 
 
@@ -124,12 +211,12 @@ class IrUiView(models.Model):
     _name = 'ir.ui.view'
     _inherit = ['ir.ui.view', 'mtbg.edge.cache.source.mixin']
 
-    def _mtbg_edge_changed(self, vals=None):
+    def _mtbg_edge_changed(self, vals=None, before=None):
         # only the website's templates (the editor's saves, a module's update): not the back office's views
         qweb = self.filtered(lambda view: view.type == 'qweb')
         if not qweb:
             return
-        super(IrUiView, qweb)._mtbg_edge_changed(vals)
+        super(IrUiView, qweb)._mtbg_edge_changed(vals, before)
 
     def _mtbg_edge_cache_pages(self, vals):
         """0.9.0: the content of website pages' own templates (Website › Pages) changed: those pages alone;
@@ -150,8 +237,9 @@ class IrConfigParameter(models.Model):
     def create(self, vals_list):
         records = super().create(vals_list)
         prefixes = param_prefixes(self.env)
-        if any(str(vals.get('key', '')).startswith(prefixes) for vals in vals_list):
-            self.env['mtbg.edge.cache']._mtbg_changed()
+        for key in sorted({str(vals.get('key', '')) for vals in vals_list if str(vals.get('key', '')).startswith(
+                prefixes)}):
+            _cache(self.env, key)._mtbg_changed()
         if any(vals.get('key') == TZ_PARAM for vals in vals_list):
             self.env['mtbg.edge.cache']._mtbg_schedule_warm()
         return records
@@ -159,10 +247,15 @@ class IrConfigParameter(models.Model):
     def write(self, vals):
         prefixes = param_prefixes(self.env)
         keys = self.mapped('key')
-        mine = any(key.startswith(prefixes) for key in keys)
+        mine = sorted(key for key in keys if key.startswith(prefixes))
+        if mine and set(vals) == {'value'}:
+            # (2.0.1: written with its own value: nothing changed)
+            same = {param.key for param in self if param.value == (False if vals['value'] is False else
+                                                                    str(vals['value']))}
+            mine = [key for key in mine if key not in same]
         result = super().write(vals)
-        if mine:
-            self.env['mtbg.edge.cache']._mtbg_changed()
+        for key in mine:
+            _cache(self.env, key)._mtbg_changed()
         if 'value' in vals and TZ_PARAM in keys:
             # (the business's time zone changed: the nightly re-fill keeps to its time in the new one)
             self.env['mtbg.edge.cache']._mtbg_schedule_warm()
@@ -189,11 +282,14 @@ def sources(env):
     return out
 
 
-def _note(records, vals=None, watched=None):
+def _note(records, vals=None, watched=None, before=None):
+    vals = really_changed(records, vals, before)
+    if vals is not None and not vals:
+        return  # (2.0.1: written with the values it had)
     if watched is not None and vals is not None and not watched & set(vals):
         return
     try:
-        records.env['mtbg.edge.cache']._mtbg_changed(declared_pages(records, vals))
+        _cache(records.env, records._name)._mtbg_changed(declared_pages(records, vals))
     except Exception:  # noqa: BLE001 - never in the way of the save
         _logger.exception("Cloudflare page cache: a change to %s could not be noted", records._name)
 
@@ -218,9 +314,10 @@ def watch_softly(env, watch=None):
                 return records
 
             def soft_write(self, vals):
+                before = before_write(self, vals, watched) if self else None
                 result = write(self, vals)
                 if self:
-                    _note(self, vals, watched)
+                    _note(self, vals, watched, before)
                 return result
 
             def soft_unlink(self):
@@ -230,8 +327,9 @@ def watch_softly(env, watch=None):
 
             def soft_translate(self, field_name, translations, digest=None, source_lang=''):
                 # (a text translated in the translation dialog or the website editor, not through write)
+                before = before_translation(self, field_name, translations) if self else None
                 result = translate(self, field_name, translations, digest=digest, source_lang=source_lang)
-                if self:
+                if self and translation_changed(self, field_name, before):
                     _note(self, {field_name: True}, watched)
                 return result
             return soft_create, soft_write, soft_unlink, soft_translate

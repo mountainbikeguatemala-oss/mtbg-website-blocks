@@ -294,6 +294,12 @@ msgstr ""
 #. module: cloudflare_connector
 #. odoo-python
 #: code:addons/cloudflare_connector/models/edge_cache.py:0
+msgid "Changed: %s"
+msgstr "Cambió: %s"
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/edge_cache.py:0
 msgid "Changes saved"
 msgstr "Cambios guardados"
 
@@ -301,6 +307,21 @@ msgstr "Cambios guardados"
 #: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
 msgid "Check API token"
 msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_log__check_paths
+msgid "Check Paths"
+msgstr "Páginas a comprobar"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_log__check
+msgid "Checked"
+msgstr "Comprobado"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__mtbg_edge_cache_log__check__waiting
+msgid "Checking"
+msgstr "Comprobando"
 
 #. module: cloudflare_connector
 #. odoo-python
@@ -475,6 +496,12 @@ msgid "Cloudflare refused: %s"
 msgstr "Cloudflare lo rechazó: %s"
 
 #. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/edge_cache.py:0
+msgid "Cloudflare said OK but the page is still cached: %s"
+msgstr "Cloudflare dijo que sí, pero la página sigue en caché: %s"
+
+#. module: cloudflare_connector
 #: model:ir.model,name:cloudflare_connector.model_cloudflare_setup_choice
 msgid "Cloudflare setup: account, bucket or zone"
 msgstr ""
@@ -634,6 +661,7 @@ msgstr ""
 
 #. module: cloudflare_connector
 #: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_log__scope
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__mtbg_edge_cache_log__check__ok
 msgid "Emptied"
 msgstr "Vaciado"
 
@@ -955,10 +983,21 @@ msgid ""
 msgstr ""
 
 #. module: cloudflare_connector
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__mtbg_edge_cache_log__check__none
+msgid "Not checked"
+msgstr "Sin comprobar"
+
+#. module: cloudflare_connector
 #. odoo-python
 #: code:addons/cloudflare_connector/models/connector.py:0
 msgid "Not checked yet"
 msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/edge_cache.py:0
+msgid "Not checked: the pages did not come through Cloudflare."
+msgstr "Sin comprobar: las páginas no pasaron por Cloudflare."
 
 #. module: cloudflare_connector
 #. odoo-python
@@ -1192,6 +1231,11 @@ msgid "Purge pages now"
 msgstr "Vaciar las páginas ahora"
 
 #. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_log__purged_at
+msgid "Purged At"
+msgstr "Vaciado a las"
+
+#. module: cloudflare_connector
 #. odoo-python
 #: code:addons/cloudflare_connector/models/edge_cache.py:0
 msgid "Purged by hand"
@@ -1395,10 +1439,20 @@ msgid "Some pages"
 msgstr "Algunas páginas"
 
 #. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_change__source
+msgid "Source"
+msgstr "Origen"
+
+#. module: cloudflare_connector
 #: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__step
 #: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__step
 msgid "Step"
 msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__mtbg_edge_cache_log__check__stale
+msgid "Still cached"
+msgstr "Sigue en caché"
 
 #. module: cloudflare_connector
 #. odoo-python
