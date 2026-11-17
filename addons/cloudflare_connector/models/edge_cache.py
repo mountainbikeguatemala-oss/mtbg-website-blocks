@@ -1,7 +1,9 @@
 """Cloudflare's page cache: what Odoo lets it keep (ir_http.py) and the purge after every change (sources.py).
 
-Every call to Cloudflare's API goes through Cloudflare Connector (0.7.0: ``cloudflare.api.purge``, a soft check):
-this module keeps only the website side (which pages, live values, when to purge).
+Part of Cloudflare Connector since 19.0.2.0.0 (owner 2026-11-16: fewest extensions; formerly the extension
+mtbg_tours_edge_cache, retired into this one with its data and settings). Every call to Cloudflare's API goes through
+``cloudflare.api.purge`` (models/connector.py); this part keeps the website side (which pages, live values, when to
+purge). The versions below (0.x) are the former extension's.
 
 A change is noted in ``mtbg.edge.cache.change`` (a row per saving transaction: never a system parameter, which would
 empty Odoo's caches, and never one shared row, which concurrent bookings would fight over), with the pages it touches
@@ -215,7 +217,7 @@ class MtbgEdgeCache(models.AbstractModel):
     @api.model
     def _mtbg_purge_soon(self):
         """The one-minute job, now (a purge of many addresses never holds a visitor's or an editor's request)."""
-        cron = self.env.ref('mtbg_tours_edge_cache.cron_edge_cache_purge', raise_if_not_found=False)
+        cron = self.env.ref('cloudflare_connector.cron_edge_cache_purge', raise_if_not_found=False)
         if cron and cron.sudo().active:
             cron.sudo()._trigger()
 
@@ -349,7 +351,7 @@ class MtbgEdgeCache(models.AbstractModel):
         """The cache's jobs (catch-up purge, homepages' re-fill) on while the cache is on, off while it is off."""
         on = self._mtbg_params()['on']
         for xmlid in self.JOBS:
-            cron = self.env.ref('mtbg_tours_edge_cache.%s' % xmlid, raise_if_not_found=False)
+            cron = self.env.ref('cloudflare_connector.%s' % xmlid, raise_if_not_found=False)
             if cron and cron.sudo().active != on:
                 cron.sudo().active = on
 
@@ -369,7 +371,7 @@ class MtbgEdgeCache(models.AbstractModel):
         """After a purge: its pages that are re-filled (every one of them: ``paths`` None) queued, asked for again in
         a minute (once for a burst of edits)."""
         if self._mtbg_warm_queue(self._mtbg_warm_targets(paths)):
-            cron = self.env.ref('mtbg_tours_edge_cache.cron_edge_cache_warm_queue', raise_if_not_found=False)
+            cron = self.env.ref('cloudflare_connector.cron_edge_cache_warm_queue', raise_if_not_found=False)
             if cron and cron.sudo().active:
                 cron.sudo()._trigger(at=fields.Datetime.now() + timedelta(seconds=WARM_DELAY))
 
@@ -435,7 +437,7 @@ class MtbgEdgeCache(models.AbstractModel):
         done = {}
         for row in Warm.search([], order='id'):
             if time.monotonic() - started > WARM_MAX:
-                cron = self.env.ref('mtbg_tours_edge_cache.cron_edge_cache_warm_queue', raise_if_not_found=False)
+                cron = self.env.ref('cloudflare_connector.cron_edge_cache_warm_queue', raise_if_not_found=False)
                 if cron:
                     cron.sudo()._trigger(at=fields.Datetime.now() + timedelta(seconds=WARM_DELAY))
                 _logger.info("Cloudflare page cache: re-fill time cap reached, %s pages left for the next run",
@@ -486,7 +488,7 @@ class MtbgEdgeCache(models.AbstractModel):
     @api.model
     def _mtbg_schedule_warm(self):
         """The nightly re-fill's next run: the coming re-fill time (settings saved, the time zone changed)."""
-        cron = self.env.ref('mtbg_tours_edge_cache.cron_edge_cache_warm_home', raise_if_not_found=False)
+        cron = self.env.ref('cloudflare_connector.cron_edge_cache_warm_home', raise_if_not_found=False)
         if cron:
             cron.sudo().write({'nextcall': self._mtbg_next_warm(), 'interval_number': 1, 'interval_type': 'days'})
         return cron

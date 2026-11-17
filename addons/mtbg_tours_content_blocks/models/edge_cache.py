@@ -1,4 +1,4 @@
-"""What of this extension the public pages show, for Cloudflare Page Cache (mtbg_tours_edge_cache, where installed:
+"""What of this extension the public pages show, for Cloudflare Connector's page cache (where installed:
 no dependency either way; its models/sources.py reads these). An edit to a watched model empties Cloudflare's cache."""
 from odoo import models
 

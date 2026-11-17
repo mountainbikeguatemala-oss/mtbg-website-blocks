@@ -77,4 +77,4 @@ class ResConfigSettings(models.TransientModel):
 
     def action_mtbg_edge_cache_log(self):
         """The Purge log button (an object button: it is called on the settings record)."""
-        return self.env['ir.actions.act_window']._for_xml_id('mtbg_tours_edge_cache.action_edge_cache_log')
+        return self.env['ir.actions.act_window']._for_xml_id('cloudflare_connector.action_edge_cache_log')

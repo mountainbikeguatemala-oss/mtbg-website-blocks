@@ -2,6 +2,10 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_content_blocks-*'`.
 
+## 19.0.0.11.5 (2026-11-16)
+
+- The page cache is part of Cloudflare Connector (19.0.2.0.0: the extension Cloudflare Page Cache, `mtbg_tours_edge_cache`, merged into it; owner, 2026-11-16: the fewest extensions). This extension's declarations (`models/edge_cache.py`) are unchanged and still need no dependency; the tests read the page cache's helpers from `odoo.addons.cloudflare_connector.models`. No behaviour change.
+
 ## 19.0.0.11.4 (2026-11-15)
 
 - **The shared photo viewer's opt-ins** (owner, 2026-11-15: the client photo album "should use existing lightbox code with panning, pinch to zoom animation between each photo, the only difference for customer gallery is the download button"): `openLightbox(slides, index, {download: {label, onClick(slide)}})` adds a Download button to the top bar (44 px tall) for slides with a `downloadUrl` (default: `downloadSlide()`, an attachment link: the page stays); `videoSlide({src, poster, width, height})` makes a PhotoSwipe HTML slide with a `<video controls playsinline>` at the video's own shape (letterboxed, no zoom), paused when swiped away or closed. Without them nothing changes: the site's galleries and viewers look and work as before.

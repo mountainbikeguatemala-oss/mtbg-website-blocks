@@ -8,14 +8,13 @@ from unittest.mock import MagicMock, call, patch
 from odoo import fields
 from odoo.exceptions import AccessError, UserError
 from odoo.service.model import call_kw
-from odoo.tools.misc import file_path
 from odoo.tests import HttpCase, TransactionCase, new_test_user, tagged
 from odoo.tests.common import Opener
 
-from odoo.addons.mtbg_tours_edge_cache.models import edge_cache, live_values
-from odoo.addons.mtbg_tours_edge_cache.models import ir_http as edge_ir_http
-from odoo.addons.mtbg_tours_edge_cache.models import pages as edge_pages
-from odoo.addons.mtbg_tours_edge_cache.models import sources as edge_sources
+from odoo.addons.cloudflare_connector.models import edge_cache, live_values
+from odoo.addons.cloudflare_connector.models import ir_http as edge_ir_http
+from odoo.addons.cloudflare_connector.models import pages as edge_pages
+from odoo.addons.cloudflare_connector.models import sources as edge_sources
 
 UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/130.0 Safari/537.36'
 
@@ -52,7 +51,7 @@ class _declaring:
 
 
 def _needs_connector(case):
-    """The purge goes through Cloudflare Connector (a soft check: Edge Cache installs without it)."""
+    """The purge goes through Cloudflare Connector (this module's cloudflare.api)."""
     if 'cloudflare.api' not in case.env:
         case.skipTest("Cloudflare Connector is not installed: nothing is purged")
 
@@ -69,7 +68,7 @@ class TestEdgeCachePages(HttpCase):
         super().setUpClass()
         cls.env['website.page'].create({
             'url': '/edge-ride', 'is_published': True, 'name': 'Edge Ride', 'type': 'qweb',
-            'key': 'mtbg_tours_edge_cache.edge_ride', 'website_id': cls.env['website'].get_current_website().id,
+            'key': 'cloudflare_connector.edge_ride', 'website_id': cls.env['website'].get_current_website().id,
             'arch': '<t t-call="website.layout"><div id="wrap"><form><input name="x"/></form>Edge Ride</div></t>'})
 
     def setUp(self):
@@ -136,7 +135,7 @@ class TestEdgeCachePages(HttpCase):
         self.assertFalse(cookies)
         self.env['website.page'].create({
             'url': '/edge-secret', 'is_published': True, 'name': 'Edge secret', 'type': 'qweb',
-            'key': 'mtbg_tours_edge_cache.edge_secret', 'visibility': 'password', 'visibility_password': 'x',
+            'key': 'cloudflare_connector.edge_secret', 'visibility': 'password', 'visibility_password': 'x',
             'arch': '<t t-call="website.layout"><div id="wrap">Secret</div></t>'})
         self.assertNotIn('s-maxage', self._get('/edge-secret')[1], "behind a password")
         if 'blog.post' in self.env:
@@ -215,7 +214,7 @@ class TestEdgeCachePurge(TransactionCase):
         # (a website page: its own content is shown on that page alone)
         cls.page = cls.env['website.page'].create({
             'url': '/purge-page', 'is_published': True, 'name': 'Purge page', 'type': 'qweb',
-            'key': 'mtbg_tours_edge_cache.purge_page', 'website_id': website.id,
+            'key': 'cloudflare_connector.purge_page', 'website_id': website.id,
             'arch': '<t t-call="website.layout"><div id="wrap">Purge page</div></t>'})
         cls.prefixes = [prefix for _code, prefix in cls.Cache._mtbg_languages(website)]
 
@@ -286,7 +285,7 @@ class TestEdgeCachePurge(TransactionCase):
     def test_global_change_purges_every_page_by_the_job(self):
         """A menu (shown on every page): every page address, by the one-minute job called at once; never everything."""
         self._ready()
-        cron = self.env.ref('mtbg_tours_edge_cache.cron_edge_cache_purge')
+        cron = self.env.ref('cloudflare_connector.cron_edge_cache_purge')
         Trigger = self.env['ir.cron.trigger'].sudo()
         before = Trigger.search_count([('cron_id', '=', cron.id)])
         with self._cloudflare() as post:
@@ -313,7 +312,7 @@ class TestEdgeCachePurge(TransactionCase):
         self._ready()
         other = self.env['website.page'].create({
             'url': '/purge-other', 'is_published': True, 'name': 'Purge other', 'type': 'qweb',
-            'key': 'mtbg_tours_edge_cache.purge_other', 'website_id': self.page.website_id.id,
+            'key': 'cloudflare_connector.purge_other', 'website_id': self.page.website_id.id,
             'arch': '<t t-call="website.layout"><div id="wrap">Other</div></t>'})
         self.env.cr.postcommit.clear()
         self.Change.search([]).unlink()
@@ -424,11 +423,6 @@ class TestEdgeCachePurge(TransactionCase):
         self.env.registry.clear_cache('stable')
         params = self.Cache._mtbg_params()
         self.assertFalse(params['on'])
-        # the connector lives in another repository: found by module name, wherever its folder is
-        connector_sql = file_path('cloudflare_connector/data/neutralize.sql')
-        with open(connector_sql) as sql:
-            self.env.cr.execute(sql.read())
-        self.env.registry.clear_cache('stable')
         self.assertFalse(self.env['ir.config_parameter'].sudo().get_param('cloudflare_connector.api_token'),
                          "a copy keeps no purge token (the connector's neutralize)")
 
@@ -496,7 +490,7 @@ class TestEdgeCacheButtons(TransactionCase):
         self.assertEqual([c.kwargs['json'] for c in post.call_args_list], [{'purge_everything': True}])
         log = self.env['mtbg.edge.cache.log'].search([], limit=1)
         self.assertEqual((log.ok, log.scope, log.create_uid), (True, 'everything', self.env.user))
-        for view in ('mtbg_tours_edge_cache.res_config_settings_view_form', 'mtbg_tours_edge_cache.edge_cache_log_list'):
+        for view in ('cloudflare_connector.res_config_settings_view_form', 'cloudflare_connector.edge_cache_log_list'):
             arch = self.env.ref(view).arch
             self.assertRegex(arch, r'name="action_mtbg(_edge_cache)?_purge_everything"[^>]*confirm=', view)
         user = new_test_user(self.env, 'edge_editor2', groups='base.group_user,website.group_website_designer')
@@ -514,7 +508,7 @@ class TestEdgeCacheButtons(TransactionCase):
             result = call_kw(self.env['mtbg.edge.cache.log'], 'action_mtbg_purge_now', [[]], {})
         self.assertEqual(result['params']['type'], 'success')
         self.assertTrue(post.called)
-        arch = self.env.ref('mtbg_tours_edge_cache.edge_cache_log_list').arch
+        arch = self.env.ref('cloudflare_connector.edge_cache_log_list').arch
         self.assertIn('action_mtbg_purge_now', arch)
         user = new_test_user(self.env, 'edge_editor', groups='base.group_user,website.group_website_designer')
         with patch.object(edge_cache.requests, 'post', return_value=answer) as post, self.assertRaises(AccessError):
@@ -580,7 +574,7 @@ class TestEdgeCacheRefill(TransactionCase):
 
     def test_time_cap(self):
         self.Cache._mtbg_warm_queue([('/', 'en_US'), ('/tours/a-ride', 'en_US')])
-        cron = self.env.ref('mtbg_tours_edge_cache.cron_edge_cache_warm_queue')
+        cron = self.env.ref('cloudflare_connector.cron_edge_cache_warm_queue')
         Trigger = self.env['ir.cron.trigger'].sudo()
         before = Trigger.search_count([('cron_id', '=', cron.id)])
         with self._get() as get, patch.object(edge_cache, 'WARM_MAX', -1):
@@ -603,7 +597,7 @@ class TestEdgeCacheRefill(TransactionCase):
 
     def test_purge_queues_its_pages_and_brings_the_refill_forward(self):
         _needs_connector(self)
-        cron = self.env.ref('mtbg_tours_edge_cache.cron_edge_cache_warm_queue')
+        cron = self.env.ref('cloudflare_connector.cron_edge_cache_warm_queue')
         cron.active = True
         Trigger = self.env['ir.cron.trigger'].sudo()
         before = Trigger.search_count([('cron_id', '=', cron.id)])
@@ -649,7 +643,7 @@ class TestEdgeCacheRefill(TransactionCase):
     def test_switch_turns_the_jobs_on_and_off(self):
         answer = MagicMock(status_code=200)
         answer.json.return_value = {'success': True}
-        crons = [self.env.ref('mtbg_tours_edge_cache.%s' % x) for x in self.Cache.JOBS]
+        crons = [self.env.ref('cloudflare_connector.%s' % x) for x in self.Cache.JOBS]
         self.assertEqual(len(crons), 4, "the catch-up purge, the nightly re-fill, the site notice's check (0.6.1), "
                                         "the re-fill queue (0.9.0)")
         _settings(self.env, on=False)
@@ -672,7 +666,7 @@ class TestEdgeCachePageList(TransactionCase):
         _settings(self.env, paths='/ /blog')
         self.env['website.page'].create({
             'url': '/list-page', 'is_published': True, 'name': 'List page', 'type': 'qweb', 'website_indexed': False,
-            'key': 'mtbg_tours_edge_cache.list_page', 'website_id': self.website.id,
+            'key': 'cloudflare_connector.list_page', 'website_id': self.website.id,
             'arch': '<t t-call="website.layout"><div id="wrap">List</div></t>'})
         self.prefixes = [prefix for _code, prefix in self.Cache._mtbg_languages(self.website)]
 
@@ -726,13 +720,9 @@ class TestEdgeCacheJobsSurviveUpgrades(TransactionCase):
     jobs and nightly purge gone, the homepages' re-fill nightly, every job on where the cache is on."""
 
     def _migrate(self, version):
-        import importlib.util
-        from odoo.modules.module import get_module_path
-        path = os.path.join(get_module_path('mtbg_tours_edge_cache'), 'migrations', version, 'post-migrate.py')
-        spec = importlib.util.spec_from_file_location('mtbg_edge_cache_%s' % version.replace('.', '_'), path)
-        migration = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(migration)
-        migration.migrate(self.env.cr, '19.0.0.2.1')
+        # (2.0.0: the former extension's migrations are this connector's upgrade steps, run for an older database)
+        from odoo.addons.cloudflare_connector.tools import page_cache_upgrades
+        getattr(page_cache_upgrades, 'step_' + ''.join(version.split('.')[2:5]))(self.env)
 
     def test_upgrade_to_edit_only(self):
         from odoo.tools import convert_file
@@ -740,25 +730,25 @@ class TestEdgeCacheJobsSurviveUpgrades(TransactionCase):
         Cron = self.env['ir.cron'].sudo()
         old = {}
         for xmlid in ('cron_edge_cache_warm_all', 'cron_edge_cache_nightly'):  # (0.2.0's jobs, still there)
-            old[xmlid] = Cron.create({'name': xmlid, 'model_id': self.env.ref('mtbg_tours_edge_cache.model_mtbg_edge_cache').id,
+            old[xmlid] = Cron.create({'name': xmlid, 'model_id': self.env.ref('cloudflare_connector.model_mtbg_edge_cache').id,
                                       'state': 'code', 'code': 'model._mtbg_warm()', 'active': True})
-            self.env['ir.model.data'].create({'module': 'mtbg_tours_edge_cache', 'name': xmlid, 'model': 'ir.cron',
+            self.env['ir.model.data'].create({'module': 'cloudflare_connector', 'name': xmlid, 'model': 'ir.cron',
                                               'res_id': old[xmlid].id, 'noupdate': True})
-        home = self.env.ref('mtbg_tours_edge_cache.cron_edge_cache_warm_home')
+        home = self.env.ref('cloudflare_connector.cron_edge_cache_warm_home')
         home.write({'interval_number': 15, 'interval_type': 'minutes', 'active': False})
         self._migrate('19.0.0.3.0')
         self.assertEqual(self.env['ir.config_parameter'].sudo().get_param('mtbg_tours.edge_cache_ttl'), '2592000')
         self.assertFalse(any(job.exists() for job in old.values()), "0.2.0's pre-fill jobs and nightly purge gone")
         self.assertEqual((home.interval_number, home.interval_type), (1, 'days'))
         self.assertEqual((home.nextcall.hour, home.nextcall.minute), (6, 5), "00:05 in Guatemala")
-        jobs = [self.env.ref('mtbg_tours_edge_cache.%s' % x) for x in self.env['mtbg.edge.cache'].JOBS]
+        jobs = [self.env.ref('cloudflare_connector.%s' % x) for x in self.env['mtbg.edge.cache'].JOBS]
         self.assertTrue(all(job.active for job in jobs))
-        convert_file(self.env, 'mtbg_tours_edge_cache', 'data/cron.xml', {}, mode='update')
+        convert_file(self.env, 'cloudflare_connector', 'data/page_cache_cron.xml', {}, mode='update')
         self.assertTrue(all(job.active for job in jobs), "the job file loaded again: nothing switched off")
 
     def test_cache_off_jobs_off(self):
         _settings(self.env, on=False)
-        jobs = [self.env.ref('mtbg_tours_edge_cache.%s' % x) for x in self.env['mtbg.edge.cache'].JOBS]
+        jobs = [self.env.ref('cloudflare_connector.%s' % x) for x in self.env['mtbg.edge.cache'].JOBS]
         for job in jobs:
             job.active = True
         self.env['mtbg.edge.cache']._mtbg_sync_jobs()
@@ -842,7 +832,7 @@ class TestLiveValues(HttpCase):
         _settings(self.env)
         self.env['website.page'].create({
             'url': '/edge-baked', 'is_published': True, 'type': 'qweb',
-            'name': 'Edge baked', 'key': 'mtbg_tours_edge_cache.edge_baked',
+            'name': 'Edge baked', 'key': 'cloudflare_connector.edge_baked',
             'arch': '<t t-call="website.layout"><div id="wrap"><p class="edge-keep">Kept</p>'
                     '<div class="mtbg-live mtbg-live--done" data-mtbg-live="tour:1:from">'
                     '<p data-base="From USD $78 /pp">From USD $78 /pp</p></div></div></t>'})
@@ -963,7 +953,7 @@ class TestEdgeCacheSiteNotice(TransactionCase):
         self.assertNotEqual(self.Cache._mtbg_banner_signature(), both)
 
     def test_job_with_the_cache(self):
-        cron = self.env.ref('mtbg_tours_edge_cache.cron_edge_cache_banner')
+        cron = self.env.ref('cloudflare_connector.cron_edge_cache_banner')
         self.Cache._mtbg_sync_jobs()
         self.assertTrue(cron.active)
         _settings(self.env, on=False)
@@ -1062,13 +1052,8 @@ class TestEdgeCacheDeclaredSources(TransactionCase):
     def test_paths_migration_050(self):
         ICP = self.env['ir.config_parameter'].sudo()
         ICP.set_param('mtbg_tours.edge_cache_paths', '/ /es/ /tours /es/tours')
-        import importlib.util
-        from odoo.modules.module import get_module_path
-        path = os.path.join(get_module_path('mtbg_tours_edge_cache'), 'migrations', '19.0.0.5.0', 'post-migrate.py')
-        spec = importlib.util.spec_from_file_location('mtbg_edge_cache_050_post', path)
-        migration = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(migration)
-        migration.migrate(self.env.cr, '19.0.0.4.0')
+        from odoo.addons.cloudflare_connector.tools import page_cache_upgrades
+        page_cache_upgrades.step_050(self.env)
         self.assertEqual(ICP.get_param('mtbg_tours.edge_cache_paths'), '/ /es/ /tours /es/tours /hotels /es/hotels')
         self.assertTrue(self.env['mtbg.edge.cache']._mtbg_path_allowed('/hotels/casa-santo-domingo'))
         self.assertTrue(self.env['mtbg.edge.cache']._mtbg_path_allowed('/es/hotels/casa-santo-domingo'))
@@ -1106,7 +1091,7 @@ class TestHoldingPage(TransactionCase):
         self.assertIn('proxy_intercept_errors on;', conf)
 
     def test_stale_if_error_a_week(self):
-        from odoo.addons.mtbg_tours_edge_cache.models import ir_http
+        from odoo.addons.cloudflare_connector.models import ir_http
         self.assertEqual(ir_http.STALE_IF_ERROR, 604800)
 
 
@@ -1115,12 +1100,8 @@ class TestEdgeCacheConnector(TransactionCase):
     """0.7.0: the purge goes through Cloudflare Connector; the old zone and token move into it."""
 
     def _migrate(self):
-        import importlib.util
-        path = os.path.join(os.path.dirname(edge_cache.__file__), '..', 'migrations', '19.0.0.7.0', 'post-migrate.py')
-        spec = importlib.util.spec_from_file_location('ec_070_post', path)
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        mod.migrate(self.env.cr, '19.0.0.6.8')
+        from odoo.addons.cloudflare_connector.tools import page_cache_upgrades
+        page_cache_upgrades.step_070(self.env)
         self.env.registry.clear_cache('stable')
 
     def _p(self, key):

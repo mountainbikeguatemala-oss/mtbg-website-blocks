@@ -1,0 +1,1889 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* cloudflare_connector
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-16 23:44+0000\n"
+"PO-Revision-Date: 2026-11-16 23:44+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid ""
+"! Public address %(d)s not connected (%(e)s): connect it on the bucket's "
+"Settings in the Cloudflare dashboard (Custom Domains)"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/edge_cache.py:0
+msgid "%(failed)s of %(count)s addresses not purged: %(error)s"
+msgstr "%(failed)s de %(count)s direcciones no se vaciaron: %(error)s"
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "%(what)s failed: %(errors)s"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid ""
+"%s is not on a website of this Cloudflare account: pick a name on one of "
+"them (%s)."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+msgid "(no lock), or keep it if it exists;"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+msgid ""
+"<strong>A bucket of its own for the photos shown online.</strong> The backups bucket has a lock\n"
+"                            (nothing deleted for some days); photos expire and are deleted, so they get their own bucket,\n"
+"                            with no lock."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid ""
+"<strong>R2 storage is not turned on for this Cloudflare account "
+"yet.</strong>"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid "<strong>Step 1 of 4: connect Odoo to your Cloudflare account.</strong>"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid "<strong>Step 2 of 4: the bucket for this site's backups.</strong>"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid "<strong>Step 3 of 4: the website cache (optional).</strong>"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid "<strong>Step 4 of 4: check, then press Set up.</strong>"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+msgid ""
+"<strong>The photo server's key, shown once: copy it now</strong> into the photo server's\n"
+"                            config.env (R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY). Odoo does not keep it."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid ""
+"A bucket is a storage space in Cloudflare R2. This site keeps its off-site backups there:\n"
+"                            the database and its files, every day. Give each site a bucket of its own.\n"
+"                            Cost: the first 10 GB each month are free, then about $0.015 per GB a month. Downloading costs nothing."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid ""
+"A bucket name has 3 to 63 characters: lowercase letters, digits and single "
+"hyphens, starting and ending with a letter or digit."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid ""
+"A bucket name has 3 to 63 characters: lowercase letters, digits and single "
+"hyphens."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid ""
+"A bucket of its own for the photos shown online (no lock: they expire), with"
+" its public address, its lifecycle and CORS rules, the site's key and a key "
+"for the photo server."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_cloudflare_photos_setup_wizard__bucket_name
+msgid "A bucket of its own, with no lock: photos expire and are deleted"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_cloudflare_setup_wizard__create_purge_token
+msgid ""
+"A key that can only purge the cache of the chosen zone (the page cache uses "
+"it when a page changes)."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__cloudflare_api_token
+msgid "API token"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "API token %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "API token failed: %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__account_choice_id
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_setup_choice__kind__account
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid "Account"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__account_count
+msgid "Account Count"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__account_id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__account_id
+msgid "Account ID"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__account_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__account_name
+msgid "Account Name"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Account: %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_log__url_count
+msgid "Addresses"
+msgstr "Direcciones"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_res_config_settings__mtbg_edge_cache_paths
+msgid ""
+"Addresses separated by spaces, each in every language too (/blog is /es/blog"
+" as well). Ending in /: that address alone; else the address and everything "
+"under it (/blog: the blog and every post). The website's own pages (Website "
+"› Pages) are kept wherever they are, unless they are behind a password, a "
+"login or a group."
+msgstr ""
+"Direcciones separadas por espacios, cada una también en todos los idiomas "
+"(/blog es también /es/blog). Terminada en /: solo esa dirección; si no, la "
+"dirección y todo lo que está debajo (/blog: el blog y cada artículo). Las "
+"páginas propias del sitio web (Sitio web › Páginas) se guardan estén donde "
+"estén, salvo si están detrás de una contraseña, un inicio de sesión o un "
+"grupo."
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_res_config_settings__mtbg_edge_cache_warm_paths
+msgid ""
+"Addresses separated by spaces, each in every language too, as for the pages "
+"Cloudflare may keep. After a purge, and every night at the re-fill time, "
+"these pages are asked for again one at a time, as a visitor would, so the "
+"first visitors find them ready."
+msgstr ""
+"Direcciones separadas por espacios, cada una también en todos los idiomas, "
+"como en las páginas que Cloudflare puede guardar. Después de vaciar la "
+"caché, y cada noche a la hora de recarga, estas páginas se vuelven a pedir "
+"una por una, como lo haría un visitante, para que los primeros visitantes "
+"las encuentren listas."
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_res_config_settings__mtbg_edge_cache
+msgid ""
+"Anonymous visitors get the listed pages from Cloudflare's cache; any change "
+"empties it. Off: every page is built for every visitor (Cloudflare keeps "
+"nothing)."
+msgstr ""
+"Los visitantes anónimos reciben las páginas de la lista desde la caché de "
+"Cloudflare; cualquier cambio la vacía. Desactivada: cada página se construye"
+" para cada visitante (Cloudflare no guarda nada)."
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form
+msgid ""
+"Anonymous visitors get these pages from Cloudflare's cache; an edit to "
+"anything they show (pages, menus, and what the installed extensions put on "
+"them) empties it. Prices, spaces and statuses load live, never cached."
+msgstr ""
+"Los visitantes anónimos reciben estas páginas desde la caché de Cloudflare; "
+"cualquier edición de lo que muestran (páginas, menús y lo que ponen las "
+"extensiones instaladas) la vacía. Precios, cupos y estados se cargan en "
+"vivo, nunca en caché."
+
+#. module: cloudflare_connector
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_photos_setup_wizard__location_hint__apac
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_setup_wizard__location_hint__apac
+msgid "Asia-Pacific"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid "Back"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__bucket_mode
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_setup_choice__kind__bucket
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_setup_wizard__step__bucket
+msgid "Bucket"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__bucket_count
+msgid "Bucket Count"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__bucket_name_taken
+msgid "Bucket Name Taken"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_cloudflare_setup_wizard__lock_days
+msgid ""
+"Bucket lock: nothing under the locked folders can be deleted or overwritten "
+"before this age, not even with the bucket's key. 0 = no lock."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.edge_cache_log_list
+msgid "By"
+msgstr "Por"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_log__request_count
+msgid "Calls"
+msgstr "Llamadas"
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+msgid "Cancel"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/edge_cache.py:0
+msgid "Changes saved"
+msgstr "Cambios guardados"
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid "Check API token"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Checking the token"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__choice_ids
+msgid "Choice"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid "Close"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid "Cloudflare"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_cloudflare_api
+msgid "Cloudflare API"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/page_cache_settings.py:0
+msgid "Cloudflare Connector is not installed"
+msgstr "Cloudflare Connector no está instalado"
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/edge_cache.py:0
+msgid ""
+"Cloudflare Connector is not installed: install it, then Settings › "
+"Cloudflare › Set up Cloudflare."
+msgstr ""
+"Cloudflare Connector no está instalado: instálalo y luego ve a Ajustes › "
+"Cloudflare › Configurar Cloudflare."
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "Cloudflare R2 is not set up yet: Settings › Cloudflare. (%s)"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_cloudflare_r2
+msgid "Cloudflare R2 storage"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid "Cloudflare account"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__cloudflare_account_id
+msgid "Cloudflare account ID"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid ""
+"Cloudflare asks for it once per account: open R2 and follow its steps to turn it on.\n"
+"                            The first 10 GB each month are free; Cloudflare may ask for a card even so. Then come back and press <em>Next</em> again."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__mtbg_edge_cache_connection
+msgid "Cloudflare connection"
+msgstr "Conexión con Cloudflare"
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "Cloudflare could not be reached: %s"
+msgstr "No se pudo contactar a Cloudflare: %s"
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Cloudflare did not answer: %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/edge_cache.py:0
+msgid "Cloudflare did not purge."
+msgstr "Cloudflare no vació la caché."
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/edge_cache.py:0
+msgid "Cloudflare did not purge: %s"
+msgstr "Cloudflare no vació la caché: %s"
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/edge_cache.py:0
+msgid "Cloudflare emptied everything it kept of the site."
+msgstr "Cloudflare vació todo lo que guardaba del sitio."
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/edge_cache.py:0
+msgid "Cloudflare emptied its copies of the pages."
+msgstr "Cloudflare vació sus copias de las páginas."
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Cloudflare has no permission group named %s on this account."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid ""
+"Cloudflare is set up. Extensions that store files in R2 (for example off-"
+"site backups) can use the bucket now."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_mtbg_edge_cache
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__mtbg_edge_cache
+msgid "Cloudflare page cache"
+msgstr "Caché de páginas de Cloudflare"
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_mtbg_edge_cache_change
+msgid "Cloudflare page cache: a change to purge"
+msgstr "Caché de páginas de Cloudflare: un cambio por vaciar"
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_mtbg_edge_cache_warm
+msgid "Cloudflare page cache: a page to re-fill"
+msgstr "Caché de páginas de Cloudflare: una página por recargar"
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_mtbg_edge_cache_log
+msgid "Cloudflare page cache: purges"
+msgstr "Caché de páginas de Cloudflare: vaciados"
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_mtbg_edge_cache_live_values
+msgid "Cloudflare page cache: the live values"
+msgstr "Caché de páginas de Cloudflare: los valores en vivo"
+
+#. module: cloudflare_connector
+#: model:ir.actions.act_window,name:cloudflare_connector.action_edge_cache_log
+msgid "Cloudflare purges"
+msgstr "Vaciados de Cloudflare"
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "Cloudflare refused the call: %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "Cloudflare refused: %s"
+msgstr "Cloudflare lo rechazó: %s"
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_cloudflare_setup_choice
+msgid "Cloudflare setup: account, bucket or zone"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_res_config_settings
+msgid "Config Settings"
+msgstr "Ajustes de configuración"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_photos_setup_wizard__step__connect
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_setup_wizard__step__connect
+msgid "Connect"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__cloudflare_status
+msgid "Connection status"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid ""
+"Could not delete the setup token (%s): delete it on the Cloudflare "
+"dashboard."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_change__create_date
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_setup_wizard__bucket_mode__new
+msgid "Create a new bucket"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Create the bucket %(name)s in %(where)s"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid "Create the token on Cloudflare"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__create_uid
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_choice__create_uid
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__create_uid
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_log__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__create_date
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_choice__create_date
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__create_date
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_log__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Creating bucket %(b)s failed: %(e)s"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid "Creating the %s key"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Creating the R2 key"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Creating the cache-purge token"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Delete the setup token in Cloudflare"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__delete_setup_token
+msgid "Delete the setup token in Cloudflare when done"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_api__display_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__display_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_r2__display_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_choice__display_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__display_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_ir_config_parameter__display_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_ir_http__display_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_ir_module_module__display_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_ir_ui_view__display_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache__display_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_change__display_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_live_values__display_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_log__display_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_source_mixin__display_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_warm__display_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_website__display_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_website_menu__display_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_website_page__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__done
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__done
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_log__ok
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_photos_setup_wizard__step__done
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_setup_wizard__step__done
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+msgid "Done"
+msgstr "Hecho"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_change__during_update
+msgid "During Update"
+msgstr "Durante la actualización"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_photos_setup_wizard__location_hint__eeur
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_setup_wizard__location_hint__eeur
+msgid "Eastern Europe"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_photos_setup_wizard__location_hint__enam
+msgid "Eastern North America"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_setup_wizard__location_hint__enam
+msgid "Eastern North America (closest to a server in Miami or New York)"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_log__scope
+msgid "Emptied"
+msgstr "Vaciado"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_res_config_settings__mtbg_edge_cache_ttl
+msgid ""
+"Every edit in Odoo empties Cloudflare's cache at once, and prices, seats and"
+" dates come to the pages live: a page can stay a month (Cloudflare drops "
+"copies nobody asks for sooner)."
+msgstr ""
+"Cada edición en Odoo vacía la caché de Cloudflare al instante, y los "
+"precios, cupos y fechas llegan a las páginas en vivo: una página puede "
+"quedarse un mes (Cloudflare descarta antes las copias que nadie pide)."
+
+#. module: cloudflare_connector
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__mtbg_edge_cache_log__scope__pages
+msgid "Every page"
+msgstr "Todas las páginas"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__mtbg_edge_cache_log__scope__everything
+msgid "Everything"
+msgstr "Todo"
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/edge_cache.py:0
+msgid "Everything purged by hand"
+msgstr "Todo vaciado a mano"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__bucket_choice_id
+msgid "Existing bucket"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid ""
+"Filled in by Set up Cloudflare. Other extensions (for example off-site "
+"backups) store their files in this bucket. Enter values by hand only for a "
+"bucket set up outside Odoo."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid ""
+"Filled in by Set up Cloudflare. The API token can only purge the cache of "
+"the site’s zone (the page cache, Settings › Website, uses it)."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_cloudflare_setup_wizard__account_id
+msgid "Filled in when the token is checked."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Finding the account"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Finding zone %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_cloudflare_setup_wizard__lock_prefixes
+msgid ""
+"Folders of the bucket the lock covers, separated by spaces (the connection "
+"test writes and deletes a file outside them)."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_ir_http
+msgid "HTTP Routing"
+msgstr "Enrutamiento HTTP"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_api__id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_r2__id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_choice__id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_ir_config_parameter__id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_ir_http__id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_ir_module_module__id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_ir_ui_view__id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache__id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_change__id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_live_values__id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_log__id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_source_mixin__id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_warm__id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_website__id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_website_menu__id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_website_page__id
+msgid "ID"
+msgstr "ID"
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid ""
+"If this site's pages go through Cloudflare, Odoo can clear Cloudflare's copy of a page as soon as it changes,\n"
+"                            so visitors never see an old version. Odoo gets a key that can only clear the cache of the website you pick, nothing else."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_res_config_settings__mtbg_edge_cache_warm_time
+msgid ""
+"In the business's time zone (UTC where none is set). Before the nightly "
+"speed log (02:30)."
+msgstr ""
+"En la zona horaria del negocio (UTC si no hay ninguna). Antes del registro "
+"de velocidad nocturno (02:30)."
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_choice__info
+msgid "Info"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__lock_days
+msgid "Keep every file at least (days)"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_choice__key
+msgid "Key"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_choice__kind
+msgid "Kind"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_warm__lang
+msgid "Lang"
+msgstr "Idioma"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__write_uid
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_choice__write_uid
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__write_uid
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_log__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__write_date
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_choice__write_date
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__write_date
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_log__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid "Last check"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_res_config_settings__cloudflare_r2_endpoint
+msgid ""
+"Leave empty for the account's endpoint (https://<account "
+"ID>.r2.cloudflarestorage.com). Only needed for a jurisdiction endpoint such "
+"as .eu."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__create_purge_token
+msgid "Let Odoo clear this site's cache on Cloudflare"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__mtbg_edge_cache_live_values
+msgid "Live values"
+msgstr "Valores en vivo"
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form
+msgid "Live values: never kept by Cloudflare"
+msgstr "Valores en vivo: Cloudflare nunca los guarda"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__location_hint
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__location_hint
+msgid "Location"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Lock: files in %(folders)s cannot be deleted for %(days)s days"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__lock_prefixes
+msgid "Locked folders"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__log
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__log
+msgid "Log"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid ""
+"Lowercase letters, digits and hyphens, 3 to 63 characters. It cannot be "
+"renamed later."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_cloudflare_setup_wizard__setup_token
+msgid ""
+"Made with the Create the token on Cloudflare button (the permissions come "
+"filled in). It is used for this setup only and deleted in Cloudflare at the "
+"end."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_cloudflare_photos_setup_wizard__setup_token
+msgid ""
+"Made with the Create the token on Cloudflare button; used for this setup "
+"only and deleted in Cloudflare at the end."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Make a key that can only clear the cache of %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Make this site's own R2 key, limited to that bucket, and test it"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_log__message
+msgid "Message"
+msgstr "Mensaje"
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_ir_module_module
+msgid "Module"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/edge_cache.py:0
+msgid "Modules updated"
+msgstr "Módulos actualizados"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_choice__name
+msgid "Name"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__bucket_name
+msgid "New bucket name"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid "Next"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__mtbg_edge_cache_warm_time
+msgid "Nightly re-fill time"
+msgstr "Hora de recarga nocturna"
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "No Cloudflare API token yet: Settings › Cloudflare."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid ""
+"No Cloudflare zone or cache-purge token yet: Settings › Cloudflare › Set up "
+"Cloudflare."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "No cache key"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "No lock"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "No photos bucket yet: press Set up photos storage."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid ""
+"No website of this account was found, so there is nothing to set here. Press"
+" <em>Next</em>."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "Not checked yet"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/page_cache_settings.py:0
+msgid "Not set up: Settings › Cloudflare › Set up Cloudflare"
+msgstr "Sin configurar: Ajustes › Cloudflare › Configurar Cloudflare"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_photos_setup_wizard__location_hint__oc
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_setup_wizard__location_hint__oc
+msgid "Oceania"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+msgid "Odoo will, in account"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "Only administrators (or the system) can purge the cache."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Only administrators can set up Cloudflare."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "Only administrators can use the Cloudflare R2 connection."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "Only administrators can use the Cloudflare connection."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/edge_cache.py:0
+msgid "Only an administrator can empty the page cache."
+msgstr "Solo un administrador puede vaciar la caché de páginas."
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid "Only an administrator sets up Cloudflare."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid "Open R2 on Cloudflare"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_website_page
+msgid "Page"
+msgstr "Página"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__mtbg_edge_cache_paths
+msgid "Pages Cloudflare may keep"
+msgstr "Páginas que Cloudflare puede guardar"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__mtbg_edge_cache_warm_paths
+msgid "Pages to re-fill"
+msgstr "Páginas por recargar"
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid ""
+"Paste it below and press <em>Next</em>. Odoo only uses it for this setup and"
+" deletes it in Cloudflare at the end."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+msgid ""
+"Paste it below, check the names and press <em>Next</em>. The token is "
+"deleted in Cloudflare at the end."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid ""
+"Paste one setup token: Odoo finds the account, creates this site's R2 bucket"
+" with its lock, makes its own narrow keys, tests them and deletes the setup "
+"token. Run it again any time."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Paste the setup token first."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid "Paste the token here"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_warm__path
+msgid "Path"
+msgstr "Ruta"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_change__paths
+msgid "Paths"
+msgstr "Rutas"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__nas_access_key_id
+msgid "Photo server access key ID"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__nas_secret_access_key
+msgid "Photo server secret access key"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__bucket_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__cloudflare_photos_bucket
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid "Photos bucket"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__cloudflare_photos_domain
+msgid "Photos public address"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid "Photos storage"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "Photos storage check failed: %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "Photos storage works: bucket %s accepted a write, a read and a delete."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Pick the bucket to use."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Pick the website, or untick the cache key."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+msgid ""
+"Press <em>Create the token on Cloudflare</em>, then <em>Review token</em> › "
+"<em>Create Token</em>, and copy it."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid ""
+"Press <em>Create the token on Cloudflare</em>. Cloudflare opens with the "
+"permissions already filled in (sign in first if it asks)."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid ""
+"Press <em>Review token</em>, then <em>Create Token</em>, and copy the token "
+"it shows."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid "Protection against deletion (bucket lock)"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__domain
+msgid "Public address"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.edge_cache_log_list
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form
+msgid "Purge everything"
+msgstr "Vaciar todo"
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.edge_cache_log_list
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form
+msgid ""
+"Purge everything Cloudflare keeps of the site, scripts, styles and pictures "
+"too, at every Cloudflare location? The next visitors get slower pages until "
+"it fills again. For emergencies only: a change already empties the pages it "
+"touches."
+msgstr ""
+"¿Vaciar todo lo que Cloudflare guarda del sitio, también scripts, estilos e "
+"imágenes, en todas las ubicaciones de Cloudflare? Los próximos visitantes "
+"recibirán páginas más lentas hasta que se vuelva a llenar. Solo para "
+"emergencias: un cambio ya vacía las páginas que toca."
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form
+msgid "Purge log"
+msgstr "Registro de vaciados"
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.edge_cache_log_list
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form
+msgid "Purge pages now"
+msgstr "Vaciar las páginas ahora"
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/edge_cache.py:0
+msgid "Purged by hand"
+msgstr "Vaciado a mano"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__r2_enabled
+msgid "R2 Enabled"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "R2 OK (bucket %s: write, read and delete)"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__r2_url
+msgid "R2 Url"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__cloudflare_r2_access_key_id
+msgid "R2 access key ID"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__cloudflare_r2_bucket
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid "R2 bucket"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "R2 check failed: %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__nas_endpoint
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__cloudflare_r2_endpoint
+msgid "R2 endpoint"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "R2 failed: %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid ""
+"R2 is not turned on for this account: open R2 on the Cloudflare dashboard "
+"(%s), turn it on, then run the setup again."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid ""
+"R2 is not turned on for this account: turn it on on the Cloudflare "
+"dashboard, then run the setup again."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__cloudflare_r2_secret_access_key
+msgid "R2 secret access key"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid "R2 storage"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "R2 works: bucket %s accepted a write, a read and a delete."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Reading the R2 buckets failed: %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Reading the permission groups"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid "Reading the websites"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_photos_setup_wizard__step__review
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_setup_wizard__step__review
+msgid "Review"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__mtbg_edge_cache_ttl
+msgid "Seconds Cloudflare keeps a page"
+msgstr "Segundos que Cloudflare guarda una página"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_choice__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid "Set up"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+#: model:ir.actions.act_window,name:cloudflare_connector.action_cloudflare_setup_wizard
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid "Set up Cloudflare"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_cloudflare_setup_wizard
+msgid "Set up Cloudflare from Odoo"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid "Set up from Odoo"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Set up from Odoo; R2 OK (bucket %s)"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+#: model:ir.actions.act_window,name:cloudflare_connector.action_cloudflare_photos_setup_wizard
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid "Set up photos storage"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_cloudflare_photos_setup_wizard
+msgid "Set up photos storage on Cloudflare"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid "Setting CORS"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Setting the bucket lock"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid "Setting the lifecycle rules"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__setup_token
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__setup_token
+msgid "Setup token"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_mtbg_edge_cache_source_mixin
+msgid "Shown on cached pages"
+msgstr "Mostrado en páginas en caché"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__origin
+msgid "Site address (CORS)"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__mtbg_edge_cache_log__scope__some
+msgid "Some pages"
+msgstr "Algunas páginas"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__step
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__step
+msgid "Step"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Stopped: %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__summary
+msgid "Summary"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/page_cache_settings.py:0
+msgid "Switched off"
+msgstr "Desactivada"
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/page_cache_settings.py:0
+msgid "Switched on"
+msgstr "Activada"
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_ir_config_parameter
+msgid "System Parameter"
+msgstr "Parámetro del sistema"
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid "Test R2 connection"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid "Test photos storage"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/connector.py:0
+msgid "The Cloudflare API token is %s."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid ""
+"The account has a bucket named %s already: pick it under \"Use a bucket that"
+" already exists\", or choose another name."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid ""
+"The account has a bucket with this name already. Choose another name, or "
+"pick it under <em>Use a bucket that already exists</em>."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "The lock cannot be negative (0 = no lock)."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "The new R2 key did not work yet: %s. Run the setup again in a minute."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid ""
+"The new photos key did not work yet: %s. Run the setup again in a minute."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_cloudflare_photos_setup_wizard__domain
+msgid ""
+"The photos' public address (a name on one of the account's websites): the "
+"gallery and the emails show pictures from https://<this>/<key>"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_res_config_settings__mtbg_edge_cache_live_values
+msgid ""
+"The prices, spaces and statuses the pages load after they open: never kept "
+"by Cloudflare."
+msgstr ""
+"Los precios, cupos y estados que las páginas cargan después de abrir: "
+"Cloudflare nunca los guarda."
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid "The public address is a name such as photos.example.com."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid ""
+"The setup stopped. What it finished is kept; fix the cause and run the setup"
+" again."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "The setup token is not valid (Cloudflare could not verify it)."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid "The site address starts with https://"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_cloudflare_photos_setup_wizard__origin
+msgid "The site's address its pages upload and download from"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "The token sees %(n)s accounts (%(names)s): pick the account."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid "The token sees %s accounts: make it again for one account only."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid ""
+"The token sees no Cloudflare account: create it again with the button above."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/edge_cache.py:0
+msgid "The website has no address (Website › Settings › Domain)."
+msgstr "El sitio web no tiene dirección (Sitio web › Ajustes › Dominio)."
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_res_config_settings__mtbg_edge_cache_connection
+msgid ""
+"The zone and its cache-purge token come from Cloudflare Connector (Settings "
+"› Cloudflare › Set up Cloudflare)."
+msgstr ""
+"La zona y su token para vaciar la caché vienen de Cloudflare Connector "
+"(Ajustes › Cloudflare › Configurar Cloudflare)."
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid ""
+"This takes up to half a minute. You can run the setup again any time: a new "
+"key replaces the old one."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid ""
+"This token sees several Cloudflare accounts: pick the one this site's "
+"backups go to, then press <em>Next</em> again."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_setup_wizard__bucket_mode__existing
+msgid "Use a bucket that already exists"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Use the bucket %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_ir_ui_view
+msgid "View"
+msgstr "Vista"
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_website
+msgid "Website"
+msgstr "Sitio web"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__zone_choice_id
+msgid "Website (zone)"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model,name:cloudflare_connector.model_website_menu
+msgid "Website Menu"
+msgstr "Menú del sitio web"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_setup_wizard__step__cache
+msgid "Website cache"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.actions.server,name:cloudflare_connector.cron_edge_cache_purge_ir_actions_server
+msgid "Website: empty Cloudflare's page cache after changes"
+msgstr "Sitio web: vaciar la caché de páginas de Cloudflare tras los cambios"
+
+#. module: cloudflare_connector
+#: model:ir.actions.server,name:cloudflare_connector.cron_edge_cache_banner_ir_actions_server
+msgid "Website: empty Cloudflare's page cache when the site notice changes"
+msgstr ""
+"Sitio web: vaciar la caché de páginas de Cloudflare cuando cambia el aviso "
+"del sitio"
+
+#. module: cloudflare_connector
+#: model:ir.actions.server,name:cloudflare_connector.cron_edge_cache_warm_queue_ir_actions_server
+msgid "Website: re-fill Cloudflare's copies of purged pages"
+msgstr "Sitio web: recargar las copias de Cloudflare de las páginas vaciadas"
+
+#. module: cloudflare_connector
+#: model:ir.actions.server,name:cloudflare_connector.cron_edge_cache_warm_home_ir_actions_server
+msgid "Website: re-fill Cloudflare's copies of the pages every night"
+msgstr ""
+"Sitio web: recargar cada noche las copias de Cloudflare de las páginas"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_photos_setup_wizard__location_hint__weur
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_setup_wizard__location_hint__weur
+msgid "Western Europe"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_photos_setup_wizard__location_hint__wnam
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_setup_wizard__location_hint__wnam
+msgid "Western North America"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.edge_cache_log_list
+msgid "When"
+msgstr "Cuándo"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_cloudflare_setup_wizard__location_hint
+msgid ""
+"Where Cloudflare keeps the bucket. Pick the one closest to the server: "
+"backups go up and come back faster. It cannot be changed later."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
+msgid ""
+"While a file is younger than this, nobody can delete or overwrite it, not even with the bucket's own key.\n"
+"                        A backup stays safe if the site or its key is ever misused. 7 days is a good start; 0 turns the lock off.\n"
+"                        A bucket that already has a lock keeps its own."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_log__reason
+msgid "Why"
+msgstr "Motivo"
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_choice__wizard_id
+msgid "Wizard"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_photos_setup_wizard__zone_id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__zone_name
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__cloudflare_zone_name
+#: model:ir.model.fields.selection,name:cloudflare_connector.selection__cloudflare_setup_choice__kind__zone
+msgid "Zone"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/page_cache_settings.py:0
+msgid "Zone %s (Settings › Cloudflare)"
+msgstr "Zona %s (Ajustes › Cloudflare)"
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "Zone %s is not in this Cloudflare account."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__zone_count
+msgid "Zone Count"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__cloudflare_zone_id
+msgid "Zone ID"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+msgid "connect its public address"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+msgid "create the bucket"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+msgid ""
+"delete <code>tours/</code> after 60 days, <code>inbox/</code> after 14 and "
+"<code>staging/</code> after 120 (lifecycle rules);"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form_cloudflare
+msgid "https://<account ID>.r2.cloudflarestorage.com"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+msgid "https://www.example.com"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+msgid "let"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "made %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+msgid ""
+"make the site's key for the bucket, and a key for the photo server, shown "
+"once;"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+msgid "photos.example.com"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+msgid "test the bucket, then delete the setup token in Cloudflare."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_photos_setup_wizard_form
+msgid "upload (PUT) and download (GET, HEAD) photos (CORS);"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "✓ Account %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "✓ Bucket %s (already there)"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "✓ Bucket %s already exists: kept"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "✓ Bucket %s created"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid "✓ Bucket %s created (no lock)"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "✓ Bucket lock kept as it is (%s rules)"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "✓ Bucket lock: %(folders)s kept at least %(days)s days"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid "✓ CORS: PUT (Content-Type), GET and HEAD from %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "✓ Cache key created for %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid "✓ Lifecycle: %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid "✓ Photo server key created, limited to bucket %s (shown below once)"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid "✓ Photos storage test passed: write, read back, delete"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid "✓ Public address %s already connected"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid "✓ Public address %s connected"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "✓ R2 key created, limited to bucket %s (object read and write)"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "✓ R2 test passed: write, read back, delete"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "✓ Setup token deleted in Cloudflare"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid "✓ Site key created, limited to bucket %s"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/setup.py:0
+msgid "✓ The previous R2 key was revoked"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/photos_setup.py:0
+msgid "✓ The previous photos key was revoked"
+msgstr ""

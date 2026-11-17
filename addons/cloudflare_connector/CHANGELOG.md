@@ -1,5 +1,12 @@
 # Cloudflare Connector
 
+## 19.0.2.0.0 (2026-11-16)
+
+- **The website's page cache is part of the connector** (owner, 2026-11-16: "yes merge"; the fewest extensions is a governing rule). The extension "Cloudflare Page Cache" (`mtbg_tours_edge_cache` 19.0.0.9.0) is merged in whole: its models (`mtbg.edge.cache`, the change notes, the re-fill queue, the purge log, the live values list), the page headers and `mtbg_auth` cookie (`ir.http`), `/mtbg/session` and its script, the settings (Settings › Website › Cloudflare page cache, the same system parameters `mtbg_tours.edge_cache*`), its four jobs, the purge log, the holding page (deploy/) and its tests. The declarations protocol is unchanged: other extensions keep declaring `_mtbg_edge_cache_watch`, `_mtbg_edge_cache_pages`, `_mtbg_edge_cache_param_prefixes`, `_mtbg_edge_cache_static_prefixes`, `_mtbg_edge_cache_fingerprint()` and `_mtbg_edge_cache_live_values` on their own models, and test for `'mtbg.edge.cache' in env`; only the Python path of its helpers moved (`odoo.addons.cloudflare_connector.models.live_values`, `.sources`, `.edge_cache`, `.ir_http`, `.pages`).
+- **Nothing lost on an upgrade**: the 19.0.2.0.0 pre-migrate (or, on a first install, the pre_init_hook) hands every record of the former extension to this module with its id (its xml ids copied, then its names removed at the end of the run: tools/retire.py), so the jobs, settings, views, access rules, models, fields, their tables and the purge log rows stay as they are; the former extension is marked uninstallable (never listed, installed or loaded again; no uninstall runs, nothing is dropped). Where its old folder is still on a server, the connector keeps it uninstallable at every load and after Update Apps List. A database whose page cache was older than 0.9.0 gets the former migrations it had not had (tools/page_cache_upgrades.py; at 0.9.0: none). The manifest declares `mtbg_takes_over` so the updater installs the connector on a site that has only the former extension.
+- **Depends on Website** (the page cache inherits the website's pages, menus, views and settings); every site that uses the connector has Website. Visits by Script (`mtbg_tours_visit`) is no longer required: where installed, cached pages keep counting visits.
+- Neutralize: the page cache switched off and its former token removed on a copy, with the connector's own keys. Spanish (tú): the former extension's translations are this module's (i18n/, new).
+
 ## 19.0.1.6.1 (2026-11-15)
 
 - Set up photos storage adds a third lifecycle rule: `staging/` deleted after 120 days (Tour photos' previews: every photo staged as it comes into the album, before Send to clients). A bucket set up before keeps its rules: add this one on the bucket's Settings in the Cloudflare dashboard.
@@ -78,3 +85,225 @@
 - `cloudflare.r2`: R2 client (Signature V4, streamed multipart above 64 MiB, SHA-256 on every upload), list, head,
   download, delete. `cloudflare.api`: REST calls with the saved token.
 - Neutralize clears the token and R2 keys on a site copy.
+
+## History of the page cache (the former extension mtbg_tours_edge_cache, merged in 19.0.2.0.0)
+
+### 19.0.0.9.0 · 2026-11-16
+- **Page addresses only, never "purge everything"** (owner, 2026-11-16, PageSpeed check): Cloudflare's "purge everything" after each change and each module update also emptied the script and style bundles and every picture at every Cloudflare location, so the next visitors and the nightly speed log met cold copies. A purge now sends only page addresses (models/pages.py): the website's sitemap, the homepages, the website's published pages and the entries of "Pages Cloudflare may keep", each in every language (`/x` and `/es/x`; a record with a translated name at its address in that language). `/web/assets/...` and `/web/image/...` are never purged (their addresses change with their content).
+- **Which pages**: an edit to a website page's own content (its template, in the editor or translated) empties that page alone, in every language, right after the save (one call). Anything else (a menu, the website's settings, a shared template, the site notice, a page created or deleted) and every module update empties every page, through the one-minute job called at once (a save never waits for it). Extensions may declare `_mtbg_edge_cache_pages(vals)` on a watched model: the only pages a change shows on (None: every page).
+- **Batches**: 30 addresses a call (Cloudflare allows 100 on Free, Pro and Business today), half a second between calls, a refused call tried again after 1 s and 2 s (the connector also waits on Cloudflare's 429); a purge that still fails is logged with how many addresses were left and is tried again by the job.
+- **A page address that cannot be purged** (not on the list, such as a blog's page 2 or a tag, or with a query string: campaigns, filters) is kept by Cloudflare an hour at most, no longer the month.
+- **Re-fill**: after a purge its pages under "Pages to re-fill" (new setting, default `/ /tours`: the homepages and every tour, category and region page, in every language) are queued and asked for again a minute later, one at a time with a pause, as an anonymous visitor (no cookie, the page's language), within a 15-minute cap a run (the rest a minute later); every one of them again each night at "Nightly re-fill time" (new setting, default 02:00 in the business's time zone `mtbg_tours.operator_tz` where there is one, else UTC: before the 02:30 speed log). New job "re-fill Cloudflare's copies of purged pages"; the homepages' nightly job becomes the nightly re-fill of every page (migration).
+- **Buttons**: "Purge pages now" (every page) and, for emergencies, "Purge everything" with a confirmation (Settings and the purge log).
+- **Purge log**: what was emptied (Everything, Every page, Some pages), how many addresses and calls, by whom and why (Changes saved, Modules updated, Purged by hand...); the first addresses of a purge of some pages.
+- Spanish: 36 strings added to es.po and the .pot (also those of 0.7.0 and 0.8.0 still missing).
+
+### 19.0.0.8.0 · 2026-11-11
+- **Universal** (owner, 2026-11-11: general extensions in their own repositories, "used on other sites without installing tours core"): moves to the Website Blocks repository, keeps its technical name, settings and data, and needs only Website and Visits by Script. Any Odoo website can use it.
+- **Each extension says what of it the pages show**, on its own models, no dependency either way (as the Alert Feed's sources): `_mtbg_edge_cache_watch` (models whose edits empty the cache: True or the watched fields), `_mtbg_edge_cache_param_prefixes` (system parameters), `_mtbg_edge_cache_static_prefixes` (public files given without a session), `_mtbg_edge_cache_fingerprint()` (what changes by itself: the site notice) and `_mtbg_edge_cache_live_values` (the live values, listed under the settings). Odoo's own website, its pages, menus and templates, and the blog stay watched here. The Tours extensions declare theirs in the same release (Catalog, Departures, Booking Form, Website, Rentals, Accommodations, Site Notice, Reusable Blocks): the same purges as before. A watched model's text translated in the editor now empties the cache for every watched model (it did for tours and their categories, not for hotels or towns).
+- The undeclared live key warning wraps the live answer where an extension has it; the country of `/mtbg/session` is read here (Cloudflare's header, else Odoo's geo IP), no longer from Forms.
+- A new install starts with the pages `/ /blog`; a site keeps its own list.
+- Tests: the page-cache tests run on a plain website (purge tests skip without Cloudflare Connector); those needing tours, bookings, hotels or the notice move to those extensions.
+
+### 19.0.0.7.1 (2026-11-10)
+
+- The holding page (deploy/updating.html) ships with no business name or logo, just a plain header; the copy on a server is the operator's. Deploy notes use example addresses. Brand-free release (owner, 2026-11-10): no business names in code, data, samples, comments or tests.
+
+### 19.0.0.7.0 (2026-11-10)
+- Every Cloudflare call goes through Cloudflare Connector (owner: "yes we need to try and get all cloudflare functions
+  in the single cloudflare connector extension"): the purge is `cloudflare.api.purge(everything=True)`, a soft check
+  (`'cloudflare.api' in env`; without the connector the purge log says so). The Tours logic stays here (which pages,
+  live values, when to purge, re-fill, stale-if-error).
+- The Zone ID and API token settings are gone: Settings shows the connector's zone instead. The upgrade moves an
+  existing zone and token into the connector's settings (only where the connector has none yet), so the site keeps
+  purging with no new setup, and removes the old token.
+
+### 19.0.0.6.8 (2026-11-08)
+
+- The live values' table: the card keys (tour and departure price, spaces, full, status) are the Tours website's, where
+  Tour Cards was merged (the module clean-up).
+
+### 19.0.0.6.7 · 2026-11-08
+
+- **The site stays up during updates** (owner: "is there anyway to keep the site live while we do backend updates?"):
+  - the pages Cloudflare keeps now carry `stale-if-error=604800`: while the server restarts, updates or is down
+    (502, 503, 504), Cloudflare still answers a kept page even when its time has run out, for up to a week. Prices
+    and seats stay live (never kept), and fill once the site is back;
+  - the holding page for everything else (booking, checkout and payment, forms, the chat, the back office):
+    `deploy/updating.html`, in English and Spanish with the logo, "back in about 2 minutes", reloading by itself once
+    the site answers. Served by nginx on the server with HTTP 503 and Retry-After: 120 (`deploy/nginx-updating.conf`),
+    both while Odoo restarts and while it answers its own update 503. Cloudflare's Free plan has no custom error
+    pages, so nginx serves it. Owner steps (Cloudflare's Always Online off, the nginx lines):
+    `deploy/README.md`.
+
+### 19.0.0.6.6 · 2026-11-05
+
+- The page cache is emptied when a journal post's Gallery photos change (Tiled Gallery 0.5.8) and when a page template
+  (tour, rental or blog post page) or its elements are saved; the template editor's unsaved preview is no change.
+
+### 19.0.0.6.5 · 2026-11-03
+
+- Spanish (bulk translation pass): the .pot regenerated from Odoo's export and es.po rebuilt from it; 13 new Spanish translations; 5 strings added to the .pot that were missing (they never loaded); 4 strings no longer in the code removed. No English text changed.
+
+### 19.0.0.6.4 · 2026-11-03
+
+- Live values: `tour:<id>:rental_table`, a rental page's Rental period discounts table (Bike Rentals 1.11.0).
+
+### 19.0.0.6.3 · 2026-11-03
+
+- Live values: `delivery:<id>:amount`, the Delivery prices block's charge of a pickup / return place (Bike Rentals
+  1.10.0).
+
+### 19.0.0.6.2 · 2026-11-03
+
+- **One purge per update, not one per module** (www, 2026-11-03: while the night's updates ran, Cloudflare's copies
+  were emptied about every 2 minutes; every module upgraded writes its website templates again, a change each).
+  While modules are installed or upgraded (Update all, the updaters, a module's data loading) a change is only
+  noted; the one-minute job purges once, when no update has noted one for 3 minutes. Edits made on a running site
+  purge at once, as before.
+
+### 19.0.0.6.1 · 2026-11-03
+
+- **The cache is emptied when the site notice changes by itself** (owner: "yes when banner changes"): a departure
+  full from bookings, its booking deadline passed, the next one taking its place, none left. Bookings never empty
+  the cache (0.3.0), so the cached pages kept the notice as it was when they were made. Every 5 minutes a job
+  ("Website: empty Cloudflare's page cache when the site notice changes") compares the notice as the pages would draw
+  it now (its departures, their order and words, the one shown first, in each language; not its price, which is
+  live) with the one they carry. When it differs, a change is noted as for an edit (the same purge after the save,
+  the same 10-second spacing and one-minute catch-up job) and the purge keeps the new notice's fingerprint: one purge
+  per change, a refused one tried again. On most days a few purges, or none. With the cache (on and off with it); nothing without Site Notice. The Big Tours
+  banner is fetched live by its script, never kept by Cloudflare: nothing to do there.
+
+### 19.0.0.6.0 · 2026-11-03
+
+- **Filled live values are emptied, no longer a reason not to cache** (found on www 2026-11-03: the tour pages showed
+  the same day-old "From USD $78" and "$1444.15" on every tour for a moment, and Cloudflare stopped keeping them):
+  a tour page saved in the website editor while its script had filled the prices keeps them in its templates. A
+  declared placeholder that arrives filled in a visitor's page is now emptied before the page leaves Odoo (the
+  script fills it from /mtbg_tours/live as always) and logged with what it held; the page is cached as usual.
+- **Every public page may be kept** (owner's search plan, 2026-11-03): each address in "Pages Cloudflare may keep"
+  stands for every language (/blog is /es/blog too); the website's own pages (Website › Pages: About us, Contact
+  us...) are kept wherever they are, unless behind a password, a login or a group. This version adds /blog and
+  /tour-policies to the settings; new default: `/ /tours /blog /hotels /tour-policies`. Booking, payment, account,
+  invoice and token pages stay out (never listed, never a website page).
+- **No session for search engines' files:** /sitemap.xml (and its parts), /robots.txt and /favicon.ico no longer
+  hand a new visitor a session cookie.
+- **Blog edits empty the cache:** posts, blogs and their categories (a post's view count is not an edit).
+- Cloudflare: the "Odoo: public pages" rule no longer needs a list of addresses (Odoo's header decides); see the
+  handoff note.
+
+### 19.0.0.5.2 · 2026-11-03
+
+- **Live values declared for tour page {placeholders}** (Booking Form 0.4.31): `tour:<id>:spots_left`,
+  `tour:<id>:next_date` (availability), `tour:<id>:from_price`, `tour:<id>:early_bird_deadline` (price). They are
+  made in the visitor's browser from the names typed in the page; the page's HTML only has `{spots_left}` etc.
+
+### 19.0.0.5.1 · 2026-11-02
+
+- **"Purge cache now" button** (owner: "need button on the extension to purge cache"): on the Cloudflare page cache
+  settings (it was the small "Test purge" link) and at the top of the purge log. Cloudflare empties the whole page
+  cache at once, whatever was edited; logged as "Purged by hand"; the homepages are filled again a minute later.
+  Administrators only.
+- **Town edits empty the cache** (for Accommodations 0.8.0's hotels by town): a town (Catalog's Locations: its name,
+  blog category, hotel list, upgrades) and a town's hotel list lines, created, changed or deleted. Watched where they
+  exist, like the hotels (no dependency): without 0.8.0 only the towns themselves. A hotel's publishing, name, address,
+  photos and description and a room type's hotel were already watched (0.5.0). Blog pages are not among the pages
+  Cloudflare keeps (settings › Pages), so a blog category page shows a town's hotels as soon as they change.
+
+### 19.0.0.5.0 · 2026-11-01
+
+- **The hotel pages are kept by Cloudflare too** (owner's direction: everything cached long-term except the live
+  values): /hotels/<slug> and /es/hotels/<slug> (Accommodations' public hotel pages) join the pages Cloudflare may
+  keep (this version's migration adds them to the settings); a room type's price per night is a declared live value
+  (hotel_class:<id>:price), never in the page.
+- **A hotel's photos carry no session cookie** for a new visitor (as the site's files since 0.2.1), so Cloudflare keeps
+  them (/hotels/photo/…, a year for the versioned address).
+- **Hotel edits empty the cache:** a hotel, a room type or a hotel photo created, changed or deleted. Accommodations
+  stays optional (no dependency, no glue module): where it is installed its models are watched when the registry
+  loads; a failure there is logged and never stops the save. Room prices and availability are live, not watched.
+- **Reusable content blocks empty the cache** (a gap until now): an edit to a block used on tour pages or as a hotel's
+  description no longer stays in Cloudflare's copy.
+
+### 19.0.0.4.0 · 2026-11-01
+
+- **The live values' declarations** (owner, 2026-11-01: "a table of declarations of any live pricing values that need
+  to be excluded from cache global"; "this list should live only in your extension"): every price, availability,
+  status and booking-form value the public pages load after they open is declared here (models/live_values.py: its
+  key, what it shows in English and Spanish, the extension answering it, its kind), and listed read-only under
+  Settings › Website › Cloudflare page cache › Live values. Enforcement, all in this extension:
+  - a page whose declared placeholder arrives filled is not given to Cloudflare (logged): no price or count is kept
+    for a month by mistake;
+  - the live route warns about a key nobody declared (it still answers it, so a visitor never sees an empty price);
+  - the tests open the home pages, the catalog, a tour page, a rental page and a tour page with a hotel upgrade
+    (where there is one): every live key declared ("undeclared live key: …" otherwise), every placeholder empty, and
+    none of the live answer's prices or counts in the page.
+
+### 19.0.0.3.0 · 2026-11-01
+
+- **Edit-only: Cloudflare keeps the pages a month** (owner, 2026-11-01: "99% of the page is static … we shouldn't
+  have to clear the entire cache of the page just to change a few numbers"; prices, seats, dates' status load live
+  from /mtbg_tours/live, never cached):
+  - the cache is emptied only when what the pages show is edited: tours, pages, menus, templates, categories,
+    regions, the site's settings, and a departure created or deleted or its tour, dates, times, state, visibility,
+    places, description, photo or notice/Big Tours fields changed; never for a booking, seats, a price rule or a
+    departure's back-office notes, logistics or links;
+  - a page stays 30 days (2592000 s; this version's migration sets it);
+  - the homepages (/ and /es) are asked for again a minute after a purge (once for a burst of edits) and every night
+    at 00:05 Guatemala time (Cloudflare drops copies nobody asks for); the other pages fill on their first visit;
+  - 0.2.0's 15-minute and 6-hour pre-fill and its nightly purge are removed (the live script hides departures that
+    have passed or closed).
+
+### 19.0.0.2.1 · 2026-11-01
+
+- **The site's script bundles and files reach Cloudflare's cache** (coordinator's check of www, 2026-11-01): Odoo
+  handed a new visitor a session cookie with every script bundle (/web/assets) and file (/web/content), and
+  Cloudflare never keeps a response that sets a cookie. Those requests no longer start a session for a visitor without
+  one who is not logged in (nothing is kept in it for a file; Odoo's /web/image already does the same). A private file
+  stays private: Odoo still sends it to a logged-in user marked "private" and answers "not found" to anyone else.
+
+### 19.0.0.2.0 · 2026-11-01
+
+- **The homepage is already in Cloudflare when a visitor comes** (owner, 2026-10-31: "Front page is the page I am
+  most concerned about that can cache and serve as quick as possible"; www answers a cached page in 0.14–0.19 s,
+  a page Cloudflare does not have yet in 0.5–1.4 s). Cloudflare keeps a page only once someone asked for it, and www
+  gets a few dozen views an hour, so Odoo now asks for the cached pages itself, through Cloudflare, as an anonymous
+  visitor (no cookie, no login, one page at a time with a pause, at most 10 minutes a round; no visitor or visit is
+  recorded):
+  - the homepages (/ and /es) every 15 minutes, every cached page (catalog, tours, categories, regions, each language)
+    every 6 hours, and both soon after every purge;
+  - a nightly purge at 00:05 Guatemala time for what a new date changes (early-bird prices, past departures); a
+    booking deadline passing within the day is already followed by the pages' scripts on the visitor's clock;
+  - the three jobs are switched on and off with the cache; an upgrade no longer switches them off (0.1.x's job file
+    switched the catch-up purge off at every upgrade, so saves stopped purging until the settings were saved again):
+    the jobs are created once, and this version's migration switches all of them on where the cache is on, no Save
+    needed;
+  - a page now stays a day in Cloudflare by default (every change in Odoo still empties it at once); www keeps the
+    value set in its settings.
+
+### 19.0.0.1.1 · 2026-10-30
+
+- **The "Purge log" button works** (owner, www 2026-10-30: "TypeError: ResConfigSettings.action_mtbg_edge_cache_log()
+  takes 1 positional argument but 2 were given"): it was declared as a model method, but a settings button is
+  called on the settings record. Tests press both buttons as the web client does (Purge log, Test purge with
+  Cloudflare answering yes and no).
+
+### 19.0.0.1.0 · 2026-10-30
+
+- **Cloudflare page cache** (owner, 2026-10-30: page speed plan, phase 3), **shipped switched OFF**: Settings ›
+  Website › "Cloudflare page cache", with the zone's ID, an API token (Zone › Cache Purge › Purge only), the pages
+  Cloudflare may keep (to start: `/ /es/ /tours /es/tours`) and for how long (300 s).
+- Switched on, an anonymous visitor's GET of a listed page (status 200, not debug or the editor) carries
+  `Cache-Control: public, max-age=0, s-maxage=<seconds>` and no cookie at all; every other page is untouched, so
+  Cloudflare's rule ("use the cache-control header, bypass without one") keeps only those.
+- `mtbg_auth=1` is set while the session has a user (login) and removed without one (logout): Cloudflare never
+  serves a cached page to a logged-in user.
+- `/mtbg/session` (never cached) gives a cached page's visitor their own form token and country when they start
+  filling a form (`window.mtbgSession`); Forms 19.0.0.4.6 opens the phone field on that country.
+- After every save that changes a tour, departure, a booking's seats, a price rule, category, region, website page,
+  template, menu, the website's own settings (the chat tab...) or an `mtbg_tours.*` setting, one Cloudflare "purge
+  everything" once the save is committed (at most one every 10 s per worker; the one-minute job, on with the switch,
+  sends the rest and retries refusals). The last 200 purges are listed (Settings › Purge log). Copies are switched off
+  and lose the token (neutralize).
+- Another extension can ask for a purge with `env['mtbg.edge.cache']._mtbg_changed()` when it is installed (soft
+  call: e.g. Communication Flows when the chat tab's WhatsApp or text number changes).
+- Needs Visits by Script (mtbg_tours_visit), so cached pages keep counting visits.

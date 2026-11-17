@@ -152,8 +152,8 @@ class CloudflareSetupWizard(models.TransientModel):
                                           "backups go up and come back faster. It cannot be changed later.")
 
     create_purge_token = fields.Boolean("Let Odoo clear this site's cache on Cloudflare", default=True,
-                                        help="A key that can only purge the cache of the chosen zone (Edge Cache "
-                                             "uses it when a page changes).")
+                                        help="A key that can only purge the cache of the chosen zone (the page "
+                                             "cache uses it when a page changes).")
     zone_choice_id = fields.Many2one("cloudflare.setup.choice", "Website (zone)",
                                      domain="[('wizard_id', '=', id), ('kind', '=', 'zone')]")
     zone_count = fields.Integer(compute="_compute_counts")

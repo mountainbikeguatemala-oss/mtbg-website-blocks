@@ -1,4 +1,4 @@
-# Keeping the site up during updates (Edge Cache 0.6.7)
+# Keeping the site up during updates (page cache 0.6.7, Cloudflare Connector)
 
 Owner question, 2026-11-08: "is there anyway to keep the site live while we do backend updates? is it nessecary to
 bring the entire site down to update extensions?"

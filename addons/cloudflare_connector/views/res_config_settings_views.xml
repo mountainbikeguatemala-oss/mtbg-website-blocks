@@ -18,7 +18,7 @@
                         </setting>
                     </block>
                     <block title="Cloudflare account" name="cloudflare_account">
-                        <setting string="Account" help="Filled in by Set up Cloudflare. The API token can only purge the cache of the site’s zone (Edge Cache uses it).">
+                        <setting string="Account" help="Filled in by Set up Cloudflare. The API token can only purge the cache of the site’s zone (the page cache, Settings › Website, uses it).">
                             <div class="content-group">
                                 <div class="row mt8">
                                     <label for="cloudflare_account_id" class="col-lg-4 o_light_label"/>

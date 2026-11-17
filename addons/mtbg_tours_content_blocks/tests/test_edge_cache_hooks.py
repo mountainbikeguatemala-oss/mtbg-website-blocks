@@ -4,7 +4,7 @@ from odoo.tests import TransactionCase, tagged
 
 
 class _EdgeCacheHooks(TransactionCase):
-    """Cloudflare Page Cache (another repository, optional): where it is installed, this extension's declarations
+    """Cloudflare Connector's page cache (optional): where it is installed, this extension's declarations
     reach it. Its edits only noted (``_mtbg_changed`` mocked): never Cloudflare."""
 
     def setUp(self):
@@ -17,11 +17,11 @@ class _EdgeCacheHooks(TransactionCase):
         self.addCleanup(changed.stop)
 
     def _declared(self, key):
-        from odoo.addons.mtbg_tours_edge_cache.models import live_values
+        from odoo.addons.cloudflare_connector.models import live_values
         return live_values.declared(self.env, key)
 
     def _watched(self, model):
-        from odoo.addons.mtbg_tours_edge_cache.models import sources
+        from odoo.addons.cloudflare_connector.models import sources
         return sources.sources(self.env).get(model, 'not watched')
 
 @tagged('post_install', '-at_install', 'mtbg')
