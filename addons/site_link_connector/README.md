@@ -106,8 +106,9 @@ needs the group *Site Link: calls from a linked site* (or to be an administrator
   opened. `GET /site_link/sso/<token>` signs the user in (replacing any other session in that browser; two-factor
   authentication is not asked again: the user is signed in on the other site) and opens `/odoo`; a used, expired or
   unknown link, or a user no longer allowed, opens `/web/login`. Every ticket and sign-in, given or refused, is logged.
-- `user_sync`: users matched by login (case does not matter); a missing active one is made as an internal user with
-  no password (it signs in by single sign-on; no invitation email); name and email follow; `active: false` archives
+- `user_sync`: users matched by login (case does not matter); a missing one is made, as an internal user with no
+  password (it signs in by single sign-on; no invitation email), **only when it is active and `shop_access` is
+  true**: access to this site comes only with shop access. Otherwise only an existing user is updated; name and email follow; `active: false` archives
   the user here (true brings it back); `shop_access` true gives the group *Site link: single sign-on allowed* and the
   **Shop Access Groups** of this site's linked sites, false takes them away, null leaves them. User ids 1 and 2,
   administrators (Settings or Access Rights rights), the calling user and portal users are never changed (answered
@@ -142,8 +143,10 @@ On the site whose employees are the list (e.g. the one with the Staff App): its 
 Employees**. Its internal users (archived ones too; never ids 1 and 2) go to the other site's `user_sync` on every
 change of a user (the cron "Site Link: send employees to linked sites" is run right after), once a day, and with
 **Sync employees now** (the result is kept on the link). Skipped when the other site offers no `user_sync`. Another
-extension says who has shop access by overriding `site.link._site_link_sync_users_list()` (default: `shop_access`
-null). Set Send Employees on one side only.
+extension says who is sent and who has shop access by defining `res.users._site_link_employees()` (answering
+`[{login, name, email, active, shop_access}]`; no dependency on this connector needed), or by overriding
+`site.link._site_link_sync_users_list()`. Default: the internal users with `shop_access` null. User ids 1 and 2 and
+the template and public users are never sent, whatever the list. Set Send Employees on one side only.
 
 On the other site: its link back gets the role **Staff accounts** and the **Shop Access Groups**. Its login page then
 shows **Log in with your staff account**: `<staff site>/site_link/sso/start?return=<this site's address>` signs the

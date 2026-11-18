@@ -2,6 +2,14 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'site_link_connector-*'`.
 
+## 19.0.0.2.2 · 2026-11-18
+- Employee list: when another extension defines `res.users._site_link_employees()` (same answer as
+  `site.link._site_link_sync_users_list()`), that list is sent, so it needs no dependency on this connector. User ids
+  1 and 2 and the template and public users are still never sent.
+- `user_sync` makes a missing user only when it is active and has `shop_access` true (owner, 2026-11-18: access to
+  the shop site comes only from the shop staff role). With false or null only an existing user is updated; false
+  still takes the shop groups away (no single sign-on).
+
 ## 19.0.0.2.1 · 2026-11-18
 - **Security**: administrators never come through the site link. Single sign-on refuses users with Settings
   (`base.group_system`) or Access Rights (`base.group_erp_manager`) rights besides user ids 1 and 2, when the ticket is

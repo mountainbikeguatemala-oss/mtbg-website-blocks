@@ -273,8 +273,8 @@ class SiteLinkApi(models.AbstractModel):
     @api.model
     def user_sync(self, users):
         """The linked site's employee list, ``users`` = [{login, name, email, active, shop_access}], made true here:
-        users matched by login (case does not matter); missing active ones made as internal users without a password
-        (they sign in by single sign-on); name and email kept up to date; archived there = archived here (and back);
+        users matched by login (case does not matter); a missing user is made (internal, without a password: it signs
+        in by single sign-on) only when it is active and ``shop_access`` is True, otherwise only existing users change; name and email kept up to date; archived there = archived here (and back);
         ``shop_access`` True gives the shop groups (single sign-on and the Shop Access Groups), False takes them away,
         null leaves them. Never user ids 1 and 2, administrators (Settings or Access Rights), the calling user or
         portal users: they are answered with ``skipped``. Users not in the list are left
@@ -309,11 +309,11 @@ class SiteLinkApi(models.AbstractModel):
                 row['skipped'] = _("the calling user") if not user.share else _("portal user")
                 continue
             if not user:
-                if not active:
+                # access to this site comes only with shop access: no user is made for anyone else
+                if not active or shop is not True:
                     continue
-                vals = {'login': login, 'name': name, 'email': email, 'group_ids': [(4, internal.id)]}
-                if shop is True:
-                    vals['group_ids'] += [(4, g.id) for g in shop_groups]
+                vals = {'login': login, 'name': name, 'email': email,
+                        'group_ids': [(4, internal.id)] + [(4, g.id) for g in shop_groups]}
                 user = Users.create(vals)
                 row.update(user_id=user.id, created=True)
                 notes.append(_("%s made", login))

@@ -257,15 +257,21 @@ class SiteLink(models.Model):
     # ------------------------------------------------------------------ one employee list (caller side)
 
     def _site_link_sync_users_list(self):
-        """Hook: the employees sent to the linked site ``self``: [{login, name, email, active, shop_access}].
-        Default: this site's internal users, archived ones included (they are archived there too), never user ids 1
-        and 2 or the template users; ``shop_access`` None (the other site leaves its shop groups alone). Another
-        extension overrides it to say who has shop access (True / False)."""
+        """The employees sent to the linked site ``self``: [{login, name, email, active, shop_access}].
+        When another extension defines ``res.users._site_link_employees()`` (same answer; no dependency on this
+        connector needed), its list is used (as superuser); otherwise this site's internal users, archived ones
+        included (they are archived there too), with ``shop_access`` None (the other site leaves its shop groups
+        alone). Either way user ids 1 and 2 and the template and public users are never sent."""
         self.ensure_one()
         skip = {1, 2} | {u.id for u in (self.env.ref('base.default_user', raise_if_not_found=False),
                                          self.env.ref('base.public_user', raise_if_not_found=False)) if u}
-        users = self.env['res.users'].sudo().with_context(active_test=False).search(
-            [('share', '=', False), ('id', 'not in', list(skip))], order='id')
+        Users = self.env['res.users'].sudo().with_context(active_test=False)
+        if hasattr(Users, '_site_link_employees'):
+            skip_logins = {login.lower() for login in Users.browse(list(skip)).exists().mapped('login') if login}
+            return [dict(e) for e in (Users._site_link_employees() or [])
+                    if isinstance(e, dict) and isinstance(e.get('login'), str)
+                    and e['login'].strip().lower() not in skip_logins]
+        users = Users.search([('share', '=', False), ('id', 'not in', list(skip))], order='id')
         return [{'login': u.login, 'name': u.name, 'email': u.email or None, 'active': u.active,
                  'shop_access': None} for u in users]
 

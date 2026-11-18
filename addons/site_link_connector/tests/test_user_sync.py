@@ -167,3 +167,47 @@ class TestSiteLinkUserSync(TransactionCase):
             self.env['site.link'].create({'name': 'X', 'base_url': 'https://x.example.com',
                                           'shop_group_ids': [(6, 0, implying.ids)]})
         self.staff_site.write({'shop_group_ids': [(4, self.env['res.groups'].create({'name': 'SLC ok'}).id)]})
+
+    def test_hook_on_res_users(self):
+        """Another extension's res.users._site_link_employees() is the list (as superuser), filtered."""
+        ResUsers = type(self.env['res.users'])
+        self.assertFalse(hasattr(ResUsers, '_site_link_employees'), "the connector does not define it")
+        root, admin = self.env.ref('base.user_root'), self.env.ref('base.user_admin')
+        public = self.env.ref('base.public_user')
+        employees = [
+            {'login': self.existing.login, 'name': 'Emp', 'email': None, 'active': True, 'shop_access': True},
+            {'login': admin.login.upper(), 'name': 'Admin', 'email': None, 'active': True, 'shop_access': True},
+            {'login': root.login, 'name': 'Root', 'email': None, 'active': True, 'shop_access': True},
+            {'login': public.login, 'name': 'Public', 'email': None, 'active': True, 'shop_access': True},
+            {'login': 'only.listed@example.com', 'name': 'Listed', 'email': None, 'active': False,
+             'shop_access': False},
+        ]
+        seen = []
+
+        def _site_link_employees(users_self):
+            seen.append(users_self.env.su)
+            return employees
+
+        ResUsers._site_link_employees = _site_link_employees
+        try:
+            users = self.staff_site.with_user(self.link_user)._site_link_sync_users_list()
+        finally:
+            del ResUsers._site_link_employees
+        self.assertEqual(seen, [True], "called once, as superuser")
+        self.assertEqual(users, [employees[0], employees[4]])
+
+    def test_no_user_made_without_shop_access(self):
+        """Access comes only with shop access: false or null never makes a user, only updates an existing one."""
+        answer = self.sync(
+            {'login': 'no.shop@example.com', 'name': 'No Shop', 'active': True, 'shop_access': False},
+            {'login': 'null.shop@example.com', 'name': 'Null Shop', 'active': True, 'shop_access': None},
+            {'login': 'missing.shop@example.com', 'name': 'Missing Shop', 'active': True},
+            {'login': 'emp.both@example.com', 'name': 'Updated Anyway', 'email': 'old@example.com', 'active': True,
+             'shop_access': False},
+        )
+        self.assertEqual([(a['user_id'], a['created']) for a in answer[:3]], [(None, False)] * 3)
+        self.assertFalse(self.env['res.users'].with_context(active_test=False).search(
+            [('login', 'in', ['no.shop@example.com', 'null.shop@example.com', 'missing.shop@example.com'])]))
+        self.assertEqual((answer[3]['user_id'], answer[3]['updated']), (self.existing.id, True))
+        self.assertEqual(self.existing.name, 'Updated Anyway')
+        self.assertNotIn(self.sso, self.existing.group_ids)
