@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_crm_rule_internal,crm rule internal user,model_mtbg_crm_rule,base.group_user,1,0,0,0
+access_crm_rule_admin,crm rule administrator,model_mtbg_crm_rule,base.group_system,1,1,1,1
+access_crm_rule_action_internal,crm rule action internal user,model_mtbg_crm_rule_action,base.group_user,1,0,0,0
+access_crm_rule_action_admin,crm rule action administrator,model_mtbg_crm_rule_action,base.group_system,1,1,1,1
+access_crm_rule_run_internal,crm rule run internal user,model_mtbg_crm_rule_run,base.group_user,1,0,0,0
+access_crm_rule_run_admin,crm rule run administrator,model_mtbg_crm_rule_run,base.group_system,1,1,1,1
+access_crm_rule_change_internal,crm rule change internal user,model_mtbg_crm_rule_change,base.group_user,1,0,0,0
+access_crm_rule_change_admin,crm rule change administrator,model_mtbg_crm_rule_change,base.group_system,1,1,1,1
+access_crm_duplicate_internal,crm duplicate internal user,model_mtbg_crm_duplicate,base.group_user,1,1,0,0
+access_crm_duplicate_admin,crm duplicate administrator,model_mtbg_crm_duplicate,base.group_system,1,1,1,1
+access_crm_rule_inbox_admin,crm rule inbox administrator,model_mtbg_crm_rule_inbox,base.group_system,1,0,0,0

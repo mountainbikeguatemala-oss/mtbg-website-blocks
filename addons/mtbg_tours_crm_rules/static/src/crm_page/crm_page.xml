@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mtbg_tours_crm_rules.CrmRulesPage">
+        <div class="o_action mtbg_crm_page h-100 d-flex flex-column">
+            <div class="d-flex flex-wrap align-items-center gap-3 px-4 py-2 border-bottom">
+                <img src="/mtbg_tours_crm_rules/static/description/icon.png" class="mtbg_crm_page_icon" alt=""/>
+                <div class="flex-grow-1">
+                    <h2 class="mb-0">Contact Rules</h2>
+                    <div class="text-muted small">What is kept tidy on its own: each rule looks after the contacts, and
+                        every change it makes can be undone.</div>
+                </div>
+            </div>
+            <ul class="nav nav-tabs px-3 pt-2">
+                <li class="nav-item"><a href="#" class="nav-link" t-att-class="{'active': state.tab === 'crm'}" t-on-click.prevent="() => this.setTab('crm')">
+                    <i class="fa fa-magic me-1"/>Contact rules</a></li>
+                <li class="nav-item"><a href="#" class="nav-link" t-att-class="{'active': state.tab === 'changes'}" t-on-click.prevent="() => this.setTab('changes')">
+                    <i class="fa fa-history me-1"/>Changes</a></li>
+            </ul>
+            <t t-call="mtbg_tours_crm_rules.CrmRulesTab"/>
+            <t t-call="mtbg_tours_crm_rules.CrmChangesTab"/>
+        </div>
+    </t>
+</templates>

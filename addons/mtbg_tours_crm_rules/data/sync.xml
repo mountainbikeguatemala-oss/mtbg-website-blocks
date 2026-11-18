@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- at each install / update: a rule for every stock helper (and every extension's) that has none yet -->
+    <function model="mtbg.crm.rule" name="_mtbg_sync_sources"/>
+</odoo>

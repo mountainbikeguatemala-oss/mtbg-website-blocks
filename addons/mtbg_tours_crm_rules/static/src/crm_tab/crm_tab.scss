@@ -1,0 +1,4 @@
+// the Contact rules tabs, on their own page (.mtbg_crm_page) and on the Alert Feed's (.mtbg_ap)
+.mtbg_crm_page, .mtbg_ap {
+    .mtbg_crm_dry > td { background: var(--bs-tertiary-bg, #f8f9fa); }
+}

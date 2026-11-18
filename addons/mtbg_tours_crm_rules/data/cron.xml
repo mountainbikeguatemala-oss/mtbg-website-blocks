@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- the Contact rules that run every day -->
+    <record id="cron_daily_rules" model="ir.cron">
+        <field name="name">MTBG Tours: Contact rules (daily)</field>
+        <field name="model_id" ref="model_mtbg_crm_rule"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_mtbg_daily()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
+    </record>
+    <!-- the Contact rules that run when a message comes in (the messages queued by the channels) -->
+    <record id="cron_received_rules" model="ir.cron">
+        <field name="name">MTBG Tours: Contact rules (messages received)</field>
+        <field name="model_id" ref="model_mtbg_crm_rule"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_mtbg_received()</field>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="active" eval="True"/>
+    </record>
+</odoo>

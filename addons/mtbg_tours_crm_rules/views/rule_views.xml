@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- the Contact rules: the board (On / off, By source), the list with Core's side bar, the rule -->
+    <record id="view_crm_rule_kanban" model="ir.ui.view">
+        <field name="name">mtbg.crm.rule.kanban</field>
+        <field name="model">mtbg.crm.rule</field>
+        <field name="arch" type="xml">
+            <kanban quick_create="false" class="mtbg_card_kanban" js_class="mtbg_board_kanban">
+                <templates>
+                    <t t-name="card">
+                        <widget name="mtbg_record_card"/>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_crm_rule_list" model="ir.ui.view">
+        <field name="name">mtbg.crm.rule.list</field>
+        <field name="model">mtbg.crm.rule</field>
+        <field name="arch" type="xml">
+            <list js_class="mtbg_sidebar_list" create="false" decoration-muted="state == 'waiting'">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="model_id" string="Records"/>
+                <field name="trigger"/>
+                <field name="last_run" optional="show"/>
+                <field name="touched_count" optional="show"/>
+                <field name="source" optional="hide"/>
+                <field name="state" widget="badge" decoration-success="state == 'on'"
+                       decoration-warning="state == 'waiting'"/>
+                <field name="enabled" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_crm_rule_form" model="ir.ui.view">
+        <field name="name">mtbg.crm.rule.form</field>
+        <field name="model">mtbg.crm.rule</field>
+        <field name="arch" type="xml">
+            <form create="false">
+                <header>
+                    <button name="action_mtbg_dry_run" type="object" string="Dry run" class="btn-primary"
+                            invisible="not id or state == 'waiting'"
+                            help="What it would change now, changing nothing"/>
+                    <button name="action_mtbg_run_now" type="object" string="Run now"
+                            invisible="not id or state != 'on'"
+                            confirm="Run this rule now on the records it looks at? The changes are logged and can be undone."/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_mtbg_runs" type="object" class="oe_stat_button" icon="fa-history"
+                                string="Runs"/>
+                        <button name="action_mtbg_changes" type="object" class="oe_stat_button" icon="fa-pencil">
+                            <field name="touched_count" widget="statinfo" string="Changed"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g. Tag Spanish speakers"/></h1>
+                    </div>
+                    <div class="alert alert-warning" role="alert" invisible="state != 'waiting'">
+                        This rule waits: its extension or its records' model is not installed.
+                    </div>
+                    <group>
+                        <group>
+                            <field name="enabled" widget="boolean_toggle"/>
+                            <field name="model_id" options="{'no_create': True, 'no_open': True}"
+                                   readonly="source"/>
+                            <field name="trigger"/>
+                            <field name="trigger_field_ids" widget="many2many_tags"
+                                   invisible="trigger != 'changed'" options="{'no_create': True}"/>
+                            <field name="days" invisible="trigger != 'daily'"/>
+                        </group>
+                        <group>
+                            <field name="once"/>
+                            <field name="last_run"/>
+                            <field name="source" invisible="not source"/>
+                            <field name="code" groups="base.group_no_one"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="What the rule is for" nolabel="1"/>
+                    <notebook>
+                        <page string="Actions" name="actions">
+                            <field name="action_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="model_id" column_invisible="1"/>
+                                    <field name="kind"/>
+                                    <field name="field_id" options="{'no_create': True, 'no_open': True}"
+                                           invisible="kind not in ('set_field', 'add_tag', 'remove_tag')"/>
+                                    <field name="value"
+                                           invisible="kind not in ('set_field', 'add_tag', 'remove_tag', 'note', 'raise_alert')"/>
+                                    <field name="fill_empty" invisible="kind not in ('set_field', 'assign_salesperson')"/>
+                                    <field name="user_id" options="{'no_create': True}"
+                                           invisible="kind not in ('assign_salesperson', 'activity')"/>
+                                    <field name="activity_type_id" optional="hide" invisible="kind != 'activity'"/>
+                                    <field name="summary" invisible="kind != 'activity'"/>
+                                    <field name="days" invisible="kind != 'activity'"/>
+                                    <field name="match_on" invisible="kind != 'flag_duplicate'"/>
+                                </list>
+                            </field>
+                            <div class="text-muted" invisible="not source">
+                                A rule from an extension may also act in its own way (its description says how).
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_crm_rule_search" model="ir.ui.view">
+        <field name="name">mtbg.crm.rule.search</field>
+        <field name="model">mtbg.crm.rule</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="model_id"/>
+                <filter string="On" name="on" domain="[('enabled', '=', True)]"/>
+                <filter string="Off" name="off" domain="[('enabled', '=', False)]"/>
+                <group>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="When" name="group_trigger" context="{'group_by': 'trigger'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- the Contact Rules page (its Contact rules and Changes tabs; with Tours they are on the Alert Feed's page) -->
+    <record id="action_crm_rules_page" model="ir.actions.client">
+        <field name="name">Contact Rules</field>
+        <field name="tag">mtbg_crm_rules_page</field>
+    </record>
+
+    <record id="action_crm_rule" model="ir.actions.act_window">
+        <field name="name">Contact Rules</field>
+        <field name="res_model">mtbg.crm.rule</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No Contact rules</p>
+            <p>Stock helpers that keep contacts and leads tidy on their own. Every change is logged and can be undone.
+               A rule is off until switched on; try it first with Dry run.</p>
+        </field>
+    </record>
+
+    <!-- the cog's page: the rule card, Import / Export -->
+    <record id="action_crm_rule_settings" model="ir.actions.client">
+        <field name="name">Contact Rules Settings</field>
+        <field name="tag">mtbg_model_settings</field>
+        <field name="params" eval="{'model': 'mtbg.crm.rule'}"/>
+    </record>
+
+    <!-- a run: what it checked and changed (a dry run: what it would change) -->
+    <record id="view_crm_rule_run_form" model="ir.ui.view">
+        <field name="name">mtbg.crm.rule.run.form</field>
+        <field name="model">mtbg.crm.rule.run</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false">
+                <header>
+                    <button name="action_mtbg_undo" type="object" string="Undo this run"
+                            invisible="dry_run or not change_ids"
+                            confirm="Put back what this run changed? A field somebody changed since is left as it is."/>
+                </header>
+                <sheet>
+                    <div class="alert alert-info" role="alert" invisible="not dry_run">
+                        Dry run: nothing was changed. These are the changes the rule would make now.
+                    </div>
+                    <group>
+                        <group>
+                            <field name="rule_id"/>
+                            <field name="date"/>
+                            <field name="trigger"/>
+                            <field name="dry_run" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="checked"/>
+                            <field name="matched"/>
+                            <field name="changed"/>
+                        </group>
+                    </group>
+                    <field name="error" invisible="not error" class="text-danger"/>
+                    <field name="change_ids">
+                        <list create="false" delete="false" decoration-muted="undone">
+                            <field name="res_name"/>
+                            <field name="kind"/>
+                            <field name="field_label"/>
+                            <field name="old_text"/>
+                            <field name="new_text"/>
+                            <field name="note" optional="show"/>
+                            <field name="undone" optional="hide"/>
+                            <button name="action_mtbg_open_record" type="object" icon="fa-external-link" title="Open"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_crm_rule_run_list" model="ir.ui.view">
+        <field name="name">mtbg.crm.rule.run.list</field>
+        <field name="model">mtbg.crm.rule.run</field>
+        <field name="arch" type="xml">
+            <list create="false" decoration-muted="dry_run" decoration-danger="error">
+                <field name="date"/>
+                <field name="rule_id"/>
+                <field name="trigger"/>
+                <field name="dry_run" column_invisible="1"/>
+                <field name="error" column_invisible="1"/>
+                <field name="checked"/>
+                <field name="matched"/>
+                <field name="changed"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- every change a rule made: undo one or many -->
+    <record id="view_crm_rule_change_list" model="ir.ui.view">
+        <field name="name">mtbg.crm.rule.change.list</field>
+        <field name="model">mtbg.crm.rule.change</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="true" editable="bottom" decoration-muted="undone">
+                <header>
+                    <button name="action_mtbg_undo" type="object" string="Undo"
+                            confirm="Put back what the rules changed on the records picked?"/>
+                </header>
+                <field name="date" readonly="1"/>
+                <field name="rule_id" readonly="1"/>
+                <field name="res_name" readonly="1"/>
+                <field name="kind" readonly="1"/>
+                <field name="field_label" readonly="1"/>
+                <field name="old_text" readonly="1"/>
+                <field name="new_text" readonly="1"/>
+                <field name="note" readonly="1" optional="show"/>
+                <field name="resolved" invisible="kind != 'alert'"/>
+                <field name="undone" readonly="1" optional="show"/>
+                <button name="action_mtbg_open_record" type="object" icon="fa-external-link" title="Open"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_crm_rule_change_search" model="ir.ui.view">
+        <field name="name">mtbg.crm.rule.change.search</field>
+        <field name="model">mtbg.crm.rule.change</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="res_name"/>
+                <field name="rule_id"/>
+                <filter string="Not undone" name="kept" domain="[('undone', '=', False)]"/>
+                <filter string="Alerts to deal with" name="alerts"
+                        domain="[('kind', '=', 'alert'), ('resolved', '=', False)]"/>
+                <group>
+                    <filter string="Rule" name="group_rule" context="{'group_by': 'rule_id'}"/>
+                    <filter string="Kind" name="group_kind" context="{'group_by': 'kind'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_crm_rule_change" model="ir.actions.act_window">
+        <field name="name">Contact Rule Changes</field>
+        <field name="res_model">mtbg.crm.rule.change</field>
+        <field name="view_mode">list</field>
+        <field name="domain">[('dry_run', '=', False)]</field>
+        <field name="context">{'search_default_kept': 1}</field>
+    </record>
+
+    <!-- possible duplicates: flagged, never merged -->
+    <record id="view_crm_duplicate_list" model="ir.ui.view">
+        <field name="name">mtbg.crm.duplicate.list</field>
+        <field name="model">mtbg.crm.duplicate</field>
+        <field name="arch" type="xml">
+            <list create="false" decoration-muted="state != 'open'">
+                <field name="res_name"/>
+                <button name="action_mtbg_open_record" type="object" icon="fa-external-link" title="Open"/>
+                <field name="other_name"/>
+                <button name="action_mtbg_open_other" type="object" icon="fa-external-link" title="Open"/>
+                <field name="reason"/>
+                <field name="value"/>
+                <field name="state" widget="badge" decoration-warning="state == 'open'"/>
+                <button name="action_mtbg_same" type="object" string="Same person" invisible="state != 'open'"/>
+                <button name="action_mtbg_different" type="object" string="Different" invisible="state != 'open'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_crm_duplicate_search" model="ir.ui.view">
+        <field name="name">mtbg.crm.duplicate.search</field>
+        <field name="model">mtbg.crm.duplicate</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="res_name"/>
+                <field name="other_name"/>
+                <field name="value"/>
+                <filter string="To check" name="open" domain="[('state', '=', 'open')]"/>
+                <group>
+                    <filter string="Reason" name="group_reason" context="{'group_by': 'reason'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_crm_duplicate" model="ir.actions.act_window">
+        <field name="name">Possible Duplicates</field>
+        <field name="res_model">mtbg.crm.duplicate</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'search_default_open': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No possible duplicates</p>
+            <p>The duplicates rule (Contact Rules) flags contacts with the same phone or email. Check each pair; merge by
+               hand when they are the same person.</p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,1230 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-26 02:35+0000\n"
+"PO-Revision-Date: 2026-10-26 02:35+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+msgid "\"A message comes in\" runs on contacts only."
+msgstr "\"Llega un mensaje\" solo funciona con contactos."
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+msgid "%(record)s: %(field)s was changed since; it is left as it is."
+msgstr "%(record)s: %(field)s cambió desde entonces; se deja como está."
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/alert_sources.py:0
+msgid "%s possible duplicates to check"
+msgstr "%s posibles duplicados por revisar"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/builtins.py:0
+msgid ""
+"A contact from a Spanish-speaking country whose language is still English "
+"(the default) gets Spanish, so messages go out in Spanish."
+msgstr ""
+"Un contacto de un país hispanohablante cuyo idioma sigue siendo inglés (el "
+"predeterminado) recibe español, para que los mensajes salgan en español."
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/builtins.py:0
+msgid ""
+"A contact with the same phone (last 8 digits) or the same email as another "
+"is flagged on the Possible Duplicates list. Nothing is ever merged."
+msgstr ""
+"Un contacto con el mismo teléfono (últimos 8 dígitos) o el mismo correo que "
+"otro se marca en la lista de Posibles duplicados. Nunca se fusiona nada."
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/builtins.py:0
+msgid ""
+"A contact without a country (or a US / Canadian contact without a state) "
+"gets them from the phone number's country code and area code. Only empty "
+"fields are filled."
+msgstr ""
+"Un contacto sin país (o un contacto de EE. UU. / Canadá sin estado) los "
+"obtiene del código de país y de área de su teléfono. Solo se llenan los "
+"campos vacíos."
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule__trigger__received
+msgid "A message comes in"
+msgstr "Llega un mensaje"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule__once
+msgid "A record it changed once is left alone afterwards"
+msgstr "Un registro que ya cambió una vez se deja en paz después"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_form
+msgid ""
+"A rule from an extension may also act in its own way (its description says "
+"how)."
+msgstr ""
+"Una regla de una extensión también puede actuar a su manera (su descripción "
+"dice cómo)."
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__days
+msgid "A to-do: due in so many days"
+msgstr "Una tarea: vence en tantos días"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__summary
+msgid "A to-do: its summary"
+msgstr "Una tarea: su resumen"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__kind
+msgid "Action"
+msgstr "Acción"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__action_ids
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_form
+msgid "Actions"
+msgstr "Acciones"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_action__kind__add_tag
+msgid "Add a tag"
+msgstr "Agregar una etiqueta"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__new_text
+msgid "After"
+msgstr "Después"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_change__kind__alert
+msgid "Alert"
+msgstr "Alerta"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+msgid "Alert rules"
+msgstr "Reglas de alertas"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_change_search
+msgid "Alerts to deal with"
+msgstr "Alertas por atender"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__resolved
+msgid "An alert: dealt with (it leaves the Alert Feed)"
+msgstr "Una alerta: atendida (sale del Feed de alertas)"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_action__kind__assign_salesperson
+msgid "Assign a salesperson"
+msgstr "Asignar un vendedor"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__automation_id
+msgid "Automation"
+msgstr "Automatización"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model,name:mtbg_tours_crm_rules.model_base
+msgid "Base"
+msgstr "Base"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__old_text
+msgid "Before"
+msgstr "Antes"
+
+#. module: mtbg_tours_crm_rules
+#: model:mtbg.board,name:mtbg_tours_crm_rules.board_rule_source
+msgid "By source"
+msgstr "Por origen"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_run__trigger__changed
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_form
+msgid "Changed"
+msgstr "Cambiados"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__change_ids
+msgid "Changes"
+msgstr "Cambios"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+msgid "Changes: %s"
+msgstr "Cambios: %s"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_inbox__channel
+msgid "Channel"
+msgstr "Canal"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+msgid "Checking…"
+msgstr "Revisando…"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+msgid "Close"
+msgstr "Cerrar"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__code
+msgid "Code"
+msgstr "Código"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/alert_sources.py:0
+msgid "Contacts the duplicates rule flagged, not yet checked."
+msgstr "Contactos que la regla de duplicados marcó, aún sin revisar."
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/builtins.py:0
+msgid "Country and state from a message's number"
+msgstr "País y estado según el número de un mensaje"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/builtins.py:0
+msgid "Country and state from the phone"
+msgstr "País y estado según el teléfono"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule__trigger__created
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_run__trigger__created
+msgid "Created"
+msgstr "Creado"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__create_uid
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__create_uid
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__create_uid
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__create_uid
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_inbox__create_uid
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__create_date
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__create_date
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__create_date
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__create_date
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_inbox__create_date
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule__trigger__changed
+msgid "Created or changed"
+msgstr "Creado o cambiado"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule__trigger_field_ids
+msgid "Created or changed: it runs when one of them changes (none: any)"
+msgstr ""
+"Creado o cambiado: se ejecuta cuando uno de ellos cambia (ninguno: "
+"cualquiera)"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_run__trigger__daily
+msgid "Daily"
+msgstr "Diaria"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__date
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__date
+msgid "Date"
+msgstr "Fecha"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__days
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__days
+msgid "Days"
+msgstr "Días"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+msgid "Dealt with"
+msgstr "Atendida"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__description
+msgid "Description"
+msgstr "Descripción"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_duplicate_list
+msgid "Different"
+msgstr "Distintos"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_duplicate__state__different
+msgid "Different people"
+msgstr "Personas distintas"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_inbox__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__display_name
+msgid "Display Name"
+msgstr "Nombre para mostrar"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_inbox__done
+msgid "Done"
+msgstr "Hecho"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__dry_run
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__dry_run
+msgid "Dry Run"
+msgstr "Prueba"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_run__trigger__dry
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_form
+msgid "Dry run"
+msgstr "Prueba"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+msgid "Dry run, nothing changed:"
+msgstr "Prueba, no se cambió nada:"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_run_form
+msgid ""
+"Dry run: nothing was changed. These are the changes the rule would make now."
+msgstr ""
+"Prueba: no se cambió nada. Estos son los cambios que la regla haría ahora."
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__match_on
+msgid "Duplicates by"
+msgstr "Duplicados por"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+msgid ""
+"Each rule keeps something tidy on its own: when a record is created or changes, when a\n"
+"                message comes in, or every day. A rule is off until switched on; try it first with Dry run. Every change\n"
+"                is logged under Changes and can be undone."
+msgstr ""
+"Cada regla mantiene algo en orden por sí sola: cuando se crea o cambia un "
+"registro, cuando llega un mensaje o cada día. Una regla está desactivada "
+"hasta que se activa; pruébela primero con Prueba. Cada cambio queda "
+"registrado en Cambios y se puede deshacer."
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_action__match_on__email
+msgid "Email"
+msgstr "Correo"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__error
+msgid "Error"
+msgstr "Error"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule__trigger__daily
+msgid "Every day"
+msgstr "Cada día"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule__days
+msgid "Every day: the days the rule waits (e.g. after an enquiry)"
+msgstr ""
+"Cada día: los días que la regla espera (p. ej., después de una consulta)"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__field_id
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__field_name
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_change__kind__field
+msgid "Field"
+msgstr "Campo"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__field_label
+msgid "Field label"
+msgstr "Etiqueta del campo"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__trigger_field_ids
+msgid "Fields watched"
+msgstr "Campos vigilados"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_action__kind__flag_duplicate
+msgid "Flag possible duplicates"
+msgstr "Marcar posibles duplicados"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__id
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__id
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__id
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__id
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_inbox__id
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__id
+msgid "ID"
+msgstr "ID"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__icon
+msgid "Icon"
+msgstr "Icono"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule__code
+msgid "Its key: an extension's rule keeps its code; a rule made here gets one"
+msgstr ""
+"Su clave: la regla de una extensión conserva su código; una regla creada "
+"aquí recibe uno"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+msgid "Its own"
+msgstr "Propia"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule__ready
+msgid "Its records' model and its source are installed"
+msgstr "El modelo de sus registros y su origen están instalados"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__kind
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_change_search
+msgid "Kind"
+msgstr "Tipo"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__last_run
+msgid "Last Run"
+msgstr "Última ejecución"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__write_uid
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__write_uid
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__write_uid
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__write_uid
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_inbox__write_uid
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__write_date
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__write_date
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__write_date
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__write_date
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_inbox__write_date
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+msgid "Last run"
+msgstr "Última ejecución"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_action__kind__note
+msgid "Log an internal note"
+msgstr "Registrar una nota interna"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.actions.server,name:mtbg_tours_crm_rules.cron_daily_rules_ir_actions_server
+msgid "MTBG Tours: CRM rules (daily)"
+msgstr "MTBG Tours: reglas de CRM (diarias)"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.actions.server,name:mtbg_tours_crm_rules.cron_received_rules_ir_actions_server
+msgid "MTBG Tours: CRM rules (messages received)"
+msgstr "MTBG Tours: reglas de CRM (mensajes recibidos)"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_run__trigger__received
+msgid "Message"
+msgstr "Mensaje"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__model_name
+msgid "Model"
+msgstr "Modelo"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__new_value
+msgid "New Value"
+msgstr "Valor nuevo"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+msgid "No changes yet."
+msgstr "Aún no hay cambios."
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.actions.act_window,help:mtbg_tours_crm_rules.action_crm_duplicate
+msgid "No possible duplicates"
+msgstr "No hay posibles duplicados"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_change_search
+msgid "Not undone"
+msgstr "No deshechos"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__note
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_change__kind__note
+msgid "Note"
+msgstr "Nota"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule__automation_id
+msgid "Odoo's automation rule that runs it (kept by this page)"
+msgstr ""
+"La regla de automatización de Odoo que la ejecuta (la mantiene esta página)"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule__state__off
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_search
+msgid "Off"
+msgstr "Desactivada"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule__enabled
+msgid "Off: it never runs (a copy of the database switches every rule off)"
+msgstr ""
+"Desactivada: nunca se ejecuta (una copia de la base de datos desactiva todas"
+" las reglas)"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__old_value
+msgid "Old Value"
+msgstr "Valor anterior"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__enabled
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule__state__on
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_search
+msgid "On"
+msgstr "Activada"
+
+#. module: mtbg_tours_crm_rules
+#: model:mtbg.board,name:mtbg_tours_crm_rules.board_rule_state
+msgid "On / off"
+msgstr "Activada / desactivada"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__once
+msgid "Once per record"
+msgstr "Una vez por registro"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__fill_empty
+msgid "Only when empty"
+msgstr "Solo si está vacío"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_duplicate_list
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_change_list
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_run_form
+msgid "Open"
+msgstr "Abrir"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__other_id
+msgid "Other"
+msgstr "Otro"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_inbox__partner_id
+msgid "Partner"
+msgstr "Contacto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_inbox__phone
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_action__match_on__phone
+msgid "Phone"
+msgstr "Teléfono"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_action__match_on__both
+msgid "Phone or email"
+msgstr "Teléfono o correo"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model,name:mtbg_tours_crm_rules.model_mtbg_crm_duplicate
+msgid "Possible Duplicate"
+msgstr "Posible duplicado"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/alert_sources.py:0
+#: model:ir.actions.act_window,name:mtbg_tours_crm_rules.action_crm_duplicate
+#: model:ir.ui.menu,name:mtbg_tours_crm_rules.menu_crm_duplicate
+msgid "Possible Duplicates"
+msgstr "Posibles duplicados"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_change__kind__duplicate
+msgid "Possible duplicate"
+msgstr "Posible duplicado"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/builtins.py:0
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+msgid "Possible duplicates by phone or email"
+msgstr "Posibles duplicados por teléfono o correo"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/alert_sources.py:0
+msgid "Possible duplicates to check"
+msgstr "Posibles duplicados por revisar"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_change_list
+msgid "Put back what the rules changed on the records picked?"
+msgstr "¿Revertir lo que las reglas cambiaron en los registros seleccionados?"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_run_form
+msgid ""
+"Put back what this run changed? A field somebody changed since is left as it"
+" is."
+msgstr ""
+"¿Revertir lo que cambió esta ejecución? Un campo que alguien cambió desde "
+"entonces se deja como está."
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.js:0
+msgid "Put back."
+msgstr "Revertido."
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_action__kind__raise_alert
+msgid "Raise an Alert Feed item"
+msgstr "Crear una alerta en el Feed de alertas"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__ready
+msgid "Ready"
+msgstr "Lista"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__reason
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_duplicate_search
+msgid "Reason"
+msgstr "Motivo"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__res_name
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__res_name
+msgid "Record"
+msgstr "Registro"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__model_id
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__model_id
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_list
+msgid "Records"
+msgstr "Registros"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__matched
+msgid "Records acted on"
+msgstr "Registros en que actuó"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__touched_count
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__changed
+msgid "Records changed"
+msgstr "Registros cambiados"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__checked
+msgid "Records checked"
+msgstr "Registros revisados"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__ref_id
+msgid "Ref"
+msgstr "Ref"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_action__kind__remove_tag
+msgid "Remove a tag"
+msgstr "Quitar una etiqueta"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__res_id
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__res_id
+msgid "Res"
+msgstr "Res"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__res_model
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__res_model
+msgid "Res Model"
+msgstr "Modelo"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__resolved
+msgid "Resolved"
+msgstr "Atendida"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__rule_id
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__rule_id
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__rule_id
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__rule_id
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_change_search
+msgid "Rule"
+msgstr "Regla"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+#: model:ir.actions.client,name:mtbg_tours_crm_rules.action_crm_rule_page
+#: model:ir.ui.menu,name:mtbg_tours_crm_rules.menu_crm_rule
+msgid "Rules & Alerts"
+msgstr "Reglas y alertas"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__run_id
+msgid "Run"
+msgstr "Ejecución"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_run__trigger__manual
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_form
+msgid "Run now"
+msgstr "Ejecutar ahora"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_form
+msgid ""
+"Run this rule now on the records it looks at? The changes are logged and can"
+" be undone."
+msgstr ""
+"¿Ejecutar esta regla ahora en los registros que revisa? Los cambios quedan "
+"registrados y se pueden deshacer."
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__run_ids
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_form
+msgid "Runs"
+msgstr "Ejecuciones"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+msgid "Runs: %s"
+msgstr "Ejecuciones: %s"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__user_id
+msgid "Salesperson / to-do for"
+msgstr "Vendedor / tarea para"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__other_name
+msgid "Same as"
+msgstr "Igual a"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_duplicate__reason__email
+msgid "Same email"
+msgstr "Mismo correo"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_duplicate_list
+msgid "Same person"
+msgstr "Misma persona"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_duplicate__state__same
+msgid "Same person (merge by hand)"
+msgstr "Misma persona (fusionar a mano)"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_duplicate__reason__phone
+msgid "Same phone"
+msgstr "Mismo teléfono"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/alert_sources.py:0
+msgid ""
+"Same phone or email: check each pair, merge by hand if they are the same "
+"person."
+msgstr ""
+"Mismo teléfono o correo: revise cada par y fusione a mano si son la misma "
+"persona."
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_action__kind__activity
+msgid "Schedule a to-do"
+msgstr "Programar una tarea"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__sequence
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_action__kind__set_field
+msgid "Set a field"
+msgstr "Llenar un campo"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__fill_empty
+msgid "Set a field / a salesperson: only records where it is empty"
+msgstr "Llenar un campo / un vendedor: solo registros donde esté vacío"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__field_id
+msgid "Set a field: the field; a tag: the tags field (e.g. Tags)"
+msgstr ""
+"Llenar un campo: el campo; una etiqueta: el campo de etiquetas (p. ej., "
+"Etiquetas)"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__value
+msgid ""
+"Set a field: the value (a related record by its name); a tag: its name; a "
+"note or an alert: its text"
+msgstr ""
+"Llenar un campo: el valor (un registro relacionado por su nombre); una "
+"etiqueta: su nombre; una nota o una alerta: su texto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__value
+msgid "Shared"
+msgstr "Compartido"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__source
+msgid "Source"
+msgstr "Origen"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/builtins.py:0
+msgid "Spanish for Spanish-speaking countries"
+msgstr "Español para países hispanohablantes"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__state
+msgid "State"
+msgstr "Estado"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__state
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_search
+msgid "Status"
+msgstr "Estado"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.actions.act_window,help:mtbg_tours_crm_rules.action_crm_rule
+msgid ""
+"Stock helpers that keep contacts and leads tidy on their own. Every change is logged and can be undone.\n"
+"               A rule is off until switched on; try it first with Dry run."
+msgstr ""
+"Ayudantes de serie que mantienen en orden los contactos y oportunidades por "
+"sí solos. Cada cambio queda registrado y se puede deshacer. Una regla está "
+"desactivada hasta que se activa; pruébela primero con Prueba."
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__summary
+msgid "Summary"
+msgstr "Resumen"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+msgid "Switch the rule on first."
+msgstr "Active la regla primero."
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_change__kind__tag_add
+msgid "Tag added"
+msgstr "Etiqueta agregada"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_change__kind__tag_remove
+msgid "Tag removed"
+msgstr "Etiqueta quitada"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.js:0
+msgid "The days are a number from 0."
+msgstr "Los días son un número desde 0."
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule__source
+msgid "The model that announced it (empty: made on this page)"
+msgstr "El modelo que la anunció (vacío: creada en esta página)"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule_inbox__phone
+msgid "The number the message came from"
+msgstr "El número del que llegó el mensaje"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__ref_id
+msgid "The to-do, note or duplicate flag made"
+msgstr "La tarea, nota o marca de duplicado creada"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__mtbg_missing_ids
+msgid "Things missing"
+msgstr "Lo que falta"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.constraint,message:mtbg_tours_crm_rules.constraint_mtbg_crm_duplicate_pair_unique
+msgid "This pair is flagged already."
+msgstr "Este par ya está marcado."
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/page.py:0
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+msgid "This rule waits for its extension or its records' model."
+msgstr "Esta regla espera a su extensión o al modelo de sus registros."
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_form
+msgid "This rule waits: its extension or its records' model is not installed."
+msgstr ""
+"Esta regla espera: su extensión o el modelo de sus registros no está "
+"instalado."
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__mtbg_time_stage
+msgid "Time to start"
+msgstr "Tiempo para empezar"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_duplicate__state__open
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_duplicate_search
+msgid "To check"
+msgstr "Por revisar"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_change__kind__activity
+msgid "To-do"
+msgstr "Tarea"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__activity_type_id
+msgid "To-do type"
+msgstr "Tipo de tarea"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__trigger
+msgid "Trigger"
+msgstr "Disparador"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_change_list
+msgid "Undo"
+msgstr "Deshacer"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_run_form
+msgid "Undo this run"
+msgstr "Deshacer esta ejecución"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__undone
+msgid "Undone"
+msgstr "Deshecho"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__value
+msgid "Value"
+msgstr "Valor"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule__state__waiting
+msgid "Waiting"
+msgstr "En espera"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+msgid "Waits for its extension"
+msgstr "Espera a su extensión"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+msgid "What"
+msgstr "Qué"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_form
+msgid "What it would change now, changing nothing"
+msgstr "Lo que cambiaría ahora, sin cambiar nada"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule__mtbg_missing_ids
+msgid "What the record's card says it still lacks (refreshed by the boards)"
+msgstr ""
+"Lo que la tarjeta del registro dice que aún le falta (lo actualizan los "
+"tableros)"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_form
+msgid "What the rule is for"
+msgstr "Para qué es la regla"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__trigger
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_search
+msgid "When"
+msgstr "Cuándo"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/builtins.py:0
+msgid ""
+"When a message comes in (WhatsApp, text, call) from a contact without a "
+"country (or a US / Canadian contact without a state), the number it came "
+"from gives them. Only empty fields are filled."
+msgstr ""
+"Cuando llega un mensaje (WhatsApp, texto, llamada) de un contacto sin país "
+"(o un contacto de EE. UU. / Canadá sin estado), el número del que llegó los "
+"da. Solo se llenan los campos vacíos."
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule__mtbg_time_stage
+msgid "Where the record is from its start date (refreshed by the boards)"
+msgstr ""
+"Dónde está el registro según su fecha de inicio (lo actualizan los tableros)"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+msgid "checked,"
+msgstr "revisados,"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_form
+msgid "e.g. Tag Spanish speakers"
+msgstr "p. ej., Etiquetar hispanohablantes"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+msgid "extension not installed"
+msgstr "extensión no instalada"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+msgid "would change"
+msgstr "cambiarían"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model,name:mtbg_tours_crm_rules.model_mtbg_crm_rule
+msgid "Contact Rule"
+msgstr "Regla de contacto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model,name:mtbg_tours_crm_rules.model_mtbg_crm_rule_action
+msgid "Contact Rule Action"
+msgstr "Acción de regla de contacto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model,name:mtbg_tours_crm_rules.model_mtbg_crm_rule_change
+msgid "Contact Rule Change"
+msgstr "Cambio de regla de contacto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.actions.act_window,name:mtbg_tours_crm_rules.action_crm_rule_change
+msgid "Contact Rule Changes"
+msgstr "Cambios de reglas de contacto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model,name:mtbg_tours_crm_rules.model_mtbg_crm_rule_run
+msgid "Contact Rule Run"
+msgstr "Ejecución de regla de contacto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.actions.act_window,name:mtbg_tours_crm_rules.action_crm_rule
+msgid "Contact Rules"
+msgstr "Reglas de contacto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.actions.client,name:mtbg_tours_crm_rules.action_crm_rule_settings
+msgid "Contact Rules Settings"
+msgstr "Ajustes de reglas de contacto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model,name:mtbg_tours_crm_rules.model_mtbg_crm_rule_inbox
+msgid "Contact Rules: messages received"
+msgstr "Reglas de contacto: mensajes recibidos"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+msgid "Contact rules"
+msgstr "Reglas de contacto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.constraint,message:mtbg_tours_crm_rules.constraint_mtbg_crm_rule_code_unique
+msgid "Each contact rule has its own code."
+msgstr "Cada regla de contacto tiene su propio código."
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.actions.act_window,help:mtbg_tours_crm_rules.action_crm_rule
+msgid "No Contact rules"
+msgstr "No hay reglas de contacto"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/page.py:0
+msgid "Only managers change the Contact rules."
+msgstr "Solo los gerentes cambian las reglas de contacto."
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.actions.act_window,help:mtbg_tours_crm_rules.action_crm_duplicate
+msgid ""
+"The duplicates rule (Contact Rules) flags contacts with the same phone or email. Check each pair; merge by\n"
+"               hand when they are the same person."
+msgstr ""
+"La regla de duplicados (Reglas de contacto) marca los contactos con el mismo teléfono o correo. Revisa cada par; combínalos\n"
+"               a mano cuando sean la misma persona."
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+msgid ""
+"The latest changes the Contact rules made, newest first. Undo puts back what was there; a\n"
+"                field somebody changed since is left as it is."
+msgstr ""
+"Los últimos cambios que hicieron las reglas de contacto, los más recientes primero. Deshacer vuelve a poner lo que había; un\n"
+"                campo que alguien cambió después se deja como está."
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/alert_sources.py:0
+msgid ""
+"What a contact rule with \"Raise an Alert Feed item\" found; it leaves the "
+"feed once marked dealt with on the Contact Rules' changes."
+msgstr ""
+"Lo que encontró una regla de contacto con \"Crear una alerta en el Feed de "
+"alertas\"; sale del feed cuando se marca como atendido en los cambios de las"
+" Reglas de contacto."
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+msgid ""
+"What needs attention (alert rules) and what is kept tidy on its own (contact\n"
+"                rules), read from every part of MTBG Tours."
+msgstr ""
+"Lo que necesita atención (reglas de alerta) y lo que se mantiene en orden por sí solo (reglas de\n"
+"                contacto), leído de todas las partes de MTBG Tours."
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/alert_sources.py:0
+msgid "contact rule alerts"
+msgstr "alertas de reglas de contacto"

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- the Contact rules, by the records they look at -->
+    <t t-name="mtbg_tours_crm_rules.CrmRulesTab">
+        <div t-if="state.tab === 'crm' and state.crm" class="mtbg_ap_body p-4 overflow-auto">
+            <t t-set="crm" t-value="state.crm"/>
+            <p class="text-muted">Each rule keeps something tidy on its own: when a record is created or changes, when a
+                message comes in, or every day. A rule is off until switched on; try it first with Dry run. Every change
+                is logged under Changes and can be undone.</p>
+            <section t-foreach="crm.groups" t-as="group" t-key="group.model" class="mtbg_ap_rules mb-4">
+                <h4 class="mb-2" t-esc="group.name"/>
+                <table class="table table-sm align-middle mb-0">
+                    <thead><tr><th>Rule</th><th>When</th><th class="text-center">Days</th><th/>
+                        <th class="text-end">Changed</th><th class="text-end">On</th></tr></thead>
+                    <tbody>
+                        <t t-foreach="group.rules" t-as="rule" t-key="rule.id">
+                            <tr t-att-class="{'text-muted': !rule.enabled or !rule.ready}">
+                                <td>
+                                    <i t-attf-class="fa {{rule.icon}} fa-fw me-1"/>
+                                    <b t-esc="rule.name"/>
+                                    <span t-if="!rule.ready" class="badge text-bg-light ms-1">extension not installed</span>
+                                    <div class="small text-muted" t-esc="rule.description"/>
+                                    <div t-if="rule.actions.length" class="small"><i class="fa fa-long-arrow-right me-1"/><t t-esc="rule.actions.join(', ')"/></div>
+                                </td>
+                                <td class="small text-nowrap" t-esc="rule.trigger_label"/>
+                                <td class="text-center">
+                                    <input t-if="rule.trigger === 'daily'" type="number" min="0" class="form-control form-control-sm mtbg_ap_days d-inline-block"
+                                           t-att-value="rule.days" t-att-readonly="!crm.can_edit" aria-label="Days"
+                                           t-on-change="(ev) => this.setCrmDays(rule, ev.target.value)"/>
+                                </td>
+                                <td class="text-nowrap">
+                                    <button t-if="crm.can_edit and rule.ready" type="button" class="btn btn-sm btn-light" t-on-click="() => this.dryRun(rule)">Dry run</button>
+                                </td>
+                                <td class="text-end"><span t-if="rule.touched" class="badge rounded-pill text-bg-secondary" t-esc="rule.touched"/></td>
+                                <td class="text-end">
+                                    <div class="form-check form-switch d-inline-block mb-0">
+                                        <input type="checkbox" class="form-check-input" t-att-checked="rule.enabled"
+                                               t-att-disabled="!crm.can_edit or !rule.ready" aria-label="On"
+                                               t-on-change="(ev) => this.saveCrmRule(rule, { enabled: ev.target.checked })"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr t-if="state.crmDry[rule.id]" class="mtbg_crm_dry">
+                                <td colspan="6">
+                                    <t t-set="dry" t-value="state.crmDry[rule.id]"/>
+                                    <div t-if="dry.loading" class="small text-muted"><i class="fa fa-spinner fa-spin me-1"/>Checking…</div>
+                                    <t t-else="">
+                                        <div class="d-flex align-items-center small mb-1">
+                                            <b class="me-2">Dry run, nothing changed:</b>
+                                            <t t-esc="dry.checked"/> checked, <t t-esc="dry.changed"/> would change
+                                            <button type="button" class="btn btn-sm btn-link ms-auto" t-on-click="() => this.closeDry(rule)">Close</button>
+                                        </div>
+                                        <table t-if="dry.changes.length" class="table table-sm small mb-0">
+                                            <tr t-foreach="dry.changes" t-as="c" t-key="c_index">
+                                                <td t-esc="c.record"/><td t-esc="c.kind_label"/><td t-esc="c.field"/>
+                                                <td class="text-muted" t-esc="c.before"/><td><i class="fa fa-long-arrow-right me-1"/><t t-esc="c.after or c.note"/></td>
+                                            </tr>
+                                        </table>
+                                    </t>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </t>
+
+    <!-- what the Contact rules changed: undo, or mark an alert dealt with -->
+    <t t-name="mtbg_tours_crm_rules.CrmChangesTab">
+        <div t-if="state.tab === 'changes' and state.crmChanges" class="mtbg_ap_body p-4 overflow-auto">
+            <t t-set="data" t-value="state.crmChanges"/>
+            <p class="text-muted">The latest changes the Contact rules made, newest first. Undo puts back what was there; a
+                field somebody changed since is left as it is.</p>
+            <div t-if="!data.changes.length" class="text-muted">No changes yet.</div>
+            <table t-else="" class="table table-sm align-middle">
+                <thead><tr><th>When</th><th>Rule</th><th>Record</th><th>What</th><th>Before</th><th>After</th><th/></tr></thead>
+                <tbody>
+                    <tr t-foreach="data.changes" t-as="c" t-key="c.id" t-att-class="{'text-muted text-decoration-line-through': c.undone}">
+                        <td class="small text-nowrap" t-esc="c.date.slice(0, 16)"/>
+                        <td class="small" t-esc="c.rule"/>
+                        <td><a href="#" t-on-click.prevent="() => this.openRecord(c)" t-esc="c.record"/></td>
+                        <td class="small"><t t-esc="c.kind_label"/><t t-if="c.field">: <t t-esc="c.field"/></t></td>
+                        <td class="small text-muted" t-esc="c.before"/>
+                        <td class="small" t-esc="c.after or c.note"/>
+                        <td class="text-end text-nowrap">
+                            <button t-if="data.can_edit and c.kind === 'alert' and !c.resolved and !c.undone" type="button"
+                                    class="btn btn-sm btn-light me-1" t-on-click="() => this.resolveChange(c)">Dealt with</button>
+                            <button t-if="data.can_edit and !c.undone" type="button" class="btn btn-sm btn-light"
+                                    t-on-click="() => this.undoChange(c)"><i class="fa fa-undo me-1"/>Undo</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </t>
+</templates>

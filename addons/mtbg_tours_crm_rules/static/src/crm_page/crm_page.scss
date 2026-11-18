@@ -1,0 +1,8 @@
+// the Contact Rules page (the Alert Feed page's look, for a site without Tours)
+.mtbg_crm_page {
+    background: var(--bs-body-bg, #fff);
+    .mtbg_crm_page_icon { width: 44px; height: 44px; border-radius: 10px; }
+    .mtbg_ap_body { max-width: 80rem; }
+    .mtbg_ap_rules th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--bs-secondary-color, #6c757d); }
+    .mtbg_ap_days { width: 4.5rem; }
+}

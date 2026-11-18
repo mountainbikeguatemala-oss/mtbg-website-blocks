@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- its own menu (0.3.0): Contact Rules with its page and Possible Duplicates. With Tours the Alert Feed puts them
+         in the Tours menus (Operations, Configuration) and this one is not shown (ir.ui.menu._load_menus_blacklist) -->
+    <menuitem id="menu_crm_root" name="Contact Rules" sequence="60"
+              web_icon="mtbg_tours_crm_rules,static/description/icon.png" groups="base.group_user"/>
+    <menuitem id="menu_crm_rules_page" name="Rules" parent="menu_crm_root" action="action_crm_rules_page"
+              sequence="10" groups="base.group_system"/>
+    <menuitem id="menu_crm_duplicates" name="Possible Duplicates" parent="menu_crm_root"
+              action="action_crm_duplicate" sequence="20"/>
+</odoo>
