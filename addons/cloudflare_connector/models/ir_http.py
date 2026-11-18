@@ -143,7 +143,8 @@ class IrHttp(models.AbstractModel):
             return False
         Cache = request.env['mtbg.edge.cache']
         params = Cache._mtbg_params()
-        return params['on'] and params['ttl'] > 0
+        # (2.1.0: only a website whose pages a purge can empty: its own zone, or Set up Cloudflare's)
+        return params['on'] and params['ttl'] > 0 and Cache._mtbg_website_kept(website)
 
     @classmethod
     def _mtbg_edge_cacheable(cls, response):

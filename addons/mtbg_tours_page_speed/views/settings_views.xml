@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Page Speed's own settings page (models/settings.py): Website › Configuration › Page Speed and the Speed
+         log's cog; its Save writes only Page Speed's own parameter -->
+    <record id="page_speed_settings_form" model="ir.ui.view">
+        <field name="name">mtbg.page.speed.settings.form</field>
+        <field name="model">mtbg.page.speed.settings</field>
+        <field name="arch" type="xml">
+            <form string="Page Speed" create="false" delete="false">
+                <header>
+                    <button name="action_save" type="object" string="Save" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1>Page Speed</h1></div>
+                    <p class="text-muted">How fast the website's pages reach visitors, and what this extension does
+                        about it. Saving here changes only Page Speed's own setting, nothing else on the site.</p>
+
+                    <h2 class="mt-4">Nightly speed log</h2>
+                    <p class="text-muted">Every night at 02:30 in your time zone (Settings › Operator Timezone) the site
+                        asks Google PageSpeed (Lighthouse) for its homepage and every tour page, on a phone and on a
+                        computer.</p>
+                    <group>
+                        <group>
+                            <field name="log_on" readonly="1"/>
+                            <field name="google_ok" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="last_night" readonly="1"/>
+                        <field name="next_night" readonly="1"/>
+                            <field name="last_night_note" readonly="1" nolabel="1" colspan="2"
+                                   invisible="not last_night"/>
+                        </group>
+                    </group>
+                    <p invisible="not google_note" class="text-muted"><field name="google_note" readonly="1" nolabel="1"/></p>
+                    <div class="d-flex gap-2">
+                        <button name="action_setup" type="object" string="Set up" class="btn-primary"
+                                icon="fa-magic"/>
+                        <button name="action_open_google" type="object" string="Set up Google" class="btn-secondary"
+                                icon="fa-google"/>
+                        <button name="action_measure_now" type="object" string="Measure now" class="btn-secondary"
+                                icon="fa-play"/>
+                        <button name="action_open_log" type="object" string="Open the speed log" class="btn-secondary"
+                                icon="fa-line-chart"/>
+                    </div>
+
+                    <h2 class="mt-5">Visitor pages without Odoo's extras</h2>
+                    <group>
+                        <field name="lean"/>
+                        <field name="first_screen" invisible="not lean"/>
+                    </group>
+
+                    <h2 class="mt-5">Photo copies</h2>
+                    <p class="text-muted">A job makes the phone (800 px), tablet (1280 px) and computer (1920 px)
+                        copies of the big photos (the sections' backgrounds, the tour pages' main photo) at WebP
+                        quality 70, keeps only copies lighter than the photo, then empties Cloudflare's cache once.</p>
+                    <group>
+                        <group>
+                            <field name="copies_last_run" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="copies_checked" readonly="1"/>
+                            <field name="copies_made" readonly="1"/>
+                        </group>
+                    </group>
+                    <button name="action_run_copies" type="object" string="Run now" class="btn-secondary"
+                            icon="fa-play"/>
+
+                    <h2 class="mt-5">Always on</h2>
+                    <ul class="text-muted">
+                        <li>The first picture of a page loads first; later section backgrounds load when the visitor
+                            nears them (a carousel's slides with their carousel).</li>
+                        <li>Phones take the main picture's 800 px copy; computers a lighter 1920 px copy of big photos
+                            when it is clearly lighter.</li>
+                        <li>Pictures fetch the size they are shown at; every picture has an alt text; the fonts come
+                            with the stylesheet.</li>
+                    </ul>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_page_speed_settings" model="ir.actions.act_window">
+        <field name="name">Page Speed</field>
+        <field name="res_model">mtbg.page.speed.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
+    <menuitem id="menu_page_speed_settings" name="Page Speed" parent="website.menu_website_global_configuration"
+              action="action_page_speed_settings" sequence="95" groups="base.group_system"/>
+</odoo>

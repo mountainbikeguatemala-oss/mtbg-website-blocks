@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- the mobile menu's "back" button of a mega menu has no words: screen readers say "Back" (accessibility) -->
+    <template id="submenu_back_label" inherit_id="website.submenu" name="Mega menu back button label">
+        <xpath expr="//div[contains(@t-attf-class, 'o_mega_nav')]/button" position="attributes">
+            <attribute name="aria-label">Back</attribute>
+            <attribute name="title">Back</attribute>
+        </xpath>
+    </template>
+
+    <!-- the icon font is not preloaded: on a phone its 76 KB took the line before the site's stylesheet, which the
+         first words wait for; it comes with the stylesheet that uses it (page speed 0.3.0) -->
+    <template id="no_icon_font_preload" inherit_id="web.frontend_layout" name="Icon font not before the text">
+        <xpath expr="//link[@rel='preload'][contains(@href, 'fontawesome-webfont')]" position="replace"/>
+    </template>
+
+    <!-- the visitors' script bundle without Odoo's extras, where the switch says so (models/lean.py, 0.5.0) -->
+    <template id="frontend_lazy_lean" inherit_id="web.frontend_layout" name="Visitor pages without Odoo extras">
+        <xpath expr="//t[@t-call-assets='web.assets_frontend_lazy']" position="replace">
+            <t t-if="request and request.env['mtbg.page.speed.lean'].mtbg_use_lean()">
+                <t t-call-assets="mtbg_tours_page_speed.assets_frontend_lazy_lean" t-css="false" lazy_load="True"/>
+            </t>
+            <t t-else="">
+                <t t-call-assets="web.assets_frontend_lazy" t-css="false" lazy_load="True"/>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- 0.8.0: the visitors' first small scripts, their lazyloader starting the script bundle after the first paint
+         (static/src/js/lazyloader.js), same switch -->
+    <template id="frontend_minimal_lean" inherit_id="web.frontend_layout" name="Visitor pages: scripts after the first paint">
+        <xpath expr="//t[@t-call-assets='web.assets_frontend_minimal']" position="replace">
+            <t t-if="request and request.env['mtbg.page.speed.lean'].mtbg_use_lean()">
+                <t t-call-assets="mtbg_tours_page_speed.assets_frontend_minimal_lean" t-css="false" defer_load="True"/>
+            </t>
+            <t t-else="">
+                <t t-call-assets="web.assets_frontend_minimal" t-css="false" defer_load="True"/>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- the visitors' stylesheet without Odoo's extras, same switch (models/lean.py, 0.6.0); Odoo's own node stays
+         (other extensions place their stylesheets after it) -->
+    <template id="frontend_lean_css" inherit_id="web.frontend_layout" name="Visitor stylesheet without Odoo extras">
+        <xpath expr="//t[@t-call-assets='web.assets_frontend'][@t-js='false']" position="before">
+            <t t-set="mtbg_lean_css" t-value="request and request.env['mtbg.page.speed.lean'].mtbg_use_lean()"/>
+            <t t-if="mtbg_lean_css" t-call-assets="mtbg_tours_page_speed.assets_frontend_lean" t-js="false"/>
+        </xpath>
+        <xpath expr="//t[@t-call-assets='web.assets_frontend'][@t-js='false']" position="attributes">
+            <attribute name="t-if">not mtbg_lean_css</attribute>
+        </xpath>
+        <!-- the editor's background shapes: fetched without holding the page, applied once they are there -->
+        <xpath expr="//t[@t-call-assets='web.assets_frontend'][@t-js='false']" position="after">
+            <t t-if="mtbg_lean_css">
+                <t t-foreach="request.env['ir.qweb']._get_asset_link_urls('mtbg_tours_page_speed.assets_frontend_late', debug)" t-as="mtbg_late_href">
+                    <link rel="stylesheet" t-att-href="mtbg_late_href" media="print" onload="this.media='all'"/>
+                    <noscript><link rel="stylesheet" t-att-href="mtbg_late_href"/></noscript>
+                </t>
+            </t>
+        </xpath>
+    </template>
+    <!-- Instant pages (0.7.12): a link the visitor points at (or touches) is fetched before the click, so the next page
+         opens at once. Chrome and Edge by their own speculation rules (which stand down by themselves on Save-Data, the
+         battery saver or low memory); other browsers by a prefetch link, never on Save-Data or a 2G connection. Only
+         the site's own ordinary pages: never Odoo's back end, the portal, checkout, payment, the customers' token
+         pages (the addresses that keep Odoo's own bundle, models/lean.py), a log-out, a download or a link with a
+         query string. The page's own HTML is fetched only (its visit is recorded by the page's script, once it
+         opens). Visitor pages only, same switch. -->
+    <template id="instant_pages" inherit_id="web.frontend_layout" name="Visitor pages: next page fetched on hover">
+        <xpath expr="//div[@id='wrapwrap']" position="after">
+            <t t-if="request and request.env['mtbg.page.speed.lean'].mtbg_use_lean()">
+                <t t-set="mtbg_no_prefetch" t-value="request.env['mtbg.page.speed.lean'].mtbg_prefetch_excluded()"/>
+                <script type="speculationrules" t-out="request.env['mtbg.page.speed.lean'].mtbg_speculation_rules()"/>
+                <script t-att-data-mtbg-no-prefetch="mtbg_no_prefetch">(function () {
+    var me = document.currentScript, c = navigator.connection || {};
+    var S = window.HTMLScriptElement, probe = document.createElement("link").relList;
+    if (S ? (S.supports ? S.supports("speculationrules") : false) : false) { return; }  // (the rules above do it)
+    if (!(probe ? (probe.supports ? probe.supports("prefetch") : false) : false)) { return; }
+    var no = new RegExp("^(?:/[a-z]{2}(?:_[A-Za-z]{2,4})?)?(?:" + me.getAttribute("data-mtbg-no-prefetch") + ")(?:[/.]|$)");
+    var done = {}, timer = null;
+    function wanted(a) {
+        if (c.saveData || /(^|-)2g$/.test(c.effectiveType || "")) { return null; }
+        if (!a || !a.href || a.origin !== location.origin || a.search || a.hasAttribute("download") || a.target === "_blank") { return null; }
+        var path = a.pathname;
+        if (done[path] || path === location.pathname || no.test(path) || /\.[a-z0-9]{2,5}$/i.test(path)) { return null; }
+        return path;
+    }
+    function go(path) {
+        done[path] = 1;
+        var link = document.createElement("link");
+        link.rel = "prefetch";
+        link.href = path;
+        document.head.appendChild(link);
+    }
+    document.addEventListener("mouseover", function (ev) {
+        var path = wanted(ev.target.closest ? ev.target.closest("a[href]") : null);
+        clearTimeout(timer);
+        if (path) { timer = setTimeout(function () { go(path); }, 80); }
+    }, {passive: true});
+    document.addEventListener("touchstart", function (ev) {
+        var path = wanted(ev.target.closest ? ev.target.closest("a[href]") : null);
+        if (path) { go(path); }
+    }, {passive: true});
+})();</script>
+            </t>
+        </xpath>
+    </template>
+</odoo>

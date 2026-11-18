@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_speed_log_admin,speed log admin,model_mtbg_page_speed_log,base.group_system,1,1,1,1
+access_speed_log_setup_admin,speed log setup admin,model_mtbg_page_speed_log_setup,base.group_system,1,1,1,1
+access_page_speed_settings_admin,page speed settings admin,model_mtbg_page_speed_settings,base.group_system,1,1,1,1

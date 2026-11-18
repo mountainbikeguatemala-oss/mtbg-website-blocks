@@ -1280,10 +1280,11 @@ class TestEdgeCacheConnector(TransactionCase):
                 patch.object(type(self.env['cloudflare.api']), 'purge', autospec=True,
                              side_effect=lambda rec, **kw: {'ok': True, 'requests': 1, 'error': ''}) as purge:
             self.assertTrue(self.env['mtbg.edge.cache']._mtbg_purge('test'))
-        self.assertEqual({k for c in purge.call_args_list for k in c.kwargs}, {'tags', 'prefixes'},
-                         "the pages' tags and prefixes (2.0.1)")
+        # (2.1.0: with the website's zone and the website, besides what is purged)
+        self.assertEqual({k for c in purge.call_args_list for k in c.kwargs} - {'zone_id', 'website'},
+                         {'tags', 'prefixes'}, "the pages' tags and prefixes (2.0.1)")
         self.assertTrue(all(len(v) <= edge_cache.PURGE_BATCH_OTHER for c in purge.call_args_list
-                            for v in c.kwargs.values()))
+                            for k, v in c.kwargs.items() if k in ('tags', 'prefixes')))
         self.assertFalse(post.called, "no Cloudflare call of its own")
 
     def test_not_set_up_is_logged(self):

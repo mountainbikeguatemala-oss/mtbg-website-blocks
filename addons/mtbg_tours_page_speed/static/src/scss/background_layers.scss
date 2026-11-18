@@ -1,0 +1,54 @@
+// The base rules of the website editor's backgrounds (html_builder/static/src/scss/background.scss, Odoo 19), for the
+// visitors' stylesheet (page speed 0.6.0, models/lean.py): sections hold their background layers (filter, shape) and
+// those layers sit on them. The shapes' own pictures (a class per shape Odoo has, 120 KB) come after the page has
+// shown (assets_frontend_late). Kept as Odoo has them.
+// Base snippet rules
+%o-we-background-layer-parent {
+    &, & > * {
+        // Allow background layers to be placed accordingly and snippet content
+        // to be displayed on top. Note: we cannot just position the layers
+        // with z-index: -1, otherwise it would go under the snippet own
+        // background. Adding a z-index: 0 on the snippet to create its own
+        // stacking context won't solve that either as, in that case, any BS
+        // component inside would be using that stacking context (e.g. a
+        // dropdown inside snippet 1 of the page would go under snippet 2
+        // when opened since the dropdown z-index would be confined into
+        // snippet 1's stacking context.
+        position: relative;
+    }
+}
+%o-we-background-layer {
+    @include o-position-absolute(0, 0, 0, 0);
+    position: absolute !important;
+    display: block;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    // For border with all 4 edges of equal value the max function is useless,
+    // but in case the border is uneven it approximates the correct roundness
+    // See BORDER_VARIABLES_RULES_EXTENSION
+    //
+    // --box-border-XXX-(radius|width) : editor Round Corners user input
+    // --box-border-(radius|width) : rounded-XXX classes
+    // --border-(radius|width) : theme (+ default bootstrap)
+    border-radius:
+        calc(var(--box-border-top-left-radius, 0px) - max(var(--box-border-top-width, 0px), var(--box-border-left-width, 0px)))
+        calc(var(--box-border-top-right-radius, 0px) - max(var(--box-border-top-width, 0px), var(--box-border-right-width, 0px)))
+        calc(var(--box-border-bottom-right-radius, 0px) - max(var(--box-border-bottom-width, 0px), var(--box-border-right-width, 0px)))
+        calc(var(--box-border-bottom-left-radius, 0px) - max(var(--box-border-bottom-width, 0px), var(--box-border-left-width, 0px)))
+}
+
+section, .oe_img_bg, [data-oe-shape-data] {
+    @extend %o-we-background-layer-parent;
+}
+.o_we_bg_filter {
+    @extend %o-we-background-layer;
+}
+
+.o_we_shape {
+    @extend %o-we-background-layer;
+
+    &.o_we_animated {
+        will-change: transform;
+    }
+}

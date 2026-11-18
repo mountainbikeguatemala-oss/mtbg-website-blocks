@@ -10,6 +10,7 @@ Other extensions call it through soft checks and never import it:
 """
 import logging
 import time
+from urllib.parse import urlsplit
 
 import requests
 
@@ -32,6 +33,20 @@ PURGE_TRIES = 4       # on 429 (rate limited): wait Retry-After (capped), then t
 
 def _param(env, name):
     return (env["ir.config_parameter"].sudo().get_param(P + name) or "").strip()
+
+
+def _host(value):
+    """The host of an address or a domain ("https://www.example.com/", "www.example.com"), lower case."""
+    value = (value or "").strip().lower()
+    if not value:
+        return ""
+    return urlsplit(value if "://" in value else "//" + value).hostname or ""
+
+
+def in_zone(host, zone_name):
+    """``host`` is the zone's own name or under it (www.example.com in example.com)."""
+    host, zone_name = _host(host), (zone_name or "").strip().lower().rstrip(".")
+    return bool(host and zone_name) and (host == zone_name or host.endswith("." + zone_name))
 
 
 class CloudflareR2(models.AbstractModel):
@@ -153,14 +168,47 @@ class CloudflareApi(models.AbstractModel):
         return data.get("result")
 
     @api.model
-    def zone(self):
-        """The site's zone saved by Set up Cloudflare: {'id': ..., 'name': ...} (empty strings when not set)."""
-        return {"id": _param(self.env, "zone_id"), "name": _param(self.env, "zone_name")}
+    def _default_zone_website(self):
+        """The website the zone saved by Set up Cloudflare is for (19.0.2.1.0): the one named at the update (system
+        parameter ``cloudflare_connector.zone_website_id``), else the first website whose address is in that zone,
+        else the first website."""
+        if "website" not in self.env:
+            return None
+        Website = self.env["website"].sudo()
+        named = _param(self.env, "zone_website_id")
+        if named.isdigit() and Website.browse(int(named)).exists():
+            return Website.browse(int(named))
+        websites = Website.search([])
+        zone_name = _param(self.env, "zone_name")
+        return websites.filtered(lambda w: in_zone(w.domain, zone_name))[:1] or websites[:1]
 
     @api.model
-    def purge(self, everything=False, urls=None, prefixes=None, hosts=None, zone_id=None, tags=None):
+    def zone(self, website=None):
+        """The zone a website's pages are in: {'id': ..., 'name': ...} (empty strings when not set).
+
+        19.0.2.1.0 (owner 2026-11-18: one database, two websites, each its own Cloudflare zone): the website's own zone
+        (Website › Settings › Cloudflare page cache), else the zone saved by Set up Cloudflare (Settings › Cloudflare)
+        for the website it is for (``_default_zone_website``) and any website whose address is in it; another
+        website has none until its own is set. ``website``: default the current one."""
+        zone = {"id": _param(self.env, "zone_id"), "name": _param(self.env, "zone_name")}
+        if "website" not in self.env:
+            return zone
+        if website is None:
+            website = self.env["website"].sudo().get_current_website()
+        if not website:
+            return zone
+        website = website.sudo()
+        if (website.cloudflare_zone_id or "").strip():
+            return {"id": website.cloudflare_zone_id.strip(),
+                    "name": (website.cloudflare_zone_name or "").strip()}
+        if zone["id"] and (website == self._default_zone_website() or in_zone(website.domain, zone["name"])):
+            return zone
+        return {"id": "", "name": ""}
+
+    @api.model
+    def purge(self, everything=False, urls=None, prefixes=None, hosts=None, zone_id=None, tags=None, website=None):
         """Empty Cloudflare's cache for the site's zone: everything, or the given URLs / URL prefixes / hosts /
-        cache tags (2.0.1).
+        cache tags (2.0.1). The zone: ``zone_id``, else ``website``'s (2.1.0; default the current website's).
 
         URLs are sent 30 a request, prefixes, hosts and tags 100 a request; a rate-limited request (429) waits and is
         tried again. A prefix is a host and a path without a scheme or query string (``www.example.com/blog``: that
@@ -169,7 +217,7 @@ class CloudflareApi(models.AbstractModel):
         """
         if not self.env.su and not self.env.user.has_group("base.group_system"):
             return {"ok": False, "requests": 0, "error": _("Only administrators (or the system) can purge the cache.")}
-        zone, token = zone_id or _param(self.env, "zone_id"), _param(self.env, "api_token")
+        zone, token = zone_id or self.zone(website)["id"], _param(self.env, "api_token")
         if not (zone and token):
             return {"ok": False, "requests": 0,
                     "error": _("No Cloudflare zone or cache-purge token yet: Settings › Cloudflare › Set up Cloudflare.")}

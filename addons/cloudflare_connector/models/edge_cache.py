@@ -42,6 +42,13 @@ purge now sends:
 Then Cloudflare's word is checked (VERIFY_*): a few purged pages asked for as a visitor; a copy still served older
 than the purge is logged "Cloudflare said OK but the page is still cached", never "Done". A save's own purge is
 checked by the one-minute job (a save never waits for it).
+
+19.0.2.1.0 (owner 2026-11-18: one database, two websites, each its own Cloudflare zone): each website's pages are kept
+and purged in its own zone (``cloudflare.api.zone(website)``: the website's own zone, else the zone of Settings ›
+Cloudflare for the website it was set up for). A purge goes to every website that has a zone, each at its own address
+and in its own languages, one log row each (its website named); the check and the re-fill ask for each website's own
+pages. A website without a zone is never kept by Cloudflare (no purge could empty it), the one Set up Cloudflare's zone
+is for excepted (as before).
 """
 from datetime import datetime, time as dt_time, timedelta
 import hashlib
@@ -314,10 +321,61 @@ class MtbgEdgeCache(models.AbstractModel):
         return self._mtbg_purge_run(reason, paths=paths, everything=everything)[1]
 
     @api.model
+    def _mtbg_cache_websites(self):
+        """The websites whose pages Cloudflare keeps and a purge empties (2.1.0): those with a zone; where none has
+        one, the current website (its purge logs why it cannot)."""
+        if 'cloudflare.api' not in self.env:
+            return self._mtbg_website()
+        Api = self.env['cloudflare.api'].sudo()
+        websites = self.env['website'].sudo().search([])
+        return websites.filtered(lambda w: Api.zone(w)['id']) or self._mtbg_website()
+
+    @api.model
+    def _mtbg_website_kept(self, website):
+        """Cloudflare may keep ``website``'s pages (2.1.0): it has a zone a purge empties, or it is the website Set up
+        Cloudflare's zone is for (as before: kept also while that zone is not set up yet)."""
+        if 'cloudflare.api' not in self.env or not website:
+            return True
+        Api = self.env['cloudflare.api'].sudo()
+        return bool(Api.zone(website)['id']) or website.sudo() == Api._default_zone_website()
+
+    @api.model
+    def _mtbg_for(self, website):
+        """This model for ``website``: its pages, address, languages and zone."""
+        return self.with_context(mtbg_edge_cache_website=website.id)
+
+    @api.model
+    def _mtbg_zone_id(self):
+        """The zone of the website a purge is for ('' when it has none)."""
+        if 'cloudflare.api' not in self.env:
+            return ''
+        return self.env['cloudflare.api'].sudo().zone(self._mtbg_website())['id']
+
+    @api.model
     def _mtbg_purge_run(self, reason, paths=None, everything=False, sources=None, verify=True):
         """``_mtbg_purge``, returning (Cloudflare took it, done: taken and not found still cached). ``verify``
-        False (a save's own purge): the check is left to the one-minute job (the log row waits for it)."""
-        Log = self.env['mtbg.edge.cache.log'].sudo()
+        False (a save's own purge): the check is left to the one-minute job (the log row waits for it). 2.1.0: each
+        website with a zone in turn (its own log row); taken when every website's was, done when every one was."""
+        if self.env.context.get('mtbg_edge_cache_website'):
+            return self._mtbg_purge_one(reason, paths, everything, sources, verify)
+        accepted, done, zones = True, True, set()
+        for website in self._mtbg_cache_websites():
+            Cache = self._mtbg_for(website)
+            if everything:
+                # (two websites in one zone: "purge everything" once)
+                zone = Cache._mtbg_zone_id()
+                if zone and zone in zones:
+                    continue
+                zones.add(zone)
+            took, emptied = Cache._mtbg_purge_one(reason, paths, everything, sources, verify)
+            accepted, done = accepted and took, done and emptied
+        return accepted, done
+
+    @api.model
+    def _mtbg_purge_one(self, reason, paths=None, everything=False, sources=None, verify=True):
+        """``_mtbg_purge_run`` for one website (the context's)."""
+        Log = self.env['mtbg.edge.cache.log'].sudo().with_context(
+            mtbg_edge_cache_website=self._mtbg_website().id)
         scope = 'everything' if everything else ('pages' if paths is None else 'some')
         if 'cloudflare.api' not in self.env:
             Log._mtbg_add(False, reason, self.env._(
@@ -326,8 +384,9 @@ class MtbgEdgeCache(models.AbstractModel):
             return False, False
         Api = self.env['cloudflare.api'].sudo()
         started = time.time()
+        zone = self._mtbg_zone_id()
         if everything:
-            result = Api.purge(everything=True)
+            result = Api.purge(everything=True, zone_id=zone or None, website=self._mtbg_website())
             if not result.get('ok'):
                 Log._mtbg_add(False, reason, result.get('error') or self.env._("Cloudflare did not purge."),
                               scope=scope, requests=result.get('requests') or 0)
@@ -342,7 +401,8 @@ class MtbgEdgeCache(models.AbstractModel):
             Log._mtbg_add(False, reason, self.env._("The website has no address (Website › Settings › Domain)."),
                           scope=scope)
             return False, False
-        sent, failed, error = self._mtbg_purge_send(self._mtbg_purge_groups(base, listed, every=paths is None))
+        sent, failed, error = self._mtbg_purge_send(self._mtbg_purge_groups(base, listed, every=paths is None),
+                                                    zone_id=zone or None)
         if failed:
             Log._mtbg_add(False, reason, self.env._(
                 "%(failed)s of %(count)s addresses not purged: %(error)s",
@@ -361,7 +421,8 @@ class MtbgEdgeCache(models.AbstractModel):
     def _mtbg_purge_logged(self, reason, scope, listed, sent, started, message, verify, count=None):
         """Cloudflare took the purge: checked (now, or by the job), then logged. True unless a page was found still
         cached."""
-        Log = self.env['mtbg.edge.cache.log'].sudo()
+        Log = self.env['mtbg.edge.cache.log'].sudo().with_context(
+            mtbg_edge_cache_website=self._mtbg_website().id)
         sample = self._mtbg_verify_sample(listed)
         values = {'scope': scope, 'count': len(listed) if count is None else count, 'requests': sent}
         if not verify and sample:
@@ -395,10 +456,11 @@ class MtbgEdgeCache(models.AbstractModel):
         return groups
 
     @api.model
-    def _mtbg_purge_send(self, groups):
+    def _mtbg_purge_send(self, groups, zone_id=None):
         """Cloudflare purges ``groups`` [(kind, item, addresses)], PURGE_BATCH_OTHER items of a kind a call,
         PURGE_GAP seconds apart; a refused call is tried again (1 s, 2 s), then the purge stops there. Returns
-        (calls sent, addresses not purged, error)."""
+        (calls sent, addresses not purged, error). ``zone_id``: the zone (2.1.0; default the website's)."""
+        zone_id = zone_id or self._mtbg_zone_id() or None
         Api = self.env['cloudflare.api'].sudo()
         batches = []
         for kind in ('tags', 'prefixes', 'files'):
@@ -413,9 +475,10 @@ class MtbgEdgeCache(models.AbstractModel):
             for attempt in range(PURGE_TRIES):
                 if attempt:
                     time.sleep(2 ** (attempt - 1))
-                result = Api.purge(**{kind: [item for item, _covered in batch]})
+                result = Api.purge(zone_id=zone_id, website=self._mtbg_website(),
+                                   **{kind: [item for item, _covered in batch]})
                 sent += result.get('requests') or 0
-                if result.get('ok') or not Api.zone()['id']:
+                if result.get('ok') or not zone_id:
                     break  # (taken; or not set up: no use trying again)
             if not result.get('ok'):
                 # (an address is purged once all its parts went: its tag and its prefix)
@@ -594,7 +657,7 @@ class MtbgEdgeCache(models.AbstractModel):
 
     @api.model
     def _mtbg_warm_base(self):
-        website = self.env['website'].sudo().get_current_website()
+        website = self._mtbg_website()
         domain = (website.domain or '').strip().rstrip('/')
         if domain and '://' not in domain:
             domain = 'https://' + domain
@@ -631,8 +694,9 @@ class MtbgEdgeCache(models.AbstractModel):
     def _mtbg_warm_queue(self, targets):
         """``targets`` [(path, language code)] added to the re-fill queue (once each). Returns how many were new."""
         Warm = self.env['mtbg.edge.cache.warm'].sudo()
-        queued = set(Warm.search([]).mapped('path'))
-        new = [{'path': path, 'lang': code} for path, code in targets if path not in queued]
+        website = self._mtbg_website()
+        queued = set(Warm.search([('website_id', 'in', (False, website.id))]).mapped('path'))
+        new = [{'path': path, 'lang': code, 'website_id': website.id} for path, code in targets if path not in queued]
         # (two of a list once)
         new = list({vals['path']: vals for vals in new}.values())
         if new:
@@ -646,10 +710,10 @@ class MtbgEdgeCache(models.AbstractModel):
         a minute later). Returns {path: Cloudflare's answer (HIT, MISS, ...) or the error}."""
         Warm = self.env['mtbg.edge.cache.warm'].sudo()
         params = self._mtbg_params()
-        base = self._mtbg_warm_base()
-        if not params['on'] or not params['ttl'] or not base:
+        if not params['on'] or not params['ttl']:
             Warm.search([]).unlink()
             return {}
+        bases = {}  # (2.1.0: each row at its website's address)
         started = time.monotonic()
         done = {}
         for row in Warm.search([], order='id'):
@@ -660,6 +724,13 @@ class MtbgEdgeCache(models.AbstractModel):
                 _logger.info("Cloudflare page cache: re-fill time cap reached, %s pages left for the next run",
                              Warm.search_count([]))
                 break
+            site = row.website_id.id or self._mtbg_website().id
+            if site not in bases:
+                bases[site] = self.with_context(mtbg_edge_cache_website=site)._mtbg_warm_base()
+            base = bases[site]
+            if not base:
+                row.unlink()
+                continue
             headers = {'User-Agent': WARM_AGENT, 'Accept-Language': (row.lang or 'en_US').split('_')[0]}
             try:
                 res = requests.get(base + row.path, headers=headers, timeout=30, allow_redirects=False)
@@ -677,7 +748,8 @@ class MtbgEdgeCache(models.AbstractModel):
     def _mtbg_warm_night(self):
         """The nightly job (at the re-fill time, before the nightly speed log): every re-filled page queued and asked
         for (Cloudflare drops copies nobody asked for)."""
-        self._mtbg_warm_queue(self._mtbg_warm_targets())
+        for website in self._mtbg_cache_websites():
+            self._mtbg_for(website)._mtbg_warm_queue(self._mtbg_for(website)._mtbg_warm_targets())
         return self._mtbg_warm()
 
     @api.model
@@ -719,6 +791,7 @@ class MtbgEdgeCacheWarm(models.Model):
 
     path = fields.Char(required=True, readonly=True)
     lang = fields.Char(readonly=True)
+    website_id = fields.Many2one('website', readonly=True, ondelete='cascade')  # (2.1.0: empty: the current one)
 
 
 class MtbgEdgeCacheChange(models.Model):
@@ -775,13 +848,16 @@ class MtbgEdgeCacheLog(models.Model):
                               ('none', 'Not checked')], string='Checked', readonly=True)
     check_paths = fields.Text(readonly=True)  # (the pages to ask for, one a line, while the check waits)
     purged_at = fields.Float(readonly=True)  # (when the purge was sent, time.time(), while the check waits)
+    # 2.1.0: the website purged (each website its own zone, its own row)
+    website_id = fields.Many2one('website', string='Website', readonly=True, ondelete='set null')
 
     @api.model
     def _mtbg_add(self, ok, reason, message, scope=False, count=0, requests=0, check=False, check_paths=False,
                   purged=0.0):
         self.sudo().create({'ok': ok, 'reason': reason, 'message': message or False, 'scope': scope,
                             'url_count': count, 'request_count': requests, 'check': check,
-                            'check_paths': check_paths or False, 'purged_at': purged or 0.0})
+                            'check_paths': check_paths or False, 'purged_at': purged or 0.0,
+                            'website_id': self.env.context.get('mtbg_edge_cache_website') or False})
         old = self.sudo().search([], offset=KEEP_LOG)
         if old:
             old.unlink()
@@ -800,7 +876,8 @@ class MtbgEdgeCacheLog(models.Model):
         them."""
         Cache = self.env['mtbg.edge.cache']
         for log in self.sudo().search([('check', '=', 'waiting')], order='id'):
-            state, note = Cache._mtbg_verify((log.check_paths or '').split(), log.purged_at or time.time())
+            on = Cache.with_context(mtbg_edge_cache_website=log.website_id.id) if log.website_id else Cache
+            state, note = on._mtbg_verify((log.check_paths or '').split(), log.purged_at or time.time())
             message = ' · '.join(x for x in ((note, log.message) if state == 'stale' else (log.message, note)) if x)
             log.write({'ok': state != 'stale', 'check': state, 'check_paths': False, 'message': message or False})
             if state == 'stale':

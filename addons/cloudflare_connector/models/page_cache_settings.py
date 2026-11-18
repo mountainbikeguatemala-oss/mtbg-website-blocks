@@ -22,6 +22,12 @@ class ResConfigSettings(models.TransientModel):
              "that address alone; else the address and everything under it (/blog: the blog and every post). The website's own pages (Website › Pages) are kept wherever they are, unless "
              "they are behind a password, a login or a group.")
 
+    # 2.1.0 (owner 2026-11-18): each website its own Cloudflare zone (the website chosen at the top of this page)
+    website_cloudflare_zone_name = fields.Char(
+        related='website_id.cloudflare_zone_name', readonly=False, string="This website's Cloudflare zone")
+    website_cloudflare_zone_id = fields.Char(
+        related='website_id.cloudflare_zone_id', readonly=False, string="Its zone ID")
+
     mtbg_edge_cache_warm_paths = fields.Char(
         string="Pages to re-fill", config_parameter='mtbg_tours.edge_cache_warm_paths', default='/ /tours',
         help="Addresses separated by spaces, each in every language too, as for the pages Cloudflare may keep. After "
@@ -36,16 +42,23 @@ class ResConfigSettings(models.TransientModel):
         help="The prices, spaces and statuses the pages load after they open: never kept by Cloudflare.")
 
     def _compute_mtbg_edge_cache_connection(self):
-        if 'cloudflare.api' not in self.env:
-            text = self.env._("Cloudflare Connector is not installed")
-        else:
-            zone = self.env['cloudflare.api'].sudo().zone()
-            ICP = self.env['ir.config_parameter'].sudo()
-            if zone['id'] and ICP.get_param('cloudflare_connector.api_token'):
-                text = self.env._("Zone %s (Settings › Cloudflare)", zone['name'] or zone['id'])
-            else:
-                text = self.env._("Not set up: Settings › Cloudflare › Set up Cloudflare")
+        """The zone of the website chosen on the page (2.1.0: its own, else Settings › Cloudflare's)."""
         for settings in self:
+            if 'cloudflare.api' not in self.env:
+                text = self.env._("Cloudflare Connector is not installed")
+            else:
+                website = settings.website_id or self.env['website'].get_current_website()
+                zone = self.env['cloudflare.api'].sudo().zone(website)
+                ICP = self.env['ir.config_parameter'].sudo()
+                if zone['id'] and ICP.get_param('cloudflare_connector.api_token'):
+                    own = (website.sudo().cloudflare_zone_id or '').strip()
+                    text = (self.env._("Zone %s (this website's own)", zone['name'] or zone['id']) if own
+                            else self.env._("Zone %s (Settings › Cloudflare)", zone['name'] or zone['id']))
+                elif not zone['id'] and ICP.get_param('cloudflare_connector.zone_id'):
+                    text = self.env._("No zone for this website: give it its own below (its pages are not kept "
+                                      "by Cloudflare until then)")
+                else:
+                    text = self.env._("Not set up: Settings › Cloudflare › Set up Cloudflare")
             settings.mtbg_edge_cache_connection = text
 
     def _compute_mtbg_edge_cache_live_values(self):

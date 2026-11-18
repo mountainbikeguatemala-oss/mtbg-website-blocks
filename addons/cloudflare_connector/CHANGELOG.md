@@ -1,5 +1,27 @@
 # Cloudflare Connector
 
+## 19.0.2.1.0 (2026-11-18)
+
+- **Each website its own Cloudflare zone** (owner, 2026-11-18: the shop site has two websites, each its own Cloudflare
+  zone). Website › Settings (the website chosen at the top) › Cloudflare page cache: **This website's Cloudflare zone**
+  and **Its zone ID** (new fields on the website, administrators only). A website's purges and page cache go to its
+  own zone; without one, to the zone of Settings › Cloudflare (Set up Cloudflare's) when it is the website that zone is
+  for, or its address is in that zone; any other website has no zone.
+- **The existing zone stays as it is**: Settings › Cloudflare keeps its zone, zone ID and cache-purge token; the update
+  names the website it is for once (system parameter `cloudflare_connector.zone_website_id`: the first website whose
+  address is in the zone, else the first website), so nothing changes on a site with one website.
+- A purge (a change, Purge pages now, the emergency Purge everything) goes to every website that has a zone, each at
+  its own address, in its own languages and zone, one purge log row each (new column **Website**); "Purge everything"
+  once per zone. The check after a purge and the re-fill ask for each website's own pages at its own address.
+- A website without a zone is never kept by Cloudflare (no purge could empty its pages): its pages get no
+  `s-maxage` (the website of Set up Cloudflare's zone excepted, as before, also while it is not set up).
+- `cloudflare.api.zone(website=None)` and `cloudflare.api.purge(..., website=None)`: the website's zone (default the
+  current website's); `zone_id=` still wins.
+- The cache-purge token of Settings › Cloudflare purges every website's zone: it must be allowed on each (Cloudflare ›
+  My Profile or the account › API Tokens › the token › Edit › Zone Resources: add the zone; permission Zone › Cache
+  Purge › Purge).
+- The page cache still ships switched OFF. Tests: every Cloudflare call mocked (tests/test_zones.py).
+
 ## 19.0.2.0.1 (2026-11-17)
 
 - **Page purges really empty Cloudflare's copies** (www, 2026-11-17: every purge logged "Every page · 347 addresses · Done ✓" while /tours/… kept being served `cf-cache-status: HIT`, `age: 68251`, old HTML; only "Purge everything" worked). A purge by single URL matches only a copy stored under Cloudflare's default cache key, as the purge request itself would be cached. Since the cache rules of 2026-11-16 the copies are no longer kept under it (checked publicly: `?utm_source=x`, `?utm_source=y` and `?gclid=1` share one copy, apart from the plain address's), so Cloudflare answered OK and removed nothing; it never reached the query string copies (a blog's page 2, a campaign link) either. Page purges now use:

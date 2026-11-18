@@ -13,6 +13,14 @@
                             <label class="col-lg-4 o_light_label" for="mtbg_edge_cache_connection"/>
                             <field name="mtbg_edge_cache_connection" class="col-lg-8" readonly="1"/>
                         </div>
+                        <div class="row mt8" groups="base.group_system">
+                            <label class="col-lg-4 o_light_label" for="website_cloudflare_zone_name"/>
+                            <field name="website_cloudflare_zone_name" class="col-lg-8" placeholder="example.com"/>
+                        </div>
+                        <div class="row mt8" groups="base.group_system">
+                            <label class="col-lg-4 o_light_label" for="website_cloudflare_zone_id"/>
+                            <field name="website_cloudflare_zone_id" class="col-lg-8"/>
+                        </div>
                         <div class="row mt8">
                             <label class="col-lg-4 o_light_label" for="mtbg_edge_cache_paths"/>
                             <field name="mtbg_edge_cache_paths" class="col-lg-8"/>
@@ -59,6 +67,7 @@
                             confirm="Purge everything Cloudflare keeps of the site, scripts, styles and pictures too, at every Cloudflare location? The next visitors get slower pages until it fills again. For emergencies only: a change already empties the pages it touches."/>
                 </header>
                 <field name="create_date" string="When"/>
+                <field name="website_id" optional="show" groups="website.group_multi_website"/>
                 <field name="ok"/>
                 <field name="check"/>
                 <field name="scope"/>

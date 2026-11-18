@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mtbg_tours_page_speed.SpeedLogDashboard">
+        <div class="o_action o_mtbg_speed_dash h-100 overflow-auto">
+            <div class="o_mtbg_speed_wrap">
+                <!-- the page's head: its name, last night, the rows' page -->
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                    <div class="flex-grow-1 min-w-0">
+                        <h2 class="mb-0">Speed log</h2>
+                        <div class="text-muted small" t-if="hasData">Last night measured: <t t-esc="lastNight"/></div>
+                    </div>
+                    <select t-if="websiteChoices.length > 1" class="form-select w-auto o_mtbg_speed_website"
+                            aria-label="Website" t-on-change="chooseWebsite">
+                        <option t-foreach="websiteChoices" t-as="site" t-key="site.id" t-att-value="site.id"
+                                t-att-selected="state.website === site.id" t-esc="site.name"/>
+                    </select>
+                    <button type="button" class="btn btn-secondary o_mtbg_speed_setup" t-on-click="openSetup">
+                        <i class="fa fa-cog me-1"/>Set up
+                    </button>
+                    <button type="button" class="btn btn-primary o_mtbg_speed_all" t-on-click="() => this.openRows()">
+                        <i class="fa fa-list me-1"/>See all rows
+                    </button>
+                </div>
+
+                <div t-if="!state.loading and !hasData" class="o_mtbg_speed_empty card p-4 text-center">
+                    <h4>No night measured yet</h4>
+                    <p class="text-muted mb-0">Every night the site asks Google PageSpeed for its homepage and every
+                        tour page, on a phone and on a computer. Press Set up to turn it on.</p>
+                </div>
+
+                <t t-if="hasData">
+                    <!-- 1. the big chart: a stat, its overlays, the nights -->
+                    <section class="card o_mtbg_speed_chart_card mb-3">
+                        <div class="card-body">
+                            <div class="o_mtbg_speed_stats o_mtbg_speed_chips d-flex flex-wrap gap-1 mb-2" role="group" aria-label="Stat">
+                                <button t-foreach="STATS" t-as="stat" t-key="stat.key" type="button"
+                                        t-attf-class="btn btn-sm o_mtbg_speed_stat {{state.stat === stat.key ? 'btn-primary active' : 'btn-outline-secondary'}}"
+                                        t-att-data-stat="stat.key" t-att-aria-pressed="state.stat === stat.key ? 'true' : 'false'"
+                                        t-on-click="() => this.chooseStat(stat.key)" t-esc="stat.label"/>
+                            </div>
+                            <div class="o_mtbg_speed_overlays d-flex flex-wrap align-items-center gap-2 mb-2">
+                              <div class="o_mtbg_speed_chips o_mtbg_speed_toggles d-flex flex-wrap align-items-center gap-2">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Nights">
+                                    <button t-foreach="RANGES" t-as="nights" t-key="nights" type="button"
+                                            t-attf-class="btn o_mtbg_speed_range {{state.nights === nights ? 'btn-secondary active' : 'btn-outline-secondary'}}"
+                                            t-att-data-nights="nights" t-on-click="() => this.chooseNights(nights)">
+                                        <t t-esc="nights"/> nights
+                                    </button>
+                                </div>
+                                <button t-foreach="SCREENS" t-as="screen" t-key="screen.key" type="button"
+                                        t-attf-class="btn btn-sm o_mtbg_speed_screen o_mtbg_speed_{{screen.key}} {{state.screens[screen.key] ? 'btn-secondary active' : 'btn-outline-secondary'}}"
+                                        t-att-data-screen="screen.key" t-att-aria-pressed="state.screens[screen.key] ? 'true' : 'false'"
+                                        t-on-click="() => this.toggleScreen(screen.key)">
+                                    <span class="o_mtbg_speed_swatch me-1"/><t t-esc="screen.label"/>
+                                </button>
+                                <button type="button" t-attf-class="btn btn-sm o_mtbg_speed_limit {{state.limit ? 'btn-secondary active' : 'btn-outline-secondary'}}"
+                                        t-att-aria-pressed="state.limit ? 'true' : 'false'" t-on-click="toggleLimit">
+                                    <span class="o_mtbg_speed_swatch is-limit me-1"/>Limit
+                                </button>
+                              </div>
+                              <div class="o_mtbg_speed_selects d-flex flex-wrap align-items-center gap-2">
+                                <label class="d-flex align-items-center gap-1 mb-0 small">
+                                    <span class="text-muted text-nowrap">Overlay</span>
+                                    <select class="form-select form-select-sm o_mtbg_speed_overlay" t-on-change="chooseOverlay">
+                                        <option value="" t-att-selected="!state.overlay">None</option>
+                                        <option t-foreach="overlayChoices" t-as="stat" t-key="stat.key" t-att-value="stat.key"
+                                                t-att-selected="state.overlay === stat.key" t-esc="stat.label"/>
+                                    </select>
+                                </label>
+                                <label class="d-flex align-items-center gap-1 mb-0 small o_mtbg_speed_page_pick">
+                                    <span class="text-muted text-nowrap">Page</span>
+                                    <select class="form-select form-select-sm o_mtbg_speed_page" t-on-change="choosePage">
+                                        <option value="" t-att-selected="!state.page">All pages (average)</option>
+                                        <option t-foreach="pageChoices" t-as="page" t-key="page.url" t-att-value="page.url"
+                                                t-att-selected="state.page === page.url" t-esc="page.title"/>
+                                    </select>
+                                </label>
+                              </div>
+                            </div>
+                            <div class="o_mtbg_speed_canvas">
+                                <canvas t-ref="canvas" role="img" aria-label="Nightly averages over time"/>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 2. last night against the 7 nights before -->
+                    <section class="o_mtbg_speed_kpis mb-3">
+                        <div t-foreach="kpiCards" t-as="card" t-key="card.key" t-attf-class="card o_mtbg_speed_kpi o_mtbg_speed_kpi_{{card.key}}">
+                            <div class="card-body">
+                                <div class="text-muted small fw-semibold mb-2" t-esc="card.label"/>
+                                <div t-foreach="card.rows" t-as="row" t-key="row.screen.key" class="o_mtbg_speed_kpi_row">
+                                    <span class="o_mtbg_speed_kpi_screen small text-muted" t-esc="row.screen.label"/>
+                                    <span class="o_mtbg_speed_kpi_value fs-4 fw-bold" t-esc="row.value"/>
+                                    <span t-attf-class="o_mtbg_speed_kpi_delta small text-nowrap {{row.tone}}"
+                                          t-att-title="'7 nights before: ' + row.week">
+                                        <i t-attf-class="fa {{row.arrow}} me-1"/><t t-esc="row.delta"/>
+                                    </span>
+                                </div>
+                                <div class="small text-muted mt-1">Last night, against the 7 nights before</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 3. the worst pages -->
+                    <section class="o_mtbg_speed_worst mb-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <h4 class="mb-0 flex-grow-1">Worst performing pages</h4>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Screen">
+                                <button t-foreach="SCREENS" t-as="screen" t-key="screen.key" type="button"
+                                        t-attf-class="btn o_mtbg_speed_worst_screen {{state.worstScreen === screen.key ? 'btn-secondary active' : 'btn-outline-secondary'}}"
+                                        t-att-data-screen="screen.key" t-on-click="() => this.chooseWorstScreen(screen.key)"
+                                        t-esc="screen.label"/>
+                            </div>
+                        </div>
+                        <div class="o_mtbg_speed_worst_grid">
+                            <div t-foreach="worstPages" t-as="page" t-key="page.id" class="card o_mtbg_speed_page_card"
+                                 role="button" tabindex="0" t-att-title="page.url"
+                                 t-on-click="() => this.openPage(page)" t-on-keydown="(ev) => this.onCardKey(ev, page)">
+                                <div class="card-body d-flex flex-column gap-1">
+                                    <div class="d-flex align-items-start gap-2">
+                                        <div class="flex-grow-1 min-w-0">
+                                            <div class="fw-semibold o_mtbg_speed_page_title" t-esc="page.title"/>
+                                            <div class="small text-muted text-truncate o_mtbg_speed_page_path" t-esc="page.path"/>
+                                        </div>
+                                        <span t-attf-class="badge rounded-pill {{scoreTone(page.score)}} o_mtbg_speed_score" t-esc="page.score"/>
+                                    </div>
+                                    <div class="d-flex align-items-baseline gap-2">
+                                        <span class="fs-4 fw-bold" t-esc="formatStat('lcp', page.lcp)"/>
+                                        <span class="small text-muted">LCP</span>
+                                    </div>
+                                    <div t-if="page.cause" class="small o_mtbg_speed_cause"><i class="fa fa-search me-1 text-muted"/><t t-esc="cause(page)"/></div>
+                                    <div class="small mt-auto d-flex flex-wrap gap-1 align-items-center">
+                                        <span t-if="page.flagged" class="badge text-bg-danger"><i class="fa fa-exclamation-triangle me-1"/>Over the limit</span>
+                                        <span t-elif="page.slow" class="badge text-bg-warning">Slow tonight</span>
+                                        <span class="text-muted o_mtbg_speed_slow_nights">Slow <t t-esc="page.slow_nights"/> of <t t-esc="state.data.nights"/> nights</span>
+                                        <a href="#" class="ms-auto o_mtbg_speed_latest" t-on-click.stop.prevent="() => this.openLatest(page)">Latest night</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div t-if="!worstPages.length" class="text-muted">No page measured on this screen.</div>
+                        </div>
+                    </section>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

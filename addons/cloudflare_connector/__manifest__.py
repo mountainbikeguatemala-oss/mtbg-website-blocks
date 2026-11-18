@@ -1,6 +1,6 @@
 {
     "name": "Cloudflare Connector",
-    "version": "19.0.2.0.1",
+    "version": "19.0.2.1.0",
     "category": "Productivity/Connectors",
     "mtbg_tours_section": "connectors",
     "summary": "One Cloudflare connection: the account, its API token, R2 storage and the website's page cache, for "
@@ -32,6 +32,9 @@ One Cloudflare connection, like Google and Meta have theirs:
   models/sources.py and models/live_values.py. Visits by Script (``mtbg_tours_visit``), where installed, keeps
   cached pages counting visits.
 * Secrets stay with administrators and are cleared on a copy of the site (neutralize).
+
+* Several websites on one database (19.0.2.1.0): each website its own Cloudflare zone (Website › Settings › Cloudflare
+  page cache) for its purges and its page cache; the zone of Settings › Cloudflare stays the default website's.
 
 It depends on no product, only on Odoo's Website: it can be installed on any Odoo website.
 """,

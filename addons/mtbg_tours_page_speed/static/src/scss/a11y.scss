@@ -1,0 +1,8 @@
+// Links in a page's text are told apart by more than their colour (accessibility, page speed 0.4.0): underlined in
+// paragraphs of the content, never in menus, buttons or cards
+#wrap p a:not(.btn):not([class*="btn-"]):not(.nav-link):not(.dropdown-item),
+#wrap .o_wblog_post_content li a:not(.btn),
+#wrap .mtbg-ride-facts__note a {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+}

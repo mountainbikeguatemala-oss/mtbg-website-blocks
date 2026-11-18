@@ -1,0 +1,560 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-04 05:11+0000\n"
+"PO-Revision-Date: 2026-11-04 05:11+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,help:mtbg_tours_page_speed.field_res_config_settings__mtbg_page_speed_lean
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.res_config_settings_view_form
+msgid ""
+"Anonymous visitors on ordinary pages get Odoo's script bundle without the "
+"editor's media dialog, Unsplash, the onboarding tours, the tax helper and "
+"the payment and delivery forms (about 365 KB less). Logged-in users and the "
+"portal, checkout, payment and invoice pages keep Odoo's own bundle."
+msgstr ""
+"Los visitantes anónimos en páginas comunes reciben el paquete de scripts de "
+"Odoo sin el diálogo de medios del editor, Unsplash, los tours de "
+"introducción, el asistente de impuestos ni los formularios de pago y entrega"
+" (unos 365 KB menos). Los usuarios con sesión iniciada y las páginas del "
+"portal, de pago, de checkout y de facturas conservan el paquete propio de "
+"Odoo."
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model,name:mtbg_tours_page_speed.model_ir_attachment
+msgid "Attachment"
+msgstr "Adjunto"
+
+#. module: mtbg_tours_page_speed
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.submenu_back_label
+msgid "Back"
+msgstr "Atrás"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model,name:mtbg_tours_page_speed.model_res_config_settings
+msgid "Config Settings"
+msgstr "Ajustes de configuración"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_ir_attachment__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_ir_http__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_mtbg_page_speed_lean__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_website_page__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model,name:mtbg_tours_page_speed.model_ir_http
+msgid "HTTP Routing"
+msgstr "Enrutamiento HTTP"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_ir_attachment__id
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_ir_http__id
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_mtbg_page_speed_lean__id
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_res_config_settings__id
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_website_page__id
+msgid "ID"
+msgstr "ID"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model,name:mtbg_tours_page_speed.model_website_page
+msgid "Page"
+msgstr "Página"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.actions.server,name:mtbg_tours_page_speed.cron_lighten_copies_ir_actions_server
+msgid "Page speed: lighter screen copies of the photos (WebP q70)"
+msgstr ""
+"Velocidad de página: copias de pantalla más ligeras de las fotos (WebP q70)"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model,name:mtbg_tours_page_speed.model_mtbg_page_speed_lean
+msgid "Page speed: visitor pages without Odoo extras"
+msgstr "Velocidad de página: páginas para visitantes sin extras de Odoo"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_res_config_settings__mtbg_page_speed_lean
+msgid "Visitor pages without Odoo's extras"
+msgstr "Páginas para visitantes sin los extras de Odoo"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_mtbg_page_speed_log__lcp_selector
+msgid "LCP element (selector)"
+msgstr "Elemento LCP (selector)"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,help:mtbg_tours_page_speed.field_mtbg_page_speed_log__lcp_selector
+msgid "Where the LCP element is in the page, as Lighthouse names it"
+msgstr "Dónde está el elemento LCP en la página, como lo nombra Lighthouse"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_mtbg_page_speed_log__lcp_ttfb
+msgid "LCP: server (ms)"
+msgstr "LCP: servidor (ms)"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,help:mtbg_tours_page_speed.field_mtbg_page_speed_log__lcp_ttfb
+msgid "Time to first byte"
+msgstr "Tiempo hasta el primer byte"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_mtbg_page_speed_log__lcp_load_delay
+msgid "LCP: load delay (ms)"
+msgstr "LCP: espera de carga (ms)"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,help:mtbg_tours_page_speed.field_mtbg_page_speed_log__lcp_load_delay
+msgid "From the first byte until the browser starts fetching the LCP picture"
+msgstr "Desde el primer byte hasta que el navegador empieza a pedir la imagen LCP"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_mtbg_page_speed_log__lcp_load_time
+msgid "LCP: load time (ms)"
+msgstr "LCP: tiempo de carga (ms)"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,help:mtbg_tours_page_speed.field_mtbg_page_speed_log__lcp_load_time
+msgid "The LCP picture's download"
+msgstr "La descarga de la imagen LCP"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_mtbg_page_speed_log__lcp_render_delay
+msgid "LCP: render delay (ms)"
+msgstr "LCP: espera de pintado (ms)"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,help:mtbg_tours_page_speed.field_mtbg_page_speed_log__lcp_render_delay
+msgid "From the picture's arrival (or the first byte, for text) until it shows"
+msgstr "Desde que llega la imagen (o el primer byte, si es texto) hasta que se muestra"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_mtbg_page_speed_log__lcp_runs
+msgid "LCP runs (s)"
+msgstr "Mediciones de LCP (s)"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,help:mtbg_tours_page_speed.field_mtbg_page_speed_log__lcp_runs
+msgid "Each run's LCP, when a slow phone page was measured more than once (the row keeps the median run)"
+msgstr "El LCP de cada medición, cuando una página lenta en teléfono se midió más de una vez (la fila guarda la medición mediana)"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_mtbg_page_speed_log__slow
+#: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.speed_log_search
+msgid "Slow tonight"
+msgstr "Lenta esta noche"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,help:mtbg_tours_page_speed.field_mtbg_page_speed_log__slow
+msgid "This night: LCP over 4 s on a phone or 2.5 s on a computer"
+msgstr "Esta noche: LCP de más de 4 s en teléfono o 2,5 s en computadora"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,help:mtbg_tours_page_speed.field_mtbg_page_speed_log__flagged
+msgid "Slow two nights in a row: LCP over 4 s on a phone or 2.5 s on a computer"
+msgstr "Lenta dos noches seguidas: LCP de más de 4 s en teléfono o 2,5 s en computadora"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_mtbg_page_speed_log__runs_data
+msgid "Runs Data"
+msgstr "Datos de las mediciones"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_mtbg_page_speed_log__tries
+msgid "Tries"
+msgstr "Intentos"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_mtbg_page_speed_log__next_try
+msgid "Next Try"
+msgstr "Próximo intento"
+
+#. module: mtbg_tours_page_speed
+#: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
+msgid "Not measured before the night was over."
+msgstr "No se midió antes de que terminara la noche."
+
+#. module: mtbg_tours_page_speed
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.speed_log_form
+msgid "The night"
+msgstr "La noche"
+
+#. module: mtbg_tours_page_speed
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.speed_log_form
+msgid "Scores"
+msgstr "Resultados"
+
+#. module: mtbg_tours_page_speed
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.speed_log_form
+msgid "Why the LCP took its time"
+msgstr "Por qué tardó el LCP"
+
+#. module: mtbg_tours_page_speed
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.speed_log_form
+msgid "The LCP element"
+msgstr "El elemento LCP"
+
+#. module: mtbg_tours_page_speed
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.speed_log_setup_form
+msgid ""
+"The results: Website › Reporting › Speed log, kept 180 days, the pages over\n"
+"                        the limits two nights in a row flagged (main picture after 4 s on a phone, 2.5 s on a\n"
+"                        computer). Saving changes only the speed log's switch."
+msgstr "Los resultados: Sitio web › Informes › Registro de velocidad, guardados 180 días, con las páginas que pasan los límites dos noches seguidas marcadas (imagen principal después de 4 s en teléfono, 2,5 s en computadora). Guardar solo cambia el interruptor del registro de velocidad."
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+msgid "All pages (average)"
+msgstr "Todas las páginas (promedio)"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.js:0
+msgid "Average LCP"
+msgstr "LCP promedio"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.js:0
+msgid "Average score"
+msgstr "Puntaje promedio"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.js:0
+msgid "Blocking time"
+msgstr "Tiempo de bloqueo"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.js:0
+msgid "CLS"
+msgstr "CLS"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.js:0
+msgid "First paint"
+msgstr "Primer pintado"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.js:0
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.speed_log_kanban
+msgid "LCP"
+msgstr "LCP"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.js:0
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+msgid "Limit"
+msgstr "Límite"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.js:0
+msgid "Page weight"
+msgstr "Peso de la página"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.js:0
+msgid "Pages not measured"
+msgstr "Páginas sin medir"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.js:0
+msgid "Pages over the limit"
+msgstr "Páginas sobre el límite"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.js:0
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_mtbg_page_speed_log__score
+msgid "Score"
+msgstr "Puntaje"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.js:0
+msgid "Server response"
+msgstr "Respuesta del servidor"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.js:0
+#: model:ir.model.fields.selection,name:mtbg_tours_page_speed.selection__mtbg_page_speed_log__strategy__mobile
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.speed_log_search
+msgid "Phone"
+msgstr "Teléfono"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.js:0
+#: model:ir.model.fields.selection,name:mtbg_tours_page_speed.selection__mtbg_page_speed_log__strategy__desktop
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.speed_log_search
+msgid "Computer"
+msgstr "Computadora"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+msgid "Last night measured:"
+msgstr "Última noche medida:"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+msgid "Last night, against the 7 nights before"
+msgstr "Anoche, frente a las 7 noches anteriores"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+msgid "Latest night"
+msgstr "Última noche"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+msgid "Nightly averages over time"
+msgstr "Promedios de cada noche en el tiempo"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+msgid "Nights"
+msgstr "Noches"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+#: model_terms:ir.actions.act_window,help:mtbg_tours_page_speed.action_speed_log
+msgid "No night measured yet"
+msgstr "Todavía no hay ninguna noche medida"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+msgid "No page measured on this screen."
+msgstr "Ninguna página medida en esta pantalla."
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+msgid "None"
+msgstr "Ninguno"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+msgid "Overlay"
+msgstr "Superponer"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+msgid "Screen"
+msgstr "Pantalla"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+msgid "See all rows"
+msgstr "Ver todas las filas"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.page_speed_settings_form
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.speed_log_list
+msgid "Set up"
+msgstr "Configurar"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+msgid "Slow"
+msgstr "Lenta"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+msgid "Stat"
+msgstr "Métrica"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+msgid "Worst performing pages"
+msgstr "Páginas con peor rendimiento"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+msgid "nights"
+msgstr "noches"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+msgid "of"
+msgstr "de"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+#: model:ir.actions.client,name:mtbg_tours_page_speed.action_speed_log_dashboard
+#: model:ir.ui.menu,name:mtbg_tours_page_speed.menu_speed_log
+msgid "Speed log"
+msgstr "Registro de velocidad"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_mtbg_page_speed_log__flagged
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.speed_log_kanban
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.speed_log_search
+msgid "Over the limit"
+msgstr "Sobre el límite"
+
+#. module: mtbg_tours_page_speed
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
+#: model:ir.model.fields.selection,name:mtbg_tours_page_speed.selection__mtbg_page_speed_log__state__error
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.speed_log_kanban
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.speed_log_search
+msgid "Not measured"
+msgstr "Sin medir"
+
+#. module: mtbg_tours_page_speed
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
+msgid "Only an administrator can see the speed log."
+msgstr "Solo un administrador puede ver el registro de velocidad."
+
+#. module: mtbg_tours_page_speed
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
+msgid "load delay"
+msgstr "retraso de carga"
+
+#. module: mtbg_tours_page_speed
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
+msgid "load time"
+msgstr "tiempo de carga"
+
+#. module: mtbg_tours_page_speed
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
+msgid "render delay"
+msgstr "retraso de renderizado"
+
+#. module: mtbg_tours_page_speed
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
+msgid "server answer"
+msgstr "respuesta del servidor"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_mtbg_page_speed_log__page_title
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.speed_log_form
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.speed_log_search
+msgid "Page title"
+msgstr "Título de la página"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,field_description:mtbg_tours_page_speed.field_mtbg_page_speed_log__path
+msgid "Path"
+msgstr "Ruta"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,help:mtbg_tours_page_speed.field_mtbg_page_speed_log__path
+msgid "The page's address without the site's"
+msgstr "La dirección de la página sin la del sitio"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.model.fields,help:mtbg_tours_page_speed.field_mtbg_page_speed_log__page_title
+msgid ""
+"The page's title (its website page's name, else its <title>), as it was that"
+" night"
+msgstr "El título de la página (el nombre de su página del sitio web, si no su <title>), como era esa noche"
+
+#. module: mtbg_tours_page_speed
+#: model:ir.actions.act_window,name:mtbg_tours_page_speed.action_speed_log
+#: model:ir.ui.menu,name:mtbg_tours_page_speed.menu_speed_log_rows
+msgid "Speed log: all nights"
+msgstr "Registro de velocidad: todas las noches"
+
+#. module: mtbg_tours_page_speed
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_page_speed.speed_log_kanban
+msgid "s"
+msgstr "s"
+
+#. module: mtbg_tours_page_speed
+#. odoo-javascript
+#: code:addons/mtbg_tours_page_speed/static/src/dashboard/speed_dashboard.xml:0
+msgid ""
+"Every night the site asks Google PageSpeed for its homepage and every\n"
+"                        tour page, on a phone and on a computer. Press Set up to turn it on."
+msgstr "Cada noche el sitio le pide a Google PageSpeed su página de inicio y cada página de tour, en un teléfono y en una computadora. Presiona Configurar para activarlo."
+
+#. module: mtbg_tours_page_speed
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
+msgid "LCP element: %(element)s; the breakdown doesn't explain the time"
+msgstr "Elemento LCP: %(element)s; el desglose no explica el tiempo"
+
+#. module: mtbg_tours_page_speed
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
+msgid "The breakdown doesn't explain the time"
+msgstr "El desglose no explica el tiempo"
+
+#. module: mtbg_tours_page_speed
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
+msgid "header logo"
+msgstr "logo del encabezado"
+
+#. module: mtbg_tours_page_speed
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
+msgid "tour cover"
+msgstr "portada del tour"
+
+#. module: mtbg_tours_page_speed
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
+msgid "page background"
+msgstr "fondo de la página"
+
+#. module: mtbg_tours_page_speed
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
+msgid "title"
+msgstr "título"

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="speed_log_list" model="ir.ui.view">
+        <field name="name">mtbg.page.speed.log.list</field>
+        <field name="model">mtbg.page.speed.log</field>
+        <field name="arch" type="xml">
+            <list js_class="mtbg_sidebar_list" create="false" edit="false" decoration-danger="flagged" decoration-warning="slow and not flagged"
+                  decoration-muted="state != 'done'">
+                <header>
+                    <button name="action_mtbg_setup" type="object" string="Set up" class="btn-primary" display="always"
+                            groups="base.group_system"/>
+                </header>
+                <field name="run_date"/>
+                <field name="website_id" optional="show" groups="website.group_multi_website"/>
+                <field name="page_title"/>
+                <field name="url" widget="url"/>
+                <field name="strategy"/>
+                <field name="score"/>
+                <field name="lcp"/>
+                <field name="lcp_runs" optional="show"/>
+                <field name="fcp" optional="show"/>
+                <field name="tbt" optional="show"/>
+                <field name="cls" optional="show"/>
+                <field name="speed_index" optional="hide"/>
+                <field name="ttfb" optional="show"/>
+                <field name="weight_kb" optional="show"/>
+                <field name="lcp_ttfb" optional="hide"/>
+                <field name="lcp_load_delay" optional="hide"/>
+                <field name="lcp_load_time" optional="hide"/>
+                <field name="lcp_render_delay" optional="show"/>
+                <field name="lcp_selector" optional="show"/>
+                <field name="lcp_element" optional="hide"/>
+                <field name="slow" optional="show"/>
+                <field name="flagged" optional="show"/>
+                <field name="state" optional="hide"/>
+                <field name="message" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- 0.9.0, phones (owner, 2026-11-17: "make this whole page mobile compatible"): each row a card, a tap opens it
+         (the action's phone view: Odoo opens a kanban first on a small screen) -->
+    <record id="speed_log_kanban" model="ir.ui.view">
+        <field name="name">mtbg.page.speed.log.kanban</field>
+        <field name="model">mtbg.page.speed.log</field>
+        <field name="arch" type="xml">
+            <kanban create="false" class="o_mtbg_speed_rows_kanban">
+                <field name="state"/>
+                <field name="flagged"/>
+                <field name="slow"/>
+                <templates>
+                    <t t-name="card" class="o_mtbg_speed_row_card">
+                        <div class="d-flex align-items-start gap-2">
+                            <div class="flex-grow-1 min-w-0">
+                                <field name="page_title" class="fw-bold o_mtbg_speed_row_title"/>
+                                <field name="path" class="small text-muted text-truncate d-block"/>
+                            </div>
+                            <field name="score" class="badge rounded-pill text-bg-light fs-6"/>
+                        </div>
+                        <div class="d-flex flex-wrap align-items-center gap-2 small mt-1">
+                            <field name="run_date"/>
+                            <field name="strategy" class="text-muted"/>
+                            <span class="ms-auto fw-bold">LCP <field name="lcp"/> s</span>
+                        </div>
+                        <div class="d-flex flex-wrap gap-1 mt-1 small">
+                            <span t-if="record.flagged.raw_value" class="badge text-bg-danger">Over the limit</span>
+                            <span t-elif="record.slow.raw_value" class="badge text-bg-warning">Slow tonight</span>
+                            <span t-if="record.state.raw_value == 'error'" class="badge text-bg-secondary">Not measured</span>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="speed_log_search" model="ir.ui.view">
+        <field name="name">mtbg.page.speed.log.search</field>
+        <field name="model">mtbg.page.speed.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="page_title"/>
+                <field name="url"/>
+                <field name="website_id" groups="website.group_multi_website"/>
+                <filter name="flagged" string="Over the limit" domain="[('flagged', '=', True)]"/>
+                <filter name="slow" string="Slow tonight" domain="[('slow', '=', True)]"/>
+                <separator/>
+                <filter name="phone" string="Phone" domain="[('strategy', '=', 'mobile')]"/>
+                <filter name="computer" string="Computer" domain="[('strategy', '=', 'desktop')]"/>
+                <separator/>
+                <filter name="not_measured" string="Not measured" domain="[('state', '=', 'error')]"/>
+                <group>
+                    <filter name="by_night" string="Night" context="{'group_by': 'run_date'}"/>
+                    <filter name="by_page" string="Page" context="{'group_by': 'url'}"/>
+                    <filter name="by_title" string="Page title" context="{'group_by': 'page_title'}"/>
+                    <filter name="by_strategy" string="Phone / computer" context="{'group_by': 'strategy'}"/>
+                    <filter name="by_website" string="Website" context="{'group_by': 'website_id'}"
+                            groups="website.group_multi_website"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- a night's row: its numbers, its LCP's breakdown and element, its runs (0.8.0) -->
+    <record id="speed_log_form" model="ir.ui.view">
+        <field name="name">mtbg.page.speed.log.form</field>
+        <field name="model">mtbg.page.speed.log</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="page_title" readonly="1" placeholder="Page title"/></h1>
+                        <h4><field name="url" widget="url" readonly="1"/></h4>
+                    </div>
+                    <div class="alert alert-warning" role="alert" invisible="not message">
+                        <field name="message" nolabel="1"/>
+                    </div>
+                    <group>
+                        <group string="The night">
+                            <field name="run_date"/>
+                            <field name="website_id" groups="website.group_multi_website"/>
+                            <field name="strategy"/>
+                            <field name="state"/>
+                            <field name="slow"/>
+                            <field name="flagged"/>
+                            <field name="lcp_runs" invisible="not lcp_runs"/>
+                        </group>
+                        <group string="Scores">
+                            <field name="score"/>
+                            <field name="lcp"/>
+                            <field name="fcp"/>
+                            <field name="tbt"/>
+                            <field name="cls"/>
+                            <field name="speed_index"/>
+                            <field name="ttfb"/>
+                            <field name="weight_kb"/>
+                        </group>
+                        <group string="Why the LCP took its time">
+                            <field name="lcp_ttfb"/>
+                            <field name="lcp_load_delay"/>
+                            <field name="lcp_load_time"/>
+                            <field name="lcp_render_delay"/>
+                        </group>
+                        <group string="The LCP element">
+                            <field name="lcp_selector"/>
+                            <field name="lcp_element"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="speed_log_setup_form" model="ir.ui.view">
+        <field name="name">mtbg.page.speed.log.setup.form</field>
+        <field name="model">mtbg.page.speed.log.setup</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="step" widget="statusbar" options="{'clickable': '0'}" nolabel="1"/>
+                <field name="google_ok" invisible="1"/>
+                <field name="has_connector" invisible="1"/>
+                <field name="test_ok" invisible="1"/>
+                <p class="mt-3">The speed log measures through your Google connection (Settings › Google): the same
+                   Google project, no key of its own.</p>
+
+                <!-- 1. the Google project: the API and a server key -->
+                <div invisible="step != 'api'" class="mt-3">
+                    <ol>
+                        <li class="mb-2">Turn on the
+                            <a href="https://console.cloud.google.com/apis/library/pagespeedonline.googleapis.com"
+                               target="_blank" rel="noopener">PageSpeed Insights API</a> in your Google project (the one
+                            Settings › Google uses): press <b>Enable</b>.</li>
+                        <li class="mb-2">Give the connector a server key: Set up Google › <b>6. API keys</b> › Server
+                            key (its steps are there: Credentials › Create credentials › API key, restricted to the
+                            PageSpeed Insights API).</li>
+                    </ol>
+                    <p class="text-muted">Google's own guide:
+                        <a href="https://developers.google.com/speed/docs/insights/v5/get-started" target="_blank"
+                           rel="noopener">Get started with the PageSpeed Insights API</a>.</p>
+                </div>
+
+                <!-- 2. the connector's PageSpeed app -->
+                <div invisible="step != 'app'" class="mt-3">
+                    <p>In Settings › Google, switch on <b>PageSpeed Insights</b> (Set up Google › 2. Apps), then paste
+                       the server key in step 6.</p>
+                    <div class="alert alert-success" role="status" invisible="not google_ok">
+                        <field name="google_note" readonly="1" nolabel="1"/>
+                    </div>
+                    <div class="alert alert-warning" role="alert" invisible="google_ok">
+                        <field name="google_note" readonly="1" nolabel="1"/>
+                    </div>
+                    <button name="action_open_google" type="object" string="Open Set up Google" class="btn-secondary"
+                            icon="fa-google" invisible="not has_connector"/>
+                </div>
+
+                <!-- 3. test -->
+                <div invisible="step != 'test'" class="mt-3">
+                    <button name="action_test" type="object" string="Test" class="btn-secondary" icon="fa-check"/>
+                    <div invisible="not test_result" class="mt-3">
+                        <div class="alert alert-success" role="status" invisible="not test_ok">
+                            <field name="test_result" readonly="1" nolabel="1"/>
+                        </div>
+                        <div class="alert alert-warning" role="alert" invisible="test_ok">
+                            <field name="test_result" readonly="1" nolabel="1"/>
+                        </div>
+                    </div>
+                    <p class="text-muted mt-2">The test measures your homepage once on a phone (about 30 seconds);
+                        nothing is saved.</p>
+                </div>
+
+                <!-- 4. turn on -->
+                <div invisible="step != 'on'" class="mt-3">
+                    <group>
+                        <field name="on"/>
+                    </group>
+                    <p>Every night, a few pages a minute:
+                        <field name="pages_note" readonly="1" nolabel="1" class="d-inline"/></p>
+                    <p class="text-muted">The results: Website › Reporting › Speed log, kept 180 days, the pages over
+                        the limits two nights in a row flagged (main picture after 4 s on a phone, 2.5 s on a
+                        computer). Saving changes only the speed log's switch.</p>
+                </div>
+
+                <footer>
+                    <button name="action_go" type="object" string="Next" class="btn-primary" invisible="step != 'api'"
+                            context="{'mtbg_step': 'app'}"/>
+                    <button name="action_go" type="object" string="Back" class="btn-secondary"
+                            invisible="step != 'app'" context="{'mtbg_step': 'api'}"/>
+                    <button name="action_go" type="object" string="Next" class="btn-primary"
+                            invisible="step != 'app'" context="{'mtbg_step': 'test'}"/>
+                    <button name="action_go" type="object" string="Back" class="btn-secondary"
+                            invisible="step != 'test'" context="{'mtbg_step': 'app'}"/>
+                    <button name="action_go" type="object" string="Next" class="btn-primary"
+                            invisible="step != 'test'" context="{'mtbg_step': 'on'}"/>
+                    <button name="action_go" type="object" string="Back" class="btn-secondary"
+                            invisible="step != 'on'" context="{'mtbg_step': 'test'}"/>
+                    <button name="action_save" type="object" string="Save" class="btn-primary"
+                            invisible="step != 'on'"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- every night's rows (0.9.0, owner 2026-11-17: "table should be its own page"): the list, its filters, side
+         bar and form; the dashboard's "See all rows" and its worst pages open it -->
+    <record id="action_speed_log" model="ir.actions.act_window">
+        <field name="name">Speed log: all nights</field>
+        <field name="res_model">mtbg.page.speed.log</field>
+        <field name="view_mode">list,kanban,form,pivot,graph</field>
+        <field name="mobile_view_mode">kanban</field>
+        <!-- 0.8.0: no default filter (Phone hid the Computer rows, and the side bar counted inside it) -->
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No night measured yet</p>
+            <p>Every night the site asks Google PageSpeed for its homepage and every tour page, on a phone and on a
+               computer, through your Google connection. Press Set up to turn it on.</p>
+        </field>
+    </record>
+
+    <!-- 0.9.0: the dashboard (static/src/dashboard): the chart, the cards, the worst pages -->
+    <record id="action_speed_log_dashboard" model="ir.actions.client">
+        <field name="name">Speed log</field>
+        <field name="tag">mtbg_speed_log_dashboard</field>
+    </record>
+
+    <menuitem id="menu_speed_log" name="Speed log" parent="website.menu_reporting" action="action_speed_log_dashboard"
+              sequence="90" groups="base.group_system"/>
+    <menuitem id="menu_speed_log_rows" name="Speed log: all nights" parent="website.menu_reporting"
+              action="action_speed_log" sequence="91" groups="base.group_system"/>
+</odoo>

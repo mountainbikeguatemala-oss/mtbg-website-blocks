@@ -1,0 +1,100 @@
+// The speed log's dashboard (0.9.0): Bootstrap's own colours (the admin's light and dark bundles turn them over)
+.o_mtbg_speed_dash {
+    background-color: $o-view-background-color;
+    .o_mtbg_speed_wrap {
+        width: 100%;
+        min-width: 0;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 16px 24px 32px;
+    }
+    .o_mtbg_speed_canvas {
+        position: relative;
+        height: 400px;
+    }
+    .o_mtbg_speed_swatch {
+        display: inline-block;
+        width: 14px;
+        height: 3px;
+        border-radius: 2px;
+        vertical-align: middle;
+        background: currentColor;
+    }
+    .o_mtbg_speed_mobile .o_mtbg_speed_swatch { background: #2a78d6; }
+    .o_mtbg_speed_desktop .o_mtbg_speed_swatch { background: #eb6834; }
+    .o_mtbg_speed_swatch.is-limit {
+        background: repeating-linear-gradient(90deg, #d03b3b 0 3px, transparent 3px 6px);
+    }
+    .o_mtbg_speed_overlay, .o_mtbg_speed_page { width: auto; max-width: 260px; }
+    .o_mtbg_speed_kpis {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+    }
+    .o_mtbg_speed_kpi_row {
+        display: grid;
+        grid-template-columns: 5.5em auto 1fr;
+        align-items: baseline;
+        gap: 8px;
+        .o_mtbg_speed_kpi_delta { justify-self: end; }
+    }
+    .o_mtbg_speed_worst_grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 12px;
+    }
+    .o_mtbg_speed_page_card {
+        cursor: pointer;
+        transition: border-color .15s, box-shadow .15s;
+        &:hover, &:focus-visible {
+            border-color: var(--bs-primary);
+            box-shadow: 0 0 0 1px var(--bs-primary);
+            outline: none;
+        }
+    }
+    .o_mtbg_speed_page_title { overflow-wrap: anywhere; }
+    @media (max-width: 1199.98px) {
+        .o_mtbg_speed_worst_grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .o_mtbg_speed_kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    // phones (owner, 2026-11-17: "make this whole page mobile compatible"): the chart full width, the buttons as
+    // rows of chips scrolled sideways (44 px to tap), two cards a row, the worst pages one under the other
+    @media (max-width: 767.98px) {
+        .o_mtbg_speed_wrap { padding: 12px 12px 24px; }
+        .o_mtbg_speed_chart_card > .card-body { padding: 12px 8px; }
+        .o_mtbg_speed_canvas { height: 260px; }
+        .o_mtbg_speed_overlays { display: block !important; }
+        .o_mtbg_speed_chips {
+            flex-wrap: nowrap !important;
+            overflow-x: auto;
+            overscroll-behavior-x: contain;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            margin: 0 -8px 8px;
+            padding: 0 8px;
+            &::-webkit-scrollbar { display: none; }
+            .btn { min-height: 44px; flex: 0 0 auto; white-space: nowrap; display: inline-flex; align-items: center; }
+            .btn-group { flex: 0 0 auto; }
+        }
+        .o_mtbg_speed_selects {
+            label { flex: 1 1 100%; }
+            select { min-height: 44px; flex: 1 1 auto; max-width: none; }
+        }
+        .o_mtbg_speed_kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+        .o_mtbg_speed_kpi .card-body { padding: 10px; }
+        .o_mtbg_speed_kpi_row {
+            grid-template-columns: auto minmax(0, 1fr);
+            gap: 0 6px;
+            .o_mtbg_speed_kpi_value { font-size: 1.1rem !important; text-align: right; }
+            .o_mtbg_speed_kpi_delta { grid-column: 1 / -1; }
+        }
+        .o_mtbg_speed_worst_grid { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+        .o_mtbg_speed_latest { padding: 10px 0; }
+        h2 { font-size: 1.4rem; }
+    }
+}
+
+// the rows' cards on phones (Speed log: all nights, its kanban)
+.o_mtbg_speed_row_card {
+    .o_mtbg_speed_row_title { overflow-wrap: anywhere; }
+}

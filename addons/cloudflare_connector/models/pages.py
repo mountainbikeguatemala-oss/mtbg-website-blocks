@@ -50,6 +50,11 @@ class MtbgEdgeCachePages(models.AbstractModel):
 
     @api.model
     def _mtbg_website(self):
+        """The website a purge, check or re-fill is for (2.1.0: each website in turn, ``_mtbg_for``), else the
+        current one (a visitor's page: the website they are on)."""
+        site = self.env.context.get('mtbg_edge_cache_website')
+        if site:
+            return self.env['website'].sudo().browse(site)
         return self.env['website'].sudo().get_current_website()
 
     @api.model

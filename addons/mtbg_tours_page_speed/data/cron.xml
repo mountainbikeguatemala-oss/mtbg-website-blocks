@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- the photos' screen copies made again at WebP q70 (models/lighten.py): a few at a time, a minute apart, then
+         each night for the copies made since -->
+    <record id="cron_lighten_copies" model="ir.cron">
+        <field name="name">Page speed: lighter screen copies of the photos (WebP q70)</field>
+        <field name="model_id" ref="base.model_ir_attachment"/>
+        <field name="state">code</field>
+        <field name="code">model._mtbg_lighten_copies()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
+    </record>
+</odoo>
