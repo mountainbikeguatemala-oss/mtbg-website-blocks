@@ -1,6 +1,6 @@
 {
     "name": "Site Link Connector",
-    "version": "19.0.0.2.2",
+    "version": "19.0.0.2.3",
     "category": "Productivity/Connectors",
     "mtbg_tours_section": "connectors",
     "summary": "Links two Odoo sites: each other's address, database and API key, a call helper with a log of failed "
@@ -20,7 +20,8 @@ technical user on the other side). Nothing else is needed on either side: it ins
   ``sso_ticket(login)`` (a one-time sign-in link, users of the group "Site link: single sign-on allowed" only),
   ``customer_search``, ``customer_create``, ``customer_bikes`` (where a customer bike model is installed); where
   Sales is installed (Repair used where it is) ``repair_quote``, ``repair_status``, ``repair_invoice`` (idempotent
-  on the reference; nothing is sent). See README.md.
+  on the reference; nothing is sent); where Communication Flows' shared inbox is installed ``inbox_unread(login)``
+  (how many conversations wait for a reply for that user: the Staff App's shop tile badge). See README.md.
 * One employee list: ``user_sync(users)`` makes the linked site's employees users here (matched by login, no
   password, archived with them, shop groups by ``shop_access``); a site with "Send Employees" sends its list on every
   user change, daily and with "Sync employees now" (hook ``site.link._site_link_sync_users_list``). A login page

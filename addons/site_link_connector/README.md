@@ -80,11 +80,13 @@ needs the group *Site Link: calls from a linked site* (or to be an administrator
 | `repair_quote(reference, partner_id, lines, note=None, bike=None)` | `reference` (text, at most 200 characters); `partner_id`; `lines`: `[{product: id or barcode, qty}]` (parts) and `[{service: name, price, hours}]` (labour); `note` (text); `bike`: a bike id (`customer_bikes`) or a description | `{order_id, name, state, amount_total, currency, portal_url}` |
 | `repair_status(reference)` | `reference` | `{name, state, approved, invoiced, paid, amount_total, portal_url}` |
 | `repair_invoice(reference)` | `reference` | `{invoice_id, name, state, amount_total, portal_url}` |
+| `inbox_unread(login)` | `login` of a user of this site (case does not matter) | `{count, enabled}`: the conversations waiting for a reply for that user (`enabled` false: the popups are off there, count 0) |
 
 - `methods` in `health()` lists what the side offers: always `health`, `sso_ticket`, `customer_search`,
   `customer_create`, `customer_bikes`; `part_lookup` and `part_consume` only where Inventory is installed (elsewhere
   they answer 422 "This site has no Inventory"); `repair_quote`, `repair_status`, `repair_invoice` only where Sales
-  is installed (elsewhere 422 "This site has no Sales").
+  is installed (elsewhere 422 "This site has no Sales"); `inbox_unread` only where Communication Flows' shared inbox
+  (side panel 1.10.0 or later) is installed (elsewhere 422 "This site has no shared inbox").
 - `part_lookup`: `qty_available` is the quantity on hand in the company's warehouses; `unit_cost` the product's cost;
   `sale_price` its sales price; `vendor` the first vendor on the product (its Purchase tab), or null; `image_url`
   `<site>/web/image/product.product/<id>/image_512` when the product has a picture (it needs a login on that site),

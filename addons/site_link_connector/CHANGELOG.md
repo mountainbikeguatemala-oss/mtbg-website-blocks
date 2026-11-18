@@ -2,6 +2,14 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'site_link_connector-*'`.
 
+## 19.0.0.2.3 · 2026-11-18
+- **New: `inbox_unread(login)`** (owner, 2026-11-18: the shop's client messages pop up, and the Staff App's shop
+  tile shows how many wait for a reply): `{count, enabled}`, the conversations that user may see whose last message
+  came from the customer, until anyone answers (Communication Flows' side panel 1.10.0, "Pop up new client
+  messages"; `enabled` false and count 0 while that setting is off). Unknown, archived or portal logins: 0. Offered
+  in `health()` only where that inbox is installed (soft check, no dependency). Read only and not logged (asked every
+  minute while the Staff App is open).
+
 ## 19.0.0.2.2 · 2026-11-18
 - Employee list: when another extension defines `res.users._site_link_employees()` (same answer as
   `site.link._site_link_sync_users_list()`), that list is sent, so it needs no dependency on this connector. User ids

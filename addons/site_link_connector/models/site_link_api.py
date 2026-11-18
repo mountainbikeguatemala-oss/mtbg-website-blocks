@@ -5,7 +5,8 @@
 The caller is the technical user of the API key; it needs the group "Site Link: calls from a linked site" (or to be
 an administrator). The methods then work with the rights they need (sudo), in the user's company. The inventory
 methods are offered only where Inventory is installed, the repair methods only where Sales is (soft checks: no
-dependency; Repair and a customer bike model are used where they are installed). See README.md."""
+dependency; Repair and a customer bike model are used where they are installed); ``inbox_unread`` only where the shared
+inbox of Communication Flows (its side panel) is. See README.md."""
 import hashlib
 import json
 import re
@@ -20,6 +21,8 @@ PROTOCOL_VERSION = 1
 BASE_METHODS = ['health', 'sso_ticket', 'user_sync', 'customer_search', 'customer_create', 'customer_bikes']
 INVENTORY_METHODS = ['part_lookup', 'part_consume']
 REPAIR_METHODS = ['repair_quote', 'repair_status', 'repair_invoice']
+# where Communication Flows' side panel is installed (the shared inbox, its "Pop up new client messages")
+INBOX_METHODS = ['inbox_unread']
 CONSUME_LOCATION_NAME = 'Internal use (linked sites)'
 LABOUR_PRODUCT_CODE = 'SITE_LINK_LABOUR'
 SEARCH_LIMIT_MAX = 50
@@ -68,9 +71,14 @@ class SiteLinkApi(models.AbstractModel):
             return None
         return Bike.sudo()
 
+    def _site_link_has_inbox(self):
+        Conversation = self.env.get('omni.conversation')
+        return Conversation is not None and hasattr(Conversation, '_cfd_popup_waiting_count')
+
     def _site_link_methods(self):
         return (BASE_METHODS + (INVENTORY_METHODS if self._site_link_has_inventory() else [])
-                + (REPAIR_METHODS if self._site_link_has_sales() else []))
+                + (REPAIR_METHODS if self._site_link_has_sales() else [])
+                + (INBOX_METHODS if self._site_link_has_inbox() else []))
 
     def _site_link_served(self, method, message):
         """A call this site answered, in the log (with the call's transaction)."""
@@ -235,6 +243,27 @@ class SiteLinkApi(models.AbstractModel):
         })
         return consumption._site_link_answer(already_done=False)
 
+
+    # ------------------------------------------------------------------ the shared inbox (soft)
+
+    @api.model
+    @api.readonly
+    def inbox_unread(self, login):
+        """How many conversations wait for a reply for this site's user ``login`` (Communication Flows' "Pop up new
+        client messages": the conversations they may see whose last message came from the customer, until anyone
+        answers): {count, enabled}. ``enabled`` False: the popups are off here (count 0). An unknown, archived or
+        portal login: count 0. Read only, not logged (the Staff App asks every minute)."""
+        self._site_link_check_caller()
+        if not self._site_link_has_inbox():
+            raise UserError(self.env._("This site has no shared inbox: it offers no unread count."))
+        if not isinstance(login, str) or not login.strip():
+            raise UserError(self.env._("login is required (text)."))
+        Users = self.env['res.users'].sudo()
+        user = Users.search([('login', '=ilike', escape_like(login.strip()))], limit=1)
+        count = self.env['omni.conversation'].sudo()._cfd_popup_waiting_count(user if not user.share else Users)
+        if count is None:
+            return {'count': 0, 'enabled': False}
+        return {'count': int(count or 0), 'enabled': True}
 
     # ------------------------------------------------------------------ single sign-on
 
