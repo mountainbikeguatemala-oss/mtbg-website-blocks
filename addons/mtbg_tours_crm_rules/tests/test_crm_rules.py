@@ -138,8 +138,11 @@ class TestCrmRules(TransactionCase):
         action = self.env.ref('mtbg_tours_crm_rules.action_crm_rules_page')
         self.assertEqual(action.tag, 'mtbg_crm_rules_page')
         root = self.env.ref('mtbg_tours_crm_rules.menu_crm_root')
+        # 0.4.0: the Contacts pipeline and the Source Channels too
         self.assertEqual(root.child_id, self.env.ref('mtbg_tours_crm_rules.menu_crm_rules_page')
-                         | self.env.ref('mtbg_tours_crm_rules.menu_crm_duplicates'))
+                         | self.env.ref('mtbg_tours_crm_rules.menu_crm_duplicates')
+                         | self.env.ref('mtbg_tours_crm_rules.menu_crm_pipeline')
+                         | self.env.ref('mtbg_tours_crm_rules.menu_crm_lead_sources'))
         manifest = self.env['ir.module.module'].get_module_info('mtbg_tours_crm_rules')
         self.assertFalse([dep for dep in manifest['depends'] if dep.startswith('mtbg_tours')])
         hidden = self.env['ir.ui.menu']._load_menus_blacklist()

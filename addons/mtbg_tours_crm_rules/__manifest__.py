@@ -1,10 +1,10 @@
 {
     'name': 'MTBG — Contact Rules',
-    'version': '19.0.0.3.0',
+    'version': '19.0.0.4.0',
     # where the updater gets it (the universal repo; owner, 2026-11-18: contact rules go global, from the Tours repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     'category': 'Productivity',
-    'summary': 'Stock contact helpers that keep contacts tidy on their own (country and state from the phone, '
+    'summary': 'The contact pipeline (leads and clients, their stage and source channel) and stock contact helpers that keep contacts tidy on their own (country and state from the phone, '
                'possible duplicates, language from the country), on their own page (with Tours: Rules & Alerts), '
                'logged with undo',
     'description': """
@@ -18,6 +18,19 @@ with its own logic; a dry run shows what it would change; every change is logged
 * Spanish for Spanish-speaking countries
 * Extensions bring their own helpers with ``_mtbg_crm_rule_sources()`` on their own model, like the Alert Feed's sources
 
+The contact pipeline (0.4.0, owner 2026-11-18: the same pipeline on every site; moved here from Tours, same names):
+
+* Each contact's type: Lead, Client, Staff, Vendor, Internal (``mtbg_contact_type``, ``mtbg_is_lead``); a new contact
+  is a lead (a WhatsApp number that writes in, an email sender made a contact, a website buyer), a paying customer a
+  client, for good; a type chosen by a person is kept; the sure types (suppliers, ourselves) every day.
+* Its stage: New, Lead, Customer, Lost (``mtbg_stage``); Tours adds Past client and Repeat client from its bookings.
+* Its source channel (``mtbg_lead_source_id``, Odoo's UTM sources): first touch only, set by the Communication Flow
+  Designer from the first message received (WhatsApp, Email, Webchat...), by a website sale (Website sale) or a form.
+* The hook for a sale paid: ``res.partner._mtbg_mark_customer(source=None)`` (a lead becomes a client, stage
+  Customer; ``source`` its source channel when it has none). Other extensions call it with a soft check.
+* Without Tours: the stage and type on the contact's page, the Contacts board (leads and clients by stage) and the
+  Source Channels in this extension's menu. With Tours, its Contacts page and contact page show them.
+
 Needs only Odoo and the admin look (0.3.0, owner 2026-11-18: in the universal repository, no Tours). Who may change
 the rules: the admin look's managers (administrators; with Tours, its managers). With Tours, the Alert Feed brings the
 Tours parts: the Contact rules and Changes tabs on its Rules & Alerts page, the Tours menus and the Tours groups'
@@ -25,7 +38,7 @@ access, and the rules' alerts in the feed; this extension's own menu is then not
 """,
     'author': 'MTBG Tours contributors',
     'license': 'LGPL-3',
-    'depends': ['mtbg_backend_ui', 'base_automation', 'mail'],
+    'depends': ['mtbg_backend_ui', 'base_automation', 'mail', 'utm'],
     # the admin look's boards, cards, side bar and settings page (0.2.0)
     'mtbg_tours_requires': {'mtbg_backend_ui': '19.0.0.2.0'},
     'data': [
@@ -33,7 +46,10 @@ access, and the rules' alerts in the feed; this extension's own menu is then not
         'data/cron.xml',
         'data/boards.xml',
         'data/sync.xml',
+        'data/pipeline.xml',
+        'data/pipeline_cron.xml',
         'views/rule_views.xml',
+        'views/pipeline_views.xml',
         'views/menus.xml',
     ],
     'assets': {
@@ -42,6 +58,7 @@ access, and the rules' alerts in the feed; this extension's own menu is then not
             'mtbg_tours_crm_rules/static/src/crm_page/*',
         ],
     },
+    'pre_init_hook': 'pre_init_hook',
     'post_init_hook': 'post_init_hook',
     'installable': True,
 }

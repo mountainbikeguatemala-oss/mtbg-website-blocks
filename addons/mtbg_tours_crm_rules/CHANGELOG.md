@@ -1,5 +1,29 @@
 # Changelog
 
+## 19.0.0.4.0 (2026-11-18)
+- **The contact pipeline goes global** (owner, 2026-11-18: "the shop set up the same way as the tours site, with
+  webchat and leads pipeline as part of the customer record"): the contact type (`mtbg_contact_type`: Lead, Client,
+  Staff, Vendor, Internal), the type set by hand, the lead flag (`mtbg_is_lead`), the stage (`mtbg_stage`: New, Lead,
+  Customer, Lost), Lost and the source channel (`mtbg_lead_source_id`, Odoo's UTM sources, first touch only) come
+  here from Tours (Communications and Core), same names. Tours adds its own on top (Partner agency; Past client and
+  Repeat client from the bookings; the Incomplete booking, Website booking and Guest sources).
+- A new contact is a lead; the Communication Flow Designer sets its source channel from the first message received
+  (WhatsApp, the mailboxes and Gmail as Email, the website chat as Webchat; its own soft check), and the history
+  backfill (Source Channels > Fill missing sources from history) reads the first message received too.
+- New source channel **Website sale**, and the hook for a sale paid: `res.partner._mtbg_mark_customer(source=None)`
+  (a lead becomes a client, stage Customer; `source` its source channel when it has none; never a type set by hand,
+  staff, vendors or internal contacts; nothing sent). Other extensions call it with a soft check.
+- The daily job "Contacts: suppliers, staff and ourselves get their type" is here (same record; off stays off).
+- Without Tours: the stage as a status bar, the type, the source channel and Lost on the contact's form, the
+  **Contacts** board (leads and clients by stage) and list, **Source Channels**, in this extension's menu; the
+  contacts' list and search get the stage, the type and the source channel (Leads, Clients, Customers filters).
+  On install (or this update on a site without Tours) every contact is typed from what is on record: ourselves and
+  the companies of the database internal, suppliers (vendor bills, never a customer) vendors, a paid customer
+  invoice or a confirmed website order a client, the rest leads; then the source channels from history.
+- On a site with Tours the records are handed over by a pre-migrate (xml ids of the fields and their choices, the
+  general source channels, the list and search views, the daily job): every value stays as it is, nothing is
+  rebuilt, nothing sent. Depends on Odoo's `utm` too.
+
 ## 19.0.0.3.0 (2026-11-18)
 - **Contact rules go global** (owner, 2026-11-18): the extension moves from the Tours repository to the universal one
   (technical name kept; its manifest names its new repository, so the updater takes it from there) and needs no Tours:

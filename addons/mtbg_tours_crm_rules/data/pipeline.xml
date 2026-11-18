@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- the source channels (0.4.0, from Tours Core): each key's source, found by its name or made; re-run safe -->
+    <function model="utm.source" name="_mtbg_seed_lead_sources"/>
+</odoo>

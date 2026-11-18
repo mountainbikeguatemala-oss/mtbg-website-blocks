@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- the sure contact types (suppliers vendors, ourselves internal; with Tours its staff too; never a type set by
+         hand): no client journey reaches them. The record id came from Tours Communications (0.4.0); switched off on
+         a site, it stays off. It changes contact types only and sends nothing -->
+    <record id="ir_cron_mtbg_classify_suppliers" model="ir.cron">
+        <field name="name">Contacts: suppliers, staff and ourselves get their type</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="state">code</field>
+        <field name="code">model._mtbg_cron_classify_suppliers()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+    </record>
+</odoo>

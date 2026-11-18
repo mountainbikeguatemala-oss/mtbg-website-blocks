@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- the contact pipeline (0.4.0, owner 2026-11-18: the same pipeline on every site). On the contact's page: the
+         stage as a status bar, the contact type, the source channel. With Tours, its contact page shows them
+         (Core's and Communications' view items): these hide (mtbg_pipeline_elsewhere) -->
+    <record id="view_partner_form_pipeline" model="ir.ui.view">
+        <field name="name">res.partner.form.mtbg.pipeline</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/div[@name='button_box']" position="after">
+                <field name="mtbg_pipeline_elsewhere" invisible="1"/>
+                <field name="mtbg_is_lead" invisible="1"/>
+                <div class="d-flex justify-content-end mb-2" name="mtbg_pipeline_stage"
+                     invisible="mtbg_pipeline_elsewhere or mtbg_contact_type not in ('lead', 'client')">
+                    <field name="mtbg_stage" widget="statusbar" invisible="mtbg_contact_type != 'client'"
+                           statusbar_visible="customer"/>
+                    <field name="mtbg_stage" widget="statusbar" invisible="not mtbg_is_lead"
+                           statusbar_visible="new,lead,lost"/>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='category_id']/../.." position="after">
+                <group name="mtbg_pipeline_fields" invisible="mtbg_pipeline_elsewhere">
+                    <group>
+                        <field name="mtbg_contact_type"/>
+                        <field name="mtbg_lead_source_id" invisible="mtbg_contact_type == 'vendor'"
+                               options="{'no_create': True}" placeholder="How they first came"/>
+                    </group>
+                    <group>
+                        <field name="mtbg_lost" invisible="not mtbg_is_lead"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- the contacts' list: the stage, in its colour (the record id came from Tours Communications, 0.4.0) -->
+    <record id="view_partner_tree_stage" model="ir.ui.view">
+        <field name="name">res.partner.list.mtbg.stage</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <list position="inside">
+                <field name="mtbg_stage" string="Stage" optional="show" widget="badge"
+                       decoration-info="mtbg_stage == 'lead'" decoration-success="mtbg_stage in ('customer', 'repeat_client')"
+                       decoration-primary="mtbg_stage == 'past_client'" decoration-muted="mtbg_stage in ('new', 'lost')"/>
+                <field name="mtbg_contact_type" string="Type" optional="hide"/>
+                <field name="mtbg_lead_source_id" string="Source Channel" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- the contacts' search: leads and clients, the stage, the source channel (the record id came from Tours
+         Communications, 0.4.0; the source channel's filters from Tours Core) -->
+    <record id="view_partner_search_stage" model="ir.ui.view">
+        <field name="name">res.partner.search.mtbg.stage</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="mtbg_lead_source_id"/>
+            </xpath>
+            <filter name="type_company" position="after">
+                <separator/>
+                <filter name="mtbg_clients" string="Clients" domain="[('mtbg_contact_type', '=', 'client')]"/>
+                <filter name="mtbg_leads" string="Leads" domain="[('mtbg_contact_type', '=', 'lead')]"/>
+                <filter name="mtbg_customers" string="Customers" domain="[('mtbg_stage', '=', 'customer')]"/>
+                <filter name="mtbg_not_clients" string="Not clients (staff, vendors, internal)"
+                        domain="[('mtbg_contact_type', 'not in', ('lead', 'client'))]"/>
+                <separator/>
+                <filter name="mtbg_no_lead_source" string="No source channel" domain="[('mtbg_lead_source_id', '=', False)]"/>
+            </filter>
+            <group name="group_by" position="inside">
+                <filter name="mtbg_by_stage" string="Stage" context="{'group_by': 'mtbg_stage'}"/>
+                <filter name="mtbg_by_type" string="Contact type" context="{'group_by': 'mtbg_contact_type'}"/>
+                <filter name="mtbg_group_lead_source" string="Source Channel" context="{'group_by': 'mtbg_lead_source_id'}"/>
+            </group>
+        </field>
+    </record>
+
+    <!-- the pipeline board: leads and clients by stage (a site without Tours; with Tours: its Contacts page) -->
+    <record id="view_partner_pipeline_kanban" model="ir.ui.view">
+        <field name="name">res.partner.kanban.mtbg.pipeline</field>
+        <field name="model">res.partner</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="mtbg_stage" quick_create="false" group_create="false" group_delete="false"
+                    group_edit="false" records_draggable="false" sample="1">
+                <field name="avatar_128"/>
+                <templates>
+                    <t t-name="card" class="flex-row">
+                        <aside class="o_kanban_aside_full">
+                            <field name="avatar_128" class="w-100 h-auto m-0" widget="image"
+                                   options="{'img_class': 'object-fit-contain'}"/>
+                        </aside>
+                        <main class="ps-2">
+                            <field name="display_name" class="fw-bold"/>
+                            <div t-if="record.email.raw_value" class="text-truncate">
+                                <i class="fa fa-fw me-1 fa-envelope text-primary" title="Email"/><field name="email"/>
+                            </div>
+                            <div t-if="record.phone.raw_value">
+                                <i class="fa fa-fw me-1 fa-phone text-primary" title="Phone"/><field name="phone"/>
+                            </div>
+                            <div t-if="record.mtbg_lead_source_id.raw_value" class="text-muted">
+                                <i class="fa fa-fw me-1 fa-sign-in" title="Source channel"/><field name="mtbg_lead_source_id"/>
+                            </div>
+                        </main>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="view_partner_pipeline_list" model="ir.ui.view">
+        <field name="name">res.partner.list.mtbg.pipeline</field>
+        <field name="model">res.partner</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="display_name" string="Name"/>
+                <field name="email" optional="show"/>
+                <field name="phone" optional="show"/>
+                <field name="country_id" optional="show"/>
+                <field name="mtbg_stage" string="Stage" widget="badge" optional="show"
+                       decoration-info="mtbg_stage == 'lead'" decoration-success="mtbg_stage == 'customer'"
+                       decoration-muted="mtbg_stage in ('new', 'lost')"/>
+                <field name="mtbg_contact_type" string="Type" optional="show"/>
+                <field name="mtbg_lead_source_id" string="Source Channel" optional="show"/>
+                <field name="create_date" string="Created on" optional="hide"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_contact_pipeline" model="ir.actions.act_window">
+        <field name="name">Contacts</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('mtbg_contact_type', 'in', ('lead', 'client')), ('type', '=', 'contact')]</field>
+        <field name="context">{'default_mtbg_contact_type': 'lead'}</field>
+        <field name="help" type="html"><p class="o_view_nocontent_smiling_face">No leads or clients yet</p>
+            <p>A new WhatsApp number, an email sender made a contact or a website buyer starts a lead; a paying
+                customer is a client.</p></field>
+    </record>
+    <record id="action_contact_pipeline_view_kanban" model="ir.actions.act_window.view">
+        <field name="sequence">1</field>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_partner_pipeline_kanban"/>
+        <field name="act_window_id" ref="action_contact_pipeline"/>
+    </record>
+    <record id="action_contact_pipeline_view_list" model="ir.actions.act_window.view">
+        <field name="sequence">2</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_partner_pipeline_list"/>
+        <field name="act_window_id" ref="action_contact_pipeline"/>
+    </record>
+
+    <!-- the source channels (with Tours: also its Configuration > Source Channels) -->
+    <record id="view_utm_source_list_pipeline" model="ir.ui.view">
+        <field name="name">utm.source.list.mtbg.pipeline</field>
+        <field name="model">utm.source</field>
+        <field name="priority">91</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <header>
+                    <button name="action_mtbg_fill_sources" type="object" string="Fill missing sources from history"
+                            display="always" groups="base.group_system"/>
+                </header>
+                <field name="name" string="Source Channel"/>
+                <field name="mtbg_contact_count"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_lead_sources" model="ir.actions.act_window">
+        <field name="name">Source Channels</field>
+        <field name="res_model">utm.source</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_utm_source_list_pipeline"/>
+        <field name="help" type="html"><p class="o_view_nocontent_smiling_face">No source channels yet</p>
+            <p>Where contacts first come from: WhatsApp, email, the website chat, a website sale… Set once, by their
+                first contact.</p></field>
+    </record>
+</odoo>
