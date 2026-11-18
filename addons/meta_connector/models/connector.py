@@ -99,12 +99,32 @@ class MetaConnector(models.AbstractModel):
         return self.env["ir.config_parameter"].sudo().get_param("meta_connector.posting") == "1"
 
     @api.model
-    def _meta_post(self, kind, caption, image_url, story=False):
+    def _meta_post_target(self, kind, target=None):
+        """The Page record posts of ``kind`` ("facebook", "instagram") go on: ``target`` (a ``meta.connector.page``
+        or its id) when it is ticked for that network, else the default (Default Page / Instagram for Posts), else
+        the first ticked. Empty: none ticked. A ``target`` not ticked for the network raises UserError."""
+        from odoo.exceptions import UserError
+        instagram = kind == "instagram"
+        pages = self._meta_pages("instagram" if instagram else "page")
+        if target:
+            chosen = self.env["meta.connector.page"].sudo().browse(getattr(target, "id", target))
+            if chosen not in pages:
+                raise UserError(self.env._("%(what)s %(name)s is not ticked in Set up Meta › Change the Pages.",
+                                           what=self.env._("Instagram account") if instagram
+                                           else self.env._("Facebook Page"),
+                                           name=chosen.exists().display_name or chosen.id))
+            return chosen
+        default = pages.filtered("post_default_instagram" if instagram else "post_default_page")
+        return (default or pages)[:1]
+
+    @api.model
+    def _meta_post(self, kind, caption, image_url, story=False, target=None):
         """Post ``caption`` with the picture at ``image_url`` (a public address) on the site's Facebook Page
         (``kind`` "facebook") or Instagram account ("instagram"): {"id", "url"}. ``story``: the picture as a story
-        instead (no caption: a story shows none; gone after 24 hours, so no address). Raises UserError with the
-        reason: Posting off, not connected, no Page / account ticked, a permission Meta has not granted, or Meta's
-        answer."""
+        instead (no caption: a story shows none; gone after 24 hours, so no address). ``target``: the Page (a
+        ``meta.connector.page`` or its id; for Instagram, the Page's account) to post on; none: the default one
+        (``_meta_post_target``). Raises UserError with the reason: Posting off, not connected, no Page / account
+        ticked, a permission Meta has not granted, or Meta's answer."""
         from odoo.exceptions import UserError
         _ = self.env._
         if kind not in graph.POST_SCOPES:
@@ -119,7 +139,7 @@ class MetaConnector(models.AbstractModel):
         if missing:
             raise UserError(_("Meta has not granted %(scopes)s to this login yet (app review, then log in with "
                               "Facebook again in Set up Meta).", scopes=", ".join(missing)))
-        page = self._meta_pages("instagram" if kind == "instagram" else "page")[:1]
+        page = self._meta_post_target(kind, target)
         if not page:
             raise UserError(_("No %(what)s ticked in Set up Meta › Change the Pages.",
                               what=_("Instagram account") if kind == "instagram" else _("Facebook Page")))

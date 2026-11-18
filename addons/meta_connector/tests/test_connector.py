@@ -5,6 +5,7 @@ from unittest.mock import patch
 
 from PIL import Image
 
+from odoo.exceptions import UserError
 from odoo.tests import HttpCase, TransactionCase, tagged
 
 from ..models import graph
@@ -296,3 +297,76 @@ class TestPostingSwitch(TransactionCase):
                 patch.object(graph, "permalink", lambda *a: "https://fb.test/never"):
             self.assertEqual(Connector._meta_post("facebook", "", "https://x.test/s.png", story=True),
                              {"id": "123_77", "url": ""})
+
+
+@tagged("post_install", "-at_install")
+class TestPostingTargets(TransactionCase):
+    """Several Pages (owner, 2026-11-18: a second website gets its own social channels): ``target`` posts on a chosen
+    Page or its Instagram account; without one, the default; the migration makes the Page used until now the
+    default. Meta is replaced: nothing is posted."""
+
+    def setUp(self):
+        super().setUp()
+        self.env["ir.config_parameter"].sudo().set_param("meta_connector.posting", "1")
+        Connector = self.env["meta.connector"]
+        self.app = Connector._meta_app() or self.env["meta.connector.app"].sudo().create({"name": "Test"})
+        self.app.write({"active": True, "granted_scopes": "pages_manage_posts,instagram_content_publish"})
+        Page = self.env["meta.connector.page"].sudo()
+        Page.search([]).unlink()
+        self.a = Page.create({"app_id": self.app.id, "page_id": "A1", "name": "A Page", "page_token": "TA",
+                              "ig_id": "IGA", "use_page": True, "use_instagram": True})
+        self.b = Page.create({"app_id": self.app.id, "page_id": "B1", "name": "B Page", "page_token": "TB",
+                              "ig_id": "IGB", "use_page": True, "use_instagram": True})
+        self.calls = []
+        calls = self.calls
+        for name, kind in (("page_photo_post", "fb"), ("ig_publish", "ig")):
+            def fake(target_id, token, image_url, caption=None, story=False, kind=kind):
+                calls.append((kind, target_id, token))
+                return {"id": "%s_1" % target_id}
+            patcher = patch.object(graph, name, fake)
+            patcher.start()
+            self.addCleanup(patcher.stop)
+        patcher = patch.object(graph, "permalink", lambda *a: "https://fb.test/p")
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_target_and_default(self):
+        Connector = self.env["meta.connector"]
+        # no default ticked: the first ticked, as before (the Pages' order)
+        Connector._meta_post("facebook", "Hi", "https://x.test/a.jpg")
+        Connector._meta_post("instagram", "Hi", "https://x.test/a.jpg")
+        self.assertEqual(self.calls, [("fb", "A1", "TA"), ("ig", "IGA", "TA")])
+        # a target: that Page, or its Instagram account (a record or its id)
+        Connector._meta_post("facebook", "Hi", "https://x.test/a.jpg", target=self.b)
+        Connector._meta_post("instagram", "Hi", "https://x.test/a.jpg", target=self.b.id)
+        self.assertEqual(self.calls[2:], [("fb", "B1", "TB"), ("ig", "IGB", "TB")])
+        # the default: one per network, the last ticked wins
+        self.a.post_default_page = True
+        self.b.post_default_page = True
+        self.assertFalse(self.a.post_default_page)
+        self.assertEqual(Connector._meta_post_target("facebook"), self.b)
+        self.assertEqual(Connector._meta_post_target("instagram"), self.a)
+        # a target not ticked for the network: refused, nothing posted
+        self.b.use_instagram = False
+        before = len(self.calls)
+        with self.assertRaises(UserError):
+            Connector._meta_post("instagram", "Hi", "https://x.test/a.jpg", target=self.b)
+        self.assertEqual(len(self.calls), before)
+        # its default unticked: back to the first ticked
+        self.b.use_page = False
+        self.assertEqual(Connector._meta_post_target("facebook"), self.a)
+
+    def test_migration_makes_the_used_page_default(self):
+        import importlib.util
+        import os
+        path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "migrations", "19.0.1.6.0", "post-migrate.py")
+        spec = importlib.util.spec_from_file_location("meta_connector_post_migrate_1_6_0", path)
+        migration = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(migration)
+        self.a.use_instagram = False
+        migration.migrate(self.env.cr, "19.0.1.5.0")
+        self.env.invalidate_all()
+        self.assertTrue(self.a.post_default_page)
+        self.assertFalse(self.a.post_default_instagram)
+        self.assertTrue(self.b.post_default_instagram)
+        self.assertFalse(self.b.post_default_page)

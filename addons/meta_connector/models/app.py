@@ -90,7 +90,8 @@ class MetaConnectorApp(models.Model):
         for app in self:
             app.scopes = scopes
 
-    @api.depends("granted_scopes", "page_ids.use_page", "page_ids.use_instagram", "page_ids.ig_id")
+    @api.depends("granted_scopes", "page_ids.use_page", "page_ids.use_instagram", "page_ids.ig_id",
+                 "page_ids.post_default_page", "page_ids.post_default_instagram")
     def _compute_posting(self):
         from markupsafe import Markup
         wanted = self.env["meta.connector"]._meta_posting_wanted()
@@ -108,11 +109,12 @@ class MetaConnectorApp(models.Model):
         self.ensure_one()
         granted = set((self.granted_scopes or "").split(","))
         rows = [(_("Permission %s", scope), scope in granted) for scope in graph.POSTING_SCOPES]
-        page = self.page_ids.filtered("use_page")[:1]
-        rows.append((_("Facebook Page: %s", "%s (%s)" % (page.name, page.page_id)) if page
+        Connector = self.env["meta.connector"]
+        page = Connector._meta_post_target("facebook")
+        rows.append((_("Default Facebook Page: %s", "%s (%s)" % (page.name, page.page_id)) if page
                      else _("Facebook Page: none ticked"), bool(page)))
-        ig = self.page_ids.filtered(lambda p: p.use_instagram and p.ig_id)[:1]
-        rows.append((_("Instagram account: %s", "@%s (%s)" % (ig.ig_username or "", ig.ig_id)) if ig
+        ig = Connector._meta_post_target("instagram")
+        rows.append((_("Default Instagram account: %s", "@%s (%s)" % (ig.ig_username or "", ig.ig_id)) if ig
                      else _("Instagram account: none linked to the Page and ticked"), bool(ig)))
         return rows
 
@@ -254,6 +256,8 @@ class MetaConnectorApp(models.Model):
         Page = self.env["meta.connector.page"].sudo()
         existing = {page.page_id: page for page in self.with_context(active_test=False).page_ids.sudo()}
         first = not any(page.use_page or page.use_instagram for page in existing.values())
+        defaults = {"page": any(p.post_default_page for p in existing.values()),
+                    "instagram": any(p.post_default_instagram for p in existing.values())}
         seen = set()
         for item in found:
             instagram = item.get("instagram_business_account") or {}
@@ -273,6 +277,11 @@ class MetaConnectorApp(models.Model):
                 page.write(values)
             else:
                 values.update(use_page=first, use_instagram=first and bool(values["ig_id"]))
+                # the first Page ticked is the default for posts (until one is chosen)
+                values.update(post_default_page=values["use_page"] and not defaults["page"],
+                              post_default_instagram=values["use_instagram"] and not defaults["instagram"])
+                defaults["page"] |= values["post_default_page"]
+                defaults["instagram"] |= values["post_default_instagram"]
                 page = Page.create(values)
             seen.add(item["id"])
         for page_id, page in existing.items():
@@ -388,6 +397,12 @@ class MetaConnectorPage(models.Model):
                                    help="This site uses the Page's Instagram account (messages, the feed).")
     state = fields.Selection(PAGE_STATES, default="new", required=True, readonly=True)
     state_reason = fields.Char(readonly=True)
+    # posting on several Pages / Instagram accounts (owner, 2026-11-18: a second shop website gets its own social
+    # channels): an app may name the one to post on; without one, the default (one per network)
+    post_default_page = fields.Boolean(string="Default Page for Posts",
+                                       help="Posts without a chosen Page go on this one.")
+    post_default_instagram = fields.Boolean(string="Default Instagram for Posts",
+                                            help="Posts without a chosen Instagram account go on this one.")
 
     _page_unique = models.Constraint("UNIQUE(app_id, page_id)", "This Page is already in the connection.")
 
@@ -398,6 +413,26 @@ class MetaConnectorPage(models.Model):
             if page.ig_username:
                 parts.append("@%s" % page.ig_username)
             page.display_name = " · ".join(parts)
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        pages = super().create(vals_list)
+        pages._one_default()
+        return pages
+
+    def write(self, vals):
+        result = super().write(vals)
+        if vals.get("post_default_page") or vals.get("post_default_instagram"):
+            self._one_default()
+        return result
+
+    def _one_default(self):
+        """One default Page and one default Instagram account per connection: the one just ticked wins."""
+        for name in ("post_default_page", "post_default_instagram"):
+            for page in self.filtered(name):
+                others = page.app_id.with_context(active_test=False).page_ids.filtered(name) - page
+                if others:
+                    super(MetaConnectorPage, others).write({name: False})
 
     def _token(self):
         """The Page's token (Messenger and its Instagram account both use it)."""

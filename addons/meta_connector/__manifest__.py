@@ -1,6 +1,6 @@
 {
     "name": "Meta Connector",
-    "version": "19.0.1.5.0",
+    "version": "19.0.1.6.0",
     "category": "Productivity/Connectors",
     "summary": "One Facebook login for every app using your Facebook Pages and Instagram accounts: setup, Pages and "
                "tokens, webhook; the website's Instagram Feed block",
@@ -22,7 +22,8 @@ Google:
 * Posting (for apps, e.g. Marketing; off by default): with Marketing installed, Set up Meta's Posting step (the
   use cases, the Instagram account linked, the permissions checked green / red) and the login's posting
   permissions; ``_meta_post(kind, caption, image_url)`` posts a picture with its caption on the Facebook Page or
-  the Instagram account. Its permissions need Meta's app review.
+  the Instagram account; several Pages and Instagram accounts can be ticked, ``target`` (a Page) posts on a
+  chosen one, else on the default Page / Instagram account. Its permissions need Meta's app review.
 * Secrets stay with administrators and are cleared on a copy of the site (neutralize).
 """,
     "author": "MTBG Tours contributors",

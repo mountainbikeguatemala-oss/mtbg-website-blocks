@@ -91,10 +91,15 @@
                                 <field name="use_page" widget="boolean_toggle"/>
                                 <field name="ig_username" readonly="1"/>
                                 <field name="use_instagram" widget="boolean_toggle" readonly="not ig_id"/>
+                                <field name="post_default_page" widget="boolean_toggle" readonly="not use_page"
+                                       column_invisible="not parent.posting_wanted"/>
+                                <field name="post_default_instagram" widget="boolean_toggle" readonly="not use_instagram"
+                                       column_invisible="not parent.posting_wanted"/>
                                 <field name="ig_id" column_invisible="1"/>
                                 <field name="state" widget="badge" decoration-success="state == 'connected'" decoration-danger="state == 'disconnected'"/>
                             </list>
                         </field>
+                        <p class="text-muted small" invisible="not posting_wanted">Several Pages and Instagram accounts can be ticked: an app may post on a chosen one (e.g. each website its own); posts without one go on the default Page and the default Instagram account.</p>
                         <p class="text-muted small">An Instagram account shows when it is a professional (business or creator) account linked to the Page. Not there? Instagram › Settings › Account type and tools › Switch to professional, then link it to the Page, and log in again.</p>
                     </div>
 
@@ -125,6 +130,8 @@
                                 <field name="use_page" widget="boolean"/>
                                 <field name="ig_username"/>
                                 <field name="use_instagram" widget="boolean"/>
+                                <field name="post_default_page" widget="boolean" column_invisible="not parent.posting_wanted"/>
+                                <field name="post_default_instagram" widget="boolean" column_invisible="not parent.posting_wanted"/>
                                 <field name="state" widget="badge" decoration-success="state == 'connected'" decoration-danger="state == 'disconnected'"/>
                                 <field name="state_reason" optional="show"/>
                             </list>

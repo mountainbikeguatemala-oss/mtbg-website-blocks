@@ -2,6 +2,11 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'meta_connector-*'`.
 
+## 19.0.1.6.0 · 2026-11-18
+
+- **Posting on several Pages** (owner, 2026-11-18: "yes bicipaca will get its own social channels"): several Facebook Pages and Instagram accounts can be ticked in Set up Meta (as before), and each Page now has **Default Page for Posts** and **Default Instagram for Posts** (one each per connection; ticking one unticks the other). `_meta_post(kind, caption, image_url, story=False, target=None)`: `target` (a `meta.connector.page` or its id) posts on that Page or its Instagram account; it must be ticked for that network, else a UserError says so. Without `target`, the default, else the first ticked: existing callers post where they did. `_meta_post_target(kind, target=None)` gives the Page used. The Posting checks name the defaults.
+- Migration: on each connection, the Page posts went on until now (the first ticked Page, the first ticked Instagram account) becomes the default. A new login's first ticked Page is the default when there is none.
+
 ## 19.0.1.5.0 · 2026-11-11
 
 - **Stories** (owner, 2026-11-11: "do we have a way to publish instagram / facebook stories?" ... "yes make the story templates"): `_meta_post(kind, caption, image_url, story=True)` posts the picture as a story. Instagram: a `STORIES` media container (no caption: a story shows none), then its publishing. Facebook Page: the photo uploaded unpublished, then `photo_stories`. The same permissions as posts (`instagram_content_publish`, `pages_manage_posts`). A story is gone after 24 hours, so it has no address.
