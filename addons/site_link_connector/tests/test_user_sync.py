@@ -2,7 +2,7 @@
 change; calls mocked)."""
 from unittest.mock import patch
 
-from odoo.exceptions import AccessError
+from odoo.exceptions import AccessError, ValidationError
 from odoo.tests import TransactionCase, new_test_user, tagged
 
 SSO = 'site_link_connector.group_site_link_sso'
@@ -144,3 +144,26 @@ class TestSiteLinkUserSync(TransactionCase):
         new_test_user(self.env, 'slc.new.staff@example.com', groups='base.group_user')
         self.existing.active = False
         self.assertGreater(Trigger.search_count([("cron_id", "=", cron.id)]), count + 1)
+
+    def test_administrators_skipped(self):
+        """A user with Settings or Access Rights rights (not only ids 1 and 2) is never changed by the list."""
+        owner = new_test_user(self.env, 'slc.owner.sync@example.com', groups='base.group_system', name='Owner')
+        rights = new_test_user(self.env, 'slc.rights.sync@example.com', groups='base.group_erp_manager', name='Rights')
+        before = [(u.name, u.email, u.active, u.group_ids) for u in (owner, rights)]
+        answer = self.sync(*[{'login': u.login.upper(), 'name': 'Taken over', 'email': 'evil@example.com',
+                              'active': False, 'shop_access': True} for u in (owner, rights)])
+        self.assertEqual([a['user_id'] for a in answer], [owner.id, rights.id])
+        self.assertTrue(all('administrator' in a['skipped'] and not a['updated'] for a in answer))
+        self.assertEqual([(u.name, u.email, u.active, u.group_ids) for u in (owner, rights)], before)
+        self.assertNotIn(self.sso, owner.group_ids)
+
+    def test_shop_groups_never_admin(self):
+        implying = self.env['res.groups'].create({'name': 'SLC implies settings',
+                                                  'implied_ids': [(4, self.env.ref('base.group_system').id)]})
+        for group in (self.env.ref('base.group_system'), self.env.ref('base.group_erp_manager'), implying):
+            with self.subTest(group=group.name), self.assertRaises(ValidationError):
+                self.staff_site.write({'shop_group_ids': [(4, group.id)]})
+        with self.assertRaises(ValidationError):
+            self.env['site.link'].create({'name': 'X', 'base_url': 'https://x.example.com',
+                                          'shop_group_ids': [(6, 0, implying.ids)]})
+        self.staff_site.write({'shop_group_ids': [(4, self.env['res.groups'].create({'name': 'SLC ok'}).id)]})

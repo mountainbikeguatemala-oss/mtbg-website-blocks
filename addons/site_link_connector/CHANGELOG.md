@@ -2,6 +2,13 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'site_link_connector-*'`.
 
+## 19.0.0.2.1 · 2026-11-18
+- **Security**: administrators never come through the site link. Single sign-on refuses users with Settings
+  (`base.group_system`) or Access Rights (`base.group_erp_manager`) rights besides user ids 1 and 2, when the ticket is
+  asked for and again when the link is opened; `user_sync` never changes such a user (answered with `skipped`);
+  Shop Access Groups may not be or imply those groups. (Otherwise the other site could make a user of the same login
+  and sign in here as an administrator.)
+
 ## 19.0.0.2.0 · 2026-11-18
 - **New: single sign-on** (owner, 2026-11-18: the Staff App's shop tile opens the shop site signed in).
   `sso_ticket(login)` answers a one-time link `/site_link/sso/<token>`: random token, only its hash kept, used once,

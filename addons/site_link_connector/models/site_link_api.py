@@ -14,7 +14,7 @@ from odoo import api, models, release
 from odoo.exceptions import AccessError, UserError
 from odoo.tools import float_round
 
-from .site_link_sso import SSO_BLOCKED_UIDS, SSO_GROUP, SSO_TTL
+from .site_link_sso import SSO_GROUP, SSO_TTL, is_admin_user
 
 PROTOCOL_VERSION = 1
 BASE_METHODS = ['health', 'sso_ticket', 'user_sync', 'customer_search', 'customer_create', 'customer_bikes']
@@ -276,7 +276,8 @@ class SiteLinkApi(models.AbstractModel):
         users matched by login (case does not matter); missing active ones made as internal users without a password
         (they sign in by single sign-on); name and email kept up to date; archived there = archived here (and back);
         ``shop_access`` True gives the shop groups (single sign-on and the Shop Access Groups), False takes them away,
-        null leaves them. Never user ids 1 and 2, the calling user or portal users. Users not in the list are left
+        null leaves them. Never user ids 1 and 2, administrators (Settings or Access Rights), the calling user or
+        portal users: they are answered with ``skipped``. Users not in the list are left
         alone. Nothing is sent to anyone. Answers [{login, user_id, created, updated}]."""
         self._site_link_check_caller()
         _ = self.env._
@@ -299,8 +300,13 @@ class SiteLinkApi(models.AbstractModel):
             user = Users.search([('login', '=ilike', escape_like(login))], limit=1)
             row = {'login': login, 'user_id': user.id or None, 'created': False, 'updated': False}
             answer.append(row)
-            if user and (user.id in SSO_BLOCKED_UIDS or user == self.env.user or user.share):
-                row['skipped'] = _("protected user") if not user.share else _("portal user")
+            if user and is_admin_user(user):
+                row['skipped'] = _("administrator (user id 1 or 2, or Settings or Access Rights rights): never "
+                                   "changed by the employee list")
+                notes.append(_("%s skipped (administrator)", login))
+                continue
+            if user and (user == self.env.user or user.share):
+                row['skipped'] = _("the calling user") if not user.share else _("portal user")
                 continue
             if not user:
                 if not active:

@@ -101,15 +101,18 @@ needs the group *Site Link: calls from a linked site* (or to be an administrator
 
 - `sso_ticket`: the token is random (32 bytes), only its SHA-256 hash is kept; the link works **once**, within
   **60 seconds**, for an **active internal** user in the group *Site link: single sign-on allowed*, and never for
-  user ids 1 and 2 (superuser, admin): otherwise 422 with the reason. The same checks run again when the link is
+  user ids 1 and 2 (superuser, admin) or users with Settings or Access Rights rights: otherwise 422 with the
+  reason. The same checks run again when the link is
   opened. `GET /site_link/sso/<token>` signs the user in (replacing any other session in that browser; two-factor
   authentication is not asked again: the user is signed in on the other site) and opens `/odoo`; a used, expired or
   unknown link, or a user no longer allowed, opens `/web/login`. Every ticket and sign-in, given or refused, is logged.
 - `user_sync`: users matched by login (case does not matter); a missing active one is made as an internal user with
   no password (it signs in by single sign-on; no invitation email); name and email follow; `active: false` archives
   the user here (true brings it back); `shop_access` true gives the group *Site link: single sign-on allowed* and the
-  **Shop Access Groups** of this site's linked sites, false takes them away, null leaves them. User ids 1 and 2, the
-  calling user and portal users are never changed; users not in the list are left alone.
+  **Shop Access Groups** of this site's linked sites, false takes them away, null leaves them. User ids 1 and 2,
+  administrators (Settings or Access Rights rights), the calling user and portal users are never changed (answered
+  with `skipped` and the reason); users not in the list are left alone. Shop Access Groups may not be or imply the
+  Settings or Access Rights groups (refused when saved).
 - `customer_search`: name, email or phone contain the query; a query with 6 digits or more also finds the same phone
   number written another way (spaces, dashes, country code). `customer_create`: when a contact has this email (case
   does not matter) or this phone number (same digits), that contact is answered with `created: false`.

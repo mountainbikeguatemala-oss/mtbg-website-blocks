@@ -1,7 +1,7 @@
 """Single sign-on tickets: a linked site asks for one (site.link.api.sso_ticket) for one of this site's users, sends
 that user to /site_link/sso/<token>, and the user is signed in here. Only the token's hash is kept; a ticket works
-once, within SSO_TTL seconds, for an active internal user in the group "Site Link: single sign-on allowed", never for
-user ids 1 and 2 (superuser and admin)."""
+once, within SSO_TTL seconds, for an active internal user in the group "Site link: single sign-on allowed", never for
+user ids 1 and 2 (superuser and admin) or users with Settings or Access Rights rights (checked at ticket and sign-in)."""
 import hashlib
 import secrets
 from datetime import timedelta
@@ -11,6 +11,15 @@ from odoo import fields, models
 SSO_TTL = 60
 SSO_BLOCKED_UIDS = (1, 2)
 SSO_GROUP = 'site_link_connector.group_site_link_sso'
+# users with these rights never sign in by single sign-on, are never changed by user_sync, and no Shop Access Group
+# may be or imply them (a linked site could otherwise make a user of the same login and sign in as an administrator)
+SSO_ADMIN_GROUPS = ('base.group_system', 'base.group_erp_manager')
+
+
+def is_admin_user(user):
+    """True for user ids 1 and 2 and for users with Settings or Access Rights rights."""
+    user = user.sudo()
+    return user.id in SSO_BLOCKED_UIDS or any(user.has_group(g) for g in SSO_ADMIN_GROUPS)
 
 
 def sso_hash(token):
@@ -38,6 +47,9 @@ class SiteLinkSsoTicket(models.Model):
         user = user.sudo()
         if user.id in SSO_BLOCKED_UIDS:
             return _("user id %s (superuser or admin) never signs in by single sign-on", user.id)
+        if is_admin_user(user):
+            return _("user %s is an administrator (Settings or Access Rights) and never signs in by single sign-on",
+                     user.login)
         if not user.active:
             return _("user %s is archived", user.login)
         if user.share or not user._is_internal():

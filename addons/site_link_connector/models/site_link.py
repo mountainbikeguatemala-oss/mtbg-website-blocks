@@ -7,7 +7,9 @@ import time
 import requests
 
 from odoo import api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
+
+from .site_link_sso import SSO_ADMIN_GROUPS
 
 _logger = logging.getLogger(__name__)
 
@@ -68,6 +70,19 @@ class SiteLink(models.Model):
     last_check_ok = fields.Boolean(string='Last Test OK', readonly=True, copy=False)
     last_check_message = fields.Text(string='Last Test Result', readonly=True, copy=False)
     log_count = fields.Integer(compute='_compute_log_count', string='Failed Calls')
+
+    @api.constrains('shop_group_ids')
+    def _check_shop_group_ids(self):
+        """No Shop Access Group gives administrator rights: shop access comes with single sign-on."""
+        admin = self.env['res.groups'].sudo()
+        for xmlid in SSO_ADMIN_GROUPS:
+            admin |= self.env.ref(xmlid, raise_if_not_found=False) or admin.browse()
+        for site in self:
+            bad = site.shop_group_ids.sudo().filtered(lambda g: g in admin or g.all_implied_ids & admin)
+            if bad:
+                raise ValidationError(self.env._(
+                    "Shop Access Groups may not give administrator rights (Settings or Access Rights): %s",
+                    ', '.join(bad.mapped('display_name'))))
 
     def _compute_log_count(self):
         counts = dict(self.env['site.link.log']._read_group([('site_id', 'in', self.ids), ('kind', '=', 'failed')],

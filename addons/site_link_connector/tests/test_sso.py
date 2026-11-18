@@ -178,3 +178,18 @@ class TestSiteLinkSso(HttpCase):
         res = self.url_open('/web/login')
         self.assertIn('Log in with your staff account', res.text)
         self.assertIn('https://staff.example.com/site_link/sso/start?return=', res.text)
+
+    def test_administrators_never(self):
+        """Settings or Access Rights rights: no ticket, and no sign-in with a ticket given before the rights came."""
+        settings = new_test_user(self.env, 'slc.owner@example.com', groups=f'base.group_system,{SSO}')
+        rights = new_test_user(self.env, 'slc.rights@example.com', groups=f'base.group_erp_manager,{SSO}')
+        for user in (settings, rights):
+            with self.subTest(user=user.login):
+                self.assertIn('administrator', self.ticket_fails(user.login).args[0])
+        self.assertFalse(self.Ticket.search([('user_id', 'in', (settings | rights).ids)]))
+        answer = self.Api.sso_ticket(self.mechanic.login)
+        self.mechanic.write({'group_ids': [(4, self.env.ref('base.group_system').id)]})
+        self.assertEqual(self.open_link(answer['url']), '/web/login')
+        self.assertFalse(self.session_uid())
+        self.assertIn('administrator', self.sso_logs(self.mechanic).filtered(
+            lambda l: l.method == 'sso_login').message)
