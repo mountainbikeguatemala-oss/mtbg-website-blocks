@@ -14,8 +14,11 @@ _logger = logging.getLogger(__name__)
 PROTOCOL_MODEL = 'site.link.api'
 ROLES = [
     ('inventory_source', 'Inventory source'),
+    ('staff_source', 'Staff accounts'),
     ('other', 'Other'),
 ]
+# what the employee list sync sends and watches on res.users
+USER_SYNC_FIELDS = {'login', 'name', 'email', 'active', 'group_ids', 'share'}
 
 
 class SiteLinkError(UserError):
@@ -48,13 +51,27 @@ class SiteLink(models.Model):
                             help="What the other site is to this one. Inventory source: the site that owns the "
                                  "products and stock; part lookups and consumptions go there.")
     timeout = fields.Integer(string='Time Limit (s)', default=15, help="Seconds to wait for the other site's answer.")
+    sync_users = fields.Boolean(string='Send Employees', copy=False,
+                                help="This site's employee list is the one list: its internal users (login, name, "
+                                     "email, active) are sent to the other site, which makes, updates and archives its "
+                                     "users to match (no password: they sign in with their account here). Sent on "
+                                     "every change of a user, by a daily safety net, and with Sync employees now. "
+                                     "Set it on one side only.")
+    shop_group_ids = fields.Many2many('res.groups', 'site_link_shop_group_rel', 'site_id', 'group_id',
+                                      string='Shop Access Groups',
+                                      help="On the site that receives an employee list: the groups (of this site) an "
+                                           "employee sent with shop access gets, besides \"Site link: single sign-on "
+                                           "allowed\"; sent without shop access, they are taken away.")
+    last_sync_at = fields.Datetime(string='Last Employee Sync', readonly=True, copy=False)
+    last_sync_message = fields.Text(string='Last Employee Sync Result', readonly=True, copy=False)
     last_check_at = fields.Datetime(string='Last Test', readonly=True, copy=False)
     last_check_ok = fields.Boolean(string='Last Test OK', readonly=True, copy=False)
     last_check_message = fields.Text(string='Last Test Result', readonly=True, copy=False)
     log_count = fields.Integer(compute='_compute_log_count', string='Failed Calls')
 
     def _compute_log_count(self):
-        counts = dict(self.env['site.link.log']._read_group([('site_id', 'in', self.ids)], ['site_id'], ['__count']))
+        counts = dict(self.env['site.link.log']._read_group([('site_id', 'in', self.ids), ('kind', '=', 'failed')],
+                                                             ['site_id'], ['__count']))
         for site in self:
             site.log_count = counts.get(site, 0)
 
@@ -173,6 +190,127 @@ class SiteLink(models.Model):
         except Exception:  # noqa: BLE001 - the log must never hide the call's own error
             _logger.exception("site link: the failed call could not be logged")
 
+    # ------------------------------------------------------------------ the protocol, one line each (caller side)
+
+    @api.model
+    def _site_link_api(self, method, site='inventory_source', **kwargs):
+        """``site.link.api.<method>(**kwargs)`` on the linked site ``site`` (a record, an id or a role)."""
+        return self._site_link_call(site, PROTOCOL_MODEL, method, **kwargs)
+
+    @api.model
+    def _site_link_offers(self, method, site='inventory_source'):
+        """Soft check: True when a site is linked (``site``: a record, an id or a role) and its health lists
+        ``method``; False otherwise (no site, unreachable, older connector there). Costs one call."""
+        try:
+            health = self._site_link_resolve(site)._site_link_health()
+        except SiteLinkError:
+            return False
+        return method in (health.get('methods') or [])
+
+    @api.model
+    def _site_link_sso_url(self, login, site='inventory_source'):
+        """The full one-time sign-in address on the linked site for its user ``login`` (valid 60 seconds)."""
+        site = self._site_link_resolve(site)
+        answer = self._site_link_api('sso_ticket', site, login=login)
+        return (site.base_url or '').strip().rstrip('/') + answer['url']
+
+    @api.model
+    def _site_link_customer_search(self, query, limit=10, site='inventory_source'):
+        return self._site_link_api('customer_search', site, query=query, limit=limit)
+
+    @api.model
+    def _site_link_customer_create(self, name, phone=None, email=None, site='inventory_source'):
+        return self._site_link_api('customer_create', site, name=name, phone=phone, email=email)
+
+    @api.model
+    def _site_link_customer_bikes(self, partner_id, site='inventory_source'):
+        return self._site_link_api('customer_bikes', site, partner_id=partner_id)
+
+    @api.model
+    def _site_link_repair_quote(self, reference, partner_id, lines, note=None, bike=None, site='inventory_source'):
+        return self._site_link_api('repair_quote', site, reference=reference, partner_id=partner_id, lines=lines,
+                                   note=note, bike=bike)
+
+    @api.model
+    def _site_link_repair_status(self, reference, site='inventory_source'):
+        return self._site_link_api('repair_status', site, reference=reference)
+
+    @api.model
+    def _site_link_repair_invoice(self, reference, site='inventory_source'):
+        return self._site_link_api('repair_invoice', site, reference=reference)
+
+    # ------------------------------------------------------------------ one employee list (caller side)
+
+    def _site_link_sync_users_list(self):
+        """Hook: the employees sent to the linked site ``self``: [{login, name, email, active, shop_access}].
+        Default: this site's internal users, archived ones included (they are archived there too), never user ids 1
+        and 2 or the template users; ``shop_access`` None (the other site leaves its shop groups alone). Another
+        extension overrides it to say who has shop access (True / False)."""
+        self.ensure_one()
+        skip = {1, 2} | {u.id for u in (self.env.ref('base.default_user', raise_if_not_found=False),
+                                         self.env.ref('base.public_user', raise_if_not_found=False)) if u}
+        users = self.env['res.users'].sudo().with_context(active_test=False).search(
+            [('share', '=', False), ('id', 'not in', list(skip))], order='id')
+        return [{'login': u.login, 'name': u.name, 'email': u.email or None, 'active': u.active,
+                 'shop_access': None} for u in users]
+
+    def _site_link_sync_users(self):
+        """Send the employee list to ``self`` (soft: skipped when the other site offers no user_sync). Keeps the
+        result on the site; raises SiteLinkError when the call fails (logged as every failed call)."""
+        self.ensure_one()
+        _ = self.env._
+        if not self._site_link_offers('user_sync', self):
+            message = _("Skipped: %s offers no employee sync (user_sync); is Site Link Connector up to date there?",
+                        self.name)
+            self.sudo().write({'last_sync_at': fields.Datetime.now(), 'last_sync_message': message})
+            return None
+        users = self._site_link_sync_users_list()
+        answer = self._site_link_api('user_sync', self, users=users) or []
+        created = sum(1 for a in answer if a.get('created'))
+        updated = sum(1 for a in answer if a.get('updated'))
+        message = _("%(sent)s employees sent: %(created)s made, %(updated)s updated there.",
+                    sent=len(users), created=created, updated=updated)
+        self.sudo().write({'last_sync_at': fields.Datetime.now(), 'last_sync_message': message})
+        return answer
+
+    def action_sync_users(self):
+        """Button: Sync employees now."""
+        self.ensure_one()
+        try:
+            answer = self._site_link_sync_users()
+            ok = answer is not None
+        except SiteLinkError as exc:
+            ok = False
+            self.sudo().write({'last_sync_at': fields.Datetime.now(), 'last_sync_message': exc.args[0]})
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': self.env._("Sync employees: %s", self.name),
+                'message': self.last_sync_message,
+                'type': 'success' if ok else 'warning',
+                'sticky': not ok,
+                'next': {'type': 'ir.actions.client', 'tag': 'soft_reload'},
+            },
+        }
+
+    @api.model
+    def _site_link_sync_users_cron(self):
+        """Cron (daily safety net, and run soon after a user changes): every site that gets the employee list."""
+        for site in self.sudo().search([('sync_users', '=', True)]):
+            try:
+                site._site_link_sync_users()
+            except SiteLinkError:
+                _logger.warning("site link: employee sync to %s failed (see Failed Calls)", site.name)
+
+    @api.model
+    def _site_link_sync_users_soon(self):
+        """Run the employee sync soon (in the cron worker, after this transaction): nothing when no site gets it."""
+        if self.sudo().search_count([('sync_users', '=', True)], limit=1):
+            cron = self.env.ref('site_link_connector.cron_site_link_user_sync', raise_if_not_found=False)
+            if cron:
+                cron.sudo()._trigger()
+
     # ------------------------------------------------------------------ health / Test connection
 
     def _site_link_health(self):
@@ -221,5 +359,5 @@ class SiteLink(models.Model):
     def action_open_log(self):
         self.ensure_one()
         action = self.env['ir.actions.act_window']._for_xml_id('site_link_connector.action_site_link_log')
-        action['domain'] = [('site_id', '=', self.id)]
+        action['domain'] = [('site_id', '=', self.id), ('kind', '=', 'failed')]
         return action

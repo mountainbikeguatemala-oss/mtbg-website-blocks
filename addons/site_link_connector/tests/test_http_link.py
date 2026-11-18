@@ -46,7 +46,8 @@ class TestSiteLinkHttp(HttpCase):
         self.assertEqual(health['database'], self.env.cr.dbname)
         self.assertEqual(health['user'], 'site_link_http')
         self.assertIn('health', health['methods'])
-        self.assertEqual(health['methods'] == ['health'], 'stock.move' not in self.env)
+        self.assertEqual('part_lookup' in health['methods'], 'stock.move' in self.env)
+        self.assertIn('sso_ticket', health['methods'])
         self.site.action_test_connection()
         self.assertTrue(self.site.last_check_ok, self.site.last_check_message)
 

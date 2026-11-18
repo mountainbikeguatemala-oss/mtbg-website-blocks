@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The site whose employees sign in with their account on a linked site (role Staff accounts): a button under
+         the login form (the address comes from the login controller). -->
+    <template id="login_staff_account" inherit_id="web.login" name="Site Link: log in with your staff account">
+        <xpath expr="//t[@t-call='web.login_oauth']" position="after">
+            <a t-if="site_link_staff_login_url" t-att-href="site_link_staff_login_url"
+               class="btn btn-secondary o_site_link_staff_login">Log in with your staff account</a>
+        </xpath>
+    </template>
+</odoo>

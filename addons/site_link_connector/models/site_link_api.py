@@ -4,15 +4,32 @@
 
 The caller is the technical user of the API key; it needs the group "Site Link: calls from a linked site" (or to be
 an administrator). The methods then work with the rights they need (sudo), in the user's company. The inventory
-methods are offered only where Inventory is installed (soft check: no dependency). See README.md."""
+methods are offered only where Inventory is installed, the repair methods only where Sales is (soft checks: no
+dependency; Repair and a customer bike model are used where they are installed). See README.md."""
+import hashlib
+import json
+import re
+
 from odoo import api, models, release
 from odoo.exceptions import AccessError, UserError
 from odoo.tools import float_round
 
+from .site_link_sso import SSO_BLOCKED_UIDS, SSO_GROUP, SSO_TTL
+
 PROTOCOL_VERSION = 1
-BASE_METHODS = ['health']
+BASE_METHODS = ['health', 'sso_ticket', 'user_sync', 'customer_search', 'customer_create', 'customer_bikes']
 INVENTORY_METHODS = ['part_lookup', 'part_consume']
+REPAIR_METHODS = ['repair_quote', 'repair_status', 'repair_invoice']
 CONSUME_LOCATION_NAME = 'Internal use (linked sites)'
+LABOUR_PRODUCT_CODE = 'SITE_LINK_LABOUR'
+SEARCH_LIMIT_MAX = 50
+# no follower added, no "created" note, no assignment mail: nothing reaches a customer from these calls
+QUIET = {'mail_create_nosubscribe': True, 'mail_create_nolog': True, 'mail_auto_subscribe_no_notify': True}
+
+
+def escape_like(text):
+    """``text`` for an =ilike comparison: its % and _ are plain characters."""
+    return text.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_')
 
 
 class SiteLinkApi(models.AbstractModel):
@@ -34,8 +51,30 @@ class SiteLinkApi(models.AbstractModel):
         if not self._site_link_has_inventory():
             raise UserError(self.env._("This site has no Inventory: it offers no part lookup or consumption."))
 
+    def _site_link_has_sales(self):
+        return 'sale.order' in self.env and 'sale.order.line' in self.env
+
+    def _site_link_require_sales(self):
+        if not self._site_link_has_sales():
+            raise UserError(self.env._("This site has no Sales: it offers no repair quotes or invoices."))
+
+    def _site_link_has_repair(self):
+        return 'repair.order' in self.env and 'repair_line_type' in self.env['stock.move']._fields
+
+    def _site_link_bike_model(self):
+        """The customer bike model (``repair.bike``, from another extension) when it is installed, else None."""
+        Bike = self.env.get('repair.bike')
+        if Bike is None or 'partner_id' not in Bike._fields:
+            return None
+        return Bike.sudo()
+
     def _site_link_methods(self):
-        return BASE_METHODS + (INVENTORY_METHODS if self._site_link_has_inventory() else [])
+        return (BASE_METHODS + (INVENTORY_METHODS if self._site_link_has_inventory() else [])
+                + (REPAIR_METHODS if self._site_link_has_sales() else []))
+
+    def _site_link_served(self, method, message):
+        """A call this site answered, in the log (with the call's transaction)."""
+        self.env['site.link.log'].sudo()._site_link_event('served', method, message)
 
     def _site_link_find_product(self, product):
         """A product.product (sudo) by id (int) or barcode (str); raises UserError when there is none."""
@@ -195,3 +234,535 @@ class SiteLinkApi(models.AbstractModel):
             'note': note or False,
         })
         return consumption._site_link_answer(already_done=False)
+
+
+    # ------------------------------------------------------------------ single sign-on
+
+    @api.model
+    def sso_ticket(self, login):
+        """A one-time sign-in link for this site's user ``login``: {url: '/site_link/sso/<token>', expires_in: 60}.
+        Only for active internal users in the group "Site Link: single sign-on allowed", never user ids 1 and 2.
+        Every ticket, given or refused, is in the log."""
+        self._site_link_check_caller()
+        _ = self.env._
+        Log = self.env['site.link.log'].sudo()
+        if not isinstance(login, str) or not login.strip():
+            raise UserError(_("login is required (text)."))
+        login = login.strip()
+        user = self.env['res.users'].sudo().with_context(active_test=False).search(
+            [('login', '=ilike', escape_like(login))], limit=1)
+        Ticket = self.env['site.link.sso.ticket'].sudo()
+        refusal = Ticket._site_link_sso_refusal(user)
+        if refusal:
+            Log._site_link_event('sso', 'sso_ticket', _("Ticket refused for %(login)s (asked by %(caller)s): %(why)s",
+                                                         login=login, caller=self.env.user.login, why=refusal),
+                                 status=403, user=user or None, own_cursor=True)
+            raise UserError(_("No single sign-on for %(login)s: %(why)s.", login=login, why=refusal))
+        token = Ticket._site_link_issue(user)
+        Log._site_link_event('sso', 'sso_ticket', _("Ticket given for %(login)s (asked by %(caller)s).",
+                                                     login=user.login, caller=self.env.user.login), user=user)
+        return {'url': f"/site_link/sso/{token}", 'expires_in': SSO_TTL}
+
+    # ------------------------------------------------------------------ one employee list
+
+    def _site_link_shop_groups(self):
+        """The groups shop access gives: single sign-on, and the Shop Access Groups of the active linked sites."""
+        groups = self.env.ref(SSO_GROUP).sudo()
+        return groups | self.env['site.link'].sudo().search([]).shop_group_ids
+
+    @api.model
+    def user_sync(self, users):
+        """The linked site's employee list, ``users`` = [{login, name, email, active, shop_access}], made true here:
+        users matched by login (case does not matter); missing active ones made as internal users without a password
+        (they sign in by single sign-on); name and email kept up to date; archived there = archived here (and back);
+        ``shop_access`` True gives the shop groups (single sign-on and the Shop Access Groups), False takes them away,
+        null leaves them. Never user ids 1 and 2, the calling user or portal users. Users not in the list are left
+        alone. Nothing is sent to anyone. Answers [{login, user_id, created, updated}]."""
+        self._site_link_check_caller()
+        _ = self.env._
+        if not isinstance(users, list):
+            raise UserError(_("users is required: a list of {login, name, email, active, shop_access}."))
+        Users = self.env['res.users'].sudo().with_context(active_test=False, no_reset_password=True, **QUIET)
+        shop_groups = self._site_link_shop_groups()
+        internal = self.env.ref('base.group_user')
+        answer, notes = [], []
+        for entry in users:
+            if not isinstance(entry, dict) or not isinstance(entry.get('login'), str) or not entry['login'].strip():
+                raise UserError(_("Each user is an object with a login (text)."))
+            login = entry['login'].strip()
+            name = entry.get('name') if isinstance(entry.get('name'), str) and entry['name'].strip() else login
+            name = name.strip()
+            email = entry.get('email') if isinstance(entry.get('email'), str) else None
+            email = (email or '').strip() or False
+            active = entry.get('active', True) is not False
+            shop = entry.get('shop_access')
+            user = Users.search([('login', '=ilike', escape_like(login))], limit=1)
+            row = {'login': login, 'user_id': user.id or None, 'created': False, 'updated': False}
+            answer.append(row)
+            if user and (user.id in SSO_BLOCKED_UIDS or user == self.env.user or user.share):
+                row['skipped'] = _("protected user") if not user.share else _("portal user")
+                continue
+            if not user:
+                if not active:
+                    continue
+                vals = {'login': login, 'name': name, 'email': email, 'group_ids': [(4, internal.id)]}
+                if shop is True:
+                    vals['group_ids'] += [(4, g.id) for g in shop_groups]
+                user = Users.create(vals)
+                row.update(user_id=user.id, created=True)
+                notes.append(_("%s made", login))
+                continue
+            vals = {}
+            if user.name != name:
+                vals['name'] = name
+            if (user.email or False) != email:
+                vals['email'] = email
+            if user.active != active:
+                vals['active'] = active
+            if shop is True:
+                vals['group_ids'] = [(4, g.id) for g in shop_groups - user.group_ids]
+            elif shop is False:
+                vals['group_ids'] = [(3, g.id) for g in shop_groups & user.group_ids]
+            if not vals.get('group_ids'):
+                vals.pop('group_ids', None)
+            if vals:
+                user.write(vals)
+                row['updated'] = True
+                notes.append(_("%(login)s updated (%(fields)s)", login=login, fields=', '.join(sorted(vals))))
+        self._site_link_served('user_sync', _("%(n)s employees received from %(caller)s. %(notes)s", n=len(users),
+                                              caller=self.env.user.login, notes='; '.join(notes) or _("No change.")))
+        return answer
+
+    # ------------------------------------------------------------------ customers
+
+    @staticmethod
+    def _site_link_digits(phone):
+        return re.sub(r'\D', '', phone or '')
+
+    def _site_link_partner_answer(self, partner):
+        return {'id': partner.id, 'name': partner.display_name, 'phone': partner.phone or None,
+                'email': partner.email or None}
+
+    def _site_link_find_partner(self, partner_id):
+        if isinstance(partner_id, bool) or not isinstance(partner_id, int):
+            raise UserError(self.env._("partner_id must be a contact id (number)."))
+        partner = self.env['res.partner'].sudo().browse(partner_id).exists()
+        if not partner:
+            raise UserError(self.env._("No contact %s on this site.", partner_id))
+        return partner
+
+    def _site_link_partners_by_phone(self, phone, limit=10):
+        """Contacts whose phone has the same digits (the last 8 must match, then all digits of the shorter one)."""
+        digits = self._site_link_digits(phone)
+        if len(digits) < 6:
+            return self.env['res.partner'].sudo().browse()
+        tail = digits[-8:]
+        pattern = '%' + '%'.join(tail) + '%'
+        candidates = self.env['res.partner'].sudo().search([('phone', '=like', pattern)], limit=200)
+        return candidates.filtered(
+            lambda p: (lambda d: d and (d.endswith(digits) or digits.endswith(d)))(self._site_link_digits(p.phone))
+        )[:limit]
+
+    @api.model
+    def customer_search(self, query, limit=10):
+        """Contacts by name, email or phone: [{id, name, phone, email}] (at most ``limit``, 50 at most)."""
+        self._site_link_check_caller()
+        if not isinstance(query, str) or len(query.strip()) < 2:
+            raise UserError(self.env._("query is required (text, 2 characters at least)."))
+        if isinstance(limit, bool) or not isinstance(limit, int) or limit < 1:
+            limit = 10
+        limit = min(limit, SEARCH_LIMIT_MAX)
+        query = query.strip()
+        Partner = self.env['res.partner'].sudo()
+        found = Partner.search(['|', '|', ('name', 'ilike', query), ('email', 'ilike', query),
+                                ('phone', 'ilike', query)], limit=limit)
+        if len(found) < limit and len(self._site_link_digits(query)) >= 6:
+            found |= self._site_link_partners_by_phone(query, limit)
+        self._site_link_served('customer_search', self.env._("%(n)s contacts for \"%(q)s\".", n=len(found[:limit]),
+                                                              q=query))
+        return [self._site_link_partner_answer(p) for p in found[:limit]]
+
+    @api.model
+    def customer_create(self, name, phone=None, email=None):
+        """A new contact, or the existing one with this email or phone: {id, name, created}."""
+        self._site_link_check_caller()
+        _ = self.env._
+        if not isinstance(name, str) or not name.strip():
+            raise UserError(_("name is required (text)."))
+        for label, value in (('phone', phone), ('email', email)):
+            if value is not None and not isinstance(value, str):
+                raise UserError(_("%s must be text.", label))
+        email = (email or '').strip() or None
+        phone = (phone or '').strip() or None
+        Partner = self.env['res.partner'].sudo()
+        existing = Partner.browse()
+        if email:
+            existing = Partner.search([('email', '=ilike', escape_like(email))], limit=1)
+        if not existing and phone:
+            existing = self._site_link_partners_by_phone(phone, 1)
+        if existing:
+            return {'id': existing.id, 'name': existing.display_name, 'created': False}
+        partner = Partner.with_context(**QUIET).create({'name': name.strip(), 'phone': phone or False,
+                                                        'email': email or False})
+        self._site_link_served('customer_create', _("Contact %(name)s (%(id)s) made.", name=partner.display_name,
+                                                    id=partner.id))
+        return {'id': partner.id, 'name': partner.display_name, 'created': True}
+
+    @api.model
+    def customer_bikes(self, partner_id):
+        """The contact's bikes where a customer bike model is installed: [{id, name, serial}] ([] elsewhere)."""
+        self._site_link_check_caller()
+        partner = self._site_link_find_partner(partner_id)
+        Bike = self._site_link_bike_model()
+        if Bike is None:
+            self._site_link_served('customer_bikes', self.env._("No bike model on this site."))
+            return []
+        bikes = Bike.search([('partner_id', 'child_of', partner.commercial_partner_id.id)])
+        answer = []
+        for bike in bikes:
+            serial = bike.frame_serial if 'frame_serial' in bike._fields else None
+            if not serial and 'lot_id' in bike._fields and bike.lot_id:
+                serial = bike.lot_id.name
+            answer.append({'id': bike.id, 'name': bike.display_name, 'serial': serial or None})
+        self._site_link_served('customer_bikes', self.env._("%(n)s bikes of contact %(id)s.", n=len(answer),
+                                                             id=partner.id))
+        return answer
+
+    # ------------------------------------------------------------------ customer repairs (quotation, invoice)
+
+    def _site_link_parse_lines(self, lines):
+        """``lines`` checked: (parts, services). parts: [(product, qty)] of goods, one per product; services:
+        [(name, price, hours, product or None)] (labour, or a service product given by id or barcode)."""
+        _ = self.env._
+        if not isinstance(lines, list) or not lines:
+            raise UserError(_("lines is required: a list of {product, qty} (parts) and {service, price, hours} "
+                              "(labour)."))
+        parts, services = {}, []
+
+        def number(value, label, allow_none=False):
+            if value is None and allow_none:
+                return None
+            if isinstance(value, bool) or not isinstance(value, (int, float)) or value < 0:
+                raise UserError(_("%s must be a number (0 or more).", label))
+            return float(value)
+
+        for line in lines:
+            if not isinstance(line, dict):
+                raise UserError(_("Each line is an object: {product, qty} or {service, price, hours}."))
+            if 'service' in line:
+                name = line.get('service')
+                if not isinstance(name, str) or not name.strip():
+                    raise UserError(_("service is the labour's name (text)."))
+                services.append((name.strip(), number(line.get('price', 0), 'price'),
+                                 number(line.get('hours'), 'hours', allow_none=True), None))
+            elif 'product' in line:
+                qty = number(line.get('qty', 1), 'qty')
+                if not qty:
+                    raise UserError(_("qty must be a number above 0."))
+                product = self._site_link_find_product(line['product'])
+                if not product.sale_ok:
+                    raise UserError(_("%s cannot be sold.", product.display_name))
+                if product.type == 'service':
+                    services.append((product.display_name, None, None, (product, qty)))
+                elif product.type == 'combo':
+                    raise UserError(_("%s is a combo: send its parts.", product.display_name))
+                else:
+                    parts[product] = parts.get(product, 0.0) + qty
+            else:
+                raise UserError(_("Each line needs product (a part) or service (labour)."))
+        return list(parts.items()), services
+
+    def _site_link_lines_hash(self, partner, parts, services, note, bike):
+        data = [partner.id, [(p.id, q) for p, q in parts],
+                [(n, pr, h, (s[0].id, s[1]) if s else None) for n, pr, h, s in services], note or '', bike]
+        return hashlib.sha256(json.dumps(data, sort_keys=True, default=str).encode()).hexdigest()
+
+    def _site_link_labour_product(self, company):
+        """The service product for typed labour lines, made once (internal reference SITE_LINK_LABOUR)."""
+        Product = self.env['product.product'].sudo().with_context(active_test=False)
+        product = Product.search([('default_code', '=', LABOUR_PRODUCT_CODE),
+                                  ('company_id', 'in', [company.id, False])], limit=1)
+        if not product:
+            vals = {'name': self.env._("Repair labour"), 'type': 'service', 'default_code': LABOUR_PRODUCT_CODE,
+                    'sale_ok': True, 'purchase_ok': False, 'list_price': 0.0}
+            if 'invoice_policy' in self.env['product.template']._fields:
+                vals['invoice_policy'] = 'order'
+            product = Product.create(vals)
+        elif not product.active:
+            product.active = True
+        return product
+
+    @staticmethod
+    def _site_link_service_label(name, hours):
+        return f"{name} ({hours:g} h)" if hours else name
+
+    def _site_link_service_sol_vals(self, order, labour, name, price, hours, service):
+        if service:
+            product, qty = service
+            return {'order_id': order.id, 'product_id': product.id, 'product_uom_qty': qty}
+        return {'order_id': order.id, 'product_id': labour.id, 'product_uom_qty': 1,
+                'name': self._site_link_service_label(name, hours), 'price_unit': price}
+
+    def _site_link_quote_text(self, note, bike_text):
+        text = '\n'.join(t for t in (bike_text and self.env._("Bike: %s", bike_text), note) if t)
+        return text or False
+
+    def _site_link_order_answer(self, order):
+        order = order.sudo()
+        return {
+            'order_id': order.id,
+            'name': order.name,
+            'state': order.state,
+            'amount_total': order.amount_total,
+            'currency': order.currency_id.name,
+            'portal_url': order.get_base_url() + order.get_portal_url(),
+        }
+
+    def _site_link_repair_row(self, reference):
+        """The site.link.repair row of ``reference`` (made when missing), locked against a call running at the same
+        time with the same reference (that call waits, then fails to serialize; Odoo retries it)."""
+        self.env['site.link.repair'].flush_model()
+        self.env.cr.execute("""
+            INSERT INTO site_link_repair (reference, create_uid, write_uid, create_date, write_date)
+            VALUES (%s, %s, %s, now() at time zone 'UTC', now() at time zone 'UTC')
+            ON CONFLICT (reference) DO NOTHING
+        """, (reference, self.env.uid, self.env.uid))
+        self.env.cr.execute("SELECT id FROM site_link_repair WHERE reference = %s FOR UPDATE", (reference,))
+        row_id = self.env.cr.fetchone()[0]
+        Row = self.env['site.link.repair'].sudo()
+        Row.invalidate_model()
+        return Row.browse(row_id)
+
+    def _site_link_check_reference(self, reference):
+        if not isinstance(reference, str) or not reference.strip():
+            raise UserError(self.env._("reference is required (text): it makes the quote and the invoice happen "
+                                       "once."))
+        return reference.strip()[:200]
+
+    def _site_link_find_row(self, reference):
+        reference = self._site_link_check_reference(reference)
+        row = self.env['site.link.repair'].sudo().search([('reference', '=', reference)], limit=1)
+        order = self.env['sale.order'].sudo().browse(row.order_id).exists() if row.order_id else None
+        if not order:
+            raise UserError(self.env._("No repair quote with reference %s on this site.", reference))
+        return row, order
+
+    def _site_link_fill_repair(self, repair, order, parts, services, text):
+        """The repair order's parts (its moves; Repair puts them on the quotation) and the quotation's labour."""
+        Move = self.env['stock.move'].sudo().with_context(**QUIET)
+        wanted = dict(parts)
+        kept = set()
+        for move in repair.move_ids.filtered(lambda m: m.repair_line_type == 'add' and m.state != 'cancel'):
+            product = move.product_id
+            if product in wanted and product not in kept:
+                kept.add(product)
+                if move.product_uom.compare(move.product_uom_qty, wanted[product]) != 0:
+                    move.product_uom_qty = wanted[product]
+                continue
+            # a part no longer sent (or a second move of one part): off the repair and off the quotation
+            sale_line = move.sale_line_id
+            move.unlink()
+            if sale_line.exists() and order.state in ('draft', 'sent'):
+                sale_line.unlink()
+        for product, qty in wanted.items():
+            if product not in kept:
+                move = Move.create({'repair_id': repair.id, 'repair_line_type': 'add', 'product_id': product.id,
+                                    'product_uom_qty': qty, 'product_uom': product.uom_id.id,
+                                    'company_id': repair.company_id.id})
+                if 'repair_price_subtotal' in move._fields and move.sale_line_id and not move.price_unit:
+                    # another extension prices repair parts by the move's unit price (and copies it to the
+                    # quotation when the quantity changes): it gets the quotation's price
+                    move.price_unit = move.sale_line_id.price_unit
+        if 'service_line_ids' in repair._fields:
+            # another extension's repair services: they go on the quotation by themselves
+            repair.service_line_ids.unlink()
+            labour = self._site_link_labour_product(repair.company_id) if any(not s[3] for s in services) else None
+            vals = []
+            for name, price, hours, service in services:
+                if service:
+                    product, qty = service
+                    vals.append({'repair_id': repair.id, 'product_id': product.id, 'name': product.display_name,
+                                 'price_unit': product.lst_price, 'product_uom_qty': qty,
+                                 'product_uom_id': product.uom_id.id})
+                else:
+                    vals.append({'repair_id': repair.id, 'product_id': labour.id, 'product_uom_id': labour.uom_id.id,
+                                 'name': self._site_link_service_label(name, hours), 'price_unit': price,
+                                 'product_uom_qty': 1})
+            if vals:
+                self.env['repair.service.line'].sudo().with_context(**QUIET).create(vals)
+            if 'customer_notes' in repair._fields:
+                repair.customer_notes = text
+            return
+        # standard Repair: the quotation lines that are not parts are this call's (labour and the note)
+        order.order_line.filtered(lambda line: not line.move_ids.repair_id).unlink()
+        self._site_link_plain_lines(order, [], services, text)
+
+    def _site_link_plain_lines(self, order, parts, services, text):
+        SaleLine = self.env['sale.order.line'].sudo().with_context(**QUIET)
+        vals = []
+        if text:
+            vals.append({'order_id': order.id, 'display_type': 'line_note', 'name': text, 'sequence': 1})
+        vals += [{'order_id': order.id, 'product_id': p.id, 'product_uom_qty': q, 'sequence': 10} for p, q in parts]
+        labour = self._site_link_labour_product(order.company_id) if any(not s[3] for s in services) else None
+        vals += [dict(self._site_link_service_sol_vals(order, labour, *s), sequence=100) for s in services]
+        if vals:
+            SaleLine.create(vals)
+
+    @api.model
+    def repair_quote(self, reference, partner_id, lines, note=None, bike=None):
+        """Make, or change (same ``reference``, while it is a quotation), the quotation for a customer repair.
+        ``lines``: [{product (id or barcode), qty}] for parts, [{service: name, price, hours}] for labour (one line
+        at ``price``; the hours show in its description). ``note``: text on the quotation. ``bike``: the customer
+        bike's id (customer_bikes) or a description. Where Repair is installed, a repair order holds the parts and
+        is linked to the quotation. Nothing is sent: the quotation stays a draft.
+        Answers {order_id, name, state, amount_total, currency, portal_url}."""
+        self._site_link_check_caller()
+        self._site_link_require_sales()
+        _ = self.env._
+        reference = self._site_link_check_reference(reference)
+        partner = self._site_link_find_partner(partner_id)
+        if note is not None and not isinstance(note, str):
+            raise UserError(_("note must be text."))
+        note = (note or '').strip() or None
+        parts, services = self._site_link_parse_lines(lines)
+        Bike = self._site_link_bike_model()
+        bike_record, bike_text = None, None
+        if isinstance(bike, bool) or (bike is not None and not isinstance(bike, (int, str))):
+            raise UserError(_("bike must be a bike id (number) or a description (text)."))
+        if isinstance(bike, int):
+            if Bike is None:
+                raise UserError(_("This site has no customer bikes: send the bike as a description (text)."))
+            bike_record = Bike.browse(bike).exists()
+            if not bike_record:
+                raise UserError(_("No bike %s on this site.", bike))
+            if bike_record.partner_id.commercial_partner_id != partner.commercial_partner_id:
+                raise UserError(_("Bike %(bike)s is not %(partner)s's.", bike=bike_record.display_name,
+                                  partner=partner.display_name))
+        elif isinstance(bike, str) and bike.strip():
+            bike_text = bike.strip()
+        fingerprint = self._site_link_lines_hash(partner, parts, services, note, bike)
+
+        row = self._site_link_repair_row(reference)
+        order = self.env['sale.order'].sudo().browse(row.order_id).exists() if row.order_id else None
+        if order and row.lines_hash == fingerprint:
+            return self._site_link_order_answer(order)
+        if order and order.state not in ('draft', 'sent'):
+            raise UserError(_("Quotation %(name)s (reference %(ref)s) is no longer a quotation (state %(state)s): it "
+                              "can no longer change. Use a new reference for more work.", name=order.name,
+                              ref=reference, state=order.state))
+        if order and order.partner_id != partner:
+            raise UserError(_("Reference %(ref)s is %(other)s's quotation, not %(partner)s's.", ref=reference,
+                              other=order.partner_id.display_name, partner=partner.display_name))
+        company = self.env.company
+        text = self._site_link_quote_text(note, bike_text)
+        repair = None
+        if self._site_link_has_repair():
+            Repair = self.env['repair.order'].sudo().with_company(company).with_context(**QUIET)
+            repair = Repair.browse(row.repair_id).exists() if row.repair_id else Repair
+            if not repair:
+                repair_vals = {'partner_id': partner.id, 'company_id': company.id,
+                               'internal_notes': _("Customer repair from a linked site, reference %s", reference)}
+                if bike_record and 'bike_id' in Repair._fields:
+                    repair_vals['bike_id'] = bike_record.id
+                repair = Repair.create(repair_vals)
+            elif bike_record and 'bike_id' in repair._fields and repair.bike_id != bike_record:
+                repair.bike_id = bike_record
+            if not order:
+                order = (repair.sale_order_id or repair._create_sale_order()).sudo()
+            self._site_link_fill_repair(repair, order, parts, services, text)
+        else:
+            if not order:
+                order = self.env['sale.order'].sudo().with_company(company).with_context(**QUIET).create(
+                    {'partner_id': partner.id, 'company_id': company.id})
+            else:
+                order.order_line.unlink()
+            self._site_link_plain_lines(order, parts, services, text)
+        if order.client_order_ref != reference:
+            order.client_order_ref = reference
+        row.write({'partner_id': partner.id, 'order_id': order.id, 'repair_id': repair.id if repair else 0,
+                   'lines_hash': fingerprint})
+        self._site_link_served('repair_quote', _("Quotation %(name)s for reference %(ref)s (%(lines)s lines).",
+                                                 name=order.name, ref=reference, lines=len(lines)))
+        return self._site_link_order_answer(order)
+
+    def _site_link_invoices(self, order):
+        return order.invoice_ids.filtered(lambda inv: inv.state != 'cancel' and inv.move_type == 'out_invoice')
+
+    @api.model
+    def repair_status(self, reference):
+        """The quotation of ``reference``: {name, state, approved, invoiced, paid, amount_total, portal_url}.
+        approved: the customer accepted it (it is a sales order); invoiced: it has an invoice (draft or posted);
+        paid: all its posted invoices are paid."""
+        self._site_link_check_caller()
+        self._site_link_require_sales()
+        row, order = self._site_link_find_row(reference)
+        invoices = self._site_link_invoices(order)
+        posted = invoices.filtered(lambda inv: inv.state == 'posted')
+        self._site_link_served('repair_status', self.env._("Status of %(name)s, reference %(ref)s.", name=order.name,
+                                                            ref=row.reference))
+        return {
+            'name': order.name,
+            'state': order.state,
+            'approved': order.state == 'sale',
+            'invoiced': bool(invoices),
+            'paid': bool(posted) and posted == invoices and all(
+                inv.payment_state in ('paid', 'in_payment') for inv in posted),
+            'amount_total': order.amount_total,
+            'portal_url': order.get_base_url() + order.get_portal_url(),
+        }
+
+    def _site_link_finish_repair(self, repair):
+        """The repair order done (its parts leave stock, the quotation's parts count as delivered)."""
+        if repair.state in ('done', 'cancel'):
+            return
+        if repair.state == 'draft':
+            repair._action_repair_confirm()
+        if repair.state == 'confirmed':
+            repair.action_repair_start()
+        for move in repair.move_ids.filtered(lambda m: m.state not in ('done', 'cancel')):
+            if move.product_uom.compare(move.quantity, move.product_uom_qty) < 0:
+                move.quantity = move.product_uom_qty
+            move.picked = True
+        repair.action_repair_done()
+
+    @api.model
+    def repair_invoice(self, reference):
+        """The invoice of the accepted quotation of ``reference``, made once (a draft: it is never posted or sent
+        here). Where Repair is installed the repair order is finished first, so its parts leave stock and are
+        invoiced. Answers {invoice_id, name, state, amount_total, portal_url}."""
+        self._site_link_check_caller()
+        self._site_link_require_sales()
+        _ = self.env._
+        reference = self._site_link_check_reference(reference)
+        order = self._site_link_find_row(reference)[1]
+        row = self._site_link_repair_row(reference)
+        Move = self.env['account.move'].sudo()
+        invoice = Move.browse(row.invoice_id).exists() if row.invoice_id else Move
+        if not invoice or invoice.state == 'cancel':
+            invoice = self._site_link_invoices(order)[:1]
+        if not invoice:
+            if order.state != 'sale':
+                raise UserError(_("Quotation %(name)s is not accepted yet: no invoice.", name=order.name))
+            repair = self.env['repair.order'].sudo().browse(row.repair_id).exists() \
+                if row.repair_id and self._site_link_has_repair() else None
+            if repair:
+                self._site_link_finish_repair(repair.with_context(**QUIET))
+            try:
+                invoice = order.with_context(**QUIET)._create_invoices()[:1]
+            except UserError as exc:
+                raise UserError(_("Quotation %(name)s has nothing to invoice yet (%(why)s).", name=order.name,
+                                  why=exc.args[0])) from exc
+            self._site_link_served('repair_invoice', _("Invoice %(id)s (draft) for %(name)s, reference %(ref)s.",
+                                                       id=invoice.id, name=order.name, ref=reference))
+        else:
+            self._site_link_served('repair_invoice', _("Invoice %(id)s for %(name)s, reference %(ref)s, already "
+                                                       "made.", id=invoice.id, name=order.name, ref=reference))
+        if row.invoice_id != invoice.id:
+            row.invoice_id = invoice.id
+        return {
+            'invoice_id': invoice.id,
+            'name': invoice.name if invoice.name and invoice.name != '/' else None,
+            'state': invoice.state,
+            'amount_total': invoice.amount_total,
+            'portal_url': invoice.get_base_url() + invoice.get_portal_url(),
+        }

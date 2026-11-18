@@ -25,6 +25,8 @@
                 <header>
                     <button name="action_test_connection" type="object" string="Test connection" class="btn-primary"
                             icon="fa-plug"/>
+                    <button name="action_sync_users" type="object" string="Sync employees now" icon="fa-users"
+                            invisible="not sync_users"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
@@ -47,6 +49,16 @@
                         <group string="Calls">
                             <field name="timeout"/>
                             <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Employees">
+                        <group>
+                            <field name="sync_users"/>
+                            <field name="last_sync_at" invisible="not last_sync_at"/>
+                            <field name="last_sync_message" invisible="not last_sync_at"/>
+                        </group>
+                        <group>
+                            <field name="shop_group_ids" widget="many2many_tags"/>
                         </group>
                     </group>
                     <group string="Last Test" invisible="not last_check_at">
@@ -74,12 +86,14 @@
         <field name="name">site.link.log.list</field>
         <field name="model">site.link.log</field>
         <field name="arch" type="xml">
-            <list string="Failed Calls" create="0" edit="0">
+            <list string="Site Link Log" create="0" edit="0">
                 <field name="create_date" string="When"/>
+                <field name="kind" optional="show"/>
                 <field name="site_id"/>
                 <field name="model"/>
                 <field name="method"/>
                 <field name="status"/>
+                <field name="user_id" optional="show"/>
                 <field name="message"/>
                 <field name="duration_ms" optional="hide"/>
                 <field name="create_uid" string="By" optional="show"/>
@@ -91,11 +105,12 @@
         <field name="name">site.link.log.form</field>
         <field name="model">site.link.log</field>
         <field name="arch" type="xml">
-            <form string="Failed Call" create="0" edit="0">
+            <form string="Site Link Log" create="0" edit="0">
                 <sheet>
                     <group>
                         <group>
                             <field name="create_date" string="When"/>
+                            <field name="kind"/>
                             <field name="site_id"/>
                             <field name="create_uid" string="By"/>
                         </group>
@@ -103,7 +118,8 @@
                             <field name="model"/>
                             <field name="method"/>
                             <field name="status"/>
-                            <field name="duration_ms"/>
+                            <field name="user_id" invisible="not user_id"/>
+                            <field name="duration_ms" invisible="kind != 'failed'"/>
                         </group>
                     </group>
                     <field name="message"/>
@@ -116,5 +132,13 @@
         <field name="name">Site Link: Failed Calls</field>
         <field name="res_model">site.link.log</field>
         <field name="view_mode">list,form</field>
+        <field name="domain">[('kind', '=', 'failed')]</field>
+    </record>
+
+    <record id="action_site_link_log_answered" model="ir.actions.act_window">
+        <field name="name">Site Link: Calls Answered and Sign-ins</field>
+        <field name="res_model">site.link.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('kind', 'in', ['served', 'sso'])]</field>
     </record>
 </odoo>

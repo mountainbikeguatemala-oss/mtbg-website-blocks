@@ -34,7 +34,9 @@ class TestSiteLinkInventory(TransactionCase):
         health = self.Api.health()
         self.assertEqual(health['protocol'], 1)
         self.assertEqual(health['database'], self.env.cr.dbname)
-        self.assertEqual(health['methods'], ['health', 'part_lookup', 'part_consume'])
+        self.assertEqual(health['methods'][:8], ['health', 'sso_ticket', 'user_sync', 'customer_search',
+                                                 'customer_create', 'customer_bikes', 'part_lookup', 'part_consume'])
+        self.assertEqual('repair_quote' in health['methods'], 'sale.order' in self.env)
 
     def test_caller_needs_the_group(self):
         Api = self.env['site.link.api'].with_user(self.plain_user)
