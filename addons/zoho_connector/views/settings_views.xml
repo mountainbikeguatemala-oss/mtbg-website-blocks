@@ -37,6 +37,20 @@
                             <widget name="mtbg_zoho_section"/>
                         </setting>
                     </block>
+                    <!-- Zoho Books expenses, Import & Sync (here since 0.2.0): the categories' destinations come from
+                         the extensions installed -->
+                    <block title="Zoho Books: expenses (Import &amp; Sync)" name="mtbg_zoho_books_expenses">
+                        <setting string="Expenses Sync" help="First sync: pick the categories and the first day, then Import (old expenses, no receipts). From then on the expenses created or changed in Zoho Books on those categories come in every hour; expenses made in Odoo go to Zoho Books with their receipt (Writes allowed).">
+                            <div class="d-flex flex-column gap-1">
+                                <field name="mtbg_zoho_expenses_sync_info" readonly="1" nolabel="1" class="small text-muted"/>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <button name="action_mtbg_zoho_expenses_first_sync" type="object" string="Run First Sync" class="btn-secondary btn-sm" icon="fa-download"/>
+                                    <button name="action_mtbg_zoho_expenses_sync_now" type="object" string="Sync Now" class="btn-secondary btn-sm" icon="fa-refresh"/>
+                                    <button name="action_mtbg_zoho_expense_categories" type="object" string="Expense Categories" class="btn-link btn-sm"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
                     <!-- the integrations: one card per Zoho integration (its app's switches, versions, install /
                          update, Sync now, its pages), its settings under it. Extensions add their blocks here. -->
                     <block title="Zoho Expense: history (read only)" name="mtbg_zoho_expense">

@@ -4,3 +4,5 @@ from . import zoho_log
 from . import res_config_settings
 from . import subextension
 from . import setup
+from . import books_expenses
+from . import partner_vendor

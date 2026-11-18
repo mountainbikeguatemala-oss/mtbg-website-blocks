@@ -9,4 +9,24 @@
         <field name="interval_type">days</field>
         <field name="active" eval="True"/>
     </record>
+    <!-- Import & Sync from Zoho Books (here since 0.2.0, same records): a run's steps (triggered) -->
+    <record id="cron_zoho_books_import" model="ir.cron">
+        <field name="name">Zoho Books: Import &amp; Sync (a run)</field>
+        <field name="model_id" ref="model_mtbg_zoho_books_import"/>
+        <field name="state">code</field>
+        <field name="code">model._mtbg_cron()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
+    </record>
+    <!-- from then on: every hour the expenses changed in Zoho Books (nothing until the first sync is done) -->
+    <record id="cron_zoho_books_expenses_sync" model="ir.cron">
+        <field name="name">Zoho Books: expenses (changes)</field>
+        <field name="model_id" ref="model_mtbg_zoho_books_import"/>
+        <field name="state">code</field>
+        <field name="code">model._mtbg_cron_sync()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
 </odoo>

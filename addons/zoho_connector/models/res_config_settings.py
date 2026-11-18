@@ -73,3 +73,44 @@ class ResConfigSettings(models.TransientModel):
                   for app in APPS}
         self.env['ir.config_parameter'].sudo().set_param('mtbg_tours.zoho_access_check', json.dumps(checks))
         return {'type': 'ir.actions.client', 'tag': 'reload'}
+
+
+class ResConfigSettingsBooksExpenses(models.TransientModel):
+    """Settings › Zoho, Zoho Books: expenses (Import & Sync, here since 0.2.0): the first sync's status, the last sync,
+    the categories; Run first sync and Sync now (buttons: no Settings Save needed)."""
+    _inherit = 'res.config.settings'
+
+    mtbg_zoho_expenses_sync_info = fields.Text(string='Expenses Sync', compute='_compute_mtbg_zoho_expenses_sync_info')
+
+    def _compute_mtbg_zoho_expenses_sync_info(self):
+        from .books_expenses import FIRST_SYNC, LAST_SYNC
+        icp = self.env['ir.config_parameter'].sudo()
+        first, last = icp.get_param(FIRST_SYNC), icp.get_param(LAST_SYNC)
+        Account = self.env['mtbg.zoho.books.account'].sudo()
+        labels = dict(Account._mtbg_destination_selection())
+        synced = Account.search([('sync', '=', True)])
+        _ = self.env._
+        lines = [_("First sync: done %s (UTC)", first) if first else _("First sync: not run yet"),
+                 _("Last sync: %s (UTC)", last) if last else _("Last sync: never")]
+        lines += [f"· {a.name} → {labels.get(a.destination, a.destination)}"
+                  f"{' (' + a.target.display_name + ')' if a.target else ''}" for a in synced]
+        for record in self:
+            record.mtbg_zoho_expenses_sync_info = "\n".join(lines)
+
+    def action_mtbg_zoho_expenses_first_sync(self):
+        run = self.env['mtbg.zoho.books.import'].create({})
+        return {'type': 'ir.actions.act_window', 'res_model': run._name, 'res_id': run.id, 'view_mode': 'form',
+                'views': [(False, 'form')], 'target': 'current'}
+
+    def action_mtbg_zoho_expenses_sync_now(self):
+        counts = self.env['mtbg.zoho.books.import']._mtbg_sync_changes()
+        _ = self.env._
+        message = _("Run the first sync first (Zoho Books on).") if counts is False else _(
+            "%(created)s new, %(updated)s updated, %(skipped)s skipped.", **counts)
+        return {'type': 'ir.actions.client', 'tag': 'display_notification',
+                'params': {'title': _("Zoho Books expenses"), 'message': message,
+                           'type': 'warning' if counts is False else 'success',
+                           'next': {'type': 'ir.actions.client', 'tag': 'reload'}}}
+
+    def action_mtbg_zoho_expense_categories(self):
+        return self.env['ir.actions.actions']._for_xml_id('zoho_connector.action_books_accounts')

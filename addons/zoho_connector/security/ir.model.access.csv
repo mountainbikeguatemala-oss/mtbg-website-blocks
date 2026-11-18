@@ -2,3 +2,6 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_zoho_ref_system,zoho ref system,model_mtbg_zoho_ref,base.group_system,1,1,1,1
 access_zoho_log_system,zoho log system,model_mtbg_zoho_log,base.group_system,1,0,0,1
 access_zoho_token_none,zoho token (code only),model_mtbg_zoho_token,base.group_system,0,0,0,0
+access_zoho_books_account_system,zoho books account system,model_mtbg_zoho_books_account,base.group_system,1,1,1,1
+access_zoho_books_import_system,zoho books import system,model_mtbg_zoho_books_import,base.group_system,1,1,1,1
+access_zoho_books_review_system,zoho books review system,model_mtbg_zoho_books_review,base.group_system,1,1,1,1

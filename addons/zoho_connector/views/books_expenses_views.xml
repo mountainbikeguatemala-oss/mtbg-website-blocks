@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Import & Sync from Zoho Books (the Tours' Zoho 0.4.0, here since 0.2.0): the categories and where their expenses go; a run; its review list -->
+    <record id="view_books_account_list" model="ir.ui.view">
+        <field name="name">mtbg.zoho.books.account.list</field>
+        <field name="model">mtbg.zoho.books.account</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" create="0" decoration-muted="destination == 'skip'">
+                <header>
+                    <button name="action_mtbg_read_accounts" type="object" string="Read Categories from Zoho Books" display="always"/>
+                </header>
+                <field name="name" readonly="1"/>
+                <field name="zoho_account_id" readonly="1" optional="hide"/>
+                <field name="destination"/>
+                <field name="target" options="{'no_create': True}"/>
+                <field name="sync" optional="show"/>
+                <field name="note" optional="show"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_books_account_search" model="ir.ui.view">
+        <field name="name">mtbg.zoho.books.account.search</field>
+        <field name="model">mtbg.zoho.books.account</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <filter name="brought_in" string="Brought In" domain="[('destination', 'not in', ('skip', 'internal'))]"/>
+                <filter name="synced" string="Kept in Sync" domain="[('sync', '=', True)]"/>
+                <group><filter name="by_destination" string="Goes To" context="{'group_by': 'destination'}"/></group>
+            </search>
+        </field>
+    </record>
+    <record id="action_books_accounts" model="ir.actions.act_window">
+        <field name="name">Zoho Books Expense Categories</field>
+        <field name="res_model">mtbg.zoho.books.account</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p>No category yet: Read Categories from Zoho Books (read only). Then say where each one's expenses go.</p>
+        </field>
+    </record>
+
+    <record id="view_books_review_list" model="ir.ui.view">
+        <field name="name">mtbg.zoho.books.review.list</field>
+        <field name="model">mtbg.zoho.books.review</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" create="0" delete="0" decoration-muted="state != 'review'">
+                <field name="state" widget="badge" decoration-warning="state == 'review'" decoration-success="state == 'done'"/>
+                <field name="date"/>
+                <field name="account_id" readonly="1"/>
+                <field name="description"/>
+                <field name="vendor" optional="show"/>
+                <field name="project" optional="show"/>
+                <field name="customer" optional="hide"/>
+                <field name="report" optional="show"/>
+                <field name="amount"/>
+                <field name="currency_code"/>
+                <field name="target" options="{'no_create': True}" readonly="state != 'review'"/>
+                <field name="note" optional="show"/>
+                <field name="zoho_line_id" optional="hide"/>
+                <field name="zoho_url" column_invisible="1"/>
+                <button name="action_mtbg_open_zoho" type="object" icon="fa-external-link" title="View in Zoho Books" invisible="not zoho_url"/>
+                <button name="action_skip" type="object" string="Skip" invisible="state != 'review'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_books_import_form" model="ir.ui.view">
+        <field name="name">mtbg.zoho.books.import.form</field>
+        <field name="model">mtbg.zoho.books.import</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_import" type="object" string="Import" class="btn-primary"
+                            invisible="state in ('reading', 'importing')"
+                            confirm="Read the picked categories' expenses from Zoho Books (read only, no receipts)? A run again updates them, never twice."/>
+                    <button name="action_refresh" type="object" string="Refresh" invisible="state not in ('reading', 'importing')"/>
+                    <button name="action_apply_reviews" type="object" string="Apply Review Choices" invisible="not review_count"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,importing,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <div class="alert alert-info" role="status" invisible="not message"><field name="message"/></div>
+                    <group>
+                        <group string="What">
+                            <field name="account_ids" widget="many2many_tags" options="{'no_create': True}"
+                                   readonly="state in ('reading', 'importing')"/>
+                            <field name="date_from" readonly="state in ('reading', 'importing')"/>
+                            <field name="date_to" readonly="state in ('reading', 'importing')" placeholder="today"/>
+                        </group>
+                        <group string="Result">
+                            <field name="expense_total"/>
+                            <field name="expense_done"/>
+                            <field name="created_count"/>
+                            <field name="updated_count"/>
+                            <field name="skipped_count"/>
+                            <field name="review_count"/>
+                            <field name="finished_on"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="To Review" name="review">
+                            <p class="text-muted">Lines whose record is not sure (a parent account's, a record the
+                                destination could not tell): pick where each goes, then Apply Review Choices, or Skip.</p>
+                            <field name="review_ids" context="{'list_view_ref': 'zoho_connector.view_books_review_list'}"/>
+                        </page>
+                        <page string="All Reviewed" name="reviewed">
+                            <field name="all_review_ids" context="{'list_view_ref': 'zoho_connector.view_books_review_list'}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_books_import_list" model="ir.ui.view">
+        <field name="name">mtbg.zoho.books.import.list</field>
+        <field name="model">mtbg.zoho.books.import</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="state" widget="badge"/>
+                <field name="expense_total"/>
+                <field name="created_count"/>
+                <field name="updated_count"/>
+                <field name="review_count"/>
+                <field name="finished_on"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_books_import" model="ir.actions.act_window">
+        <field name="name">Import &amp; Sync from Zoho Books</field>
+        <field name="res_model">mtbg.zoho.books.import</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">The first sync: bring in the old expenses</p>
+            <p>New, pick the Zoho Books categories and the first day, then Import (read only, no receipts). From then on
+                their new and changed expenses come in every hour.</p>
+        </field>
+    </record>
+</odoo>

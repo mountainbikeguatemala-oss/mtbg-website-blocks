@@ -1,9 +1,9 @@
 {
     'name': 'Zoho Connector',
-    'version': '19.0.0.1.0',
+    'version': '19.0.0.2.0',
     'category': 'Services',
     'summary': 'One login for every Zoho app (Books, Expense, Shifts): setup wizard, a switch per app, the references '
-               'of Odoo records in Zoho, the sync log',
+               'of Odoo records in Zoho, the sync log; Zoho Books expenses Import & Sync; vendors in Zoho Books',
     'description': """
 The Zoho connection any Odoo site can use, without any other extension (2026-11-11: the Zoho connector split; it
 took this part over from the Tours' Zoho extension, which keeps the tours' Zoho Books work).
@@ -18,19 +18,29 @@ took this part over from the Tours' Zoho extension, which keeps the tours' Zoho 
 * The sync log (``mtbg.zoho.log``): every write and every failed call, kept 90 days.
 * The Zoho section of Settings: the connection, the sync log and references, and a card per integration (an
   extension gives its cards, ``_mtbg_card_defaults``; a glue module its manifest's ``zoho_connector_card``).
+* Zoho Books expenses, Import & Sync (0.2.0, from the Tours' Zoho extension): the Expense Categories
+  (``mtbg.zoho.books.account``, read only from Zoho Books) and where each one's expenses go, a run
+  (``mtbg.zoho.books.import``: the first sync, then every hour the changes), its review list
+  (``mtbg.zoho.books.review``). Extensions bring the destinations (``_mtbg_destinations``, ``_mtbg_suggest``,
+  ``_mtbg_import_line``, ``_mtbg_apply_review``); without any, a category is skipped or counted as internal.
+* A vendor contact's Zoho Books vendor (0.2.0, from the Tours' Zoho extension): ``mtbg_zoho_vendor_id`` on the
+  contact, found or made by name (``_mtbg_zoho_vendor_ensure``), the vendors made here pushed in the background
+  (``_mtbg_zoho_push_vendors``; which contacts are vendors: an extension's ``mtbg_is_vendor`` tick).
 """,
     'author': 'MTBG Tours contributors',
     'license': 'LGPL-3',
     'depends': ['base', 'web', 'base_setup'],
     'external_dependencies': {'python': ['requests']},
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
-    # (the updater: a planned move, these modules' Zoho models and records come here; pre_init_hook moves their ids)
+    # (the updater: a planned move, these modules' Zoho models and records come here; pre_init_hook and the 0.2.0
+    # pre-migration move their ids)
     'mtbg_takes_over': ['mtbg_tours_zoho', 'mtbg_tours_invoicing'],
     'mtbg_tours_section': 'connectors',
     'data': [
         'security/ir.model.access.csv',
         'data/cron.xml',
         'views/zoho_views.xml',
+        'views/books_expenses_views.xml',
         'views/settings_views.xml',
     ],
     'assets': {
