@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The Site Link section of Odoo's Settings: its own app there -->
+    <record id="view_site_link_settings" model="ir.ui.view">
+        <field name="name">res.config.settings.site_link_connector</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="mode">extension</field>
+        <field name="priority">91</field>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Site Link" name="site_link_connector"
+                     logo="/site_link_connector/static/description/icon.png" groups="base.group_system">
+                    <block title="Linked Sites" name="site_link_sites">
+                        <setting class="col-lg-12" string="Linked Sites"
+                                 help="Other Odoo sites this one calls: address, database, the API key of a technical user there, and the other site's role (e.g. inventory source). Test connection shows the other side's health.">
+                            <button name="%(site_link_connector.action_site_link)d" type="action"
+                                    string="Linked Sites" class="btn-secondary" icon="fa-link"/>
+                        </setting>
+                        <setting class="col-lg-12" string="Failed Calls"
+                                 help="Every call to a linked site that failed, with the reason (kept 90 days).">
+                            <button name="%(site_link_connector.action_site_link_log)d" type="action"
+                                    string="Failed Calls" class="btn-secondary" icon="fa-exclamation-triangle"/>
+                        </setting>
+                        <setting class="col-lg-12" string="Calls From Linked Sites"
+                                 help="For a linked site to call this one: make a technical user here, give it the group &quot;Site Link: calls from a linked site&quot;, make an API key for it (its Preferences › Account Security) and save that key on the other site.">
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

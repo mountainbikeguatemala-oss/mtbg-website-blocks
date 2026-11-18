@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Given to the technical user whose API key the OTHER site uses to call this one (site.link.api). -->
+    <record id="group_site_link_remote" model="res.groups">
+        <field name="name">Site Link: calls from a linked site</field>
+        <field name="comment">The technical user whose API key a linked site uses. Its calls (health, part lookup,
+            part consumption) run with the rights they need, nothing more: the user needs no other access.</field>
+    </record>
+</odoo>

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_site_link_system,site link system,model_site_link,base.group_system,1,1,1,1
+access_site_link_log_system,site link log system,model_site_link_log,base.group_system,1,0,0,1
+access_site_link_consumption_system,site link consumption system,model_site_link_consumption,base.group_system,1,0,0,0
