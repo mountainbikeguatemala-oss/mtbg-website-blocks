@@ -6,7 +6,8 @@ The caller is the technical user of the API key; it needs the group "Site Link: 
 an administrator). The methods then work with the rights they need (sudo), in the user's company. The inventory
 methods are offered only where Inventory is installed, the repair methods only where Sales is (soft checks: no
 dependency; Repair and a customer bike model are used where they are installed); ``inbox_unread`` only where the shared
-inbox of Communication Flows (its side panel) is. See README.md."""
+inbox of Communication Flows (its side panel) is; ``staff_clock`` only where another extension answers
+``res.users._site_link_staff_clock(user)``. See README.md."""
 import hashlib
 import json
 import logging
@@ -27,6 +28,8 @@ INVENTORY_METHODS = ['part_lookup', 'part_consume']
 REPAIR_METHODS = ['repair_quote', 'repair_status', 'repair_invoice']
 # where Communication Flows' side panel is installed (the shared inbox, its "Pop up new client messages")
 INBOX_METHODS = ['inbox_unread']
+# where another extension answers res.users._site_link_staff_clock(user) (e.g. a staff app's shift clock)
+STAFF_CLOCK_METHODS = ['staff_clock']
 CONSUME_LOCATION_NAME = 'Internal use (linked sites)'
 LABOUR_PRODUCT_CODE = 'SITE_LINK_LABOUR'
 SEARCH_LIMIT_MAX = 50
@@ -79,10 +82,14 @@ class SiteLinkApi(models.AbstractModel):
         Conversation = self.env.get('omni.conversation')
         return Conversation is not None and hasattr(Conversation, '_cfd_popup_waiting_count')
 
+    def _site_link_has_staff_clock(self):
+        return hasattr(self.env['res.users'], '_site_link_staff_clock')
+
     def _site_link_methods(self):
         return (BASE_METHODS + (INVENTORY_METHODS if self._site_link_has_inventory() else [])
                 + (REPAIR_METHODS if self._site_link_has_sales() else [])
-                + (INBOX_METHODS if self._site_link_has_inbox() else []))
+                + (INBOX_METHODS if self._site_link_has_inbox() else [])
+                + (STAFF_CLOCK_METHODS if self._site_link_has_staff_clock() else []))
 
     def _site_link_served(self, method, message):
         """A call this site answered, in the log (with the call's transaction)."""
@@ -288,6 +295,33 @@ class SiteLinkApi(models.AbstractModel):
         if count is None:
             return {'count': 0, 'enabled': False}
         return {'count': int(count or 0), 'enabled': True}
+
+    # ------------------------------------------------------------------ the staff clock (soft)
+
+    @api.model
+    @api.readonly
+    def staff_clock(self, login):
+        """Whether this site's user ``login`` is clocked in now (a staff app's shift clock, answered by another
+        extension's ``res.users._site_link_staff_clock(user)``; no dependency): {clocked_in, since}, ``since`` the
+        clock-in time in UTC ('YYYY-MM-DD HH:MM:SS') or None. An unknown, archived or portal login: not clocked in.
+        Read only, not logged (the linked site asks every couple of minutes)."""
+        self._site_link_check_caller()
+        if not self._site_link_has_staff_clock():
+            raise UserError(self.env._("This site has no staff clock: it offers no clock-in state."))
+        if not isinstance(login, str) or not login.strip():
+            raise UserError(self.env._("login is required (text)."))
+        Users = self.env['res.users'].sudo()
+        user = Users.search([('login', '=ilike', escape_like(login.strip()))], limit=1)
+        answer = None
+        if user and not user.share:
+            try:
+                answer = Users._site_link_staff_clock(user)
+            except Exception:  # noqa: BLE001 - another extension's hook never breaks the answer
+                _logger.warning("site link: res.users._site_link_staff_clock() failed", exc_info=True)
+        if not isinstance(answer, dict) or not answer.get('clocked_in'):
+            return {'clocked_in': False, 'since': None}
+        since = answer.get('since')
+        return {'clocked_in': True, 'since': since if isinstance(since, str) and since else None}
 
     # ------------------------------------------------------------------ single sign-on
 

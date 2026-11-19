@@ -295,12 +295,29 @@ class SiteLink(models.Model):
         ``/site_link/sso/start?return=<its address for path>&fallback=1`` when it gives this site single sign-on
         tickets (an API key saved and ``sso_ticket`` in its health; a ticket refused for this user opens the address
         as it is), else its plain address (signed in there only when the browser already is). None when no site is
-        linked or it lists no such path."""
-        target = self._site_link_partner_url(path, site)
+        linked or it lists no such path. One health call (19.0.0.2.5: the path and the methods from the same answer)."""
+        try:
+            site = self._site_link_resolve(site)
+        except SiteLinkError:
+            return None
+        base = (site.base_url or '').strip().rstrip('/')
+        if not base.startswith(('http://', 'https://')):
+            return None
+        try:
+            health = site._site_link_health()
+        except SiteLinkError:
+            health = {}
+        if not path:
+            target = base + '/'
+        elif path.startswith('/'):
+            target = base + path if is_local_path(path) else None
+        else:
+            paths = health.get('paths') if isinstance(health.get('paths'), dict) else {}
+            resolved = paths.get(path)
+            target = base + resolved if isinstance(resolved, str) and is_local_path(resolved) else None
         if not target:
             return None
-        site = self._site_link_resolve(site)
-        if site.sudo().api_key and self._site_link_offers('sso_ticket', site):
+        if site.sudo().api_key and 'sso_ticket' in (health.get('methods') or []):
             return '/site_link/sso/start?' + urlencode({'return': target, 'fallback': '1'})
         return target
 
@@ -328,6 +345,22 @@ class SiteLink(models.Model):
     @api.model
     def _site_link_repair_invoice(self, reference, site='inventory_source'):
         return self._site_link_api('repair_invoice', site, reference=reference)
+
+    @api.model
+    def _site_link_staff_clock(self, login, site='staff_source'):
+        """Whether ``login`` is clocked in on the linked site ``site`` (its staff app's shift clock): {clocked_in,
+        since} (``since`` in UTC, 'YYYY-MM-DD HH:MM:SS', or None). None when no site is linked, it does not offer
+        ``staff_clock`` (soft) or does not answer. One call (the caller keeps the answer a while)."""
+        try:
+            site = self._site_link_resolve(site)
+            answer = self._site_link_api('staff_clock', site, login=login)
+        except SiteLinkError:
+            return None
+        if not isinstance(answer, dict):
+            return None
+        since = answer.get('since')
+        return {'clocked_in': bool(answer.get('clocked_in')),
+                'since': since if isinstance(since, str) and since else None}
 
     # ------------------------------------------------------------------ one employee list (caller side)
 

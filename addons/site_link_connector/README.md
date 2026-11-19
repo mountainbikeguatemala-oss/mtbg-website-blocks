@@ -97,12 +97,16 @@ needs the group *Site Link: calls from a linked site* (or to be an administrator
 | `repair_status(reference)` | `reference` | `{name, state, approved, invoiced, paid, amount_total, portal_url}` |
 | `repair_invoice(reference)` | `reference` | `{invoice_id, name, state, amount_total, portal_url}` |
 | `inbox_unread(login)` | `login` of a user of this site (case does not matter) | `{count, enabled}`: the conversations waiting for a reply for that user (`enabled` false: the popups are off there, count 0) |
+| `staff_clock(login)` | `login` of a user of this site (case does not matter) | `{clocked_in, since}`: whether that user is clocked in now, `since` the clock-in time in UTC (`YYYY-MM-DD HH:MM:SS`) or null |
 
 - `methods` in `health()` lists what the side offers: always `health`, `sso_ticket`, `customer_search`,
   `customer_create`, `customer_bikes`; `part_lookup` and `part_consume` only where Inventory is installed (elsewhere
   they answer 422 "This site has no Inventory"); `repair_quote`, `repair_status`, `repair_invoice` only where Sales
   is installed (elsewhere 422 "This site has no Sales"); `inbox_unread` only where Communication Flows' shared inbox
-  (side panel 1.10.0 or later) is installed (elsewhere 422 "This site has no shared inbox").
+  (side panel 1.10.0 or later) is installed (elsewhere 422 "This site has no shared inbox"); `staff_clock` only where
+  another extension answers `res.users._site_link_staff_clock(user)` → `{clocked_in, since}` (no dependency on this
+  connector; elsewhere 422 "This site has no staff clock"). Unknown, archived or portal logins: not clocked in.
+  Caller side: `site.link._site_link_staff_clock(login, site='staff_source')` (None when not offered or no answer).
 - `part_lookup`: `qty_available` is the quantity on hand in the company's warehouses; `unit_cost` the product's cost;
   `sale_price` its sales price; `vendor` the first vendor on the product (its Purchase tab), or null; `image_url`
   `<site>/web/image/product.product/<id>/image_512` when the product has a picture (it needs a login on that site),

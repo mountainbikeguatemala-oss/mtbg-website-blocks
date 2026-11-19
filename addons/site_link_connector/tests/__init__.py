@@ -7,3 +7,4 @@ from . import test_repair
 from . import test_user_sync
 from . import test_inbox
 from . import test_partner_url
+from . import test_staff_clock

@@ -2,6 +2,15 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'site_link_connector-*'`.
 
+## 19.0.0.2.5 · 2026-11-19
+- **New: `staff_clock(login)`** (owner, 2026-11-19: the shop app shows "on shift since 08:02 · 3 h 12 min" while the
+  employee is clocked in on the Staff App): `{clocked_in, since}` (`since` in UTC). Offered in `health()` only where
+  another extension answers `res.users._site_link_staff_clock(user)` (soft, no dependency); unknown, archived or portal
+  logins: not clocked in. Read only and not logged (asked every couple of minutes). Caller side:
+  `_site_link_staff_clock(login, site='staff_source')`, None when not offered or no answer.
+- `_site_link_sso_start_url(path, site)` makes one health call instead of two (the named path and the methods from
+  the same answer): the shop app's way back to the Staff App opens sooner.
+
 ## 19.0.0.2.4 · 2026-11-19
 - **Single sign-on both ways** (owner, 2026-11-19: the Staff App's Tour / Tienda switch, between the two sites):
   the sign-in link opens `return` (`redirect`, its older name, still read): a path of this site or a full address on
