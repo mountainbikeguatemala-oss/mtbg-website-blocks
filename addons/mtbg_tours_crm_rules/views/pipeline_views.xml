@@ -16,7 +16,7 @@
                     <field name="mtbg_stage" widget="statusbar" invisible="mtbg_contact_type != 'client'"
                            statusbar_visible="customer"/>
                     <field name="mtbg_stage" widget="statusbar" invisible="not mtbg_is_lead"
-                           statusbar_visible="new,lead,lost"/>
+                           statusbar_visible="new,lead,negotiation,lost"/>
                 </div>
             </xpath>
             <xpath expr="//field[@name='category_id']/../.." position="after">
@@ -27,6 +27,7 @@
                                options="{'no_create': True}" placeholder="How they first came"/>
                     </group>
                     <group>
+                        <field name="mtbg_negotiation" invisible="not mtbg_is_lead"/>
                         <field name="mtbg_lost" invisible="not mtbg_is_lead"/>
                     </group>
                 </group>
@@ -42,7 +43,8 @@
         <field name="arch" type="xml">
             <list position="inside">
                 <field name="mtbg_stage" string="Stage" optional="show" widget="badge"
-                       decoration-info="mtbg_stage == 'lead'" decoration-success="mtbg_stage in ('customer', 'repeat_client')"
+                       decoration-info="mtbg_stage == 'lead'" decoration-warning="mtbg_stage == 'negotiation'"
+                       decoration-success="mtbg_stage in ('customer', 'repeat_client')"
                        decoration-primary="mtbg_stage == 'past_client'" decoration-muted="mtbg_stage in ('new', 'lost')"/>
                 <field name="mtbg_contact_type" string="Type" optional="hide"/>
                 <field name="mtbg_lead_source_id" string="Source Channel" optional="hide"/>
@@ -64,6 +66,7 @@
                 <separator/>
                 <filter name="mtbg_clients" string="Clients" domain="[('mtbg_contact_type', '=', 'client')]"/>
                 <filter name="mtbg_leads" string="Leads" domain="[('mtbg_contact_type', '=', 'lead')]"/>
+                <filter name="mtbg_negotiation" string="Negotiation" domain="[('mtbg_stage', '=', 'negotiation')]"/>
                 <filter name="mtbg_customers" string="Customers" domain="[('mtbg_stage', '=', 'customer')]"/>
                 <filter name="mtbg_not_clients" string="Not clients (staff, vendors, internal)"
                         domain="[('mtbg_contact_type', 'not in', ('lead', 'client'))]"/>
@@ -121,7 +124,8 @@
                 <field name="phone" optional="show"/>
                 <field name="country_id" optional="show"/>
                 <field name="mtbg_stage" string="Stage" widget="badge" optional="show"
-                       decoration-info="mtbg_stage == 'lead'" decoration-success="mtbg_stage == 'customer'"
+                       decoration-info="mtbg_stage == 'lead'" decoration-warning="mtbg_stage == 'negotiation'"
+                       decoration-success="mtbg_stage == 'customer'"
                        decoration-muted="mtbg_stage in ('new', 'lost')"/>
                 <field name="mtbg_contact_type" string="Type" optional="show"/>
                 <field name="mtbg_lead_source_id" string="Source Channel" optional="show"/>

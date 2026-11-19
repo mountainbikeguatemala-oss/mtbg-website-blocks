@@ -1,5 +1,17 @@
 # Changelog
 
+## 19.0.0.5.0 (2026-11-19)
+- **New stage Negotiation** (Negociación; owner, 2026-11-19), between Lead and Customer, on every site (the stage bar,
+  the boards' columns, the list's badge, a Negotiation filter). The box **Negotiation** (`mtbg_negotiation`) on a
+  lead's form sets it by hand.
+- The hook for a quote made: `res.partner._mtbg_mark_negotiation()`: a New or Lead contact moves to Negotiation
+  (a shop calls it with a soft check when a quote is made). Never backwards: customers (every client stage), lost
+  leads, staff, vendors and internal contacts stay as they are. Paying still makes them Customer
+  (`_mtbg_mark_customer`, which clears the box). Nothing is sent.
+- `res.partner._mtbg_set_stage(stage)`: a stage picked by a person on another screen (a shop's Contacts screen):
+  New / Lead, Negotiation, Customer, Lost; Customer and back to a lead change the contact type as chosen by a person.
+- Spanish for the stages (Sin contacto, Prospecto, Negociación, Cliente, Perdido).
+
 ## 19.0.0.4.0 (2026-11-18)
 - **The contact pipeline goes global** (owner, 2026-11-18: "the shop set up the same way as the tours site, with
   webchat and leads pipeline as part of the customer record"): the contact type (`mtbg_contact_type`: Lead, Client,

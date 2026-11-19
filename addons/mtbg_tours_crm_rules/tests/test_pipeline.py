@@ -102,3 +102,49 @@ class TestContactPipeline(TransactionCase):
         self.assertFalse(late.mtbg_lead_source_id, "history sets nothing live")
         self.Partner._mtbg_fill_sources_from_history()
         self.assertEqual(late.mtbg_lead_source_id.name, 'WhatsApp')
+
+    def test_negotiation(self):
+        """0.5.0: a quote for a New or Lead contact moves them to Negotiation (never backwards); by hand too; paying
+        makes them Customer."""
+        keys = self.Partner._group_expand_mtbg_stage(None, [])
+        self.assertLess(keys.index('lead'), keys.index('negotiation'))
+        self.assertLess(keys.index('negotiation'), keys.index('customer'))
+        tours = 'mtbg_tours_completed' in self.Partner._fields  # Tours computes the stages from its bookings
+        nina = self.Partner.create({'name': 'Nina Quote'})
+        nina._mtbg_set_lead_source('whatsapp')
+        self.assertEqual(nina._mtbg_mark_negotiation(), nina)
+        self.assertTrue(nina.mtbg_negotiation)
+        self.assertEqual(nina.mtbg_stage, 'negotiation')
+        self.assertFalse(nina._mtbg_mark_negotiation(), "already in negotiation")
+        nina._mtbg_mark_customer()
+        self.assertEqual(nina.mtbg_contact_type, 'client')
+        self.assertFalse(nina.mtbg_negotiation, "paying clears it")
+        if not tours:
+            self.assertEqual(nina.mtbg_stage, 'customer')
+        self.assertFalse(nina._mtbg_mark_negotiation(), "a customer stays a customer")
+        self.assertEqual(nina.mtbg_contact_type, 'client')
+        self.assertNotEqual(nina.mtbg_stage, 'negotiation')
+        # a new contact (no contact yet) too; a lost one stays lost; a vendor is left alone
+        fresh = self.Partner.create({'name': 'Fresh Quote'})
+        self.assertEqual(fresh._mtbg_mark_negotiation(), fresh)
+        self.assertEqual(fresh.mtbg_stage, 'negotiation')
+        lost = self.Partner.create({'name': 'Lost Quote', 'mtbg_lost': True})
+        self.assertFalse(lost._mtbg_mark_negotiation())
+        self.assertEqual(lost.mtbg_stage, 'lost')
+        vendor = self.Partner.create({'name': 'Vendor Quote'})
+        vendor.mtbg_contact_type = 'vendor'
+        self.assertFalse(vendor._mtbg_mark_negotiation())
+        self.assertFalse(vendor.mtbg_stage)
+        # by hand: the box, and a stage picked on another screen
+        hand = self.Partner.create({'name': 'Hand Pick'})
+        hand.mtbg_negotiation = True
+        self.assertEqual(hand.mtbg_stage, 'negotiation')
+        self.assertTrue(hand._mtbg_set_stage('lost'))
+        self.assertEqual((hand.mtbg_stage, hand.mtbg_negotiation), ('lost', False))
+        self.assertTrue(hand._mtbg_set_stage('negotiation'))
+        self.assertEqual((hand.mtbg_stage, hand.mtbg_lost), ('negotiation', False))
+        self.assertTrue(hand._mtbg_set_stage('customer'))
+        self.assertEqual((hand.mtbg_contact_type, hand.mtbg_contact_type_manual), ('client', True))
+        self.assertTrue(hand._mtbg_set_stage('lead'))
+        self.assertEqual((hand.mtbg_contact_type, hand.mtbg_negotiation, hand.mtbg_lost), ('lead', False, False))
+        self.assertFalse(hand._mtbg_set_stage('past_client'), "a stage from bookings cannot be picked")
