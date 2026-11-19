@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-19 17:11+0000\n"
-"PO-Revision-Date: 2026-11-19 17:11+0000\n"
+"POT-Creation-Date: 2026-11-19 18:54+0000\n"
+"PO-Revision-Date: 2026-11-19 18:54+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,12 +18,31 @@ msgstr ""
 #. module: printer_connector
 #. odoo-javascript
 #: code:addons/printer_connector/static/src/label_print.js:0
-msgid "%s labels printed."
+msgid "\"My own font\" has no font file yet: the label uses the device's font."
 msgstr ""
 
 #. module: printer_connector
 #: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__darkness
 msgid "1 (light) to 31 (dark). The MakeID app uses 15."
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__font_file
+msgid ""
+"A .ttf, .otf or .woff font file (one the business may use), for \"My own "
+"font\"."
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__logo
+msgid ""
+"A small logo (a crown, a mark): printed in black and white, so a plain dark "
+"shape on a light background prints best."
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__logo_position__top
+msgid "Above the rest"
 msgstr ""
 
 #. module: printer_connector
@@ -41,6 +60,11 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/printer_connector/static/src/makeid_printer.js:0
 msgid "Already printing."
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__sans
+msgid "Arial / Helvetica (the device's own)"
 msgstr ""
 
 #. module: printer_connector
@@ -76,24 +100,23 @@ msgid "Bold name"
 msgstr ""
 
 #. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__show_code
+msgid "Code in text"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__code_position
+msgid "Code position"
+msgstr ""
+
+#. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__code_font_px
 msgid "Code text size"
 msgstr ""
 
 #. module: printer_connector
-#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__show_code
-msgid "Code under the barcode"
-msgstr ""
-
-#. module: printer_connector
 #: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__gap_mode__continuous
 msgid "Continuous tape"
-msgstr ""
-
-#. module: printer_connector
-#. odoo-javascript
-#: code:addons/printer_connector/static/src/label_print.xml:0
-msgid "Copies"
 msgstr ""
 
 #. module: printer_connector
@@ -128,10 +151,43 @@ msgid "Display Name"
 msgstr ""
 
 #. module: printer_connector
+#: model_terms:ir.ui.view,arch_db:printer_connector.view_bsx_label_layout_form
+msgid ""
+"Each screen prints with the first active layout \"Used for\" it, else the first\n"
+"                        \"Every screen\" one. The barcode is the item's barcode, or its code / internal reference when it\n"
+"                        has none. \"My own font\": upload the font file (one the business may use) on the layout."
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__usage__general
+msgid "Every screen (the default)"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__fira_mono
+msgid "Fira Mono (typewriter)"
+msgstr ""
+
+#. module: printer_connector
 #: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__length_mm
 msgid ""
 "Fixed length of every label. 0 = as long as the content needs, between the "
 "minimum and maximum below. The E1 cuts each label at the printed length."
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__font
+msgid "Font"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__font_file
+msgid "Font file"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__font_file_name
+msgid "Font file name"
 msgstr ""
 
 #. module: printer_connector
@@ -144,6 +200,21 @@ msgstr ""
 #. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__id
 msgid "ID"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__logo_height_mm
+msgid "Its height (above the rest: its height too)."
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__khand
+msgid "Khand"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__la_belle_aurore
+msgid "La Belle Aurore (signature)"
 msgstr ""
 
 #. module: printer_connector
@@ -191,6 +262,46 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__lato
+msgid "Lato"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__logo_position__left
+msgid "Left"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__logo
+msgid "Logo"
+msgstr ""
+
+#. module: printer_connector
+#: model_terms:ir.ui.view,arch_db:printer_connector.view_bsx_label_layout_form
+msgid "Logo and font"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__logo_position
+msgid "Logo position"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__logo_rotation
+msgid "Logo rotation (degrees)"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__logo_height_mm
+msgid "Logo size (mm)"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__marck_script
+msgid "Marck Script (handwritten)"
+msgstr ""
+
+#. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__max_length_mm
 msgid "Maximum length (mm)"
 msgstr ""
@@ -198,6 +309,21 @@ msgstr ""
 #. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__min_length_mm
 msgid "Minimum length (mm)"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__montserrat
+msgid "Montserrat"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__montserrat_black
+msgid "Montserrat Black"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__custom
+msgid "My own font (uploaded below)"
 msgstr ""
 
 #. module: printer_connector
@@ -218,6 +344,16 @@ msgstr ""
 #. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__name_font_px
 msgid "Name text size"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__open_sans
+msgid "Open Sans"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__oswald
+msgid "Oswald (tall, condensed)"
 msgstr ""
 
 #. module: printer_connector
@@ -286,8 +422,33 @@ msgid "Product name"
 msgstr ""
 
 #. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__raleway
+msgid "Raleway"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__reenie_beanie
+msgid "Reenie Beanie (handwritten)"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__logo_position__right
+msgid "Right"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__code_position__right
+msgid "Right of the barcode"
+msgstr ""
+
+#. module: printer_connector
 #: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__price_position__right
 msgid "Right of the name"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__roboto
+msgid "Roboto"
 msgstr ""
 
 #. module: printer_connector
@@ -308,6 +469,11 @@ msgstr ""
 #. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__sequence
 msgid "Sequence"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__shadows_into_light
+msgid "Shadows Into Light (hand lettering)"
 msgstr ""
 
 #. module: printer_connector
@@ -363,10 +529,10 @@ msgid "The content is taller than the label: use smaller text or fewer lines."
 msgstr ""
 
 #. module: printer_connector
-#: model_terms:ir.ui.view,arch_db:printer_connector.view_bsx_label_layout_form
+#: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__font
 msgid ""
-"The first active layout in the list is the one every screen prints with.\n"
-"                        The barcode is the item's barcode, or its code / internal reference when it has none."
+"The font of the label's text. The fonts come with Odoo; \"My own font\" uses"
+" the font file uploaded on this layout."
 msgstr ""
 
 #. module: printer_connector
@@ -379,6 +545,18 @@ msgstr ""
 #. odoo-python
 #: code:addons/printer_connector/models/label_layout.py:0
 msgid "The label length goes up to 200 mm (0 = automatic)."
+msgstr ""
+
+#. module: printer_connector
+#. odoo-python
+#: code:addons/printer_connector/models/label_layout.py:0
+msgid "The logo size goes from 2 to 12 mm."
+msgstr ""
+
+#. module: printer_connector
+#. odoo-python
+#: code:addons/printer_connector/models/label_layout.py:0
+msgid "The logo turns at most 90 degrees either way."
 msgstr ""
 
 #. module: printer_connector
@@ -440,6 +618,14 @@ msgid "The printer stopped answering."
 msgstr ""
 
 #. module: printer_connector
+#: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__usage
+msgid ""
+"The screens that print with this layout. Extensions add their own uses (e.g."
+" rental bike labels, client name tags); a screen with no layout of its own "
+"uses the first \"Every screen\" one."
+msgstr ""
+
+#. module: printer_connector
 #. odoo-javascript
 #: code:addons/printer_connector/static/src/label_print.xml:0
 #: code:addons/printer_connector/static/src/makeid_printer.js:0
@@ -455,8 +641,23 @@ msgid "This product has no barcode and no internal reference: add one first."
 msgstr ""
 
 #. module: printer_connector
+#: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__logo_rotation
+msgid "Turn the logo a little, e.g. -15 (counter-clockwise) or 10."
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__code_position__below
+msgid "Under the barcode"
+msgstr ""
+
+#. module: printer_connector
 #: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__price_position__below
 msgid "Under the name"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__usage
+msgid "Used for"
 msgstr ""
 
 #. module: printer_connector

@@ -7,16 +7,6 @@
 .bsx_labelprint_go {
     flex: 1 1 auto;
 }
-.bsx_labelprint_copies {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-.bsx_labelprint_copies > span {
-    min-width: 2ch;
-    text-align: center;
-    font-weight: 600;
-}
 .bsx_labelprint_highlight {
     border: 2px solid var(--cui-accent, #0d6efd);
     border-radius: 12px;

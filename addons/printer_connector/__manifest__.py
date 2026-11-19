@@ -1,6 +1,6 @@
 {
     "name": "Printer Connector",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.1.0",
     "category": "Productivity/Connectors",
     "mtbg_tours_section": "connectors",
     "summary": "Odoo to the business's printers, straight from the browser. First: barcode labels on a Bluetooth "

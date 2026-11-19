@@ -1,15 +1,13 @@
-# Translation of Odoo Server.
-# This file contains the translation of the following modules:
-# 	* printer_connector
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-19 17:11+0000\n"
-"PO-Revision-Date: 2026-11-19 17:11+0000\n"
+"POT-Creation-Date: 2026-11-19 18:54+0000\n"
+"PO-Revision-Date: 2026-11-19 18:54+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -18,13 +16,38 @@ msgstr ""
 #. module: printer_connector
 #. odoo-javascript
 #: code:addons/printer_connector/static/src/label_print.js:0
-msgid "%s labels printed."
-msgstr "%s etiquetas impresas."
+msgid "\"My own font\" has no font file yet: the label uses the device's font."
+msgstr ""
+"\"Mi propia fuente\" todavía no tiene archivo de fuente: la etiqueta usa la "
+"fuente del dispositivo."
 
 #. module: printer_connector
 #: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__darkness
 msgid "1 (light) to 31 (dark). The MakeID app uses 15."
 msgstr "1 (claro) a 31 (oscuro). La app de MakeID usa 15."
+
+#. module: printer_connector
+#: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__font_file
+msgid ""
+"A .ttf, .otf or .woff font file (one the business may use), for \"My own "
+"font\"."
+msgstr ""
+"Un archivo de fuente .ttf, .otf o .woff (una que el negocio pueda usar), "
+"para \"Mi propia fuente\"."
+
+#. module: printer_connector
+#: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__logo
+msgid ""
+"A small logo (a crown, a mark): printed in black and white, so a plain dark "
+"shape on a light background prints best."
+msgstr ""
+"Un logo pequeño (una corona, una marca): se imprime en blanco y negro, así "
+"que una figura oscura y sencilla sobre fondo claro imprime mejor."
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__logo_position__top
+msgid "Above the rest"
+msgstr "Encima del resto"
 
 #. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__active
@@ -35,13 +58,20 @@ msgstr "Activo"
 #. odoo-javascript
 #: code:addons/printer_connector/static/src/label_print.xml:0
 msgid "Add a barcode or an internal reference to print a label."
-msgstr "Agrega un código de barras o una referencia interna para imprimir una etiqueta."
+msgstr ""
+"Agrega un código de barras o una referencia interna para imprimir una "
+"etiqueta."
 
 #. module: printer_connector
 #. odoo-javascript
 #: code:addons/printer_connector/static/src/makeid_printer.js:0
 msgid "Already printing."
 msgstr "Ya está imprimiendo."
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__sans
+msgid "Arial / Helvetica (the device's own)"
+msgstr "Arial / Helvetica (la del dispositivo)"
 
 #. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__bar_module_dots
@@ -68,7 +98,9 @@ msgstr "Largo máximo del código de barras (mm)"
 #: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__margin_mm
 msgid ""
 "Blank space inside the label ends. The printer adds its own ~1.5 mm border."
-msgstr "Espacio en blanco en los extremos de la etiqueta. La impresora agrega su propio borde de ~1.5 mm."
+msgstr ""
+"Espacio en blanco en los extremos de la etiqueta. La impresora agrega su "
+"propio borde de ~1.5 mm."
 
 #. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__font_bold
@@ -76,25 +108,24 @@ msgid "Bold name"
 msgstr "Nombre en negrita"
 
 #. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__show_code
+msgid "Code in text"
+msgstr "Código en texto"
+
+#. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__code_position
+msgid "Code position"
+msgstr "Posición del código"
+
+#. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__code_font_px
 msgid "Code text size"
 msgstr "Tamaño del texto del código"
 
 #. module: printer_connector
-#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__show_code
-msgid "Code under the barcode"
-msgstr "Código bajo el código de barras"
-
-#. module: printer_connector
 #: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__gap_mode__continuous
 msgid "Continuous tape"
 msgstr "Cinta continua"
-
-#. module: printer_connector
-#. odoo-javascript
-#: code:addons/printer_connector/static/src/label_print.xml:0
-msgid "Copies"
-msgstr "Copias"
 
 #. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__create_uid
@@ -128,23 +159,81 @@ msgid "Display Name"
 msgstr "Nombre mostrado"
 
 #. module: printer_connector
+#: model_terms:ir.ui.view,arch_db:printer_connector.view_bsx_label_layout_form
+msgid ""
+"Each screen prints with the first active layout \"Used for\" it, else the first\n"
+"                        \"Every screen\" one. The barcode is the item's barcode, or its code / internal reference when it\n"
+"                        has none. \"My own font\": upload the font file (one the business may use) on the layout."
+msgstr ""
+"Cada pantalla imprime con el primer diseño activo \"Usado para\" ella, si "
+"no, con el primero de \"Todas las pantallas\". El código de barras es el "
+"código de barras del artículo, o su código / referencia interna si no tiene."
+" \"Mi propia fuente\": sube el archivo de fuente (una que el negocio pueda "
+"usar) en el diseño."
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__usage__general
+msgid "Every screen (the default)"
+msgstr "Todas las pantallas (predeterminado)"
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__fira_mono
+msgid "Fira Mono (typewriter)"
+msgstr "Fira Mono (máquina de escribir)"
+
+#. module: printer_connector
 #: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__length_mm
 msgid ""
 "Fixed length of every label. 0 = as long as the content needs, between the "
 "minimum and maximum below. The E1 cuts each label at the printed length."
-msgstr "Largo fijo de cada etiqueta. 0 = tan larga como lo necesite el contenido, entre el mínimo y el máximo de abajo. La E1 corta cada etiqueta al largo impreso."
+msgstr ""
+"Largo fijo de cada etiqueta. 0 = tan larga como lo necesite el contenido, "
+"entre el mínimo y el máximo de abajo. La E1 corta cada etiqueta al largo "
+"impreso."
+
+#. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__font
+msgid "Font"
+msgstr "Fuente"
+
+#. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__font_file
+msgid "Font file"
+msgstr "Archivo de fuente"
+
+#. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__font_file_name
+msgid "Font file name"
+msgstr "Nombre del archivo de fuente"
 
 #. module: printer_connector
 #: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__tape_mm
 msgid ""
 "Height of the printed area across the tape. The E1 head prints at most 12 "
 "mm."
-msgstr "Alto del área impresa a lo ancho de la cinta. El cabezal de la E1 imprime 12 mm como máximo."
+msgstr ""
+"Alto del área impresa a lo ancho de la cinta. El cabezal de la E1 imprime 12"
+" mm como máximo."
 
 #. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__id
 msgid "ID"
 msgstr "ID"
+
+#. module: printer_connector
+#: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__logo_height_mm
+msgid "Its height (above the rest: its height too)."
+msgstr "Su alto (encima del resto: también su alto)."
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__khand
+msgid "Khand"
+msgstr "Khand"
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__la_belle_aurore
+msgid "La Belle Aurore (signature)"
+msgstr "La Belle Aurore (firma)"
 
 #. module: printer_connector
 #: model_terms:ir.ui.view,arch_db:printer_connector.view_bsx_label_layout_form
@@ -191,6 +280,46 @@ msgid "Last Updated on"
 msgstr "Última actualización el"
 
 #. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__lato
+msgid "Lato"
+msgstr "Lato"
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__logo_position__left
+msgid "Left"
+msgstr "Izquierda"
+
+#. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__logo
+msgid "Logo"
+msgstr "Logo"
+
+#. module: printer_connector
+#: model_terms:ir.ui.view,arch_db:printer_connector.view_bsx_label_layout_form
+msgid "Logo and font"
+msgstr "Logo y fuente"
+
+#. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__logo_position
+msgid "Logo position"
+msgstr "Posición del logo"
+
+#. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__logo_rotation
+msgid "Logo rotation (degrees)"
+msgstr "Giro del logo (grados)"
+
+#. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__logo_height_mm
+msgid "Logo size (mm)"
+msgstr "Tamaño del logo (mm)"
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__marck_script
+msgid "Marck Script (handwritten)"
+msgstr "Marck Script (manuscrita)"
+
+#. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__max_length_mm
 msgid "Maximum length (mm)"
 msgstr "Largo máximo (mm)"
@@ -199,6 +328,21 @@ msgstr "Largo máximo (mm)"
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__min_length_mm
 msgid "Minimum length (mm)"
 msgstr "Largo mínimo (mm)"
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__montserrat
+msgid "Montserrat"
+msgstr "Montserrat"
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__montserrat_black
+msgid "Montserrat Black"
+msgstr "Montserrat Black"
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__custom
+msgid "My own font (uploaded below)"
+msgstr "Mi propia fuente (subida abajo)"
 
 #. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__name
@@ -219,6 +363,16 @@ msgstr "Líneas del nombre"
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__name_font_px
 msgid "Name text size"
 msgstr "Tamaño del texto del nombre"
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__open_sans
+msgid "Open Sans"
+msgstr "Open Sans"
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__oswald
+msgid "Oswald (tall, condensed)"
+msgstr "Oswald (alta, condensada)"
 
 #. module: printer_connector
 #: model_terms:ir.ui.view,arch_db:printer_connector.view_bsx_label_layout_form
@@ -286,9 +440,34 @@ msgid "Product name"
 msgstr "Nombre del producto"
 
 #. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__raleway
+msgid "Raleway"
+msgstr "Raleway"
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__reenie_beanie
+msgid "Reenie Beanie (handwritten)"
+msgstr "Reenie Beanie (manuscrita)"
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__logo_position__right
+msgid "Right"
+msgstr "Derecha"
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__code_position__right
+msgid "Right of the barcode"
+msgstr "A la derecha del código de barras"
+
+#. module: printer_connector
 #: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__price_position__right
 msgid "Right of the name"
 msgstr "A la derecha del nombre"
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__roboto
+msgid "Roboto"
+msgstr "Roboto"
 
 #. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__sample_code
@@ -309,6 +488,11 @@ msgstr "Producto de muestra"
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__sequence
 msgid "Sequence"
 msgstr "Secuencia"
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__font__shadows_into_light
+msgid "Shadows Into Light (hand lettering)"
+msgstr "Shadows Into Light (letra a mano)"
 
 #. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__margin_mm
@@ -342,7 +526,9 @@ msgstr "El largo máximo del código de barras va de 10 a 200 mm."
 #. module: printer_connector
 #: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__barcode_max_mm
 msgid "The bars get thinner (down to 1 dot) to keep the barcode this short."
-msgstr "Las barras se adelgazan (hasta 1 punto) para que el código de barras no pase de este largo."
+msgstr ""
+"Las barras se adelgazan (hasta 1 punto) para que el código de barras no pase"
+" de este largo."
 
 #. module: printer_connector
 #. odoo-javascript
@@ -360,14 +546,18 @@ msgstr "El código es muy largo: su código de barras pasa del largo máximo."
 #. odoo-javascript
 #: code:addons/printer_connector/static/src/label_print.js:0
 msgid "The content is taller than the label: use smaller text or fewer lines."
-msgstr "El contenido es más alto que la etiqueta: usa texto más pequeño o menos líneas."
+msgstr ""
+"El contenido es más alto que la etiqueta: usa texto más pequeño o menos "
+"líneas."
 
 #. module: printer_connector
-#: model_terms:ir.ui.view,arch_db:printer_connector.view_bsx_label_layout_form
+#: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__font
 msgid ""
-"The first active layout in the list is the one every screen prints with.\n"
-"                        The barcode is the item's barcode, or its code / internal reference when it has none."
-msgstr "El primer diseño activo de la lista es con el que imprimen todas las pantallas. El código de barras es el código de barras del artículo, o su código / referencia interna si no tiene."
+"The font of the label's text. The fonts come with Odoo; \"My own font\" uses"
+" the font file uploaded on this layout."
+msgstr ""
+"La fuente del texto de la etiqueta. Las fuentes vienen con Odoo; \"Mi propia"
+" fuente\" usa el archivo de fuente subido en este diseño."
 
 #. module: printer_connector
 #. odoo-javascript
@@ -384,8 +574,22 @@ msgstr "El largo de la etiqueta llega hasta 200 mm (0 = automático)."
 #. module: printer_connector
 #. odoo-python
 #: code:addons/printer_connector/models/label_layout.py:0
+msgid "The logo size goes from 2 to 12 mm."
+msgstr "El tamaño del logo va de 2 a 12 mm."
+
+#. module: printer_connector
+#. odoo-python
+#: code:addons/printer_connector/models/label_layout.py:0
+msgid "The logo turns at most 90 degrees either way."
+msgstr "El logo gira como máximo 90 grados hacia cada lado."
+
+#. module: printer_connector
+#. odoo-python
+#: code:addons/printer_connector/models/label_layout.py:0
 msgid "The margin can't be negative and the barcode is at least 2 mm high."
-msgstr "El margen no puede ser negativo y el código de barras mide al menos 2 mm de alto."
+msgstr ""
+"El margen no puede ser negativo y el código de barras mide al menos 2 mm de "
+"alto."
 
 #. module: printer_connector
 #. odoo-python
@@ -393,7 +597,9 @@ msgstr "El margen no puede ser negativo y el código de barras mide al menos 2 m
 msgid ""
 "The minimum length must be at least 10 mm and not above the maximum (200 mm "
 "at most)."
-msgstr "El largo mínimo debe ser de al menos 10 mm y no pasar del máximo (200 mm como máximo)."
+msgstr ""
+"El largo mínimo debe ser de al menos 10 mm y no pasar del máximo (200 mm "
+"como máximo)."
 
 #. module: printer_connector
 #. odoo-python
@@ -425,7 +631,9 @@ msgstr "La impresora no responde."
 msgid ""
 "The printer reports a problem (code %s): check the labels and that the lid "
 "is closed."
-msgstr "La impresora reporta un problema (código %s): revisa las etiquetas y que la tapa esté cerrada."
+msgstr ""
+"La impresora reporta un problema (código %s): revisa las etiquetas y que la "
+"tapa esté cerrada."
 
 #. module: printer_connector
 #. odoo-javascript
@@ -440,19 +648,45 @@ msgid "The printer stopped answering."
 msgstr "La impresora dejó de responder."
 
 #. module: printer_connector
+#: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__usage
+msgid ""
+"The screens that print with this layout. Extensions add their own uses (e.g."
+" rental bike labels, client name tags); a screen with no layout of its own "
+"uses the first \"Every screen\" one."
+msgstr ""
+"Las pantallas que imprimen con este diseño. Las extensiones agregan sus "
+"propios usos (p. ej. etiquetas de bicis de renta, etiquetas con el nombre "
+"del cliente); una pantalla sin diseño propio usa el primero de \"Todas las "
+"pantallas\"."
+
+#. module: printer_connector
 #. odoo-javascript
 #: code:addons/printer_connector/static/src/label_print.xml:0
 #: code:addons/printer_connector/static/src/makeid_printer.js:0
 msgid ""
 "This browser has no Bluetooth printing: use Chrome on Android, Windows or "
 "Mac."
-msgstr "Este navegador no puede imprimir por Bluetooth: usa Chrome en Android, Windows o Mac."
+msgstr ""
+"Este navegador no puede imprimir por Bluetooth: usa Chrome en Android, "
+"Windows o Mac."
 
 #. module: printer_connector
 #. odoo-javascript
 #: code:addons/printer_connector/static/src/label_print.js:0
 msgid "This product has no barcode and no internal reference: add one first."
-msgstr "Este producto no tiene código de barras ni referencia interna: agrega uno primero."
+msgstr ""
+"Este producto no tiene código de barras ni referencia interna: agrega uno "
+"primero."
+
+#. module: printer_connector
+#: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__logo_rotation
+msgid "Turn the logo a little, e.g. -15 (counter-clockwise) or 10."
+msgstr "Gira un poco el logo, p. ej. -15 (contra las agujas del reloj) o 10."
+
+#. module: printer_connector
+#: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__code_position__below
+msgid "Under the barcode"
+msgstr "Debajo del código de barras"
 
 #. module: printer_connector
 #: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__price_position__below
@@ -460,8 +694,16 @@ msgid "Under the name"
 msgstr "Debajo del nombre"
 
 #. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__usage
+msgid "Used for"
+msgstr "Usado para"
+
+#. module: printer_connector
 #: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__bar_module_dots
 msgid ""
 "Width of the thinnest bar, in printer dots (0.125 mm). Wider bars scan more "
 "easily; it is reduced automatically when the code is too long."
-msgstr "Ancho de la barra más delgada, en puntos de la impresora (0.125 mm). Las barras más anchas se escanean más fácil; se reduce sola cuando el código es muy largo."
+msgstr ""
+"Ancho de la barra más delgada, en puntos de la impresora (0.125 mm). Las "
+"barras más anchas se escanean más fácil; se reduce sola cuando el código es "
+"muy largo."

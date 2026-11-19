@@ -7,15 +7,8 @@
                 <button type="button" class="btn btn-lg btn-primary bsx_labelprint_go" t-on-click="print"
                         t-att-disabled="state.busy or !supported or !hasCode or props.disabled">
                     <i t-att-class="state.busy ? 'fa fa-spinner fa-spin me-1' : 'fa fa-print me-1'"/>
-                    <t t-if="state.busy">Printing…</t><t t-else="">Print label</t>
+                    <t t-if="state.busy">Printing…</t><t t-elif="props.label" t-esc="props.label"/><t t-else="">Print label</t>
                 </button>
-                <div class="bsx_labelprint_copies" title="Copies">
-                    <button type="button" class="btn btn-outline-secondary" t-on-click="() => this.changeCopies(-1)"
-                            t-att-disabled="state.busy or state.copies &lt;= 1">−</button>
-                    <span t-esc="state.copies"/>
-                    <button type="button" class="btn btn-outline-secondary" t-on-click="() => this.changeCopies(1)"
-                            t-att-disabled="state.busy">+</button>
-                </div>
             </div>
             <div t-if="!supported" class="small text-muted mt-1">This browser has no Bluetooth printing: use Chrome on Android, Windows or Mac.</div>
             <div t-elif="!hasCode" class="small text-muted mt-1">Add a barcode or an internal reference to print a label.</div>
