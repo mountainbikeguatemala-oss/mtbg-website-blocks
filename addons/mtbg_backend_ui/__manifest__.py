@@ -1,6 +1,6 @@
 {
     'name': 'MTBG — Admin Look',
-    'version': '19.0.0.2.0',
+    'version': '19.0.0.2.1',
     # where the updater gets it (the universal repo; owner, 2026-11-11: the one admin module, from Tours Core 0.7.0)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     'category': 'Productivity',
@@ -19,6 +19,8 @@ The admin's shared screens, for any Odoo database (no website needed; Tours Core
 * Each user's screen choices kept on the server (columns picked, folds), on every browser and device.
 * The admin on a phone: fields, buttons and dialogs sized for a finger (below 768px wide).
 * Translated text settings (a system parameter per language) with their editor widget.
+* Every calendar's Day and Week view zooms sideways: a two-finger pinch (Ctrl + wheel on a computer) widens the day
+  columns, the hours stay on the left; kept per model and view on each device.
 
 Who may change boards, cards, settings pages and texts: administrators (a suite may set its own managers).
 """,
@@ -38,6 +40,8 @@ Who may change boards, cards, settings pages and texts: administrators (a suite 
             'mtbg_backend_ui/static/src/card_editor/*',
             'mtbg_backend_ui/static/src/dark/color_scheme.js',
             'mtbg_backend_ui/static/src/view_modes/*',
+            # every calendar's Day / Week view zooms sideways (pinch, Ctrl + wheel): a patch of Odoo's calendar
+            'mtbg_backend_ui/static/src/calendar_zoom/*',
             'mtbg_backend_ui/static/src/board_kanban/*',
             'mtbg_backend_ui/static/src/model_settings/*',
             'mtbg_backend_ui/static/src/sidebar_list/*',
@@ -50,6 +54,9 @@ Who may change boards, cards, settings pages and texts: administrators (a suite 
         ],
         'web.assets_tests': [
             'mtbg_backend_ui/static/tests/tours/*',
+        ],
+        'web.assets_unit_tests': [
+            'mtbg_backend_ui/static/tests/*.test.js',
         ],
         # the admin in dark (the user menu's switch): the palette turned over, in Odoo's dark bundles only
         'web.assets_web_dark': [

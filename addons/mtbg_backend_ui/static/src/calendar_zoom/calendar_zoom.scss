@@ -1,0 +1,33 @@
+// Every calendar's Day / Week view zoomed sideways (calendar_zoom.js): the view harness widened by --mtbg-cal-zoom,
+// the calendar scrolls sideways (the day header with it), the hours column held on the left by --mtbg-cal-x (the
+// scroll). The page's own background (FullCalendar's --fc-page-bg-color, Odoo's view background), so light and dark.
+.o_calendar_widget.fc.o_mtbg_cal_zoomable {
+    // the browser leaves two-finger pinches to the calendar, one-finger scrolling stays native
+    touch-action: pan-x pan-y;
+}
+
+.o_calendar_widget.fc.o_mtbg_cal_zoomed {
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+
+    > .fc-view-harness {
+        flex-shrink: 0;
+        width: calc(var(--mtbg-cal-zoom, 1) * 100%);
+    }
+
+    // the hours (and the header's / all-day row's corner) pinned on the left
+    th.fc-timegrid-axis,
+    td.fc-timegrid-axis:not(.fc-timegrid-col),
+    .fc-timegrid-slot-label {
+        position: relative;
+        z-index: 5;
+        transform: translateX(var(--mtbg-cal-x, 0px));
+        background-color: var(--fc-page-bg-color);
+    }
+
+    // the hour labels above the events that slide under them (FullCalendar puts the slots in a layer of their own)
+    .fc-timegrid-slots {
+        z-index: auto;
+    }
+}

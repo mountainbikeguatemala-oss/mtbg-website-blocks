@@ -2,6 +2,24 @@
 
 Every version of this module, newest first. Tags: `git tag -l 'mtbg_backend_ui-*'`.
 
+## 19.0.0.2.1 (2026-11-18)
+
+- **Every calendar's Day and Week view zooms sideways** (owner, 2026-11-18: "Calendar week view should allow
+  horizontal pinch zoom across the entire suite of extensions"): a two-finger pinch widens or narrows the day columns,
+  from the screen's width (Odoo's look, the smallest) to about one day per screen; the grid then scrolls sideways with
+  its day header, the hours column stays pinned on the left, the time scale is unchanged. On a computer: Ctrl + wheel
+  or a trackpad pinch. One-finger swipes scroll the columns while there is room; at either end they change the week as
+  before (Odoo's swipe). The zoom is kept per model and view (day / week) on each device (local storage; nothing kept
+  when it is blocked); a calendar opened zoomed shows today's column. Month and Year unchanged.
+- How: a patch of Odoo's ``CalendarCommonRenderer`` (``static/src/calendar_zoom/``), so every calendar built on it gets
+  it: Odoo's calendar view for any model, Tours Core's operations and panel calendars, Marketing's Autopost calendar.
+  FullCalendar's own column width (``dayMinWidth``) needs its paid scroll grid, so the view harness is made wider
+  (``--mtbg-cal-zoom``) and FullCalendar lays itself out for that width. Colours from the page's background, so light
+  and dark.
+- Test: hoot unit tests (``static/tests/calendar_zoom.test.js``, run by ``TestCalendarZoomJs``): the zoom's
+  arithmetic, storage (also blocked), Ctrl + wheel, a two-finger pinch that does not reach the week swipe, the zoom kept
+  on reopening, Month untouched.
+
 ## 19.0.0.2.0 (2026-11-16)
 
 - **The admin on a phone** (owner, 2026-11-16: "All these fields should be larger and more mobile friendly across
