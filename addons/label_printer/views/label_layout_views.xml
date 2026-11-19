@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bsx_label_layout_form" model="ir.ui.view">
+        <field name="name">bsx.label.layout.form</field>
+        <field name="model">bsx.label.layout</field>
+        <field name="arch" type="xml">
+            <form string="Label layout">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" placeholder="Product label"/></h1></div>
+                    <widget name="bsx_label_preview"/>
+                    <group>
+                        <group string="Label">
+                            <field name="tape_mm"/>
+                            <field name="length_mm"/>
+                            <field name="min_length_mm" invisible="length_mm"/>
+                            <field name="max_length_mm" invisible="length_mm"/>
+                            <field name="margin_mm"/>
+                            <field name="gap_mode"/>
+                            <field name="darkness"/>
+                        </group>
+                        <group string="Barcode">
+                            <field name="show_barcode"/>
+                            <field name="barcode_height_mm" invisible="not show_barcode"/>
+                            <field name="bar_module_dots" invisible="not show_barcode"/>
+                            <field name="barcode_max_mm" invisible="not show_barcode"/>
+                            <field name="show_code" invisible="not show_barcode"/>
+                            <field name="code_font_px" invisible="not show_barcode or not show_code"/>
+                        </group>
+                        <group string="Name and price">
+                            <field name="show_name"/>
+                            <field name="name_font_px" invisible="not show_name"/>
+                            <field name="name_lines" invisible="not show_name"/>
+                            <field name="font_bold" invisible="not show_name"/>
+                            <field name="show_price"/>
+                            <field name="price_font_px" invisible="not show_price"/>
+                            <field name="price_position" invisible="not show_price or not show_name"/>
+                        </group>
+                        <group string="Preview sample">
+                            <field name="sample_name"/>
+                            <field name="sample_code"/>
+                            <field name="sample_price"/>
+                        </group>
+                    </group>
+                    <div class="text-muted small">The first active layout in the list is the one every screen prints with.
+                        The barcode is the item's barcode, or its code / internal reference when it has none.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bsx_label_layout_list" model="ir.ui.view">
+        <field name="name">bsx.label.layout.list</field>
+        <field name="model">bsx.label.layout</field>
+        <field name="arch" type="xml">
+            <list string="Label layouts">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="tape_mm"/>
+                <field name="length_mm"/>
+                <field name="gap_mode"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bsx_label_layout" model="ir.actions.act_window">
+        <field name="name">Label layout</field>
+        <field name="res_model">bsx.label.layout</field>
+        <field name="view_mode">list,form</field>
+        <field name="path">label-layout</field>
+    </record>
+
+    <menuitem id="menu_bsx_label_layout" name="Label layout" parent="base.menu_administration"
+              action="action_bsx_label_layout" sequence="60" groups="base.group_system"/>
+</odoo>

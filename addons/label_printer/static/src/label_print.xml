@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="label_printer.LabelPrintButton">
+        <div t-att-class="'bsx_labelprint ' + (props.class or '') + (props.highlight ? ' bsx_labelprint_highlight' : '')">
+            <div t-if="props.highlight" class="bsx_labelprint_ask">Print its label?</div>
+            <div class="bsx_labelprint_row">
+                <button type="button" class="btn btn-lg btn-primary bsx_labelprint_go" t-on-click="print"
+                        t-att-disabled="state.busy or !supported or !hasCode or props.disabled">
+                    <i t-att-class="state.busy ? 'fa fa-spinner fa-spin me-1' : 'fa fa-print me-1'"/>
+                    <t t-if="state.busy">Printing…</t><t t-else="">Print label</t>
+                </button>
+                <div class="bsx_labelprint_copies" title="Copies">
+                    <button type="button" class="btn btn-outline-secondary" t-on-click="() => this.changeCopies(-1)"
+                            t-att-disabled="state.busy or state.copies &lt;= 1">−</button>
+                    <span t-esc="state.copies"/>
+                    <button type="button" class="btn btn-outline-secondary" t-on-click="() => this.changeCopies(1)"
+                            t-att-disabled="state.busy">+</button>
+                </div>
+            </div>
+            <div t-if="!supported" class="small text-muted mt-1">This browser has no Bluetooth printing: use Chrome on Android, Windows or Mac.</div>
+            <div t-elif="!hasCode" class="small text-muted mt-1">Add a barcode or an internal reference to print a label.</div>
+            <div t-elif="props.disabled and props.disabledReason" class="small text-muted mt-1" t-esc="props.disabledReason"/>
+            <div t-elif="printer.name" class="small text-muted mt-1"><i class="fa fa-bluetooth-b me-1"/><t t-esc="printer.name"/></div>
+        </div>
+    </t>
+
+    <t t-name="label_printer.LabelPreview">
+        <div class="bsx_label_preview mb-3">
+            <div class="bsx_label_preview_tape"><div t-ref="holder"/></div>
+            <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
+                <span class="text-muted small">Preview, actual size at 203 dpi: <t t-esc="state.size"/></span>
+                <button type="button" class="btn btn-secondary btn-sm ms-auto" t-on-click="testPrint"
+                        t-att-disabled="state.busy or !supported">
+                    <i t-att-class="state.busy ? 'fa fa-spinner fa-spin me-1' : 'fa fa-print me-1'"/>Print a test label
+                </button>
+            </div>
+            <div t-if="!supported" class="small text-muted">This browser has no Bluetooth printing: use Chrome on Android, Windows or Mac.</div>
+            <div t-foreach="state.warnings" t-as="w" t-key="w_index" class="text-warning small"><i class="fa fa-exclamation-triangle me-1"/><t t-esc="w"/></div>
+        </div>
+    </t>
+</templates>

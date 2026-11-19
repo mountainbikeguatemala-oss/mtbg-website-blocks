@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- the first layout, all defaults; no values here, so a layout taken over from the shop core keeps its own -->
+    <record id="label_layout_default" model="bsx.label.layout"/>
+</odoo>

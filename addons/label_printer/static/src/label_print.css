@@ -1,0 +1,44 @@
+/* Label printing: Print label button (shop screens) and the Label layout preview (backend). */
+.bsx_labelprint_row {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+}
+.bsx_labelprint_go {
+    flex: 1 1 auto;
+}
+.bsx_labelprint_copies {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.bsx_labelprint_copies > span {
+    min-width: 2ch;
+    text-align: center;
+    font-weight: 600;
+}
+.bsx_labelprint_highlight {
+    border: 2px solid var(--cui-accent, #0d6efd);
+    border-radius: 12px;
+    padding: 10px;
+}
+.bsx_labelprint_ask {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+.bsx_label_preview_tape {
+    display: block;
+    width: fit-content;
+    padding: 12px;
+    background: #d9d4cc;
+    border-radius: 6px;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+/* 8 dots per mm; shown at 2x so text and bars are readable on screen */
+.bsx_label_canvas {
+    display: block;
+    image-rendering: pixelated;
+    height: auto;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}

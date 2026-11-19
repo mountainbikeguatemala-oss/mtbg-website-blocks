@@ -1,0 +1,467 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* label_printer
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-19 17:11+0000\n"
+"PO-Revision-Date: 2026-11-19 17:11+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/label_print.js:0
+msgid "%s labels printed."
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,help:label_printer.field_bsx_label_layout__darkness
+msgid "1 (light) to 31 (dark). The MakeID app uses 15."
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__active
+msgid "Active"
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/label_print.xml:0
+msgid "Add a barcode or an internal reference to print a label."
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/makeid_printer.js:0
+msgid "Already printing."
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__bar_module_dots
+msgid "Bar width (dots)"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__show_barcode
+#: model_terms:ir.ui.view,arch_db:label_printer.view_bsx_label_layout_form
+msgid "Barcode"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__barcode_height_mm
+msgid "Barcode height (mm)"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__barcode_max_mm
+msgid "Barcode max length (mm)"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,help:label_printer.field_bsx_label_layout__margin_mm
+msgid ""
+"Blank space inside the label ends. The printer adds its own ~1.5 mm border."
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__font_bold
+msgid "Bold name"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__code_font_px
+msgid "Code text size"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__show_code
+msgid "Code under the barcode"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields.selection,name:label_printer.selection__bsx_label_layout__gap_mode__continuous
+msgid "Continuous tape"
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/label_print.xml:0
+msgid "Copies"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__darkness
+msgid "Darkness"
+msgstr ""
+
+#. module: label_printer
+#. odoo-python
+#: code:addons/label_printer/models/label_layout.py:0
+msgid "Darkness goes from 1 to 31."
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields.selection,name:label_printer.selection__bsx_label_layout__gap_mode__gap
+msgid "Die-cut labels (gap between labels)"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,help:label_printer.field_bsx_label_layout__length_mm
+msgid ""
+"Fixed length of every label. 0 = as long as the content needs, between the "
+"minimum and maximum below. The E1 cuts each label at the printed length."
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,help:label_printer.field_bsx_label_layout__tape_mm
+msgid ""
+"Height of the printed area across the tape. The E1 head prints at most 12 "
+"mm."
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__id
+msgid "ID"
+msgstr ""
+
+#. module: label_printer
+#: model_terms:ir.ui.view,arch_db:label_printer.view_bsx_label_layout_form
+msgid "Label"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.actions.act_window,name:label_printer.action_bsx_label_layout
+#: model:ir.model,name:label_printer.model_bsx_label_layout
+#: model:ir.ui.menu,name:label_printer.menu_bsx_label_layout
+#: model_terms:ir.ui.view,arch_db:label_printer.view_bsx_label_layout_form
+msgid "Label layout"
+msgstr ""
+
+#. module: label_printer
+#: model_terms:ir.ui.view,arch_db:label_printer.view_bsx_label_layout_list
+msgid "Label layouts"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__length_mm
+msgid "Label length (mm)"
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/label_print.js:0
+msgid "Label printed."
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__gap_mode
+msgid "Label roll"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__max_length_mm
+msgid "Maximum length (mm)"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__min_length_mm
+msgid "Minimum length (mm)"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__name
+msgid "Name"
+msgstr ""
+
+#. module: label_printer
+#: model_terms:ir.ui.view,arch_db:label_printer.view_bsx_label_layout_form
+msgid "Name and price"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__name_lines
+msgid "Name lines"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__name_font_px
+msgid "Name text size"
+msgstr ""
+
+#. module: label_printer
+#: model_terms:ir.ui.view,arch_db:label_printer.view_bsx_label_layout_form
+msgid "Preview sample"
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/label_print.xml:0
+msgid "Preview, actual size at 203 dpi:"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__show_price
+msgid "Price"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__price_position
+msgid "Price position"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__price_font_px
+msgid "Price text size"
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/label_print.xml:0
+msgid "Print a test label"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__tape_mm
+msgid "Print height (mm)"
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/label_print.xml:0
+msgid "Print its label?"
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/label_print.xml:0
+msgid "Print label"
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/label_print.xml:0
+msgid "Printing…"
+msgstr ""
+
+#. module: label_printer
+#: model_terms:ir.ui.view,arch_db:label_printer.view_bsx_label_layout_form
+msgid "Product label"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__show_name
+msgid "Product name"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields.selection,name:label_printer.selection__bsx_label_layout__price_position__right
+msgid "Right of the name"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__sample_code
+msgid "Sample code"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__sample_price
+msgid "Sample price"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__sample_name
+msgid "Sample product"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,field_description:label_printer.field_bsx_label_layout__margin_mm
+msgid "Side margin (mm)"
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/label_print.js:0
+msgid "Test label printed."
+msgstr ""
+
+#. module: label_printer
+#. odoo-python
+#: code:addons/label_printer/models/label_layout.py:0
+msgid "Text sizes start at 8."
+msgstr ""
+
+#. module: label_printer
+#. odoo-python
+#: code:addons/label_printer/models/label_layout.py:0
+msgid "The bar width goes from 1 to 6 dots."
+msgstr ""
+
+#. module: label_printer
+#. odoo-python
+#: code:addons/label_printer/models/label_layout.py:0
+msgid "The barcode max length goes from 10 to 200 mm."
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,help:label_printer.field_bsx_label_layout__barcode_max_mm
+msgid "The bars get thinner (down to 1 dot) to keep the barcode this short."
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/label_print.js:0
+msgid "The code has characters a barcode can't hold."
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/label_print.js:0
+msgid "The code is too long: its barcode goes over the max length."
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/label_print.js:0
+msgid "The content is taller than the label: use smaller text or fewer lines."
+msgstr ""
+
+#. module: label_printer
+#: model_terms:ir.ui.view,arch_db:label_printer.view_bsx_label_layout_form
+msgid ""
+"The first active layout in the list is the one every screen prints with.\n"
+"                        The barcode is the item's barcode, or its code / internal reference when it has none."
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/label_print.js:0
+msgid "The label could not print."
+msgstr ""
+
+#. module: label_printer
+#. odoo-python
+#: code:addons/label_printer/models/label_layout.py:0
+msgid "The label length goes up to 200 mm (0 = automatic)."
+msgstr ""
+
+#. module: label_printer
+#. odoo-python
+#: code:addons/label_printer/models/label_layout.py:0
+msgid "The margin can't be negative and the barcode is at least 2 mm high."
+msgstr ""
+
+#. module: label_printer
+#. odoo-python
+#: code:addons/label_printer/models/label_layout.py:0
+msgid ""
+"The minimum length must be at least 10 mm and not above the maximum (200 mm "
+"at most)."
+msgstr ""
+
+#. module: label_printer
+#. odoo-python
+#: code:addons/label_printer/models/label_layout.py:0
+msgid "The name takes 1 to 3 lines."
+msgstr ""
+
+#. module: label_printer
+#. odoo-python
+#: code:addons/label_printer/models/label_layout.py:0
+msgid "The print height must be between 3 and 12 mm."
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/makeid_printer.js:0
+msgid "The printer did not connect: is it on and close by? (%s)"
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/makeid_printer.js:0
+msgid "The printer does not answer."
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/makeid_printer.js:0
+msgid ""
+"The printer reports a problem (code %s): check the labels and that the lid "
+"is closed."
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/makeid_printer.js:0
+msgid "The printer stays busy."
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/makeid_printer.js:0
+msgid "The printer stopped answering."
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/label_print.xml:0
+#: code:addons/label_printer/static/src/makeid_printer.js:0
+msgid ""
+"This browser has no Bluetooth printing: use Chrome on Android, Windows or "
+"Mac."
+msgstr ""
+
+#. module: label_printer
+#. odoo-javascript
+#: code:addons/label_printer/static/src/label_print.js:0
+msgid "This product has no barcode and no internal reference: add one first."
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields.selection,name:label_printer.selection__bsx_label_layout__price_position__below
+msgid "Under the name"
+msgstr ""
+
+#. module: label_printer
+#: model:ir.model.fields,help:label_printer.field_bsx_label_layout__bar_module_dots
+msgid ""
+"Width of the thinnest bar, in printer dots (0.125 mm). Wider bars scan more "
+"easily; it is reduced automatically when the code is too long."
+msgstr ""
