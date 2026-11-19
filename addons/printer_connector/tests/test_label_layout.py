@@ -52,3 +52,11 @@ class TestLabelLayout(TransactionCase):
         self.assertEqual([i["field"] for i in printed["elements"]["center"]], ["barcode", "code"])
         layout.elements = "not json"
         self.assertIsNone(Layout.get_print_layout()["elements"], "unreadable items: made from the settings")
+
+    def test_rows_saved_and_read(self):
+        Layout = self.env["bsx.label.layout"]
+        rows = ('{"rows": [{"uid": "r1", "left": [{"uid": "a", "field": "name", "size": 18}], "center": [], '
+                '"right": [{"uid": "b", "field": "price", "size": 20}]}]}')
+        Layout.create({"name": "Rows", "sequence": 0, "elements": rows})
+        printed = Layout.get_print_layout()
+        self.assertEqual([i["field"] for i in printed["elements"]["rows"][0]["right"]], ["price"])

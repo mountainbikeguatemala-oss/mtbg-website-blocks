@@ -3,8 +3,8 @@
  * Draws a label from its layout (Settings › Label layout: bsx.label.layout) and turns it into printer rows.
  *
  * The label is drawn landscape, 8 dots per mm (203 dpi): width = label length along the tape, height = tape width.
- * Its items (logo, barcode, code, name, price) in three regions: Left, Center (rows) and Right, placed with the
- * drag and drop editor (elementsOf: layouts made before it are made from their settings). Everything shrinks together
+ * Its items (logo, barcode, code, name, price) in rows, each row with a Left, Center and Right, placed with the drag
+ * and drop editor (rowsOf: layouts made before it are made from their settings). Everything shrinks together
  * to fit the tape; a name is made smaller before it is cut. Auto length: as long as the content needs.
  * The layout's font and logo are loaded first: prepareLabelAssets(layout) (fonts from the site, never outside).
  */
@@ -94,7 +94,8 @@ function wrapText(measure, text, width, maxLines) {
 }
 
 export const LABEL_FIELDS = ["logo", "barcode", "code", "name", "price"];
-export const REGIONS = ["left", "center", "right"];
+export const SLOTS = ["left", "center", "right"];
+const PADS = ["pad_top", "pad_right", "pad_bottom", "pad_left"];
 
 let uidSeq = 0;
 export function itemUid() {
@@ -102,12 +103,17 @@ export function itemUid() {
     return `i${Date.now().toString(36)}${uidSeq}`;
 }
 
+export function newRow() {
+    return { uid: itemUid(), left: [], center: [], right: [] };
+}
+
 /** A new item of a field, with its usual size. */
 export function newItem(field, layout = {}) {
-    const base = { uid: itemUid(), field, inline: false, bold: field !== "code" };
+    const base = { uid: itemUid(), field, bold: field !== "code" };
     switch (field) {
         case "logo":
-            return { ...base, size: layout.logo_height_mm || 8, rotation: layout.logo_rotation || 0 };
+            return { ...base, size: layout.logo_height_mm || 8, rotation: layout.logo_rotation || 0,
+                     pad_top: 0, pad_right: 0, pad_bottom: 0, pad_left: 0 };
         case "barcode":
             return { ...base, size: layout.barcode_height_mm || 7 };
         case "code":
@@ -120,47 +126,95 @@ export function newItem(field, layout = {}) {
     return base;
 }
 
+const clean = (items) => (Array.isArray(items) ? items : []).filter((i) => i && LABEL_FIELDS.includes(i.field));
+
 /**
- * The layout's items by region: its saved items (the drag and drop editor), else made from its settings (layouts made
+ * The layout's rows, top to bottom, each with its Left, Center and Right (items side by side in each). From its saved
+ * items (the drag and drop editor; 1.2.0's three regions are read too), else made from its settings (layouts made
  * before the editor: the same label as before).
  */
-export function elementsOf(layout) {
+export function rowsOf(layout) {
     const e = layout.elements;
-    if (e && typeof e === "object" && REGIONS.some((r) => Array.isArray(e[r]) && e[r].length)) {
-        return Object.fromEntries(REGIONS.map((r) => [r, (e[r] || []).filter((i) => LABEL_FIELDS.includes(i.field))]));
+    if (e && typeof e === "object") {
+        if (Array.isArray(e.rows)) {
+            const rows = e.rows.map((r) => ({ uid: r.uid || itemUid(), left: clean(r.left), center: clean(r.center),
+                                              right: clean(r.right) }));
+            if (rows.length) {
+                return rows;
+            }
+        } else if (SLOTS.some((k) => Array.isArray(e[k]) && e[k].length)) {
+            // 1.2.0: Left / Center (rows: "inline" joined the one before) / Right, the sides beside every row: one row
+            // per center row, the sides in the first one
+            const rows = [];
+            for (const item of clean(e.center)) {
+                if (!rows.length || !item.inline) {
+                    rows.push(newRow());
+                }
+                rows[rows.length - 1].center.push(item);
+            }
+            if (!rows.length) {
+                rows.push(newRow());
+            }
+            rows[0].left.push(...clean(e.left));
+            rows[0].right.push(...clean(e.right));
+            return rows;
+        }
     }
-    const out = { left: [], center: [], right: [] };
+    // before the editor: from the settings
+    const rows = [];
     const logo = newItem("logo", layout);
     const pos = layout.logo_position || "left";
     if (pos === "top") {
-        out.center.push(logo);
-    } else {
-        out[pos === "right" ? "right" : "left"].push(logo);
+        rows.push({ ...newRow(), center: [logo] });
     }
     if (layout.show_barcode) {
-        out.center.push(newItem("barcode", layout));
+        const row = { ...newRow(), center: [newItem("barcode", layout)] };
         if (layout.show_code) {
             const code = newItem("code", layout);
             if (layout.code_position === "right") {
-                Object.assign(code, { inline: true, bold: true });
+                row.center.push({ ...code, bold: true });
+            } else {
+                rows.push(row);
+                rows.push({ ...newRow(), center: [code] });
             }
-            out.center.push(code);
+        }
+        if (!rows.includes(row)) {
+            rows.push(row);
         }
     }
-    if (layout.show_name) {
-        out.center.push(newItem("name", layout));
+    if (layout.show_name || layout.show_price) {
+        const row = newRow();
+        if (layout.show_name) {
+            row.center.push(newItem("name", layout));
+        }
+        if (layout.show_price) {
+            if (layout.show_name && layout.price_position === "right") {
+                row.right.push(newItem("price", layout));
+            } else if (layout.show_name) {
+                rows.push(row);
+                rows.push({ ...newRow(), center: [newItem("price", layout)] });
+            } else {
+                row.center.push(newItem("price", layout));
+            }
+        }
+        if (!rows.includes(row)) {
+            rows.push(row);
+        }
     }
-    if (layout.show_price) {
-        out.center.push({ ...newItem("price", layout), inline: layout.show_name && layout.price_position === "right" });
+    if (!rows.length) {
+        rows.push(newRow());
     }
-    return out;
+    if (pos !== "top") {
+        rows[0][pos === "right" ? "right" : "left"].unshift(logo);
+    }
+    return rows;
 }
 
 /**
  * Renders the label. layout: dict from bsx.label.layout.get_print_layout(); product: {name, barcode,
  * default_code, price_display}; assets: prepareLabelAssets(layout) (without: the device's font, no logo).
- * The items: Left and Right stack top to bottom beside the rest; Center is rows (an item "inline" joins the row
- * before it). Everything shrinks together until it fits the tape, and a name before it is cut.
+ * Its rows top to bottom; in each, Left at the label's start, Right at its end, Center in the middle, the items of a
+ * slot side by side. Everything shrinks together until it fits the tape, and a name before it is cut.
  * Returns {canvas, widthDots (length), heightDots (tape), code, warnings[]}.
  */
 export function renderLabel(layout, product, assets = {}) {
@@ -187,12 +241,11 @@ export function renderLabel(layout, product, assets = {}) {
     const rowGap = Math.round(0.4 * DOTS_PER_MM);
     const logo = assets.logo && assets.logo.naturalWidth ? assets.logo : null;
     const priceText = String(product?.price_display || "");
-    const regions = elementsOf(L);
+    const rows = rowsOf(L);
 
     // the barcode's bars (one encoding for every barcode item)
     let bars = null;
-    const wantsBars = REGIONS.some((r) => regions[r].some((i) => i.field === "barcode"));
-    if (wantsBars) {
+    if (rows.some((r) => SLOTS.some((k) => r[k].some((i) => i.field === "barcode")))) {
         if (!code) {
             warnings.push("no_code");
         } else {
@@ -214,7 +267,9 @@ export function renderLabel(layout, product, assets = {}) {
             if (!logo) {
                 return null;
             }
-            const h = Math.max(8, Math.min(tapeDots - 2, Math.round(size * DOTS_PER_MM * scale)));
+            // its spacing (mm), kept as set: around the picture, inside its box
+            const [pt, pr, pb, pl] = PADS.map((k) => Math.max(0, Math.round((Number(item[k]) || 0) * DOTS_PER_MM)));
+            const h = Math.max(8, Math.min(tapeDots - 2 - pt - pb, Math.round(size * DOTS_PER_MM * scale)));
             const angle = ((Number(item.rotation) || 0) * Math.PI) / 180;
             const ratio = logo.naturalWidth / logo.naturalHeight;
             const cos = Math.abs(Math.cos(angle));
@@ -222,9 +277,9 @@ export function renderLabel(layout, product, assets = {}) {
             const dh = h / (ratio * sin + cos);
             const dw = dh * ratio;
             const w = Math.round(dw * cos + dh * sin);
-            return { w, h, draw: (x, y, rowH) => {
+            return { w: w + pl + pr, h: h + pt + pb, draw: (x, y, rowH) => {
                 ctx.save();
-                ctx.translate(x + w / 2, y + rowH / 2);
+                ctx.translate(x + pl + w / 2, y + (rowH - (h + pt + pb)) / 2 + pt + h / 2);
                 ctx.rotate(angle);
                 ctx.drawImage(logo, -dw / 2, -dh / 2, dw, dh);
                 ctx.restore();
@@ -267,39 +322,27 @@ export function renderLabel(layout, product, assets = {}) {
         } };
     };
 
-    /** A side region (left / right): its items stacked; a center: its rows. */
+    /** Every row at a scale: its slots' boxes (a name gets the room the rest of its row leaves). */
     const layoutAt = (scale) => {
-        const side = (items) => {
-            const boxes = items.map((i) => box(i, scale)).filter(Boolean);
-            const h = boxes.reduce((a, b) => a + b.h, 0) + rowGap * Math.max(0, boxes.length - 1);
-            return { boxes, w: Math.max(0, ...boxes.map((b) => b.w)), h };
-        };
-        const left = side(regions.left);
-        const right = side(regions.right);
-        const centerRoom = limit - 2 * margin - (left.w ? left.w + gap : 0) - (right.w ? right.w + gap : 0);
-        const rows = [];
-        for (const item of regions.center) {
-            if (!rows.length || !item.inline) {
-                rows.push([]);
-            }
-            rows[rows.length - 1].push(item);
-        }
         let cut = false;
-        const rowBoxes = rows.map((row) => {
-            // the name gets the room the rest of its row leaves
-            const others = row.filter((i) => i.field !== "name").map((i) => box(i, scale)).filter(Boolean);
-            const used = others.reduce((a, b) => a + b.w, 0) + gap * others.length;
-            const boxes = row.map((i) => (i.field === "name" ? box(i, scale, centerRoom - used) : box(i, scale)))
+        const planned = rows.map((row) => {
+            const others = SLOTS.flatMap((k) => row[k]).filter((i) => i.field !== "name").map((i) => box(i, scale))
                 .filter(Boolean);
-            cut = cut || boxes.some((b) => b.cut);
-            return { boxes, w: boxes.reduce((a, b) => a + b.w, 0) + gap * Math.max(0, boxes.length - 1),
-                     h: Math.max(0, ...boxes.map((b) => b.h)) };
-        }).filter((r) => r.boxes.length);
-        const centerH = rowBoxes.reduce((a, r) => a + r.h, 0) + rowGap * Math.max(0, rowBoxes.length - 1);
-        const centerW = Math.max(0, ...rowBoxes.map((r) => r.w));
-        return { left, right, rows: rowBoxes, centerW, centerH, cut,
-                 h: Math.max(left.h, right.h, centerH),
-                 w: 2 * margin + centerW + (left.w ? left.w + gap : 0) + (right.w ? right.w + gap : 0) };
+            const used = others.reduce((a, b) => a + b.w, 0) + gap * others.length;
+            const room = limit - 2 * margin - used;
+            const slots = {};
+            for (const k of SLOTS) {
+                const boxes = row[k].map((i) => (i.field === "name" ? box(i, scale, room) : box(i, scale))).filter(Boolean);
+                cut = cut || boxes.some((b) => b.cut);
+                slots[k] = { boxes, w: boxes.reduce((a, b) => a + b.w, 0) + gap * Math.max(0, boxes.length - 1) };
+            }
+            const all = SLOTS.flatMap((k) => slots[k].boxes);
+            const filled = SLOTS.filter((k) => slots[k].boxes.length).length;
+            return { slots, h: Math.max(0, ...all.map((b) => b.h)),
+                     w: 2 * margin + SLOTS.reduce((a, k) => a + slots[k].w, 0) + gap * Math.max(0, filled - 1) };
+        }).filter((r) => r.h > 0);
+        const h = planned.reduce((a, r) => a + r.h, 0) + rowGap * Math.max(0, planned.length - 1);
+        return { rows: planned, h, w: Math.max(0, ...planned.map((r) => r.w)), cut };
     };
 
     // the bars as wide as the tape lets them be (down to one dot), then everything smaller until it fits
@@ -333,28 +376,26 @@ export function renderLabel(layout, product, assets = {}) {
     ctx.fillRect(0, 0, width, tapeDots);
     ctx.fillStyle = "#000";
     ctx.textBaseline = "middle";
-    const drawStack = (region, x) => {
-        let y = Math.max(0, Math.round((tapeDots - region.h) / 2));
-        for (const b of region.boxes) {
-            b.draw(x + (region.w - b.w) / 2, y, b.h);
-            y += b.h + rowGap;
-        }
-    };
-    if (plan.left.w) {
-        drawStack(plan.left, margin);
-    }
-    if (plan.right.w) {
-        drawStack(plan.right, width - margin - plan.right.w);
-    }
-    const x0 = margin + (plan.left.w ? plan.left.w + gap : 0);
-    const x1 = width - margin - (plan.right.w ? plan.right.w + gap : 0);
-    let y = Math.max(0, Math.round((tapeDots - plan.centerH) / 2));
-    for (const row of plan.rows) {
-        let x = Math.round((x0 + x1) / 2 - row.w / 2);
-        for (const b of row.boxes) {
-            b.draw(x, y, row.h);
+    const drawSlot = (slot, x, y, rowH) => {
+        for (const b of slot.boxes) {
+            b.draw(x, y, rowH);
             x += b.w + gap;
         }
+    };
+    let y = Math.max(0, Math.round((tapeDots - plan.h) / 2));
+    for (const row of plan.rows) {
+        const { left, center, right } = row.slots;
+        drawSlot(left, margin, y, row.h);
+        drawSlot(right, width - margin - right.w, y, row.h);
+        // the center in the middle of the label (pushed aside when a side would overlap it)
+        let cx = Math.round((width - center.w) / 2);
+        if (left.w) {
+            cx = Math.max(cx, margin + left.w + gap);
+        }
+        if (right.w) {
+            cx = Math.min(cx, width - margin - right.w - gap - center.w);
+        }
+        drawSlot(center, cx, y, row.h);
         y += row.h + rowGap;
     }
     // hard black / white: thermal dots are on or off (a logo's transparent parts are white)

@@ -112,9 +112,9 @@ class BsxLabelLayout(models.Model):
     font_bold = fields.Boolean("Bold name", default=True)
 
     # the label's items, placed with the drag and drop editor (empty: made from the settings below, as before 1.2.0):
-    # {"left": [item], "center": [item], "right": [item]}; an item {"uid", "field": logo | barcode | code | name |
-    # price, "size" (logo / barcode: mm; text: px), "bold", "lines" (name), "rotation" (logo), "inline" (center: on
-    # the same line as the item before it)}
+    # {"rows": [{"uid", "left": [item], "center": [item], "right": [item]}]} top to bottom (1.2.0's {"left", "center",
+    # "right"} is still read); an item {"uid", "field": logo | barcode | code | name | price, "size" (logo / barcode:
+    # mm; text: px), "bold", "lines" (name), "rotation", "pad_top" / "pad_right" / "pad_bottom" / "pad_left" (logo, mm)}
     elements = fields.Text("Items")
 
     # preview sample (not printed on real labels)

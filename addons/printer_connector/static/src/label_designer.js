@@ -3,11 +3,11 @@
  * The Label layout page's drag and drop editor (field widget "bsx_label_designer" on bsx.label.layout.elements;
  * owner, 2026-11-19: "make it a drag and drop field editor like our tour cards extension", "reorder the items").
  *
- * Like the Card Designer: the fields on the left (Logo, Barcode, Code, Name, Price); the label as a plan in three
- * regions (Left, Center, Right). Drag a field into a region, drag placed items within or between regions to reorder
- * them, click one for its size, bold, lines, turn, or "on the same line" as the item before it (Center). Above it,
- * the label itself, redrawn at once on every change on the page (its items, the logo, the font, the sizes...), and
- * "Print a test label". The items are saved with the page's Save.
+ * Like the Card Designer: the fields on the left (Logo, Barcode, Code, Name, Price); the label as a plan of rows,
+ * top to bottom, each with its Left, Center and Right (owner: "we need left right center per row"). Drag a field
+ * into a row's slot, drag placed items within or between slots and rows, add / remove rows, click an item for its
+ * size, bold, lines, turn, and the logo's spacing (top, right, bottom, left). Above it, the label itself, redrawn at
+ * once on every change on the page, and "Print a test label". Saved with the page's Save.
  */
 import { Component, onMounted, useRef, useState } from "@odoo/owl";
 import { _t } from "@web/core/l10n/translation";
@@ -15,7 +15,7 @@ import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { useRecordObserver } from "@web/model/relational_model/utils";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
-import { elementsOf, LABEL_FIELDS, newItem, prepareLabelAssets, REGIONS, renderLabel } from "./label_render";
+import { LABEL_FIELDS, newItem, newRow, prepareLabelAssets, renderLabel, rowsOf, SLOTS } from "./label_render";
 import { printLabelsWithLayout, warningText } from "./label_print";
 import { makeIdPrinter } from "./makeid_printer";
 
@@ -46,7 +46,7 @@ export class LabelDesigner extends Component {
         return { logo: _t("Logo"), barcode: _t("Barcode"), code: _t("Code"), name: _t("Name"), price: _t("Price") };
     }
 
-    get regionLabels() {
+    get slotLabels() {
         return { left: _t("Left"), center: _t("Center"), right: _t("Right") };
     }
 
@@ -54,78 +54,122 @@ export class LabelDesigner extends Component {
         return LABEL_FIELDS.map((key) => ({ key, label: this.labels[key], icon: ICONS[key] }));
     }
 
-    get regions() {
-        return REGIONS;
+    get slots() {
+        return SLOTS;
+    }
+
+    icon(field) {
+        return ICONS[field];
+    }
+
+    /** The saved items, if readable. */
+    saved(record = this.props.record) {
+        try {
+            return record.data[this.props.name] ? JSON.parse(record.data[this.props.name]) : null;
+        } catch {
+            return null;
+        }
     }
 
     /**
-     * The items as the page holds them, a fresh copy to edit (a layout not edited here yet: made once from its
+     * The rows as the page holds them, a fresh copy to edit (a layout not edited here yet: made once from its
      * settings, so its items keep their ids until it is saved).
      */
-    get elements() {
-        let saved = null;
-        try {
-            saved = this.props.record.data[this.props.name] ? JSON.parse(this.props.record.data[this.props.name]) : null;
-        } catch {
-            saved = null;
-        }
-        const made = elementsOf({ ...this.props.record.data, elements: saved });
-        if (saved && Object.values(made).some((items) => items.length)) {
-            return made;
+    get rows() {
+        const saved = this.saved();
+        if (saved && Array.isArray(saved.rows) && saved.rows.length) {
+            return rowsOf({ ...this.props.record.data, elements: saved });
         }
         if (!this.fromSettings || this.fromSettings.record !== this.props.record.id) {
-            this.fromSettings = { record: this.props.record.id, elements: made };
+            this.fromSettings = { record: this.props.record.id, rows: rowsOf({ ...this.props.record.data, elements: saved }) };
         }
-        return JSON.parse(JSON.stringify(this.fromSettings.elements));
+        return JSON.parse(JSON.stringify(this.fromSettings.rows));
     }
 
-    commit(elements) {
-        this.props.record.update({ [this.props.name]: JSON.stringify(elements) });
+    commit(rows) {
+        this.props.record.update({ [this.props.name]: JSON.stringify({ rows }) });
     }
 
-    get selectedItem() {
-        const uid = this.state.selected;
-        for (const region of REGIONS) {
-            const index = this.elements[region].findIndex((i) => i.uid === uid);
-            if (index >= 0) {
-                return { region, index, item: this.elements[region][index] };
+    find(rows, uid) {
+        for (let r = 0; r < rows.length; r++) {
+            for (const slot of SLOTS) {
+                const index = rows[r][slot].findIndex((i) => i.uid === uid);
+                if (index >= 0) {
+                    return { row: r, slot, index, item: rows[r][slot][index] };
+                }
             }
         }
         return null;
     }
 
+    get selectedItem() {
+        return this.state.selected ? this.find(this.rows, this.state.selected) : null;
+    }
+
     placedCount(field) {
-        return REGIONS.reduce((n, r) => n + this.elements[r].filter((i) => i.field === field).length, 0);
+        return this.rows.reduce((n, row) => n + SLOTS.reduce((m, k) => m + row[k].filter((i) => i.field === field).length, 0), 0);
     }
 
     // ------------------------------------------------------------------ editing
-    add(field, region = "center", index = null) {
-        const elements = this.elements;
+    /** A field added: into a row's slot (clicked in the list: the middle of the last row, a new row when it is full). */
+    add(field, row = null, slot = "center", index = null) {
+        const rows = this.rows;
+        if (row === null) {
+            row = rows.length - 1;
+            if (row < 0 || SLOTS.some((k) => rows[row][k].length)) {
+                rows.push(newRow());
+                row = rows.length - 1;
+            }
+        }
         const item = newItem(field, this.props.record.data);
-        elements[region].splice(index === null ? elements[region].length : index, 0, item);
-        this.commit(elements);
+        const items = rows[row][slot];
+        items.splice(index === null ? items.length : index, 0, item);
+        this.commit(rows);
         this.state.selected = item.uid;
     }
 
-    remove(uid) {
-        const elements = this.elements;
-        for (const region of REGIONS) {
-            elements[region] = elements[region].filter((i) => i.uid !== uid);
+    addRow() {
+        const rows = this.rows;
+        rows.push(newRow());
+        this.commit(rows);
+    }
+
+    removeRow(r) {
+        const rows = this.rows;
+        rows.splice(r, 1);
+        this.commit(rows.length ? rows : [newRow()]);
+    }
+
+    moveRow(r, delta) {
+        const rows = this.rows;
+        const to = r + delta;
+        if (to < 0 || to >= rows.length) {
+            return;
         }
-        this.commit(elements);
+        [rows[r], rows[to]] = [rows[to], rows[r]];
+        this.commit(rows);
+    }
+
+    remove(uid) {
+        const rows = this.rows;
+        const at = this.find(rows, uid);
+        if (at) {
+            rows[at.row][at.slot].splice(at.index, 1);
+            this.commit(rows);
+        }
         if (this.state.selected === uid) {
             this.state.selected = null;
         }
     }
 
     change(key, value) {
-        const sel = this.selectedItem;
-        if (!sel) {
+        const rows = this.rows;
+        const at = this.state.selected && this.find(rows, this.state.selected);
+        if (!at) {
             return;
         }
-        const elements = this.elements;
-        elements[sel.region][sel.index] = { ...sel.item, [key]: value };
-        this.commit(elements);
+        rows[at.row][at.slot][at.index] = { ...at.item, [key]: value };
+        this.commit(rows);
     }
 
     changeNumber(key, ev, min, max) {
@@ -142,8 +186,8 @@ export class LabelDesigner extends Component {
         ev.dataTransfer.setData("text/plain", field);
     }
 
-    onDragItem(ev, region, item) {
-        this.state.drag = { type: "item", region, uid: item.uid };
+    onDragItem(ev, item) {
+        this.state.drag = { type: "item", uid: item.uid };
         ev.dataTransfer.effectAllowed = "move";
         ev.dataTransfer.setData("text/plain", item.uid);
     }
@@ -153,49 +197,47 @@ export class LabelDesigner extends Component {
         this.state.dropAt = null;
     }
 
-    onDragOver(ev, region, index) {
+    onDragOver(ev, row, slot, index) {
         if (!this.state.drag) {
             return;
         }
         ev.preventDefault();
+        ev.stopPropagation();
         const at = this.state.dropAt;
-        if (!at || at.region !== region || at.index !== index) {
-            this.state.dropAt = { region, index };
+        if (!at || at.row !== row || at.slot !== slot || at.index !== index) {
+            this.state.dropAt = { row, slot, index };
         }
     }
 
-    onDrop(ev, region, index) {
+    onDrop(ev, row, slot, index) {
         ev.preventDefault();
+        ev.stopPropagation();
         const drag = this.state.drag;
         this.onDragEnd();
         if (!drag) {
             return;
         }
         if (drag.type === "field") {
-            this.add(drag.field, region, index);
+            this.add(drag.field, row, slot, index);
             return;
         }
-        const elements = this.elements;
-        const from = elements[drag.region];
-        const at = from.findIndex((i) => i.uid === drag.uid);
-        if (at < 0) {
+        const rows = this.rows;
+        const from = this.find(rows, drag.uid);
+        if (!from) {
             return;
         }
-        const [item] = from.splice(at, 1);
-        if (drag.region === region && at < index) {
+        rows[from.row][from.slot].splice(from.index, 1);
+        if (from.row === row && from.slot === slot && from.index < index) {
             index -= 1;
         }
-        if (region !== "center") {
-            item.inline = false;
-        }
-        elements[region].splice(index, 0, item);
-        this.commit(elements);
-        this.state.selected = item.uid;
+        rows[row][slot].splice(index, 0, from.item);
+        this.commit(rows);
+        this.state.selected = from.item.uid;
     }
 
-    isDropAt(region, index) {
+    isDropAt(row, slot, index) {
         const at = this.state.dropAt;
-        return Boolean(at && at.region === region && at.index === index);
+        return Boolean(at && at.row === row && at.slot === slot && at.index === index);
     }
 
     // ------------------------------------------------------------------ the label, live
@@ -225,14 +267,11 @@ export class LabelDesigner extends Component {
         } else if (d.logo && id) {
             logoSrc = `/web/image/bsx.label.layout/${id}/logo?unique=${unique}`;
         }
-        let saved = null;
-        try {
-            saved = d[this.props.name] ? JSON.parse(d[this.props.name]) : null;
-        } catch {
-            saved = null;
-        }
-        return { layout: { ...d, elements: elementsOf({ ...d, elements: saved }), font_spec: fontSpec, logo_url: logoSrc },
-                 logoSrc };
+        const saved = this.saved(record);
+        const rows = saved && Array.isArray(saved.rows) && saved.rows.length ? saved.rows
+            : (this.fromSettings && this.fromSettings.record === record.id ? this.fromSettings.rows
+                : rowsOf({ ...d, elements: saved }));
+        return { layout: { ...d, elements: { rows }, font_spec: fontSpec, logo_url: logoSrc }, logoSrc };
     }
 
     sampleOf(record) {

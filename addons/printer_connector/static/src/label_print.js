@@ -10,7 +10,7 @@
 import { Component, useState } from "@odoo/owl";
 import { _t } from "@web/core/l10n/translation";
 import { useService } from "@web/core/utils/hooks";
-import { elementsOf, labelCode, labelRows, prepareLabelAssets, renderLabel } from "./label_render";
+import { labelCode, labelRows, prepareLabelAssets, renderLabel, rowsOf, SLOTS } from "./label_render";
 import { makeIdPrinter } from "./makeid_printer";
 
 const layoutPromises = new Map();
@@ -59,7 +59,7 @@ export async function printLabelsWithLayout(layout, product, copies = 1, assets 
 export async function printProductLabels(orm, product, copies = 1, { usage = "general" } = {}) {
     product = { ...product, name: product.label_name || product.name };
     const layout = await getLabelLayout(orm, usage);
-    const placed = Object.values(elementsOf(layout)).flat();
+    const placed = rowsOf(layout).flatMap((row) => SLOTS.flatMap((k) => row[k]));
     if (placed.some((i) => i.field === "barcode") && !labelCode(product)) {
         throw new Error(warningText(["no_code"])[0]);
     }

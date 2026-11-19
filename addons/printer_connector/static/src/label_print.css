@@ -58,17 +58,36 @@
 }
 .bsx_ld_field:hover, .bsx_ld_item:hover { border-color: var(--bs-primary, #714b67); }
 .bsx_ld_grip { color: var(--bs-secondary-color, #6c757d); }
-.bsx_ld_plan {
-    display: grid;
-    grid-template-columns: minmax(110px, 1fr) minmax(160px, 2fr) minmax(110px, 1fr);
-    gap: 10px;
-}
-.bsx_ld_region {
+.bsx_ld_plan { display: flex; flex-direction: column; gap: 10px; }
+.bsx_ld_row {
     border: 2px dashed var(--bs-border-color, #ced4da);
     border-radius: 8px;
-    padding: 8px;
-    min-height: 120px;
+    padding: 6px 8px 8px;
 }
+.bsx_ld_row_head { display: flex; align-items: center; margin-bottom: 4px; }
+.bsx_ld_row_slots {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+.bsx_ld_slot {
+    background: var(--bs-tertiary-bg, #f8f9fa);
+    border-radius: 6px;
+    padding: 6px;
+    min-height: 64px;
+}
+.bsx_ld_slot_title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--bs-secondary-color, #6c757d);
+    margin-bottom: 4px;
+}
+.bsx_ld_slot_center .bsx_ld_slot_title { text-align: center; }
+.bsx_ld_slot_right .bsx_ld_slot_title { text-align: right; }
+.bsx_ld_addrow { align-self: flex-start; }
+.bsx_ld_pads { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.bsx_ld_pads label { font-size: 12px; }
 .bsx_ld_region_title {
     font-size: 11px;
     font-weight: 700;
@@ -81,7 +100,6 @@
     border-color: var(--bs-primary, #714b67);
     box-shadow: 0 0 0 2px rgba(113, 75, 103, .25);
 }
-.bsx_ld_item.is-inline { margin-left: 18px; }
 .bsx_ld_drop { height: 6px; border-radius: 3px; margin: 0 0 4px; }
 .bsx_ld_drop.is-on { background: var(--bs-primary, #714b67); height: 8px; }
 .bsx_ld_drop_end { min-height: 28px; display: flex; align-items: center; justify-content: center; }

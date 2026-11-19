@@ -1,5 +1,12 @@
 # Changelog
 
+## 19.0.1.3.0 (2026-11-19)
+- Rows (owner: "we need to be able to put things in the same row so we need left right center per row"): the label
+  is rows top to bottom, each with its Left, Center and Right; the items of one place stand side by side. Add, move
+  up / down and remove rows; drag items between any row's places. 1.2.0's layouts (three regions) and older ones are
+  read as rows: they print as before.
+- The logo's spacing (owner: "set spacing around logo left right top bottom"): top, right, bottom and left, in mm.
+
 ## 19.0.1.2.0 (2026-11-19)
 - A drag and drop editor on the Label layout page (owner: "the preview in the label settings is terrible it should
   update whenever you update on the page. and allow drag / drop", "make it a drag and drop field editor like our

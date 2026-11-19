@@ -21,8 +21,8 @@
                 <!-- the fields to place -->
                 <div class="bsx_ld_fields">
                     <h5 class="mb-1">Fields</h5>
-                    <div class="text-muted small mb-2">Drag a field onto the label (or click it: it goes into Center).
-                        Drag placed items to reorder or move them.</div>
+                    <div class="text-muted small mb-2">Drag a field into a row's Left, Center or Right (or click it: it gets a
+                        row of its own). Drag placed items to reorder or move them; items in one place stand side by side.</div>
                     <div t-foreach="fields" t-as="f" t-key="f.key" class="bsx_ld_field" draggable="true"
                          t-on-dragstart="(ev) => this.onDragField(ev, f.key)" t-on-dragend="onDragEnd"
                          t-on-click="() => this.add(f.key)" t-att-title="f.label">
@@ -33,34 +33,49 @@
                     </div>
                 </div>
 
-                <!-- the label as a plan: Left, Center (rows), Right -->
+                <!-- the label as a plan: rows, top to bottom, each with its Left, Center and Right -->
                 <div class="bsx_ld_plan">
-                    <div t-foreach="regions" t-as="region" t-key="region" t-attf-class="bsx_ld_region bsx_ld_region_{{region}}">
-                        <div class="bsx_ld_region_title" t-esc="regionLabels[region]"/>
-                        <t t-set="items" t-value="elements[region]"/>
-                        <t t-foreach="items" t-as="item" t-key="item.uid">
-                            <div t-att-class="'bsx_ld_drop' + (isDropAt(region, item_index) ? ' is-on' : '')"
-                                 t-on-dragover="(ev) => this.onDragOver(ev, region, item_index)"
-                                 t-on-drop="(ev) => this.onDrop(ev, region, item_index)"/>
-                            <div t-att-class="'bsx_ld_item' + (state.selected === item.uid ? ' is-selected' : '') + (item.inline and region === 'center' and item_index ? ' is-inline' : '')"
-                                 draggable="true" t-on-dragstart="(ev) => this.onDragItem(ev, region, item)" t-on-dragend="onDragEnd"
-                                 t-on-dragover="(ev) => this.onDragOver(ev, region, item_index + 1)"
-                                 t-on-drop="(ev) => this.onDrop(ev, region, item_index + 1)"
-                                 t-on-click="() => this.state.selected = item.uid">
-                                <i class="fa fa-bars bsx_ld_grip" aria-hidden="true"/>
-                                <i t-if="item.inline and region === 'center' and item_index" class="fa fa-level-up fa-rotate-90 text-muted" title="On the same line as the one before"/>
-                                <i t-attf-class="fa {{item.field === 'logo' ? 'fa-picture-o' : item.field === 'barcode' ? 'fa-barcode' : item.field === 'code' ? 'fa-hashtag' : item.field === 'name' ? 'fa-font' : 'fa-tag'}} fa-fw" aria-hidden="true"/>
-                                <span class="flex-grow-1 text-truncate"><t t-esc="labels[item.field]"/>
-                                    <small class="text-muted"> · <t t-esc="item.size"/><t t-if="item.field === 'logo' or item.field === 'barcode'"> mm</t><t t-else=""> px</t></small></span>
-                                <button type="button" class="btn btn-sm btn-link p-0 text-danger" title="Remove" t-on-click.stop="() => this.remove(item.uid)"><i class="fa fa-times"/></button>
+                    <t t-set="rowsNow" t-value="rows"/>
+                    <div t-foreach="rowsNow" t-as="row" t-key="row.uid" class="bsx_ld_row">
+                        <div class="bsx_ld_row_head">
+                            <span class="bsx_ld_region_title">Row <t t-esc="row_index + 1"/></span>
+                            <span class="ms-auto">
+                                <button type="button" class="btn btn-sm btn-link p-0 me-2" title="Move up" t-att-disabled="!row_index"
+                                        t-on-click="() => this.moveRow(row_index, -1)"><i class="fa fa-arrow-up"/></button>
+                                <button type="button" class="btn btn-sm btn-link p-0 me-2" title="Move down" t-att-disabled="row_index === rowsNow.length - 1"
+                                        t-on-click="() => this.moveRow(row_index, 1)"><i class="fa fa-arrow-down"/></button>
+                                <button type="button" class="btn btn-sm btn-link p-0 text-danger" title="Remove the row"
+                                        t-on-click="() => this.removeRow(row_index)"><i class="fa fa-times"/></button>
+                            </span>
+                        </div>
+                        <div class="bsx_ld_row_slots">
+                            <div t-foreach="slots" t-as="slot" t-key="slot" t-attf-class="bsx_ld_slot bsx_ld_slot_{{slot}}">
+                                <div class="bsx_ld_slot_title" t-esc="slotLabels[slot]"/>
+                                <t t-set="items" t-value="row[slot]"/>
+                                <t t-foreach="items" t-as="item" t-key="item.uid">
+                                    <div t-att-class="'bsx_ld_drop' + (isDropAt(row_index, slot, item_index) ? ' is-on' : '')"
+                                         t-on-dragover="(ev) => this.onDragOver(ev, row_index, slot, item_index)"
+                                         t-on-drop="(ev) => this.onDrop(ev, row_index, slot, item_index)"/>
+                                    <div t-att-class="'bsx_ld_item' + (state.selected === item.uid ? ' is-selected' : '')"
+                                         draggable="true" t-on-dragstart="(ev) => this.onDragItem(ev, item)" t-on-dragend="onDragEnd"
+                                         t-on-dragover="(ev) => this.onDragOver(ev, row_index, slot, item_index + 1)"
+                                         t-on-drop="(ev) => this.onDrop(ev, row_index, slot, item_index + 1)"
+                                         t-on-click="() => this.state.selected = item.uid">
+                                        <i t-attf-class="fa {{icon(item.field)}} fa-fw" aria-hidden="true"/>
+                                        <span class="flex-grow-1 text-truncate" t-esc="labels[item.field]"/>
+                                        <button type="button" class="btn btn-sm btn-link p-0 text-danger" title="Remove" t-on-click.stop="() => this.remove(item.uid)"><i class="fa fa-times"/></button>
+                                    </div>
+                                </t>
+                                <div t-att-class="'bsx_ld_drop bsx_ld_drop_end' + (isDropAt(row_index, slot, items.length) ? ' is-on' : '')"
+                                     t-on-dragover="(ev) => this.onDragOver(ev, row_index, slot, items.length)"
+                                     t-on-drop="(ev) => this.onDrop(ev, row_index, slot, items.length)">
+                                    <span t-if="!items.length" class="small text-muted">Drop here</span>
+                                </div>
                             </div>
-                        </t>
-                        <div t-att-class="'bsx_ld_drop bsx_ld_drop_end' + (isDropAt(region, items.length) ? ' is-on' : '')"
-                             t-on-dragover="(ev) => this.onDragOver(ev, region, items.length)"
-                             t-on-drop="(ev) => this.onDrop(ev, region, items.length)">
-                            <span t-if="!items.length" class="small text-muted">Drop a field here</span>
                         </div>
                     </div>
+                    <button type="button" class="btn btn-sm btn-outline-primary bsx_ld_addrow" t-on-click="addRow">
+                        <i class="fa fa-plus me-1"/>Add row</button>
                 </div>
 
                 <!-- the selected item's look -->
@@ -68,7 +83,7 @@
                     <t t-set="sel" t-value="selectedItem"/>
                     <div t-if="!sel" class="text-muted small">Click an item on the label to set its size and look.</div>
                     <t t-else="">
-                        <h5 class="mb-2"><t t-esc="labels[sel.item.field]"/> <small class="text-muted">· <t t-esc="regionLabels[sel.region]"/></small></h5>
+                        <h5 class="mb-2"><t t-esc="labels[sel.item.field]"/> <small class="text-muted">· Row <t t-esc="sel.row + 1"/>, <t t-esc="slotLabels[sel.slot]"/></small></h5>
                         <label class="form-label small mb-1">
                             <t t-if="sel.item.field === 'logo' or sel.item.field === 'barcode'">Height (mm)</t><t t-else="">Text size (px)</t>
                         </label>
@@ -90,11 +105,14 @@
                             <input type="number" class="form-control form-control-sm mb-2" step="1" t-att-value="sel.item.rotation or 0"
                                    t-on-change="(ev) => this.changeNumber('rotation', ev, -90, 90)"/>
                             <div t-if="!hasLogo" class="small text-warning mb-2">Upload the logo below (Logo and font).</div>
+                            <label class="form-label small mb-1">Spacing around it (mm)</label>
+                            <div class="bsx_ld_pads mb-2">
+                                <label>Top <input type="number" class="form-control form-control-sm" step="0.5" min="0" t-att-value="sel.item.pad_top or 0" t-on-change="(ev) => this.changeNumber('pad_top', ev, 0, 6)"/></label>
+                                <label>Right <input type="number" class="form-control form-control-sm" step="0.5" min="0" t-att-value="sel.item.pad_right or 0" t-on-change="(ev) => this.changeNumber('pad_right', ev, 0, 20)"/></label>
+                                <label>Bottom <input type="number" class="form-control form-control-sm" step="0.5" min="0" t-att-value="sel.item.pad_bottom or 0" t-on-change="(ev) => this.changeNumber('pad_bottom', ev, 0, 6)"/></label>
+                                <label>Left <input type="number" class="form-control form-control-sm" step="0.5" min="0" t-att-value="sel.item.pad_left or 0" t-on-change="(ev) => this.changeNumber('pad_left', ev, 0, 20)"/></label>
+                            </div>
                         </t>
-                        <label t-if="sel.region === 'center' and sel.index" class="form-check small mb-2">
-                            <input type="checkbox" class="form-check-input" t-att-checked="sel.item.inline"
-                                   t-on-change="(ev) => this.change('inline', ev.target.checked)"/>
-                            <span class="form-check-label">On the same line as the one before</span></label>
                         <button type="button" class="btn btn-sm btn-outline-danger mt-1" t-on-click="() => this.remove(sel.item.uid)">
                             <i class="fa fa-trash me-1"/>Remove</button>
                     </t>
