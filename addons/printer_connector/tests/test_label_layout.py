@@ -42,3 +42,13 @@ class TestLabelLayout(TransactionCase):
         self.assertIn("roboto", Layout.get_font_specs())
         with self.assertRaises(ValidationError):
             mono.logo_rotation = 120
+
+    def test_items_saved_and_read(self):
+        Layout = self.env["bsx.label.layout"]
+        layout = Layout.create({"name": "Items", "sequence": 0, "elements": '{"left": [{"uid": "a", "field": "logo", "size": 9}], '
+                                '"center": [{"uid": "b", "field": "barcode", "size": 6}, {"uid": "c", "field": "code", "inline": true}], "right": []}'})
+        printed = Layout.get_print_layout()
+        self.assertEqual(printed["id"], layout.id)
+        self.assertEqual([i["field"] for i in printed["elements"]["center"]], ["barcode", "code"])
+        layout.elements = "not json"
+        self.assertIsNone(Layout.get_print_layout()["elements"], "unreadable items: made from the settings")

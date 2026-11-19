@@ -17,18 +17,4 @@
         </div>
     </t>
 
-    <t t-name="printer_connector.LabelPreview">
-        <div class="bsx_label_preview mb-3">
-            <div class="bsx_label_preview_tape"><div t-ref="holder"/></div>
-            <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
-                <span class="text-muted small">Preview, actual size at 203 dpi: <t t-esc="state.size"/></span>
-                <button type="button" class="btn btn-secondary btn-sm ms-auto" t-on-click="testPrint"
-                        t-att-disabled="state.busy or !supported">
-                    <i t-att-class="state.busy ? 'fa fa-spinner fa-spin me-1' : 'fa fa-print me-1'"/>Print a test label
-                </button>
-            </div>
-            <div t-if="!supported" class="small text-muted">This browser has no Bluetooth printing: use Chrome on Android, Windows or Mac.</div>
-            <div t-foreach="state.warnings" t-as="w" t-key="w_index" class="text-warning small"><i class="fa fa-exclamation-triangle me-1"/><t t-esc="w"/></div>
-        </div>
-    </t>
 </templates>

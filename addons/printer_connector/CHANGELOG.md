@@ -1,5 +1,15 @@
 # Changelog
 
+## 19.0.1.2.0 (2026-11-19)
+- A drag and drop editor on the Label layout page (owner: "the preview in the label settings is terrible it should
+  update whenever you update on the page. and allow drag / drop", "make it a drag and drop field editor like our
+  tour cards extension", "reorder the items"): the fields (Logo, Barcode, Code, Name, Price) dragged into the label's
+  Left, Center or Right, dragged to reorder or move, clicked for their size, bold, lines, turn, or "on the same
+  line" as the one before (Center). Saved as the layout's items (``elements``); a layout not edited yet is made
+  from its settings, so it prints as before.
+- The label above the editor is redrawn at once on every change on the page (the editor, the logo, the font, the
+  sizes...), 3 × real size.
+
 ## 19.0.1.1.0 (2026-11-19)
 - A logo on a layout (owner: "allow the template to include a small logo in our case its our crown"): left, right
   or above the rest, its size, a small rotation; printed in black and white.

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- the Label layout page's drag and drop editor (label_designer.js) -->
+    <t t-name="printer_connector.LabelDesigner">
+        <div class="bsx_ld">
+            <!-- the label itself, live -->
+            <div class="bsx_ld_preview">
+                <div class="bsx_label_preview_tape"><div t-ref="holder"/></div>
+                <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
+                    <span class="text-muted small">Preview, 3 × real size (203 dpi): <t t-esc="state.size"/></span>
+                    <button type="button" class="btn btn-secondary btn-sm ms-auto" t-on-click="testPrint"
+                            t-att-disabled="state.busy or !supported">
+                        <i t-att-class="state.busy ? 'fa fa-spinner fa-spin me-1' : 'fa fa-print me-1'"/>Print a test label
+                    </button>
+                </div>
+                <div t-if="!supported" class="small text-muted">This browser has no Bluetooth printing: use Chrome on Android, Windows or Mac.</div>
+                <div t-foreach="state.warnings" t-as="w" t-key="w_index" class="text-warning small"><i class="fa fa-exclamation-triangle me-1"/><t t-esc="w"/></div>
+            </div>
+
+            <div class="bsx_ld_body">
+                <!-- the fields to place -->
+                <div class="bsx_ld_fields">
+                    <h5 class="mb-1">Fields</h5>
+                    <div class="text-muted small mb-2">Drag a field onto the label (or click it: it goes into Center).
+                        Drag placed items to reorder or move them.</div>
+                    <div t-foreach="fields" t-as="f" t-key="f.key" class="bsx_ld_field" draggable="true"
+                         t-on-dragstart="(ev) => this.onDragField(ev, f.key)" t-on-dragend="onDragEnd"
+                         t-on-click="() => this.add(f.key)" t-att-title="f.label">
+                        <i class="fa fa-bars bsx_ld_grip" aria-hidden="true"/>
+                        <i t-attf-class="fa {{f.icon}} fa-fw text-muted" aria-hidden="true"/>
+                        <span class="flex-grow-1 text-truncate" t-esc="f.label"/>
+                        <span t-if="placedCount(f.key)" class="badge rounded-pill text-bg-light" t-esc="placedCount(f.key)"/>
+                    </div>
+                </div>
+
+                <!-- the label as a plan: Left, Center (rows), Right -->
+                <div class="bsx_ld_plan">
+                    <div t-foreach="regions" t-as="region" t-key="region" t-attf-class="bsx_ld_region bsx_ld_region_{{region}}">
+                        <div class="bsx_ld_region_title" t-esc="regionLabels[region]"/>
+                        <t t-set="items" t-value="elements[region]"/>
+                        <t t-foreach="items" t-as="item" t-key="item.uid">
+                            <div t-att-class="'bsx_ld_drop' + (isDropAt(region, item_index) ? ' is-on' : '')"
+                                 t-on-dragover="(ev) => this.onDragOver(ev, region, item_index)"
+                                 t-on-drop="(ev) => this.onDrop(ev, region, item_index)"/>
+                            <div t-att-class="'bsx_ld_item' + (state.selected === item.uid ? ' is-selected' : '') + (item.inline and region === 'center' and item_index ? ' is-inline' : '')"
+                                 draggable="true" t-on-dragstart="(ev) => this.onDragItem(ev, region, item)" t-on-dragend="onDragEnd"
+                                 t-on-dragover="(ev) => this.onDragOver(ev, region, item_index + 1)"
+                                 t-on-drop="(ev) => this.onDrop(ev, region, item_index + 1)"
+                                 t-on-click="() => this.state.selected = item.uid">
+                                <i class="fa fa-bars bsx_ld_grip" aria-hidden="true"/>
+                                <i t-if="item.inline and region === 'center' and item_index" class="fa fa-level-up fa-rotate-90 text-muted" title="On the same line as the one before"/>
+                                <i t-attf-class="fa {{item.field === 'logo' ? 'fa-picture-o' : item.field === 'barcode' ? 'fa-barcode' : item.field === 'code' ? 'fa-hashtag' : item.field === 'name' ? 'fa-font' : 'fa-tag'}} fa-fw" aria-hidden="true"/>
+                                <span class="flex-grow-1 text-truncate"><t t-esc="labels[item.field]"/>
+                                    <small class="text-muted"> · <t t-esc="item.size"/><t t-if="item.field === 'logo' or item.field === 'barcode'"> mm</t><t t-else=""> px</t></small></span>
+                                <button type="button" class="btn btn-sm btn-link p-0 text-danger" title="Remove" t-on-click.stop="() => this.remove(item.uid)"><i class="fa fa-times"/></button>
+                            </div>
+                        </t>
+                        <div t-att-class="'bsx_ld_drop bsx_ld_drop_end' + (isDropAt(region, items.length) ? ' is-on' : '')"
+                             t-on-dragover="(ev) => this.onDragOver(ev, region, items.length)"
+                             t-on-drop="(ev) => this.onDrop(ev, region, items.length)">
+                            <span t-if="!items.length" class="small text-muted">Drop a field here</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- the selected item's look -->
+                <div class="bsx_ld_options">
+                    <t t-set="sel" t-value="selectedItem"/>
+                    <div t-if="!sel" class="text-muted small">Click an item on the label to set its size and look.</div>
+                    <t t-else="">
+                        <h5 class="mb-2"><t t-esc="labels[sel.item.field]"/> <small class="text-muted">· <t t-esc="regionLabels[sel.region]"/></small></h5>
+                        <label class="form-label small mb-1">
+                            <t t-if="sel.item.field === 'logo' or sel.item.field === 'barcode'">Height (mm)</t><t t-else="">Text size (px)</t>
+                        </label>
+                        <input type="number" class="form-control form-control-sm mb-2" t-att-value="sel.item.size"
+                               t-att-step="sel.item.field === 'logo' or sel.item.field === 'barcode' ? 0.5 : 1"
+                               t-on-change="(ev) => sel.item.field === 'logo' or sel.item.field === 'barcode' ? this.changeNumber('size', ev, 2, 12) : this.changeNumber('size', ev, 8, 96)"/>
+                        <label t-if="['code', 'name', 'price'].includes(sel.item.field)" class="form-check small mb-2">
+                            <input type="checkbox" class="form-check-input" t-att-checked="sel.item.bold"
+                                   t-on-change="(ev) => this.change('bold', ev.target.checked)"/>
+                            <span class="form-check-label">Bold</span></label>
+                        <t t-if="sel.item.field === 'name'">
+                            <label class="form-label small mb-1">Lines</label>
+                            <select class="form-select form-select-sm mb-2" t-on-change="(ev) => this.change('lines', Number(ev.target.value))">
+                                <option t-foreach="[1, 2, 3]" t-as="n" t-key="n" t-att-value="n" t-att-selected="(sel.item.lines or 1) === n" t-esc="n"/>
+                            </select>
+                        </t>
+                        <t t-if="sel.item.field === 'logo'">
+                            <label class="form-label small mb-1">Turn (degrees)</label>
+                            <input type="number" class="form-control form-control-sm mb-2" step="1" t-att-value="sel.item.rotation or 0"
+                                   t-on-change="(ev) => this.changeNumber('rotation', ev, -90, 90)"/>
+                            <div t-if="!hasLogo" class="small text-warning mb-2">Upload the logo below (Logo and font).</div>
+                        </t>
+                        <label t-if="sel.region === 'center' and sel.index" class="form-check small mb-2">
+                            <input type="checkbox" class="form-check-input" t-att-checked="sel.item.inline"
+                                   t-on-change="(ev) => this.change('inline', ev.target.checked)"/>
+                            <span class="form-check-label">On the same line as the one before</span></label>
+                        <button type="button" class="btn btn-sm btn-outline-danger mt-1" t-on-click="() => this.remove(sel.item.uid)">
+                            <i class="fa fa-trash me-1"/>Remove</button>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

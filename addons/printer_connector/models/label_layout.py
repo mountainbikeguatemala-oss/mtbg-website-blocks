@@ -1,3 +1,5 @@
+import json
+
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
@@ -109,6 +111,12 @@ class BsxLabelLayout(models.Model):
                                       string="Price position", default="right", required=True)
     font_bold = fields.Boolean("Bold name", default=True)
 
+    # the label's items, placed with the drag and drop editor (empty: made from the settings below, as before 1.2.0):
+    # {"left": [item], "center": [item], "right": [item]}; an item {"uid", "field": logo | barcode | code | name |
+    # price, "size" (logo / barcode: mm; text: px), "bold", "lines" (name), "rotation" (logo), "inline" (center: on
+    # the same line as the item before it)}
+    elements = fields.Text("Items")
+
     # preview sample (not printed on real labels)
     sample_name = fields.Char("Sample product", default="Trail helmet, size M")
     sample_code = fields.Char("Sample code", default="7501234567890")
@@ -164,8 +172,13 @@ class BsxLabelLayout(models.Model):
         logo_url = ""
         if self.id and self.logo:
             logo_url = f"/web/image/bsx.label.layout/{self.id}/logo?unique={self._unique()}"
+        try:
+            elements = json.loads(self.elements) if self.elements else None
+        except ValueError:
+            elements = None
         return {name: self[name] for name in PRINT_FIELDS} | {
-            "id": self.id, "name": self.name, "logo_url": logo_url, "font_spec": self._font_dict()}
+            "id": self.id, "name": self.name, "logo_url": logo_url, "font_spec": self._font_dict(),
+            "elements": elements if isinstance(elements, dict) else None}
 
     @api.model
     def get_print_layout(self, usage=None):

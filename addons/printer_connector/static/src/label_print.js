@@ -5,14 +5,12 @@
  *   for" ``usage``, else the first "Every screen" one), its font and logo, the printer's own head width and chunk
  *   size, then the labels. item: {name or label_name, barcode, default_code, price_display}.
  * - <LabelPrintButton product="..." usage="..."/>: Print label (one label a press: the printer does not cut).
- * - view widget "bsx_label_preview": the live preview and a test print on the Label layout form.
+ * (The Label layout page's drag and drop editor with its live preview: label_designer.js.)
  */
-import { Component, onMounted, onWillUpdateProps, useRef, useState } from "@odoo/owl";
+import { Component, useState } from "@odoo/owl";
 import { _t } from "@web/core/l10n/translation";
-import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
-import { standardWidgetProps } from "@web/views/widgets/standard_widget_props";
-import { labelCode, labelRows, prepareLabelAssets, renderLabel } from "./label_render";
+import { elementsOf, labelCode, labelRows, prepareLabelAssets, renderLabel } from "./label_render";
 import { makeIdPrinter } from "./makeid_printer";
 
 const layoutPromises = new Map();
@@ -61,7 +59,8 @@ export async function printLabelsWithLayout(layout, product, copies = 1, assets 
 export async function printProductLabels(orm, product, copies = 1, { usage = "general" } = {}) {
     product = { ...product, name: product.label_name || product.name };
     const layout = await getLabelLayout(orm, usage);
-    if (layout.show_barcode && !labelCode(product)) {
+    const placed = Object.values(elementsOf(layout)).flat();
+    if (placed.some((i) => i.field === "barcode") && !labelCode(product)) {
         throw new Error(warningText(["no_code"])[0]);
     }
     await printLabelsWithLayout(layout, product, copies);
@@ -121,107 +120,3 @@ export class LabelPrintButton extends Component {
     }
 }
 
-export class BsxLabelPreview extends Component {
-    static template = "printer_connector.LabelPreview";
-    static props = { ...standardWidgetProps };
-
-    setup() {
-        this.orm = useService("orm");
-        this.notification = useService("notification");
-        this.canvasHolder = useRef("holder");
-        this.state = useState({ warnings: [], size: "", busy: false });
-        this.fontSpecs = null;
-        this.drawing = 0;
-        onMounted(() => this.draw(this.props));
-        onWillUpdateProps((next) => this.draw(next));
-    }
-
-    /** A binary field's value as the form holds it: base64 once changed here, else a size text (saved file). */
-    static isBase64(value) {
-        return typeof value === "string" && value.length > 200 && !/^[\d.,]+ ?[kmg]?b/i.test(value);
-    }
-
-    async layoutOf(props) {
-        const d = props.record.data;
-        const id = props.record.resId;
-        const unique = encodeURIComponent(String(d.write_date || Date.now()));
-        if (!this.fontSpecs) {
-            this.fontSpecs = await this.orm.call("bsx.label.layout", "get_font_specs", []);
-        }
-        let fontSpec = this.fontSpecs[d.font] || { family: "", faces: [] };
-        if (d.font === "custom") {
-            const file = d.font_file;
-            if (BsxLabelPreview.isBase64(file)) {
-                const url = `data:font/ttf;base64,${file}`;
-                fontSpec = { family: `Label Preview Font ${file.length}`, faces: [{ weight: 400, url }, { weight: 700, url }] };
-            } else if (file && id) {
-                const url = `/web/content/bsx.label.layout/${id}/font_file?unique=${unique}`;
-                fontSpec = { family: `Label Font ${id}`, faces: [{ weight: 400, url }, { weight: 700, url }] };
-            } else {
-                fontSpec = { family: "", faces: [], missing: true };
-            }
-        }
-        let logoSrc = "";
-        if (BsxLabelPreview.isBase64(d.logo)) {
-            logoSrc = `data:image/png;base64,${d.logo}`;
-        } else if (d.logo && id) {
-            logoSrc = `/web/image/bsx.label.layout/${id}/logo?unique=${unique}`;
-        }
-        return { layout: { ...d, font_spec: fontSpec, logo_url: logoSrc }, logoSrc };
-    }
-
-    sampleOf(props) {
-        const d = props.record.data;
-        return { name: d.sample_name || "", barcode: d.sample_code || "", default_code: "",
-                 price_display: d.sample_price || "" };
-    }
-
-    async draw(props) {
-        const ticket = ++this.drawing;
-        let rendered;
-        try {
-            const { layout, logoSrc } = await this.layoutOf(props);
-            const assets = await prepareLabelAssets(layout, { logoSrc });
-            rendered = renderLabel(layout, this.sampleOf(props), assets);
-        } catch {
-            return;
-        }
-        const holder = this.canvasHolder.el;
-        if (!holder || ticket !== this.drawing) {
-            return; // a newer drawing is on its way
-        }
-        const { canvas } = rendered;
-        canvas.className = "bsx_label_canvas";
-        // 2x the real size, smaller on a narrow screen
-        canvas.style.width = `min(100%, ${rendered.widthDots * 2}px)`;
-        holder.replaceChildren(canvas);
-        this.state.warnings = warningText(rendered.warnings);
-        this.state.size = `${(rendered.widthDots / 8).toFixed(1)} × ${(rendered.heightDots / 8).toFixed(1)} mm`;
-    }
-
-    async testPrint() {
-        if (this.state.busy) {
-            return;
-        }
-        this.state.busy = true;
-        try {
-            await makeIdPrinter.connect(); // first: the browser's printer chooser needs the click
-            const { layout, logoSrc } = await this.layoutOf(this.props);
-            const assets = await prepareLabelAssets(layout, { logoSrc });
-            await printLabelsWithLayout(layout, this.sampleOf(this.props), 1, assets);
-            this.notification.add(_t("Test label printed."), { type: "success" });
-        } catch (error) {
-            if (error?.name !== "NotFoundError") {
-                this.notification.add(error?.message || _t("The label could not print."), { type: "danger" });
-            }
-        } finally {
-            this.state.busy = false;
-        }
-    }
-
-    get supported() {
-        return makeIdPrinter.supported;
-    }
-}
-
-registry.category("view_widgets").add("bsx_label_preview", { component: BsxLabelPreview });

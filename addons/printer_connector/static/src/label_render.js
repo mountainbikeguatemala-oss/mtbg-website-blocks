@@ -3,9 +3,9 @@
  * Draws a label from its layout (Settings › Label layout: bsx.label.layout) and turns it into printer rows.
  *
  * The label is drawn landscape, 8 dots per mm (203 dpi): width = label length along the tape, height = tape width.
- * A logo (left, right or above the rest, turned a little if asked) and the content: barcode (its code under it or on
- * its right), the name (1-3 lines), the price (under the name or on its right). Everything shrinks together to fit
- * the tape; a name is made smaller before it is cut. Auto length: as long as the content needs (min / max length).
+ * Its items (logo, barcode, code, name, price) in three regions: Left, Center (rows) and Right, placed with the
+ * drag and drop editor (elementsOf: layouts made before it are made from their settings). Everything shrinks together
+ * to fit the tape; a name is made smaller before it is cut. Auto length: as long as the content needs.
  * The layout's font and logo are loaded first: prepareLabelAssets(layout) (fonts from the site, never outside).
  */
 import { encodeCode128 } from "./code128";
@@ -93,9 +93,74 @@ function wrapText(measure, text, width, maxLines) {
     return { lines, cut };
 }
 
+export const LABEL_FIELDS = ["logo", "barcode", "code", "name", "price"];
+export const REGIONS = ["left", "center", "right"];
+
+let uidSeq = 0;
+export function itemUid() {
+    uidSeq += 1;
+    return `i${Date.now().toString(36)}${uidSeq}`;
+}
+
+/** A new item of a field, with its usual size. */
+export function newItem(field, layout = {}) {
+    const base = { uid: itemUid(), field, inline: false, bold: field !== "code" };
+    switch (field) {
+        case "logo":
+            return { ...base, size: layout.logo_height_mm || 8, rotation: layout.logo_rotation || 0 };
+        case "barcode":
+            return { ...base, size: layout.barcode_height_mm || 7 };
+        case "code":
+            return { ...base, size: layout.code_font_px || 14, bold: false };
+        case "name":
+            return { ...base, size: layout.name_font_px || 18, bold: layout.font_bold !== false, lines: layout.name_lines || 1 };
+        case "price":
+            return { ...base, size: layout.price_font_px || 20 };
+    }
+    return base;
+}
+
+/**
+ * The layout's items by region: its saved items (the drag and drop editor), else made from its settings (layouts made
+ * before the editor: the same label as before).
+ */
+export function elementsOf(layout) {
+    const e = layout.elements;
+    if (e && typeof e === "object" && REGIONS.some((r) => Array.isArray(e[r]) && e[r].length)) {
+        return Object.fromEntries(REGIONS.map((r) => [r, (e[r] || []).filter((i) => LABEL_FIELDS.includes(i.field))]));
+    }
+    const out = { left: [], center: [], right: [] };
+    const logo = newItem("logo", layout);
+    const pos = layout.logo_position || "left";
+    if (pos === "top") {
+        out.center.push(logo);
+    } else {
+        out[pos === "right" ? "right" : "left"].push(logo);
+    }
+    if (layout.show_barcode) {
+        out.center.push(newItem("barcode", layout));
+        if (layout.show_code) {
+            const code = newItem("code", layout);
+            if (layout.code_position === "right") {
+                Object.assign(code, { inline: true, bold: true });
+            }
+            out.center.push(code);
+        }
+    }
+    if (layout.show_name) {
+        out.center.push(newItem("name", layout));
+    }
+    if (layout.show_price) {
+        out.center.push({ ...newItem("price", layout), inline: layout.show_name && layout.price_position === "right" });
+    }
+    return out;
+}
+
 /**
  * Renders the label. layout: dict from bsx.label.layout.get_print_layout(); product: {name, barcode,
  * default_code, price_display}; assets: prepareLabelAssets(layout) (without: the device's font, no logo).
+ * The items: Left and Right stack top to bottom beside the rest; Center is rows (an item "inline" joins the row
+ * before it). Everything shrinks together until it fits the tape, and a name before it is cut.
  * Returns {canvas, widthDots (length), heightDots (tape), code, warnings[]}.
  */
 export function renderLabel(layout, product, assets = {}) {
@@ -110,7 +175,7 @@ export function renderLabel(layout, product, assets = {}) {
     const minLen = Math.round(L.min_length_mm * DOTS_PER_MM);
     const maxLen = Math.max(minLen, Math.round(L.max_length_mm * DOTS_PER_MM));
     const fixedLen = L.length_mm > 0 ? Math.round(L.length_mm * DOTS_PER_MM) : 0;
-    const bold = Boolean(L.font_bold);
+    const limit = fixedLen || maxLen;
     const code = labelCode(product);
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
@@ -119,35 +184,15 @@ export function renderLabel(layout, product, assets = {}) {
         return ctx.measureText(text).width;
     };
     const gap = Math.round(0.6 * DOTS_PER_MM);
-
-    // --- logo: its box (left / right: across the tape; above: on top of the content)
+    const rowGap = Math.round(0.4 * DOTS_PER_MM);
     const logo = assets.logo && assets.logo.naturalWidth ? assets.logo : null;
-    const logoPos = L.logo_position || "left";
-    // logoW / logoH: the box it takes (turned: the turned picture's box); drawW / drawH: the picture itself
-    let logoH = 0;
-    let logoW = 0;
-    let drawW = 0;
-    let drawH = 0;
-    const angle = ((L.logo_rotation || 0) * Math.PI) / 180;
-    if (logo) {
-        const want = Math.round((L.logo_height_mm || 8) * DOTS_PER_MM);
-        logoH = Math.min(want, logoPos === "top" ? Math.max(8, tapeDots - 24) : tapeDots - 2);
-        const ratio = logo.naturalWidth / logo.naturalHeight;
-        const cos = Math.abs(Math.cos(angle));
-        const sin = Math.abs(Math.sin(angle));
-        drawH = logoH / (ratio * sin + cos);
-        drawW = drawH * ratio;
-        logoW = Math.round(drawW * cos + drawH * sin);
-    }
-    const sideLogo = logo && logoPos !== "top";
-    const contentH = logo && logoPos === "top" ? tapeDots - logoH - gap : tapeDots;
-    const limit = fixedLen || maxLen;
-    const contentLimit = limit - (sideLogo ? logoW + gap : 0);
+    const priceText = String(product?.price_display || "");
+    const regions = elementsOf(L);
 
-    // --- barcode
+    // the barcode's bars (one encoding for every barcode item)
     let bars = null;
-    let module = Math.max(1, Math.round(L.bar_module_dots || 2));
-    if (L.show_barcode) {
+    const wantsBars = REGIONS.some((r) => regions[r].some((i) => i.field === "barcode"));
+    if (wantsBars) {
         if (!code) {
             warnings.push("no_code");
         } else {
@@ -159,151 +204,158 @@ export function renderLabel(layout, product, assets = {}) {
         }
     }
     const barsModules = bars ? bars.reduce((a, b) => a + b, 0) : 0;
-    // the printer leaves its own ~1.5 mm blank border around every label, so a small quiet zone scans fine
-    const quiet = () => Math.max(margin, 2 * module);
-    const codeRight = Boolean(bars && L.show_code && code && L.code_position === "right");
     const barsMax = Math.round((L.barcode_max_mm || 40) * DOTS_PER_MM);
-    const codeRoom = codeRight ? measureWith(L.code_font_px, true)(code) + gap : 0;
-    const fits = () => barsModules * module <= barsMax && barsModules * module + 2 * quiet() + codeRoom <= contentLimit;
-    while (bars && module > 1 && !fits()) {
-        module -= 1;
-    }
-    if (bars && !fits()) {
-        warnings.push("barcode_too_long");
-    }
+    let module = Math.max(1, Math.round(L.bar_module_dots || 2));
 
-    // --- the content's rows; everything shrinks together until it fits the tape (and a name before it is cut)
+    /** An item's box at a scale: {w, h, draw(x, y, rowH)}; null: nothing to show (no logo, empty text). */
+    const box = (item, scale, room) => {
+        const size = Number(item.size) || 0;
+        if (item.field === "logo") {
+            if (!logo) {
+                return null;
+            }
+            const h = Math.max(8, Math.min(tapeDots - 2, Math.round(size * DOTS_PER_MM * scale)));
+            const angle = ((Number(item.rotation) || 0) * Math.PI) / 180;
+            const ratio = logo.naturalWidth / logo.naturalHeight;
+            const cos = Math.abs(Math.cos(angle));
+            const sin = Math.abs(Math.sin(angle));
+            const dh = h / (ratio * sin + cos);
+            const dw = dh * ratio;
+            const w = Math.round(dw * cos + dh * sin);
+            return { w, h, draw: (x, y, rowH) => {
+                ctx.save();
+                ctx.translate(x + w / 2, y + rowH / 2);
+                ctx.rotate(angle);
+                ctx.drawImage(logo, -dw / 2, -dh / 2, dw, dh);
+                ctx.restore();
+            } };
+        }
+        if (item.field === "barcode") {
+            if (!bars) {
+                return null;
+            }
+            const h = Math.max(16, Math.round(size * DOTS_PER_MM * Math.max(scale, 0.6)));
+            const w = barsModules * module + 2 * module;
+            return { w, h, draw: (x, y, rowH) => {
+                let bx = x + module;
+                const top = y + (rowH - h) / 2;
+                bars.forEach((bw, i) => {
+                    if (i % 2 === 0) {
+                        ctx.fillRect(bx, top, bw * module, h);
+                    }
+                    bx += bw * module;
+                });
+            } };
+        }
+        const text = item.field === "code" ? code : item.field === "price" ? priceText : String(product?.name || "");
+        if (!text) {
+            return null;
+        }
+        const px = Math.max(6, size * scale);
+        const bold = Boolean(item.bold);
+        const measure = measureWith(px, bold);
+        const lines = item.field === "name" && room !== undefined
+            ? wrapText(measure, text, Math.max(20, room), Math.max(1, Math.min(3, item.lines || 1)))
+            : { lines: [text], cut: false };
+        const lineH = Math.ceil(px * 1.1);
+        const w = Math.ceil(Math.max(...lines.lines.map(measure)));
+        return { w, h: lineH * lines.lines.length, cut: lines.cut, draw: (x, y, rowH) => {
+            ctx.font = fontCss(family, px, bold);
+            ctx.textAlign = "left";
+            const top = y + (rowH - lineH * lines.lines.length) / 2;
+            lines.lines.forEach((t, i) => ctx.fillText(t, x, top + lineH * (i + 0.5)));
+        } };
+    };
+
+    /** A side region (left / right): its items stacked; a center: its rows. */
+    const layoutAt = (scale) => {
+        const side = (items) => {
+            const boxes = items.map((i) => box(i, scale)).filter(Boolean);
+            const h = boxes.reduce((a, b) => a + b.h, 0) + rowGap * Math.max(0, boxes.length - 1);
+            return { boxes, w: Math.max(0, ...boxes.map((b) => b.w)), h };
+        };
+        const left = side(regions.left);
+        const right = side(regions.right);
+        const centerRoom = limit - 2 * margin - (left.w ? left.w + gap : 0) - (right.w ? right.w + gap : 0);
+        const rows = [];
+        for (const item of regions.center) {
+            if (!rows.length || !item.inline) {
+                rows.push([]);
+            }
+            rows[rows.length - 1].push(item);
+        }
+        let cut = false;
+        const rowBoxes = rows.map((row) => {
+            // the name gets the room the rest of its row leaves
+            const others = row.filter((i) => i.field !== "name").map((i) => box(i, scale)).filter(Boolean);
+            const used = others.reduce((a, b) => a + b.w, 0) + gap * others.length;
+            const boxes = row.map((i) => (i.field === "name" ? box(i, scale, centerRoom - used) : box(i, scale)))
+                .filter(Boolean);
+            cut = cut || boxes.some((b) => b.cut);
+            return { boxes, w: boxes.reduce((a, b) => a + b.w, 0) + gap * Math.max(0, boxes.length - 1),
+                     h: Math.max(0, ...boxes.map((b) => b.h)) };
+        }).filter((r) => r.boxes.length);
+        const centerH = rowBoxes.reduce((a, r) => a + r.h, 0) + rowGap * Math.max(0, rowBoxes.length - 1);
+        const centerW = Math.max(0, ...rowBoxes.map((r) => r.w));
+        return { left, right, rows: rowBoxes, centerW, centerH, cut,
+                 h: Math.max(left.h, right.h, centerH),
+                 w: 2 * margin + centerW + (left.w ? left.w + gap : 0) + (right.w ? right.w + gap : 0) };
+    };
+
+    // the bars as wide as the tape lets them be (down to one dot), then everything smaller until it fits
+    if (bars) {
+        while (module > 1 && (barsModules * module > barsMax || layoutAt(1).w > limit)) {
+            module -= 1;
+        }
+        if (barsModules * module > barsMax || layoutAt(1).w > limit) {
+            warnings.push("barcode_too_long");
+        }
+    }
     let scale = 1;
-    let blocks;
-    let contentWidth;
-    const priceText = L.show_price ? String(product?.price_display || "") : "";
+    let plan = layoutAt(scale);
     for (let attempt = 0; attempt < 16; attempt++) {
-        const codePx = L.code_font_px * scale;
-        const namePx = L.name_font_px * scale;
-        const pricePx = L.price_font_px * scale;
-        const barH = bars ? Math.max(16, Math.round(L.barcode_height_mm * DOTS_PER_MM * Math.max(scale, 0.6))) : 0;
-        const priceRight = Boolean(priceText) && L.price_position === "right";
-        const textArea = contentLimit - 2 * margin;
-        const priceW = priceText ? measureWith(pricePx, true)(priceText) : 0;
-        const nameArea = priceRight ? Math.max(40, textArea - priceW - 3 * DOTS_PER_MM) : textArea;
-        const wrapped = L.show_name ? wrapText(measureWith(namePx, bold), product?.name || "", nameArea, L.name_lines)
-            : { lines: [], cut: false };
-        const nameLines = wrapped.lines;
-        blocks = [];
-        if (bars) {
-            const rowCodePx = codeRight ? Math.min(codePx, barH * 0.9) : 0;
-            const codeW = codeRight ? measureWith(rowCodePx, true)(code) : 0;
-            blocks.push({ kind: "bars", h: barH, codePx: rowCodePx, codeW,
-                          w: barsModules * module + (codeRight ? gap + codeW : 0) });
-        }
-        if (L.show_code && code && !codeRight) {
-            blocks.push({ kind: "text", text: code, px: codePx, bold: false, h: Math.ceil(codePx * 1.05) });
-        }
-        if (priceRight && nameLines.length) {
-            blocks.push({ kind: "namePrice", lines: nameLines, px: namePx, pricePx,
-                          h: Math.ceil(Math.max(nameLines.length * namePx * 1.1, pricePx * 1.1)) });
-        } else {
-            for (const line of nameLines) {
-                blocks.push({ kind: "text", text: line, px: namePx, bold, h: Math.ceil(namePx * 1.1) });
-            }
-            if (priceText) {
-                blocks.push({ kind: "text", text: priceText, px: pricePx, bold: true, h: Math.ceil(pricePx * 1.1) });
-            }
-        }
-        const rowGap = Math.round(0.4 * DOTS_PER_MM);
-        const totalH = blocks.reduce((a, b) => a + b.h, 0) + rowGap * Math.max(0, blocks.length - 1);
-        contentWidth = 0;
-        for (const b of blocks) {
-            if (b.kind === "bars") {
-                contentWidth = Math.max(contentWidth, b.w + 2 * quiet());
-            } else if (b.kind === "text") {
-                contentWidth = Math.max(contentWidth, measureWith(b.px, b.bold)(b.text) + 2 * margin);
-            } else if (b.kind === "namePrice") {
-                const nw = Math.max(...b.lines.map((t) => measureWith(b.px, bold)(t)));
-                contentWidth = Math.max(contentWidth, nw + 3 * DOTS_PER_MM + priceW + 2 * margin);
-            }
-        }
-        blocks.gap = rowGap;
-        blocks.totalH = totalH;
-        const fitsTape = totalH <= contentH - 2;
-        if ((fitsTape && !wrapped.cut) || scale < 0.4) {
+        const fitsTape = plan.h <= tapeDots - 2;
+        if ((fitsTape && !plan.cut && plan.w <= limit) || scale < 0.4) {
             if (!fitsTape) {
                 warnings.push("too_tall");
             }
             break;
         }
         scale *= 0.92;
+        plan = layoutAt(scale);
     }
 
-    // --- the canvas
-    const needed = sideLogo ? contentWidth + logoW + gap + margin
-        : Math.max(contentWidth, logo ? logoW + 2 * margin : 0);
-    const width = fixedLen || Math.min(maxLen, Math.max(minLen, Math.ceil(needed)));
+    // the canvas
+    const width = fixedLen || Math.min(maxLen, Math.max(minLen, Math.ceil(plan.w)));
     canvas.width = width;
     canvas.height = tapeDots;
     ctx.fillStyle = "#fff";
     ctx.fillRect(0, 0, width, tapeDots);
     ctx.fillStyle = "#000";
     ctx.textBaseline = "middle";
-
-    // the content's area (the logo's side taken off), its rows centred in it
-    let x0 = 0;
-    let x1 = width;
-    let y0 = 0;
-    if (logo) {
-        let lx;
-        let ly;
-        if (logoPos === "top") {
-            lx = Math.round((width - logoW) / 2);
-            ly = Math.max(0, Math.round((tapeDots - logoH - gap - blocks.totalH) / 2));
-            y0 = ly + logoH + gap;
-        } else {
-            ly = Math.round((tapeDots - logoH) / 2);
-            if (logoPos === "right") {
-                lx = width - margin - logoW;
-                x1 = lx - gap + margin;
-            } else {
-                lx = margin;
-                x0 = lx + logoW + gap - margin;
-            }
+    const drawStack = (region, x) => {
+        let y = Math.max(0, Math.round((tapeDots - region.h) / 2));
+        for (const b of region.boxes) {
+            b.draw(x + (region.w - b.w) / 2, y, b.h);
+            y += b.h + rowGap;
         }
-        ctx.save();
-        ctx.translate(lx + logoW / 2, ly + logoH / 2);
-        ctx.rotate(angle);
-        ctx.drawImage(logo, -drawW / 2, -drawH / 2, drawW, drawH);
-        ctx.restore();
+    };
+    if (plan.left.w) {
+        drawStack(plan.left, margin);
     }
-    const cx = (x0 + x1) / 2;
-    let y = logo && logoPos === "top" ? y0 : Math.max(0, Math.round((tapeDots - blocks.totalH) / 2));
-    for (const b of blocks) {
-        if (b.kind === "bars") {
-            let x = Math.round(cx - b.w / 2);
-            bars.forEach((w, i) => {
-                if (i % 2 === 0) {
-                    ctx.fillRect(x, y, w * module, b.h);
-                }
-                x += w * module;
-            });
-            if (b.codePx) {
-                ctx.font = fontCss(family, b.codePx, true);
-                ctx.textAlign = "left";
-                ctx.fillText(code, x + gap, y + b.h / 2);
-            }
-        } else if (b.kind === "text") {
-            ctx.font = fontCss(family, b.px, b.bold);
-            ctx.textAlign = "center";
-            ctx.fillText(b.text, cx, y + b.h / 2);
-        } else if (b.kind === "namePrice") {
-            ctx.textAlign = "left";
-            ctx.font = fontCss(family, b.px, bold);
-            const lineH = b.px * 1.1;
-            const top = y + (b.h - b.lines.length * lineH) / 2;
-            b.lines.forEach((t, i) => ctx.fillText(t, x0 + margin, top + lineH * (i + 0.5)));
-            ctx.font = fontCss(family, b.pricePx, true);
-            ctx.textAlign = "right";
-            ctx.fillText(priceText, x1 - margin, y + b.h / 2);
+    if (plan.right.w) {
+        drawStack(plan.right, width - margin - plan.right.w);
+    }
+    const x0 = margin + (plan.left.w ? plan.left.w + gap : 0);
+    const x1 = width - margin - (plan.right.w ? plan.right.w + gap : 0);
+    let y = Math.max(0, Math.round((tapeDots - plan.centerH) / 2));
+    for (const row of plan.rows) {
+        let x = Math.round((x0 + x1) / 2 - row.w / 2);
+        for (const b of row.boxes) {
+            b.draw(x, y, row.h);
+            x += b.w + gap;
         }
-        y += b.h + blocks.gap;
+        y += row.h + rowGap;
     }
     // hard black / white: thermal dots are on or off (a logo's transparent parts are white)
     const img = ctx.getImageData(0, 0, width, tapeDots);

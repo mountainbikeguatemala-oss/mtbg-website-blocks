@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-19 18:54+0000\n"
-"PO-Revision-Date: 2026-11-19 18:54+0000\n"
+"POT-Creation-Date: 2026-11-19 19:23+0000\n"
+"PO-Revision-Date: 2026-11-19 19:23+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -73,6 +73,8 @@ msgid "Bar width (dots)"
 msgstr ""
 
 #. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.js:0
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__show_barcode
 #: model_terms:ir.ui.view,arch_db:printer_connector.view_bsx_label_layout_form
 msgid "Barcode"
@@ -95,8 +97,32 @@ msgid ""
 msgstr ""
 
 #. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.xml:0
+msgid "Bold"
+msgstr ""
+
+#. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__font_bold
 msgid "Bold name"
+msgstr ""
+
+#. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.js:0
+msgid "Center"
+msgstr ""
+
+#. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.xml:0
+msgid "Click an item on the label to set its size and look."
+msgstr ""
+
+#. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.js:0
+msgid "Code"
 msgstr ""
 
 #. module: printer_connector
@@ -151,6 +177,20 @@ msgid "Display Name"
 msgstr ""
 
 #. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.xml:0
+msgid ""
+"Drag a field onto the label (or click it: it goes into Center).\n"
+"                        Drag placed items to reorder or move them."
+msgstr ""
+
+#. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.xml:0
+msgid "Drop a field here"
+msgstr ""
+
+#. module: printer_connector
 #: model_terms:ir.ui.view,arch_db:printer_connector.view_bsx_label_layout_form
 msgid ""
 "Each screen prints with the first active layout \"Used for\" it, else the first\n"
@@ -161,6 +201,12 @@ msgstr ""
 #. module: printer_connector
 #: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__usage__general
 msgid "Every screen (the default)"
+msgstr ""
+
+#. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.xml:0
+msgid "Fields"
 msgstr ""
 
 #. module: printer_connector
@@ -191,6 +237,12 @@ msgid "Font file name"
 msgstr ""
 
 #. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.xml:0
+msgid "Height (mm)"
+msgstr ""
+
+#. module: printer_connector
 #: model:ir.model.fields,help:printer_connector.field_bsx_label_layout__tape_mm
 msgid ""
 "Height of the printed area across the tape. The E1 head prints at most 12 "
@@ -200,6 +252,11 @@ msgstr ""
 #. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__id
 msgid "ID"
+msgstr ""
+
+#. module: printer_connector
+#: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__elements
+msgid "Items"
 msgstr ""
 
 #. module: printer_connector
@@ -267,11 +324,21 @@ msgid "Lato"
 msgstr ""
 
 #. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.js:0
 #: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__logo_position__left
 msgid "Left"
 msgstr ""
 
 #. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.xml:0
+msgid "Lines"
+msgstr ""
+
+#. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.js:0
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__logo
 msgid "Logo"
 msgstr ""
@@ -327,13 +394,10 @@ msgid "My own font (uploaded below)"
 msgstr ""
 
 #. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.js:0
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__name
 msgid "Name"
-msgstr ""
-
-#. module: printer_connector
-#: model_terms:ir.ui.view,arch_db:printer_connector.view_bsx_label_layout_form
-msgid "Name and price"
 msgstr ""
 
 #. module: printer_connector
@@ -344,6 +408,12 @@ msgstr ""
 #. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__name_font_px
 msgid "Name text size"
+msgstr ""
+
+#. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.xml:0
+msgid "On the same line as the one before"
 msgstr ""
 
 #. module: printer_connector
@@ -363,11 +433,13 @@ msgstr ""
 
 #. module: printer_connector
 #. odoo-javascript
-#: code:addons/printer_connector/static/src/label_print.xml:0
-msgid "Preview, actual size at 203 dpi:"
+#: code:addons/printer_connector/static/src/label_designer.xml:0
+msgid "Preview, 3 × real size (203 dpi):"
 msgstr ""
 
 #. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.js:0
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__show_price
 msgid "Price"
 msgstr ""
@@ -384,7 +456,7 @@ msgstr ""
 
 #. module: printer_connector
 #. odoo-javascript
-#: code:addons/printer_connector/static/src/label_print.xml:0
+#: code:addons/printer_connector/static/src/label_designer.xml:0
 msgid "Print a test label"
 msgstr ""
 
@@ -432,6 +504,14 @@ msgid "Reenie Beanie (handwritten)"
 msgstr ""
 
 #. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.xml:0
+msgid "Remove"
+msgstr ""
+
+#. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.js:0
 #: model:ir.model.fields.selection,name:printer_connector.selection__bsx_label_layout__logo_position__right
 msgid "Right"
 msgstr ""
@@ -483,8 +563,14 @@ msgstr ""
 
 #. module: printer_connector
 #. odoo-javascript
-#: code:addons/printer_connector/static/src/label_print.js:0
+#: code:addons/printer_connector/static/src/label_designer.js:0
 msgid "Test label printed."
+msgstr ""
+
+#. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.xml:0
+msgid "Text size (px)"
 msgstr ""
 
 #. module: printer_connector
@@ -537,6 +623,7 @@ msgstr ""
 
 #. module: printer_connector
 #. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.js:0
 #: code:addons/printer_connector/static/src/label_print.js:0
 msgid "The label could not print."
 msgstr ""
@@ -627,6 +714,7 @@ msgstr ""
 
 #. module: printer_connector
 #. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.xml:0
 #: code:addons/printer_connector/static/src/label_print.xml:0
 #: code:addons/printer_connector/static/src/makeid_printer.js:0
 msgid ""
@@ -638,6 +726,12 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/printer_connector/static/src/label_print.js:0
 msgid "This product has no barcode and no internal reference: add one first."
+msgstr ""
+
+#. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.xml:0
+msgid "Turn (degrees)"
 msgstr ""
 
 #. module: printer_connector
@@ -656,6 +750,12 @@ msgid "Under the name"
 msgstr ""
 
 #. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.xml:0
+msgid "Upload the logo below (Logo and font)."
+msgstr ""
+
+#. module: printer_connector
 #: model:ir.model.fields,field_description:printer_connector.field_bsx_label_layout__usage
 msgid "Used for"
 msgstr ""
@@ -665,4 +765,16 @@ msgstr ""
 msgid ""
 "Width of the thinnest bar, in printer dots (0.125 mm). Wider bars scan more "
 "easily; it is reduced automatically when the code is too long."
+msgstr ""
+
+#. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.xml:0
+msgid "mm"
+msgstr ""
+
+#. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.xml:0
+msgid "px"
 msgstr ""

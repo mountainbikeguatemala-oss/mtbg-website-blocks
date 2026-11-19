@@ -25,10 +25,69 @@
     max-width: 100%;
     box-sizing: border-box;
 }
-/* 8 dots per mm; shown at 2x so text and bars are readable on screen */
+/* 8 dots per mm; shown bigger so text and bars are readable on screen */
 .bsx_label_canvas {
     display: block;
     image-rendering: pixelated;
     height: auto;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+/* the Label layout page's drag and drop editor (label_designer.js), like the Card Designer */
+.bsx_ld_preview { margin-bottom: 16px; }
+.bsx_ld_body {
+    display: grid;
+    grid-template-columns: minmax(150px, 190px) minmax(0, 1fr) minmax(170px, 220px);
+    gap: 16px;
+    align-items: start;
+}
+@media (max-width: 900px) {
+    .bsx_ld_body { grid-template-columns: 1fr; }
+}
+.bsx_ld_field, .bsx_ld_item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    border-radius: 6px;
+    background: var(--bs-body-bg, #fff);
+    cursor: grab;
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+.bsx_ld_field:hover, .bsx_ld_item:hover { border-color: var(--bs-primary, #714b67); }
+.bsx_ld_grip { color: var(--bs-secondary-color, #6c757d); }
+.bsx_ld_plan {
+    display: grid;
+    grid-template-columns: minmax(110px, 1fr) minmax(160px, 2fr) minmax(110px, 1fr);
+    gap: 10px;
+}
+.bsx_ld_region {
+    border: 2px dashed var(--bs-border-color, #ced4da);
+    border-radius: 8px;
+    padding: 8px;
+    min-height: 120px;
+}
+.bsx_ld_region_title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--bs-secondary-color, #6c757d);
+    margin-bottom: 6px;
+}
+.bsx_ld_item.is-selected {
+    border-color: var(--bs-primary, #714b67);
+    box-shadow: 0 0 0 2px rgba(113, 75, 103, .25);
+}
+.bsx_ld_item.is-inline { margin-left: 18px; }
+.bsx_ld_drop { height: 6px; border-radius: 3px; margin: 0 0 4px; }
+.bsx_ld_drop.is-on { background: var(--bs-primary, #714b67); height: 8px; }
+.bsx_ld_drop_end { min-height: 28px; display: flex; align-items: center; justify-content: center; }
+.bsx_ld_drop_end.is-on { min-height: 28px; opacity: .6; }
+.bsx_ld_options {
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    border-radius: 8px;
+    padding: 10px;
 }
