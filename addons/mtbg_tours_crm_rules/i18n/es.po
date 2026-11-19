@@ -1,3 +1,6 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mtbg_tours_crm_rules
 #
 msgid ""
 msgstr ""
@@ -27,9 +30,24 @@ msgstr "%(record)s: %(field)s cambió desde entonces; se deja como está."
 
 #. module: mtbg_tours_crm_rules
 #. odoo-python
-#: code:addons/mtbg_tours_crm_rules/models/alert_sources.py:0
-msgid "%s possible duplicates to check"
-msgstr "%s posibles duplicados por revisar"
+#: code:addons/mtbg_tours_crm_rules/models/lead_source.py:0
+msgid "%(total)s contacts got their source channel: %(detail)s"
+msgstr "%(total)s contactos recibieron su canal de origen: %(detail)s"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_pipeline_kanban
+msgid "<i class=\"fa fa-fw me-1 fa-envelope text-primary\" title=\"Email\"/>"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_pipeline_kanban
+msgid "<i class=\"fa fa-fw me-1 fa-phone text-primary\" title=\"Phone\"/>"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_pipeline_kanban
+msgid "<i class=\"fa fa-fw me-1 fa-sign-in\" title=\"Source channel\"/>"
+msgstr ""
 
 #. module: mtbg_tours_crm_rules
 #. odoo-python
@@ -67,6 +85,23 @@ msgstr ""
 #: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule__trigger__received
 msgid "A message comes in"
 msgstr "Llega un mensaje"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.actions.act_window,help:mtbg_tours_crm_rules.action_contact_pipeline
+msgid ""
+"A new WhatsApp number, an email sender made a contact or a website buyer starts a lead; a paying\n"
+"                customer is a client."
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_partner__mtbg_negotiation
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_users__mtbg_negotiation
+msgid ""
+"A quote was made for this lead (set when a quote is made, or by hand): stage"
+" Negotiation until they pay (Customer) or are lost."
+msgstr ""
+"Se hizo una cotización para este prospecto (al hacer una cotización, o a "
+"mano): etapa Negociación hasta que pague (Cliente) o se pierda."
 
 #. module: mtbg_tours_crm_rules
 #: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule__once
@@ -123,12 +158,6 @@ msgid "Alert"
 msgstr "Alerta"
 
 #. module: mtbg_tours_crm_rules
-#. odoo-javascript
-#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
-msgid "Alert rules"
-msgstr "Reglas de alertas"
-
-#. module: mtbg_tours_crm_rules
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_change_search
 msgid "Alerts to deal with"
 msgstr "Alertas por atender"
@@ -175,7 +204,7 @@ msgstr "Cambiados"
 
 #. module: mtbg_tours_crm_rules
 #. odoo-javascript
-#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_page/crm_page.xml:0
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__change_ids
 msgid "Changes"
 msgstr "Cambios"
@@ -198,6 +227,16 @@ msgid "Checking…"
 msgstr "Revisando…"
 
 #. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__res_partner__mtbg_contact_type__client
+msgid "Client"
+msgstr "Cliente"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_search_stage
+msgid "Clients"
+msgstr "Cliente"
+
+#. module: mtbg_tours_crm_rules
 #. odoo-javascript
 #: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
 msgid "Close"
@@ -211,14 +250,78 @@ msgstr "Código"
 #. module: mtbg_tours_crm_rules
 #. odoo-python
 #: code:addons/mtbg_tours_crm_rules/models/rule.py:0
+#: model:ir.model,name:mtbg_tours_crm_rules.model_res_partner
 msgid "Contact"
 msgstr "Contacto"
 
 #. module: mtbg_tours_crm_rules
-#. odoo-python
-#: code:addons/mtbg_tours_crm_rules/models/alert_sources.py:0
-msgid "Contacts the duplicates rule flagged, not yet checked."
-msgstr "Contactos que la regla de duplicados marcó, aún sin revisar."
+#: model:ir.model,name:mtbg_tours_crm_rules.model_mtbg_crm_rule
+msgid "Contact Rule"
+msgstr "Regla de contacto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model,name:mtbg_tours_crm_rules.model_mtbg_crm_rule_action
+msgid "Contact Rule Action"
+msgstr "Acción de regla de contacto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model,name:mtbg_tours_crm_rules.model_mtbg_crm_rule_change
+msgid "Contact Rule Change"
+msgstr "Cambio de regla de contacto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.actions.act_window,name:mtbg_tours_crm_rules.action_crm_rule_change
+msgid "Contact Rule Changes"
+msgstr "Cambios de reglas de contacto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model,name:mtbg_tours_crm_rules.model_mtbg_crm_rule_run
+msgid "Contact Rule Run"
+msgstr "Ejecución de regla de contacto"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_page/crm_page.xml:0
+#: model:ir.actions.act_window,name:mtbg_tours_crm_rules.action_crm_rule
+#: model:ir.actions.client,name:mtbg_tours_crm_rules.action_crm_rules_page
+#: model:ir.ui.menu,name:mtbg_tours_crm_rules.menu_crm_root
+msgid "Contact Rules"
+msgstr "Reglas de contacto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.actions.client,name:mtbg_tours_crm_rules.action_crm_rule_settings
+msgid "Contact Rules Settings"
+msgstr "Ajustes de reglas de contacto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model,name:mtbg_tours_crm_rules.model_mtbg_crm_rule_inbox
+msgid "Contact Rules: messages received"
+msgstr "Reglas de contacto: mensajes recibidos"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_page/crm_page.xml:0
+msgid "Contact rules"
+msgstr "Reglas de contacto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_partner__mtbg_contact_type
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_users__mtbg_contact_type
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_search_stage
+msgid "Contact type"
+msgstr "Tipo de contacto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.actions.act_window,name:mtbg_tours_crm_rules.action_contact_pipeline
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_utm_source__mtbg_contact_count
+#: model:ir.ui.menu,name:mtbg_tours_crm_rules.menu_crm_pipeline
+msgid "Contacts"
+msgstr "Contactos"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.actions.server,name:mtbg_tours_crm_rules.ir_cron_mtbg_classify_suppliers_ir_actions_server
+msgid "Contacts: suppliers, staff and ourselves get their type"
+msgstr "Contactos"
 
 #. module: mtbg_tours_crm_rules
 #. odoo-python
@@ -231,6 +334,11 @@ msgstr "País y estado según el número de un mensaje"
 #: code:addons/mtbg_tours_crm_rules/models/builtins.py:0
 msgid "Country and state from the phone"
 msgstr "País y estado según el teléfono"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model,website_form_label:mtbg_tours_crm_rules.model_res_partner
+msgid "Create a Customer"
+msgstr "Crear un cliente"
 
 #. module: mtbg_tours_crm_rules
 #: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule__trigger__created
@@ -255,6 +363,7 @@ msgstr "Creado por"
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__create_date
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_inbox__create_date
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__create_date
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_pipeline_list
 msgid "Created on"
 msgstr "Creado el"
 
@@ -271,6 +380,16 @@ msgid "Created or changed: it runs when one of them changes (none: any)"
 msgstr ""
 "Creado o cambiado: se ejecuta cuando uno de ellos cambia (ninguno: "
 "cualquiera)"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__res_partner__mtbg_stage__customer
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_search_stage
+msgid "Customers"
+msgstr "Cliente"
 
 #. module: mtbg_tours_crm_rules
 #: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_run__trigger__daily
@@ -319,6 +438,8 @@ msgstr "Personas distintas"
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__display_name
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_inbox__display_name
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_partner__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_utm_source__display_name
 msgid "Display Name"
 msgstr "Nombre para mostrar"
 
@@ -360,6 +481,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__match_on
 msgid "Duplicates by"
 msgstr "Duplicados por"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.constraint,message:mtbg_tours_crm_rules.constraint_mtbg_crm_rule_code_unique
+msgid "Each contact rule has its own code."
+msgstr "Cada regla de contacto tiene su propio código."
 
 #. module: mtbg_tours_crm_rules
 #. odoo-javascript
@@ -413,11 +539,21 @@ msgid "Fields watched"
 msgstr "Campos vigilados"
 
 #. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_utm_source_list_pipeline
+msgid "Fill missing sources from history"
+msgstr "Completar orígenes faltantes desde el historial"
+
+#. module: mtbg_tours_crm_rules
 #. odoo-python
 #: code:addons/mtbg_tours_crm_rules/models/rule.py:0
 #: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_action__kind__flag_duplicate
 msgid "Flag possible duplicates"
 msgstr "Marcar posibles duplicados"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_form_pipeline
+msgid "How they first came"
+msgstr "Cómo llegaron la primera vez"
 
 #. module: mtbg_tours_crm_rules
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__id
@@ -426,6 +562,8 @@ msgstr "Marcar posibles duplicados"
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__id
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_inbox__id
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_run__id
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_partner__id
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_utm_source__id
 msgid "ID"
 msgstr "ID"
 
@@ -433,6 +571,17 @@ msgstr "ID"
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__icon
 msgid "Icon"
 msgstr "Icono"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__res_partner__mtbg_contact_type__internal
+msgid "Internal / test"
+msgstr "Interno / prueba"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_partner__mtbg_is_lead
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_users__mtbg_is_lead
+msgid "Is a Lead"
+msgstr "Es prospecto"
 
 #. module: mtbg_tours_crm_rules
 #: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule__code
@@ -490,19 +639,46 @@ msgid "Last run"
 msgstr "Última ejecución"
 
 #. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__res_partner__mtbg_contact_type__lead
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__res_partner__mtbg_stage__lead
+msgid "Lead"
+msgstr "Prospecto"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_partner__mtbg_contact_type
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_users__mtbg_contact_type
+msgid ""
+"Lead: not paid yet. Client: a paying customer (set when they first pay, "
+"never undone automatically). Leads and clients have a stage and get the "
+"client journeys; staff, vendors and internal contacts do not."
+msgstr "Prospecto"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_search_stage
+msgid "Leads"
+msgstr "Prospecto"
+
+#. module: mtbg_tours_crm_rules
 #: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_action__kind__note
 msgid "Log an internal note"
 msgstr "Registrar una nota interna"
 
 #. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_partner__mtbg_lost
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_users__mtbg_lost
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__res_partner__mtbg_stage__lost
+msgid "Lost / not a fit"
+msgstr "Perdido / no encaja"
+
+#. module: mtbg_tours_crm_rules
 #: model:ir.actions.server,name:mtbg_tours_crm_rules.cron_daily_rules_ir_actions_server
-msgid "MTBG Tours: CRM rules (daily)"
-msgstr "MTBG Tours: reglas de CRM (diarias)"
+msgid "MTBG Tours: Contact rules (daily)"
+msgstr ""
 
 #. module: mtbg_tours_crm_rules
 #: model:ir.actions.server,name:mtbg_tours_crm_rules.cron_received_rules_ir_actions_server
-msgid "MTBG Tours: CRM rules (messages received)"
-msgstr "MTBG Tours: reglas de CRM (mensajes recibidos)"
+msgid "MTBG Tours: Contact rules (messages received)"
+msgstr ""
 
 #. module: mtbg_tours_crm_rules
 #: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_run__trigger__received
@@ -515,14 +691,34 @@ msgid "Model"
 msgstr "Modelo"
 
 #. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_partner__mtbg_pipeline_elsewhere
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_users__mtbg_pipeline_elsewhere
+msgid "Mtbg Pipeline Elsewhere"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__name
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_pipeline_list
 msgid "Name"
 msgstr "Nombre"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_partner__mtbg_negotiation
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_users__mtbg_negotiation
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__res_partner__mtbg_stage__negotiation
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_search_stage
+msgid "Negotiation"
+msgstr "Negociación"
 
 #. module: mtbg_tours_crm_rules
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_change__new_value
 msgid "New Value"
 msgstr "Valor nuevo"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.actions.act_window,help:mtbg_tours_crm_rules.action_crm_rule
+msgid "No Contact rules"
+msgstr "No hay reglas de contacto"
 
 #. module: mtbg_tours_crm_rules
 #. odoo-javascript
@@ -531,9 +727,40 @@ msgid "No changes yet."
 msgstr "Aún no hay cambios."
 
 #. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/lead_source.py:0
+msgid "No contact without a source channel has any history to take it from."
+msgstr "Ningún contacto sin canal de origen tiene historial del cual tomarlo."
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__res_partner__mtbg_stage__new
+msgid "No contact yet"
+msgstr "Sin contacto aún"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.actions.act_window,help:mtbg_tours_crm_rules.action_contact_pipeline
+msgid "No leads or clients yet"
+msgstr "Todavía no hay prospectos ni clientes"
+
+#. module: mtbg_tours_crm_rules
 #: model_terms:ir.actions.act_window,help:mtbg_tours_crm_rules.action_crm_duplicate
 msgid "No possible duplicates"
 msgstr "No hay posibles duplicados"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_search_stage
+msgid "No source channel"
+msgstr "Sin canal de origen"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.actions.act_window,help:mtbg_tours_crm_rules.action_lead_sources
+msgid "No source channels yet"
+msgstr "Sin canal de origen"
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_search_stage
+msgid "Not clients (staff, vendors, internal)"
+msgstr "No clientes (personal, proveedores, internos)"
 
 #. module: mtbg_tours_crm_rules
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_change_search
@@ -592,6 +819,12 @@ msgid "Once per record"
 msgstr "Una vez por registro"
 
 #. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/page.py:0
+msgid "Only managers change the Contact rules."
+msgstr "Solo los gerentes cambian las reglas de contacto."
+
+#. module: mtbg_tours_crm_rules
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__fill_empty
 msgid "Only when empty"
 msgstr "Solo si está vacío"
@@ -630,10 +863,8 @@ msgid "Possible Duplicate"
 msgstr "Posible duplicado"
 
 #. module: mtbg_tours_crm_rules
-#. odoo-python
-#: code:addons/mtbg_tours_crm_rules/models/alert_sources.py:0
 #: model:ir.actions.act_window,name:mtbg_tours_crm_rules.action_crm_duplicate
-#: model:ir.ui.menu,name:mtbg_tours_crm_rules.menu_crm_duplicate
+#: model:ir.ui.menu,name:mtbg_tours_crm_rules.menu_crm_duplicates
 msgid "Possible Duplicates"
 msgstr "Posibles duplicados"
 
@@ -648,12 +879,6 @@ msgstr "Posible duplicado"
 #: code:addons/mtbg_tours_crm_rules/models/rule.py:0
 msgid "Possible duplicates by phone or email"
 msgstr "Posibles duplicados por teléfono o correo"
-
-#. module: mtbg_tours_crm_rules
-#. odoo-python
-#: code:addons/mtbg_tours_crm_rules/models/alert_sources.py:0
-msgid "Possible duplicates to check"
-msgstr "Posibles duplicados por revisar"
 
 #. module: mtbg_tours_crm_rules
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_change_list
@@ -765,12 +990,9 @@ msgid "Rule"
 msgstr "Regla"
 
 #. module: mtbg_tours_crm_rules
-#. odoo-javascript
-#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
-#: model:ir.actions.client,name:mtbg_tours_crm_rules.action_crm_rule_page
-#: model:ir.ui.menu,name:mtbg_tours_crm_rules.menu_crm_rule
-msgid "Rules & Alerts"
-msgstr "Reglas y alertas"
+#: model:ir.ui.menu,name:mtbg_tours_crm_rules.menu_crm_rules_page
+msgid "Rules"
+msgstr ""
 
 #. module: mtbg_tours_crm_rules
 #. odoo-python
@@ -837,16 +1059,6 @@ msgid "Same phone"
 msgstr "Mismo teléfono"
 
 #. module: mtbg_tours_crm_rules
-#. odoo-python
-#: code:addons/mtbg_tours_crm_rules/models/alert_sources.py:0
-msgid ""
-"Same phone or email: check each pair, merge by hand if they are the same "
-"person."
-msgstr ""
-"Mismo teléfono o correo: revise cada par y fusione a mano si son la misma "
-"persona."
-
-#. module: mtbg_tours_crm_rules
 #: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_action__kind__activity
 msgid "Schedule a to-do"
 msgstr "Programar una tarea"
@@ -884,6 +1096,12 @@ msgstr ""
 "etiqueta: su nombre; una nota o una alerta: su texto"
 
 #. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_partner__mtbg_lost
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_users__mtbg_lost
+msgid "Set by hand: not going to buy. Paying makes them a customer again."
+msgstr "A mano: no va a comprar. Si paga vuelve a ser cliente."
+
+#. module: mtbg_tours_crm_rules
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__value
 msgid "Shared"
 msgstr "Compartido"
@@ -894,10 +1112,40 @@ msgid "Source"
 msgstr "Origen"
 
 #. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_partner__mtbg_lead_source_id
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_users__mtbg_lead_source_id
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_pipeline_list
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_search_stage
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_tree_stage
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_utm_source_list_pipeline
+msgid "Source Channel"
+msgstr "Canal de origen"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.actions.act_window,name:mtbg_tours_crm_rules.action_lead_sources
+#: model:ir.ui.menu,name:mtbg_tours_crm_rules.menu_crm_lead_sources
+msgid "Source Channels"
+msgstr "Canal de origen"
+
+#. module: mtbg_tours_crm_rules
 #. odoo-python
 #: code:addons/mtbg_tours_crm_rules/models/builtins.py:0
 msgid "Spanish for Spanish-speaking countries"
 msgstr "Español para países hispanohablantes"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__res_partner__mtbg_contact_type__staff
+msgid "Staff / guide"
+msgstr "Personal / guía"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_partner__mtbg_stage
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_users__mtbg_stage
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_pipeline_list
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_search_stage
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_tree_stage
+msgid "Stage"
+msgstr "Etapa"
 
 #. module: mtbg_tours_crm_rules
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__state
@@ -944,10 +1192,56 @@ msgid "Tag removed"
 msgstr "Etiqueta quitada"
 
 #. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_partner__mtbg_lead_source_id
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_users__mtbg_lead_source_id
+msgid ""
+"The channel they first came through (WhatsApp, email, the website chat, a "
+"web form, a website sale…): set once, by the first contact, kept as they "
+"become a client"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_partner__mtbg_is_lead
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_users__mtbg_is_lead
+msgid ""
+"The contact is a lead (not paid yet): pages and view items switch on it "
+"without knowing contact types."
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_partner__mtbg_contact_type_manual
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_users__mtbg_contact_type_manual
+msgid ""
+"The contact type was chosen by a person: the automatic classification never "
+"changes it."
+msgstr ""
+"El tipo de contacto lo eligió una persona: la clasificación automática nunca"
+" lo cambia."
+
+#. module: mtbg_tours_crm_rules
 #. odoo-javascript
 #: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.js:0
 msgid "The days are a number from 0."
 msgstr "Los días son un número desde 0."
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.actions.act_window,help:mtbg_tours_crm_rules.action_crm_duplicate
+msgid ""
+"The duplicates rule (Contact Rules) flags contacts with the same phone or email. Check each pair; merge by\n"
+"               hand when they are the same person."
+msgstr ""
+"La regla de duplicados (Reglas de contacto) marca los contactos con el mismo teléfono o correo. Revisa cada par; combínalos\n"
+"               a mano cuando sean la misma persona."
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
+msgid ""
+"The latest changes the Contact rules made, newest first. Undo puts back what was there; a\n"
+"                field somebody changed since is left as it is."
+msgstr ""
+"Los últimos cambios que hicieron las reglas de contacto, los más recientes primero. Deshacer vuelve a poner lo que había; un\n"
+"                campo que alguien cambió después se deja como está."
 
 #. module: mtbg_tours_crm_rules
 #: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule__source
@@ -1015,6 +1309,23 @@ msgid "Trigger"
 msgstr "Disparador"
 
 #. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_pipeline_list
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_tree_stage
+msgid "Type"
+msgstr "Tipo"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_partner__mtbg_contact_type_manual
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_users__mtbg_contact_type_manual
+msgid "Type set by hand"
+msgstr "Tipo"
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model,name:mtbg_tours_crm_rules.model_utm_source
+msgid "UTM Source"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
 #. odoo-javascript
 #: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_change_list
@@ -1037,6 +1348,11 @@ msgid "Value"
 msgstr "Valor"
 
 #. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__res_partner__mtbg_contact_type__vendor
+msgid "Vendor / supplier"
+msgstr "Proveedor"
+
+#. module: mtbg_tours_crm_rules
 #: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule__state__waiting
 msgid "Waiting"
 msgstr "En espera"
@@ -1052,6 +1368,14 @@ msgstr "Espera a su extensión"
 #: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
 msgid "What"
 msgstr "Qué"
+
+#. module: mtbg_tours_crm_rules
+#. odoo-javascript
+#: code:addons/mtbg_tours_crm_rules/static/src/crm_page/crm_page.xml:0
+msgid ""
+"What is kept tidy on its own: each rule looks after the contacts, and\n"
+"                        every change it makes can be undone."
+msgstr ""
 
 #. module: mtbg_tours_crm_rules
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_crm_rule_form
@@ -1093,6 +1417,23 @@ msgstr ""
 "da. Solo se llenan los campos vacíos."
 
 #. module: mtbg_tours_crm_rules
+#: model_terms:ir.actions.act_window,help:mtbg_tours_crm_rules.action_lead_sources
+msgid ""
+"Where contacts first come from: WhatsApp, email, the website chat, a website sale… Set once, by their\n"
+"                first contact."
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_partner__mtbg_stage
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_users__mtbg_stage
+msgid ""
+"Where the contact is in their journey with us: a lead's from their first "
+"contact, a client's from what they bought"
+msgstr ""
+"Dónde está el contacto en su recorrido con nosotros: el de un prospecto "
+"desde su primer contacto, el de un cliente según lo que compró"
+
+#. module: mtbg_tours_crm_rules
 #: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule__mtbg_time_stage
 msgid "Where the record is from its start date (refreshed by the boards)"
 msgstr ""
@@ -1120,111 +1461,3 @@ msgstr "extensión no instalada"
 #: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
 msgid "would change"
 msgstr "cambiarían"
-
-#. module: mtbg_tours_crm_rules
-#: model:ir.model,name:mtbg_tours_crm_rules.model_mtbg_crm_rule
-msgid "Contact Rule"
-msgstr "Regla de contacto"
-
-#. module: mtbg_tours_crm_rules
-#: model:ir.model,name:mtbg_tours_crm_rules.model_mtbg_crm_rule_action
-msgid "Contact Rule Action"
-msgstr "Acción de regla de contacto"
-
-#. module: mtbg_tours_crm_rules
-#: model:ir.model,name:mtbg_tours_crm_rules.model_mtbg_crm_rule_change
-msgid "Contact Rule Change"
-msgstr "Cambio de regla de contacto"
-
-#. module: mtbg_tours_crm_rules
-#: model:ir.actions.act_window,name:mtbg_tours_crm_rules.action_crm_rule_change
-msgid "Contact Rule Changes"
-msgstr "Cambios de reglas de contacto"
-
-#. module: mtbg_tours_crm_rules
-#: model:ir.model,name:mtbg_tours_crm_rules.model_mtbg_crm_rule_run
-msgid "Contact Rule Run"
-msgstr "Ejecución de regla de contacto"
-
-#. module: mtbg_tours_crm_rules
-#: model:ir.actions.act_window,name:mtbg_tours_crm_rules.action_crm_rule
-msgid "Contact Rules"
-msgstr "Reglas de contacto"
-
-#. module: mtbg_tours_crm_rules
-#: model:ir.actions.client,name:mtbg_tours_crm_rules.action_crm_rule_settings
-msgid "Contact Rules Settings"
-msgstr "Ajustes de reglas de contacto"
-
-#. module: mtbg_tours_crm_rules
-#: model:ir.model,name:mtbg_tours_crm_rules.model_mtbg_crm_rule_inbox
-msgid "Contact Rules: messages received"
-msgstr "Reglas de contacto: mensajes recibidos"
-
-#. module: mtbg_tours_crm_rules
-#. odoo-javascript
-#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
-msgid "Contact rules"
-msgstr "Reglas de contacto"
-
-#. module: mtbg_tours_crm_rules
-#: model:ir.model.constraint,message:mtbg_tours_crm_rules.constraint_mtbg_crm_rule_code_unique
-msgid "Each contact rule has its own code."
-msgstr "Cada regla de contacto tiene su propio código."
-
-#. module: mtbg_tours_crm_rules
-#: model_terms:ir.actions.act_window,help:mtbg_tours_crm_rules.action_crm_rule
-msgid "No Contact rules"
-msgstr "No hay reglas de contacto"
-
-#. module: mtbg_tours_crm_rules
-#. odoo-python
-#: code:addons/mtbg_tours_crm_rules/models/page.py:0
-msgid "Only managers change the Contact rules."
-msgstr "Solo los gerentes cambian las reglas de contacto."
-
-#. module: mtbg_tours_crm_rules
-#: model_terms:ir.actions.act_window,help:mtbg_tours_crm_rules.action_crm_duplicate
-msgid ""
-"The duplicates rule (Contact Rules) flags contacts with the same phone or email. Check each pair; merge by\n"
-"               hand when they are the same person."
-msgstr ""
-"La regla de duplicados (Reglas de contacto) marca los contactos con el mismo teléfono o correo. Revisa cada par; combínalos\n"
-"               a mano cuando sean la misma persona."
-
-#. module: mtbg_tours_crm_rules
-#. odoo-javascript
-#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
-msgid ""
-"The latest changes the Contact rules made, newest first. Undo puts back what was there; a\n"
-"                field somebody changed since is left as it is."
-msgstr ""
-"Los últimos cambios que hicieron las reglas de contacto, los más recientes primero. Deshacer vuelve a poner lo que había; un\n"
-"                campo que alguien cambió después se deja como está."
-
-#. module: mtbg_tours_crm_rules
-#. odoo-python
-#: code:addons/mtbg_tours_crm_rules/models/alert_sources.py:0
-msgid ""
-"What a contact rule with \"Raise an Alert Feed item\" found; it leaves the "
-"feed once marked dealt with on the Contact Rules' changes."
-msgstr ""
-"Lo que encontró una regla de contacto con \"Crear una alerta en el Feed de "
-"alertas\"; sale del feed cuando se marca como atendido en los cambios de las"
-" Reglas de contacto."
-
-#. module: mtbg_tours_crm_rules
-#. odoo-javascript
-#: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
-msgid ""
-"What needs attention (alert rules) and what is kept tidy on its own (contact\n"
-"                rules), read from every part of MTBG Tours."
-msgstr ""
-"Lo que necesita atención (reglas de alerta) y lo que se mantiene en orden por sí solo (reglas de\n"
-"                contacto), leído de todas las partes de MTBG Tours."
-
-#. module: mtbg_tours_crm_rules
-#. odoo-python
-#: code:addons/mtbg_tours_crm_rules/models/alert_sources.py:0
-msgid "contact rule alerts"
-msgstr "alertas de reglas de contacto"

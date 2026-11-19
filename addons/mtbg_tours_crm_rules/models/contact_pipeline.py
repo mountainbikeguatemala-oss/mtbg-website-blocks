@@ -6,12 +6,14 @@ Moved here from Tours Communications 0.8 (0.4.0); the fields keep their names, T
   are considered clients"), Staff, Vendor or Internal for the people who are not customers (no stage, no client
   journeys). Every new contact starts a Lead (a WhatsApp number that writes in, a sender made a contact from the
   inbox, a website buyer) and becomes a Client, for good, when they pay. A type chosen by a person is kept.
-* **Stage**: a lead is New (no contact yet), Lead (they reached us: a source channel) or Lost (by hand); a client is
-  Customer. An extension adds its own stages and computes them (Tours: Past client, Repeat client, from the
+* **Stage**: a lead is New (no contact yet), Lead (they reached us: a source channel), Negotiation (0.5.0: a quote
+  was made for them, or set by hand) or Lost (by hand); a client is Customer. An extension adds its own stages and computes them (Tours: Past client, Repeat client, from the
   bookings), with ``selection_add`` and ``_compute_mtbg_stage`` / ``_mtbg_stage_depends``.
 * **The hook for paying customers**: ``partner._mtbg_mark_customer(source=None)``: a sale paid (a website sale, a
   shop's quote paid) makes its contact a client (stage Customer), ``source`` its source channel when it has none
   yet (e.g. ``'website_sale'``). Nothing is sent: no flow watches the type.
+* **The hook for quotes** (0.5.0): ``partner._mtbg_mark_negotiation()``: a quote made for a New or Lead contact moves
+  them to Negotiation; never backwards (a customer stays a customer, a lost lead stays lost). Soft-checked too.
 * **Classification**: the sure types every day (suppliers vendors, ourselves internal; never over a type set by
   hand), so no client journey reaches a supplier or our own inbox; all contacts once on install.
 """
@@ -27,12 +29,15 @@ CONTACT_TYPES = [
 STAGES = [
     ('new', 'No contact yet'),
     ('lead', 'Lead'),
+    ('negotiation', 'Negotiation'),
     ('customer', 'Customer'),
     ('lost', 'Lost / not a fit'),
 ]
 # the customer side: leads and clients (stages, journeys, the pipeline)
 CUSTOMER_TYPES = ('lead', 'client')
-STAGE_COLORS = {'new': '#9aa0a6', 'lead': '#f1c232', 'customer': '#6cc66c', 'lost': '#e5534b'}
+STAGE_COLORS = {'new': '#9aa0a6', 'lead': '#f1c232', 'negotiation': '#f08c2e', 'customer': '#6cc66c', 'lost': '#e5534b'}
+# a lead's stages that a person can pick (a contacts screen): the rest come from what they bought
+HAND_STAGES = ('new', 'lead', 'negotiation', 'customer', 'lost')
 # our own addresses: the company's mailboxes are not clients. Their domains come from the company (its email, its
 # website) and the setting mtbg_tours.own_email_domains (more, comma separated): never a business name in the code
 OWN_DOMAINS_PARAM = 'mtbg_tours.own_email_domains'
@@ -62,6 +67,10 @@ class ResPartnerPipeline(models.Model):
                                        "contact, a client's from what they bought")
     mtbg_lost = fields.Boolean(string='Lost / not a fit', tracking=True,
                                help="Set by hand: not going to buy. Paying makes them a customer again.")
+    mtbg_negotiation = fields.Boolean(
+        string='Negotiation', tracking=True, copy=False,
+        help="A quote was made for this lead (set when a quote is made, or by hand): stage Negotiation until they "
+             "pay (Customer) or are lost.")
     # the pipeline's fields shown on the contact's page by another extension (Tours Core's contact page): this
     # extension's own then hide
     mtbg_pipeline_elsewhere = fields.Boolean(compute='_compute_mtbg_pipeline_elsewhere')
@@ -91,7 +100,7 @@ class ResPartnerPipeline(models.Model):
 
     def _mtbg_stage_depends(self):
         """What the stage is computed from (an extension adds its own: super() + theirs)."""
-        return ['mtbg_contact_type', 'mtbg_lost', 'mtbg_lead_source_id']
+        return ['mtbg_contact_type', 'mtbg_lost', 'mtbg_negotiation', 'mtbg_lead_source_id']
 
     def _mtbg_contacted_us(self):
         """They reached us: a source channel (their first message, a form, a sale...)."""
@@ -107,6 +116,8 @@ class ResPartnerPipeline(models.Model):
                 partner.mtbg_stage = 'customer'
             elif partner.mtbg_lost:
                 partner.mtbg_stage = 'lost'
+            elif partner.mtbg_negotiation:
+                partner.mtbg_stage = 'negotiation'
             elif partner._mtbg_contacted_us():
                 partner.mtbg_stage = 'lead'
             else:
@@ -156,8 +167,44 @@ class ResPartnerPipeline(models.Model):
             partners.filtered(lambda p: p.mtbg_contact_type in CUSTOMER_TYPES)._mtbg_set_lead_source(source)
         clients = partners.filtered(lambda p: p.mtbg_contact_type == 'lead' and not p.mtbg_contact_type_manual)
         if clients:
-            clients.with_context(mtbg_auto_type=True).write({'mtbg_contact_type': 'client', 'mtbg_lost': False})
+            clients.with_context(mtbg_auto_type=True).write({'mtbg_contact_type': 'client', 'mtbg_lost': False,
+                                                            'mtbg_negotiation': False})
         return clients
+
+    def _mtbg_mark_negotiation(self):
+        """The hook for a quote made (0.5.0, owner 2026-11-19: a shop's quote for a lead): New and Lead contacts move to
+        Negotiation. Never backwards: customers (any client stage), lost leads, staff, vendors and internal contacts
+        are left as they are. Nothing is sent. Returns the contacts that moved.
+
+        Other extensions call it with a soft check: ``if hasattr(partner, '_mtbg_mark_negotiation'):``."""
+        partners = self.sudo().exists().filtered(
+            lambda p: p.mtbg_contact_type == 'lead' and not p.mtbg_lost and not p.mtbg_negotiation
+            and p.mtbg_stage in ('new', 'lead'))
+        if partners:
+            partners.write({'mtbg_negotiation': True})
+        return partners
+
+    def _mtbg_set_stage(self, stage):
+        """A stage picked by a person (a contacts screen's stage menu or board; 0.5.0): New / Lead (back to an open
+        lead), Negotiation, Customer (a client), Lost. Customer and the stages of a lead change the contact type, as
+        a person choosing it (kept by the automatic classification). Stages computed from bookings or sales (e.g.
+        Tours' Past client) cannot be picked. Returns False for a stage that cannot."""
+        if stage not in HAND_STAGES:
+            return False
+        for partner in self:
+            vals = {}
+            if stage == 'customer':
+                if partner.mtbg_contact_type != 'client':
+                    vals['mtbg_contact_type'] = 'client'
+                vals.update(mtbg_lost=False, mtbg_negotiation=False)
+            else:
+                if partner.mtbg_contact_type not in CUSTOMER_TYPES or partner.mtbg_contact_type == 'client':
+                    vals['mtbg_contact_type'] = 'lead'
+                vals.update(mtbg_lost=stage == 'lost', mtbg_negotiation=stage == 'negotiation')
+            changed = {key: value for key, value in vals.items() if partner[key] != value}
+            if changed:
+                partner.write(changed)
+        return True
 
     # ------------------------------------------------------------------ classification
     @api.model

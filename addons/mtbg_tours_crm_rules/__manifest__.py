@@ -1,6 +1,6 @@
 {
     'name': 'MTBG — Contact Rules',
-    'version': '19.0.0.4.0',
+    'version': '19.0.0.5.0',
     # where the updater gets it (the universal repo; owner, 2026-11-18: contact rules go global, from the Tours repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     'category': 'Productivity',
@@ -23,7 +23,11 @@ The contact pipeline (0.4.0, owner 2026-11-18: the same pipeline on every site; 
 * Each contact's type: Lead, Client, Staff, Vendor, Internal (``mtbg_contact_type``, ``mtbg_is_lead``); a new contact
   is a lead (a WhatsApp number that writes in, an email sender made a contact, a website buyer), a paying customer a
   client, for good; a type chosen by a person is kept; the sure types (suppliers, ourselves) every day.
-* Its stage: New, Lead, Customer, Lost (``mtbg_stage``); Tours adds Past client and Repeat client from its bookings.
+* Its stage: New, Lead, Negotiation, Customer, Lost (``mtbg_stage``); Tours adds Past client and Repeat client from
+  its bookings. Negotiation (0.5.0): a quote made for a New or Lead contact (``res.partner._mtbg_mark_negotiation()``,
+  called by a shop with a soft check), or the Negotiation box by hand; never backwards.
+* A stage picked by a person on another screen: ``res.partner._mtbg_set_stage(stage)`` (New, Lead, Negotiation,
+  Customer, Lost).
 * Its source channel (``mtbg_lead_source_id``, Odoo's UTM sources): first touch only, set by the Communication Flow
   Designer from the first message received (WhatsApp, Email, Webchat...), by a website sale (Website sale) or a form.
 * The hook for a sale paid: ``res.partner._mtbg_mark_customer(source=None)`` (a lead becomes a client, stage
