@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
-    <t t-name="label_printer.LabelPrintButton">
+    <t t-name="printer_connector.LabelPrintButton">
         <div t-att-class="'bsx_labelprint ' + (props.class or '') + (props.highlight ? ' bsx_labelprint_highlight' : '')">
             <div t-if="props.highlight" class="bsx_labelprint_ask">Print its label?</div>
             <div class="bsx_labelprint_row">
@@ -24,7 +24,7 @@
         </div>
     </t>
 
-    <t t-name="label_printer.LabelPreview">
+    <t t-name="printer_connector.LabelPreview">
         <div class="bsx_label_preview mb-3">
             <div class="bsx_label_preview_tape"><div t-ref="holder"/></div>
             <div class="d-flex flex-wrap align-items-center gap-2 mt-2">

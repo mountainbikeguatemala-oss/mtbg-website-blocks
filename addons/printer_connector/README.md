@@ -1,4 +1,4 @@
-# Label Printer: the MakeID BLE protocol
+# Printer Connector: the MakeID BLE protocol
 
 Worked out from the MakeID-Life Android app (2.2.0) and checked on an E1 (protocol version 1.30, 96-dot head,
 170 rows per chunk): test labels and a ruler printed correctly.

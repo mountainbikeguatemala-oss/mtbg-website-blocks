@@ -22,4 +22,4 @@ class TestLabelLayout(TransactionCase):
         """The install hook re-owns the shop core's records (nothing to do on a site without them)."""
         data = self.env["ir.model.data"].search([("name", "=", "label_layout_default"),
                                                  ("model", "=", "bsx.label.layout")])
-        self.assertEqual(data.mapped("module"), ["label_printer"])
+        self.assertEqual(data.mapped("module"), ["printer_connector"])

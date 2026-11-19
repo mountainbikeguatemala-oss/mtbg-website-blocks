@@ -1,7 +1,7 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
-# what the label printers' screens read (label_printer/label_render.js)
+# what the label printers' screens read (printer_connector/static/src/label_render.js)
 PRINT_FIELDS = (
     "tape_mm", "length_mm", "min_length_mm", "max_length_mm", "margin_mm", "darkness", "gap_mode",
     "show_barcode", "barcode_height_mm", "bar_module_dots", "barcode_max_mm", "show_code", "code_font_px",

@@ -62,7 +62,7 @@ export async function printProductLabels(orm, product, copies = 1) {
 }
 
 export class LabelPrintButton extends Component {
-    static template = "label_printer.LabelPrintButton";
+    static template = "printer_connector.LabelPrintButton";
     static props = {
         product: Object,
         highlight: { type: Boolean, optional: true },
@@ -114,7 +114,7 @@ export class LabelPrintButton extends Component {
 }
 
 export class BsxLabelPreview extends Component {
-    static template = "label_printer.LabelPreview";
+    static template = "printer_connector.LabelPreview";
     static props = { ...standardWidgetProps };
 
     setup() {
