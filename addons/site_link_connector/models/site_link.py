@@ -4,12 +4,14 @@ X-Odoo-Database)."""
 import logging
 import time
 
+from urllib.parse import urlencode, urlparse
+
 import requests
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
-from .site_link_sso import SSO_ADMIN_GROUPS
+from .site_link_sso import SSO_ADMIN_GROUPS, SSO_GROUP, is_admin_user
 
 _logger = logging.getLogger(__name__)
 
@@ -21,6 +23,14 @@ ROLES = [
 ]
 # what the employee list sync sends and watches on res.users
 USER_SYNC_FIELDS = {'login', 'name', 'email', 'active', 'group_ids', 'share'}
+
+
+def is_local_path(path):
+    """True for a path of a site (/..., not //host, no scheme or host, no control characters)."""
+    if not isinstance(path, str) or not path.startswith('/') or path.startswith(('//', '/\\')):
+        return False
+    parsed = urlparse(path)
+    return not (parsed.scheme or parsed.netloc or any(c in path for c in '\r\n\t'))
 
 
 class SiteLinkError(UserError):
@@ -58,6 +68,8 @@ class SiteLink(models.Model):
                                      "email, active) are sent to the other site, which makes, updates and archives its "
                                      "users to match (no password: they sign in with their account here). Sent on "
                                      "every change of a user, by a daily safety net, and with Sync employees now. "
+                                     "Employees sent with shop access may be signed in here from the other site "
+                                     "too (they get \"Site link: single sign-on allowed\" here). "
                                      "Set it on one side only.")
     shop_group_ids = fields.Many2many('res.groups', 'site_link_shop_group_rel', 'site_id', 'group_id',
                                       string='Shop Access Groups',
@@ -223,11 +235,74 @@ class SiteLink(models.Model):
         return method in (health.get('methods') or [])
 
     @api.model
-    def _site_link_sso_url(self, login, site='inventory_source'):
-        """The full one-time sign-in address on the linked site for its user ``login`` (valid 60 seconds)."""
+    def _site_link_sso_url(self, login, site='inventory_source', return_path=None):
+        """The full one-time sign-in address on the linked site for its user ``login`` (valid 60 seconds).
+        ``return_path``: what it opens once signed in (a path of that site, or a name its health lists in ``paths``);
+        without one, that site's home."""
         site = self._site_link_resolve(site)
         answer = self._site_link_api('sso_ticket', site, login=login)
-        return (site.base_url or '').strip().rstrip('/') + answer['url']
+        url = (site.base_url or '').strip().rstrip('/') + answer['url']
+        path = self._site_link_partner_path(return_path, site) if return_path else None
+        if path:
+            # ``return`` (19.0.0.2.4) and ``redirect`` (what older versions of the other site read)
+            url += ('&' if '?' in url else '?') + urlencode({'return': path, 'redirect': path})
+        return url
+
+    @api.model
+    def _site_link_partner_paths(self, site='inventory_source'):
+        """The named paths the linked site lists in its health (``paths``, e.g. {'staff_app': '/odoo/...'}); {} when
+        it lists none, is not linked or does not answer. Costs one call."""
+        try:
+            health = self._site_link_resolve(site)._site_link_health()
+        except SiteLinkError:
+            return {}
+        paths = health.get('paths')
+        if not isinstance(paths, dict):
+            return {}
+        return {name: path for name, path in paths.items()
+                if isinstance(name, str) and isinstance(path, str) and is_local_path(path)}
+
+    @api.model
+    def _site_link_partner_path(self, path, site='inventory_source'):
+        """``path`` when it is a path (starts with /), else the linked site's path of that name (its health's
+        ``paths``); None when it is neither."""
+        if not isinstance(path, str) or not path:
+            return None
+        if path.startswith('/'):
+            return path if is_local_path(path) else None
+        return self._site_link_partner_paths(site).get(path)
+
+    @api.model
+    def _site_link_partner_url(self, path='', site='inventory_source'):
+        """The linked site's full address for ``path``: a path ('/odoo/inventory') or a name its health lists in
+        ``paths`` ('staff_app'); '' for its home. None when no site is linked or that site lists no such name.
+        Plain address, no sign-in: see _site_link_sso_start_url for the signed-in way."""
+        try:
+            site = self._site_link_resolve(site)
+        except SiteLinkError:
+            return None
+        base = (site.base_url or '').strip().rstrip('/')
+        if not base.startswith(('http://', 'https://')):
+            return None
+        if not path:
+            return base + '/'
+        resolved = self._site_link_partner_path(path, site)
+        return base + resolved if resolved else None
+
+    @api.model
+    def _site_link_sso_start_url(self, path='', site='staff_source'):
+        """The way to the linked site ``site`` signed in with this site's login: this site's
+        ``/site_link/sso/start?return=<its address for path>&fallback=1`` when it gives this site single sign-on
+        tickets (an API key saved and ``sso_ticket`` in its health; a ticket refused for this user opens the address
+        as it is), else its plain address (signed in there only when the browser already is). None when no site is
+        linked or it lists no such path."""
+        target = self._site_link_partner_url(path, site)
+        if not target:
+            return None
+        site = self._site_link_resolve(site)
+        if site.sudo().api_key and self._site_link_offers('sso_ticket', site):
+            return '/site_link/sso/start?' + urlencode({'return': target, 'fallback': '1'})
+        return target
 
     @api.model
     def _site_link_customer_search(self, query, limit=10, site='inventory_source'):
@@ -280,12 +355,13 @@ class SiteLink(models.Model):
         result on the site; raises SiteLinkError when the call fails (logged as every failed call)."""
         self.ensure_one()
         _ = self.env._
+        users = self._site_link_sync_users_list()
+        self._site_link_sync_sso_back(users)
         if not self._site_link_offers('user_sync', self):
             message = _("Skipped: %s offers no employee sync (user_sync); is Site Link Connector up to date there?",
                         self.name)
             self.sudo().write({'last_sync_at': fields.Datetime.now(), 'last_sync_message': message})
             return None
-        users = self._site_link_sync_users_list()
         answer = self._site_link_api('user_sync', self, users=users) or []
         created = sum(1 for a in answer if a.get('created'))
         updated = sum(1 for a in answer if a.get('updated'))
@@ -293,6 +369,40 @@ class SiteLink(models.Model):
                     sent=len(users), created=created, updated=updated)
         self.sudo().write({'last_sync_at': fields.Datetime.now(), 'last_sync_message': message})
         return answer
+
+    def _site_link_sync_sso_back(self, users):
+        """The way back (19.0.0.2.4): an employee sent with shop access may be signed in HERE from the linked site
+        too (its app's switch back to this one, site.link.api.sso_ticket on this site), so they get this site's group
+        "Site link: single sign-on allowed"; sent with shop access false, it is taken away; null leaves it. Never
+        user ids 1 and 2, administrators (Settings or Access Rights), archived or portal users (who are refused a
+        ticket anyway). Answers the logins changed."""
+        from .site_link_api import escape_like  # (that module imports this one)
+        group = self.env.ref(SSO_GROUP, raise_if_not_found=False)
+        if not group:
+            return []
+        Users = self.env['res.users'].sudo().with_context(active_test=False)
+        changed = []
+        for row in users or []:
+            shop = row.get('shop_access') if isinstance(row, dict) else None
+            login = row.get('login') if isinstance(row, dict) else None
+            if shop not in (True, False) or not isinstance(login, str) or not login.strip():
+                continue
+            user = Users.search([('login', '=ilike', escape_like(login.strip()))], limit=1)
+            if not user or is_admin_user(user) or user.share:
+                continue
+            allowed = shop and user.active and row.get('active', True) is not False
+            if allowed and group not in user.group_ids:
+                user.write({'group_ids': [(4, group.id)]})
+                changed.append(user.login)
+            elif not allowed and group in user.group_ids:
+                user.write({'group_ids': [(3, group.id)]})
+                changed.append(user.login)
+        if changed:
+            self.env['site.link.log'].sudo()._site_link_event(
+                'sso', 'user_sync', self.env._("Single sign-on from %(site)s here: %(logins)s (shop access).",
+                                               site=', '.join(self.mapped('name')), logins=', '.join(changed)),
+                model='site.link')
+        return changed
 
     def action_sync_users(self):
         """Button: Sync employees now."""

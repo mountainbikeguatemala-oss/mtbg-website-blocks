@@ -2,6 +2,20 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'site_link_connector-*'`.
 
+## 19.0.0.2.4 · 2026-11-19
+- **Single sign-on both ways** (owner, 2026-11-19: the Staff App's Tour / Tienda switch, between the two sites):
+  the sign-in link opens `return` (`redirect`, its older name, still read): a path of this site or a full address on
+  this site's own host; anything else is refused (logged) and `/odoo` opens. `/site_link/sso/start` works on either
+  site towards any linked site with an API key, passes the path as `return` (and `redirect` for older versions) and,
+  with `fallback=1`, opens the address as it is when the other site gives no ticket for that login (logged).
+- Employees sent with shop access (Send Employees) get *Site link: single sign-on allowed* on the sending site too
+  (shop access false takes it away; never ids 1 and 2, administrators or portal users): the other site's app can
+  sign them back in. Logged.
+- `health()` answers `sso_return: true` and `paths`: the named paths of this site another extension gives through
+  `res.users._site_link_paths()` (no dependency needed).
+- Caller side: `_site_link_sso_url(login, site, return_path)`, `_site_link_partner_url(path, site)` (a path or a
+  name from the other site's `paths`), `_site_link_partner_paths(site)`, `_site_link_sso_start_url(path, site)`.
+
 ## 19.0.0.2.3 · 2026-11-18
 - **New: `inbox_unread(login)`** (owner, 2026-11-18: the shop's client messages pop up, and the Staff App's shop
   tile shows how many wait for a reply): `{count, enabled}`, the conversations that user may see whose last message

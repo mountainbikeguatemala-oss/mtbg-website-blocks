@@ -160,13 +160,14 @@ class TestSiteLinkSso(HttpCase):
                 as call:
             for evil in ('https://evil.example.com/odoo', 'https://shop.example.com.evil.example.com/',
                          'https://shop.example.com@evil.example.com/', '//shop.example.com/odoo',
-                         'http://shop.example.com/odoo', 'https://shop.example.com:8443/', 'javascript:alert(1)', ''):
+                         'http://shop.example.com/odoo', 'https://shop.example.com:8443/', 'javascript:alert(1)', '',
+                         'https://shop.example.com:443.evil.example.com/'):
                 with self.subTest(evil=evil):
                     self.assertEqual(self.start(evil).status_code, 403)
             call.assert_not_called()
             res = self.start(good)
-        self.assertEqual(res.headers['Location'],
-                         'https://shop.example.com/site_link/sso/TOKEN?redirect=%2Fodoo%2Finventory')
+        self.assertEqual(res.headers['Location'], 'https://shop.example.com/site_link/sso/TOKEN'
+                                                  '?return=%2Fodoo%2Finventory&redirect=%2Fodoo%2Finventory')
         self.assertEqual(call.call_args.args, (shop, 'site.link.api', 'sso_ticket'))
         self.assertEqual(call.call_args.kwargs, {'login': self.mechanic.login})
 
@@ -193,3 +194,60 @@ class TestSiteLinkSso(HttpCase):
         self.assertFalse(self.session_uid())
         self.assertIn('administrator', self.sso_logs(self.mechanic).filtered(
             lambda l: l.method == 'sso_login').message)
+
+    # ------------------------------------------------------------------ both ways (19.0.0.2.4)
+
+    def test_sign_in_return(self):
+        """``return`` (and ``redirect``, its older name): a path here or a full address on this site's own host;
+        anything else opens /odoo and is logged."""
+        own = self.base_url().rstrip('/')
+        for params, expected in (({'return': '/odoo/action-base.action_res_users?x=1'},
+                                  '/odoo/action-base.action_res_users?x=1'),
+                                 ({'return': own + '/odoo/settings?a=b'}, '/odoo/settings?a=b'),
+                                 ({'return': '/odoo/a', 'redirect': '/odoo/b'}, '/odoo/a'),
+                                 ({'redirect': '/odoo/b'}, '/odoo/b'),
+                                 ({'return': 'https://evil.example.com/odoo'}, '/odoo'),
+                                 ({'return': own.replace('http://', 'https://') + '/odoo/x'}, '/odoo'),
+                                 ({'return': own + '.evil.example.com/odoo'}, '/odoo'),
+                                 ({'return': '//evil.example.com/odoo'}, '/odoo')):
+            with self.subTest(params=params):
+                self.opener.cookies.clear()
+                url = self.Api.sso_ticket(self.mechanic.login)['url']
+                res = self.url_open(url, params=params, allow_redirects=False)
+                location = urlparse(res.headers['Location'])
+                self.assertIn(location.netloc, ('', urlparse(self.base_url()).netloc))
+                self.assertEqual(location.path + ('?' + location.query if location.query else ''), expected)
+                self.assertEqual(self.session_uid(), self.mechanic.id)
+        refused = self.sso_logs(self.mechanic).filtered(lambda l: l.status == 400)
+        self.assertEqual(len(refused), 4)
+        self.assertIn('evil.example.com', refused.sorted('id')[0].message)
+
+    def test_start_fallback(self):
+        """``fallback=1``: no ticket there for this login, the address opens as it is (logged); without it the error
+        page."""
+        from unittest.mock import patch
+        from odoo.addons.site_link_connector.models.site_link import SiteLinkError
+        self.env['site.link'].create({'name': 'Tours', 'base_url': 'https://staff.example.com', 'api_key': 'K',
+                                      'role': 'staff_source'})
+        Site = type(self.env['site.link'])
+        target = 'https://staff.example.com/odoo/action-x?staff_mode=tour'
+        # not signed in: the login page keeps the fallback for the way back
+        res = self.url_open('/site_link/sso/start', params={'return': target, 'fallback': '1'},
+                            allow_redirects=False)
+        self.assertIn('fallback%3D1', res.headers['Location'])
+        self.authenticate(self.mechanic.login, self.mechanic.login)
+        refusal = SiteLinkError("Tours: No single sign-on for x: administrator.", 422)
+        with patch.object(Site, '_site_link_call', side_effect=refusal):
+            res = self.url_open('/site_link/sso/start', params={'return': target, 'fallback': '1'},
+                                allow_redirects=False)
+            self.assertEqual(res.headers['Location'], target)
+            res = self.url_open('/site_link/sso/start', params={'return': target}, allow_redirects=False)
+            self.assertEqual(res.status_code, 502)
+        log = self.sso_logs(self.mechanic).filtered(lambda l: l.method == 'sso_start')
+        self.assertEqual(log.status, 422)
+        self.assertIn('opened https://staff.example.com/odoo/action-x', log.message)
+        with patch.object(Site, '_site_link_call', return_value={'url': '/site_link/sso/T', 'expires_in': 60}):
+            res = self.url_open('/site_link/sso/start', params={'return': target, 'fallback': '1'},
+                                allow_redirects=False)
+        self.assertEqual(res.headers['Location'], 'https://staff.example.com/site_link/sso/T?return='
+                         '%2Fodoo%2Faction-x%3Fstaff_mode%3Dtour&redirect=%2Fodoo%2Faction-x%3Fstaff_mode%3Dtour')

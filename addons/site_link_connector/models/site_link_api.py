@@ -9,13 +9,17 @@ dependency; Repair and a customer bike model are used where they are installed);
 inbox of Communication Flows (its side panel) is. See README.md."""
 import hashlib
 import json
+import logging
 import re
 
 from odoo import api, models, release
 from odoo.exceptions import AccessError, UserError
 from odoo.tools import float_round
 
+from .site_link import is_local_path
 from .site_link_sso import SSO_GROUP, SSO_TTL, is_admin_user
+
+_logger = logging.getLogger(__name__)
 
 PROTOCOL_VERSION = 1
 BASE_METHODS = ['health', 'sso_ticket', 'user_sync', 'customer_search', 'customer_create', 'customer_bikes']
@@ -128,7 +132,27 @@ class SiteLinkApi(models.AbstractModel):
             'user': self.env.user.login,
             'company': self.env.company.name,
             'methods': self._site_link_methods(),
+            # 19.0.0.2.4: the sign-in link opens ``return`` (a path here, or a full address on this site's host)
+            'sso_return': True,
+            'paths': self._site_link_paths(),
         }
+
+    def _site_link_paths(self):
+        """The named paths of this site a linked site may open (health's ``paths``, read by
+        site.link._site_link_partner_url there): what another extension's ``res.users._site_link_paths()`` answers
+        ({name: path}; no dependency on this connector needed), paths only."""
+        Users = self.env['res.users'].sudo()
+        if not hasattr(Users, '_site_link_paths'):
+            return {}
+        try:
+            paths = Users._site_link_paths() or {}
+        except Exception:  # noqa: BLE001 - another extension's hook never breaks the health check
+            _logger.warning("site link: res.users._site_link_paths() failed", exc_info=True)
+            return {}
+        if not isinstance(paths, dict):
+            return {}
+        return {name: path for name, path in paths.items()
+                if isinstance(name, str) and name and isinstance(path, str) and is_local_path(path)}
 
     @api.model
     @api.readonly

@@ -55,7 +55,23 @@ if Site._site_link_offers('repair_quote'):            # soft check: False when n
     quote = Site._site_link_repair_quote('WO-12', partner_id, [{'product': '7501234567890', 'qty': 1},
                                                               {'service': 'Brake bleed', 'price': 150, 'hours': 1}])
 url = Site._site_link_sso_url('mechanic@example.com')  # full address of the one-time sign-in link
+url = Site._site_link_sso_url('mechanic@example.com', return_path='/odoo/inventory')  # ... that opens this path
 ```
+
+Addresses on the linked site (19.0.0.2.4; for a switch between the two sites' apps):
+
+```python
+Site._site_link_partner_url('/odoo', site='staff_source')      # 'https://staff.example.com/odoo'
+Site._site_link_partner_url('staff_app', site='staff_source')  # a path the other site names in its health()['paths']
+Site._site_link_partner_paths(site='staff_source')             # {'staff_app': '/odoo/...'}: all its named paths
+Site._site_link_sso_start_url('staff_app', site='staff_source')
+# '/site_link/sso/start?return=https%3A%2F%2Fstaff.example.com%2F...&fallback=1' (a path of THIS site): signed in
+# there with this login when that site gives this one tickets (API key saved, sso_ticket offered), else the plain
+# address; None when there is no such site or path
+```
+
+A site names its paths for the other one by defining `res.users._site_link_paths()` in any extension (answering
+`{name: path}`, paths only; no dependency on this connector needed): `health()` lists them in `paths`.
 
 `_site_link_api(method, site, **kwargs)`, `_site_link_customer_search(query, limit)`,
 `_site_link_customer_create(name, phone, email)`, `_site_link_customer_bikes(partner_id)`,
@@ -69,7 +85,7 @@ needs the group *Site Link: calls from a linked site* (or to be an administrator
 
 | Method | Arguments | Answer |
 |---|---|---|
-| `health()` | none | `{protocol: 1, module: "site_link_connector", module_version, odoo_version, database, user, company, methods: [...]}` |
+| `health()` | none | `{protocol: 1, module: "site_link_connector", module_version, odoo_version, database, user, company, methods: [...], sso_return: true, paths: {name: path}}` |
 | `part_lookup(barcode)` | `barcode` (text) | not found: `{found: false, barcode}`; found: `{found: true, id, name, default_code, barcode, qty_available, uom, unit_cost, sale_price, currency, vendor, image_url}` |
 | `part_consume(product, qty, reference, note=None)` | `product`: product id (number) or barcode (text); `qty` > 0 (in the product's unit); `reference` (text, required, at most 200 characters); `note` (text) | `{reference, move_id, product_id, product_name, qty, uom, unit_cost, total_cost, currency, already_done}` |
 | `sso_ticket(login)` | `login` of a user of this site (case does not matter) | `{url: "/site_link/sso/<token>", expires_in: 60}` |
@@ -106,8 +122,11 @@ needs the group *Site Link: calls from a linked site* (or to be an administrator
   user ids 1 and 2 (superuser, admin) or users with Settings or Access Rights rights: otherwise 422 with the
   reason. The same checks run again when the link is
   opened. `GET /site_link/sso/<token>` signs the user in (replacing any other session in that browser; two-factor
-  authentication is not asked again: the user is signed in on the other site) and opens `/odoo`; a used, expired or
-  unknown link, or a user no longer allowed, opens `/web/login`. Every ticket and sign-in, given or refused, is logged.
+  authentication is not asked again: the user is signed in on the other site) and opens `return` (19.0.0.2.4;
+  `redirect` is its older name, still read): a path of this site, or a full address on this site's own host
+  (scheme, host and port of the request), anything else is refused (logged) and `/odoo` opens; without it `/odoo`.
+  `health()` says `sso_return: true` from this version. A used, expired or unknown link, or a user no longer
+  allowed, opens `/web/login`. Every ticket and sign-in, given or refused, is logged.
 - `user_sync`: users matched by login (case does not matter); a missing one is made, as an internal user with no
   password (it signs in by single sign-on; no invitation email), **only when it is active and `shop_access` is
   true**: access to this site comes only with shop access. Otherwise only an existing user is updated; name and email follow; `active: false` archives
@@ -155,7 +174,17 @@ shows **Log in with your staff account**: `<staff site>/site_link/sso/start?retu
 employee in there (login page first), asks this site for a ticket for that login and sends them back signed in, to
 the path of `return`. The staff site checks `return` is on a linked site's address (same scheme, host and port, no
 user info: anything else is refused, 403) and that the employee is an internal user; this site opens only its own
-paths after the sign-in (`/site_link/sso/<token>?redirect=<path>`, else `/odoo`).
+paths after the sign-in (`/site_link/sso/<token>?return=<path>`, else `/odoo`).
+
+**Both ways (19.0.0.2.4).** The same start works on either site, towards any linked site with an API key: a switch
+between the two sites' apps sends the employee to `/site_link/sso/start?return=<the other site's address>&fallback=1`
+on the site they are on (`site.link._site_link_sso_start_url(path)` makes it). With `fallback=1` a ticket refused
+there (no such user, an administrator, not allowed) opens the address as it is (signed in when the browser already
+is; logged) instead of an error page. On the site with **Send Employees**, the employees sent with `shop_access`
+true get the group *Site link: single sign-on allowed* there too (false takes it away, null leaves it; never ids 1
+and 2, administrators or portal users), so the other site may sign them back in; each change is in the log. For
+that way the other site needs a link back with an API key of a technical user of this site (group *Site Link: calls
+from a linked site*).
 
 ## Tests
 

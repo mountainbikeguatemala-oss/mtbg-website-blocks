@@ -1,6 +1,6 @@
 {
     "name": "Site Link Connector",
-    "version": "19.0.0.2.3",
+    "version": "19.0.0.2.4",
     "category": "Productivity/Connectors",
     "mtbg_tours_section": "connectors",
     "summary": "Links two Odoo sites: each other's address, database and API key, a call helper with a log of failed "
@@ -27,8 +27,12 @@ technical user on the other side). Nothing else is needed on either side: it ins
   user change, daily and with "Sync employees now" (hook ``site.link._site_link_sync_users_list``). A login page
   button "Log in with your staff account" signs in through the site with the role Staff accounts
   (``/site_link/sso/start``, its return address checked to be a linked site's).
-* ``site.link._site_link_sso_url(login)``, ``_site_link_repair_quote(...)`` and the other one-line helpers, and
-  ``_site_link_offers(method)`` (soft check of what the other side offers).
+* ``site.link._site_link_sso_url(login, return_path=...)``, ``_site_link_repair_quote(...)`` and the other one-line
+  helpers, and ``_site_link_offers(method)`` (soft check of what the other side offers).
+* Both ways (19.0.0.2.4): the sign-in link opens ``return`` (a path of its site); ``/site_link/sso/start`` on either
+  site (``fallback=1``: the page as it is when no ticket is given); ``_site_link_partner_url(path)`` and
+  ``_site_link_sso_start_url(path)`` give the linked site's addresses, with the named paths its ``health()`` lists
+  (``res.users._site_link_paths()``); employees sent with shop access may be signed back in on the sending site.
 * The API keys stay with administrators and are cleared on a copy of the site (neutralize).
 """,
     "author": "MTBG Tours contributors",
