@@ -100,24 +100,36 @@ class TestZohoShare(TransactionCase):
         ICP.set_param('mtbg_tours.zoho_books_writes', '1')
         calls = []
 
-        def site_call(site, model, call, *ids, **kwargs):
-            calls.append((site, model, call, kwargs))
-            if kwargs['path'] == 'expenses' and kwargs['method'] == 'POST':
-                return {'body': {'code': 0, 'expense': {'expense_id': 'E7'}}}
-            if kwargs['path'] == 'contacts':
-                return {'error': 'Zoho Books GET contacts: 401 57 not authorised'}
-            return {'blocked': 'writes are off there'}
+        def post(url, json=None, headers=None, **kwargs):
+            """The other site's /json/2 (the real _site_link_call runs; only the network is faked)."""
+            calls.append((url, json, headers))
+            if json['path'] == 'expenses' and json['verb'] == 'POST':
+                answer = {'body': {'code': 0, 'expense': {'expense_id': 'E7'}}}
+            elif json['path'] == 'contacts':
+                answer = {'error': 'Zoho Books GET contacts: 401 57 not authorised'}
+            else:
+                answer = {'blocked': 'writes are off there'}
+            res = MagicMock()
+            res.status_code, res.content = 200, b'x'
+            res.json.return_value = answer
+            return res
 
         books = self.client.Zoho(self.env, 'books')
-        with patch.object(type(self.Site), '_site_link_call', autospec=False, side_effect=site_call):
+        from odoo.addons.site_link_connector.models import site_link as site_link_module
+        with patch.object(site_link_module.requests, 'post', side_effect=post):
             body = books.request('POST', 'expenses', json={'amount': 3},
                                  files={'receipt': ('r.jpg', b'JPG', 'image/jpeg')})
             self.assertEqual(body['expense']['expense_id'], 'E7')
             with self.assertRaises(self.client.ZohoError):
                 books.request('GET', 'contacts')
             with self.assertRaises(self.client.ZohoWriteBlocked):
-                books.request('PUT', 'expenses/E7', json={})
-        site, model, method, kwargs = calls[0]
-        self.assertEqual((site, model, method, kwargs['app']), (link, 'site.link.api', 'zoho_request', 'books'))
+                books.request('PUT', 'expenses/7', json={})
+        url, kwargs, headers = calls[0]
+        self.assertEqual(url, 'https://tours.example.com/json/2/site.link.api/zoho_request')
+        self.assertEqual((kwargs['app'], kwargs['verb'], kwargs['path']), ('books', 'POST', 'expenses'))
+        self.assertEqual(headers['Authorization'], 'bearer K')
         self.assertEqual(kwargs['files']['receipt'], ['r.jpg', base64.b64encode(b'JPG').decode(), 'image/jpeg'])
+        # what the other site receives is exactly what zoho_request takes
+        import inspect
+        self.assertLessEqual(set(kwargs), set(inspect.signature(type(self.Api).zoho_request).parameters) - {'self'})
         self.assertNotIn('organization_id', kwargs.get('params') or {}, "the other site adds its own")

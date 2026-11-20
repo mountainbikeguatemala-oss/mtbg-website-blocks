@@ -322,7 +322,7 @@ class SiteLinkApi(models.AbstractModel):
 
     @api.model
     @api.readonly
-    def zoho_request(self, app, method, path, params=None, json=None, files=None, record=None):
+    def zoho_request(self, app, verb, path, params=None, json=None, files=None, record=None):
         """One Zoho call for the linked site, with this site's Zoho login (its switches and Writes allowed too). Only
         where a link here ticks "May use our Zoho login"; Zoho Books only; reads anywhere, writes only to expenses,
         their receipts and vendor contacts. ``files``: {field: [name, base64, mimetype]}. Answers {body} (Zoho's
@@ -331,7 +331,8 @@ class SiteLinkApi(models.AbstractModel):
         client = self._site_link_zoho_client()
         if not client or not self._site_link_shares_zoho():
             raise UserError(self.env._("This site does not share its Zoho login with linked sites."))
-        method = (method or '').upper()
+        # ``verb``, not ``method``: the caller's _site_link_call already takes ``method`` (the remote one)
+        method = (verb or '').upper()
         path = (path or '').strip().strip('/')
         if app not in ZOHO_APPS:
             raise UserError(self.env._("Linked sites may use Zoho Books only, not %s.", app))

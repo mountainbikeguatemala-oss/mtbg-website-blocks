@@ -2,6 +2,10 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'zoho_connector-*'`.
 
+## 19.0.0.3.3 · 2026-11-20
+- Fix: a call through the linked site sends the HTTP method as `verb` (Site Link Connector 0.2.7); before, every call
+  through the link failed before leaving the site.
+
 ## 19.0.0.3.2 · 2026-11-20
 - Fix: **Sync from Zoho Books** on Expense Categories and Expense Payment Methods failed from the list's button (the
   button passes the selected records; the method took none).

@@ -2,6 +2,12 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'site_link_connector-*'`.
 
+## 19.0.0.2.7 · 2026-11-20
+- Fix: `zoho_request(app, verb, path, ...)`: the HTTP method is now `verb` (it was `method`, which the caller's
+  `_site_link_call(site, model, method, ...)` already takes: every call through the link failed with "got multiple
+  values for argument 'method'"). Zoho Connector 0.3.3 sends `verb`; ship both together. The test now runs the real
+  `_site_link_call` (only the network faked) and checks the arguments sent are exactly `zoho_request`'s.
+
 ## 19.0.0.2.6 · 2026-11-20
 - **One Zoho login for both sites** (owner, 2026-11-20: "we should just link via the site api the two sites zoho
   permission"; Zoho allows one Self Client, already used by the tours site): on the site with the Zoho login, a link's

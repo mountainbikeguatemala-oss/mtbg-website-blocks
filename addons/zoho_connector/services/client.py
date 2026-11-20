@@ -301,7 +301,7 @@ class Zoho:
                   for field, (name, data, mimetype) in files.items()} if files else None
         try:
             answer = self.env['site.link']._site_link_call(
-                self.via, 'site.link.api', 'zoho_request', app=self.app, method=method, path=path,
+                self.via, 'site.link.api', 'zoho_request', app=self.app, verb=method, path=path,
                 params=dict(params) if params else None, json=json, files=upload,
                 record=record.display_name if record else None) or {}
         except UserError as e:  # the link's own error (no answer, refused): never sent
