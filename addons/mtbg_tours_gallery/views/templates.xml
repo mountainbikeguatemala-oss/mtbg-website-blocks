@@ -29,7 +29,8 @@
     </template>
 
     <!-- The photo gallery (19.0.0.6.5): a main photo, the other photos in a grid of 5 under it ("+N" on the fifth when
-         there are more; the rest in the lightbox only), every photo opening in the page's lightbox as one set. For
+         there are more; the rest in the lightbox only), every photo opening in the page's lightbox as one set; a
+         thumbnail shows its photo in the main photo's box, the main photo opens the lightbox (19.0.0.6.7). For
          other modules (t-call with ``gallery_photos``: a list of {'src', 'full', 'alt'}, the first the main photo;
          ``gallery_set``: the lightbox set's name; ``gallery_alt``: the alt text when a photo has none); content
          blocks write the same markup by hand (CHANGELOG 19.0.0.6.5). Lazy, every box sized before it loads. -->
@@ -43,12 +44,13 @@
                  width="512" height="341" t-att-data-mtbg-full="gallery_first[0].get('full') or None"/>
             <div t-if="gallery_rest" class="mtbg-gallery__thumbs">
                 <t t-foreach="gallery_rest" t-as="photo">
-                    <span t-if="photo_index &lt; 5" t-attf-class="mtbg-gallery__thumb #{'mtbg-gallery__thumb--more' if photo_index == 4 and gallery_more else ''}"
-                          t-att-data-more="'+%s' % (len(gallery_rest) - 4) if photo_index == 4 and gallery_more else None">
+                    <!-- (19.0.0.6.7: a div, never a span: the website editor merges identical neighbouring spans) -->
+                    <div t-if="photo_index &lt; 5" t-attf-class="mtbg-gallery__thumb #{'mtbg-gallery__thumb--more' if photo_index == 4 and gallery_more else ''}"
+                         t-att-data-more="'+%s' % (len(gallery_rest) - 4) if photo_index == 4 and gallery_more else None">
                         <img t-att-src="photo['src']" t-att-alt="photo.get('alt') or gallery_alt or ''"
                              loading="lazy" decoding="async" width="96" height="64"
                              t-att-data-mtbg-full="photo.get('full') or None"/>
-                    </span>
+                    </div>
                     <!-- (beyond the grid: not shown, still in the lightbox after the "+N" one) -->
                     <img t-else="" class="mtbg-gallery__hidden" t-att-src="photo['src']"
                          t-att-alt="photo.get('alt') or gallery_alt or ''" loading="lazy" decoding="async" width="96" height="64"

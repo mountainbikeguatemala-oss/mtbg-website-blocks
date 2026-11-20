@@ -477,3 +477,171 @@ class TestPhotoGallery(HttpCase):
         """.replace('__ID__', str(ids[5]))
         self.browser_js('/photo-gallery-page', code, timeout=60,
                         ready="!!(document.documentElement.dataset.mtbgLightbox && document.querySelectorAll('.mtbg-gallery__thumb')[4]?.dataset.more)")
+
+    # 19.0.0.6.7 (owner, 2026-11-20: "each small thumb should change the main photo above. and then clicking on the
+    # main photo launches the lightbox")
+
+    JS_HELPERS = """
+        const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+        const check = (ok, what) => { if (!ok) { throw new Error(what); } };
+        async function until(fn, what, timeout = 15000) {
+            const end = Date.now() + timeout;
+            while (!fn()) {
+                if (Date.now() > end) { throw new Error('timed out: ' + what); }
+                await sleep(100);
+            }
+        }
+        const path = (url) => new URL(url, location.href).pathname;
+        const main = () => document.querySelector('.mtbg-gallery__main');
+        const thumbs = () => [...document.querySelectorAll('.mtbg-gallery__thumbs > .mtbg-gallery__thumb')];
+        const counter = () => document.querySelector('.pswp--open .pswp__counter')?.textContent.replace(/\\s/g, '');
+        const shown = () => document.querySelector('.pswp--open .pswp__item:not([aria-hidden="true"]) img.pswp__img:not(.pswp__img--placeholder)');
+        async function closeLightbox() {
+            await sleep(600); // (its opening animation done)
+            odoo.loader.modules.get('@mtbg_tours_content_blocks/shared/lightbox').openViewer().close();
+            await until(() => !document.querySelector('.pswp'), 'the lightbox closed');
+            await sleep(300);
+        }
+    """
+
+    def _browser(self, url, code, ready):
+        self.browser_js(url, """
+            (async () => {
+                %s
+                try {
+                    %s
+                    console.log('test successful');
+                } catch (e) {
+                    console.error(e.message);
+                }
+            })();
+        """ % (self.JS_HELPERS, code), ready=ready, timeout=90)
+
+    def _page(self, url, body):
+        self.env['website.page'].create({
+            'name': url, 'url': url, 'is_published': True, 'type': 'qweb',
+            'key': 'mtbg_tours_gallery.test_page%s' % url.replace('/', '_').replace('-', '_'),
+            'arch': '<t t-call="website.layout"><div id="wrap"><section><div class="container" style="max-width:600px">'
+                    '%s</div></section></div></t>' % body,
+        })
+
+    def test_thumbnail_shows_its_photo_main_opens_lightbox(self):
+        """A content block's gallery (the template's div thumbnails): a thumbnail shows its photo in the main photo's
+        box (the main photo's size, nothing moves, it ringed), the lightbox stays closed; the main photo opens it at
+        the photo shown (3 / 8, its full picture); Enter and Space on a thumbnail do the same as a tap, the active one
+        brings back the first photo; "+N" opens the lightbox at its photo."""
+        ids = self.pictures.ids
+        thumbs = ''.join('<div class="mtbg-gallery__thumb"><img src="/web/image/%s/192x128" data-mtbg-full="/web/image/%s" '
+                         'alt="t%s" width="96" height="64"/></div>' % (i, i, n) for n, i in enumerate(ids[1:], 1))
+        self._page('/photo-gallery-swap', '<div class="mtbg-gallery" data-mtbg-photo-set="swap"><img class="mtbg-gallery__main" '
+                   'src="/web/image/%s/512x341" data-mtbg-full="/web/image/%s" alt="main" width="512" height="341"/>'
+                   '<div class="mtbg-gallery__thumbs">%s</div></div>' % (ids[0], ids[0], thumbs))
+        self._browser('/photo-gallery-swap', """
+            const box = main().getBoundingClientRect();
+            const below = document.querySelector('.mtbg-gallery__thumbs').getBoundingClientRect().top;
+            check(thumbs().every((t) => t.getAttribute('role') === 'button' && t.tabIndex === 0), 'thumbnails are buttons');
+            check(main().getAttribute('role') === 'button' && main().tabIndex === 0, 'the main photo is a button');
+            // a tap on the second thumbnail: its photo in the main photo's box, at the main photo's size
+            thumbs()[1].querySelector('img').click();
+            await until(() => path(main().src) === '/web/image/__2__/512x341', 'the main photo is the second thumbnail\\'s');
+            await sleep(400);
+            check(!document.querySelector('.pswp--open'), 'a thumbnail does not open the lightbox');
+            const after = main().getBoundingClientRect();
+            check(Math.abs(after.width - box.width) < 1 && Math.abs(after.height - box.height) < 1, 'the box keeps its size');
+            check(Math.abs(document.querySelector('.mtbg-gallery__thumbs').getBoundingClientRect().top - below) < 1, 'nothing moves');
+            check(thumbs()[1].classList.contains('mtbg-gallery__thumb--active') && thumbs()[1].getAttribute('aria-pressed') === 'true', 'marked');
+            check(thumbs().filter((t) => t.classList.contains('mtbg-gallery__thumb--active')).length === 1, 'only it');
+            check(main().alt === 't2' && path(main().dataset.mtbgFull) === '/web/image/__2__', 'its alt and full picture');
+            // the main photo: the lightbox at the photo shown, every photo of the gallery in it
+            main().click();
+            await until(() => counter() && shown(), 'the lightbox opened');
+            check(counter() === '3/8', 'at the photo shown: ' + counter());
+            check(path(shown().src) === '/web/image/__2__', 'its full picture: ' + shown().src);
+            await closeLightbox();
+            // the keyboard: Enter on the first thumbnail, Space on it again (the active one): the first photo back
+            thumbs()[0].focus();
+            thumbs()[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+            await until(() => path(main().src) === '/web/image/__1__/512x341', 'Enter shows the first thumbnail\\'s photo');
+            const space = new KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true });
+            thumbs()[0].dispatchEvent(space);
+            check(space.defaultPrevented, 'Space does not scroll the page');
+            await until(() => path(main().src) === '/web/image/__0__/512x341', 'the active one again: the first photo');
+            check(!document.querySelector('.mtbg-gallery__thumb--active'), 'no thumbnail marked');
+            main().dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+            await until(() => counter(), 'Enter on the main photo opens the lightbox');
+            check(counter() === '1/8', 'at the first photo: ' + counter());
+            await closeLightbox();
+            // "+3" (the fifth): the lightbox at its photo, the main photo unchanged
+            check(thumbs()[4].dataset.more === '+3', '+3 on the fifth');
+            thumbs()[4].querySelector('img').click();
+            await until(() => counter(), '+N opens the lightbox');
+            check(counter() === '6/8', '+N at its photo: ' + counter());
+            check(path(main().src) === '/web/image/__0__/512x341', 'the main photo unchanged');
+        """.replace('__0__', str(ids[0])).replace('__1__', str(ids[1])).replace('__2__', str(ids[2])),
+            ready="!!(document.documentElement.dataset.mtbgLightbox && document.querySelector('.mtbg-gallery__thumb[role]'))")
+
+    def test_older_blocks_spans_merged_and_repeated_main(self):
+        """A block written before 19.0.0.6.7 (www's block 941): span thumbnails with data-mtbg-thumb, a span the website
+        editor merged holding 3 photos, the first thumbnail repeating the main photo. Each photo its own thumbnail,
+        the repeated one the first photo's button, the lightbox with each photo once (8, not 9); "+N" counted."""
+        ids = self.pictures.ids
+        span = lambda n, *pics: '<span class="mtbg-gallery__thumb" data-mtbg-thumb="%s">%s</span>' % (n, ''.join(
+            '<img src="/web/image/%s/192x128" data-mtbg-full="/web/image/%s" alt="t" width="96" height="64"/>' % (i, i) for i in pics))
+        grid = span(1, ids[0]) + span(2, ids[1]) + span(3, ids[2], ids[3], ids[4]) + span(6, ids[5]) + span(7, ids[6]) + span(8, ids[7])
+        self._page('/photo-gallery-older', '<div class="mtbg-gallery" data-mtbg-photo-set="older"><img class="mtbg-gallery__main" '
+                   'src="/web/image/%s/512x341" data-mtbg-full="/web/image/%s" alt="main" width="512" height="341"/>'
+                   '<div class="mtbg-gallery__thumbs">%s</div></div>' % (ids[0], ids[0], grid))
+        self._browser('/photo-gallery-older', """
+            check(thumbs().length === 8, 'one thumbnail a photo: ' + thumbs().length);
+            check(thumbs().every((t) => t.querySelectorAll('img').length === 1), 'the merged span split');
+            check(thumbs()[4].dataset.more === '+4', '+4 on the fifth: ' + thumbs()[4].dataset.more);
+            check(thumbs()[5].getBoundingClientRect().width <= 2, 'the sixth not seen');
+            check(thumbs()[0].classList.contains('mtbg-gallery__thumb--active'), 'the repeated main photo: the first photo, shown');
+            thumbs()[2].click();
+            await until(() => path(main().src) === '/web/image/__2__/512x341', 'a photo of the merged span');
+            main().click();
+            await until(() => counter(), 'the lightbox opened');
+            check(counter() === '3/8', 'each photo once: ' + counter());
+            await closeLightbox();
+            thumbs()[0].click();
+            await until(() => path(main().src) === '/web/image/__0__/512x341', 'the repeated one: the first photo back');
+        """.replace('__0__', str(ids[0])).replace('__2__', str(ids[2])),
+            ready="!!(document.documentElement.dataset.mtbgLightbox && document.querySelector('.mtbg-gallery__thumb[role]'))")
+
+    def test_template_swaps_too(self):
+        """Other modules' galleries (the template, e.g. Accommodations' hotel sections and upgrade slides): the same."""
+        ids = self.pictures.ids
+        self.env['ir.ui.view'].create({
+            'name': 'gallery host', 'type': 'qweb', 'key': 'mtbg_tours_gallery.test_template_host',
+            'arch': '<t t-name="mtbg_tours_gallery.test_template_host"><t t-call="mtbg_tours_gallery.photo_gallery">'
+                    '<t t-set="gallery_photos" t-value="photos"/><t t-set="gallery_set" t-value="&quot;tpl&quot;"/></t></t>'})
+        html = str(self.env['ir.qweb']._render('mtbg_tours_gallery.test_template_host', {'photos': self._photos()}))
+        self.assertEqual(html.count('<div class="mtbg-gallery__thumb '), 5, "div thumbnails (never merged by the editor)")
+        self.assertNotIn('<span', html)
+        self._page('/photo-gallery-template', html)
+        self._browser('/photo-gallery-template', """
+            thumbs()[3].click();
+            await until(() => path(main().src) === '/web/image/__4__/512x341', 'the fourth thumbnail\\'s photo');
+            main().click();
+            await until(() => counter(), 'the lightbox opened');
+            check(counter() === '5/8', 'at the photo shown, the hidden ones in the set: ' + counter());
+        """.replace('__4__', str(ids[4])),
+            ready="!!(document.documentElement.dataset.mtbgLightbox && document.querySelector('.mtbg-gallery__thumb[role]'))")
+
+    def test_saved_in_the_website_editor(self):
+        """A reusable block with a gallery, edited and saved in the website editor: the div thumbnails stay one
+        element each (the editor merged identical neighbouring spans), nothing the page's code adds is saved."""
+        ids = self.pictures.ids
+        thumbs = ''.join('<div class="mtbg-gallery__thumb"><img src="/web/image/%s/192x128" data-mtbg-full="/web/image/%s" '
+                         'alt="t" width="96" height="64"/></div>' % (i, i) for i in ids[1:])
+        block = self.env['mtbg.tours.content.block'].create({'name': 'Gallery host', 'body': (
+            '<p class="mtbg-test-text">Before the gallery.</p><div class="mtbg-gallery" data-mtbg-photo-set="saved">'
+            '<img class="mtbg-gallery__main" src="/web/image/%s/512x341" data-mtbg-full="/web/image/%s" alt="main" '
+            'width="512" height="341"/><div class="mtbg-gallery__thumbs">%s</div></div>') % (ids[0], ids[0], thumbs)})
+        self.start_tour(self.env['website'].get_client_action_url(f'/mtbg/block/{block.id}', True),
+                        'mtbg_photo_gallery_save_tour', login='admin', timeout=180)
+        body = str(block.body)
+        self.assertIn('Edited next to the gallery', body, "saved")
+        self.assertEqual(body.count('class="mtbg-gallery__thumb"'), 7, "7 thumbnails, one element each")
+        for added in ('role=', 'tabindex', 'aria-pressed', 'mtbg-gallery__thumb--active', 'data-more', '--more'):
+            self.assertNotIn(added, body)

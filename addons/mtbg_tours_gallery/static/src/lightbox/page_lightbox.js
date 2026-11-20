@@ -28,8 +28,12 @@ function isTile(img) {
     return !!img.closest(".mtbg-tg") && isShown(img);
 }
 
-/** A photo of a marked set (``data-mtbg-photo-set``): its set's shown photos open together. */
+/** A photo of a marked set (``data-mtbg-photo-set``): its set's shown photos open together. (The photo gallery's,
+ * ``.mtbg-gallery``: its own code opens them, photo_gallery.js, 19.0.0.6.7.) */
 function photoSet(img) {
+    if (img.closest(".mtbg-gallery")) {
+        return null;
+    }
     const set = img.closest("[data-mtbg-photo-set]");
     return set && isShown(img) ? set : null;
 }
@@ -37,7 +41,7 @@ function photoSet(img) {
 /** A page photo (of the page's data-mtbg-lightbox-photos): big enough, not a logo or an icon, not inside a form, not
  * a picture linking to a page; one marked data-mtbg-lightbox-always (e.g. a tour's cover) whatever its size. */
 function isPagePhoto(img) {
-    if (img.closest("form, .o_not_lightbox, .mtbg-tg, [data-mtbg-photo-set]")) {
+    if (img.closest("form, .o_not_lightbox, .mtbg-tg, [data-mtbg-photo-set], .mtbg-gallery")) {
         return false;
     }
     const link = img.closest("a");

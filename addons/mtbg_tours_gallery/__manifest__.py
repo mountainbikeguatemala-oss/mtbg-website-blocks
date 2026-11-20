@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Website — Tiled Gallery',
-    'version': '19.0.0.6.5',
+    'version': '19.0.0.6.7',
     # where the updater gets it (the website blocks pack's repo; owner, 2026-11-11: universal, from the Tours repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     # its section on the Extensions panel: Custom blocks (its main job is website editor blocks)
@@ -21,9 +21,10 @@ then pairs, every photo cropped to fill its tile. Any Odoo website (no Tours nee
   edge, swipes follow the finger, pinch and double-tap zoom, swipe down to close, caption, "3 / 15"; full size.
 * Laid out on the server from the photos' stored sizes, so nothing moves while they load; loaded when the page scrolls
   near the block.
-* A photo gallery for any page (a main photo, a grid of 5 thumbnails under it, "+N" for more, every photo in the
-  lightbox as one set): the template mtbg_tours_gallery.photo_gallery for other modules, or its markup written in a
-  content block (``.mtbg-gallery``, CHANGELOG 19.0.0.6.5).
+* A photo gallery for any page (a main photo, a grid of 5 thumbnails under it, "+N" for more): a thumbnail shows its
+  photo in the main photo's box, the main photo opens the lightbox at the photo shown (every photo as one set): the
+  template mtbg_tours_gallery.photo_gallery for other modules, or its markup written in a content block
+  (``.mtbg-gallery``, CHANGELOG 19.0.0.6.7).
 * WebP: Odoo does not resize WebP, so the tiles use the pictures' screen-sized copies ("resize: 480/800/1280",
   made when a module adds a photo to a record's gallery, e.g. a tour's); JPEG and PNG are resized by Odoo.
 
@@ -57,6 +58,10 @@ _mtbg_record_add).
         ],
         'web.assets_backend': [
             'mtbg_tours_gallery/static/src/focus_point/*',
+        ],
+        # (the photo gallery saved in the website editor, 19.0.0.6.7)
+        'web.assets_tests': [
+            'mtbg_tours_gallery/static/tests/tours/**/*',
         ],
     },
     'installable': True,

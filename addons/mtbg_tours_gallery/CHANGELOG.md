@@ -2,6 +2,29 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_gallery-*'`.
 
+## 19.0.0.6.7 (2026-11-20)
+
+- **A thumbnail changes the main photo; the main photo opens the lightbox** (owner, 2026-11-20: "each small thumb should change the main photo above. and then clicking on the main photo launches the lightbox"). A tap on a thumbnail (a button: Enter or Space too) shows its photo in the main photo's box: the box keeps its size (nothing on the page moves), the picture is loaded before it shows (no blank box), the thumbnail shown is ringed (`mtbg-gallery__thumb--active`, `aria-pressed`). The main photo's picture for a thumbnail: its Odoo picture at the main photo's size (`/web/image/<id>/192x128` shows as `/web/image/<id>/512x341`), else the thumbnail's own picture when it is big enough (480 px or more, e.g. the hotels' 512 px photos), else its full picture; `data-mtbg-main` on a thumbnail's `img` names one. Tapping the ringed thumbnail again brings back the first photo. A tap on the main photo opens the page's lightbox at the photo it shows, with every photo of the gallery as one set (the ones beyond the grid too). The "+N" thumbnail opens the lightbox at its photo (it does not swap: "+N" means "see them all").
+- **Thumbnails are `div`s** (the website editor merges identical neighbouring `span`s on save: a block's thumbnails ended up in one span; block 941 on www worked around it with `data-mtbg-thumb="1".."10"`). The template writes `div`s; the page still takes older blocks as they are: `span` thumbnails (with or without `data-mtbg-thumb`), a span holding several photos (split into one thumbnail each when the page loads, put back when the editor starts), a first thumbnail repeating the main photo (it is the first photo's button; the lightbox has each photo once).
+- Everything the page's code adds (buttons, ring, "+N", split spans, the photo swapped in) is undone when the website editor starts: the block is saved as written. The page lightbox leaves `.mtbg-gallery` photos to the gallery's code.
+- Hotels and Accommodations' night sections and upgrade slides (they call the template) get all of it with no change there.
+- **Paste-ready markup for a content block** (one `div` per photo, any number; the sixth and on are hidden, the fifth gets "+N"):
+
+```html
+<div class="mtbg-gallery" data-mtbg-photo-set="iximche">
+    <img class="mtbg-gallery__main" src="/web/image/101/512x341" data-mtbg-full="/web/image/101" alt="Iximché" loading="lazy" width="512" height="341"/>
+    <div class="mtbg-gallery__thumbs">
+        <div class="mtbg-gallery__thumb"><img src="/web/image/102/192x128" data-mtbg-full="/web/image/102" alt="Iximché" loading="lazy" width="96" height="64"/></div>
+        <div class="mtbg-gallery__thumb"><img src="/web/image/103/192x128" data-mtbg-full="/web/image/103" alt="Iximché" loading="lazy" width="96" height="64"/></div>
+        <div class="mtbg-gallery__thumb"><img src="/web/image/104/192x128" data-mtbg-full="/web/image/104" alt="Iximché" loading="lazy" width="96" height="64"/></div>
+        <!-- one div per photo, as many as there are -->
+    </div>
+</div>
+```
+
+- Tests: a thumbnail shows its photo (the main photo's size kept, nothing moves, ringed, no lightbox), the main photo opens the lightbox at it (3 / 8, its full picture), Enter and Space, the ringed one brings back the first photo, "+N" at its photo (6 / 8); an older block (spans with `data-mtbg-thumb`, a merged span of 3, the first repeating the main photo: 8 thumbnails, "+4", each photo once: 3 / 8); the template's galleries the same (div thumbnails); a block with a gallery saved in the website editor (7 thumbnails stay 7 elements; nothing the page adds is saved; with spans the same test gives 1).
+- New words (need Spanish): "Show photo %s", "Show all %s photos", "Open the photo full screen" (screen-reader labels).
+
 ## 19.0.0.6.5 (2026-11-20)
 
 - **The photo gallery, for any page** (owner, 2026-11-20: content blocks such as "Iximché – Mayan Ruins (short)" use the same gallery as a tour's hotel section): moved here from Hotels and Accommodations (19.0.0.8.43's night gallery), its style and code in this extension's frontend assets (every website page). The main photo (3:2), the other photos in a grid of 5 under it that fits its width (never scrolled sideways); more than 5: the fifth says "+N" (the photos not seen), the rest are in the lightbox only. Every photo opens in the page's lightbox as one set (`data-mtbg-photo-set`), each at its `data-mtbg-full` picture when it names one (else its own).
