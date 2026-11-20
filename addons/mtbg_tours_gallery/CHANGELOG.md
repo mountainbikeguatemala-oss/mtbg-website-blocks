@@ -2,6 +2,28 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_gallery-*'`.
 
+## 19.0.0.6.5 (2026-11-20)
+
+- **The photo gallery, for any page** (owner, 2026-11-20: content blocks such as "Iximché – Mayan Ruins (short)" use the same gallery as a tour's hotel section): moved here from Hotels and Accommodations (19.0.0.8.43's night gallery), its style and code in this extension's frontend assets (every website page). The main photo (3:2), the other photos in a grid of 5 under it that fits its width (never scrolled sideways); more than 5: the fifth says "+N" (the photos not seen), the rest are in the lightbox only. Every photo opens in the page's lightbox as one set (`data-mtbg-photo-set`), each at its `data-mtbg-full` picture when it names one (else its own).
+- **For other modules**: `t-call="mtbg_tours_gallery.photo_gallery"` with `gallery_photos` (a list of `{'src', 'full', 'alt'}`, the first the main photo), `gallery_set` (the lightbox set's name), `gallery_alt` (when a photo has no alt). Lazy, every box sized before it loads.
+- **In a content block** (the block's HTML, edited on the website): paste and change the pictures; list every thumbnail, any number: the sixth and on are hidden, the fifth gets "+N" when the page loads (`photo_gallery.js`; nothing is added to the saved block). One `data-mtbg-photo-set` name per gallery on a page (any word). Use `/web/image/<id>/512x341` for the main photo, `/web/image/<id>/192x128` for a thumbnail and `/web/image/<id>` for the full picture (from the media library: the picture's id):
+
+```html
+<div class="mtbg-gallery" data-mtbg-photo-set="iximche">
+    <img class="mtbg-gallery__main" src="/web/image/101/512x341" data-mtbg-full="/web/image/101" alt="Iximché" loading="lazy" width="512" height="341"/>
+    <div class="mtbg-gallery__thumbs">
+        <span class="mtbg-gallery__thumb"><img src="/web/image/102/192x128" data-mtbg-full="/web/image/102" alt="Iximché" loading="lazy" width="96" height="64"/></span>
+        <span class="mtbg-gallery__thumb"><img src="/web/image/103/192x128" data-mtbg-full="/web/image/103" alt="Iximché" loading="lazy" width="96" height="64"/></span>
+        <span class="mtbg-gallery__thumb"><img src="/web/image/104/192x128" data-mtbg-full="/web/image/104" alt="Iximché" loading="lazy" width="96" height="64"/></span>
+        <!-- one span per photo, as many as there are -->
+    </div>
+</div>
+```
+
+  The markup the template makes (also accepted by hand): `mtbg-gallery__thumb mtbg-gallery__thumb--more` with `data-more="+N"` on the fifth, and the photos beyond as `<img class="mtbg-gallery__hidden" ...>` inside `mtbg-gallery__thumbs`.
+- Tests: the template (main photo, 5 thumbnails, "+3", 2 in the lightbox only, nothing without photos) and a block written by hand in the browser ("+3" on the fifth, the sixth not seen, no sideways scroll, the fifth opens the lightbox at 6 / 8, its full picture).
+- No new words.
+
 ## 19.0.0.6.3 (2026-11-15)
 
 - **Justified rows, bigger on phones** (owner, 2026-11-15: "tiles are too small and the gifs are still cropped heavily"): `justified()` now has three screens: phones (< 576 px) at most 2 a row, a landscape alone at full width, two portraits (or a portrait and a tall video) sharing a row, a lone portrait centred about 0.9 screen widths tall; tablets (576-991 px) at most 3 a row; desktops at most 4, rows about 320 px tall. Every photo keeps its exact shape (no crop but a few pixels at the gaps; no clamp any more). Layouts `.mtbg-tg-j-phone/-tablet/-desktop` inside `.mtbg-tg.mtbg-tg-justified`; narrow rows centred. The gallery block's own layouts are untouched.

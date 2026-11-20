@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Website — Tiled Gallery',
-    'version': '19.0.0.6.3',
+    'version': '19.0.0.6.5',
     # where the updater gets it (the website blocks pack's repo; owner, 2026-11-11: universal, from the Tours repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     # its section on the Extensions panel: Custom blocks (its main job is website editor blocks)
@@ -21,6 +21,9 @@ then pairs, every photo cropped to fill its tile. Any Odoo website (no Tours nee
   edge, swipes follow the finger, pinch and double-tap zoom, swipe down to close, caption, "3 / 15"; full size.
 * Laid out on the server from the photos' stored sizes, so nothing moves while they load; loaded when the page scrolls
   near the block.
+* A photo gallery for any page (a main photo, a grid of 5 thumbnails under it, "+N" for more, every photo in the
+  lightbox as one set): the template mtbg_tours_gallery.photo_gallery for other modules, or its markup written in a
+  content block (``.mtbg-gallery``, CHANGELOG 19.0.0.6.5).
 * WebP: Odoo does not resize WebP, so the tiles use the pictures' screen-sized copies ("resize: 480/800/1280",
   made when a module adds a photo to a record's gallery, e.g. a tour's); JPEG and PNG are resized by Odoo.
 
@@ -42,6 +45,9 @@ _mtbg_record_add).
             # the viewer is the base's shared one (@mtbg_tours_content_blocks/shared/lightbox), loaded on the first touch
             'mtbg_tours_gallery/static/src/lightbox/page_lightbox.js',
             'mtbg_tours_gallery/static/src/lightbox/page_lightbox.scss',
+            # the photo gallery (main photo, 5 thumbnails, "+N"; 19.0.0.6.5): for other modules and content blocks
+            'mtbg_tours_gallery/static/src/photo_gallery/photo_gallery.scss',
+            'mtbg_tours_gallery/static/src/photo_gallery/photo_gallery.js',
         ],
         'website.assets_inside_builder_iframe': [
             'mtbg_tours_gallery/static/src/gallery/gallery.edit.js',

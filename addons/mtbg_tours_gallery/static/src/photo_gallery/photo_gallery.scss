@@ -1,0 +1,62 @@
+// The photo gallery (19.0.0.6.5; first Accommodations 19.0.0.8.43's hotel section, owner 2026-11-20: "no horizontal
+// scroll ... I just want photos below the main photo"; shared so content blocks use it too): the main photo (3:2),
+// then the other photos in a grid of 5 that fits its width, never scrolled sideways; more than 5: the fifth says "+N"
+// and the ones beyond are in the lightbox only (in the page, not seen). Every photo opens in the page's lightbox as one
+// set (data-mtbg-photo-set, page_lightbox.js). Markup: CHANGELOG 19.0.0.6.5.
+.mtbg-gallery {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+    &:not(:last-child) { margin-bottom: 1rem; } // (in a block's text: a paragraph's space before the next)
+    img { cursor: zoom-in; }
+    .mtbg-gallery__main {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        margin: 0;
+        aspect-ratio: 3 / 2;
+        object-fit: cover;
+        background: var(--bs-secondary-bg, rgba(0, 0, 0, .05));
+    }
+    .mtbg-gallery__thumbs {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: .4rem;
+        overflow: hidden;
+    }
+    .mtbg-gallery__thumb {
+        position: relative;
+        display: block;
+        aspect-ratio: 3 / 2;
+        overflow: hidden;
+        border-radius: .35rem;
+        background: var(--bs-secondary-bg, rgba(0, 0, 0, .05));
+        img { display: block; width: 100%; height: 100%; max-width: none; margin: 0; object-fit: cover; }
+        &.mtbg-gallery__thumb--more::after {
+            content: attr(data-more);
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, .55);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            pointer-events: none; // (a tap is the photo's: the lightbox)
+        }
+    }
+    // beyond the grid: not seen, still in the lightbox (after the "+N" one). A pasted gallery may simply list all its
+    // thumbnails: the sixth and on are these (photo_gallery.js puts "+N" on the fifth)
+    .mtbg-gallery__hidden,
+    .mtbg-gallery__thumb:nth-child(n + 6) {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        pointer-events: none;
+    }
+}

@@ -398,3 +398,82 @@ class TestJustified(TransactionCase):
         """The gallery block keeps its own rows (Jetpack's rectangular style)."""
         self.assertEqual([r['pattern'] for r in layout(_photos(1.5, 1, 1, 1.5, 0.75, 1, 1, 1), 'desktop')],
                          ['big_left', 'big_right', 'pair'])
+
+
+@tagged('post_install', '-at_install', 'mtbg')
+class TestPhotoGallery(HttpCase):
+    """The photo gallery (19.0.0.6.5, owner 2026-11-20: content blocks use the hotel section's gallery): a main photo,
+    5 thumbnails, "+N" on the fifth when more, the rest in the lightbox only; every photo opens the page's lightbox
+    as one set. From the template (other modules) or written by hand in a content block."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.pictures = cls.env['ir.attachment']
+        for i in range(8):
+            cls.pictures |= cls.env['ir.attachment'].create({
+                'name': f'shared-{i}.png', 'datas': _picture(300 + i, 200), 'mimetype': 'image/png', 'public': True})
+
+    def _photos(self):
+        return [{'src': '/web/image/%s/512x341' % p.id, 'full': '/web/image/%s' % p.id, 'alt': p.name}
+                for p in self.pictures]
+
+    def test_template(self):
+        html = str(self.env['ir.qweb']._render('mtbg_tours_gallery.photo_gallery', {
+            'gallery_photos': self._photos(), 'gallery_set': 'test-set'}))
+        self.assertIn('data-mtbg-photo-set="test-set"', html)
+        self.assertEqual(html.count('class="mtbg-gallery__main"'), 1)
+        self.assertEqual(html.count('class="mtbg-gallery__thumb '), 5, "5 thumbnails")
+        self.assertIn('data-more="+3"', html, "7 more photos: the fifth says +3")
+        self.assertEqual(html.count('class="mtbg-gallery__hidden"'), 2, "the rest: in the lightbox only")
+        self.assertEqual(html.count('data-mtbg-full='), 8, "every photo at full size")
+        few = str(self.env['ir.qweb']._render('mtbg_tours_gallery.photo_gallery', {
+            'gallery_photos': self._photos()[:4], 'gallery_set': 'few'}))
+        self.assertNotIn('data-more', few)
+        self.assertNotIn('mtbg-gallery__hidden', few)
+        self.assertFalse(str(self.env['ir.qweb']._render('mtbg_tours_gallery.photo_gallery', {
+            'gallery_photos': [], 'gallery_set': 'none'})).strip(), "no photos: nothing")
+
+    def test_written_in_a_content_block(self):
+        """A content block's own markup (a main photo, every thumbnail listed): "+N" on the fifth, the rest not seen,
+        each photo opens the lightbox with all of them (the fifth thumbnail: 6 / 8, its full picture)."""
+        ids = self.pictures.ids
+        thumbs = ''.join('<span class="mtbg-gallery__thumb"><img src="/web/image/%s/96x64" data-mtbg-full="/web/image/%s" alt="t"/></span>'
+                         % (i, i) for i in ids[1:])
+        block = ('<div class="mtbg-gallery" data-mtbg-photo-set="ruins"><img class="mtbg-gallery__main" '
+                 'src="/web/image/%s/512x341" data-mtbg-full="/web/image/%s" alt="main"/>'
+                 '<div class="mtbg-gallery__thumbs">%s</div></div>' % (ids[0], ids[0], thumbs))
+        self.env['website.page'].create({
+            'name': 'block', 'url': '/photo-gallery-page', 'is_published': True, 'type': 'qweb',
+            'key': 'mtbg_tours_gallery.test_page_photo_gallery',
+            'arch': '<t t-call="website.layout"><div id="wrap"><section><div class="container" style="max-width:600px">%s</div></section></div></t>' % block,
+        })
+        code = """
+            const fifth = () => document.querySelectorAll('.mtbg-gallery__thumb')[4];
+            const deadline = Date.now() + 20000;
+            let clicked = false;
+            (function attempt() {
+                const grid = document.querySelector('.mtbg-gallery__thumbs').getBoundingClientRect();
+                const sixth = document.querySelectorAll('.mtbg-gallery__thumb')[5].getBoundingClientRect();
+                if (!clicked) {
+                    if (fifth().dataset.more !== '+3') { console.error('fifth: ' + fifth().dataset.more); return; }
+                    if (sixth.width > 2) { console.error('the sixth thumbnail shows'); return; }
+                    if (document.documentElement.scrollWidth > window.innerWidth) { console.error('sideways scroll'); return; }
+                    clicked = true;
+                    fifth().querySelector('img').click();
+                }
+                const counter = document.querySelector('.pswp--open .pswp__counter');
+                const img = document.querySelector('.pswp--open .pswp__item:not([aria-hidden="true"]) img.pswp__img:not(.pswp__img--placeholder)');
+                if (counter && img) {
+                    if (counter.textContent.replace(/\\s/g, '') !== '6/8') { console.error('counter: ' + counter.textContent); }
+                    else if (new URL(img.src).pathname !== '/web/image/__ID__') { console.error('not the full picture: ' + img.src); }
+                    else { console.log('test successful'); }
+                } else if (Date.now() > deadline) {
+                    console.error('lightbox did not open');
+                } else {
+                    setTimeout(attempt, 300);
+                }
+            })();
+        """.replace('__ID__', str(ids[5]))
+        self.browser_js('/photo-gallery-page', code, timeout=60,
+                        ready="!!(document.documentElement.dataset.mtbgLightbox && document.querySelectorAll('.mtbg-gallery__thumb')[4]?.dataset.more)")
