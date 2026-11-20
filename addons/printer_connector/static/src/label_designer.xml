@@ -94,6 +94,13 @@
                             <input type="checkbox" class="form-check-input" t-att-checked="sel.item.bold"
                                    t-on-change="(ev) => this.change('bold', ev.target.checked)"/>
                             <span class="form-check-label">Bold</span></label>
+                        <t t-if="['code', 'name', 'price'].includes(sel.item.field)">
+                            <label class="form-label small mb-1">Spacing (mm)</label>
+                            <div class="bsx_ld_pads mb-2">
+                                <label>Top <input type="number" class="form-control form-control-sm" step="0.5" min="0" t-att-value="sel.item.pad_top or 0" t-on-change="(ev) => this.changeNumber('pad_top', ev, 0, 6)"/></label>
+                                <label>Bottom <input type="number" class="form-control form-control-sm" step="0.5" min="0" t-att-value="sel.item.pad_bottom or 0" t-on-change="(ev) => this.changeNumber('pad_bottom', ev, 0, 6)"/></label>
+                            </div>
+                        </t>
                         <t t-if="sel.item.field === 'name'">
                             <label class="form-label small mb-1">Lines</label>
                             <select class="form-select form-select-sm mb-2" t-on-change="(ev) => this.change('lines', Number(ev.target.value))">

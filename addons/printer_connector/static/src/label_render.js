@@ -109,7 +109,7 @@ export function newRow() {
 
 /** A new item of a field, with its usual size. */
 export function newItem(field, layout = {}) {
-    const base = { uid: itemUid(), field, bold: field !== "code" };
+    const base = { uid: itemUid(), field, bold: field !== "code", pad_top: 0, pad_bottom: 0 };
     switch (field) {
         case "logo":
             return { ...base, size: layout.logo_height_mm || 8, rotation: layout.logo_rotation || 0,
@@ -127,6 +127,19 @@ export function newItem(field, layout = {}) {
 }
 
 const clean = (items) => (Array.isArray(items) ? items : []).filter((i) => i && LABEL_FIELDS.includes(i.field));
+
+/** Ids by place (row, side, order): the same on every read of a layout not saved from the editor yet. */
+function placeIds(rows) {
+    rows.forEach((row, r) => {
+        row.uid = `r${r}`;
+        for (const k of SLOTS) {
+            row[k].forEach((item, i) => {
+                item.uid = `r${r}${k[0]}${i}`;
+            });
+        }
+    });
+    return rows;
+}
 
 /**
  * The layout's rows, top to bottom, each with its Left, Center and Right (items side by side in each). From its saved
@@ -157,7 +170,7 @@ export function rowsOf(layout) {
             }
             rows[0].left.push(...clean(e.left));
             rows[0].right.push(...clean(e.right));
-            return rows;
+            return placeIds(rows);
         }
     }
     // before the editor: from the settings
@@ -207,7 +220,7 @@ export function rowsOf(layout) {
     if (pos !== "top") {
         rows[0][pos === "right" ? "right" : "left"].unshift(logo);
     }
-    return rows;
+    return placeIds(rows);
 }
 
 /**
@@ -314,10 +327,14 @@ export function renderLabel(layout, product, assets = {}) {
             : { lines: [text], cut: false };
         const lineH = Math.ceil(px * 1.1);
         const w = Math.ceil(Math.max(...lines.lines.map(measure)));
-        return { w, h: lineH * lines.lines.length, cut: lines.cut, draw: (x, y, rowH) => {
+        // its spacing above and below (mm), kept as set
+        const pt = Math.max(0, Math.round((Number(item.pad_top) || 0) * DOTS_PER_MM));
+        const pb = Math.max(0, Math.round((Number(item.pad_bottom) || 0) * DOTS_PER_MM));
+        const textH = lineH * lines.lines.length;
+        return { w, h: textH + pt + pb, cut: lines.cut, draw: (x, y, rowH) => {
             ctx.font = fontCss(family, px, bold);
             ctx.textAlign = "left";
-            const top = y + (rowH - lineH * lines.lines.length) / 2;
+            const top = y + (rowH - (textH + pt + pb)) / 2 + pt;
             lines.lines.forEach((t, i) => ctx.fillText(t, x, top + lineH * (i + 0.5)));
         } };
     };

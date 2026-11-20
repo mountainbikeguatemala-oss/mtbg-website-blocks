@@ -1,6 +1,6 @@
 {
     "name": "Printer Connector",
-    "version": "19.0.1.3.0",
+    "version": "19.0.1.4.0",
     "category": "Productivity/Connectors",
     "mtbg_tours_section": "connectors",
     "summary": "Odoo to the business's printers, straight from the browser. First: barcode labels on a Bluetooth "
@@ -14,7 +14,7 @@ Bluetooth on) or ChromeOS; not iPhone / iPad.
 
 * Settings › Label layout (``bsx.label.layout``): a drag and drop editor like the Card Designer (the fields Logo,
   Barcode, Code, Name, Price dragged into the label's rows, each row with its Left, Center and Right, reordered,
-  each with its size and look; the logo's spacing) above the label itself, redrawn on every change; print height, label length (automatic or fixed), margins,
+  each with its size and look; the logo's spacing, a text's spacing above and below) above the label itself, redrawn on every change; print height, label length (automatic or fixed), margins,
   darkness, label roll (die-cut or continuous); barcode height, bar width and max length (40 mm), the code under it;
   name size and lines, price size and position. Live preview at real size and "Print a test label". The first
   active layout is the one every screen prints with.

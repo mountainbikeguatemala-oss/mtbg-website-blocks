@@ -1,5 +1,11 @@
 # Changelog
 
+## 19.0.1.4.0 (2026-11-19)
+- A text's spacing (owner: "text should have padding settings to (top bottom only)"): Code, Name and Price get a
+  top and a bottom spacing (mm), kept as set when the rest shrinks to fit.
+- Fix: on a layout not saved from the editor yet, clicking an item now selects it (its ids are by place, the same on
+  every read; before, the page could make new ones and the click found nothing).
+
 ## 19.0.1.3.0 (2026-11-19)
 - Rows (owner: "we need to be able to put things in the same row so we need left right center per row"): the label
   is rows top to bottom, each with its Left, Center and Right; the items of one place stand side by side. Add, move

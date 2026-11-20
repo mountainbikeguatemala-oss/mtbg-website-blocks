@@ -816,3 +816,9 @@ msgstr ""
 #: code:addons/printer_connector/static/src/label_designer.xml:0
 msgid "· Row"
 msgstr ""
+
+#. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_designer.xml:0
+msgid "Spacing (mm)"
+msgstr ""

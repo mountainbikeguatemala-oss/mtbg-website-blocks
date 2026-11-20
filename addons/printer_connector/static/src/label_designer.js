@@ -71,19 +71,9 @@ export class LabelDesigner extends Component {
         }
     }
 
-    /**
-     * The rows as the page holds them, a fresh copy to edit (a layout not edited here yet: made once from its
-     * settings, so its items keep their ids until it is saved).
-     */
+    /** The rows as the page holds them, a fresh copy to edit (not saved from here yet: made from its settings). */
     get rows() {
-        const saved = this.saved();
-        if (saved && Array.isArray(saved.rows) && saved.rows.length) {
-            return rowsOf({ ...this.props.record.data, elements: saved });
-        }
-        if (!this.fromSettings || this.fromSettings.record !== this.props.record.id) {
-            this.fromSettings = { record: this.props.record.id, rows: rowsOf({ ...this.props.record.data, elements: saved }) };
-        }
-        return JSON.parse(JSON.stringify(this.fromSettings.rows));
+        return rowsOf({ ...this.props.record.data, elements: this.saved() });
     }
 
     commit(rows) {
@@ -267,10 +257,7 @@ export class LabelDesigner extends Component {
         } else if (d.logo && id) {
             logoSrc = `/web/image/bsx.label.layout/${id}/logo?unique=${unique}`;
         }
-        const saved = this.saved(record);
-        const rows = saved && Array.isArray(saved.rows) && saved.rows.length ? saved.rows
-            : (this.fromSettings && this.fromSettings.record === record.id ? this.fromSettings.rows
-                : rowsOf({ ...d, elements: saved }));
+        const rows = rowsOf({ ...d, elements: this.saved(record) });
         return { layout: { ...d, elements: { rows }, font_spec: fontSpec, logo_url: logoSrc }, logoSrc };
     }
 
