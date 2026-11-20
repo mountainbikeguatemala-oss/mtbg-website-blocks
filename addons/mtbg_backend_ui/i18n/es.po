@@ -1107,3 +1107,248 @@ msgstr "p. ej. Por tour"
 #: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
 msgid "labels. An empty label shows the built-in one."
 msgstr ". Una etiqueta vacía muestra la predeterminada."
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "%s is needed."
+msgstr "Falta %s."
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "%s is not a number."
+msgstr "%s no es un número."
+
+#. module: mtbg_tours_core
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0
+msgid "Add Expense"
+msgstr "Agregar gasto"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "Add a photo of the receipt."
+msgstr "Agrega una foto del recibo."
+
+#. module: mtbg_tours_core
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0
+msgid "Amount"
+msgstr "Monto"
+
+#. module: mtbg_tours_core
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0
+msgid "Category"
+msgstr "Categoría"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "Choose %s from the list."
+msgstr "Elige %s de la lista."
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Choose…"
+msgstr "Elige…"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Close"
+msgstr "Cerrar"
+
+#. module: mtbg_tours_core
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: mtbg_tours_core
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0
+msgid "Date"
+msgstr "Fecha"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "Expense deleted."
+msgstr "Gasto eliminado."
+
+#. module: mtbg_tours_core
+#: model:ir.model,name:mtbg_backend_ui.model_mtbg_expense_form
+msgid "Expense input form (shared)"
+msgstr "Formulario de gastos (compartido)"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "Expense recorded."
+msgstr "Gasto registrado."
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "Expense saved."
+msgstr "Gasto guardado."
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Fewer details"
+msgstr "Menos detalles"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "More details:"
+msgstr "Más detalles:"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "New:"
+msgstr "Nuevo:"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "Not deleted."
+msgstr "No se eliminó."
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "Not saved."
+msgstr "No se guardó."
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Nothing found."
+msgstr "No se encontró nada."
+
+#. module: mtbg_tours_core
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0
+msgid "Nothing records expenses of this kind here (%s)."
+msgstr "Aquí nada registra gastos de este tipo (%s)."
+
+#. module: mtbg_tours_core
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0
+msgid "Pick a vendor or add a new one"
+msgstr "Elige un proveedor o agrega uno nuevo"
+
+#. module: mtbg_tours_core
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0
+msgid "Pick the vendor, or add it"
+msgstr "Elige el proveedor, o agrégalo"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Receipt"
+msgstr "Recibo"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Recent"
+msgstr "Recientes"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Remove"
+msgstr "Quitar"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Retake"
+msgstr "Tomar otra"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Start with the receipt: a photo, or a PDF."
+msgstr "Empieza con el recibo: una foto o un PDF."
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Take photo"
+msgstr "Tomar foto"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Tap again to delete"
+msgstr "Toca otra vez para eliminar"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/receipt.js:0
+msgid "The file could not be read."
+msgstr "No se pudo leer el archivo."
+
+#. module: mtbg_tours_core
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0
+msgid "This expense form lacks its standard fields: %s"
+msgstr "A este formulario de gastos le faltan sus campos estándar: %s"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/receipt.js:0
+msgid "This photo could not be opened: take it again or pick a JPG."
+msgstr "No se pudo abrir esta foto: tómala otra vez o elige un JPG."
+
+#. module: mtbg_tours_core
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0
+msgid "Unknown kind of field in the expense form: %s"
+msgstr "Tipo de campo desconocido en el formulario de gastos: %s"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Upload a photo or a PDF"
+msgstr "Sube una foto o un PDF"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Upload photo or PDF"
+msgstr "Subir foto o PDF"
+
+#. module: mtbg_tours_core
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0
+msgid "Vendor"
+msgstr "Proveedor"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Change"
+msgstr "Cambiar"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Other type:"
+msgstr "Otro tipo:"
+
+#. module: mtbg_tours_core
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "Other type"
+msgstr "Otro tipo"

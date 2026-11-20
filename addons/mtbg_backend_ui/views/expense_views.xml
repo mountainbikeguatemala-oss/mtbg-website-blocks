@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- the shared expense categories and payment methods; a module that records expenses gives the menu -->
+    <record id="view_mtbg_expense_category_list" model="ir.ui.view">
+        <field name="name">mtbg.expense.category.list</field>
+        <field name="model">mtbg.expense.category</field>
+        <field name="arch" type="xml">
+            <list string="Expense Categories" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="in_app" widget="boolean_toggle"/>
+                <field name="active" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_mtbg_expense_category_search" model="ir.ui.view">
+        <field name="name">mtbg.expense.category.search</field>
+        <field name="model">mtbg.expense.category</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <filter name="in_app" string="Offered in the form" domain="[('in_app', '=', True)]"/>
+                <filter name="not_in_app" string="Not offered" domain="[('in_app', '=', False)]"/>
+                <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+    <record id="action_mtbg_expense_category" model="ir.actions.act_window">
+        <field name="name">Expense Categories</field>
+        <field name="res_model">mtbg.expense.category</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="view_mtbg_expense_method_list" model="ir.ui.view">
+        <field name="name">mtbg.expense.method.list</field>
+        <field name="model">mtbg.expense.method</field>
+        <field name="arch" type="xml">
+            <list string="Expense Payment Methods" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="currency_id" options="{'no_create': True}"/>
+                <field name="in_app" widget="boolean_toggle"/>
+                <field name="active" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_mtbg_expense_method_search" model="ir.ui.view">
+        <field name="name">mtbg.expense.method.search</field>
+        <field name="model">mtbg.expense.method</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <filter name="in_app" string="Offered in the form" domain="[('in_app', '=', True)]"/>
+                <filter name="not_in_app" string="Not offered" domain="[('in_app', '=', False)]"/>
+                <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+    <record id="action_mtbg_expense_method" model="ir.actions.act_window">
+        <field name="name">Expense Payment Methods</field>
+        <field name="res_model">mtbg.expense.method</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

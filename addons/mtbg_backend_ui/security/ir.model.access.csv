@@ -4,3 +4,7 @@ access_board_system,board system,model_mtbg_board,base.group_system,1,1,1,1
 access_missing_tag_user,missing tag user,model_mtbg_missing_tag,base.group_user,1,0,0,0
 access_missing_tag_system,missing tag system,model_mtbg_missing_tag,base.group_system,1,1,1,1
 access_mtbg_user_pref_system,user pref system,model_mtbg_user_pref,base.group_system,1,0,0,1
+access_expense_category_user,expense category user,model_mtbg_expense_category,base.group_user,1,0,0,0
+access_expense_category_system,expense category system,model_mtbg_expense_category,base.group_system,1,1,1,1
+access_expense_method_user,expense method user,model_mtbg_expense_method,base.group_user,1,0,0,0
+access_expense_method_system,expense method system,model_mtbg_expense_method,base.group_system,1,1,1,1

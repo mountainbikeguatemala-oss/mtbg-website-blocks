@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- the shared expense categories and payment methods: their Zoho Books accounts, read from Zoho Books -->
+    <record id="view_mtbg_expense_category_list_zoho" model="ir.ui.view">
+        <field name="name">mtbg.expense.category.list.zoho</field>
+        <field name="model">mtbg.expense.category</field>
+        <field name="inherit_id" ref="mtbg_backend_ui.view_mtbg_expense_category_list"/>
+        <field name="arch" type="xml">
+            <list position="inside">
+                <header>
+                    <button name="action_mtbg_zoho_sync" type="object" string="Sync from Zoho Books"
+                            display="always" class="btn-secondary" groups="base.group_system"/>
+                </header>
+            </list>
+            <field name="name" position="after">
+                <field name="zoho_account_name" string="Zoho Books Account"/>
+                <field name="zoho_account_id" optional="hide"/>
+            </field>
+        </field>
+    </record>
+    <record id="view_mtbg_expense_method_list_zoho" model="ir.ui.view">
+        <field name="name">mtbg.expense.method.list.zoho</field>
+        <field name="model">mtbg.expense.method</field>
+        <field name="inherit_id" ref="mtbg_backend_ui.view_mtbg_expense_method_list"/>
+        <field name="arch" type="xml">
+            <list position="inside">
+                <header>
+                    <button name="action_mtbg_zoho_sync" type="object" string="Sync from Zoho Books"
+                            display="always" class="btn-secondary" groups="base.group_system"/>
+                </header>
+            </list>
+            <field name="name" position="after">
+                <field name="zoho_paid_through_name" string="Zoho Books Paid Through"/>
+                <field name="zoho_paid_through_id" optional="hide"/>
+            </field>
+        </field>
+    </record>
+</odoo>

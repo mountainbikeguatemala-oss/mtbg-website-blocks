@@ -33,7 +33,7 @@ STEP = 10  # expenses read per background step
 FIRST_SYNC = 'mtbg_tours.zoho_books_expenses_first_sync'  # when the first sync was done (UTC)
 LAST_SYNC = 'mtbg_tours.zoho_books_expenses_last_sync'  # the last pull's time (UTC): the next reads changes since
 SENT_KINDS = ('staff_expense', 'wage_expense', 'wage_payment', 'reimbursement_payment', 'vehicle_expense_out',
-              'reimbursement', 'payment_fee')
+              'reimbursement', 'payment_fee', 'expense_out')
 # kinds made per record they are for, "<prefix><id>" (a pay stub's wages of one vehicle: vehicle_wage_payment:<unit id>)
 SENT_PREFIXES = ('vehicle_wage_payment:',)
 

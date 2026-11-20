@@ -2,6 +2,21 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'zoho_connector-*'`.
 
+## 19.0.0.3.0 · 2026-11-20
+- **Expenses recorded in Odoo go to Zoho Books** (owner, 2026-11-20: the shop's used purchases, "record it as an
+  expense in zoho books"; the rule that every Odoo expense is in Zoho Books): any model with Admin Look's expense
+  mixin (``mtbg.expense.source``, now a dependency) is a Zoho Books expense once its save is committed: its category's
+  account, its payment method's paid through account, its vendor contact as the Zoho vendor (found by name, else
+  made), its receipt attached, its currency at Zoho Books' rate (Odoo's when Zoho has none) unless it is Zoho's base,
+  described with what it is and who recorded it, its reference ``ODOO-<MODEL>-<id>`` (the marker a retry finds it by:
+  never twice). A change updates it, a deletion deletes it. A category or method without an account, or a refusal:
+  Error on the record with the reason, tried again every hour (the job "Zoho Books: expenses recorded in Odoo", also
+  run right after each save); Writes allowed off: Waiting. The job pushes the waiting vendor contacts first.
+- **Sync from Zoho Books** on Expense Categories (Zoho's expense, cost of goods sold and other expense accounts) and
+  Expense Payment Methods (its bank, cash, card and clearing accounts, with their currency): new ones come in
+  unticked, for a manager to offer in the form; a known one keeps its name here.
+- Reference kind ``expense_out`` (Open in Zoho goes to the expense); Import & Sync never brings these back in.
+
 ## 19.0.0.2.0 · 2026-11-18
 - **Zoho Books expenses and vendors come here** (owner, 2026-11-18: "zoho connector should be global"), from the
   Tours' Zoho extension (0.5.2), under the same model and record names, so any site can use them without the Tours:

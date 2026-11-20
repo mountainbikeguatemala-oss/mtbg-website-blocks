@@ -2,6 +2,23 @@
 
 Every version of this module, newest first. Tags: `git tag -l 'mtbg_backend_ui-*'`.
 
+## 19.0.0.3.0 (2026-11-20)
+
+- **The one expense form is here** (owner, 2026-11-20: the shop site records a used purchase "all in one go" with "the
+  same expense form that we created for [the tours site] in the staff app"; the shop site has no Tours): the
+  ``MtbgExpenseForm`` component (``static/src/expense_form``, templates ``mtbg_backend_ui.ExpenseForm*``, the client
+  action ``mtbg_expense_form``) and its server side ``mtbg.expense.form`` (targets, the four standard fields, the vendor
+  picker) moved from Tours Core 0.9.3, unchanged; Core's paths re-export them. Its Spanish came along.
+- **Expenses without Tours** (``models/expense.py``): ``res.partner.mtbg_is_vendor`` (the vendor list; Tours Core has
+  the same field), **Expense Categories** (``mtbg.expense.category``) and **Expense Payment Methods**
+  (``mtbg.expense.method``, an optional currency it only pays in), each with *Offered in the form*; and the mixin
+  ``mtbg.expense.source`` (date, description, amount and currency, category, paid with, vendor, receipt, recorded by)
+  for a model whose records are expenses: ``_mtbg_expense_changed(deleted=False)`` after a create, a change of the
+  expense's fields and before a delete, ``_mtbg_expense_reference()`` (``ODOO-<MODEL>-<id>``),
+  ``_mtbg_expense_description()``, and the connector's status (``expense_sync_state`` / ``_error`` / ``_url``, Send
+  again, Open). The receipt file belongs to its expense. A connector sends them (Zoho Connector 0.3.0); the lists' menus
+  come from the module that records expenses.
+
 ## 19.0.0.2.1 (2026-11-18)
 
 - **Every calendar's Day and Week view zooms sideways** (owner, 2026-11-18: "Calendar week view should allow

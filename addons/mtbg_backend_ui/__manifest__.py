@@ -1,6 +1,6 @@
 {
     'name': 'MTBG — Admin Look',
-    'version': '19.0.0.2.1',
+    'version': '19.0.0.3.0',
     # where the updater gets it (the universal repo; owner, 2026-11-11: the one admin module, from Tours Core 0.7.0)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     'category': 'Productivity',
@@ -18,6 +18,8 @@ The admin's shared screens, for any Odoo database (no website needed; Tours Core
 * Dark mode for the whole admin (the user menu's switch).
 * Each user's screen choices kept on the server (columns picked, folds), on every browser and device.
 * The admin on a phone: fields, buttons and dialogs sized for a finger (below 768px wide).
+* The one expense form (``mtbg.expense.form``, ``MtbgExpenseForm``, from Tours Core 0.9.3) and the expenses any
+  module records with it: categories, payment methods, vendors (``mtbg_is_vendor``), the ``mtbg.expense.source`` mixin.
 * Translated text settings (a system parameter per language) with their editor widget.
 * Every calendar's Day and Week view zooms sideways: a two-finger pinch (Ctrl + wheel on a computer) widens the day
   columns, the hours stay on the left; kept per model and view on each device.
@@ -29,6 +31,7 @@ Who may change boards, cards, settings pages and texts: administrators (a suite 
     'depends': ['web', 'html_editor'],
     'data': [
         'security/ir.model.access.csv',
+        'views/expense_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
@@ -49,6 +52,8 @@ Who may change boards, cards, settings pages and texts: administrators (a suite 
             'mtbg_backend_ui/static/src/board_badge/*',
             'mtbg_backend_ui/static/src/board_statusbar/*',
             'mtbg_backend_ui/static/src/data_transfer/*',
+            # the one expense form (from Tours Core 0.9.3): any module's expenses, the Staff App's and the shop's
+            'mtbg_backend_ui/static/src/expense_form/*',
             # the admin on a phone: finger-sized fields, buttons and dialogs (below 768px; not in the Staff App)
             'mtbg_backend_ui/static/src/mobile/mobile_fields.scss',
         ],

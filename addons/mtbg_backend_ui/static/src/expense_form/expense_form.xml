@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- One expense input form (owner, 2026-11-07): the fields come from the target's server side -->
+    <t t-name="mtbg_backend_ui.ExpenseForm">
+        <div class="o_mtbg_ef" t-att-class="{'o_mtbg_ef_touch': touch}" t-if="state.schema">
+            <t t-set="s" t-value="state.schema"/>
+            <!-- the receipt: the phone's camera, or a file (a picture or a PDF); the chooser opens the phone's own
+                 menu (camera, gallery) -->
+            <input type="file" accept="image/*" capture="environment" class="d-none o_mtbg_ef_camerainput" t-ref="camera" t-on-change="onPhoto"/>
+            <input type="file" accept="image/*,application/pdf" class="d-none o_mtbg_ef_fileinput" t-ref="file"
+                   t-att-multiple="receipt.multiple ? 'multiple' : null" t-on-change="onPhoto"/>
+            <input type="file" accept="image/*" class="d-none o_mtbg_ef_pickinput" t-ref="pick" t-on-change="onPhoto"/>
+
+            <!-- a new expense starts with its receipt (receipt.first) -->
+            <div t-if="state.picking" class="o_mtbg_ef_pick">
+                <h4 class="mb-1" t-esc="s.title"/>
+                <p class="text-muted small mb-3">Start with the receipt: a photo, or a PDF.
+                    <t t-if="s.subtitle"><br/><i class="fa fa-flag-checkered me-1"/><t t-esc="s.subtitle"/></t></p>
+                <button type="button" class="btn btn-primary btn-lg w-100 mb-2 o_mtbg_ef_camera" t-on-click="takePhoto">
+                    <i class="fa fa-camera me-2"/>Take photo</button>
+                <button type="button" class="btn btn-secondary btn-lg w-100 mb-2 o_mtbg_ef_upload" t-on-click="uploadPhoto">
+                    <i class="fa fa-upload me-2"/>Upload photo or PDF</button>
+                <div t-if="state.error" class="alert alert-danger py-2 o_mtbg_ef_error" t-esc="state.error"/>
+                <button type="button" class="btn btn-link w-100 o_mtbg_ef_cancel" t-on-click="cancel">Cancel</button>
+            </div>
+
+            <t t-else="">
+                <h3 t-if="s.title and !s.no_title" class="o_mtbg_ef_title" t-esc="s.title"/>
+                <div t-if="s.readonly and s.readonly_reason" class="alert alert-info py-2 o_mtbg_ef_locked">
+                    <i class="fa fa-lock me-1"/><t t-esc="s.readonly_reason"/></div>
+
+                <!-- the first choice above the receipt (owner, 2026-11-16: "Big buttons should show above the fold"):
+                     the type's buttons never under the receipt's box -->
+                <div t-if="topFields.length" class="o_mtbg_ef_top">
+                    <div t-foreach="topFields" t-as="f" t-key="f.name" t-attf-class="o_mtbg_ef_field o_mtbg_ef_{{f.kind}} o_mtbg_ef_f_{{f.name}}">
+                        <t t-call="mtbg_backend_ui.ExpenseFormField"/>
+                    </div>
+                </div>
+
+                <!-- the receipt on top while the details are entered (owner, 2026-11-05); a tap shows it bigger -->
+                <div t-if="shownReceipts.length or !s.readonly" t-att-class="'o_mtbg_ef_receipts' + (state.zoom ? ' is-zoomed' : '')">
+                    <div t-foreach="shownReceipts" t-as="r" t-key="r.key" class="o_mtbg_ef_receipt">
+                        <img t-if="!r.is_pdf and r.url" t-att-src="r.url" alt="Receipt" t-on-click="toggleZoom"/>
+                        <a t-elif="r.url" t-att-href="r.url" target="_blank" class="o_mtbg_ef_doc"><i class="fa fa-file-pdf-o me-1"/><t t-esc="r.name or 'Receipt'"/></a>
+                        <span t-else="" class="o_mtbg_ef_doc"><i class="fa fa-file-pdf-o me-1"/><t t-esc="r.name or 'Receipt'"/></span>
+                        <button t-if="receipt.multiple and !readonly" type="button" class="btn btn-sm btn-light o_mtbg_ef_rm"
+                                title="Remove" t-on-click="() => this.removeReceipt(r)"><i class="fa fa-times"/></button>
+                    </div>
+                    <div t-if="!readonly" class="o_mtbg_ef_receipt_tools">
+                        <span t-if="!shownReceipts.length" class="text-muted small me-auto">Receipt<t t-if="receipt.required"> <span class="text-danger">*</span></t></span>
+                        <button t-if="shownReceipts.length and !receipt.multiple" type="button" class="btn btn-sm btn-light" t-on-click="toggleZoom">
+                            <i t-attf-class="fa {{state.zoom ? 'fa-compress' : 'fa-expand'}}"/></button>
+                        <button type="button" class="btn btn-sm btn-light o_mtbg_ef_retake" t-on-click="takePhoto">
+                            <i class="fa fa-camera me-1"/><t t-if="shownReceipts.length and !receipt.multiple">Retake</t><t t-else="">Photo</t></button>
+                        <button type="button" class="btn btn-sm btn-light o_mtbg_ef_file" t-on-click="uploadPhoto" title="Upload a photo or a PDF">
+                            <i class="fa fa-upload"/></button>
+                    </div>
+                </div>
+
+                <div class="o_mtbg_ef_fields">
+                    <div t-foreach="shownFields" t-as="f" t-key="f.name" t-attf-class="o_mtbg_ef_field o_mtbg_ef_{{f.kind}} o_mtbg_ef_f_{{f.name}}">
+                        <t t-call="mtbg_backend_ui.ExpenseFormField"/>
+                    </div>
+                </div>
+
+                <!-- the rest folded (owner, 2026-11-09: as few fields at once as can be) -->
+                <t t-set="more" t-value="moreFields"/>
+                <button t-if="more.length or hasHiddenMinor" type="button" class="btn btn-link btn-sm px-0 mb-2 o_mtbg_ef_more" t-on-click="toggleMore">
+                    <i t-attf-class="fa {{state.more ? 'fa-chevron-up' : 'fa-chevron-down'}} me-1"/>
+                    <t t-if="state.more">Fewer details</t>
+                    <t t-else="">More details: <t t-esc="moreLabel"/></t>
+                </button>
+                <div t-if="state.error" class="alert alert-danger py-2 o_mtbg_ef_error" t-esc="state.error"/>
+                <div class="o_mtbg_ef_buttons">
+                    <button t-if="!s.readonly" type="button" class="btn btn-success o_mtbg_ef_save" t-att-disabled="state.busy" t-on-click="save">
+                        <i t-attf-class="fa {{state.busy ? 'fa-spinner fa-spin' : 'fa-check'}} me-1"/>Save</button>
+                    <button type="button" class="btn btn-secondary o_mtbg_ef_cancel" t-on-click="cancel">
+                        <t t-if="s.readonly">Close</t><t t-else="">Cancel</t></button>
+                    <button t-if="s.can_delete and !s.readonly" type="button" class="btn o_mtbg_ef_delete"
+                            t-att-class="state.confirm ? 'btn-danger' : 'btn-outline-danger'" t-att-disabled="state.busy" t-on-click="remove">
+                        <i class="fa fa-trash me-1"/><t t-if="state.confirm">Tap again to delete</t><t t-else="">Delete</t></button>
+                </div>
+            </t>
+        </div>
+        <div t-else="" class="o_mtbg_ef text-muted"><i class="fa fa-spinner fa-spin me-1"/>Loading…</div>
+    </t>
+
+    <!-- one field of the form (its kind's input), shown in the top row or the list -->
+    <t t-name="mtbg_backend_ui.ExpenseFormField">
+
+        <t t-set="v" t-value="state.values[f.name]"/>
+        <!-- set by another (a type's button sets the Category, owner 2026-11-16): one line, "Change" opens it -->
+        <div t-if="isFolded(f)" class="o_mtbg_ef_folded">
+            <span class="text-muted"><t t-esc="f.label"/>:</span>
+            <strong class="ms-1" t-esc="foldedLabel(f)"/>
+            <button t-if="!readonly and !f.readonly" type="button" class="btn btn-link o_mtbg_ef_unfold"
+                    t-on-click="() => this.unfold(f)">Change</button>
+        </div>
+        <t t-else="">
+        <label t-if="f.label and f.kind !== 'check' and f.kind !== 'info' and !f.no_label" class="form-label">
+            <t t-esc="f.label"/><t t-if="f.kind === 'money' and currencyLabel(f)"> (<t t-esc="currencyLabel(f)"/>)</t>
+            <span t-if="isRequired(f)" class="text-danger"> *</span>
+        </label>
+
+        <div t-if="f.kind === 'choice'" class="mtbg_choice_buttons" t-att-class="{'o_mtbg_ef_choice_row': f.name === 'paid_by'}" role="radiogroup">
+            <button t-foreach="bigOptionsOf(f)" t-as="c" t-key="c.value" type="button" role="radio"
+                    t-attf-class="mtbg_choice_btn mtbg_tone-{{c.tone or 'grey'}}" t-att-class="{'is-on': v === c.value}"
+                    t-att-disabled="readonly or f.readonly" t-att-aria-checked="v === c.value ? 'true' : 'false'"
+                    t-on-click="() => this.pickChoice(f, c.value)">
+                <i t-if="c.icon" t-attf-class="fa {{c.icon}}"/><span t-esc="c.label"/>
+            </button>
+        </div>
+        <!-- its smaller options (Upgrades, Initial Cost: owner 2026-11-16, never big buttons), More details open -->
+        <t t-set="minor" t-value="f.kind === 'choice' ? minorOptionsOf(f) : []"/>
+        <div t-if="minor.length and (state.more or !touch or minor.some((c) => same(c.value, v)))" class="o_mtbg_ef_minor">
+            <span class="text-muted small me-1">Other type:</span>
+            <button t-foreach="minor" t-as="c" t-key="c.value" type="button" role="radio"
+                    t-attf-class="btn btn-sm o_mtbg_ef_minor_btn" t-att-class="same(c.value, v) ? 'btn-dark' : 'btn-outline-secondary'"
+                    t-att-disabled="readonly or f.readonly" t-att-aria-checked="same(c.value, v) ? 'true' : 'false'"
+                    t-on-click="() => this.pickChoice(f, c.value)">
+                <i t-if="c.icon" t-attf-class="fa {{c.icon}} me-1"/><t t-esc="c.label"/>
+            </button>
+        </div>
+        <!-- its follow-up (Paid with), once a button is tapped -->
+        <t t-set="th" t-value="f.kind === 'choice' and f.then and v ? fieldOf(f.then) : false"/>
+        <div t-if="th and isVisible(th)" t-attf-class="o_mtbg_ef_then o_mtbg_ef_f_{{th.name}} mt-2">
+            <label class="form-label small mb-1"><t t-esc="th.label"/><span t-if="isRequired(th)" class="text-danger"> *</span></label>
+            <select class="form-select" t-ref="thenSelect" t-att-disabled="readonly or th.readonly"
+                    t-on-change="(ev) => this.onSelect(th, ev)">
+                <option value="" t-att-selected="!state.values[th.name]">Choose…</option>
+                <option t-foreach="optionsOf(th)" t-as="o" t-key="o.value" t-att-value="o.value"
+                        t-att-selected="same(o.value, state.values[th.name])" t-esc="o.label"/>
+            </select>
+        </div>
+
+        <t t-elif="f.kind === 'select'">
+            <select class="form-select" t-att-disabled="readonly or isLocked(f)" t-on-change="(ev) => this.onSelect(f, ev)">
+                <option value="" t-att-selected="!v">Choose…</option>
+                <option t-foreach="optionsOf(f)" t-as="o" t-key="o.value" t-att-value="o.value"
+                        t-att-selected="same(o.value, v)" t-esc="o.label"/>
+                <option t-if="f.search" value="__search__" t-esc="f.search_label or 'Search…'"/>
+            </select>
+            <div t-if="state.search and state.search.field === f.name" class="o_mtbg_ef_search mt-1">
+                <input class="form-control mb-1 o_mtbg_ef_term" autocomplete="off" t-att-placeholder="f.search_placeholder or 'Search'"
+                       t-att-value="state.search.term" t-on-input="onSearchTerm"/>
+                <div class="list-group">
+                    <button t-foreach="state.search.results" t-as="r" t-key="r.value" type="button"
+                            class="list-group-item list-group-item-action o_mtbg_ef_result"
+                            t-on-click="() => this.pickFound(r)" t-esc="r.label"/>
+                    <div t-if="!state.search.results.length" class="list-group-item text-muted small">Nothing found.</div>
+                    <button type="button" class="list-group-item list-group-item-action text-muted small"
+                            t-on-click="() => this.pickFound(null)">Cancel</button>
+                </div>
+            </div>
+        </t>
+
+        <div t-elif="f.kind === 'typeahead'" class="o_mtbg_ef_typeahead">
+            <t t-set="ta" t-value="typeaheadOf(f)"/>
+            <input class="form-control" autocomplete="off" t-att-placeholder="f.placeholder or ''"
+                   t-att-disabled="readonly or f.readonly" t-att-value="v ? v.label : ''"
+                   t-on-input="(ev) => this.onTypeaheadInput(f, ev)" t-on-focus="() => this.onTypeaheadFocus(f)"
+                   t-on-blur="() => this.onTypeaheadBlur(f)"/>
+            <div t-if="ta.open and (ta.results.length or typeaheadIsNew(f))" class="o_mtbg_ef_suggest">
+                <div t-if="!(v and v.label) and ta.results.length" class="o_mtbg_ef_hint">Recent</div>
+                <button t-foreach="ta.results" t-as="r" t-key="r.value" type="button" class="o_mtbg_ef_opt"
+                        t-on-mousedown.prevent="() => this.pickTypeahead(f, r)" t-on-click="() => this.pickTypeahead(f, r)" t-esc="r.label"/>
+                <div t-if="typeaheadIsNew(f)" class="o_mtbg_ef_hint"><i class="fa fa-plus me-1"/>New: <t t-esc="v.label"/></div>
+            </div>
+        </div>
+
+        <!-- several at once (owner, 2026-11-16: "oil change, oil filter, air filter in the same service") -->
+        <div t-elif="f.kind === 'tags'" class="o_mtbg_ef_tags" role="group">
+            <button t-foreach="optionsOf(f)" t-as="o" t-key="o.value" type="button"
+                    class="o_mtbg_ef_tag" t-att-class="{'is-on': hasTag(f, o.value)}"
+                    t-att-aria-pressed="hasTag(f, o.value) ? 'true' : 'false'" t-att-disabled="readonly or f.readonly"
+                    t-on-click="() => this.toggleTag(f, o.value)">
+                <i t-attf-class="fa {{hasTag(f, o.value) ? 'fa-check' : 'fa-plus'}} me-1"/><t t-esc="o.label"/>
+            </button>
+        </div>
+
+        <input t-elif="f.kind === 'date'" type="date" class="form-control" t-att-max="f.max or null"
+               t-att-disabled="readonly or f.readonly" t-att-value="v or ''" t-on-change="(ev) => this.set(f, ev.target.value)"/>
+
+        <div t-elif="f.kind === 'money'" class="d-flex gap-2">
+            <!-- a text box with the phone's number pad (owner, 2026-11-15): what is typed stays as typed
+                 ("12." while the 5 comes, "12,5"), read as a number on save only -->
+            <input type="text" inputmode="decimal" autocomplete="off" class="form-control o_mtbg_ef_amount"
+                   t-att-disabled="readonly or f.readonly" t-att-value="v === false or v === undefined or v === null ? '' : v"
+                   t-on-input="(ev) => this.set(f, ev.target.value)"/>
+            <t t-if="f.currency_field" t-set="cur" t-value="fieldOf(f.currency_field)"/>
+            <select t-if="cur and isVisible(cur)" class="form-select o_mtbg_ef_currency" t-att-disabled="readonly or isLocked(cur)"
+                    t-att-title="isLocked(cur) and cur.lock_reason ? cur.lock_reason : null"
+                    t-on-change="(ev) => this.onSelect(cur, ev)">
+                <option t-foreach="optionsOf(cur)" t-as="o" t-key="o.value" t-att-value="o.value"
+                        t-att-selected="same(o.value, state.values[cur.name])" t-esc="o.label"/>
+            </select>
+        </div>
+
+        <div t-elif="f.kind === 'number'" class="d-flex align-items-center gap-2">
+            <input type="text" t-att-inputmode="f.step === '1' ? 'numeric' : 'decimal'" autocomplete="off"
+                   class="form-control o_mtbg_ef_number"
+                   t-att-disabled="readonly or f.readonly" t-att-value="v === false or v === undefined or v === null ? '' : v"
+                   t-on-input="(ev) => this.set(f, ev.target.value)"/>
+            <span t-if="f.suffix" class="text-muted" t-esc="f.suffix"/>
+        </div>
+
+        <input t-elif="f.kind === 'text'" class="form-control" t-att-placeholder="f.placeholder or ''"
+               t-att-disabled="readonly or f.readonly" t-att-value="v or ''" t-on-input="(ev) => this.set(f, ev.target.value)"/>
+
+        <textarea t-elif="f.kind === 'textarea'" class="form-control" rows="2" t-att-placeholder="f.placeholder or ''"
+                  t-att-disabled="readonly or f.readonly" t-on-input="(ev) => this.set(f, ev.target.value)" t-esc="v or ''"/>
+
+        <label t-elif="f.kind === 'check'" class="o_mtbg_ef_check">
+            <input type="checkbox" class="form-check-input" t-att-checked="v ? 'checked' : null"
+                   t-att-disabled="readonly or f.readonly" t-on-change="(ev) => this.set(f, ev.target.checked)"/>
+            <span t-esc="f.label"/>
+        </label>
+
+        <div t-elif="f.kind === 'info'" class="small text-muted" t-esc="f.text"/>
+
+        <div t-if="f.help" class="form-text" t-esc="f.help"/>
+        </t>
+    </t>
+
+    <t t-name="mtbg_backend_ui.ExpenseFormAction">
+        <div class="o_mtbg_ef_action p-3">
+            <MtbgExpenseForm target="params.target" params="params.params || {}" onDone.bind="done" onCancel.bind="close"/>
+        </div>
+    </t>
+</templates>

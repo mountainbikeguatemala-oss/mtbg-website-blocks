@@ -58,8 +58,8 @@ class ResPartnerZohoVendor(models.Model):
     @api.model
     def _mtbg_zoho_vendor_crons(self):
         """The xml ids of the jobs that push the waiting vendors (the first one found is triggered). Extensions that
-        send expenses give theirs."""
-        return []
+        send expenses give theirs (0.3.0: the expenses recorded in Odoo, this connector's own)."""
+        return ['zoho_connector.cron_zoho_expense_out']
 
     def _mtbg_zoho_vendor_queue(self):
         """The vendor contacts not in Zoho Books yet: waiting to be pushed (never their contact people, never one

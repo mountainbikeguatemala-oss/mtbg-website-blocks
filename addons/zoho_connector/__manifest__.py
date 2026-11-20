@@ -1,6 +1,6 @@
 {
     'name': 'Zoho Connector',
-    'version': '19.0.0.2.0',
+    'version': '19.0.0.3.0',
     'category': 'Services',
     'summary': 'One login for every Zoho app (Books, Expense, Shifts): setup wizard, a switch per app, the references '
                'of Odoo records in Zoho, the sync log; Zoho Books expenses Import & Sync; vendors in Zoho Books',
@@ -26,10 +26,14 @@ took this part over from the Tours' Zoho extension, which keeps the tours' Zoho 
 * A vendor contact's Zoho Books vendor (0.2.0, from the Tours' Zoho extension): ``mtbg_zoho_vendor_id`` on the
   contact, found or made by name (``_mtbg_zoho_vendor_ensure``), the vendors made here pushed in the background
   (``_mtbg_zoho_push_vendors``; which contacts are vendors: an extension's ``mtbg_is_vendor`` tick).
+* Expenses recorded in Odoo (0.3.0): any model with Admin Look's expense mixin (``mtbg.expense.source``, e.g. the
+  shop's used purchases) is a Zoho Books expense once saved: its category's account, its payment method's paid
+  through account (both lists filled by Sync from Zoho Books), its vendor, its receipt, Zoho's rate; changes update
+  it, a deletion deletes it, an error shows on the record and is retried every hour.
 """,
     'author': 'MTBG Tours contributors',
     'license': 'LGPL-3',
-    'depends': ['base', 'web', 'base_setup'],
+    'depends': ['base', 'web', 'base_setup', 'mtbg_backend_ui'],
     'external_dependencies': {'python': ['requests']},
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     # (the updater: a planned move, these modules' Zoho models and records come here; pre_init_hook and the 0.2.0
@@ -42,6 +46,7 @@ took this part over from the Tours' Zoho extension, which keeps the tours' Zoho 
         'views/zoho_views.xml',
         'views/books_expenses_views.xml',
         'views/settings_views.xml',
+        'views/expense_out_views.xml',
     ],
     'assets': {
         'web.assets_backend': [

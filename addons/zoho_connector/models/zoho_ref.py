@@ -59,7 +59,7 @@ class MtbgZohoRef(models.Model):
         domain = accounts.split('//')[-1].strip('/').removeprefix('accounts.') or 'zoho.com'
         books_org = icp.get_param('mtbg_tours.zoho_org_id') or ''
         paths = {('books', 'project'): 'projects', ('books', 'vendor'): 'contacts', ('books', 'wage_expense'): 'expenses',
-                 ('books', 'vehicle_expense'): 'expenses'}
+                 ('books', 'vehicle_expense'): 'expenses', ('books', 'expense_out'): 'expenses'}
         for ref in self:
             path = paths.get((ref.system, ref.kind))
             # a vehicle expense's reference is one line of the Zoho expense: the page is the expense's
