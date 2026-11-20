@@ -3,6 +3,7 @@ tested where a model has the expense mixin (the shop's used purchases); Zoho is 
 from unittest.mock import patch
 
 from odoo.exceptions import UserError
+from odoo.service.model import call_kw
 from odoo.tests import tagged
 
 from odoo.addons.zoho_connector.services import client as zoho_client
@@ -31,9 +32,10 @@ class TestExpenseLists(ZohoCase):
                 {'account_id': 'ZZ_B2', 'account_name': 'Loan', 'account_type': 'other_current_liability'}]},
         })
         with patch.object(zoho_client.requests, 'request', side_effect=request):
+            # the list's header button: called with the selected ids (none)
+            call_kw(Category, 'action_mtbg_zoho_sync', [[]], {})
             Category.action_mtbg_zoho_sync()
-            Category.action_mtbg_zoho_sync()
-            Method.action_mtbg_zoho_sync()
+            call_kw(Method, 'action_mtbg_zoho_sync', [[]], {})
         self.assertEqual(own.name, 'ZZ Used parts', "a known one keeps its name here")
         self.assertEqual(own.zoho_account_name, 'Parts')
         new = Category.search([('zoho_account_id', '=', 'ZZ_A2')])
@@ -44,3 +46,10 @@ class TestExpenseLists(ZohoCase):
         self.assertEqual((cash.name, cash.currency_id.name, cash.in_app), ('Shop cash', 'USD', False))
         self.assertFalse(Method.search([('zoho_paid_through_id', '=', 'ZZ_B2')]))
         self.assertEqual({m for m, _p in calls}, {'GET'}, "read only")
+
+    def test_card_gives_the_switches(self):
+        """Settings › Zoho has this connector's card: Zoho Books On / Writes allowed on any site."""
+        cards = {c['key']: c for c in self.env['mtbg.zoho.subextension']._mtbg_cards()}
+        card = cards['expenses_out']
+        self.assertEqual((card['app'], card['status'], card['has_writes']), ('books', 'built_in', True))
+        self.assertEqual(len(card['links']), 2)

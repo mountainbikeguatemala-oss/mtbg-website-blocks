@@ -2,6 +2,13 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'zoho_connector-*'`.
 
+## 19.0.0.3.2 · 2026-11-20
+- Fix: **Sync from Zoho Books** on Expense Categories and Expense Payment Methods failed from the list's button (the
+  button passes the selected records; the method took none).
+- **Its own card in Settings › Zoho**, "Zoho Books: expenses recorded in Odoo": Zoho Books **On** and **Writes
+  allowed** (the same switches the other Zoho cards share), Sync now, and the two lists. A site without the Tours' Zoho
+  cards (the shop site) had no switch for them.
+
 ## 19.0.0.3.1 · 2026-11-20
 - **Zoho through a linked site** (owner, 2026-11-20: one Self Client for both sites): where Site Link Connector's
   link to another site ticks **Use its Zoho login** (a soft check, no dependency), this site needs no Zoho login of

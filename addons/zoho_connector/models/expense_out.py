@@ -20,11 +20,13 @@ import json
 import logging
 
 from odoo import _, api, fields, models
+from odoo.tools.translate import LazyTranslate
 from odoo.exceptions import UserError
 
 from ..services.client import Zoho, ZohoError, ZohoWriteBlocked
 
 _logger = logging.getLogger(__name__)
+_lt = LazyTranslate(__name__)
 
 KIND = 'expense_out'
 EXPENSE_TYPES = ('expense', 'cost_of_goods_sold', 'other_expense')
@@ -49,6 +51,25 @@ def _books_for_sync(env):
     return books
 
 
+class MtbgZohoSubextensionExpenses(models.AbstractModel):
+    """This connector's own card in Settings › Zoho (0.3.2): Zoho Books On and Writes allowed on a site without the
+    Tours' Zoho cards (the shop site), the run now, the two lists."""
+    _inherit = 'mtbg.zoho.subextension'
+
+    @api.model
+    def _mtbg_card_defaults(self):
+        return super()._mtbg_card_defaults() + [{
+            'key': 'expenses_out', 'module': False, 'owner': 'zoho_connector', 'app': 'books', 'sequence': 15,
+            'title': _lt("Zoho Books: expenses recorded in Odoo"),
+            'summary': _lt("Expenses recorded in Odoo (e.g. the shop's used purchases) go to Zoho Books with their "
+                           "receipt: each category's account, each payment method's paid through account."),
+            'sync': 'mtbg.expense.source:_mtbg_zoho_sync_expenses',
+            'links': [{'title': _lt("Expense Categories"), 'action': 'mtbg_backend_ui.action_mtbg_expense_category'},
+                      {'title': _lt("Expense Payment Methods"),
+                       'action': 'mtbg_backend_ui.action_mtbg_expense_method'}],
+        }]
+
+
 class MtbgExpenseCategoryZoho(models.Model):
     _inherit = 'mtbg.expense.category'
 
@@ -56,7 +77,6 @@ class MtbgExpenseCategoryZoho(models.Model):
                                   help="The Zoho Books expense account this category is booked on")
     zoho_account_name = fields.Char(string='Zoho Books Account', readonly=True, copy=False)
 
-    @api.model
     def action_mtbg_zoho_sync(self):
         """Zoho Books' expense accounts into the categories: a new account a new category (not offered yet); a known
         one keeps its name here, its Zoho name is updated."""
@@ -89,7 +109,6 @@ class MtbgExpenseMethodZoho(models.Model):
                                             "the bank's)")
     zoho_paid_through_name = fields.Char(string='Zoho Books Paid Through', readonly=True, copy=False)
 
-    @api.model
     def action_mtbg_zoho_sync(self):
         """Zoho Books' bank, cash and card accounts into the payment methods (new ones not offered yet)."""
         books = _books_for_sync(self.env)
