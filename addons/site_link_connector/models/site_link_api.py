@@ -8,6 +8,7 @@ methods are offered only where Inventory is installed, the repair methods only w
 dependency; Repair and a customer bike model are used where they are installed); ``inbox_unread`` only where the shared
 inbox of Communication Flows (its side panel) is; ``staff_clock`` only where another extension answers
 ``res.users._site_link_staff_clock(user)``. See README.md."""
+import base64
 import hashlib
 import json
 import logging
@@ -30,6 +31,12 @@ REPAIR_METHODS = ['repair_quote', 'repair_status', 'repair_invoice']
 INBOX_METHODS = ['inbox_unread']
 # where another extension answers res.users._site_link_staff_clock(user) (e.g. a staff app's shift clock)
 STAFF_CLOCK_METHODS = ['staff_clock']
+# where Zoho Connector is (soft) and a link may use this site's Zoho login (owner, 2026-11-20: "link via the site api
+# the two sites zoho permission"): the other site's Zoho Books calls, made here with this site's login
+ZOHO_METHODS = ['zoho_request']
+ZOHO_APPS = ('books',)
+# what a linked site may change in Zoho Books: its expenses (and their receipts) and the vendor contacts they name
+ZOHO_WRITE_PATHS = re.compile(r'^(expenses(/\d+(/receipt)?)?|contacts(/\d+/active)?)$')
 CONSUME_LOCATION_NAME = 'Internal use (linked sites)'
 LABOUR_PRODUCT_CODE = 'SITE_LINK_LABOUR'
 SEARCH_LIMIT_MAX = 50
@@ -85,11 +92,26 @@ class SiteLinkApi(models.AbstractModel):
     def _site_link_has_staff_clock(self):
         return hasattr(self.env['res.users'], '_site_link_staff_clock')
 
+    def _site_link_zoho_client(self):
+        """Zoho Connector's client class, or None where it is not installed (a soft check)."""
+        if 'mtbg.zoho.ref' not in self.env:
+            return None
+        try:
+            from odoo.addons.zoho_connector.services import client
+        except ImportError:
+            return None
+        return client
+
+    def _site_link_shares_zoho(self):
+        return bool(self._site_link_zoho_client()) and bool(
+            self.env['site.link'].sudo().search_count([('share_zoho', '=', True)]))
+
     def _site_link_methods(self):
         return (BASE_METHODS + (INVENTORY_METHODS if self._site_link_has_inventory() else [])
                 + (REPAIR_METHODS if self._site_link_has_sales() else [])
                 + (INBOX_METHODS if self._site_link_has_inbox() else [])
-                + (STAFF_CLOCK_METHODS if self._site_link_has_staff_clock() else []))
+                + (STAFF_CLOCK_METHODS if self._site_link_has_staff_clock() else [])
+                + (ZOHO_METHODS if self._site_link_shares_zoho() else []))
 
     def _site_link_served(self, method, message):
         """A call this site answered, in the log (with the call's transaction)."""
@@ -300,6 +322,46 @@ class SiteLinkApi(models.AbstractModel):
 
     @api.model
     @api.readonly
+    def zoho_request(self, app, method, path, params=None, json=None, files=None, record=None):
+        """One Zoho call for the linked site, with this site's Zoho login (its switches and Writes allowed too). Only
+        where a link here ticks "May use our Zoho login"; Zoho Books only; reads anywhere, writes only to expenses,
+        their receipts and vendor contacts. ``files``: {field: [name, base64, mimetype]}. Answers {body} (Zoho's
+        answer), {blocked: message} (Writes allowed off here) or {error: message}."""
+        self._site_link_check_caller()
+        client = self._site_link_zoho_client()
+        if not client or not self._site_link_shares_zoho():
+            raise UserError(self.env._("This site does not share its Zoho login with linked sites."))
+        method = (method or '').upper()
+        path = (path or '').strip().strip('/')
+        if app not in ZOHO_APPS:
+            raise UserError(self.env._("Linked sites may use Zoho Books only, not %s.", app))
+        if method not in ('GET', 'POST', 'PUT', 'DELETE') or not path or '..' in path:
+            raise UserError(self.env._("Not a Zoho call a linked site may make: %(method)s %(path)s",
+                                       method=method, path=path))
+        if method != 'GET' and not ZOHO_WRITE_PATHS.match(path):
+            raise UserError(self.env._("Linked sites may change only expenses and vendor contacts in Zoho Books, "
+                                       "not %(method)s %(path)s.", method=method, path=path))
+        upload = None
+        if files:
+            upload = {}
+            for field, value in dict(files).items():
+                name, data, mimetype = (list(value) + [None, None, None])[:3]
+                upload[str(field)] = (str(name or 'file'), base64.b64decode(data or ''), mimetype or
+                                      'application/octet-stream')
+        label = f"linked site: {record}" if record else "linked site"
+        zoho = client.Zoho(self.env(su=True), app)  # the token and the log are system records
+        try:
+            body = zoho.request(method, path, params=params if isinstance(params, dict) else None,
+                                json=json if isinstance(json, dict) else None, files=upload,
+                                record=None)
+        except client.ZohoWriteBlocked as error:
+            return {'blocked': str(error)}
+        except client.ZohoError as error:
+            return {'error': str(error)[:1000]}
+        if method != 'GET':
+            self._site_link_served('zoho_request', f"{method} {path} ({label})")
+        return {'body': body}
+
     def staff_clock(self, login):
         """Whether this site's user ``login`` is clocked in now (a staff app's shift clock, answered by another
         extension's ``res.users._site_link_staff_clock(user)``; no dependency): {clocked_in, since}, ``since`` the

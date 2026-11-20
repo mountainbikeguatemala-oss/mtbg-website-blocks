@@ -17,6 +17,7 @@ Calls are paced (``mtbg_tours.zoho_rate_limit`` per minute and app, default 90: 
 with a growing wait when Zoho says "too many requests" (any call) or fails on its side (GET only: a write is never
 sent twice).
 """
+import base64
 import collections
 import hashlib
 import json
@@ -29,6 +30,7 @@ import requests
 
 import odoo
 from odoo import SUPERUSER_ID, api
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -149,7 +151,19 @@ class Zoho:
 
     # ------------------------------------------------------------------ state
     @property
+    def via(self):
+        """The linked site whose Zoho login this site uses (Site Link Connector's "Use its Zoho login", a soft
+        check; 0.3.1, owner 2026-11-20: one Zoho login for both sites), or None: then every call goes there."""
+        if not hasattr(self, '_via'):
+            Site = self.env.get('site.link') if hasattr(self.env, 'get') else None
+            site = Site._site_link_zoho_via() if Site is not None and hasattr(Site, '_site_link_zoho_via') else None
+            self._via = site if site else None
+        return self._via
+
+    @property
     def connected(self):
+        if self.via:
+            return True
         return all(self._param(k) for k in ('zoho_client_id', 'zoho_client_secret', 'zoho_refresh_token'))
 
     @property
@@ -167,7 +181,7 @@ class Zoho:
     def enabled(self):
         """The app is switched on, the connection made and its organization set."""
         switched = self._forced is not None or truthy(self._param(f'zoho_{self.app}_enabled'))
-        return switched and self.connected and (bool(self.org_id) or not self.spec['org_param'])
+        return switched and self.connected and (bool(self.org_id) or not self.spec['org_param'] or bool(self.via))
 
     @property
     def writes(self):
@@ -234,6 +248,8 @@ class Zoho:
                     'invoice': {}}
         if method != 'GET' and not self.writes:
             raise ZohoWriteBlocked(f"{self.spec['label']}: writes are off ({method} {path} not sent)")
+        if self.via:
+            return self._via_request(method, path, params, json, files, record)
         params, headers = dict(params or {}), {}
         where, name = self.spec['org_in']
         if where == 'query':
@@ -278,11 +294,39 @@ class Zoho:
             raise ZohoError(text)
         return body
 
+    def _via_request(self, method, path, params, json, files, record):
+        """The call made by the linked site with its Zoho login (its switches and limits apply there too)."""
+        started = time.monotonic()
+        upload = {field: [name, base64.b64encode(data or b'').decode(), mimetype]
+                  for field, (name, data, mimetype) in files.items()} if files else None
+        try:
+            answer = self.env['site.link']._site_link_call(
+                self.via, 'site.link.api', 'zoho_request', app=self.app, method=method, path=path,
+                params=dict(params) if params else None, json=json, files=upload,
+                record=record.display_name if record else None) or {}
+        except UserError as e:  # the link's own error (no answer, refused): never sent
+            self._log(method, path, 0, False, f"linked site: {e.args[0] if e.args else e}", started, record)
+            raise ZohoError(f"{self.spec['label']} {method} {path} through {self.via.name}: "
+                            f"{e.args[0] if e.args else e}") from e
+        if answer.get('blocked'):
+            raise ZohoWriteBlocked(f"{self.spec['label']} on {self.via.name}: {answer['blocked']}")
+        if answer.get('error'):
+            self._log(method, path, 0, False, f"linked site: {answer['error']}", started, record)
+            if 'SCOPE' in str(answer['error']).upper():
+                raise ZohoScopeError(answer['error'])
+            raise ZohoError(answer['error'])
+        body = answer.get('body') or {}
+        if method != 'GET':
+            self._log(method, path, 200, True, f"through {self.via.name}", started, record)
+        return body
+
     def download(self, path, params=None):
         """A file (an expense's receipt), read only: (bytes, mimetype, filename). Raises ZohoError when Zoho answers
         with an error (JSON) instead of the file."""
         if not self.enabled:
             raise ZohoError(f"{self.spec['label']} is off or not connected")
+        if self.via:
+            raise ZohoError(f"{self.spec['label']}: files are not read through a linked site ({path})")
         params, headers = dict(params or {}), {}
         where, name = self.spec['org_in']
         if where == 'query':
@@ -337,7 +381,7 @@ class Zoho:
         """A cheap read: {'ok', 'message'} (the token's scope for this app, the organization)."""
         if not self.connected:
             return {'ok': False, 'message': 'not connected'}
-        if self.spec['org_param'] and not self.org_id:
+        if self.spec['org_param'] and not self.org_id and not self.via:
             return {'ok': False, 'message': 'organization id missing'}
         try:  # also before the app is switched on (a read only)
             self.request('GET', self.spec['probe'], params=self.spec.get('probe_params'), _check=False)
@@ -350,7 +394,7 @@ class Zoho:
     def organizations(self):
         """[{id, name}] of the app's organizations the login reaches (Books, Expense; none for the others)."""
         paths = {'books': ('books/v3/organizations', 'organizations'), 'expense': ('expense/v1/organizations', 'organizations')}
-        if self.app not in paths or not self.connected:
+        if self.app not in paths or not self.connected or self.via:
             return []
         path, key = paths[self.app]
         api_url = self._param('zoho_api_url', 'https://www.zohoapis.com').rstrip('/')

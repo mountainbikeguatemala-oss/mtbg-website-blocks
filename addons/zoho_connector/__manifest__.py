@@ -1,6 +1,6 @@
 {
     'name': 'Zoho Connector',
-    'version': '19.0.0.3.0',
+    'version': '19.0.0.3.1',
     'category': 'Services',
     'summary': 'One login for every Zoho app (Books, Expense, Shifts): setup wizard, a switch per app, the references '
                'of Odoo records in Zoho, the sync log; Zoho Books expenses Import & Sync; vendors in Zoho Books',

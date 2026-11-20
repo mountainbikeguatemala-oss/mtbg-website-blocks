@@ -2,6 +2,16 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'site_link_connector-*'`.
 
+## 19.0.0.2.6 · 2026-11-20
+- **One Zoho login for both sites** (owner, 2026-11-20: "we should just link via the site api the two sites zoho
+  permission"; Zoho allows one Self Client, already used by the tours site): on the site with the Zoho login, a link's
+  **May use our Zoho login** lets that other site make its Zoho Books calls here: `zoho_request(app, method, path,
+  params, json, files, record)` (offered in `health()` only where Zoho Connector is installed and a link ticks it;
+  soft, no dependency). Zoho Books only; reads anywhere, writes only to expenses, their receipts and vendor contacts;
+  this site's switches and Writes allowed apply; a write is noted in the link's log. Answers `{body}`, `{blocked}`
+  (Writes allowed off here) or `{error}`. On the other site, the link's **Use its Zoho login** makes Zoho Connector
+  (0.3.1) send every Zoho call there (`site.link._site_link_zoho_via()`), with no Zoho login of its own.
+
 ## 19.0.0.2.5 · 2026-11-19
 - **New: `staff_clock(login)`** (owner, 2026-11-19: the shop app shows "on shift since 08:02 · 3 h 12 min" while the
   employee is clocked in on the Staff App): `{clocked_in, since}` (`since` in UTC). Offered in `health()` only where

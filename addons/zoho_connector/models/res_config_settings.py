@@ -42,7 +42,11 @@ class ResConfigSettings(models.TransientModel):
         _ = self.env._
         icp = self.env['ir.config_parameter'].sudo()
         books = Zoho(self.env, 'books')
-        if books.connected:
+        if books.via:
+            info = _("Connected through the linked site %(site)s: its Zoho login and Zoho Books organization (Zoho "
+                     "Books only; reads, and writes to expenses and vendors). Its Writes allowed applies too.",
+                     site=books.via.name)
+        elif books.connected:
             info = _("Connected: %(server)s, Zoho Books organization %(org)s (every Zoho link uses this login).",
                      server=icp.get_param('mtbg_tours.zoho_accounts_url') or 'https://accounts.zoho.com',
                      org=books.org_id or '-')

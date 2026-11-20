@@ -61,6 +61,14 @@
                             <field name="shop_group_ids" widget="many2many_tags"/>
                         </group>
                     </group>
+                    <group string="Zoho">
+                        <group>
+                            <field name="use_zoho"/>
+                        </group>
+                        <group>
+                            <field name="share_zoho"/>
+                        </group>
+                    </group>
                     <group string="Last Test" invisible="not last_check_at">
                         <field name="last_check_at"/>
                         <field name="last_check_ok"/>

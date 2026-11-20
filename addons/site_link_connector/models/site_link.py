@@ -62,6 +62,15 @@ class SiteLink(models.Model):
     role = fields.Selection(ROLES, string="Other Site's Role", required=True, default='other',
                             help="What the other site is to this one. Inventory source: the site that owns the "
                                  "products and stock; part lookups and consumptions go there.")
+    # Zoho (owner, 2026-11-20): one Zoho login for both sites, over the link (needs Zoho Connector on both)
+    share_zoho = fields.Boolean(
+        string='May use our Zoho login', copy=False,
+        help="This other site may make its Zoho Books calls with this site's Zoho login: reads, and writes to "
+             "expenses and vendor contacts only, while this site's Zoho Books Writes allowed is on.")
+    use_zoho = fields.Boolean(
+        string="Use its Zoho login", copy=False,
+        help="This site's Zoho calls go to that site, which makes them with its Zoho login (no Zoho login here). "
+             "That site must tick \"May use our Zoho login\" for this one.")
     timeout = fields.Integer(string='Time Limit (s)', default=15, help="Seconds to wait for the other site's answer.")
     sync_users = fields.Boolean(string='Send Employees', copy=False,
                                 help="This site's employee list is the one list: its internal users (login, name, "
@@ -118,6 +127,11 @@ class SiteLink(models.Model):
         if len(site) != 1:
             raise SiteLinkError(self.env._("No linked site found (Settings › Site Link)."))
         return site
+
+    @api.model
+    def _site_link_zoho_via(self):
+        """The linked site whose Zoho login this site uses (``use_zoho``), or an empty recordset."""
+        return self.sudo().search([('use_zoho', '=', True)], limit=1)
 
     @api.model
     def _site_link_call(self, site, model, method, *ids, **kwargs):

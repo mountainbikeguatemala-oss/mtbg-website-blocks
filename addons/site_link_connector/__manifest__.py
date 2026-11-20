@@ -1,6 +1,6 @@
 {
     "name": "Site Link Connector",
-    "version": "19.0.0.2.5",
+    "version": "19.0.0.2.6",
     "category": "Productivity/Connectors",
     "mtbg_tours_section": "connectors",
     "summary": "Links two Odoo sites: each other's address, database and API key, a call helper with a log of failed "

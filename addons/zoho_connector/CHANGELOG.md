@@ -2,6 +2,14 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'zoho_connector-*'`.
 
+## 19.0.0.3.1 · 2026-11-20
+- **Zoho through a linked site** (owner, 2026-11-20: one Self Client for both sites): where Site Link Connector's
+  link to another site ticks **Use its Zoho login** (a soft check, no dependency), this site needs no Zoho login of
+  its own: every Zoho Books call goes to that site (`zoho_request`, Site Link Connector 0.2.6), which makes it with its
+  login and its organization. Here still decide: Zoho Books On and Writes allowed (a write with Writes allowed off is
+  never sent); there its Writes allowed applies too. Settings › Zoho says it is connected through that site. Files
+  (an expense's receipt download for Import & Sync) and the organization list are not read through a link.
+
 ## 19.0.0.3.0 · 2026-11-20
 - **Expenses recorded in Odoo go to Zoho Books** (owner, 2026-11-20: the shop's used purchases, "record it as an
   expense in zoho books"; the rule that every Odoo expense is in Zoho Books): any model with Admin Look's expense

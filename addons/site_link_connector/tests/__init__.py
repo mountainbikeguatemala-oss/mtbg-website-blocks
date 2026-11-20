@@ -8,3 +8,4 @@ from . import test_user_sync
 from . import test_inbox
 from . import test_partner_url
 from . import test_staff_clock
+from . import test_zoho_share
