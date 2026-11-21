@@ -213,7 +213,8 @@ export class PhotoGallery extends Interaction {
 
     async open(index) {
         const slides = this.photos.map((photo, n) => {
-            const slide = slideFromImage(photo.img);
+            // (19.0.0.6.9: a photo's caption, data-mtbg-caption, is the lightbox's)
+            const slide = slideFromImage(photo.img, { caption: photo.img.dataset.mtbgCaption || "" });
             // the photo shown: opens from (and closes to) the main photo
             return n === this.current ? { ...slide, element: this.main, msrc: this.main.currentSrc || slide.msrc } : slide;
         });

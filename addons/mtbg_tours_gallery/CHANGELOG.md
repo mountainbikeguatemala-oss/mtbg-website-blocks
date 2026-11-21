@@ -2,6 +2,11 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_gallery-*'`.
 
+## 19.0.0.6.9 (2026-11-21)
+
+- **The photo gallery takes optional sizes and captions** (for Hotels and Accommodations 19.0.0.8.63's day galleries, owner 2026-11-21: "for multi-day in itinerary day-by day we should have the option to create a gallery for each day"). Additive: a photo of `gallery_photos` may also have `srcset` and `sizes` (the main photo's sizes: the browser picks its copy), `main` (a thumbnail's picture for the main photo's box, `data-mtbg-main`, already read since 19.0.0.6.7), `caption` (`data-mtbg-caption`: the lightbox shows it under the photo) and `width` (`data-mtbg-width`: the full picture's width, for the lightbox). A photo without them, and every gallery written so far (hotel sections, content blocks), is shown exactly as before.
+- No new words.
+
 ## 19.0.0.6.7 (2026-11-20)
 
 - **A thumbnail changes the main photo; the main photo opens the lightbox** (owner, 2026-11-20: "each small thumb should change the main photo above. and then clicking on the main photo launches the lightbox"). A tap on a thumbnail (a button: Enter or Space too) shows its photo in the main photo's box: the box keeps its size (nothing on the page moves), the picture is loaded before it shows (no blank box), the thumbnail shown is ringed (`mtbg-gallery__thumb--active`, `aria-pressed`). The main photo's picture for a thumbnail: its Odoo picture at the main photo's size (`/web/image/<id>/192x128` shows as `/web/image/<id>/512x341`), else the thumbnail's own picture when it is big enough (480 px or more, e.g. the hotels' 512 px photos), else its full picture; `data-mtbg-main` on a thumbnail's `img` names one. Tapping the ringed thumbnail again brings back the first photo. A tap on the main photo opens the page's lightbox at the photo it shows, with every photo of the gallery as one set (the ones beyond the grid too). The "+N" thumbnail opens the lightbox at its photo (it does not swap: "+N" means "see them all").

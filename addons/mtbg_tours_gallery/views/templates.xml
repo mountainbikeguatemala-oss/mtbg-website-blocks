@@ -33,7 +33,10 @@
          thumbnail shows its photo in the main photo's box, the main photo opens the lightbox (19.0.0.6.7). For
          other modules (t-call with ``gallery_photos``: a list of {'src', 'full', 'alt'}, the first the main photo;
          ``gallery_set``: the lightbox set's name; ``gallery_alt``: the alt text when a photo has none); content
-         blocks write the same markup by hand (CHANGELOG 19.0.0.6.5). Lazy, every box sized before it loads. -->
+         blocks write the same markup by hand (CHANGELOG 19.0.0.6.5). Lazy, every box sized before it loads.
+         19.0.0.6.9, all optional (a photo without them is shown as before): ``srcset`` (the main photo's sizes),
+         ``main`` (a thumbnail's picture for the main photo's box), ``caption`` (the lightbox's caption), ``width`` (the
+         full picture's width, for the lightbox). -->
     <template id="photo_gallery" name="Photo gallery">
         <t t-set="gallery_first" t-value="gallery_photos[:1]"/>
         <t t-set="gallery_rest" t-value="gallery_photos[1:]"/>
@@ -41,7 +44,11 @@
         <div t-if="gallery_first" class="mtbg-gallery" t-att-data-mtbg-photo-set="gallery_set or 'gallery'">
             <img class="mtbg-gallery__main" t-att-src="gallery_first[0]['src']"
                  t-att-alt="gallery_first[0].get('alt') or gallery_alt or ''" loading="lazy" decoding="async"
-                 width="512" height="341" t-att-data-mtbg-full="gallery_first[0].get('full') or None"/>
+                 width="512" height="341" t-att-data-mtbg-full="gallery_first[0].get('full') or None"
+                 t-att-srcset="gallery_first[0].get('srcset') or None"
+                 t-att-sizes="(gallery_first[0].get('sizes') or '100vw') if gallery_first[0].get('srcset') else None"
+                 t-att-data-mtbg-caption="gallery_first[0].get('caption') or None"
+                 t-att-data-mtbg-width="gallery_first[0].get('width') or None"/>
             <div t-if="gallery_rest" class="mtbg-gallery__thumbs">
                 <t t-foreach="gallery_rest" t-as="photo">
                     <!-- (19.0.0.6.7: a div, never a span: the website editor merges identical neighbouring spans) -->
@@ -49,12 +56,14 @@
                          t-att-data-more="'+%s' % (len(gallery_rest) - 4) if photo_index == 4 and gallery_more else None">
                         <img t-att-src="photo['src']" t-att-alt="photo.get('alt') or gallery_alt or ''"
                              loading="lazy" decoding="async" width="96" height="64"
-                             t-att-data-mtbg-full="photo.get('full') or None"/>
+                             t-att-data-mtbg-full="photo.get('full') or None" t-att-data-mtbg-main="photo.get('main') or None"
+                             t-att-data-mtbg-caption="photo.get('caption') or None" t-att-data-mtbg-width="photo.get('width') or None"/>
                     </div>
                     <!-- (beyond the grid: not shown, still in the lightbox after the "+N" one) -->
                     <img t-else="" class="mtbg-gallery__hidden" t-att-src="photo['src']"
                          t-att-alt="photo.get('alt') or gallery_alt or ''" loading="lazy" decoding="async" width="96" height="64"
-                         t-att-data-mtbg-full="photo.get('full') or None"/>
+                         t-att-data-mtbg-full="photo.get('full') or None" t-att-data-mtbg-main="photo.get('main') or None"
+                         t-att-data-mtbg-caption="photo.get('caption') or None" t-att-data-mtbg-width="photo.get('width') or None"/>
                 </t>
             </div>
         </div>
