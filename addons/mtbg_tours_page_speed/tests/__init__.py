@@ -6,3 +6,4 @@ from . import test_speed_log
 from . import test_first_screen
 from . import test_dashboard
 from . import test_edge_cache_hooks
+from . import test_inp

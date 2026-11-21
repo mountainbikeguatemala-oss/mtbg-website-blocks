@@ -34,7 +34,9 @@ class TestLean(HttpCase):
         for folder in ('tree_editor', 'domain_selector', 'model_field_selector', 'barcode', 'effects', 'debug'):
             self.assertFalse([u for u in lean_files if u.startswith('/web/static/src/core/%s/' % folder)], folder)
         self.assertTrue(any(u.startswith('/web/static/src/core/dropdown/') for u in lean_files), "what pages use stays")
-        self.assertFalse(set(lean_files) - set(full), "nothing added")
+        # (0.11.0: but its interactions' start in slices, sliced_start.js)
+        self.assertEqual(set(lean_files) - set(full), {'/mtbg_tours_page_speed/static/src/js/sliced_start.js'},
+                         "nothing added but the start in slices")
         self.assertTrue(any(u.startswith('/website/static/src/') for u in lean_files), "the website's own code stays")
         if 'mtbg.edge.cache' in self.env:  # (Cloudflare Connector's page cache: its session script)
             self.assertTrue(any(u.startswith('/cloudflare_connector/') for u in lean_files), "our own code stays")

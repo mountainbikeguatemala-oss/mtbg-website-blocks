@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Tours — Page Speed',
-    'version': '19.0.0.10.0',
+    'version': '19.0.0.11.0',
     'category': 'Website/Website',
     'summary': "The website's pictures as fast as the screen allows: the first one at once, phone and tablet sizes "
                "of the background photos, every photo's size",
@@ -38,6 +38,9 @@ every night's rows, with each page's title, on their own page.
 Any website (0.10.0, owner 2026-11-18): the extension moves to the universal repository (technical name kept) and needs
 no Tours, only Odoo's Website and the admin look (side bar lists); several websites on one database are each measured
 on their own (their address, their homepages), the dashboard shows one website at a time.
+A click at once (0.11.0, desktop INP 2026-11-21): the visitors' scripts start in short slices, the page answers a
+click between two: the bundle's modules (in Odoo's order), then the page's interactions (in Odoo's order), also those
+of a bundle loaded later (the booking form's).
 """,
     'author': 'MTBG Tours contributors',
     'license': 'LGPL-3',
@@ -61,7 +64,10 @@ on their own (their address, their homepages), the dashboard shows one website a
              'mtbg_tours_page_speed/static/src/js/lazyloader.js'),
         ],
         # the visitors' copy of Odoo's script bundle (models/lean.py: its removals follow the switch)
-        'mtbg_tours_page_speed.assets_frontend_lazy_lean': [('include', 'web.assets_frontend_lazy')],
+        # 0.11.0: its interactions start in short slices (static/src/js/sliced_start.js; its modules start in
+        # slices too: static/src/js/lazyloader.js)
+        'mtbg_tours_page_speed.assets_frontend_lazy_lean': [('include', 'web.assets_frontend_lazy'),
+                                                            'mtbg_tours_page_speed/static/src/js/sliced_start.js'],
         # the visitors' copy of Odoo's stylesheet (0.6.0, same switch: its removals in models/lean.py)
         'mtbg_tours_page_speed.assets_frontend_lean': [('include', 'web.assets_frontend')],
         # ... and what comes after the page has shown: the editor's background shapes (their base rules stay)

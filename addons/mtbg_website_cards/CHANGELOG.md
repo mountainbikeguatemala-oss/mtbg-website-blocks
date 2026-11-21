@@ -2,6 +2,12 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_website_cards-*'`.
 
+## 19.0.0.4.11 · 2026-11-21
+
+- **The slider measured when laid out** (desktop INP, 2026-11-21): a slider's arrows and "fits" state are measured in
+  the size observer's first call (after the browser's own layout), no longer at its start, which laid the whole page
+  out again while the page's scripts started; again whenever its size changes, as before (`slider.js`).
+
 ## 19.0.0.4.9 · 2026-11-09
 
 - **The 3D ribbon wraps round the card again** (owner, 2026-11-09: "I just wanted to remove the grey border not the 3D

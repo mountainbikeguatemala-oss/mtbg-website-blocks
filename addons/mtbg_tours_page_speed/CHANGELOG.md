@@ -2,6 +2,26 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_page_speed-*'`.
 
+## 19.0.0.11.0 · 2026-11-21
+
+- **A click answered at once on computers** (desktop INP, 2026-11-21: Google Search Console rated every computer page
+  of the site poor, 575 ms; phones good): the visitors' scripts started in one long task each (at a slow computer's
+  speed, 4x: the bundle's modules 300 ms, the page's interactions 500-700 ms), and a visitor's first click waited for
+  them. Now they start in short slices (30 ms each), the page answering a click and drawing a frame between two:
+  - the bundle's modules (`static/src/js/lazyloader.js`): while the visitors' scripts load, Odoo's module loader only
+    takes note of each module defined; they then start in the same order, by Odoo's own loader, a slice at a time,
+    each script's before the next one is evaluated. The page's start waits for the last one, as before
+    (`allScriptsLoaded`); a module still missing one is reported as Odoo does.
+  - the page's interactions (`static/src/js/sliced_start.js`, in the visitors' script copy only): the first start of
+    the whole page, in Odoo's order (each interaction class in the registry's order, its elements in the page's), and
+    a bundle loaded later that adds its interactions to a part of the page (the booking form's on a tour page; then
+    Odoo's own start of that part for the public root's widgets). Any other start (a part of the page started again)
+    is Odoo's own.
+  Logged-in users (the editor) and the full pages (`FULL_PATHS`) keep Odoo's bundle and start, unchanged.
+- **Tests**: `test_inp.py`, in a real browser at 4x slower: no long task and no long animation frame over 200 ms
+  while the visitors' scripts start (Odoo's start: one task of 480 ms on the test site's contact page), and every
+  module and interaction starts, once.
+
 ## 19.0.0.10.0 · 2026-11-18
 
 - **Page speed on any website** (owner, 2026-11-18: page speed on the shop site, which has two websites and no Tours):

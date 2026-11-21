@@ -58,8 +58,9 @@ export class Slider extends Interaction {
         if (!this.track) {
             return;
         }
-        this.updateEnds();
-        // hidden at first (a mega menu), or filled later (a block's script): measure again when it changes
+        // measured when the browser has laid it out (the observer's first call; 19.0.0.4.11, desktop INP 2026-11-21: no longer
+        // at start, which laid the page out again), again when it changes (hidden at first in a mega menu, or filled
+        // later by a block's script)
         this.observer = new ResizeObserver(() => this.updateEnds());
         this.observer.observe(this.track);
         this.registerCleanup(() => this.observer.disconnect());

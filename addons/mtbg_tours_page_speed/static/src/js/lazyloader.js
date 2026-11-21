@@ -6,6 +6,11 @@
 // stylesheets the first screen asked for (models/first_screen.py: the scripts then find every rule, menus and all),
 // at most LATE_WAIT ms. A visitor's tap, click or key starts it at once. Buttons clicked before it has loaded wait
 // and are pressed again once it has, as in Odoo's.
+// 0.11.0 (desktop INP, 2026-11-21): the bundle's modules start in short slices (SLICE_MS each, the page answers a
+// click between two), not in one long task when the script has loaded: while the visitors' scripts load, Odoo's
+// module loader only takes note of each module (in the order defined), then they start in that order, exactly as
+// Odoo's loader would have started them, a slice at a time. The page's start (the public root, its interactions)
+// waits for the last one, as before (allScriptsLoaded).
 import {
     BUTTON_HANDLER_SELECTOR,
     makeAsyncHandler,
@@ -195,6 +200,62 @@ if (document.readyState === 'complete') {
     window.addEventListener('load', _afterLoad);
 }
 
+// 0.11.0: a slice of the modules' start, then the page's turn (a click, a frame) before the next one
+const SLICE_MS = 30;
+/** The main thread back to the page for a moment (its waiting events and a frame first). */
+export function yieldToPage() {
+    if (globalThis.scheduler?.yield) {
+        return globalThis.scheduler.yield();
+    }
+    return new Promise((resolve) => setTimeout(resolve, 0));
+}
+
+const loader = globalThis.odoo?.loader;
+const waitingModules = [];
+let holding = false;
+/** While the visitors' scripts load: Odoo's loader takes note of each module defined, it starts none yet. */
+function _holdModules() {
+    if (holding || !loader) {
+        return;
+    }
+    holding = true;
+    loader.addJob = (name) => waitingModules.push(name);
+}
+/**
+ * The modules defined so far, started in their order by Odoo's own loader (the same start as without the slices: each
+ * one with every module it was waiting for), SLICE_MS at a time.
+ */
+async function _startHeldModules() {
+    const addJob = Object.getPrototypeOf(loader).addJob;
+    let sliceStart = performance.now();
+    while (waitingModules.length) {
+        const name = waitingModules.shift();
+        try {
+            addJob.call(loader, name);
+        } catch (error) {
+            // (as Odoo's: a module failing to start is reported, the others start)
+            setTimeout(() => {
+                throw error;
+            });
+        }
+        if (waitingModules.length && performance.now() - sliceStart > SLICE_MS) {
+            await yieldToPage();
+            sliceStart = performance.now();
+        }
+    }
+}
+async function _releaseModules() {
+    await _startHeldModules();
+    if (holding) {
+        holding = false;
+        delete loader.addJob;
+        // (a module still waiting for one never defined: Odoo's own report)
+        if (loader.jobs.size) {
+            loader.reportErrors(loader.findErrors());
+        }
+    }
+}
+
 /**
  * @param {DOMElement[]} scripts
  * @param {integer} index
@@ -205,13 +266,17 @@ function _loadScripts(scripts, index) {
     }
     if (index === undefined) {
         index = 0;
+        _holdModules();
     }
     if (index >= scripts.length) {
-        allScriptsLoadedResolve();
+        _releaseModules().then(allScriptsLoadedResolve);
         return;
     }
     const script = scripts[index];
-    script.addEventListener('load', _loadScripts.bind(this, scripts, index + 1));
+    // (each script's modules start before the next script is evaluated)
+    script.addEventListener('load', () => {
+        _startHeldModules().then(() => _loadScripts(scripts, index + 1));
+    });
     script.setAttribute('defer', 'defer'); // See LAZY_LOAD_DEFER
     script.src = script.dataset.src;
     script.removeAttribute('data-src');
