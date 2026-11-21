@@ -1,6 +1,6 @@
 {
     'name': 'MTBG — Contact Rules',
-    'version': '19.0.0.5.0',
+    'version': '19.0.0.5.2',
     # where the updater gets it (the universal repo; owner, 2026-11-18: contact rules go global, from the Tours repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     'category': 'Productivity',
@@ -15,6 +15,8 @@ with its own logic; a dry run shows what it would change; every change is logged
 * Country and state from the phone (a contact's number; a US / Canadian area code gives the state)
 * Country and state from a message's number (when a message comes in: the channels queue it)
 * Possible duplicates by phone or email (flagged on Possible Duplicates; never merged)
+* De-duplicate (0.5.2) in a contact's gear menu, in place of Duplicate: its likely duplicates (email, phone, a
+  "(copy)" name) in Odoo's merge dialog, the most complete proposed as the one kept; merged only on a person's click
 * Spanish for Spanish-speaking countries
 * Extensions bring their own helpers with ``_mtbg_crm_rule_sources()`` on their own model, like the Alert Feed's sources
 
@@ -55,11 +57,15 @@ access, and the rules' alerts in the feed; this extension's own menu is then not
         'views/rule_views.xml',
         'views/pipeline_views.xml',
         'views/menus.xml',
+        'views/contact_dedupe_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
             'mtbg_tours_crm_rules/static/src/crm_tab/*',
             'mtbg_tours_crm_rules/static/src/crm_page/*',
+        ],
+        'web.assets_tests': [
+            'mtbg_tours_crm_rules/static/tests/tours/*',
         ],
     },
     'pre_init_hook': 'pre_init_hook',

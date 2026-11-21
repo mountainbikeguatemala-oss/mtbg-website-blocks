@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- De-duplicate (owner, 2026-11-21): in the contact's gear menu, in place of Duplicate (off on every contact form
+         and list, res.partner._get_view): its likely duplicates in Odoo's merge dialog, the most complete proposed
+         as the one kept; nothing merged until a person clicks Merge. Who: those who may merge contacts (Odoo's) -->
+    <record id="action_contact_dedupe" model="ir.actions.server">
+        <field name="name">De-duplicate</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="binding_view_types">form</field>
+        <field name="group_ids" eval="[(4, ref('base.group_partner_manager'))]"/>
+        <field name="state">code</field>
+        <field name="code">action = record.action_mtbg_dedupe()</field>
+    </record>
+</odoo>

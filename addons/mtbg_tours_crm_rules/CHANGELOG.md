@@ -1,5 +1,27 @@
 # Changelog
 
+## 19.0.0.5.2 (2026-11-21)
+- **De-duplicate a contact, no Duplicate** (owner, 2026-11-21: "In this settings menu for a contact we would never
+  have a use for duplicate let's remove that and add the option to "de-duplicate""): Odoo's Duplicate is off on every
+  contact form and list (the gear menu, the list's Actions menu; `duplicate="0"` when the view loads); other models
+  keep theirs.
+- **De-duplicate** in the contact's gear menu (server action `action_contact_dedupe`, for those who may merge
+  contacts): the contact's likely duplicates, among the active contacts of the same kind (a person with persons, a
+  company with companies; never its own company or its people): the same email (case aside), the same phone (the last
+  8 digits, with or without the country code), the same name with case and a trailing " (copy)" / " (copia)" aside
+  (two people of one name with two different emails stay two people). They open in Odoo's own merge dialog (Contacts'
+  Merge, at most 3 at a time: this contact and its 2 strongest matches), the most complete proposed as the one kept;
+  a person checks and clicks Merge Contacts, nothing is merged before. None found: "No duplicates found for <name>".
+- The one kept follows the contact rule (owner, 2026-10-29): not a "(copy)", the fuller details (key details filled,
+  the name's words and letters), then the stronger source (with Tours: Core's source ranks, booking / payment >
+  pre-tour > contact form > newsletter > live chat), then the most linked records (bookings, invoices, messages...),
+  then the oldest. Staff can pick another in the dialog.
+- The merge (Odoo's) moves every link to the one kept: bookings, invoices and other many2one links, messages and
+  chatter, followers, activities, attachments; now also the links kept as a model and an id (message logs, external
+  references, short links; Many2oneReference fields and `res_model` / `res_id` pairs). Possible duplicate flags
+  between the merged contacts are removed. Never blanks out: each detail filled from a merged contact is written in
+  the kept one's chatter ("Details taken from the merged contacts: Phone: (none) → …, from …").
+
 ## 19.0.0.5.0 (2026-11-19)
 - **New stage Negotiation** (Negociación; owner, 2026-11-19), between Lead and Customer, on every site (the stage bar,
   the boards' columns, the list's badge, a Negotiation filter). The box **Negotiation** (`mtbg_negotiation`) on a
