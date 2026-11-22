@@ -1,5 +1,21 @@
 # Changelog
 
+## 19.0.0.6.0 (2026-11-21)
+- **Reply status** (owner, 2026-11-21: "our leads are getting lost we need some way to distinguish if we have gotten
+  back to them, if they are waiting a response from us, or a week has passed since they got back to us"): who writes
+  next, from every channel's messages (computed and stored by the Communication Flow Designer 3.47.0; only a message
+  a person of ours writes is a reply, never an automated one): **Waiting on us** (red, "Waiting on us · 8 d": their
+  last message, a website form's question too, is newer than our last reply), **Waiting on them** (blue: we answered
+  last), **Follow up** (amber: we answered last and the days of Settings › Communication Flows went by, default 7).
+- The contact's page: the badge under the buttons, with the first line of what they wrote while waiting on us (any
+  site, Tours' contact page too). The contacts' lists and the Contacts board: a Reply column / badge and their last
+  message; filters **Waiting on us**, **Follow up due**, **Waiting on them**, group by Reply status. The Contacts
+  board and list sort waiting on us first, the oldest wait first (`cfd_reply_rank, cfd_reply_since`).
+- The Alert Feed (when installed): **Leads waiting on us** (Fix now; leads waiting at least the rule's hours, default
+  1) and **Follow-ups due** (To do), each one alert listing the leads, the oldest first, opening them. No message or
+  notification is sent to anyone.
+- No dependency on the Designer: the same stored fields are declared here (without it they stay empty).
+
 ## 19.0.0.5.2 (2026-11-21)
 - **De-duplicate a contact, no Duplicate** (owner, 2026-11-21: "In this settings menu for a contact we would never
   have a use for duplicate let's remove that and add the option to "de-duplicate""): Odoo's Duplicate is off on every

@@ -9,6 +9,18 @@
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
             <xpath expr="//sheet/div[@name='button_box']" position="after">
+                <!-- 0.6.0: the reply status (the Communication Flow Designer's, from every channel): who writes next -->
+                <field name="cfd_reply_status" invisible="1"/>
+                <div class="o_mtbg_reply_status d-flex flex-wrap align-items-center gap-2 mb-2" name="mtbg_reply_status"
+                     invisible="not cfd_reply_status">
+                    <field name="mtbg_reply_label" widget="badge" class="o_mtbg_reply_badge"
+                           decoration-danger="cfd_reply_status == 'waiting_us'"
+                           decoration-warning="cfd_reply_status == 'follow_up'"
+                           decoration-info="cfd_reply_status == 'waiting_them'"/>
+                    <span class="text-muted text-truncate o_mtbg_reply_preview" invisible="cfd_reply_status != 'waiting_us' or not cfd_reply_preview">
+                        <i class="fa fa-quote-left me-1" title="Their last message"/><field name="cfd_reply_preview" class="d-inline"/>
+                    </span>
+                </div>
                 <field name="mtbg_pipeline_elsewhere" invisible="1"/>
                 <field name="mtbg_is_lead" invisible="1"/>
                 <div class="d-flex justify-content-end mb-2" name="mtbg_pipeline_stage"
@@ -48,6 +60,10 @@
                        decoration-primary="mtbg_stage == 'past_client'" decoration-muted="mtbg_stage in ('new', 'lost')"/>
                 <field name="mtbg_contact_type" string="Type" optional="hide"/>
                 <field name="mtbg_lead_source_id" string="Source Channel" optional="hide"/>
+                <field name="cfd_reply_status" column_invisible="1"/>
+                <field name="mtbg_reply_label" string="Reply" optional="show" widget="badge" width="170px"
+                       decoration-danger="cfd_reply_status == 'waiting_us'" decoration-warning="cfd_reply_status == 'follow_up'"
+                       decoration-info="cfd_reply_status == 'waiting_them'"/>
             </list>
         </field>
     </record>
@@ -72,11 +88,17 @@
                         domain="[('mtbg_contact_type', 'not in', ('lead', 'client'))]"/>
                 <separator/>
                 <filter name="mtbg_no_lead_source" string="No source channel" domain="[('mtbg_lead_source_id', '=', False)]"/>
+                <separator/>
+                <!-- 0.6.0: the reply status -->
+                <filter name="mtbg_reply_waiting_us" string="Waiting on us" domain="[('cfd_reply_status', '=', 'waiting_us')]"/>
+                <filter name="mtbg_reply_follow_up" string="Follow up due" domain="[('cfd_reply_status', '=', 'follow_up')]"/>
+                <filter name="mtbg_reply_waiting_them" string="Waiting on them" domain="[('cfd_reply_status', '=', 'waiting_them')]"/>
             </filter>
             <group name="group_by" position="inside">
                 <filter name="mtbg_by_stage" string="Stage" context="{'group_by': 'mtbg_stage'}"/>
                 <filter name="mtbg_by_type" string="Contact type" context="{'group_by': 'mtbg_contact_type'}"/>
                 <filter name="mtbg_group_lead_source" string="Source Channel" context="{'group_by': 'mtbg_lead_source_id'}"/>
+                <filter name="mtbg_by_reply_status" string="Reply status" context="{'group_by': 'cfd_reply_status'}"/>
             </group>
         </field>
     </record>
@@ -87,9 +109,10 @@
         <field name="model">res.partner</field>
         <field name="priority">90</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="mtbg_stage" quick_create="false" group_create="false" group_delete="false"
+            <kanban default_group_by="mtbg_stage" default_order="cfd_reply_rank, cfd_reply_since, id desc" quick_create="false" group_create="false" group_delete="false"
                     group_edit="false" records_draggable="false" sample="1">
                 <field name="avatar_128"/>
+                <field name="cfd_reply_status"/>
                 <templates>
                     <t t-name="card" class="flex-row">
                         <aside class="o_kanban_aside_full">
@@ -107,6 +130,17 @@
                             <div t-if="record.mtbg_lead_source_id.raw_value" class="text-muted">
                                 <i class="fa fa-fw me-1 fa-sign-in" title="Source channel"/><field name="mtbg_lead_source_id"/>
                             </div>
+                            <!-- 0.6.0: who writes next (the reply status) and what they asked -->
+                            <div t-if="record.cfd_reply_status.raw_value" class="mt-1">
+                                <field name="mtbg_reply_label" widget="badge"
+                                       decoration-danger="cfd_reply_status == 'waiting_us'"
+                                       decoration-warning="cfd_reply_status == 'follow_up'"
+                                       decoration-info="cfd_reply_status == 'waiting_them'"/>
+                            </div>
+                            <div t-if="record.cfd_reply_status.raw_value == 'waiting_us' and record.cfd_reply_preview.raw_value"
+                                 class="text-muted small text-truncate o_mtbg_reply_preview">
+                                <i class="fa fa-fw me-1 fa-quote-left" title="Their last message"/><field name="cfd_reply_preview"/>
+                            </div>
                         </main>
                     </t>
                 </templates>
@@ -118,8 +152,13 @@
         <field name="model">res.partner</field>
         <field name="priority">90</field>
         <field name="arch" type="xml">
-            <list>
+            <list default_order="cfd_reply_rank, cfd_reply_since, id desc">
                 <field name="display_name" string="Name"/>
+                <field name="cfd_reply_status" column_invisible="1"/>
+                <field name="mtbg_reply_label" string="Reply" widget="badge" optional="show" width="170px"
+                       decoration-danger="cfd_reply_status == 'waiting_us'" decoration-warning="cfd_reply_status == 'follow_up'"
+                       decoration-info="cfd_reply_status == 'waiting_them'"/>
+                <field name="cfd_reply_preview" string="Their last message" optional="show" class="text-truncate"/>
                 <field name="email" optional="show"/>
                 <field name="phone" optional="show"/>
                 <field name="country_id" optional="show"/>

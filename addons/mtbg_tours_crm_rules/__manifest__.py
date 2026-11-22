@@ -1,6 +1,6 @@
 {
     'name': 'MTBG — Contact Rules',
-    'version': '19.0.0.5.2',
+    'version': '19.0.0.6.0',
     # where the updater gets it (the universal repo; owner, 2026-11-18: contact rules go global, from the Tours repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     'category': 'Productivity',
@@ -34,6 +34,10 @@ The contact pipeline (0.4.0, owner 2026-11-18: the same pipeline on every site; 
   Designer from the first message received (WhatsApp, Email, Webchat...), by a website sale (Website sale) or a form.
 * The hook for a sale paid: ``res.partner._mtbg_mark_customer(source=None)`` (a lead becomes a client, stage
   Customer; ``source`` its source channel when it has none). Other extensions call it with a soft check.
+* Its reply status (0.6.0): Waiting on us, Waiting on them, Follow up (``cfd_reply_status``, computed and stored
+  by the Communication Flow Designer from every channel's messages; declared here too, empty without it): a badge on
+  the contact's page, the lists' and board's Reply, filters, waiting-on-us leads first, and the Alert Feed's "Leads
+  waiting on us" and "Follow-ups due".
 * Without Tours: the stage and type on the contact's page, the Contacts board (leads and clients by stage) and the
   Source Channels in this extension's menu. With Tours, its Contacts page and contact page show them.
 

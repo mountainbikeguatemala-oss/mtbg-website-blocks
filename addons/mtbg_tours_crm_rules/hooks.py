@@ -62,5 +62,8 @@ def post_init_hook(env):  # the sources of modules installed together with it
     """A rule for each source installed (Contact Rules' own and the extensions'), off until switched on; the contact
     types of a site without Tours (every contact a lead until now) from what is on record."""
     env['mtbg.crm.rule']._mtbg_sync_sources()
+    # 0.6.0: the Alert Feed's "Leads waiting on us" and "Follow-ups due", when the feed is installed
+    from .models.reply_status import sync_alert_sources
+    sync_alert_sources(env)
     if not tours_pipeline(env.cr):
         env['res.partner']._mtbg_classify_on_install()
