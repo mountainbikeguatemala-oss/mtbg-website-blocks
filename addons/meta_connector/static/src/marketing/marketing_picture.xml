@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="meta_connector.MarketingPictureField">
+        <div class="o_mtbg_mkt_picture">
+            <img t-if="src" t-att-src="src" t-att-style="style" class="img-fluid o_mtbg_mkt_picture_img" role="button"
+                 alt="Preview" title="Show it as the phone does" t-on-click="openPhone"/>
+        </div>
+    </t>
+
+    <t t-name="meta_connector.MarketingPhoneDialog">
+        <Dialog title="props.title" size="'md'" footer="false" contentClass="'o_mtbg_mkt_phone_dialog'">
+            <div t-attf-class="o_mtbg_mkt_phone o_mtbg_mkt_phone_{{ props.shape or 'vertical' }}">
+                <div class="o_mtbg_mkt_phone_screen">
+                    <img t-att-src="props.src" alt="Preview"/>
+                    <t t-if="(props.shape or 'vertical') === 'vertical'">
+                        <div class="o_mtbg_mkt_phone_bars"><span/></div>
+                        <div class="o_mtbg_mkt_phone_account"><span class="o_mtbg_mkt_phone_avatar"/><span>Story</span></div>
+                        <div class="o_mtbg_mkt_phone_reply">Send message</div>
+                    </t>
+                </div>
+            </div>
+        </Dialog>
+    </t>
+</templates>

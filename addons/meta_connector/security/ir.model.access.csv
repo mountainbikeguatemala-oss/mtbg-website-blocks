@@ -3,3 +3,6 @@ access_meta_connector_app_admin,meta.connector.app admin,model_meta_connector_ap
 access_meta_connector_page_admin,meta.connector.page admin,model_meta_connector_page,base.group_system,1,1,1,1
 access_meta_connector_page_user,meta.connector.page user,model_meta_connector_page,base.group_user,1,0,0,0
 access_meta_connector_media_admin,meta.connector.media admin,model_meta_connector_media,base.group_system,1,1,1,1
+access_mtbg_marketing_overlay_designer,mtbg.marketing.overlay designer,model_mtbg_marketing_overlay,website.group_website_designer,1,1,1,1
+access_mtbg_marketing_overlay_layer_designer,mtbg.marketing.overlay.layer designer,model_mtbg_marketing_overlay_layer,website.group_website_designer,1,1,1,1
+access_mtbg_marketing_font_designer,mtbg.marketing.font designer,model_mtbg_marketing_font,website.group_website_designer,1,1,1,1

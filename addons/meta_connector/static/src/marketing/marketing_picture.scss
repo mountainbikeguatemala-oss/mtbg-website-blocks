@@ -1,0 +1,81 @@
+// the marketing engine's picture: a thumbnail, and the phone view of a story or post
+.o_mtbg_mkt_picture_img {
+    cursor: zoom-in;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.o_mtbg_mkt_phone {
+    margin: 0 auto;
+    max-width: 340px;
+    padding: 10px;
+    border-radius: 34px;
+    background: #111;
+}
+
+.o_mtbg_mkt_phone_screen {
+    position: relative;
+    overflow: hidden;
+    border-radius: 26px;
+    background: #000;
+
+    img {
+        display: block;
+        width: 100%;
+    }
+}
+
+.o_mtbg_mkt_phone_square .o_mtbg_mkt_phone_screen {
+    border-radius: 8px;
+}
+
+.o_mtbg_mkt_phone_bars {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    right: 10px;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.4);
+
+    span {
+        display: block;
+        width: 40%;
+        height: 100%;
+        border-radius: 2px;
+        background: #fff;
+    }
+}
+
+.o_mtbg_mkt_phone_account {
+    position: absolute;
+    top: 18px;
+    left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.o_mtbg_mkt_phone_avatar {
+    width: 26px;
+    height: 26px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
+}
+
+.o_mtbg_mkt_phone_reply {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    padding: 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+    color: #fff;
+    font-size: 12px;
+}

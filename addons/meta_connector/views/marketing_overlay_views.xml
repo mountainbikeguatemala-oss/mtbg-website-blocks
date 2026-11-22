@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- the marketing engine's story and post templates (owner, 2026-11-22: "the marketing template preview should be
+         GLOBAL"): the editor with its live preview; each marketing app opens it from its own menu -->
+    <record id="view_mtbg_marketing_overlay_list" model="ir.ui.view">
+        <field name="name">mtbg.marketing.overlay.list</field>
+        <field name="model">mtbg.marketing.overlay</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="shape"/>
+                <field name="website_id" optional="show" groups="website.group_multi_website"/>
+                <field name="scrim" optional="show"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mtbg_marketing_overlay_form" model="ir.ui.view">
+        <field name="name">mtbg.marketing.overlay.form</field>
+        <field name="model">mtbg.marketing.overlay</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <field name="active" invisible="1"/>
+                    <field name="source" invisible="1"/>
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="oe_title">
+                                <label for="name"/>
+                                <h1><field name="name" placeholder="e.g. Hype story"/></h1>
+                            </div>
+                            <group>
+                                <group>
+                                    <field name="shape"/>
+                                    <field name="website_id" options="{'no_create': True}"/>
+                                    <field name="scrim"/>
+                                </group>
+                                <group invisible="scrim == 'none'">
+                                    <field name="scrim_color" widget="color"/>
+                                    <field name="scrim_opacity"/>
+                                    <field name="scrim_height"/>
+                                </group>
+                            </group>
+                            <group name="photo">
+                                <group string="The photo">
+                                    <field name="fit"/>
+                                    <field name="background_color" widget="color"/>
+                                </group>
+                                <group string="Photo shown whole: its box" invisible="fit == 'cover'">
+                                    <field name="contain_top"/>
+                                    <field name="contain_bottom"/>
+                                    <field name="contain_margin"/>
+                                </group>
+                            </group>
+                            <group name="qr">
+                                <group string="QR code (the short link)">
+                                    <field name="qr_enabled" widget="boolean_toggle"/>
+                                    <field name="qr_size" invisible="not qr_enabled"/>
+                                    <field name="qr_anchor" invisible="not qr_enabled"/>
+                                    <field name="qr_offset_x" invisible="not qr_enabled"/>
+                                    <field name="qr_offset_y" invisible="not qr_enabled"/>
+                                    <field name="qr_quiet" invisible="not qr_enabled"/>
+                                </group>
+                                <group name="qr_note">
+                                    <div class="text-muted small" colspan="2">Meta's API cannot put a link sticker on a
+                                        story: the story shows the link and this QR code instead.</div>
+                                </group>
+                            </group>
+                            <separator string="Layers (drawn in this order)"/>
+                            <field name="layer_ids" nolabel="1">
+                                <list default_order="sequence, id">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="active" widget="boolean_toggle"/>
+                                    <field name="name"/>
+                                    <field name="kind"/>
+                                    <field name="show_if" optional="show"/>
+                                    <field name="text_en"/>
+                                    <field name="font" optional="show"/>
+                                    <field name="size" optional="show"/>
+                                    <field name="color" widget="color" optional="show"/>
+                                    <field name="x" optional="hide"/>
+                                    <field name="y" optional="hide"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="name" placeholder="e.g. Headline"/>
+                                            <field name="kind"/>
+                                            <field name="show_if"/>
+                                            <field name="active"/>
+                                        </group>
+                                        <group string="Where">
+                                            <field name="x"/>
+                                            <field name="y"/>
+                                            <field name="align"/>
+                                            <field name="valign"/>
+                                            <field name="rotate" invisible="kind == 'logo'"/>
+                                        </group>
+                                    </group>
+                                    <group invisible="kind == 'logo'">
+                                        <group string="Text">
+                                            <field name="text_en" placeholder="{headline}"/>
+                                            <field name="text_es" placeholder="Empty: the English"/>
+                                            <field name="uppercase"/>
+                                        </group>
+                                        <group string="Font">
+                                            <field name="font"/>
+                                            <field name="font_id" options="{'no_quick_create': True}"/>
+                                            <field name="size"/>
+                                            <field name="min_size"/>
+                                            <field name="color" widget="color"/>
+                                            <field name="line_height"/>
+                                        </group>
+                                        <group string="Fit">
+                                            <field name="max_width"/>
+                                            <field name="max_lines"/>
+                                        </group>
+                                        <group string="Shadow and outline">
+                                            <field name="shadow"/>
+                                            <field name="shadow_color" widget="color" invisible="not shadow"/>
+                                            <field name="outline"/>
+                                            <field name="outline_color" widget="color" invisible="not outline"/>
+                                        </group>
+                                        <group string="Background box" invisible="kind == 'sticker'">
+                                            <field name="box"/>
+                                        </group>
+                                        <group string="The badge" invisible="kind != 'sticker' and not box">
+                                            <field name="box_color" widget="color"/>
+                                            <field name="box_opacity"/>
+                                            <field name="box_padding"/>
+                                            <field name="box_radius"/>
+                                            <field name="box_border"/>
+                                            <field name="box_border_color" widget="color" invisible="not box_border"/>
+                                        </group>
+                                    </group>
+                                    <group invisible="kind != 'logo'">
+                                        <group string="Logo">
+                                            <field name="logo" widget="image" options="{'size': [0, 80]}"/>
+                                            <field name="logo_source" invisible="logo"/>
+                                            <field name="logo_size"/>
+                                            <field name="opacity"/>
+                                        </group>
+                                    </group>
+                                </form>
+                            </field>
+                        </div>
+                        <div class="col-lg-5">
+                            <separator string="Preview"/>
+                            <field name="preview_image" widget="mtbg_marketing_picture" readonly="1" nolabel="1"
+                                   options="{'size': [360, 0], 'shape_field': 'shape'}" class="d-block mb-2"/>
+                            <group name="preview">
+                                <field name="preview_lang"/>
+                                <field name="preview_headline" invisible="source != 'tours'"/>
+                                <field name="preview_website_id" options="{'no_create': True}"
+                                       groups="website.group_multi_website"/>
+                                <field name="sample_image" widget="image" options="{'size': [0, 80]}"/>
+                            </group>
+                            <div class="text-muted small mb-2" name="preview_note">The real drawing at full size (1080 px
+                                wide), made smaller: the post looks exactly like this. Click it for the phone view.</div>
+                            <separator string="Placeholders"/>
+                            <field name="placeholders_help" nolabel="1"/>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mtbg_marketing_font_list" model="ir.ui.view">
+        <field name="name">mtbg.marketing.font.list</field>
+        <field name="model">mtbg.marketing.font</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+                <field name="data" filename="filename" widget="binary"/>
+                <field name="filename" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_mtbg_marketing_font_form" model="ir.ui.view">
+        <field name="name">mtbg.marketing.font.form</field>
+        <field name="model">mtbg.marketing.font</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                    <field name="data" filename="filename"/>
+                    <field name="filename" invisible="1"/>
+                </group>
+            </form>
+        </field>
+    </record>
+</odoo>

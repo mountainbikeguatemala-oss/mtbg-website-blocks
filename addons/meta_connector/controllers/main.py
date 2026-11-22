@@ -62,3 +62,32 @@ class MetaConnectorController(http.Controller):
         except (TypeError, ValueError):
             count = 6
         return request.env["meta.connector.media"].sudo()._meta_feed(count=count, username=username or None)
+
+
+class MetaConnectorMarketingPreview(http.Controller):
+    """A record drawn with a marketing template (the marketing engine), 360 px wide: a queue's card of a story or
+    post not drawn yet shows the real picture. Internal users only, the record read with their rights."""
+
+    @http.route("/meta_connector/overlay/<int:overlay_id>/preview/<string:model>/<int:res_id>", type="http",
+                auth="user", methods=["GET"], readonly=True)
+    def marketing_preview(self, overlay_id, model, res_id, lang=None, width=360, **options):
+        env = request.env
+        if not env.user._is_internal() or model not in env:
+            return request.not_found()
+        overlay = env["mtbg.marketing.overlay"].browse(overlay_id).exists()
+        record = env[model].browse(res_id).exists()
+        if not overlay or not record:
+            return request.not_found()
+        overlay.check_access("read")
+        record.check_access("read")
+        options.pop("unique", None)
+        website = env["website"].browse(int(options.pop("website_id"))).exists() \
+            if str(options.get("website_id") or "").isdigit() else None
+        try:
+            width = max(60, min(1080, int(width)))
+        except (TypeError, ValueError):
+            width = 360
+        image = overlay.sudo()._mtbg_render_record(record.sudo(), lang or "en", website=website, fmt="JPEG",
+                                                   preview_width=width, **options)
+        return request.make_response(image, headers=[("Content-Type", "image/jpeg"),
+                                                     ("Cache-Control", "private, max-age=600")])

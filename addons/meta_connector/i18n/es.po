@@ -25,6 +25,13 @@ msgstr ""
 "Meta."
 
 #. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/connector.py:0
+msgid "%(what)s %(name)s is not ticked in Set up Meta › Change the Pages."
+msgstr ""
+"%(what)s %(name)s no está marcado en Configurar Meta › Cambiar las páginas."
+
+#. module: meta_connector
 #. odoo-javascript
 #: code:addons/meta_connector/static/src/feed/feed.js:0
 msgid "%s followers"
@@ -46,6 +53,28 @@ msgstr "%s: conectado."
 #: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
 msgid ", logged in as an admin of your Facebook Page."
 msgstr ", con la sesión iniciada como administrador de su página de Facebook."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+", open your app › <b>Use cases</b> › <b>Add use cases</b>: add <b>Manage "
+"everything on your Page</b> and the <b>Instagram API</b> use case (Manage "
+"messaging &amp; content on Instagram). In each, add the permissions "
+"<code>pages_manage_posts</code>, <code>pages_read_engagement</code>, "
+"<code>pages_show_list</code>, <code>instagram_basic</code> and "
+"<code>instagram_content_publish</code>."
+msgstr ""
+", abre tu app › <b>Casos de uso</b> › <b>Agregar casos de uso</b>: agrega "
+"<b>Administrar todo en tu página</b> y el caso de uso <b>API de "
+"Instagram</b> (Administrar mensajes y contenido en Instagram). En cada uno, "
+"agrega los permisos <code>pages_manage_posts</code>, "
+"<code>pages_read_engagement</code>, <code>pages_show_list</code>, "
+"<code>instagram_basic</code> e <code>instagram_content_publish</code>."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__max_lines
+msgid "0: as many as it needs."
+msgstr "0: las que necesite."
 
 #. module: meta_connector
 #. odoo-javascript
@@ -73,6 +102,16 @@ msgid ""
 msgstr ""
 ":\n"
 "                                elija su app, “User Token”, agregue estos permisos, “Generate Access Token” y péguelo aquí:"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "<b>Permissions asked:</b>"
+msgstr "<b>Permisos pedidos:</b>"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "<b>Posting:</b>"
+msgstr "<b>Publicación:</b>"
 
 #. module: meta_connector
 #: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
@@ -113,6 +152,7 @@ msgstr "<i class=\"fa fa-whatsapp me-1\" style=\"color:#25d366\" title=\"WhatsAp
 
 #. module: meta_connector
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__active
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__active
 msgid "Active"
 msgstr "Activo"
 
@@ -131,6 +171,11 @@ msgid "Album"
 msgstr "Álbum"
 
 #. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__align
+msgid "Alignment"
+msgstr "Alineación"
+
+#. module: meta_connector
 #: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
 msgid ""
 "An Instagram account shows when it is a professional (business or creator) "
@@ -142,6 +187,23 @@ msgstr ""
 " o de creador) vinculada a la página. ¿No aparece? Instagram › Configuración"
 " › Tipo de cuenta y herramientas › Cambiar a cuenta profesional, vincúlela a"
 " la página e inicie sesión otra vez."
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__x
+msgid "Anchor X (%)"
+msgstr "Ancla X (%)"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__y
+msgid "Anchor Y (%)"
+msgstr "Ancla Y (%)"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/marketing_overlay.py:0
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__source__any
+msgid "Any"
+msgstr "Cualquiera"
 
 #. module: meta_connector
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__app_id
@@ -179,6 +241,26 @@ msgid "App “%s” found. Now the Facebook login."
 msgstr "App “%s” encontrada. Ahora el inicio de sesión de Facebook."
 
 #. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "Archived"
+msgstr "Archivado"
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay__background_color
+msgid "Around a photo shown whole, and without a photo."
+msgstr "Alrededor de una foto mostrada entera, y sin foto."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__size
+msgid "At full size (the image is 1080 px wide)."
+msgstr "A tamaño completo (la imagen mide 1080 px de ancho)."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay__scrim_opacity
+msgid "At the edge, 0 to 1."
+msgstr "En el borde, de 0 a 1."
+
+#. module: meta_connector
 #. odoo-javascript
 #: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
 msgid "Automatic"
@@ -190,14 +272,86 @@ msgid "Back"
 msgstr "Atrás"
 
 #. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__background_color
+msgid "Background"
+msgstr "Fondo"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__box
+msgid "Background Box"
+msgstr "Caja de fondo"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "Background box"
+msgstr "Caja de fondo"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__qr_anchor__bottom
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay_layer__valign__bottom
+msgid "Bottom"
+msgstr "Abajo"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__qr_anchor__bottom-left
+msgid "Bottom left"
+msgstr "Abajo a la izquierda"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__qr_anchor__bottom-right
+msgid "Bottom right"
+msgstr "Abajo a la derecha"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__box_border
+msgid "Box Border (px)"
+msgstr "Borde de la caja (px)"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__box_border_color
+msgid "Box Border Colour"
+msgstr "Color del borde de la caja"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__box_color
+msgid "Box Color"
+msgstr "Color de la caja"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__box_opacity
+msgid "Box Opacity"
+msgstr "Opacidad de la caja"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__box_padding
+msgid "Box Padding"
+msgstr "Margen interior de la caja"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__box_radius
+msgid "Box Radius"
+msgstr "Radio de la caja"
+
+#. module: meta_connector
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__can_message
 msgid "Can Message"
 msgstr "Puede enviar mensajes"
 
 #. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__uppercase
+msgid "Capitals"
+msgstr "Mayúsculas"
+
+#. module: meta_connector
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__caption
 msgid "Caption"
 msgstr "Texto"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__qr_anchor__center
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay_layer__align__center
+msgid "Centre"
+msgstr "Centro"
 
 #. module: meta_connector
 #: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
@@ -206,8 +360,18 @@ msgstr "Cambiar las páginas"
 
 #. module: meta_connector
 #: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "Check"
+msgstr "Comprobar"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
 msgid "Check the app"
 msgstr "Comprobar la app"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__color
+msgid "Colour"
+msgstr "Color"
 
 #. module: meta_connector
 #. odoo-javascript
@@ -268,9 +432,17 @@ msgid "Corners"
 msgstr "Esquinas"
 
 #. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__rotate
+msgid "Counter-clockwise; a sticker: -8 or 8."
+msgstr "En sentido antihorario; una etiqueta: -8 u 8."
+
+#. module: meta_connector
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__create_uid
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__create_uid
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__create_uid
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_font__create_uid
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__create_uid
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__create_uid
 msgid "Created by"
 msgstr "Creado por"
 
@@ -278,8 +450,33 @@ msgstr "Creado por"
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__create_date
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__create_date
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__create_date
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_font__create_date
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__create_date
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__create_date
 msgid "Created on"
 msgstr "Creado el"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "Default Facebook Page: %s"
+msgstr "Página de Facebook predeterminada: %s"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "Default Instagram account: %s"
+msgstr "Cuenta de Instagram predeterminada: %s"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__post_default_instagram
+msgid "Default Instagram for Posts"
+msgstr "Instagram predeterminado para publicaciones"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__post_default_page
+msgid "Default Page for Posts"
+msgstr "Página predeterminada para publicaciones"
 
 #. module: meta_connector
 #: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_page__state__disconnected
@@ -291,6 +488,9 @@ msgstr "Desconectado"
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__display_name
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__display_name
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__display_name
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_font__display_name
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__display_name
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__display_name
 #: model:ir.model.fields,field_description:meta_connector.field_res_config_settings__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
@@ -301,9 +501,38 @@ msgid "Done"
 msgstr "Hecho"
 
 #. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__show_if
+msgid ""
+"Drawn only when the record has this (e.g. a new product, the last one). "
+"Empty: always."
+msgstr ""
+"Se dibuja solo cuando el registro lo tiene (p. ej. un producto nuevo, el "
+"último). Vacío: siempre."
+
+#. module: meta_connector
 #: model:ir.model.fields,help:meta_connector.field_meta_connector_app__user_token_expires
 msgid "Empty: never (the Pages' tokens never expire either)."
 msgstr "Vacío: nunca (los tokens de las páginas tampoco caducan)."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "Empty: the English"
+msgstr "Vacío: el inglés"
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__text_es
+msgid "Empty: the English."
+msgstr "Vacío: el inglés."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__logo
+msgid "Empty: the logo below."
+msgstr "Vacío: el logo de abajo."
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__preview_lang__en
+msgid "English"
+msgstr "Inglés"
 
 #. module: meta_connector
 #: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
@@ -317,6 +546,8 @@ msgid "Facebook & Instagram"
 msgstr "Facebook e Instagram"
 
 #. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/connector.py:0
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__name
 #: model:ir.model.fields,field_description:meta_connector.field_res_config_settings__meta_fb_status
 #: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
@@ -332,6 +563,12 @@ msgstr "Página de Facebook (y su cuenta de Instagram)"
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__page_id
 msgid "Facebook Page ID"
 msgstr "ID de la página de Facebook"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "Facebook Page: none ticked"
+msgstr "Página de Facebook: ninguna marcada"
 
 #. module: meta_connector
 #: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
@@ -390,6 +627,31 @@ msgstr ""
 "no está en https: use el token de abajo (o abra Odoo en su dirección https)."
 
 #. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_font__filename
+msgid "Filename"
+msgstr "Nombre del archivo"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__fit__cover
+msgid "Fill (cut to fit)"
+msgstr "Llenar (recortada)"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__fit__auto
+msgid "Fill when made for the shape, else whole"
+msgstr "Llenar si está hecha para la forma, si no entera"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "Finish"
+msgstr "Terminar"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "Fit"
+msgstr "Ajuste"
+
+#. module: meta_connector
 #. odoo-javascript
 #: code:addons/meta_connector/static/src/feed/feed.js:0
 msgid "Follow @%s"
@@ -402,6 +664,17 @@ msgid "Follow button"
 msgstr "Botón Seguir"
 
 #. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__font
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "Font"
+msgstr "Fuente"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_font__data
+msgid "Font File"
+msgstr "Archivo de fuente"
+
+#. module: meta_connector
 #: model:ir.model.fields,help:meta_connector.field_meta_connector_app__granted_targets
 msgid ""
 "For each permission limited to some assets, their IDs (e.g. the WhatsApp "
@@ -409,6 +682,17 @@ msgid ""
 msgstr ""
 "Para cada permiso limitado a algunos activos, sus ID (p. ej. las cuentas de "
 "WhatsApp Business a las que llega el inicio de sesión)."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+"For other people than the app's admins and testers, Meta must approve those "
+"permissions (<b>App Review</b>): until then posting works for the app's own "
+"roles only."
+msgstr ""
+"Para otras personas que no sean los administradores y evaluadores de la app,"
+" Meta debe aprobar esos permisos (<b>Revisión de la app</b>): hasta "
+"entonces, publicar solo funciona para los roles de la propia app."
 
 #. module: meta_connector
 #: model:ir.model.fields,help:meta_connector.field_meta_connector_app__manual_token
@@ -420,10 +704,40 @@ msgstr ""
 " lista): para un Odoo que todavía no está en https."
 
 #. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__scrim__bottom
+msgid "From the bottom"
+msgstr "Desde abajo"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__scrim__top
+msgid "From the top"
+msgstr "Desde arriba"
+
+#. module: meta_connector
 #. odoo-javascript
 #: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
 msgid "Full"
 msgstr "Completo"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__scrim
+msgid "Gradient"
+msgstr "Degradado"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__scrim_color
+msgid "Gradient Colour"
+msgstr "Color del degradado"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__scrim_height
+msgid "Gradient Height (%)"
+msgstr "Altura del degradado (%)"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__scrim_opacity
+msgid "Gradient Opacity"
+msgstr "Opacidad del degradado"
 
 #. module: meta_connector
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__granted_targets
@@ -440,6 +754,11 @@ msgstr "Graph API Explorer"
 #: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
 msgid "Grid"
 msgstr "Cuadrícula"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__valign
+msgid "Hangs From"
+msgstr "Cuelga de"
 
 #. module: meta_connector
 #. odoo-javascript
@@ -468,6 +787,9 @@ msgstr "Permiso Human Agent"
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__id
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__id
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__id
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_font__id
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__id
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__id
 #: model:ir.model.fields,field_description:meta_connector.field_res_config_settings__id
 msgid "ID"
 msgstr "ID"
@@ -484,12 +806,26 @@ msgstr "Imagen"
 
 #. module: meta_connector
 #: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "In"
+msgstr "En"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
 msgid ""
 "In the app's dashboard, add the products <b>Messenger</b> and "
 "<b>Instagram</b> (“Set up”)."
 msgstr ""
 "En el panel de la app, agregue los productos <b>Messenger</b> e "
 "<b>Instagram</b> (“Configurar”)."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__text
+msgid ""
+"In the language of the switch above. {placeholders}: {headline}, {tour}, "
+"{date_long}..."
+msgstr ""
+"En el idioma del selector de arriba. {placeholders}: {headline}, {tour}, "
+"{date_long}..."
 
 #. module: meta_connector
 #: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_app__message_kind__info
@@ -548,10 +884,18 @@ msgid "Instagram Posts"
 msgstr "Publicaciones de Instagram"
 
 #. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/connector.py:0
 #: model:ir.model.fields,field_description:meta_connector.field_res_config_settings__meta_ig_status
 #: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
 msgid "Instagram account"
 msgstr "Cuenta de Instagram"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "Instagram account: none linked to the Page and ticked"
+msgstr "Cuenta de Instagram: ninguna vinculada a la página y marcada"
 
 #. module: meta_connector
 #: model:ir.model.fields,field_description:meta_connector.field_res_config_settings__meta_ig_chat
@@ -570,6 +914,28 @@ msgid "Instagram post"
 msgstr "Publicación de Instagram"
 
 #. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__font_id
+msgid "Instead of the font above."
+msgstr "En lugar de la fuente de arriba."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay__qr_size
+msgid "Its side, a share of the short edge, its white quiet zone included."
+msgstr "Su lado, una parte del lado corto, con su zona blanca incluida."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay__website_id
+msgid "Its website's logo and address. Empty: the website it is drawn for."
+msgstr ""
+"El logo y la dirección de su sitio web. Vacío: el sitio web para el que se "
+"dibuja."
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__kind
+msgid "Kind"
+msgstr "Tipo"
+
+#. module: meta_connector
 #. odoo-javascript
 #: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
 msgid "Landscape (16:9)"
@@ -579,6 +945,9 @@ msgstr "Horizontal (16:9)"
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__write_uid
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__write_uid
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__write_uid
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_font__write_uid
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__write_uid
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__write_uid
 msgid "Last Updated by"
 msgstr "Última actualización por"
 
@@ -586,8 +955,26 @@ msgstr "Última actualización por"
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__write_date
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__write_date
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__write_date
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_font__write_date
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__write_date
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__write_date
 msgid "Last Updated on"
 msgstr "Última actualización el"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__name
+msgid "Layer"
+msgstr "Capa"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__layer_ids
+msgid "Layers"
+msgstr "Capas"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "Layers (drawn in this order)"
+msgstr "Capas (dibujadas en este orden)"
 
 #. module: meta_connector
 #. odoo-javascript
@@ -596,14 +983,34 @@ msgid "Layout"
 msgstr "Diseño"
 
 #. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__qr_anchor__left
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay_layer__align__left
+msgid "Left"
+msgstr "Izquierda"
+
+#. module: meta_connector
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__legacy_urls
 msgid "Legacy Urls"
 msgstr "Direcciones anteriores"
 
 #. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__line_height
+msgid "Line Height"
+msgstr "Altura de línea"
+
+#. module: meta_connector
 #: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
 msgid "Log in with Facebook again"
 msgstr "Iniciar sesión con Facebook otra vez"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+"Log in with Facebook again (button below) and tick the Page and the "
+"Instagram account when Facebook asks; then <b>Check</b>."
+msgstr ""
+"Inicia sesión con Facebook de nuevo (botón de abajo) y marca la página y la "
+"cuenta de Instagram cuando Facebook lo pida; luego <b>Comprobar</b>."
 
 #. module: meta_connector
 #. odoo-python
@@ -633,6 +1040,49 @@ msgstr "ID de configuración del inicio de sesión"
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__user_token_expires
 msgid "Login Expires"
 msgstr "El inicio de sesión caduca"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__logo
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay_layer__kind__logo
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "Logo"
+msgstr "Logo"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__logo_source
+msgid "Logo From"
+msgstr "Logo de"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__logo_size
+msgid "Logo Width (%)"
+msgstr "Ancho del logo (%)"
+
+#. module: meta_connector
+#: model:ir.model,name:meta_connector.model_mtbg_marketing_overlay_layer
+msgid "Marketing overlay layer"
+msgstr "Capa de plantilla de marketing"
+
+#. module: meta_connector
+#: model:ir.model,name:meta_connector.model_mtbg_marketing_overlay
+msgid "Marketing overlay template"
+msgstr "Plantilla de marketing"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/marketing/marketing_picture.js:0
+msgid "Marketing picture"
+msgstr "Imagen de marketing"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__max_lines
+msgid "Max Lines"
+msgstr "Líneas máx."
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__max_width
+msgid "Max Width (%)"
+msgstr "Ancho máx. (%)"
 
 #. module: meta_connector
 #. odoo-javascript
@@ -668,6 +1118,11 @@ msgid "Meta"
 msgstr "Meta"
 
 #. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "Meta Business Suite"
+msgstr "Meta Business Suite"
+
+#. module: meta_connector
 #: model:ir.model,name:meta_connector.model_meta_connector_app
 msgid "Meta Connection"
 msgstr "Conexión con Meta"
@@ -695,6 +1150,12 @@ msgstr "Conexión con Meta"
 #. module: meta_connector
 #. odoo-python
 #: code:addons/meta_connector/models/app.py:0
+msgid "Meta did not answer: %s"
+msgstr "Meta no respondió: %s"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
 msgid "Meta does not know this App ID and secret: %s"
 msgstr "Meta no conoce este ID y clave secreta de la app: %s"
 
@@ -706,6 +1167,11 @@ msgstr ""
 "Meta no necesita revisar la app: solo trabaja con sus propias páginas."
 
 #. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "Meta for Developers"
+msgstr "Meta for Developers"
+
+#. module: meta_connector
 #: model:ir.model.fields,help:meta_connector.field_meta_connector_app__human_agent
 msgid ""
 "Meta granted the app the Human Agent permission (App Review): staff may "
@@ -714,6 +1180,22 @@ msgstr ""
 "Meta concedió a la app el permiso Human Agent (revisión de la app): el "
 "personal puede responder hasta 7 días después del último mensaje del cliente"
 " en lugar de 24 horas."
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/connector.py:0
+msgid ""
+"Meta has not granted %(scopes)s to this login yet (app review, then log in "
+"with Facebook again in Set up Meta)."
+msgstr ""
+"Meta aún no ha concedido %(scopes)s a este inicio de sesión (revisión de la "
+"app, luego inicia sesión con Facebook de nuevo en Configurar Meta)."
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/connector.py:0
+msgid "Meta is not connected (Settings › Meta › Set up Meta)."
+msgstr "Meta no está conectado (Ajustes › Meta › Configurar Meta)."
 
 #. module: meta_connector
 #. odoo-python
@@ -728,6 +1210,21 @@ msgstr ""
 "tanto, los mensajes llegan cada 10 minutos."
 
 #. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/connector.py:0
+msgid "Meta posts go to \"facebook\" or \"instagram\"."
+msgstr "Las publicaciones de Meta van a \"facebook\" o \"instagram\"."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid ""
+"Meta's API cannot put a link sticker on a\n"
+"                                        story: the story shows the link and this QR code instead."
+msgstr ""
+"La API de Meta no puede poner una etiqueta de enlace en una historia: la "
+"historia muestra el enlace y este código QR en su lugar."
+
+#. module: meta_connector
 #: model:ir.actions.server,name:meta_connector.ir_cron_meta_health_ir_actions_server
 msgid "Meta: check the connection"
 msgstr "Meta: revisar la conexión"
@@ -736,6 +1233,11 @@ msgstr "Meta: revisar la conexión"
 #: model:ir.actions.server,name:meta_connector.ir_cron_meta_instagram_feed_ir_actions_server
 msgid "Meta: refresh the Instagram feed"
 msgstr "Meta: actualizar el feed de Instagram"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay_layer__valign__middle
+msgid "Middle"
+msgstr "Centro"
 
 #. module: meta_connector
 #: model:ir.model.fields,help:meta_connector.field_meta_connector_app__legacy_urls
@@ -747,8 +1249,17 @@ msgstr ""
 
 #. module: meta_connector
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__name
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_font__name
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__name
 msgid "Name"
 msgstr "Nombre"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/connector.py:0
+msgid "No %(what)s ticked in Set up Meta › Change the Pages."
+msgstr ""
+"Ningún(a) %(what)s marcado(a) en Configurar Meta › Cambiar las páginas."
 
 #. module: meta_connector
 #. odoo-python
@@ -778,6 +1289,7 @@ msgstr "¿Todavía sin https? Pegue un token"
 #. module: meta_connector
 #. odoo-javascript
 #: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__scrim__none
 msgid "None"
 msgstr "Ninguno"
 
@@ -793,9 +1305,26 @@ msgid "Not connected yet: Set up Meta."
 msgstr "Aún sin conectar: Configurar Meta."
 
 #. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid ""
+"Not ready yet: %s. Follow the steps above, then log in with Facebook again."
+msgstr ""
+"Aún no está listo: %s. Sigue los pasos de arriba y luego inicia sesión con "
+"Facebook de nuevo."
+
+#. module: meta_connector
 #: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_app__webhook_state__none
 msgid "Not set"
 msgstr "Sin configurar"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "Now Posting: the Meta app's use cases, then a new Facebook login."
+msgstr ""
+"Ahora Publicación: los casos de uso de la app de Meta y luego un nuevo "
+"inicio de sesión con Facebook."
 
 #. module: meta_connector
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__redirect_url
@@ -819,6 +1348,11 @@ msgstr ""
 "registrarlo a mano: panel de la app › Messenger (e Instagram) › Webhooks:"
 
 #. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__active
+msgid "On"
+msgstr "Activa"
+
+#. module: meta_connector
 #: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
 msgid ""
 "One Facebook login for Facebook and Instagram, and for every use below. Meta"
@@ -832,6 +1366,11 @@ msgstr ""
 #: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
 msgid "One row"
 msgstr "Una fila"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__show_if
+msgid "Only When"
+msgstr "Solo cuando"
 
 #. module: meta_connector
 #. odoo-python
@@ -853,6 +1392,11 @@ msgstr ""
 "Configuraciones): si no, déjelo vacío."
 
 #. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__opacity
+msgid "Opacity"
+msgstr "Opacidad"
+
+#. module: meta_connector
 #: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
 msgid "Open"
 msgstr "Abrir"
@@ -861,6 +1405,26 @@ msgstr "Abrir"
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__manual_token
 msgid "Or paste a user token"
 msgstr "O pegue un token de usuario"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__outline
+msgid "Outline (px)"
+msgstr "Contorno (px)"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__outline_color
+msgid "Outline Color"
+msgstr "Color del contorno"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__overlay_id
+msgid "Overlay"
+msgstr "Plantilla"
+
+#. module: meta_connector
+#: model:ir.model,name:meta_connector.model_mtbg_marketing_font
+msgid "Overlay font"
+msgstr "Fuente de plantilla"
 
 #. module: meta_connector
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__page_id
@@ -897,6 +1461,12 @@ msgid "Permalink"
 msgstr "Enlace"
 
 #. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid "Permission %s"
+msgstr "Permiso %s"
+
+#. module: meta_connector
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__scopes
 msgid "Permissions"
 msgstr "Permisos"
@@ -907,14 +1477,45 @@ msgid "Permissions Granted"
 msgstr "Permisos concedidos"
 
 #. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__fit
 #: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_media__media_type__image
 msgid "Photo"
 msgstr "Foto"
 
 #. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__contain_bottom
+msgid "Photo Box Bottom (%)"
+msgstr "Caja de la foto: abajo (%)"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__contain_margin
+msgid "Photo Box Side Margin (%)"
+msgstr "Caja de la foto: margen lateral (%)"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__contain_top
+msgid "Photo Box Top (%)"
+msgstr "Caja de la foto: arriba (%)"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "Photo shown whole: its box"
+msgstr "Foto mostrada entera: su caja"
+
+#. module: meta_connector
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__picture_url
 msgid "Picture Url"
 msgstr "URL de la imagen"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "Placeholders"
+msgstr "Variables"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__placeholders_help
+msgid "Placeholders Help"
+msgstr "Ayuda de variables"
 
 #. module: meta_connector
 #: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_app__webhook_state__manual
@@ -933,10 +1534,89 @@ msgid "Posted At"
 msgstr "Publicado el"
 
 #. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_res_config_settings__meta_posting
+#: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_app__step__posting
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid "Posting"
+msgstr "Publicación"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__posting_wanted
+msgid "Posting Wanted"
+msgstr "Publicación deseada"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__posting_checks
+msgid "Posting checks"
+msgstr "Comprobaciones de publicación"
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/connector.py:0
+msgid "Posting is off in Settings › Meta."
+msgstr "La publicación está desactivada en Ajustes › Meta."
+
+#. module: meta_connector
+#. odoo-python
+#: code:addons/meta_connector/models/app.py:0
+msgid ""
+"Posting is ready: every permission granted, the Page and the Instagram "
+"account ticked."
+msgstr ""
+"La publicación está lista: todos los permisos concedidos, la página y la "
+"cuenta de Instagram marcadas."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid "Posting: this site posts on your Facebook Page and Instagram account."
+msgstr ""
+"Publicación: este sitio publica en tu página de Facebook y tu cuenta de "
+"Instagram."
+
+#. module: meta_connector
 #. odoo-javascript
 #: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
 msgid "Posts"
 msgstr "Publicaciones"
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_meta_connector_page__post_default_instagram
+msgid "Posts without a chosen Instagram account go on this one."
+msgstr "Las publicaciones sin una cuenta de Instagram elegida van a esta."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_meta_connector_page__post_default_page
+msgid "Posts without a chosen Page go on this one."
+msgstr "Las publicaciones sin una página elegida van a esta."
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/marketing/marketing_picture.js:0
+#: code:addons/meta_connector/static/src/marketing/marketing_picture.xml:0
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__preview_image
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "Preview"
+msgstr "Vista previa"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__preview_website_id
+msgid "Preview For"
+msgstr "Vista previa para"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__preview_headline
+msgid "Preview Headline"
+msgstr "Titular de la vista previa"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__preview_lang
+msgid "Preview In"
+msgstr "Vista previa en"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__sample_image
+msgid "Preview Photo"
+msgstr "Foto de la vista previa"
 
 #. module: meta_connector
 #: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_app__message_kind__danger
@@ -954,6 +1634,41 @@ msgstr "Perfil"
 #: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
 msgid "Profile and followers"
 msgstr "Perfil y seguidores"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__qr_enabled
+msgid "QR Code"
+msgstr "Código QR"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__qr_offset_x
+msgid "QR Offset X (%)"
+msgstr "Desplazamiento QR X (%)"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__qr_offset_y
+msgid "QR Offset Y (%)"
+msgstr "Desplazamiento QR Y (%)"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__qr_anchor
+msgid "QR Position"
+msgstr "Posición del QR"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__qr_quiet
+msgid "QR Quiet Zone"
+msgstr "Zona blanca del QR"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__qr_size
+msgid "QR Size (%)"
+msgstr "Tamaño del QR (%)"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "QR code (the short link)"
+msgstr "Código QR (el enlace corto)"
 
 #. module: meta_connector
 #: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
@@ -976,6 +1691,12 @@ msgid "Registered"
 msgstr "Registrado"
 
 #. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__qr_anchor__right
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay_layer__align__right
+msgid "Right"
+msgstr "Derecha"
+
+#. module: meta_connector
 #: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
 msgid "Save"
 msgstr "Guardar"
@@ -987,6 +1708,18 @@ msgid "See the post on Instagram"
 msgstr "Ver la publicación en Instagram"
 
 #. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/marketing/marketing_picture.xml:0
+msgid "Send message"
+msgstr "Enviar mensaje"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__sequence
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: meta_connector
 #. odoo-python
 #: code:addons/meta_connector/models/app.py:0
 #: model:ir.actions.server,name:meta_connector.action_meta_setup
@@ -996,10 +1729,62 @@ msgid "Set up Meta"
 msgstr "Configurar Meta"
 
 #. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+"Several Pages and Instagram accounts can be ticked: an app may post on a "
+"chosen one (e.g. each website its own); posts without one go on the default "
+"Page and the default Instagram account."
+msgstr ""
+"Se pueden marcar varias páginas y cuentas de Instagram: una app puede "
+"publicar en una elegida (p. ej. cada sitio web la suya); las publicaciones "
+"sin una van a la página y la cuenta de Instagram predeterminadas."
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__shadow
+msgid "Shadow"
+msgstr "Sombra"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__shadow_color
+msgid "Shadow Color"
+msgstr "Color de la sombra"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "Shadow and outline"
+msgstr "Sombra y contorno"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__shape
+msgid "Shape"
+msgstr "Forma"
+
+#. module: meta_connector
 #. odoo-javascript
 #: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
 msgid "Show"
 msgstr "Mostrar"
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/marketing/marketing_picture.xml:0
+msgid "Show it as the phone does"
+msgstr "Verla como en el teléfono"
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__min_size
+msgid "Shrunk down to this to fit its max width and lines."
+msgstr "Se reduce hasta este tamaño para caber en su ancho y líneas máximos."
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__size
+msgid "Size (px)"
+msgstr "Tamaño (px)"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__min_size
+msgid "Smallest (px)"
+msgstr "Mínimo (px)"
 
 #. module: meta_connector
 #. odoo-javascript
@@ -1008,8 +1793,14 @@ msgid "Spacing"
 msgstr "Espaciado"
 
 #. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__preview_lang__es
+msgid "Spanish"
+msgstr "Español"
+
+#. module: meta_connector
 #. odoo-javascript
 #: code:addons/meta_connector/static/src/website_builder/feed_option.xml:0
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__shape__square
 msgid "Square (1:1)"
 msgstr "Cuadrado (1:1)"
 
@@ -1029,9 +1820,46 @@ msgid "Step"
 msgstr "Paso"
 
 #. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay_layer__kind__sticker
+msgid "Sticker"
+msgstr "Etiqueta"
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__kind
+msgid ""
+"Sticker: a text on a coloured badge (its background box always on), turned a"
+" few degrees."
+msgstr ""
+"Etiqueta: un texto sobre una insignia de color (su caja de fondo siempre "
+"activa), girada unos grados."
+
+#. module: meta_connector
+#. odoo-javascript
+#: code:addons/meta_connector/static/src/marketing/marketing_picture.xml:0
+msgid "Story"
+msgstr "Historia"
+
+#. module: meta_connector
 #: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_app__message_kind__success
 msgid "Success"
 msgstr "Éxito"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__text
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay_layer__kind__text
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "Text"
+msgstr "Texto"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__text_en
+msgid "Text (English)"
+msgstr "Texto (inglés)"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__text_es
+msgid "Text (Spanish)"
+msgstr "Texto (español)"
 
 #. module: meta_connector
 #: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
@@ -1059,6 +1887,29 @@ msgstr ""
 "feed."
 
 #. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__valign
+msgid "The anchor is the block's top, middle or bottom."
+msgstr ""
+"El ancla es la parte de arriba, el centro o la parte de abajo del bloque."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay__source
+msgid ""
+"The app whose records this template draws: its placeholders and stickers."
+msgstr ""
+"La app cuyos registros dibuja esta plantilla: sus variables y etiquetas."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "The badge"
+msgstr "La insignia"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay_layer__logo_source__company
+msgid "The company's logo"
+msgstr "El logo de la empresa"
+
+#. module: meta_connector
 #. odoo-python
 #: code:addons/meta_connector/models/app.py:0
 msgid "The last Facebook login did not give this Page."
@@ -1077,6 +1928,32 @@ msgstr ""
 "conserva su propio token."
 
 #. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "The photo"
+msgstr "La foto"
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay__preview_headline
+msgid "The preview's {headline} (a hype rule gives its own)."
+msgstr "El {headline} de la vista previa (una regla de hype da el suyo)."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid ""
+"The real drawing at full size (1080 px\n"
+"                                wide), made smaller: the post looks exactly like this. Click it for the phone view."
+msgstr ""
+"El dibujo real a tamaño completo (1080 px de ancho), reducido: la "
+"publicación se ve exactamente así. Haz clic para verla como en el teléfono."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay__qr_enabled
+msgid "The short link as a QR code (black on white, scans on any photo)."
+msgstr ""
+"El enlace corto como código QR (negro sobre blanco, se escanea sobre "
+"cualquier foto)."
+
+#. module: meta_connector
 #: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
 msgid ""
 "The website block “Instagram Feed” shows your latest posts, kept here and "
@@ -1084,6 +1961,20 @@ msgid ""
 msgstr ""
 "El bloque del sitio web “Feed de Instagram” muestra sus últimas "
 "publicaciones, guardadas aquí y actualizadas cada hora."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay__preview_website_id
+msgid ""
+"The website whose logo and address the preview shows (empty: this template's"
+" website, else the current one)."
+msgstr ""
+"El sitio web cuyo logo y dirección muestra la vista previa (vacío: el sitio "
+"web de esta plantilla, si no el actual)."
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay_layer__logo_source__website
+msgid "The website's logo"
+msgstr "El logo del sitio web"
 
 #. module: meta_connector
 #: model:ir.model.constraint,message:meta_connector.constraint_meta_connector_page_page_unique
@@ -1094,6 +1985,34 @@ msgstr "Esta página ya está en la conexión."
 #: model:ir.model.constraint,message:meta_connector.constraint_meta_connector_media_media_unique
 msgid "This post is already kept."
 msgstr "Esta publicación ya está guardada."
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_res_config_settings__meta_posting
+msgid ""
+"This site posts on the Facebook Page and the Instagram account (e.g. with "
+"Marketing). On: Set up Meta asks for the posting permissions "
+"(pages_manage_posts, instagram_content_publish) at the next Facebook login. "
+"Other people than the Meta app's own admins need Meta's app review first."
+msgstr ""
+"Este sitio publica en la página de Facebook y la cuenta de Instagram (p. ej."
+" con Marketing). Activado: Configurar Meta pide los permisos de publicación "
+"(pages_manage_posts, instagram_content_publish) en el próximo inicio de "
+"sesión con Facebook. Otras personas que no sean los administradores de la "
+"app de Meta necesitan primero la revisión de la app."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.res_config_settings_view_form_meta
+msgid ""
+"This site posts on the Facebook Page and the Instagram account (e.g. with "
+"Marketing). On: log in with Facebook again in Set up Meta to grant the "
+"posting permissions. People other than the Meta app's admins need Meta's app"
+" review first."
+msgstr ""
+"Este sitio publica en la página de Facebook y la cuenta de Instagram (p. ej."
+" con Marketing). Activado: inicia sesión con Facebook de nuevo en Configurar"
+" Meta para conceder los permisos de publicación. Otras personas que no sean "
+"los administradores de la app de Meta necesitan primero la revisión de la "
+"app."
 
 #. module: meta_connector
 #: model:ir.model.fields,help:meta_connector.field_meta_connector_page__use_page
@@ -1139,6 +2058,37 @@ msgid "Tile shape"
 msgstr "Forma de las miniaturas"
 
 #. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__qr_anchor__top
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay_layer__valign__top
+msgid "Top"
+msgstr "Arriba"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__scrim__both
+msgid "Top and bottom"
+msgstr "Arriba y abajo"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__qr_anchor__top-left
+msgid "Top left"
+msgstr "Arriba a la izquierda"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__qr_anchor__top-right
+msgid "Top right"
+msgstr "Arriba a la derecha"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__rotate
+msgid "Turn (°)"
+msgstr "Giro (°)"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__font_id
+msgid "Uploaded Font"
+msgstr "Fuente subida"
+
+#. module: meta_connector
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_page__use_instagram
 msgid "Use Instagram"
 msgstr "Usar Instagram"
@@ -1163,6 +2113,11 @@ msgid "Use this token"
 msgstr "Usar este token"
 
 #. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__source
+msgid "Used By"
+msgstr "Usada por"
+
+#. module: meta_connector
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__user_token
 msgid "User Token"
 msgstr "User Token"
@@ -1171,6 +2126,17 @@ msgstr "User Token"
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__verify_token
 msgid "Verify Token"
 msgstr "Token de verificación"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__shape__vertical
+msgid "Vertical (9:16)"
+msgstr "Vertical (9:16)"
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay__shape
+msgid "Vertical: 1080 x 1920 (stories). Square: 1080 x 1080 (posts)."
+msgstr ""
+"Vertical: 1080 x 1920 (historias). Cuadrada: 1080 x 1080 (publicaciones)."
 
 #. module: meta_connector
 #: model:ir.model.fields.selection,name:meta_connector.selection__meta_connector_media__media_type__video
@@ -1199,6 +2165,16 @@ msgid "Webhook registered: messages arrive at once."
 msgstr "Webhook registrado: los mensajes llegan al instante."
 
 #. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__website_id
+msgid "Website"
+msgstr "Sitio web"
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__name
+msgid "What it is, for you (e.g. Headline)."
+msgstr "Qué es, para ti (p. ej. Titular)."
+
+#. module: meta_connector
 #: model:ir.model.fields,help:meta_connector.field_meta_connector_app__granted_scopes
 msgid ""
 "What the login may do (Meta's answer, checked at each login and every day)."
@@ -1224,6 +2200,26 @@ msgid "WhatsApp sends with the Meta login"
 msgstr "WhatsApp envía con el inicio de sesión de Meta"
 
 #. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__logo_source
+msgid "When no picture of its own is uploaded."
+msgstr "Cuando no se sube una imagen propia."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "Where"
+msgstr "Dónde"
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay__qr_quiet
+msgid "White modules round the code (3-4 scan best)."
+msgstr "Módulos blancos alrededor del código (3-4 se escanean mejor)."
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay__fit__contain
+msgid "Whole, on the background"
+msgstr "Entera, sobre el fondo"
+
+#. module: meta_connector
 #. odoo-python
 #: code:addons/meta_connector/models/app.py:0
 msgid ""
@@ -1232,6 +2228,15 @@ msgid ""
 msgstr ""
 "Sin el webhook, los mensajes nuevos llegan cada 10 minutos (vea el recuadro "
 "Webhook)."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+"Your Instagram account must be a professional (business) account linked to "
+"the Facebook Page: in"
+msgstr ""
+"Tu cuenta de Instagram debe ser una cuenta profesional (de empresa) "
+"vinculada a la página de Facebook: en"
 
 #. module: meta_connector
 #: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
@@ -1244,6 +2249,16 @@ msgid "e.g. 1234567890123456"
 msgstr "p. ej. 1234567890123456"
 
 #. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "e.g. Headline"
+msgstr "p. ej. Titular"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "e.g. Hype story"
+msgstr "p. ej. Historia de hype"
+
+#. module: meta_connector
 #: model_terms:ir.ui.view,arch_db:meta_connector.snippets
 msgid "instagram, feed, posts, photos, social, follow, grid"
 msgstr "instagram, feed, publicaciones, fotos, redes, seguir, cuadrícula"
@@ -1253,3 +2268,22 @@ msgstr "instagram, feed, publicaciones, fotos, redes, seguir, cuadrícula"
 #: code:addons/meta_connector/models/app.py:0
 msgid "no answer"
 msgstr "sin respuesta"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "{headline}"
+msgstr "{headline}"
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__text_en
+msgid "{placeholders}: see the list on the right."
+msgstr "{placeholders}: mira la lista de la derecha."
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_meta_connector_app_form
+msgid ""
+"› Settings › Instagram accounts, connect it to the Page (or the Page's "
+"Settings › Linked accounts › Instagram)."
+msgstr ""
+"› Configuración › Cuentas de Instagram, conéctala a la página (o en "
+"Configuración de la página › Cuentas vinculadas › Instagram)."

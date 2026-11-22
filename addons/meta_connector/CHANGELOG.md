@@ -2,6 +2,32 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'meta_connector-*'`.
 
+## 19.0.1.6.2 · 2026-11-22
+
+- **The marketing engine: story and post templates for every marketing app** (owner, 2026-11-22: "the marketing
+  template preview should be GLOBAL marketing extension I don't want to have to code everything twice for two
+  websites"; the owner chose this extension as its home). Moved here from Tours Marketing (19.0.0.9.10), the same
+  models, tables and ids (nothing copied or re-made): `mtbg.marketing.overlay` (a story / post template: its shape,
+  photo, gradient, QR code, layers, live preview), `mtbg.marketing.overlay.layer`, `mtbg.marketing.font`, and the
+  drawing (`models/overlay_render.py`: Pillow, dates, placeholders). Tours' overlays draw exactly as before.
+- New for every template: a **website** (its logo and address: `{website_name}`, `{website_domain}` "example.com",
+  `{website_url}`; empty: the website it is drawn for); the **photo** cut to fill, shown whole on a background colour
+  in a box, or "auto" (fills when made for the shape, else whole); **sticker** layers (a text on a coloured badge,
+  turned a few degrees, with a border); **Only when** on any layer (a flag of the record: a new product, a bargain,
+  the last one...); a logo layer's **Logo From** (the company's, as before, or the website's); a text's turn and its
+  box's border.
+- **Sources**: an app plugs in by overriding `_mtbg_overlay_sources()` (its placeholders and flags, its code added
+  to `source`), `_mtbg_source_values(record, lang, website=None, **options)`, `_mtbg_source_photo(record,
+  **options)` and the preview hooks (`_mtbg_preview_values`, `_mtbg_preview_photo`); `_mtbg_render_record(record,
+  lang, website=None, ...)` draws a record. `/meta_connector/overlay/<id>/preview/<model>/<id>` (internal users,
+  read rights on both) draws one 360 px wide for a queue's or calendar's card.
+- **`mtbg_marketing_picture`**: a field widget (image field or picture address) showing a drawing; a click shows it
+  as the phone does (a story's bars, the account, the reply box). The template editor's preview uses it.
+- The template editor (list and form) and the fonts' list are here (Tours and Bike Shop Marketing open them from
+  their menus). Website designers may edit templates and fonts.
+- Updater: `mtbg_takes_over: ['mtbg_tours_marketing']` (the models move from it, a planned move, never a duplicate).
+- Translations: Spanish for the new and moved texts.
+
 ## 19.0.1.6.0 · 2026-11-18
 
 - **Posting on several Pages** (owner, 2026-11-18: "yes bicipaca will get its own social channels"): several Facebook Pages and Instagram accounts can be ticked in Set up Meta (as before), and each Page now has **Default Page for Posts** and **Default Instagram for Posts** (one each per connection; ticking one unticks the other). `_meta_post(kind, caption, image_url, story=False, target=None)`: `target` (a `meta.connector.page` or its id) posts on that Page or its Instagram account; it must be ticked for that network, else a UserError says so. Without `target`, the default, else the first ticked: existing callers post where they did. `_meta_post_target(kind, target=None)` gives the Page used. The Posting checks name the defaults.

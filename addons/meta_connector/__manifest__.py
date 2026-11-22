@@ -1,9 +1,10 @@
 {
     "name": "Meta Connector",
-    "version": "19.0.1.6.0",
+    "version": "19.0.1.6.2",
     "category": "Productivity/Connectors",
     "summary": "One Facebook login for every app using your Facebook Pages and Instagram accounts: setup, Pages and "
-               "tokens, webhook; the website's Instagram Feed block",
+               "tokens, webhook; the website's Instagram Feed block; the story and post templates every marketing "
+               "app draws with",
     "description": """
 One Meta connection for the apps that use Facebook Pages and Instagram accounts, like the Google connector does for
 Google:
@@ -24,10 +25,23 @@ Google:
   permissions; ``_meta_post(kind, caption, image_url)`` posts a picture with its caption on the Facebook Page or
   the Instagram account; several Pages and Instagram accounts can be ticked, ``target`` (a Page) posts on a
   chosen one, else on the default Page / Instagram account. Its permissions need Meta's app review.
+* Story and post templates (1.6.2, owner 2026-11-22: "the marketing template preview should be GLOBAL marketing
+  extension I don't want to have to code everything twice for two websites"): the marketing engine every marketing
+  app draws its pictures with (moved here from Tours Marketing: the same templates, layers and fonts, nothing
+  re-made). A template is a shape (9:16 story, 1:1 post), a photo (cut to fill, or whole on a background colour),
+  a gradient, layers (text, sticker: a text on a coloured badge turned a few degrees, logo: its own, the company's
+  or the website's), a QR code; any layer may show only when the record has a flag (a new product, a bargain, the
+  last one...). Its editor draws a live preview (the real drawing made smaller; a click shows it as the phone
+  does). A template may belong to a website (its logo, its address: {website_domain}, {website_name}). The apps
+  plug in as sources (``_mtbg_overlay_sources``, ``_mtbg_source_values``, ``_mtbg_source_photo``) with their own
+  placeholders, flags and preview record; ``/meta_connector/overlay/<id>/preview/<model>/<id>`` draws a record for
+  a queue's card; the ``mtbg_marketing_picture`` field shows a drawing with its phone view.
 * Secrets stay with administrators and are cleared on a copy of the site (neutralize).
 """,
     "author": "MTBG Tours contributors",
     "license": "LGPL-3",
+    # the marketing templates' models moved here from Tours Marketing (same tables, same ids): not a duplicate
+    "mtbg_takes_over": ["mtbg_tours_marketing"],
     "mtbg_github_source": {"repo": "git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git", "subdir": "addons"},
     "depends": ["base_setup", "web", "website"],
     "external_dependencies": {"python": ["requests"]},
@@ -36,8 +50,14 @@ Google:
         "data/ir_cron.xml",
         "views/app_views.xml",
         "views/snippets.xml",
+        "views/marketing_overlay_views.xml",
     ],
     "assets": {
+        "web.assets_backend": [
+            "meta_connector/static/src/marketing/marketing_picture.js",
+            "meta_connector/static/src/marketing/marketing_picture.xml",
+            "meta_connector/static/src/marketing/marketing_picture.scss",
+        ],
         "web.assets_frontend": [
             "meta_connector/static/src/feed/feed.js",
             "meta_connector/static/src/feed/feed.scss",
