@@ -335,6 +335,16 @@ BUILTIN_PRESETS = [
     {'key': 'odoo', 'name': _lt("Odoo default"),
      'description': _lt("The menus as the modules define them (the same as Reset everything)."), 'layout': []},
 ]
+# the phone's presets (0.11.6, owner 2026-11-21: "make a new mobile preset so everything that is horizontal on the main
+# menu is in the vertical (icon) menu on the mobile backend"): after every other preset. A preset may say
+# ``phone_menu`` (the phone's side menu lists every app's whole top bar: models/topbar.py) and ``keep_layout`` (the
+# menus' layout stays as it is: a computer's top bar does not change).
+PHONE_PRESETS = [
+    {'key': 'phone_menu', 'name': _lt("Phone: every menu in the side menu"),
+     'description': _lt("On a phone, the side menu (the menu button, top left) lists every app with all of its top "
+                        "bar's menus. The layout and a computer's top bar stay as they are."),
+     'layout': [], 'phone_menu': True, 'keep_layout': True},
+]
 
 
 class MtbgMenuPreset(models.Model):
@@ -363,14 +373,14 @@ class MtbgMenuPreset(models.Model):
                 if preset.get('key') and preset['key'] not in keys:
                     keys.add(preset['key'])
                     presets.append(preset)
-        return presets
+        return presets + [p for p in PHONE_PRESETS if p['key'] not in keys]
 
     @api.model
     def mtbg_presets(self):
         """The built-in presets and the ones saved here."""
         self._mtbg_check()
         presets = [{'key': p['key'], 'name': self._mtbg_text(p['name']), 'description': self._mtbg_text(p['description']),
-                    'builtin': True} for p in self._mtbg_builtin_presets()]
+                    'builtin': True, 'keep_layout': bool(p.get('keep_layout'))} for p in self._mtbg_builtin_presets()]
         presets += [{'key': 'saved:%d' % p.id, 'name': p.name, 'description': p.description or '', 'builtin': False}
                     for p in self.sudo().search([])]
         return presets
@@ -432,9 +442,14 @@ class MtbgMenuPreset(models.Model):
                 raise UserError(_("This preset is gone."))
             layout = preset.layout or []
         else:
-            layout = next((p['layout'] for p in self._mtbg_builtin_presets() if p['key'] == key), None)
-            if layout is None:
+            builtin = next((p for p in self._mtbg_builtin_presets() if p['key'] == key), None)
+            if builtin is None:
                 raise UserError(_("Unknown preset."))
+            layout = builtin['layout']
+            if 'phone_menu' in builtin:  # the phone's side menu (models/topbar.py)
+                self.env['mtbg.topbar'].mtbg_topbar_save(phone_menu=bool(builtin['phone_menu']))
+            if builtin.get('keep_layout'):  # a phone preset: the menus' layout stays
+                return self.env['mtbg.menu.override'].mtbg_designer_data()
         Override = self.env['mtbg.menu.override']
         Override.mtbg_designer_reset([])
         Menu = self.env['ir.ui.menu'].sudo()

@@ -2,6 +2,25 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_content_blocks-*'`.
 
+## 19.0.0.11.6 (2026-11-21)
+
+- **A phone preset: every menu in the phone's side menu** (owner, 2026-11-21: "make a new mobile preset so everything
+  that is horizontal on the main menu is in the vertical (icon) menu on the mobile backend"). Menu Designer › Presets ›
+  "Phone: every menu in the side menu" (the last preset) switches it on for everyone; the switch "Phone: every menu in
+  the side menu" under Top bar icons turns it on or off. On a phone (below 768px) the side menu (the menu button, top
+  left) then lists every app, the open one unfolded and a tap on another unfolding it, with all of its top bar's menus:
+  each page a row a finger high, a menu with menus under it a heading (a tap opens its own page when it has one: Odoo's
+  side menu and a computer's dropdown leave that page out), a menu under it that opens the same page left out
+  (Bookings › All bookings). Odoo's side menu showed only the open app's top bar, and not the website's "This page"
+  menus. The preset keeps the menus' layout: a computer's top bar does not change. Another preset leaves the switch as
+  it is; "Back to the default icons" turns it off.
+- Presets may say ``phone_menu`` (sets the switch) and ``keep_layout`` (the layout stays); ``mtbg_presets()`` gives
+  ``keep_layout`` so the designer asks the right question before applying.
+- The top bar settings (`mtbg.topbar`) carry ``phone_menu`` (system parameter
+  ``mtbg_tours_content_blocks.topbar_phone_menu``), sent with the session as before.
+- New strings (Spanish to add): "Phone: every menu in the side menu", the preset's description, "Menu", the apply
+  question for a layout-keeping preset.
+
 ## 19.0.0.11.5 (2026-11-16)
 
 - The page cache is part of Cloudflare Connector (19.0.2.0.0: the extension Cloudflare Page Cache, `mtbg_tours_edge_cache`, merged into it; owner, 2026-11-16: the fewest extensions). This extension's declarations (`models/edge_cache.py`) are unchanged and still need no dependency; the tests read the page cache's helpers from `odoo.addons.cloudflare_connector.models`. No behaviour change.

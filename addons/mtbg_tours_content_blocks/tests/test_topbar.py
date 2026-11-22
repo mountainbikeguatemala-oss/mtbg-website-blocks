@@ -21,6 +21,7 @@ class TestTopbar(TransactionCase):
                                              'cfd_visitors_online', 'mail.activity_menu'])
         self.assertFalse(any(i['hidden'] for i in settings['items']))
         self.assertFalse(settings['company_name'])
+        self.assertFalse(settings['phone_menu'], "the phone's side menu as Odoo's")
 
     def test_save(self):
         """The order and the hidden ones kept; the user menu never (always last), a key once; the switch alone."""
@@ -33,9 +34,13 @@ class TestTopbar(TransactionCase):
         settings = self.Topbar.mtbg_topbar_save(company_name=True)
         self.assertTrue(settings['company_name'])
         self.assertEqual(len(settings['items']), 3, "the switch alone leaves the order")
+        settings = self.Topbar.mtbg_topbar_save(phone_menu=True)
+        self.assertTrue(settings['phone_menu'])
+        self.assertTrue(settings['company_name'], "the phone switch alone leaves the company name")
         settings = self.Topbar.mtbg_topbar_reset()
         self.assertEqual([i['key'] for i in settings['items']], DEFAULT_ORDER)
         self.assertFalse(settings['company_name'])
+        self.assertFalse(settings['phone_menu'])
 
     def test_only_admins(self):
         user = self.env['res.users'].create({'name': 'Top Bar Staff', 'login': 'zz_topbar_staff',
@@ -46,6 +51,8 @@ class TestTopbar(TransactionCase):
             Topbar.mtbg_topbar_save([{'key': 'cfd_inbox'}])
         with self.assertRaises(AccessError):
             Topbar.mtbg_topbar_reset()
+        with self.assertRaises(AccessError):
+            Topbar.mtbg_topbar_save(phone_menu=True)
 
 
 @tagged('post_install', '-at_install', 'mtbg')
@@ -154,3 +161,42 @@ class TestTopbarBubbles(HttpCase):
             })();
         """
         self.browser_js('/odoo', code, ready="document.readyState === 'complete'", login='admin', timeout=90)
+
+
+@tagged('post_install', '-at_install', 'mtbg')
+class TestPhoneMenu(HttpCase):
+    """The phone's side menu with every menu (0.11.6, owner 2026-11-21: "everything that is horizontal on the main
+    menu is in the vertical (icon) menu on the mobile backend"): every page of every app's top bar has its row (a
+    menu under one that opens the same page left out), at 390 and 360 px; off, Odoo's own; a computer's top bar
+    unchanged."""
+    browser_size = '390x844'
+    touch_enabled = True
+
+    def setUp(self):
+        super().setUp()
+        self.env['mtbg.topbar'].mtbg_topbar_reset()
+
+    def check(self, size=None, tour='mtbg_phone_menu'):
+        if size:
+            self.browser_size = size
+        self.start_tour('/odoo', tour, login='admin')
+
+    def test_phone_390(self):
+        self.env['mtbg.menu.preset'].mtbg_preset_apply('phone_menu')
+        self.check()
+
+    def test_phone_360(self):
+        self.env['mtbg.menu.preset'].mtbg_preset_apply('phone_menu')
+        self.check('360x640')
+
+    def test_off(self):
+        self.check(tour='mtbg_phone_menu_off')
+
+
+@tagged('post_install', '-at_install', 'mtbg')
+class TestPhoneMenuDesktop(HttpCase):
+    """On a computer, with the phone preset on: the top bar's menus are Odoo's, no phone menu."""
+
+    def test_desktop(self):
+        self.env['mtbg.menu.preset'].mtbg_preset_apply('phone_menu')
+        self.start_tour('/odoo', 'mtbg_phone_menu_desktop', login='admin')

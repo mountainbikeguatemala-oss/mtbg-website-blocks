@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- the phone's side menu with every app's top bar (phone_menu.js); Odoo's own when the switch is off -->
+    <t t-inherit="web.NavBar.AppsMenu.Sidebar" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_sidebar_topbar')]/small" position="attributes">
+            <attribute name="t-if">!mtbgPhoneMenu</attribute>
+        </xpath>
+        <xpath expr="//div[hasclass('o_sidebar_topbar')]/small" position="after">
+            <span t-else="" class="ms-3 fw-bolder">Menu</span>
+        </xpath>
+        <xpath expr="//nav[hasclass('o_burger_menu_content')]" position="attributes">
+            <attribute name="t-if">!mtbgPhoneMenu</attribute>
+        </xpath>
+        <xpath expr="//nav[hasclass('o_burger_menu_content')]" position="after">
+            <nav t-else="" class="o_burger_menu_content o_burger_menu_app o_mtbg_phone_menu flex-grow-1 flex-shrink-1 overflow-auto">
+                <ul class="list-unstyled ps-0 mb-0">
+                    <li t-foreach="mtbgPhoneApps" t-as="entry" t-key="entry.app.id" class="o_mtbg_phone_app"
+                        t-att-class="{ 'is-current': currentApp?.id === entry.app.id }" t-att-data-menu-xmlid="entry.app.xmlid">
+                        <t t-set="appOpen" t-value="mtbgPhoneIsOpen(entry.app)"/>
+                        <div class="o_mtbg_phone_app_head d-flex align-items-center fw-bolder" role="button" tabindex="0"
+                             t-att-aria-expanded="entry.rows.length ? (appOpen ? 'true' : 'false') : undefined"
+                             t-on-click="() => this.mtbgPhoneTapApp(entry)">
+                            <img t-if="entry.app.webIconData" class="o_app_icon me-2" t-att-src="entry.app.webIconData" alt=""/>
+                            <span class="flex-grow-1" t-esc="entry.app.name"/>
+                            <i t-if="entry.rows.length" t-attf-class="fa fa-fw {{ appOpen ? 'fa-chevron-up' : 'fa-chevron-down' }} me-3"/>
+                        </div>
+                        <ul t-if="appOpen and entry.rows.length" class="o_mtbg_phone_rows list-unstyled ps-0 mb-0">
+                            <t t-foreach="entry.rows" t-as="row" t-key="row_index">
+                                <li t-if="row.page" class="o_mtbg_phone_page" role="button"
+                                    t-att-class="{ 'fw-bold': !row.depth, 'has-menus': row.heading }"
+                                    t-attf-style="--mtbg-depth: {{ row.depth }}"
+                                    t-att-data-menu-xmlid="row.menu.xmlid" t-att-data-section="row.menu.id"
+                                    t-on-click="() => this._onMenuClicked(row.menu)" t-esc="row.menu.name"/>
+                                <li t-else="" class="o_mtbg_phone_heading text-900" t-att-class="{ 'fw-bolder': !row.depth }"
+                                    t-attf-style="--mtbg-depth: {{ row.depth }}" t-att-data-menu-xmlid="row.menu.xmlid"
+                                    t-esc="row.menu.name"/>
+                            </t>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </xpath>
+    </t>
+
+</templates>

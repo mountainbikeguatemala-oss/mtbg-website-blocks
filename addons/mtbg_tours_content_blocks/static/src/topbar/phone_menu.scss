@@ -1,0 +1,38 @@
+// The phone's side menu with every app's top bar (phone_menu.js): one row per app, its menus under it when unfolded,
+// rows a finger high, each level indented (Odoo's text-indent rules for nested lists do not apply: the rows are flat).
+.o_app_menu_sidebar .o_mtbg_phone_menu {
+    ul li {
+        text-indent: 0;
+        margin-bottom: 0;
+    }
+    .o_mtbg_phone_app {
+        padding-left: 0;
+        border-bottom: 1px solid $border-color;
+        &.is-current > .o_mtbg_phone_app_head {
+            background-color: rgba($primary, .08);
+        }
+    }
+    .o_mtbg_phone_app_head {
+        min-height: 48px;
+        padding: .25rem 0 .25rem $o-horizontal-padding;
+        .o_app_icon {
+            height: 2em;
+            width: 2em;
+        }
+    }
+    .o_mtbg_phone_rows {
+        padding-bottom: .5rem;
+    }
+    .o_mtbg_phone_page, .o_mtbg_phone_heading {
+        display: flex;
+        align-items: center;
+        min-height: 44px;
+        padding: .25rem $o-horizontal-padding .25rem calc(#{$o-horizontal-padding} * 2 + var(--mtbg-depth, 0) * 1rem);
+        line-height: 1.25;
+    }
+    .o_mtbg_phone_heading {
+        min-height: 36px;
+        padding-top: .75rem;
+        font-size: .9em;
+    }
+}

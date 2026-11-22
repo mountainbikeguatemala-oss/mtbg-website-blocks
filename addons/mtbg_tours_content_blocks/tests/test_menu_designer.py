@@ -217,6 +217,30 @@ class TestMenuPresets(TransactionCase):
         self.assertEqual(len(folder), 1)
         self.assertIn(self.env.ref('website.menu_website_website_settings').id, self.menus()[folder.id]['children'])
 
+    def test_phone_preset(self):
+        """The phone preset (0.11.6, owner 2026-11-21): the phone's side menu lists every menu; the layout (a
+        computer's top bar) stays as it is; listed after every other preset; another preset leaves the switch."""
+        Topbar = self.env['mtbg.topbar']
+        Topbar.mtbg_topbar_reset()
+        self.assertFalse(Topbar.mtbg_topbar_settings()['phone_menu'], "off by default: Odoo's side menu")
+        layout = [{'xmlid': 'website.menu_reporting', 'name': 'Our Reports', 'sequence': 1}]
+        self.Preset.mtbg_preset_apply('saved:%d' % self.Preset.create({'name': 'Ours', 'layout': layout}).id)
+        before = self.menus()
+        presets = self.Preset.mtbg_presets()
+        builtin = [p for p in presets if p['builtin']]
+        self.assertEqual(builtin[-1]['key'], 'phone_menu', "after every other built-in preset")
+        self.assertTrue(builtin[-1]['keep_layout'])
+        self.assertFalse(next(p for p in presets if p['key'] == 'odoo')['keep_layout'])
+        self.Preset.mtbg_preset_apply('phone_menu')
+        self.assertTrue(Topbar.mtbg_topbar_settings()['phone_menu'])
+        after = self.menus()
+        self.assertEqual(after[self.env.ref('website.menu_reporting').id]['name'], 'Our Reports', "the layout stays")
+        self.assertEqual(after['root']['children'], before['root']['children'])
+        self.Preset.mtbg_preset_apply('odoo')
+        self.assertTrue(Topbar.mtbg_topbar_settings()['phone_menu'], "a layout preset leaves the phone's switch")
+        Topbar.mtbg_topbar_save(phone_menu=False)
+        self.assertFalse(Topbar.mtbg_topbar_settings()['phone_menu'], "and the switch turns it off")
+
 
 @tagged('post_install', '-at_install', 'mtbg')
 class TestMenuDesignerPage(HttpCase):

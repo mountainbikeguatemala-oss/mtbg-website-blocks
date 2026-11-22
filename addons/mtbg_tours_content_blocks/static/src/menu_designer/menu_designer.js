@@ -622,11 +622,12 @@ export class MenuDesigner extends Component {
         return _t("Show it in the top bar");
     }
 
-    async saveTopbar(items, companyName) {
+    async saveTopbar(items, companyName, phoneMenu) {
         this.state.topbarSaving = true;
         try {
             const settings = await this.orm.call(TOPBAR, "mtbg_topbar_save", [], {
                 items: items?.map((row) => ({ key: row.key, hidden: row.hidden })), company_name: companyName,
+                phone_menu: phoneMenu,
             });
             this.state.topbar = settings;
             setTopbarSettings(settings);
@@ -653,6 +654,10 @@ export class MenuDesigner extends Component {
 
     topbarCompanyName(ev) {
         this.saveTopbar(undefined, ev.target.checked);
+    }
+
+    topbarPhoneMenu(ev) {
+        this.saveTopbar(undefined, undefined, ev.target.checked);
     }
 
     focusTopbar(key) {
@@ -723,9 +728,15 @@ export class MenuDesigner extends Component {
     applyPreset(preset) {
         this.state.presetsOpen = false;
         this.dialog.add(ConfirmationDialog, {
-            body: _t("Use the preset “%s” for everyone? It replaces the menus' layout now (unsaved changes are lost).", preset.name),
+            body: preset.keep_layout
+                ? _t("Use the preset “%s” for everyone? The menus' layout stays as it is.", preset.name)
+                : _t("Use the preset “%s” for everyone? It replaces the menus' layout now (unsaved changes are lost).", preset.name),
             confirm: async () => {
                 this.load(await this.orm.call(PRESETS, "mtbg_preset_apply", [preset.key]));
+                // a preset may switch the phone's side menu (the top bar settings)
+                const settings = await this.orm.call(TOPBAR, "mtbg_topbar_settings", []);
+                this.state.topbar = settings;
+                setTopbarSettings(settings);
                 await this.menuService.reload();
                 this.say(_t("The preset “%s” is in use.", preset.name));
             },

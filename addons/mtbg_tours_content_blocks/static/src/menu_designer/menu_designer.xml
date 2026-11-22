@@ -100,6 +100,11 @@
                                    t-att-checked="state.topbar.company_name" t-att-disabled="state.topbarSaving" t-on-change="topbarCompanyName"/>
                             <label class="form-check-label" for="mtbg_md_company_name">Show company name in top bar</label>
                         </div>
+                        <div class="form-check form-switch mb-0">
+                            <input class="form-check-input" type="checkbox" role="switch" id="mtbg_md_phone_menu"
+                                   t-att-checked="state.topbar.phone_menu" t-att-disabled="state.topbarSaving" t-on-change="topbarPhoneMenu"/>
+                            <label class="form-check-label" for="mtbg_md_phone_menu">Phone: every menu in the side menu</label>
+                        </div>
                         <button class="btn btn-sm btn-link" t-on-click="resetTopbar">Back to the default icons</button>
                     </div>
                 </section>
