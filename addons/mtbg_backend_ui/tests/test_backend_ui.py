@@ -37,6 +37,22 @@ class TestBackendUi(TransactionCase):
         self.assertEqual(self.env['mtbg.board.mixin'].with_user(admin).mtbg_board_settings()['can_edit'],
                          admin._mtbg_ui_manager())
 
+    def test_page_opened_on_one_board(self):
+        """0.3.1: an action's ``mtbg_open_board`` (a board's XML id) is the board the page opens on."""
+        Mixin = self.env['mtbg.board.mixin']
+        first = self.env['mtbg.board'].create({'name': 'First', 'res_model': 'mtbg.board.mixin', 'sequence': 1})
+        second = self.env['mtbg.board'].create({'name': 'Second', 'res_model': 'mtbg.board.mixin', 'sequence': 2})
+        self.env['ir.model.data'].create({'module': 'mtbg_backend_ui_test', 'name': 'second_board',
+                                          'model': 'mtbg.board', 'res_id': second.id})
+        self.assertFalse(Mixin.mtbg_board_settings()['open_board'], "no key: the viewer's choice")
+        settings = Mixin.with_context(mtbg_open_board='mtbg_backend_ui_test.second_board').mtbg_board_settings()
+        self.assertEqual(settings['open_board'], second.id)
+        self.assertIn(first.id, [b['id'] for b in settings['boards']], "the other boards still listed")
+        other = Mixin.with_context(mtbg_open_board='mtbg_backend_ui_test.second_board', mtbg_scope='elsewhere')
+        self.assertFalse(other.mtbg_board_settings()['open_board'], "a board of another page: not opened")
+        self.assertFalse(Mixin.with_context(mtbg_open_board='base.main_company').mtbg_board_settings()['open_board'],
+                         "not a board")
+
     def test_settings_switches_and_texts(self):
         """The settings pages read the switches as yes / no and the long texts as text."""
         Settings = self.env['res.config.settings']

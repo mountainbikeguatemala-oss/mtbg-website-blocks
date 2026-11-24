@@ -1,6 +1,6 @@
 {
     'name': 'MTBG — Admin Look',
-    'version': '19.0.0.3.0',
+    'version': '19.0.0.3.1',
     # where the updater gets it (the universal repo; owner, 2026-11-11: the one admin module, from Tours Core 0.7.0)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     'category': 'Productivity',

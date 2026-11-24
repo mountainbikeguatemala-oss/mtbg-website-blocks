@@ -213,7 +213,17 @@ class MtbgBoardMixin(models.AbstractModel):
             'refreshed': self._mtbg_board_refreshed(),
             # the side bar on Cards and Kanban as on the list (Core's rule: every view has it)
             'has_sidebar': hasattr(self, 'mtbg_sidebar'),
+            # 0.3.1: a page of its own for one board (its action's context ``mtbg_open_board``: the board's XML id)
+            'open_board': self._mtbg_open_board(boards),
         }
+
+    @api.model
+    def _mtbg_open_board(self, boards):
+        """The board the page opens on: its action's context ``mtbg_open_board`` (a board's XML id), one of
+        ``boards``; False: the viewer's own choice."""
+        xmlid = self.env.context.get('mtbg_open_board')
+        board = self.env.ref(xmlid, raise_if_not_found=False) if isinstance(xmlid, str) and '.' in xmlid else None
+        return board.id if board and board._name == 'mtbg.board' and board in boards else False
 
     @api.model
     def _mtbg_settings_xmlid(self):

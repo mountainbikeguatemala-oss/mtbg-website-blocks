@@ -2,6 +2,13 @@
 
 Every version of this module, newest first. Tags: `git tag -l 'mtbg_backend_ui-*'`.
 
+## 19.0.0.3.1 (2026-11-23)
+
+- **A page opened on one board** (owner, 2026-11-23: menus "Leads Pipeline" and "Leads to be Contacted"): an action's
+  context `mtbg_open_board` (a board's XML id, one of the page's boards) opens the board kanban on that board every
+  time (`mtbg_board_settings()['open_board']`). Another board can still be picked there for the visit; nothing is kept
+  in the browser, so the model's own page still opens on the viewer's board. Without the key: as before.
+
 ## 19.0.0.3.0 (2026-11-20)
 
 - **The one expense form is here** (owner, 2026-11-20: the shop site records a used purchase "all in one go" with "the

@@ -5,6 +5,9 @@
  * is picked; a sort clicked likewise. The board chosen is the viewer's (kept in this browser). The cards look as set in
  * the settings, the same on every board. A model with a side bar has it here too, on Cards and Kanban (Core's rule:
  * every view has the side bar), its chosen branch narrowing the board.
+ * A page of its own for one board (0.3.1: a menu such as "Leads Pipeline"): its action's context
+ * ``mtbg_open_board`` (the board's XML id) opens on that board every time; another board can still be picked there,
+ * and nothing is kept in this browser, so the model's own page keeps the viewer's board.
  */
 import { Component, useState, useSubEnv } from "@odoo/owl";
 import { Dialog } from "@web/core/dialog/dialog";
@@ -74,9 +77,11 @@ export class BoardKanbanController extends KanbanController {
         super.setup();
         this.mtbgOrm = useService("orm");
         this.mtbgDialog = useService("dialog");
-        this.boards = useState({ id: readBoard(this.props.resModel), list: [], columns: [], sorts: [], totals: [],
+        this.pageBoard = Boolean(this.props.context?.mtbg_open_board);
+        this.boards = useState({ id: this.pageBoard ? 0 : readBoard(this.props.resModel), list: [], columns: [],
+                                 sorts: [], totals: [],
                                  colors: {}, canEdit: false, settingsAction: false, refreshed: [],
-                                 hasSidebar: false });
+                                 hasSidebar: false, open: 0 });
         useSubEnv({ mtbgBoards: this.boards });
         this.viewEntries = useViewModes(this);
         this.boardsReady = this.loadBoards();
@@ -119,6 +124,9 @@ export class BoardKanbanController extends KanbanController {
                                      totals: settings.totals, colors: settings.colors, canEdit: settings.can_edit,
                                      settingsAction: settings.settings_action || false,
                                      refreshed: settings.refreshed || [], hasSidebar: !!settings.has_sidebar });
+        if (this.pageBoard && !this.boards.id && settings.open_board) {
+            this.boards.id = this.boards.open = settings.open_board;  // the page's own board
+        }
         if (this.boards.id !== CARDS && !settings.boards.some((b) => b.id === this.boards.id)) {
             this.boards.id = settings.boards[0]?.id || 0;
         }
@@ -176,7 +184,9 @@ export class BoardKanbanController extends KanbanController {
 
     chooseBoard(id) {
         this.boards.id = id;
-        writeBoard(this.props.resModel, id);
+        if (!this.pageBoard) {
+            writeBoard(this.props.resModel, id);
+        }
         return this.reloadBoard();
     }
 
@@ -189,7 +199,7 @@ export class BoardKanbanController extends KanbanController {
         if (mode === "cards") {
             return this.chooseBoard(CARDS);
         }
-        const last = lastBoard(this.props.resModel);
+        const last = this.pageBoard ? this.boards.open : lastBoard(this.props.resModel);
         return this.chooseBoard(this.boards.list.some((b) => b.id === last) ? last : this.boards.list[0]?.id || 0);
     }
 
