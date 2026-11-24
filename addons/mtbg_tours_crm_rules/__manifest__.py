@@ -1,6 +1,6 @@
 {
     'name': 'MTBG — Contact Rules',
-    'version': '19.0.0.6.0',
+    'version': '19.0.0.6.1',
     # where the updater gets it (the universal repo; owner, 2026-11-18: contact rules go global, from the Tours repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     'category': 'Productivity',

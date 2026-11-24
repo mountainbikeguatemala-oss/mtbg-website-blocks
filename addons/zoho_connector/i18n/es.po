@@ -1,0 +1,1667 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-24 05:29+0000\n"
+"PO-Revision-Date: 2026-11-24 05:29+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/setup.py:0
+msgid "%(app)s: Zoho did not list its organizations, so the ID typed is kept unchecked. Check access, at the end, tries it."
+msgstr "%(app)s: Zoho no listó sus organizaciones, así que el ID escrito se conserva sin comprobar. Comprobar acceso, al final, lo prueba."
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.js:0
+msgid "%(app)s: organization %(id)s is not one this login reaches (it reaches: %(list)s)."
+msgstr "%(app)s: la organización %(id)s no es una a la que llegue este inicio de sesión (llega a: %(list)s)."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/setup.py:0
+msgid "%(app)s: this login does not have its permissions yet, so its organizations are not checked. The ID typed is kept; add the app with a new grant code to have it checked."
+msgstr "%(app)s: este inicio de sesión aún no tiene sus permisos, así que sus organizaciones no se comprueban. Se conserva el ID escrito; añada la aplicación con un nuevo código de concesión para comprobarlo."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/subextension.py:0
+msgid "%(created)s new, %(updated)s updated, %(removed)s removed."
+msgstr "%(created)s nuevos, %(updated)s actualizados, %(removed)s eliminados."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/res_config_settings.py:0
+msgid "%(created)s new, %(updated)s updated, %(skipped)s skipped."
+msgstr "%(created)s nuevos, %(updated)s actualizados, %(skipped)s omitidos."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/books_expenses.py:0
+msgid "%(done)s of %(total)s expenses read…"
+msgstr "%(done)s de %(total)s gastos leídos…"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/books_expenses.py:0
+msgid "%s expense categories read."
+msgstr "%s categorías de gastos leídas."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/books_expenses.py:0
+msgid "%s expenses to read…"
+msgstr "%s gastos por leer…"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.js:0
+msgid "%s sync error(s)"
+msgstr "%s error(es) de sincronización"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.js:0
+msgid "%s: On"
+msgstr "%s: activado"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "(default)"
+msgstr "(predeterminada)"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.js:0
+msgid "(shared by every %s integration)"
+msgstr "(compartido por todas las integraciones de %s)"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "A Zoho login is saved. Keep it, or make a new grant code to add an app."
+msgstr "Hay un inicio de sesión de Zoho guardado. Consérvelo o genere un nuevo código para añadir una aplicación."
+
+#. module: zoho_connector
+#: model:ir.model.fields,help:zoho_connector.field_mtbg_zoho_ref__fingerprint
+msgid "A hash of what was sent last (sent again only when it changes)"
+msgstr "Una huella de lo último enviado (se vuelve a enviar solo si cambia)"
+
+#. module: zoho_connector
+#: model:ir.model.fields,help:zoho_connector.field_mtbg_zoho_ref__zoho_parent_id
+msgid "A second Zoho id the reference needs (a project's customer)"
+msgstr "Un segundo ID de Zoho que necesita la referencia (el cliente de un proyecto)"
+
+#. module: zoho_connector
+#: model:ir.model.fields,help:zoho_connector.field_mtbg_zoho_ref__zoho_scope_id
+msgid "A third Zoho id the reference needs (an expense line's account)"
+msgstr "Un tercer ID de Zoho que necesita la referencia (la cuenta de una línea de gasto)"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_token__access_token
+msgid "Access Token"
+msgstr "Token de acceso"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_res_config_settings__mtbg_zoho_access_info model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Access per App"
+msgstr "Acceso por aplicación"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_account__active
+msgid "Active"
+msgstr "Activo"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_books_import_form
+msgid "All Reviewed"
+msgstr "Todo revisado"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__amount
+msgid "Amount"
+msgstr "Monto"
+
+#. module: zoho_connector
+#: model:ir.model.constraint,message:zoho_connector.constraint_mtbg_zoho_ref_ref_uniq
+msgid "An Odoo record has one Zoho reference of each kind."
+msgstr "Un registro de Odoo tiene una referencia de Zoho de cada tipo."
+
+#. module: zoho_connector
+#: model:ir.model.fields,help:zoho_connector.field_mtbg_zoho_ref__retry_after
+msgid "An error is tried again by itself from then (empty: on the next run)"
+msgstr "Un error se reintenta solo a partir de entonces (vacío: en la próxima ejecución)"
+
+#. module: zoho_connector
+#: model:ir.model,name:zoho_connector.model_mtbg_expense_source
+msgid "An expense (shared fields)"
+msgstr "Un gasto (campos compartidos)"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_books_import_form
+msgid "Apply Review Choices"
+msgstr "Aplicar elecciones de revisión"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.js:0
+msgid "Available"
+msgstr "Disponible"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Back"
+msgstr "Atrás"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_books_account_search
+msgid "Brought In"
+msgstr "Importado"
+
+#. module: zoho_connector
+#: model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_books_review__state__done
+msgid "Brought in"
+msgstr "Importado"
+
+#. module: zoho_connector
+#: model:ir.model.fields,help:zoho_connector.field_mtbg_zoho_books_account__sync
+msgid "Brought in by a first sync: its new and changed expenses come in by themselves"
+msgstr "Importado por una primera sincronización: sus gastos nuevos y modificados entran solos"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.js:0
+msgid "Built in"
+msgstr "Incluido"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Calls are paced and retried when Zoho says too many. Zoho Books allows 100 a minute."
+msgstr "Las llamadas se espacian y se reintentan cuando Zoho dice que son demasiadas. Zoho Books permite 100 por minuto."
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_res_config_settings__mtbg_zoho_rate_limit model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Calls per Minute (per app)"
+msgstr "Llamadas por minuto (por aplicación)"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__account_ids
+msgid "Categories"
+msgstr "Categorías"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__account_id
+msgid "Category"
+msgstr "Categoría"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Check Access"
+msgstr "Comprobar acceso"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.js:0 code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Check access"
+msgstr "Comprobar acceso"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/setup.py:0
+msgid "Choose the Zoho Books organization."
+msgstr "Elija la organización de Zoho Books."
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Client ID"
+msgstr "ID de cliente"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Client Secret"
+msgstr "Secreto de cliente"
+
+#. module: zoho_connector
+#: model:ir.model,name:zoho_connector.model_res_config_settings
+msgid "Config Settings"
+msgstr "Ajustes de configuración"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Connect"
+msgstr "Conectar"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/res_config_settings.py:0
+msgid "Connected through the linked site %(site)s: its Zoho login and Zoho Books organization (Zoho Books only; reads, and writes to expenses and vendors). Its Writes allowed applies too."
+msgstr "Conectado a través del sitio enlazado %(site)s: su inicio de sesión de Zoho y su organización de Zoho Books (solo Zoho Books; lecturas, y escrituras en gastos y proveedores). También aplica su ajuste Escrituras permitidas."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/res_config_settings.py:0
+msgid "Connected: %(server)s, Zoho Books organization %(org)s (every Zoho link uses this login)."
+msgstr "Conectado: %(server)s, organización de Zoho Books %(org)s (cada enlace de Zoho usa este inicio de sesión)."
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_res_config_settings__mtbg_zoho_connection_info model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Connection"
+msgstr "Conexión"
+
+#. module: zoho_connector
+#: model:ir.model,name:zoho_connector.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Contact Language"
+msgstr "Idioma del contacto"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Copy"
+msgstr "Copiar"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Copy the code it shows and paste it below (it is valid a few minutes, once)."
+msgstr "Copia el código que muestra y pégalo abajo (es válido unos minutos, una vez)."
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Copy the permissions."
+msgstr "Copia los permisos."
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_account__create_uid model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__create_uid model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__create_uid model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_log__create_uid model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__create_uid model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_token__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_account__create_date model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__create_date model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__create_date model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_log__create_date model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__create_date model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_token__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__currency_code
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__customer
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Data centre"
+msgstr "Centro de datos"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__date
+msgid "Date"
+msgstr "Fecha"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/expense_out.py:0
+msgid "Deleted in Odoo before it was sent."
+msgstr "Eliminado en Odoo antes de enviarse."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/expense_out.py:0
+msgid "Deleted in Odoo: its Zoho Books expense %s was deleted."
+msgstr "Eliminado en Odoo: se eliminó su gasto de Zoho Books %s."
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__description
+msgid "Description"
+msgstr "Descripción"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Digits only, as Zoho shows it (e.g. 801234567)."
+msgstr "Solo dígitos, como lo muestra Zoho (p. ej. 801234567)."
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_expense_category__display_name model:ir.model.fields,field_description:zoho_connector.field_mtbg_expense_method__display_name model:ir.model.fields,field_description:zoho_connector.field_mtbg_expense_source__display_name model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_account__display_name model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__display_name model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__display_name model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_log__display_name model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__display_name model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_setup__display_name model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_subextension__display_name model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_token__display_name model:ir.model.fields,field_description:zoho_connector.field_res_config_settings__display_name model:ir.model.fields,field_description:zoho_connector.field_res_partner__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0 model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_books_import__state__done
+msgid "Done"
+msgstr "Hecho"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/books_expenses.py:0
+msgid "Done: %(new)s new lines, %(again)s found again, %(skip)s skipped; %(review)s to review."
+msgstr "Listo: %(new)s líneas nuevas, %(again)s encontradas otra vez, %(skip)s omitidas; %(review)s por revisar."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/subextension.py:0
+msgid "Done: see the sync log for what went to or came from Zoho."
+msgstr "Listo: vea en el registro de sincronización lo que se envió o se recibió de Zoho."
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_log__duration_ms
+msgid "Duration (ms)"
+msgstr "Duración (ms)"
+
+#. module: zoho_connector
+#: model:ir.model.constraint,message:zoho_connector.constraint_mtbg_zoho_books_account_account_uniq
+msgid "Each Zoho Books account once."
+msgstr "Cada cuenta de Zoho Books una sola vez."
+
+#. module: zoho_connector
+#: model:ir.model.fields,help:zoho_connector.field_mtbg_zoho_books_import__date_to
+msgid "Empty: today"
+msgstr "Vacío: hoy"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Enter a different organization ID"
+msgstr "Introducir otro ID de organización"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__error model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_books_import__state__error model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_ref__state__error
+msgid "Error"
+msgstr "Error"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_ref_search
+msgid "Errors"
+msgstr "Errores"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__retry_count
+msgid "Errors in a row"
+msgstr "Errores seguidos"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Every app stays Off until you switch it on in its card."
+msgstr "Cada aplicación queda desactivada hasta que la active en su tarjeta."
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Every app's scopes, for the self client's Generate Code (api-console.zoho.com)."
+msgstr "Los permisos (scopes) de todas las aplicaciones, para el “Generate Code” del self client (api-console.zoho.com)."
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Every write sent to a Zoho app and every failed call (kept 90 days); which Zoho record each Odoo record is."
+msgstr "Cada escritura enviada a una aplicación de Zoho y cada llamada fallida (se guardan 90 días); qué registro de Zoho es cada registro de Odoo."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/expense_out.py:0 model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Expense Categories"
+msgstr "Categorías de gastos"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/expense_out.py:0
+msgid "Expense Payment Methods"
+msgstr "Métodos de pago de gastos"
+
+#. module: zoho_connector
+#: model:ir.model,name:zoho_connector.model_mtbg_expense_category
+msgid "Expense category"
+msgstr "Categoría de gasto"
+
+#. module: zoho_connector
+#: model:ir.model,name:zoho_connector.model_mtbg_expense_method
+msgid "Expense payment method"
+msgstr "Método de pago de gastos"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__expense_total
+msgid "Expenses Found"
+msgstr "Gastos encontrados"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__expense_done
+msgid "Expenses Read"
+msgstr "Gastos leídos"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_res_config_settings__mtbg_zoho_expenses_sync_info model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Expenses Sync"
+msgstr "Sincronización de gastos"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/expense_out.py:0
+msgid "Expenses recorded in Odoo (e.g. the shop's used purchases) go to Zoho Books with their receipt: each category's account, each payment method's paid through account."
+msgstr "Los gastos registrados en Odoo (p. ej. las compras de usados de la tienda) van a Zoho Books con su recibo: la cuenta de cada categoría, la cuenta de pago de cada método de pago."
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_token__expires_at
+msgid "Expires At"
+msgstr "Vence el"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_log_search
+msgid "Failed"
+msgstr "Fallido"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__fingerprint
+msgid "Fingerprint"
+msgstr "Huella"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__finished_on
+msgid "Finished On"
+msgstr "Terminado el"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/res_config_settings.py:0
+msgid "First sync: done %s (UTC)"
+msgstr "Primera sincronización: hecha %s (UTC)"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/res_config_settings.py:0
+msgid "First sync: not run yet"
+msgstr "Primera sincronización: aún no se ha ejecutado"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "First sync: pick the categories and the first day, then Import (old expenses, no receipts). From then on the expenses created or changed in Zoho Books on those categories come in every hour; expenses made in Odoo go to Zoho Books with their receipt (Writes allowed)."
+msgstr "Primera sincronización: elige las categorías y el primer día, luego Importar (gastos antiguos, sin recibos). A partir de ahí, los gastos creados o modificados en Zoho Books en esas categorías entran cada hora; los gastos hechos en Odoo van a Zoho Books con su recibo (Escrituras permitidas)."
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__updated_count
+msgid "Found Again"
+msgstr "Encontrados otra vez"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__date_from
+msgid "From"
+msgstr "Desde"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_account__destination model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__destination model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__target model_terms:ir.ui.view,arch_db:zoho_connector.view_books_account_search
+msgid "Goes To"
+msgstr "Va a"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Grant code"
+msgstr "Código de concesión"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_log__status
+msgid "HTTP Status"
+msgstr "Estado HTTP"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_expense_category__id model:ir.model.fields,field_description:zoho_connector.field_mtbg_expense_method__id model:ir.model.fields,field_description:zoho_connector.field_mtbg_expense_source__id model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_account__id model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__id model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__id model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_log__id model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__id model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_setup__id model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_subextension__id model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_token__id model:ir.model.fields,field_description:zoho_connector.field_res_config_settings__id model:ir.model.fields,field_description:zoho_connector.field_res_partner__id
+msgid "ID"
+msgstr "ID"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/books_expenses.py:0 model_terms:ir.ui.view,arch_db:zoho_connector.view_books_import_form
+msgid "Import"
+msgstr "Importar"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/books_expenses.py:0
+msgid "Import & Sync from %s"
+msgstr "Importar y sincronizar desde %s"
+
+#. module: zoho_connector
+#: model:ir.actions.act_window,name:zoho_connector.action_books_import
+msgid "Import & Sync from Zoho Books"
+msgstr "Importar y sincronizar desde Zoho Books"
+
+#. module: zoho_connector
+#: model:ir.model,name:zoho_connector.model_mtbg_zoho_books_import
+msgid "Import & Sync from Zoho Books (a run)"
+msgstr "Importar y sincronizar desde Zoho Books (una ejecución)"
+
+#. module: zoho_connector
+#: model:ir.model,name:zoho_connector.model_mtbg_zoho_books_review
+msgid "Import & Sync from Zoho Books: a line to review"
+msgstr "Importar y sincronizar desde Zoho Books: una línea por revisar"
+
+#. module: zoho_connector
+#: model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_books_import__state__importing
+msgid "Importing…"
+msgstr "Importando…"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "In Zoho's API console, add a Self Client (once) and copy its Client ID and Client Secret here."
+msgstr "En la consola de API de Zoho, añade un Self Client (una vez) y copia aquí su Client ID y su Client Secret."
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "In the API console: your Self Client › Generate Code, paste them in Scope, choose a duration, Create."
+msgstr "En la consola de API: tu Self Client › Generate Code, pégalos en Scope, elige una duración, Create."
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.xml:0
+msgid "Install"
+msgstr "Instalar"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.js:0
+msgid "Installed"
+msgstr "Instalada"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.js:0
+msgid "Installs itself once %s is switched on."
+msgstr "Se instala sola cuando se active %s."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/books_expenses.py:0
+msgid "Internal (not brought in, counted)"
+msgstr "Interno (no importado, contado)"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Invoice template"
+msgstr "Plantilla de factura"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.js:0
+msgid "Invoices & Payments"
+msgstr "Facturas y pagos"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Invoices & Payments in Zoho Books"
+msgstr "Facturas y pagos en Zoho Books"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/books_expenses.py:0
+msgid "It is running: reload the page in a minute."
+msgstr "Se está ejecutando: recarga la página en un minuto."
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Keep this login"
+msgstr "Mantener este inicio de sesión"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_account__sync model_terms:ir.ui.view,arch_db:zoho_connector.view_books_account_search
+msgid "Kept in Sync"
+msgstr "Se mantiene sincronizado"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__kind model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_ref_search
+msgid "Kind"
+msgstr "Tipo"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Language"
+msgstr "Idioma"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__last_sync
+msgid "Last Sync"
+msgstr "Última sincronización"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_account__write_uid model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__write_uid model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__write_uid model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_log__write_uid model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__write_uid model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_token__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_account__write_date model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__write_date model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__write_date model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_log__write_date model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__write_date model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_token__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/res_config_settings.py:0
+msgid "Last sync: %s (UTC)"
+msgstr "Última sincronización: %s (UTC)"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/res_config_settings.py:0
+msgid "Last sync: never"
+msgstr "Última sincronización: nunca"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_books_import_form
+msgid ""
+"Lines whose record is not sure (a parent account's, a record the\n"
+"                                destination could not tell): pick where each goes, then Apply Review Choices, or Skip."
+msgstr ""
+"Líneas cuyo registro no es seguro (el de una cuenta padre, un registro que el\n"
+"                                destino no pudo determinar): elige a dónde va cada una, luego Aplicar elecciones de revisión, u Omitir."
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0 code:addons/zoho_connector/static/src/subextensions/zoho_card.xml:0
+msgid "Loading…"
+msgstr "Cargando…"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.js:0 model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Login"
+msgstr "Usuario"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__message model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_log__message
+msgid "Message"
+msgstr "Mensaje"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_log__method
+msgid "Method"
+msgstr "Método"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "More Zoho integrations"
+msgstr "Más integraciones de Zoho"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_res_partner__mtbg_zoho_vendor_details_of model:ir.model.fields,field_description:zoho_connector.field_res_users__mtbg_zoho_vendor_details_of
+msgid "Mtbg Zoho Vendor Details Of"
+msgstr "Detalles del proveedor Zoho leídos de"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_res_partner__mtbg_zoho_vendor_modified model:ir.model.fields,field_description:zoho_connector.field_res_users__mtbg_zoho_vendor_modified
+msgid "Mtbg Zoho Vendor Modified"
+msgstr "Proveedor Zoho modificado"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__name model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Needed by Invoices & Payments"
+msgstr "Necesaria para Facturas y pagos"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Needed to go on. Once connected, it is checked against the organizations your login reaches."
+msgstr "Necesario para continuar. Al conectar, se comprueba con las organizaciones a las que llega tu inicio de sesión."
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.js:0
+msgid "Needs %s"
+msgstr "Necesita %s"
+
+#. module: zoho_connector
+#: model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_books_import__state__draft
+msgid "New"
+msgstr "Nuevo"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__created_count
+msgid "New Lines"
+msgstr "Líneas nuevas"
+
+#. module: zoho_connector
+#: model_terms:ir.actions.act_window,help:zoho_connector.action_books_import
+msgid ""
+"New, pick the Zoho Books categories and the first day, then Import (read only, no receipts). From then on\n"
+"                their new and changed expenses come in every hour."
+msgstr ""
+"Nuevo, elige las categorías de Zoho Books y el primer día, luego Importar (solo lectura, sin recibos). A partir de ahí\n"
+"                sus gastos nuevos y modificados entran cada hora."
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Next"
+msgstr "Siguiente"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__retry_after
+msgid "Next retry"
+msgstr "Próximo reintento"
+
+#. module: zoho_connector
+#: model_terms:ir.actions.act_window,help:zoho_connector.action_books_accounts
+msgid "No category yet: Read Categories from Zoho Books (read only). Then say where each one's expenses go."
+msgstr "Aún no hay categorías: Leer categorías de Zoho Books (solo lectura). Luego indica a dónde van los gastos de cada una."
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "No organization ID needed: it is the account's own."
+msgstr "No hace falta ID de organización: es la de la cuenta."
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.xml:0
+msgid "No other Zoho integration on this server or on GitHub."
+msgstr "No hay otras integraciones de Zoho en este servidor ni en GitHub."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/res_config_settings.py:0
+msgid "Not connected: Set up Zoho, below."
+msgstr "Sin conexión: Configurar Zoho, abajo."
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.js:0
+msgid "Not on this server"
+msgstr "No está en este servidor"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_account__note
+msgid "Note"
+msgstr "Nota"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_log__ok
+msgid "OK"
+msgstr "OK"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_log__res_model model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__res_model
+msgid "Odoo Model"
+msgstr "Modelo de Odoo"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_log__res_id model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__res_id
+msgid "Odoo Record ID"
+msgstr "ID del registro de Odoo"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.js:0
+msgid "On GitHub %s"
+msgstr "En GitHub %s"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "One login for every Zoho app and every extension using Zoho: made here (Set up Zoho), its access token shared."
+msgstr "Un solo inicio de sesión para cada app de Zoho y cada extensión que usa Zoho: se hace aquí (Configurar Zoho), con su token de acceso compartido."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/zoho_ref.py:0
+msgid "Only Zoho managers can retry Zoho errors."
+msgstr "Solo los administradores de Zoho pueden reintentar errores de Zoho."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/books_expenses.py:0
+msgid "Only a Zoho manager imports from Zoho Books."
+msgstr "Solo un administrador de Zoho importa desde Zoho Books."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/subextension.py:0
+msgid "Only administrators can change the Zoho integrations."
+msgstr "Solo los administradores pueden cambiar las integraciones de Zoho."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/setup.py:0
+msgid "Only administrators can set up Zoho."
+msgstr "Solo los administradores pueden configurar Zoho."
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.js:0
+msgid "Open %s to copy the organization ID"
+msgstr "Abrir %s para copiar el ID de organización"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Open Zoho's API console"
+msgstr "Abrir la consola de API de Zoho"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Open Zoho's API console to paste them"
+msgstr "Abrir la consola de API de Zoho para pegarlos"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__zoho_url model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_ref_form
+msgid "Open in Zoho"
+msgstr "Abrir en Zoho"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_ref_form
+msgid "Open the Odoo Record"
+msgstr "Abrir el registro de Odoo"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0 model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Organization ID"
+msgstr "ID de la organización"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/setup.py:0
+msgid "Paste the Client ID, the Client Secret and the code."
+msgstr "Pegue el ID de cliente, el secreto de cliente y el código."
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_log__path
+msgid "Path"
+msgstr "Ruta"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__payload
+msgid "Payload"
+msgstr "Carga útil"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.js:0 code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Permissions"
+msgstr "Permisos"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.js:0
+msgid "Permissions (for %s apps)"
+msgstr "Permisos (para %s aplicaciones)"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.js:0
+msgid "Permissions copied: paste them into Generate Code."
+msgstr "Permisos copiados: pégalos en Generate Code."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/books_expenses.py:0
+msgid "Pick the Zoho Books categories to bring in."
+msgstr "Elige las categorías de Zoho Books que quieres importar."
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__project
+msgid "Project"
+msgstr "Proyecto"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__queue
+msgid "Queue"
+msgstr "Cola"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_books_account_list
+msgid "Read Categories from Zoho Books"
+msgstr "Leer categorías de Zoho Books"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_books_import_form
+msgid "Read the picked categories' expenses from Zoho Books (read only, no receipts)? A run again updates them, never twice."
+msgstr "¿Leer de Zoho Books los gastos de las categorías elegidas (solo lectura, sin recibos)? Volver a ejecutarlo los actualiza, nunca los duplica."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/books_expenses.py:0
+msgid "Reading Zoho Books…"
+msgstr "Leyendo Zoho Books…"
+
+#. module: zoho_connector
+#: model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_books_import__state__reading
+msgid "Reading…"
+msgstr "Leyendo…"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_account__target
+msgid "Record"
+msgstr "Registro"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.xml:0
+msgid "References"
+msgstr "Referencias"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_books_import_form
+msgid "Refresh"
+msgstr "Actualizar"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__report
+msgid "Report"
+msgstr "Reporte"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_books_import_form
+msgid "Result"
+msgstr "Resultado"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_ref_list
+msgid "Retry errors"
+msgstr "Reintentar errores"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__all_review_ids
+msgid "Reviewed Lines"
+msgstr "Líneas revisadas"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__run_id
+msgid "Run"
+msgstr "Ejecutar"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Run First Sync"
+msgstr "Ejecutar primera sincronización"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/res_config_settings.py:0
+msgid "Run the first sync first (Zoho Books on)."
+msgstr "Ejecuta primero la primera sincronización (Zoho Books activado)."
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Save and check"
+msgstr "Guardar y comprobar"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/res_config_settings.py:0
+msgid "Scopes Zoho reported for the token: %s"
+msgstr "Permisos que Zoho indicó para el token: %s"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_res_config_settings__mtbg_zoho_scopes_needed model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Scopes for a New Grant Code"
+msgstr "Permisos para un nuevo código de autorización"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Set up Zoho"
+msgstr "Configurar Zoho"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Set up this app"
+msgstr "Configurar esta aplicación"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_books_review_list
+msgid "Skip"
+msgstr "Omitir"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/books_expenses.py:0
+msgid "Skip (not brought in)"
+msgstr "Omitir (no importado)"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Skip this app"
+msgstr "Omitir esta aplicación"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__skipped_count model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_books_review__state__skip model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_ref__state__skipped
+msgid "Skipped"
+msgstr "Omitido"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Skipped: its permissions are left out of the login. Set it up any time from here."
+msgstr "Omitida: sus permisos quedan fuera del inicio de sesión. Configúrala cuando quieras desde aquí."
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__state model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__state model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__state
+msgid "State"
+msgstr "Estado"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_ref_search
+msgid "Status"
+msgstr "Estado"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Stripe account ID (acct_…, for the Stripe link on each Zoho payment)"
+msgstr "ID de la cuenta de Stripe (acct_…, para el enlace de Stripe en cada pago de Zoho)"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Stripe clearing account (deposit to)"
+msgstr "Cuenta puente de Stripe (depositar en)"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/books_expenses.py:0 code:addons/zoho_connector/models/expense_out.py:0
+msgid "Switch Zoho Books on first (Settings › Zoho)."
+msgstr "Activa primero Zoho Books (Ajustes › Zoho)."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/books_expenses.py:0
+msgid "Switch Zoho Books on first (Settings › Zoho). Writes allowed can stay off."
+msgstr "Activa primero Zoho Books (Ajustes › Zoho). Escrituras permitidas puede quedar desactivado."
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Sync & References"
+msgstr "Sincronización y referencias"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.xml:0
+msgid "Sync Log"
+msgstr "Registro de sincronización"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Sync Log and References"
+msgstr "Registro de sincronización y referencias"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Sync Now"
+msgstr "Sincronizar ahora"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_mtbg_expense_category_list_zoho model_terms:ir.ui.view,arch_db:zoho_connector.view_mtbg_expense_method_list_zoho
+msgid "Sync from Zoho Books"
+msgstr "Sincronizar desde Zoho Books"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.xml:0
+msgid "Sync now"
+msgstr "Sincronizar ahora"
+
+#. module: zoho_connector
+#: model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_ref__state__done
+msgid "Synced"
+msgstr "Sincronizado"
+
+#. module: zoho_connector
+#: model:ir.model.fields,help:zoho_connector.field_mtbg_zoho_ref__name
+msgid "The Odoo record's name when the reference was written"
+msgstr "El nombre del registro de Odoo cuando se escribió la referencia"
+
+#. module: zoho_connector
+#: model:ir.model.fields,help:zoho_connector.field_mtbg_expense_method__zoho_paid_through_id
+msgid "The Zoho Books account the money left from (the cash's, the card's, the bank's)"
+msgstr "La cuenta de Zoho Books de donde salió el dinero (la del efectivo, la de la tarjeta, la del banco)"
+
+#. module: zoho_connector
+#: model:ir.model.fields,help:zoho_connector.field_res_partner__mtbg_zoho_vendor_details_of model:ir.model.fields,help:zoho_connector.field_res_users__mtbg_zoho_vendor_details_of
+msgid "The Zoho Books change its details (address, people) were read for"
+msgstr "El cambio de Zoho Books para el que se leyeron sus detalles (dirección, personas)"
+
+#. module: zoho_connector
+#: model:ir.model.fields,help:zoho_connector.field_mtbg_expense_category__zoho_account_id
+msgid "The Zoho Books expense account this category is booked on"
+msgstr "La cuenta de gastos de Zoho Books en la que se registra esta categoría"
+
+#. module: zoho_connector
+#: model:ir.model.fields,help:zoho_connector.field_mtbg_zoho_books_import__account_ids
+msgid "The Zoho Books expense categories to bring in"
+msgstr "Las categorías de gastos de Zoho Books que se importan"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/expense_out.py:0
+msgid "The category %s has no Zoho Books account (Expense Categories)."
+msgstr "La categoría %s no tiene cuenta de Zoho Books (Categorías de gastos)."
+
+#. module: zoho_connector
+#: model_terms:ir.actions.act_window,help:zoho_connector.action_books_import
+msgid "The first sync: bring in the old expenses"
+msgstr "La primera sincronización: importar los gastos antiguos"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/expense_out.py:0
+msgid "The payment method %s has no Zoho Books account (Expense Payment Methods)."
+msgstr "El método de pago %s no tiene cuenta de Zoho Books (Métodos de pago de gastos)."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/subextension.py:0
+msgid "This integration cannot be installed or updated from here now."
+msgstr "Esta integración no se puede instalar ni actualizar desde aquí ahora."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/subextension.py:0
+msgid "This integration has no sync to run now (is its Zoho app On?)."
+msgstr "Esta integración no tiene una sincronización que ejecutar ahora (¿está activada su aplicación de Zoho?)."
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.js:0
+msgid "This login does not have the permissions of %s yet: make a new grant code below to add them."
+msgstr "Este inicio de sesión aún no tiene los permisos de %s: genere abajo un nuevo código de concesión para añadirlos."
+
+#. module: zoho_connector
+#: model:ir.model.fields,help:zoho_connector.field_res_partner__mtbg_zoho_vendor_id model:ir.model.fields,help:zoho_connector.field_res_users__mtbg_zoho_vendor_id
+msgid "This vendor's Zoho Books vendor contact (empty: not in Zoho Books yet)"
+msgstr "El contacto de proveedor en Zoho Books de este proveedor (vacío: aún no está en Zoho Books)"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__date_to
+msgid "To"
+msgstr "Hasta"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__review_count model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_import__review_ids model_terms:ir.ui.view,arch_db:zoho_connector.view_books_import_form
+msgid "To Review"
+msgstr "Por revisar"
+
+#. module: zoho_connector
+#: model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_books_review__state__review
+msgid "To review"
+msgstr "Por revisar"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/subextension.py:0
+msgid "Unknown page."
+msgstr "Página desconocida."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/subextension.py:0
+msgid "Unknown switch."
+msgstr "Interruptor desconocido."
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.xml:0
+msgid "Update"
+msgstr "Actualizar"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.js:0
+msgid "Use the %s organization ID"
+msgstr "Usar el ID de organización de %s"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.js:0
+msgid "Usually the same as %(source)s: organization %(id)s is used."
+msgstr "Normalmente es el mismo que %(source)s: se usa la organización %(id)s."
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__vendor
+msgid "Vendor"
+msgstr "Proveedor"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_res_partner__mtbg_zoho_vendor_synced_at model:ir.model.fields,field_description:zoho_connector.field_res_users__mtbg_zoho_vendor_synced_at
+msgid "Vendor Synced"
+msgstr "Proveedor sincronizado"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.js:0
+msgid "Version %(version)s · on GitHub %(newest)s"
+msgstr "Versión %(version)s · en GitHub %(newest)s"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.js:0
+msgid "Version %s"
+msgstr "Versión %s"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_books_review_list
+msgid "View in Zoho Books"
+msgstr "Ver en Zoho Books"
+
+#. module: zoho_connector
+#: model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_ref__state__waiting model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_ref_search
+msgid "Waiting"
+msgstr "En espera"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/expense_out.py:0 code:addons/zoho_connector/models/partner_vendor.py:0
+msgid "Waiting for Zoho Books “Writes allowed”."
+msgstr "En espera de “Escritura permitida” de Zoho Books."
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_books_import_form
+msgid "What"
+msgstr "Qué"
+
+#. module: zoho_connector
+#: model:ir.model.fields,help:zoho_connector.field_mtbg_zoho_ref__kind
+msgid "What the Zoho record is (project, vendor, wage_expense...)"
+msgstr "Qué es el registro de Zoho (project, vendor, wage_expense...)"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "What the token may do in each app, from one read per app. A missing scope: generate a new code for the self client with the scopes below, then Set up Zoho Books again."
+msgstr "Lo que el token puede hacer en cada aplicación, con una lectura por aplicación. Si falta un permiso: genere un nuevo código del self client con los permisos de abajo y vuelva a ejecutar Configurar Zoho Books."
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_log_list
+msgid "When"
+msgstr "Cuándo"
+
+#. module: zoho_connector
+#: model:ir.model.fields,help:zoho_connector.field_mtbg_zoho_token__expires_at
+msgid "When the token ends (seconds since 1970)"
+msgstr "Cuándo vence el token (segundos desde 1970)"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Where Stripe payments are deposited, the invoice's custom fields, the invoice template per language."
+msgstr "Dónde se depositan los pagos de Stripe, los campos personalizados de la factura, la plantilla de factura por idioma."
+
+#. module: zoho_connector
+#: model:ir.model.fields,help:zoho_connector.field_mtbg_zoho_books_account__target
+msgid "Where its expenses go when that is one record (a vehicle)"
+msgstr "A dónde van sus gastos cuando es un solo registro (un vehículo)"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__note
+msgid "Why"
+msgstr "Motivo"
+
+#. module: zoho_connector
+#: model:ir.model.fields,help:zoho_connector.field_mtbg_zoho_books_account__note
+msgid "Why it was suggested"
+msgstr "Por qué se sugirió"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/subextensions/zoho_card.xml:0
+msgid "Writes allowed"
+msgstr "Escritura permitida"
+
+#. module: zoho_connector
+#. odoo-javascript
+#: code:addons/zoho_connector/static/src/setup/zoho_setup.xml:0
+msgid "Your Zoho login"
+msgstr "Tu inicio de sesión de Zoho"
+
+#. module: zoho_connector
+#: model:ir.actions.act_window,name:zoho_connector.action_zoho_settings model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Zoho"
+msgstr "Zoho"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_account__zoho_account_id
+msgid "Zoho Account ID"
+msgstr "ID de la cuenta de Zoho"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_log__app model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__system model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_log_search model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_ref_search
+msgid "Zoho App"
+msgstr "Aplicación de Zoho"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/books_expenses.py:0 model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_log__app__books model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_ref__system__books model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_ref_search
+msgid "Zoho Books"
+msgstr "Zoho Books"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_expense_category__zoho_account_name model_terms:ir.ui.view,arch_db:zoho_connector.view_mtbg_expense_category_list_zoho
+msgid "Zoho Books Account"
+msgstr "Cuenta de Zoho Books"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_expense_category__zoho_account_id
+msgid "Zoho Books Account ID"
+msgstr "ID de cuenta de Zoho Books"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_account__name
+msgid "Zoho Books Category"
+msgstr "Categoría de Zoho Books"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__expense_id
+msgid "Zoho Books Expense"
+msgstr "Gasto de Zoho Books"
+
+#. module: zoho_connector
+#: model:ir.actions.act_window,name:zoho_connector.action_books_accounts
+msgid "Zoho Books Expense Categories"
+msgstr "Categorías de gastos de Zoho Books"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__zoho_line_id
+msgid "Zoho Books Line"
+msgstr "Línea de Zoho Books"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_books_review__zoho_url
+msgid "Zoho Books Link"
+msgstr "Enlace de Zoho Books"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_expense_method__zoho_paid_through_name model_terms:ir.ui.view,arch_db:zoho_connector.view_mtbg_expense_method_list_zoho
+msgid "Zoho Books Paid Through"
+msgstr "Cuenta de pago en Zoho Books"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_expense_method__zoho_paid_through_id
+msgid "Zoho Books Paid Through ID"
+msgstr "ID de cuenta de pago en Zoho Books"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_res_partner__mtbg_zoho_vendor_id model:ir.model.fields,field_description:zoho_connector.field_res_users__mtbg_zoho_vendor_id
+msgid "Zoho Books Vendor"
+msgstr "Proveedor de Zoho Books"
+
+#. module: zoho_connector
+#: model:ir.model.fields,help:zoho_connector.field_res_config_settings__mtbg_zoho_rate_limit
+msgid "Zoho Books allows 100 calls a minute per organization"
+msgstr "Zoho Books permite 100 llamadas por minuto por organización"
+
+#. module: zoho_connector
+#: model:ir.model,name:zoho_connector.model_mtbg_zoho_books_account
+msgid "Zoho Books expense category and where its expenses go"
+msgstr "Categoría de gasto de Zoho Books y a dónde van sus gastos"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/res_config_settings.py:0
+msgid "Zoho Books expenses"
+msgstr "Gastos de Zoho Books"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/setup.py:0
+msgid "Zoho Books › your organizations: the Organization ID (also in Settings › Organization Profile)."
+msgstr "Zoho Books › tus organizaciones: el ID de organización (también en Configuración › Perfil de la organización)."
+
+#. module: zoho_connector
+#: model:ir.model.fields,help:zoho_connector.field_res_partner__mtbg_zoho_vendor_modified model:ir.model.fields,help:zoho_connector.field_res_users__mtbg_zoho_vendor_modified
+msgid "Zoho Books' last change of the vendor as read"
+msgstr "Último cambio del proveedor en Zoho Books, tal como se leyó"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/expense_out.py:0
+msgid "Zoho Books: %(added)s new categories (tick the ones staff may pick)."
+msgstr "Zoho Books: %(added)s categorías nuevas (marca las que el personal puede elegir)."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/expense_out.py:0
+msgid "Zoho Books: %(added)s new payment methods (tick the ones staff may pick)."
+msgstr "Zoho Books: %(added)s métodos de pago nuevos (marca los que el personal puede elegir)."
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/books_expenses.py:0 code:addons/zoho_connector/models/expense_out.py:0
+msgid "Zoho Books: %s"
+msgstr "Zoho Books: %s"
+
+#. module: zoho_connector
+#: model:ir.actions.server,name:zoho_connector.cron_zoho_books_import_ir_actions_server
+msgid "Zoho Books: Import & Sync (a run)"
+msgstr "Zoho Books: Importar y sincronizar (una ejecución)"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_res_config_settings__mtbg_zoho_books_enabled
+msgid "Zoho Books: On"
+msgstr "Zoho Books: activado"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_res_config_settings__mtbg_zoho_books_writes
+msgid "Zoho Books: Writes allowed"
+msgstr "Zoho Books: escritura permitida"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Zoho Books: expenses (Import & Sync)"
+msgstr "Zoho Books: gastos (Importar y sincronizar)"
+
+#. module: zoho_connector
+#: model:ir.actions.server,name:zoho_connector.cron_zoho_books_expenses_sync_ir_actions_server
+msgid "Zoho Books: expenses (changes)"
+msgstr "Zoho Books: gastos (cambios)"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/expense_out.py:0 model:ir.actions.server,name:zoho_connector.cron_zoho_expense_out_ir_actions_server
+msgid "Zoho Books: expenses recorded in Odoo"
+msgstr "Zoho Books: gastos registrados en Odoo"
+
+#. module: zoho_connector
+#: model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_log__app__crm
+msgid "Zoho CRM"
+msgstr "Zoho CRM"
+
+#. module: zoho_connector
+#: model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_ref__system__crm
+msgid "Zoho CRM (history)"
+msgstr "Zoho CRM (historial)"
+
+#. module: zoho_connector
+#: model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_log__app__expense model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_ref__system__expense model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_ref_search
+msgid "Zoho Expense"
+msgstr "Zoho Expense"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_res_config_settings__mtbg_zoho_expense_org_id
+msgid "Zoho Expense Organization ID"
+msgstr "ID de la organización de Zoho Expense"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/setup.py:0
+msgid "Zoho Expense › Settings › Organization Profile: the Organization ID."
+msgstr "Zoho Expense › Configuración › Perfil de la organización: el ID de organización."
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Zoho Expense's organization (often the same as Zoho Books'). Zoho Expense is only read now, for the staff expenses' history import; its reports are no longer made."
+msgstr "La organización de Zoho Expense (a menudo la misma que la de Zoho Books). Zoho Expense ahora solo se lee, para importar el historial de gastos del personal; ya no se crean sus reportes."
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_res_config_settings__mtbg_zoho_expense_enabled
+msgid "Zoho Expense: On"
+msgstr "Zoho Expense: activado"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_res_config_settings__mtbg_zoho_expense_writes
+msgid "Zoho Expense: Writes allowed"
+msgstr "Zoho Expense: escritura permitida"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Zoho Expense: history (read only)"
+msgstr "Zoho Expense: historial (solo lectura)"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__zoho_id
+msgid "Zoho ID"
+msgstr "ID de Zoho"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__zoho_parent_id
+msgid "Zoho Parent ID"
+msgstr "ID principal de Zoho"
+
+#. module: zoho_connector
+#: model:ir.actions.act_window,name:zoho_connector.action_zoho_refs
+msgid "Zoho References"
+msgstr "Referencias de Zoho"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_mtbg_zoho_ref__zoho_scope_id
+msgid "Zoho Scope ID"
+msgstr "ID de ámbito de Zoho"
+
+#. module: zoho_connector
+#: model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_log__app__shifts model:ir.model.fields.selection,name:zoho_connector.selection__mtbg_zoho_ref__system__shifts model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_ref_search model_terms:ir.ui.view,arch_db:zoho_connector.view_zoho_settings
+msgid "Zoho Shifts"
+msgstr "Zoho Shifts"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_res_config_settings__mtbg_zoho_shifts_org_id
+msgid "Zoho Shifts Organization ID"
+msgstr "ID de la organización de Zoho Shifts"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/setup.py:0
+msgid "Zoho Shifts › Organizations: your organization's ID."
+msgstr "Zoho Shifts › Organizaciones: el ID de su organización."
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_res_config_settings__mtbg_zoho_shifts_enabled
+msgid "Zoho Shifts: On"
+msgstr "Zoho Shifts: activado"
+
+#. module: zoho_connector
+#: model:ir.model.fields,field_description:zoho_connector.field_res_config_settings__mtbg_zoho_shifts_writes
+msgid "Zoho Shifts: Writes allowed"
+msgstr "Zoho Shifts: escritura permitida"
+
+#. module: zoho_connector
+#: model:ir.actions.act_window,name:zoho_connector.action_zoho_log
+msgid "Zoho Sync Log"
+msgstr "Registro de sincronización con Zoho"
+
+#. module: zoho_connector
+#: model:ir.model,name:zoho_connector.model_mtbg_zoho_token
+msgid "Zoho access token"
+msgstr "Token de acceso de Zoho"
+
+#. module: zoho_connector
+#: model:ir.model,name:zoho_connector.model_mtbg_zoho_ref
+msgid "Zoho reference"
+msgstr "Referencia de Zoho"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/setup.py:0
+msgid "Zoho refused the saved login: make a new grant code below."
+msgstr "Zoho rechazó el inicio de sesión guardado: genere abajo un nuevo código de concesión."
+
+#. module: zoho_connector
+#: model:ir.model,name:zoho_connector.model_mtbg_zoho_setup
+msgid "Zoho setup wizard"
+msgstr "Asistente de configuración de Zoho"
+
+#. module: zoho_connector
+#: model:ir.model,name:zoho_connector.model_mtbg_zoho_subextension
+msgid "Zoho sub-extensions (the Zoho page's cards)"
+msgstr "Subextensiones de Zoho (las tarjetas de la página de Zoho)"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/subextension.py:0
+msgid "Zoho sync errors"
+msgstr "Errores de sincronización con Zoho"
+
+#. module: zoho_connector
+#: model:ir.model,name:zoho_connector.model_mtbg_zoho_log
+msgid "Zoho sync log"
+msgstr "Registro de sincronización con Zoho"
+
+#. module: zoho_connector
+#: model:ir.actions.server,name:zoho_connector.cron_zoho_log_cleanup_ir_actions_server
+msgid "Zoho: sync log cleanup"
+msgstr "Zoho: limpieza del registro de sincronización"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/res_config_settings.py:0
+msgid "not checked"
+msgstr "sin comprobar"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/res_config_settings.py:0
+msgid "off"
+msgstr "desactivada"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/res_config_settings.py:0
+msgid "ok"
+msgstr "ok"
+
+#. module: zoho_connector
+#. odoo-python
+#: code:addons/zoho_connector/models/res_config_settings.py:0
+msgid "on"
+msgstr "activado"
+
+#. module: zoho_connector
+#: model_terms:ir.ui.view,arch_db:zoho_connector.view_books_import_form
+msgid "today"
+msgstr "hoy"

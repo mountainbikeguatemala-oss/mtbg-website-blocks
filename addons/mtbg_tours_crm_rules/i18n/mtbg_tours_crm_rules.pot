@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-19 05:17+0000\n"
-"PO-Revision-Date: 2026-11-19 05:17+0000\n"
+"POT-Creation-Date: 2026-11-24 05:28+0000\n"
+"PO-Revision-Date: 2026-11-24 05:28+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -34,6 +34,48 @@ msgid "%(total)s contacts got their source channel: %(detail)s"
 msgstr ""
 
 #. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/reply_status.py:0
+msgid "%s d"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/reply_status.py:0
+msgid "%s follow-up(s) due"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/reply_status.py:0
+msgid "%s h"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/reply_status.py:0
+msgid "%s lead(s) waiting on us"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/reply_status.py:0
+msgid "%s min"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/contact_dedupe.py:0
+msgid "(none)"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_partner__cfd_reply_rank
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_users__cfd_reply_rank
+msgid "1 waiting on us, 2 follow up, 3 waiting on them, empty: none."
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_pipeline_kanban
 msgid "<i class=\"fa fa-fw me-1 fa-envelope text-primary\" title=\"Email\"/>"
 msgstr ""
@@ -45,7 +87,17 @@ msgstr ""
 
 #. module: mtbg_tours_crm_rules
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_pipeline_kanban
+msgid "<i class=\"fa fa-fw me-1 fa-quote-left\" title=\"Their last message\"/>"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_pipeline_kanban
 msgid "<i class=\"fa fa-fw me-1 fa-sign-in\" title=\"Source channel\"/>"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_form_pipeline
+msgid "<i class=\"fa fa-quote-left me-1\" title=\"Their last message\"/>"
 msgstr ""
 
 #. module: mtbg_tours_crm_rules
@@ -324,11 +376,6 @@ msgid "Country and state from the phone"
 msgstr ""
 
 #. module: mtbg_tours_crm_rules
-#: model:ir.model,website_form_label:mtbg_tours_crm_rules.model_res_partner
-msgid "Create a Customer"
-msgstr ""
-
-#. module: mtbg_tours_crm_rules
 #: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule__trigger__created
 #: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_run__trigger__created
 msgid "Created"
@@ -397,6 +444,19 @@ msgid "Days"
 msgstr ""
 
 #. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/contact_dedupe.py:0
+#: model:ir.actions.server,name:mtbg_tours_crm_rules.action_contact_dedupe
+msgid "De-duplicate"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/contact_dedupe.py:0
+msgid "De-duplicate %s"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
 #. odoo-javascript
 #: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
 msgid "Dealt with"
@@ -405,6 +465,12 @@ msgstr ""
 #. module: mtbg_tours_crm_rules
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__description
 msgid "Description"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/contact_dedupe.py:0
+msgid "Details taken from the merged contacts:"
 msgstr ""
 
 #. module: mtbg_tours_crm_rules
@@ -418,6 +484,7 @@ msgid "Different people"
 msgstr ""
 
 #. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_base_partner_merge_automatic_wizard__display_name
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__display_name
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__display_name
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__display_name
@@ -531,11 +598,28 @@ msgid "Flag possible duplicates"
 msgstr ""
 
 #. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__res_partner__cfd_reply_status__follow_up
+msgid "Follow up"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_search_stage
+msgid "Follow up due"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/reply_status.py:0
+msgid "Follow-ups due"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_form_pipeline
 msgid "How they first came"
 msgstr ""
 
 #. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_base_partner_merge_automatic_wizard__id
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_duplicate__id
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__id
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule_action__id
@@ -626,14 +710,37 @@ msgstr ""
 #: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_partner__mtbg_contact_type
 #: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_users__mtbg_contact_type
 msgid ""
-"Lead: not paid yet. Client: a paying customer (set when they first pay, "
-"never undone automatically). Leads and clients have a stage and get the "
-"client journeys; staff, vendors and internal contacts do not."
+"Lead: not paid yet. Client: a paying customer or their guest (set when a "
+"booking they book or ride on gets its first payment, never undone "
+"automatically). Leads and clients have a stage and get the client journeys; "
+"staff, vendors, agencies and internal contacts do not."
 msgstr ""
 
 #. module: mtbg_tours_crm_rules
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_search_stage
 msgid "Leads"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/reply_status.py:0
+msgid "Leads waiting on us"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/reply_status.py:0
+msgid ""
+"Leads we answered last who have not written back for the days set in "
+"Settings › Communication Flows (Reply status)."
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/reply_status.py:0
+msgid ""
+"Leads whose last message (any channel, a website form too) is newer than our"
+" last reply."
 msgstr ""
 
 #. module: mtbg_tours_crm_rules
@@ -656,6 +763,11 @@ msgstr ""
 #. module: mtbg_tours_crm_rules
 #: model:ir.actions.server,name:mtbg_tours_crm_rules.cron_received_rules_ir_actions_server
 msgid "MTBG Tours: Contact rules (messages received)"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model,name:mtbg_tours_crm_rules.model_base_partner_merge_automatic_wizard
+msgid "Merge Partner Wizard"
 msgstr ""
 
 #. module: mtbg_tours_crm_rules
@@ -713,6 +825,12 @@ msgstr ""
 #. module: mtbg_tours_crm_rules
 #: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__res_partner__mtbg_stage__new
 msgid "No contact yet"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/contact_dedupe.py:0
+msgid "No duplicates found for %s"
 msgstr ""
 
 #. module: mtbg_tours_crm_rules
@@ -932,6 +1050,37 @@ msgstr ""
 #. module: mtbg_tours_crm_rules
 #: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__mtbg_crm_rule_action__kind__remove_tag
 msgid "Remove a tag"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_partner__mtbg_reply_label
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_users__mtbg_reply_label
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_pipeline_list
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_tree_stage
+msgid "Reply"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_partner__cfd_reply_rank
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_users__cfd_reply_rank
+msgid "Reply Order"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_partner__cfd_reply_status
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_users__cfd_reply_status
+msgid "Reply Status"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_partner__cfd_reply_since
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_users__cfd_reply_since
+msgid "Reply Status Since"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_search_stage
+msgid "Reply status"
 msgstr ""
 
 #. module: mtbg_tours_crm_rules
@@ -1217,6 +1366,17 @@ msgid "The to-do, note or duplicate flag made"
 msgstr ""
 
 #. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_partner__cfd_reply_preview
+#: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_res_users__cfd_reply_preview
+msgid "Their Last Message"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_pipeline_list
+msgid "Their last message"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
 #: model:ir.model.fields,field_description:mtbg_tours_crm_rules.field_mtbg_crm_rule__mtbg_missing_ids
 msgid "Things missing"
 msgstr ""
@@ -1314,6 +1474,33 @@ msgid "Waiting"
 msgstr ""
 
 #. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__res_partner__cfd_reply_status__waiting_them
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_search_stage
+msgid "Waiting on them"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields.selection,name:mtbg_tours_crm_rules.selection__res_partner__cfd_reply_status__waiting_us
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_crm_rules.view_partner_search_stage
+msgid "Waiting on us"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_partner__cfd_reply_status
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_users__cfd_reply_status
+msgid ""
+"Waiting on us: their last message is newer than our last reply. Waiting on "
+"them: we answered last. Follow up: we answered last and they have not "
+"written back for days. Empty: no conversation yet."
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_partner__cfd_reply_since
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_users__cfd_reply_since
+msgid "Waiting on us: when they wrote. Otherwise: when we last answered."
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
 #. odoo-python
 #: code:addons/mtbg_tours_crm_rules/models/rule.py:0
 msgid "Waits for its extension"
@@ -1378,13 +1565,24 @@ msgstr ""
 #: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_partner__mtbg_stage
 #: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_users__mtbg_stage
 msgid ""
-"Where the contact is in their journey with us: a lead's from their first "
-"contact, a client's from what they bought"
+"Where the client is in their journey: set from their bookings and history"
 msgstr ""
 
 #. module: mtbg_tours_crm_rules
 #: model:ir.model.fields,help:mtbg_tours_crm_rules.field_mtbg_crm_rule__mtbg_time_stage
 msgid "Where the record is from its start date (refreshed by the boards)"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_partner__mtbg_reply_label
+#: model:ir.model.fields,help:mtbg_tours_crm_rules.field_res_users__mtbg_reply_label
+msgid "Who has to write next, and since when."
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/contact_dedupe.py:0
+msgid "Yes"
 msgstr ""
 
 #. module: mtbg_tours_crm_rules
@@ -1402,6 +1600,18 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/mtbg_tours_crm_rules/static/src/crm_tab/crm_tab.xml:0
 msgid "extension not installed"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/contact_dedupe.py:0
+msgid "from %s"
+msgstr ""
+
+#. module: mtbg_tours_crm_rules
+#. odoo-python
+#: code:addons/mtbg_tours_crm_rules/models/reply_status.py:0
+msgid "hours waiting at least"
 msgstr ""
 
 #. module: mtbg_tours_crm_rules

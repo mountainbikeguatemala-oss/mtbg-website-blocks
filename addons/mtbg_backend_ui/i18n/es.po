@@ -32,6 +32,18 @@ msgid "%s card"
 msgstr "Tarjeta de %s"
 
 #. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "%s is needed."
+msgstr "Falta %s."
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "%s is not a number."
+msgstr "%s no es un número."
+
+#. module: mtbg_backend_ui
 #. odoo-python
 #: code:addons/mtbg_backend_ui/models/text_setting.py:0
 msgid "%s is not a translated text setting."
@@ -44,57 +56,57 @@ msgid "(main language, edited on the page)"
 msgstr "(idioma principal, se edita en la página)"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__f1
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_email_layout__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_wa_template__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__ir_module_module__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mail_template__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_crm_rule__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_customer_credit__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_hotel__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_invoice_template__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_maintenance__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_autopost__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_item__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_page_template__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_rental_booking__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_expense_report__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_member__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_shift__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_stripe_card_link__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_section__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_set__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_assignment__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_participant__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_payment__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_departure__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_wildcard__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tours_content_block__mtbg_time_stage__f1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__res_partner__mtbg_time_stage__f1
 msgid "1 Day Follow Up"
 msgstr "Seguimiento a 1 día"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__fm
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_email_layout__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_wa_template__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__ir_module_module__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mail_template__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_crm_rule__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_customer_credit__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_hotel__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_invoice_template__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_maintenance__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_autopost__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_item__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_page_template__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_rental_booking__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_expense_report__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_member__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_shift__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_stripe_card_link__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_section__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_set__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_assignment__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_participant__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_payment__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_departure__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_wildcard__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tours_content_block__mtbg_time_stage__fm model:ir.model.fields.selection,name:mtbg_backend_ui.selection__res_partner__mtbg_time_stage__fm
 msgid "1 Month Follow Up"
 msgstr "Seguimiento a 1 mes"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__m1
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_email_layout__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_wa_template__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__ir_module_module__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mail_template__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_crm_rule__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_customer_credit__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_hotel__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_invoice_template__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_maintenance__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_autopost__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_item__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_page_template__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_rental_booking__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_expense_report__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_member__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_shift__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_stripe_card_link__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_section__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_set__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_assignment__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_participant__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_payment__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_departure__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_wildcard__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tours_content_block__mtbg_time_stage__m1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__res_partner__mtbg_time_stage__m1
 msgid "1 Month Out"
 msgstr "Falta 1 mes"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__fw
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_email_layout__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_wa_template__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__ir_module_module__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mail_template__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_crm_rule__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_customer_credit__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_hotel__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_invoice_template__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_maintenance__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_autopost__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_item__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_page_template__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_rental_booking__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_expense_report__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_member__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_shift__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_stripe_card_link__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_section__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_set__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_assignment__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_participant__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_payment__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_departure__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_wildcard__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tours_content_block__mtbg_time_stage__fw model:ir.model.fields.selection,name:mtbg_backend_ui.selection__res_partner__mtbg_time_stage__fw
 msgid "1 Week Follow Up"
 msgstr "Seguimiento a 1 semana"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__w1
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_email_layout__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_wa_template__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__ir_module_module__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mail_template__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_crm_rule__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_customer_credit__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_hotel__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_invoice_template__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_maintenance__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_autopost__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_item__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_page_template__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_rental_booking__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_expense_report__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_member__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_shift__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_stripe_card_link__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_section__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_set__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_assignment__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_participant__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_payment__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_departure__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_wildcard__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tours_content_block__mtbg_time_stage__w1 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__res_partner__mtbg_time_stage__w1
 msgid "1 Week Out"
 msgstr "Falta 1 semana"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__w2
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_email_layout__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_wa_template__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__ir_module_module__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mail_template__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_crm_rule__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_customer_credit__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_hotel__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_invoice_template__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_maintenance__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_autopost__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_item__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_page_template__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_rental_booking__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_expense_report__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_member__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_shift__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_stripe_card_link__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_section__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_set__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_assignment__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_participant__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_payment__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_departure__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_wildcard__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tours_content_block__mtbg_time_stage__w2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__res_partner__mtbg_time_stage__w2
 msgid "2 Weeks Out"
 msgstr "Faltan 2 semanas"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__m2
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_email_layout__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_wa_template__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__ir_module_module__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mail_template__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_crm_rule__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_customer_credit__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_hotel__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_invoice_template__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_maintenance__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_autopost__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_item__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_page_template__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_rental_booking__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_expense_report__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_member__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_shift__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_stripe_card_link__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_section__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_set__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_assignment__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_participant__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_payment__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_departure__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_wildcard__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tours_content_block__mtbg_time_stage__m2 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__res_partner__mtbg_time_stage__m2
 msgid "2+ Months Out"
 msgstr "Faltan 2+ meses"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__h24
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_email_layout__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_wa_template__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__ir_module_module__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mail_template__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_crm_rule__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_customer_credit__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_hotel__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_invoice_template__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_maintenance__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_autopost__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_item__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_page_template__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_rental_booking__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_expense_report__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_member__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_shift__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_stripe_card_link__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_section__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_set__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_assignment__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_participant__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_payment__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_departure__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_wildcard__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tours_content_block__mtbg_time_stage__h24 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__res_partner__mtbg_time_stage__h24
 msgid "24 Hours Out"
 msgstr "Faltan 24 horas"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__d3
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_email_layout__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_wa_template__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__ir_module_module__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mail_template__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_crm_rule__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_customer_credit__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_hotel__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_invoice_template__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_maintenance__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_autopost__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_item__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_page_template__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_rental_booking__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_expense_report__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_member__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_shift__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_stripe_card_link__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_section__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_set__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_assignment__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_participant__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_payment__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_departure__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_wildcard__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tours_content_block__mtbg_time_stage__d3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__res_partner__mtbg_time_stage__d3
 msgid "3 Days Out"
 msgstr "Faltan 3 días"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__w3
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_email_layout__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_wa_template__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__ir_module_module__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mail_template__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_crm_rule__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_customer_credit__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_hotel__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_invoice_template__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_maintenance__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_autopost__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_item__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_page_template__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_rental_booking__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_expense_report__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_member__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_shift__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_stripe_card_link__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_section__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_set__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_assignment__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_participant__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_payment__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_departure__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_wildcard__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tours_content_block__mtbg_time_stage__w3 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__res_partner__mtbg_time_stage__w3
 msgid "3 Weeks Out"
 msgstr "Faltan 3 semanas"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__h48
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_email_layout__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_wa_template__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__ir_module_module__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mail_template__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_crm_rule__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_customer_credit__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_hotel__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_invoice_template__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_maintenance__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_autopost__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_item__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_page_template__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_rental_booking__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_expense_report__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_member__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_shift__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_stripe_card_link__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_section__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_set__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_assignment__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_participant__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_payment__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_departure__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_wildcard__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tours_content_block__mtbg_time_stage__h48 model:ir.model.fields.selection,name:mtbg_backend_ui.selection__res_partner__mtbg_time_stage__h48
 msgid "48 Hours Out"
 msgstr "Faltan 48 horas"
 
@@ -109,6 +121,11 @@ msgstr ""
 "                            y en las páginas de otros registros. Un solo aspecto para todo el sitio, siempre del mismo ancho."
 
 #. module: mtbg_backend_ui
+#: model:ir.model.fields,help:mtbg_backend_ui.field_res_partner__mtbg_is_vendor model:ir.model.fields,help:mtbg_backend_ui.field_res_users__mtbg_is_vendor
+msgid "A business the company pays: offered as an expense's vendor"
+msgstr "Un negocio al que la empresa le paga: se ofrece como proveedor de un gasto"
+
+#. module: mtbg_backend_ui
 #. odoo-javascript
 #: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
 msgid "A date ascending: the soonest first."
@@ -118,9 +135,7 @@ msgstr "Una fecha ascendente: la más próxima primero."
 #. odoo-javascript
 #: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
 msgid "A list under the fields that opens on click (a booking's riders)."
-msgstr ""
-"Una lista bajo los campos que se abre al hacer clic (los ciclistas de una "
-"reserva)."
+msgstr "Una lista bajo los campos que se abre al hacer clic (los ciclistas de una reserva)."
 
 #. module: mtbg_backend_ui
 #: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_board__total_field
@@ -141,7 +156,22 @@ msgstr "Cada elemento faltante se define una sola vez."
 #. module: mtbg_backend_ui
 #: model:ir.model,name:mtbg_backend_ui.model_mtbg_user_pref
 msgid "A user's screen choice"
-msgstr ""
+msgstr "Preferencia de pantalla de un usuario"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_source__expense_sync_state
+msgid "Accounting"
+msgstr "Contabilidad"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_source__expense_sync_error
+msgid "Accounting Error"
+msgstr "Error de contabilidad"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_source__expense_sync_url
+msgid "Accounting Link"
+msgstr "Enlace de contabilidad"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
@@ -156,22 +186,49 @@ msgid "Across, photo under"
 msgstr "Horizontal, foto debajo"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__active
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__active model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_category__active model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_method__active
 msgid "Active"
 msgstr "Activo"
 
 #. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0
+msgid "Add Expense"
+msgstr "Agregar gasto"
+
+#. module: mtbg_backend_ui
 #. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
-#: code:addons/mtbg_backend_ui/static/src/sidebar_list/sidebar_list.xml:0
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "Add a photo of the receipt."
+msgstr "Agrega una foto del recibo."
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0 code:addons/mtbg_backend_ui/static/src/sidebar_list/sidebar_list.xml:0
 msgid "All"
 msgstr "Todas"
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0 model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_source__amount
+msgid "Amount"
+msgstr "Monto"
+
+#. module: mtbg_backend_ui
+#: model:ir.model,name:mtbg_backend_ui.model_mtbg_expense_source
+msgid "An expense (shared fields)"
+msgstr "Un gasto (campos compartidos)"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
 #: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
 msgid "Apply a preset…"
 msgstr "Aplicar un ajuste predefinido…"
+
+#. module: mtbg_backend_ui
+#: model_terms:ir.ui.view,arch_db:mtbg_backend_ui.view_mtbg_expense_category_search model_terms:ir.ui.view,arch_db:mtbg_backend_ui.view_mtbg_expense_method_search
+msgid "Archived"
+msgstr "Archivado"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
@@ -183,7 +240,7 @@ msgstr "Ascendente"
 #. odoo-javascript
 #: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
 msgid "Bar across the top"
-msgstr ""
+msgstr "Barra en la parte superior"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
@@ -199,8 +256,7 @@ msgstr "Junto a la foto"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.js:0
-#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.js:0 code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
 msgid "Big figure"
 msgstr "Cifra grande"
 
@@ -224,8 +280,7 @@ msgstr "Tablero: las columnas y su orden"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
-#: model:ir.model,name:mtbg_backend_ui.model_mtbg_board_mixin
+#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0 model:ir.model,name:mtbg_backend_ui.model_mtbg_board_mixin
 msgid "Boards"
 msgstr "Tableros"
 
@@ -237,13 +292,12 @@ msgstr "Explorar"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
-#: code:addons/mtbg_backend_ui/static/src/text_setting/text_setting.xml:0
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0 code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0 code:addons/mtbg_backend_ui/static/src/text_setting/text_setting.xml:0
 msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__cancelled
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_email_layout__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_wa_template__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__ir_module_module__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mail_template__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_crm_rule__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_customer_credit__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_hotel__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_invoice_template__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_maintenance__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_autopost__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_item__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_page_template__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_rental_booking__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_expense_report__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_member__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_shift__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_stripe_card_link__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_section__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_set__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_assignment__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_participant__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_payment__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_departure__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_wildcard__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tours_content_block__mtbg_time_stage__cancelled model:ir.model.fields.selection,name:mtbg_backend_ui.selection__res_partner__mtbg_time_stage__cancelled
 msgid "Cancelled"
 msgstr "Cancelado"
 
@@ -261,8 +315,7 @@ msgstr "Tarjeta guardada."
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.js:0
-#: code:addons/mtbg_backend_ui/static/src/view_modes/view_modes.js:0
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.js:0 code:addons/mtbg_backend_ui/static/src/view_modes/view_modes.js:0
 msgid "Cards"
 msgstr "Tarjetas"
 
@@ -271,6 +324,36 @@ msgstr "Tarjetas"
 #: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
 msgid "Cards, top to bottom"
 msgstr "Tarjetas, de arriba abajo"
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0 model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_source__category_id
+msgid "Category"
+msgstr "Categoría"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Change"
+msgstr "Cambiar"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "Choose %s from the list."
+msgstr "Elige %s de la lista."
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Choose…"
+msgstr "Elige…"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Close"
+msgstr "Cerrar"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
@@ -285,17 +368,13 @@ msgstr "Color"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
-#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__total_field
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0 code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0 model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__total_field
 msgid "Column total"
 msgstr "Total de la columna"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
-#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__group_by
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0 code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0 model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__group_by
 msgid "Columns"
 msgstr "Columnas"
 
@@ -311,6 +390,11 @@ msgid "Config Settings"
 msgstr "Ajustes de configuración"
 
 #. module: mtbg_backend_ui
+#: model:ir.model,name:mtbg_backend_ui.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: mtbg_backend_ui
 #. odoo-javascript
 #: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
 msgid "Countdown"
@@ -323,18 +407,20 @@ msgid "Countdown pill"
 msgstr "Píldora de cuenta regresiva"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__create_uid
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__create_uid
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__create_uid
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__create_uid model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_category__create_uid model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_method__create_uid model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__create_uid model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__create_date
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__create_date
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__create_date
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__create_date model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_category__create_date model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_method__create_date model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__create_date model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__create_date
 msgid "Created on"
 msgstr "Creado el"
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0 model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_method__currency_id model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_source__currency_id
+msgid "Currency"
+msgstr "Moneda"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
@@ -349,6 +435,12 @@ msgid "Dark mode"
 msgstr "Modo oscuro"
 
 #. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0 model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_source__date
+msgid "Date"
+msgstr "Fecha"
+
+#. module: mtbg_backend_ui
 #. odoo-javascript
 #: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
 msgid "Date format"
@@ -356,7 +448,7 @@ msgstr "Formato de fecha"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0 code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
 msgid "Delete"
 msgstr "Eliminar"
 
@@ -367,7 +459,7 @@ msgid "Descending"
 msgstr "Descendente"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__description
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__description model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_source__name
 msgid "Description"
 msgstr "Descripción"
 
@@ -384,18 +476,7 @@ msgid "Discard"
 msgstr "Descartar"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_ir_config_parameter__display_name
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_ir_http__display_name
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__display_name
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board_mixin__display_name
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_card_mixin__display_name
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_data_transfer__display_name
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__display_name
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_sidebar_mixin__display_name
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_text_setting__display_name
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__display_name
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_res_config_settings__display_name
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_res_users__display_name
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_ir_config_parameter__display_name model:ir.model.fields,field_description:mtbg_backend_ui.field_ir_http__display_name model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__display_name model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board_mixin__display_name model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_card_mixin__display_name model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_data_transfer__display_name model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_category__display_name model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_form__display_name model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_method__display_name model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_source__display_name model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__display_name model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_sidebar_mixin__display_name model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_text_setting__display_name model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__display_name model:ir.model.fields,field_description:mtbg_backend_ui.field_res_config_settings__display_name model:ir.model.fields,field_description:mtbg_backend_ui.field_res_partner__display_name model:ir.model.fields,field_description:mtbg_backend_ui.field_res_users__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
 
@@ -431,25 +512,75 @@ msgstr "Editando las etiquetas en"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/text_setting/text_setting.js:0
-#: code:addons/mtbg_backend_ui/static/src/text_setting/text_setting.xml:0
+#: code:addons/mtbg_backend_ui/static/src/text_setting/text_setting.js:0 code:addons/mtbg_backend_ui/static/src/text_setting/text_setting.xml:0
 msgid "Empty: the main text"
 msgstr "Vacío: el texto principal"
 
 #. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_expense_source__expense_sync_state__error
+msgid "Error"
+msgstr "Error"
+
+#. module: mtbg_backend_ui
 #. odoo-javascript
 #: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
-msgid ""
-"Every record out as a spreadsheet (the list's columns), or in from one."
-msgstr ""
-"Exporta todos los registros a una hoja de cálculo (las columnas de la lista)"
-" o impórtalos desde una."
+msgid "Every record out as a spreadsheet (the list's columns), or in from one."
+msgstr "Exporta todos los registros a una hoja de cálculo (las columnas de la lista) o impórtalos desde una."
+
+#. module: mtbg_backend_ui
+#: model:ir.actions.act_window,name:mtbg_backend_ui.action_mtbg_expense_category model_terms:ir.ui.view,arch_db:mtbg_backend_ui.view_mtbg_expense_category_list
+msgid "Expense Categories"
+msgstr "Categorías de gastos"
+
+#. module: mtbg_backend_ui
+#: model:ir.actions.act_window,name:mtbg_backend_ui.action_mtbg_expense_method model_terms:ir.ui.view,arch_db:mtbg_backend_ui.view_mtbg_expense_method_list
+msgid "Expense Payment Methods"
+msgstr "Métodos de pago de gastos"
+
+#. module: mtbg_backend_ui
+#: model:ir.model,name:mtbg_backend_ui.model_mtbg_expense_category
+msgid "Expense category"
+msgstr "Categoría de gasto"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "Expense deleted."
+msgstr "Gasto eliminado."
+
+#. module: mtbg_backend_ui
+#: model:ir.model,name:mtbg_backend_ui.model_mtbg_expense_form
+msgid "Expense input form (shared)"
+msgstr "Formulario de gastos (compartido)"
+
+#. module: mtbg_backend_ui
+#: model:ir.model,name:mtbg_backend_ui.model_mtbg_expense_method
+msgid "Expense payment method"
+msgstr "Método de pago de gastos"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "Expense recorded."
+msgstr "Gasto registrado."
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "Expense saved."
+msgstr "Gasto guardado."
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
 #: code:addons/mtbg_backend_ui/static/src/data_transfer/data_transfer.xml:0
 msgid "Export"
 msgstr "Exportar"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Fewer details"
+msgstr "Menos detalles"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
@@ -480,18 +611,7 @@ msgid "Hide the side bar"
 msgstr "Ocultar la barra lateral"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_ir_config_parameter__id
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_ir_http__id
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__id
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board_mixin__id
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_card_mixin__id
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_data_transfer__id
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__id
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_sidebar_mixin__id
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_text_setting__id
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__id
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_res_config_settings__id
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_res_users__id
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_ir_config_parameter__id model:ir.model.fields,field_description:mtbg_backend_ui.field_ir_http__id model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__id model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board_mixin__id model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_card_mixin__id model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_data_transfer__id model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_category__id model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_form__id model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_method__id model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_source__id model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__id model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_sidebar_mixin__id model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_text_setting__id model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__id model:ir.model.fields,field_description:mtbg_backend_ui.field_res_config_settings__id model:ir.model.fields,field_description:mtbg_backend_ui.field_res_partner__id model:ir.model.fields,field_description:mtbg_backend_ui.field_res_users__id
 msgid "ID"
 msgstr "ID"
 
@@ -499,7 +619,7 @@ msgstr "ID"
 #. odoo-javascript
 #: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
 msgid "Icons instead of labels (where a field has one)"
-msgstr ""
+msgstr "Íconos en lugar de etiquetas (donde un campo tiene uno)"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
@@ -509,8 +629,7 @@ msgstr "Importar"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
-#: model:ir.model,name:mtbg_backend_ui.model_mtbg_data_transfer
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0 model:ir.model,name:mtbg_backend_ui.model_mtbg_data_transfer
 msgid "Import / Export"
 msgstr "Importar / exportar"
 
@@ -531,8 +650,7 @@ msgid "Kanban board"
 msgstr "Tablero kanban"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__key
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__key
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__key model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__key
 msgid "Key"
 msgstr "Clave"
 
@@ -555,16 +673,12 @@ msgid "Languages"
 msgstr "Idiomas"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__write_uid
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__write_uid
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__write_uid
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__write_uid model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_category__write_uid model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_method__write_uid model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__write_uid model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__write_uid
 msgid "Last Updated by"
 msgstr "Última actualización por"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__write_date
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__write_date
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__write_date
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__write_date model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_category__write_date model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_method__write_date model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__write_date model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__write_date
 msgid "Last Updated on"
 msgstr "Última actualización el"
 
@@ -613,12 +727,11 @@ msgstr "En vivo, hasta el inicio (días, horas, minutos)"
 #. odoo-javascript
 #: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
 msgid "Live: the card shows your unsaved changes (only you see them)."
-msgstr ""
-"En vivo: la tarjeta muestra tus cambios sin guardar (solo tú los ves)."
+msgstr "En vivo: la tarjeta muestra tus cambios sin guardar (solo tú los ves)."
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0 code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
 msgid "Loading…"
 msgstr "Cargando…"
 
@@ -629,20 +742,28 @@ msgstr "Modelo"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "More details:"
+msgstr "Más detalles:"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
 #. odoo-python
-#: code:addons/mtbg_backend_ui/models/record_card.py:0
-#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__name
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__name
+#: code:addons/mtbg_backend_ui/models/record_card.py:0 code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0 model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__name model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_category__name model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_method__name model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__name
 msgid "Name"
 msgstr "Nombre"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
-#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0 code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
 msgid "New board"
 msgstr "Nuevo tablero"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "New:"
+msgstr "Nuevo:"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
@@ -664,16 +785,49 @@ msgstr "Aún no hay registros para mostrar."
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
-#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0 code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
 msgid "None"
 msgstr "Ninguno"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "Not deleted."
+msgstr "No se eliminó."
+
+#. module: mtbg_backend_ui
+#: model_terms:ir.ui.view,arch_db:mtbg_backend_ui.view_mtbg_expense_category_search model_terms:ir.ui.view,arch_db:mtbg_backend_ui.view_mtbg_expense_method_search
+msgid "Not offered"
+msgstr "No ofrecido"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "Not saved."
+msgstr "No se guardó."
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_expense_source__expense_sync_state__none
+msgid "Not sent"
+msgstr "No enviado"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Nothing found."
+msgstr "No se encontró nada."
 
 #. module: mtbg_backend_ui
 #. odoo-python
 #: code:addons/mtbg_backend_ui/models/board.py:0
 msgid "Nothing missing"
 msgstr "No falta nada"
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0
+msgid "Nothing records expenses of this kind here (%s)."
+msgstr "Aquí nada registra gastos de este tipo (%s)."
 
 #. module: mtbg_backend_ui
 #. odoo-python
@@ -700,6 +854,11 @@ msgid "Number, bottom right"
 msgstr "Número, abajo a la derecha"
 
 #. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_category__in_app model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_method__in_app model_terms:ir.ui.view,arch_db:mtbg_backend_ui.view_mtbg_expense_category_search model_terms:ir.ui.view,arch_db:mtbg_backend_ui.view_mtbg_expense_method_search
+msgid "Offered in the form"
+msgstr "Ofrecido en el formulario"
+
+#. module: mtbg_backend_ui
 #. odoo-javascript
 #: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
 msgid "On top"
@@ -708,7 +867,7 @@ msgstr "Arriba"
 #. module: mtbg_backend_ui
 #: model:ir.model.constraint,message:mtbg_backend_ui.constraint_mtbg_user_pref_user_key
 msgid "One value per user and key."
-msgstr ""
+msgstr "Un valor por usuario y clave."
 
 #. module: mtbg_backend_ui
 #. odoo-python
@@ -717,15 +876,19 @@ msgid "Only a manager changes a card's look."
 msgstr "Solo un administrador cambia el aspecto de una tarjeta."
 
 #. module: mtbg_backend_ui
+#: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_expense_method__currency_id
+msgid "Only expenses in this currency can be paid with it (empty: any)"
+msgstr "Solo los gastos en esta moneda se pueden pagar con él (vacío: cualquiera)"
+
+#. module: mtbg_backend_ui
 #. odoo-python
 #: code:addons/mtbg_backend_ui/models/text_setting.py:0
 msgid "Only managers can change these texts."
-msgstr ""
+msgstr "Solo los gerentes pueden cambiar estos textos."
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__order
+#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0 model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__order
 msgid "Order"
 msgstr "Orden"
 
@@ -736,13 +899,30 @@ msgid "Other languages"
 msgstr "Otros idiomas"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__past
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
+msgid "Other type"
+msgstr "Otro tipo"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Other type:"
+msgstr "Otro tipo:"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_source__method_id
+msgid "Paid With"
+msgstr "Pagado con"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_email_layout__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_wa_template__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__ir_module_module__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mail_template__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_crm_rule__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_customer_credit__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_hotel__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_invoice_template__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_maintenance__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_autopost__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_item__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_page_template__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_rental_booking__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_expense_report__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_member__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_shift__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_stripe_card_link__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_section__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_set__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_assignment__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_participant__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_payment__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_departure__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_wildcard__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tours_content_block__mtbg_time_stage__past model:ir.model.fields.selection,name:mtbg_backend_ui.selection__res_partner__mtbg_time_stage__past
 msgid "Past"
 msgstr "Pasado"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0 code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
 msgid "Photo"
 msgstr "Foto"
 
@@ -757,6 +937,18 @@ msgstr "Posición de la foto"
 #: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
 msgid "Photo size"
 msgstr "Tamaño de la foto"
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0
+msgid "Pick a vendor or add a new one"
+msgstr "Elige un proveedor o agrega uno nuevo"
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0
+msgid "Pick the vendor, or add it"
+msgstr "Elige el proveedor, o agrégalo"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
@@ -778,6 +970,18 @@ msgstr "Vista previa"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0 model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_source__receipt_id
+msgid "Receipt"
+msgstr "Recibo"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Recent"
+msgstr "Recientes"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
 #: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
 msgid "Record"
 msgstr "Registro"
@@ -786,6 +990,11 @@ msgstr "Registro"
 #: model:ir.model,name:mtbg_backend_ui.model_mtbg_card_mixin
 msgid "Record card"
 msgstr "Tarjeta de registro"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_source__recorded_by_id
+msgid "Recorded By"
+msgstr "Registrado por"
 
 #. module: mtbg_backend_ui
 #. odoo-python
@@ -800,6 +1009,18 @@ msgid "Reload"
 msgstr "Recargar"
 
 #. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Remove"
+msgstr "Quitar"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Retake"
+msgstr "Tomar otra"
+
+#. module: mtbg_backend_ui
 #. odoo-python
 #: code:addons/mtbg_backend_ui/models/record_card.py:0
 msgid "Sample (every field filled)"
@@ -807,9 +1028,7 @@ msgstr "Ejemplo (todos los campos llenos)"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
-#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
-#: code:addons/mtbg_backend_ui/static/src/text_setting/text_setting.xml:0
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0 code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0 code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0 code:addons/mtbg_backend_ui/static/src/text_setting/text_setting.xml:0
 msgid "Save"
 msgstr "Guardar"
 
@@ -837,26 +1056,26 @@ msgid "Search columns…"
 msgstr "Buscar columnas…"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__sequence
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__sequence
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_expense_source__expense_sync_state__done
+msgid "Sent"
+msgstr "Enviado"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board__sequence model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_category__sequence model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_method__sequence model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_missing_tag__sequence
 msgid "Sequence"
 msgstr "Secuencia"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0
-#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.js:0
-#: code:addons/mtbg_backend_ui/static/src/sidebar_list/sidebar_list.xml:0
+#: code:addons/mtbg_backend_ui/static/src/board_kanban/board_kanban.xml:0 code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.js:0 code:addons/mtbg_backend_ui/static/src/sidebar_list/sidebar_list.xml:0
 msgid "Settings"
 msgstr "Ajustes"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
 #: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
-msgid ""
-"Short fields side by side in one row under the fields, one line tall (an "
-"icon and the value), in the fields' order."
-msgstr ""
+msgid "Short fields side by side in one row under the fields, one line tall (an icon and the value), in the fields' order."
+msgstr "Campos cortos uno al lado del otro en una fila debajo de los campos, de una línea de alto (un ícono y el valor), en el orden de los campos."
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
@@ -884,16 +1103,36 @@ msgstr "Mostrar la barra lateral"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
-#: code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
+#: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0 code:addons/mtbg_backend_ui/static/src/model_settings/model_settings.xml:0
 msgid "Shows"
 msgstr "Muestra"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_expense_source__expense_sync_state__skipped
+msgid "Skipped"
+msgstr "Omitido"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
 #: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
 msgid "Small stats"
-msgstr ""
+msgstr "Estadísticas pequeñas"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_expense_category__in_app
+msgid "Staff can pick it in the expense form (a category read from an accounting app starts unticked)"
+msgstr "El personal puede elegirla en el formulario de gastos (una categoría leída de una app de contabilidad empieza sin marcar)"
+
+#. module: mtbg_backend_ui
+#: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_expense_method__in_app
+msgid "Staff can pick it in the expense form (an account read from an accounting app starts unticked)"
+msgstr "El personal puede elegirla en el formulario de gastos (una cuenta leída de una app de contabilidad empieza sin marcar)"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Start with the receipt: a photo, or a PDF."
+msgstr "Empieza con el recibo: una foto o un PDF."
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
@@ -914,14 +1153,32 @@ msgstr "Parámetro del sistema"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Take photo"
+msgstr "Tomar foto"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Tap again to delete"
+msgstr "Toca otra vez para eliminar"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
 #: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
 msgid "The bar in the status colour (no status pill)"
-msgstr ""
+msgstr "La barra en el color del estado (sin etiqueta de estado)"
 
 #. module: mtbg_backend_ui
 #: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_board__group_by
 msgid "The field the columns are, e.g. state, or start_date:month"
 msgstr "El campo que forma las columnas, p. ej. state, o start_date:month"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/receipt.js:0
+msgid "The file could not be read."
+msgstr "No se pudo leer el archivo."
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
@@ -945,14 +1202,8 @@ msgstr "El texto del enlace"
 
 #. module: mtbg_backend_ui
 #: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_board__scope
-msgid ""
-"The page the board is for, when a model has more than one (its action's "
-"context ``mtbg_scope``, e.g. invoices on the bookings); empty: the model's "
-"own page"
-msgstr ""
-"La página para la que es el tablero, cuando un modelo tiene más de una (el "
-"contexto ``mtbg_scope`` de su acción, p. ej. facturas en las reservas); "
-"vacío: la página propia del modelo"
+msgid "The page the board is for, when a model has more than one (its action's context ``mtbg_scope``, e.g. invoices on the bookings); empty: the model's own page"
+msgstr "La página para la que es el tablero, cuando un modelo tiene más de una (el contexto ``mtbg_scope`` de su acción, p. ej. facturas en las reservas); vacío: la página propia del modelo"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
@@ -963,12 +1214,8 @@ msgstr "El idioma de la vista previa y el idioma de las etiquetas que editas"
 #. module: mtbg_backend_ui
 #. odoo-javascript
 #: code:addons/mtbg_backend_ui/static/src/text_setting/text_setting.xml:0
-msgid ""
-"The website has one language. Add languages under Website › Configuration › "
-"Settings to translate this text."
-msgstr ""
-"El sitio web tiene un solo idioma. Agrega idiomas en Sitio web › "
-"Configuración › Ajustes para traducir este texto."
+msgid "The website has one language. Add languages under Website › Configuration › Settings to translate this text."
+msgstr "El sitio web tiene un solo idioma. Agrega idiomas en Sitio web › Configuración › Ajustes para traducir este texto."
 
 #. module: mtbg_backend_ui
 #: model:ir.model,name:mtbg_backend_ui.model_mtbg_missing_tag
@@ -977,8 +1224,7 @@ msgstr "Elemento faltante"
 
 #. module: mtbg_backend_ui
 #. odoo-python
-#: code:addons/mtbg_backend_ui/models/board.py:0
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board_mixin__mtbg_missing_ids
+#: code:addons/mtbg_backend_ui/models/board.py:0 model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board_mixin__mtbg_missing_ids
 msgid "Things missing"
 msgstr "Lo que falta"
 
@@ -990,8 +1236,19 @@ msgstr "Este botón ya no está disponible en esta tarjeta."
 
 #. module: mtbg_backend_ui
 #. odoo-python
-#: code:addons/mtbg_backend_ui/models/board.py:0
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board_mixin__mtbg_time_stage
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0
+msgid "This expense form lacks its standard fields: %s"
+msgstr "A este formulario de gastos le faltan sus campos estándar: %s"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/receipt.js:0
+msgid "This photo could not be opened: take it again or pick a JPG."
+msgstr "No se pudo abrir esta foto: tómala otra vez o elige un JPG."
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/board.py:0 model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_board_mixin__mtbg_time_stage
 msgid "Time to start"
 msgstr "Tiempo para el inicio"
 
@@ -1019,7 +1276,7 @@ msgid "Top to bottom, e.g. start_date asc"
 msgstr "De arriba abajo, p. ej. start_date asc"
 
 #. module: mtbg_backend_ui
-#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__on
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_email_layout__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__cfd_wa_template__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__ir_module_module__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mail_template__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_board_mixin__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_crm_rule__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_customer_credit__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_hotel__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_invoice_template__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_maintenance__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_autopost__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_marketing_item__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_page_template__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_rental_booking__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_expense_report__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_member__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_staff_shift__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_stripe_card_link__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_section__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_terms_set__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_assignment__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_participant__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_booking_payment__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_departure__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tour_wildcard__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_tours_content_block__mtbg_time_stage__on model:ir.model.fields.selection,name:mtbg_backend_ui.selection__res_partner__mtbg_time_stage__on
 msgid "Tour in Progress"
 msgstr "Tour en curso"
 
@@ -1031,12 +1288,14 @@ msgstr "Ajuste de texto traducido"
 #. module: mtbg_backend_ui
 #. odoo-javascript
 #: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
-msgid ""
-"Under the title, one per line, in this order: drag one (or use the arrows). "
-"The eye shows or hides one."
-msgstr ""
-"Bajo el título, uno por línea, en este orden: arrastra uno (o usa las "
-"flechas). El ojo muestra u oculta uno."
+msgid "Under the title, one per line, in this order: drag one (or use the arrows). The eye shows or hides one."
+msgstr "Bajo el título, uno por línea, en este orden: arrastra uno (o usa las flechas). El ojo muestra u oculta uno."
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0
+msgid "Unknown kind of field in the expense form: %s"
+msgstr "Tipo de campo desconocido en el formulario de gastos: %s"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
@@ -1045,15 +1304,32 @@ msgid "Unsaved changes"
 msgstr "Cambios sin guardar"
 
 #. module: mtbg_backend_ui
-#: model:ir.model,name:mtbg_backend_ui.model_res_users
-#: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__user_id
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Upload a photo or a PDF"
+msgstr "Sube una foto o un PDF"
+
+#. module: mtbg_backend_ui
+#. odoo-javascript
+#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
+msgid "Upload photo or PDF"
+msgstr "Subir foto o PDF"
+
+#. module: mtbg_backend_ui
+#: model:ir.model,name:mtbg_backend_ui.model_res_users model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__user_id
 msgid "User"
 msgstr "Usuario"
 
 #. module: mtbg_backend_ui
 #: model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_user_pref__value
 msgid "Value"
-msgstr ""
+msgstr "Valor"
+
+#. module: mtbg_backend_ui
+#. odoo-python
+#: code:addons/mtbg_backend_ui/models/expense_form.py:0 model:ir.model.fields,field_description:mtbg_backend_ui.field_mtbg_expense_source__vendor_id model:ir.model.fields,field_description:mtbg_backend_ui.field_res_partner__mtbg_is_vendor model:ir.model.fields,field_description:mtbg_backend_ui.field_res_users__mtbg_is_vendor
+msgid "Vendor"
+msgstr "Proveedor"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
@@ -1062,11 +1338,15 @@ msgid "View"
 msgstr "Vista"
 
 #. module: mtbg_backend_ui
+#: model:ir.model.fields.selection,name:mtbg_backend_ui.selection__mtbg_expense_source__expense_sync_state__waiting
+msgid "Waiting"
+msgstr "En espera"
+
+#. module: mtbg_backend_ui
 #. odoo-javascript
 #: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
 msgid "Warnings the extensions give (a role to fill, a payment due...)."
-msgstr ""
-"Avisos que dan las extensiones (un rol por cubrir, un pago pendiente...)."
+msgstr "Avisos que dan las extensiones (un rol por cubrir, un pago pendiente...)."
 
 #. module: mtbg_backend_ui
 #: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_board__description
@@ -1076,25 +1356,17 @@ msgstr "Para qué es el tablero (la página de ajustes lo muestra)"
 #. module: mtbg_backend_ui
 #: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_board_mixin__mtbg_missing_ids
 msgid "What the record's card says it still lacks (refreshed by the boards)"
-msgstr ""
-"Lo que la tarjeta del registro indica que aún falta (actualizado por los "
-"tableros)"
+msgstr "Lo que la tarjeta del registro indica que aún falta (actualizado por los tableros)"
 
 #. module: mtbg_backend_ui
 #: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_board_mixin__mtbg_time_stage
 msgid "Where the record is from its start date (refreshed by the boards)"
-msgstr ""
-"Dónde está el registro respecto a su fecha de inicio (actualizado por los "
-"tableros)"
+msgstr "Dónde está el registro respecto a su fecha de inicio (actualizado por los tableros)"
 
 #. module: mtbg_backend_ui
 #: model:ir.model.fields,help:mtbg_backend_ui.field_mtbg_board__domain
-msgid ""
-"Which records the board shows (a domain, e.g. [('mtbg_stage', 'in', ['new', "
-"'lead'])]); empty: all of them"
-msgstr ""
-"Qué registros muestra el tablero (un dominio, p. ej. [('mtbg_stage', 'in', "
-"['new', 'lead'])]); vacío: todos"
+msgid "Which records the board shows (a domain, e.g. [('mtbg_stage', 'in', ['new', 'lead'])]); empty: all of them"
+msgstr "Qué registros muestra el tablero (un dominio, p. ej. [('mtbg_stage', 'in', ['new', 'lead'])]); vacío: todos"
 
 #. module: mtbg_backend_ui
 #. odoo-javascript
@@ -1107,248 +1379,3 @@ msgstr "p. ej. Por tour"
 #: code:addons/mtbg_backend_ui/static/src/card_editor/card_editor.xml:0
 msgid "labels. An empty label shows the built-in one."
 msgstr ". Una etiqueta vacía muestra la predeterminada."
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
-msgid "%s is needed."
-msgstr "Falta %s."
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
-msgid "%s is not a number."
-msgstr "%s no es un número."
-
-#. module: mtbg_tours_core
-#. odoo-python
-#: code:addons/mtbg_backend_ui/models/expense_form.py:0
-msgid "Add Expense"
-msgstr "Agregar gasto"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
-msgid "Add a photo of the receipt."
-msgstr "Agrega una foto del recibo."
-
-#. module: mtbg_tours_core
-#. odoo-python
-#: code:addons/mtbg_backend_ui/models/expense_form.py:0
-msgid "Amount"
-msgstr "Monto"
-
-#. module: mtbg_tours_core
-#. odoo-python
-#: code:addons/mtbg_backend_ui/models/expense_form.py:0
-msgid "Category"
-msgstr "Categoría"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
-msgid "Choose %s from the list."
-msgstr "Elige %s de la lista."
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
-msgid "Choose…"
-msgstr "Elige…"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
-msgid "Close"
-msgstr "Cerrar"
-
-#. module: mtbg_tours_core
-#. odoo-python
-#: code:addons/mtbg_backend_ui/models/expense_form.py:0
-msgid "Currency"
-msgstr "Moneda"
-
-#. module: mtbg_tours_core
-#. odoo-python
-#: code:addons/mtbg_backend_ui/models/expense_form.py:0
-msgid "Date"
-msgstr "Fecha"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
-msgid "Expense deleted."
-msgstr "Gasto eliminado."
-
-#. module: mtbg_tours_core
-#: model:ir.model,name:mtbg_backend_ui.model_mtbg_expense_form
-msgid "Expense input form (shared)"
-msgstr "Formulario de gastos (compartido)"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
-msgid "Expense recorded."
-msgstr "Gasto registrado."
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
-msgid "Expense saved."
-msgstr "Gasto guardado."
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
-msgid "Fewer details"
-msgstr "Menos detalles"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
-msgid "More details:"
-msgstr "Más detalles:"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
-msgid "New:"
-msgstr "Nuevo:"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
-msgid "Not deleted."
-msgstr "No se eliminó."
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
-msgid "Not saved."
-msgstr "No se guardó."
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
-msgid "Nothing found."
-msgstr "No se encontró nada."
-
-#. module: mtbg_tours_core
-#. odoo-python
-#: code:addons/mtbg_backend_ui/models/expense_form.py:0
-msgid "Nothing records expenses of this kind here (%s)."
-msgstr "Aquí nada registra gastos de este tipo (%s)."
-
-#. module: mtbg_tours_core
-#. odoo-python
-#: code:addons/mtbg_backend_ui/models/expense_form.py:0
-msgid "Pick a vendor or add a new one"
-msgstr "Elige un proveedor o agrega uno nuevo"
-
-#. module: mtbg_tours_core
-#. odoo-python
-#: code:addons/mtbg_backend_ui/models/expense_form.py:0
-msgid "Pick the vendor, or add it"
-msgstr "Elige el proveedor, o agrégalo"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
-msgid "Receipt"
-msgstr "Recibo"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
-msgid "Recent"
-msgstr "Recientes"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
-msgid "Remove"
-msgstr "Quitar"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
-msgid "Retake"
-msgstr "Tomar otra"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
-msgid "Start with the receipt: a photo, or a PDF."
-msgstr "Empieza con el recibo: una foto o un PDF."
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
-msgid "Take photo"
-msgstr "Tomar foto"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
-msgid "Tap again to delete"
-msgstr "Toca otra vez para eliminar"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/receipt.js:0
-msgid "The file could not be read."
-msgstr "No se pudo leer el archivo."
-
-#. module: mtbg_tours_core
-#. odoo-python
-#: code:addons/mtbg_backend_ui/models/expense_form.py:0
-msgid "This expense form lacks its standard fields: %s"
-msgstr "A este formulario de gastos le faltan sus campos estándar: %s"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/receipt.js:0
-msgid "This photo could not be opened: take it again or pick a JPG."
-msgstr "No se pudo abrir esta foto: tómala otra vez o elige un JPG."
-
-#. module: mtbg_tours_core
-#. odoo-python
-#: code:addons/mtbg_backend_ui/models/expense_form.py:0
-msgid "Unknown kind of field in the expense form: %s"
-msgstr "Tipo de campo desconocido en el formulario de gastos: %s"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
-msgid "Upload a photo or a PDF"
-msgstr "Sube una foto o un PDF"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
-msgid "Upload photo or PDF"
-msgstr "Subir foto o PDF"
-
-#. module: mtbg_tours_core
-#. odoo-python
-#: code:addons/mtbg_backend_ui/models/expense_form.py:0
-msgid "Vendor"
-msgstr "Proveedor"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
-msgid "Change"
-msgstr "Cambiar"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.xml:0
-msgid "Other type:"
-msgstr "Otro tipo:"
-
-#. module: mtbg_tours_core
-#. odoo-javascript
-#: code:addons/mtbg_backend_ui/static/src/expense_form/expense_form.js:0
-msgid "Other type"
-msgstr "Otro tipo"

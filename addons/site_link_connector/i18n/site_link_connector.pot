@@ -1,0 +1,1313 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* site_link_connector
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-24 05:29+0000\n"
+"PO-Revision-Date: 2026-11-24 05:29+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "%(login)s updated (%(fields)s)"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "%(n)s bikes of contact %(id)s."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "%(n)s contacts for \"%(q)s\"."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "%(n)s employees received from %(caller)s. %(notes)s"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid "%(sent)s employees sent: %(created)s made, %(updated)s updated there."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid "%(site)s answered HTTP %(status)s to %(model)s.%(method)s: %(detail)s"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid "%(site)s answered a redirect to %(to)s: save that address instead."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid ""
+"%(site)s answered something that is not JSON (HTTP %(status)s): is the "
+"address an Odoo site?"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid "%(site)s answered, but not with a site link health check."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid "%(site)s cannot be reached (%(url)s): %(error)s"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid "%(site)s did not answer within %(s)s seconds."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid ""
+"%(site)s has no %(model)s.%(method)s (is Site Link Connector installed and "
+"up to date there?): %(detail)s"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid ""
+"%(site)s refused the API key (wrong, revoked or expired key, or wrong "
+"database): %(detail)s"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid "%(site)s: no API key saved."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid "%(site)s: the API key's user may not do this: %(detail)s"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid "%(site)s: the address must start with https:// (or http://)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "%s cannot be sold."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "%s is a combo: send its parts."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "%s is not a stocked good (it is a service or a combo)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "%s is tracked by lot or serial number: consume it on this site."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "%s made"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "%s must be a number (0 or more)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "%s must be text."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "%s skipped (administrator)"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.constraint,message:site_link_connector.constraint_site_link_repair_reference_uniq
+msgid "A customer repair reference is used once."
+msgstr ""
+
+#. module: site_link_connector
+#: model:res.groups,comment:site_link_connector.group_site_link_sso
+msgid ""
+"A linked site may sign these users in here with a one-time link (valid 60 seconds, used\n"
+"            once). Only active internal users; never the superuser or the admin user (ids 1 and 2)."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.constraint,message:site_link_connector.constraint_site_link_consumption_reference_uniq
+msgid "A part consumption reference is used once."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.constraint,message:site_link_connector.constraint_site_link_sso_ticket_token_hash_uniq
+msgid "A single sign-on token is used once."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__api_key
+msgid "API Key"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__active
+msgid "Active"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__base_url
+msgid "Address"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,help:site_link_connector.field_site_link__api_key
+msgid ""
+"An API key of the technical user on the other site (that user's Preferences "
+"› Account Security › New API Key, no expiry or a long one). The user needs "
+"the group \"Site Link: calls from a linked site\" there."
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_form
+msgid "Archived"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Bike %(bike)s is not %(partner)s's."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Bike: %s"
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_log_form
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_log_list
+msgid "By"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields.selection,name:site_link_connector.selection__site_link_log__kind__served
+msgid "Call answered"
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_form
+msgid "Calls"
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_settings
+msgid "Calls Answered and Sign-ins"
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_settings
+msgid "Calls From Linked Sites"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Company %s has no warehouse."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid ""
+"Connected: database %(db)s, Odoo %(odoo)s, Site Link Connector %(version)s, user %(user)s.\n"
+"Methods offered: %(methods)s"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Contact %(name)s (%(id)s) made."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_repair__partner_id
+msgid "Contact ID"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/controllers/sso.py:0
+msgid "Content-Type"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__create_uid
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_consumption__create_uid
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_log__create_uid
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_repair__create_uid
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_sso_ticket__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__create_date
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_consumption__create_date
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_log__create_date
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_repair__create_date
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_sso_ticket__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_consumption__currency
+msgid "Currency"
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_settings
+msgid ""
+"Customer and repair calls this site answered for a linked site, and every "
+"single sign-on ticket and sign-in, given or refused (kept 90 days)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Customer repair from a linked site, reference %s"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__db_name
+msgid "Database"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_res_users__display_name
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__display_name
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_api__display_name
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_consumption__display_name
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_log__display_name
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_repair__display_name
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_sso_ticket__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_log__duration_ms
+msgid "Duration (ms)"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Each line is an object: {product, qty} or {service, price, hours}."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Each line needs product (a part) or service (labour)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Each user is an object with a login (text)."
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_form
+msgid "Employees"
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_settings
+msgid ""
+"Every call to a linked site that failed, with the reason (kept 90 days)."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_sso_ticket__expires_at
+msgid "Expires At"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__log_count
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_form
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_settings
+msgid "Failed Calls"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields.selection,name:site_link_connector.selection__site_link_log__kind__failed
+msgid "Failed call"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,help:site_link_connector.field_site_link_log__status
+msgid ""
+"Failed calls: the other site's answer (0: no answer: unreachable, time "
+"limit, setup). Calls answered and sign-ins: 200 done, 403 refused, 410 link "
+"used or expired."
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_settings
+msgid ""
+"For a linked site to call this one: make a technical user here, give it the "
+"group \"Site Link: calls from a linked site\", make an API key for it (its "
+"Preferences › Account Security) and save that key on the other site. Users "
+"the other site may sign in here with a one-time link need the group \"Site "
+"link: single sign-on allowed\"."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_log__status
+msgid "HTTP Status"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_res_users__id
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__id
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_api__id
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_consumption__id
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_log__id
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_repair__id
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_sso_ticket__id
+msgid "ID"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields.selection,name:site_link_connector.selection__site_link__role__inventory_source
+msgid "Inventory source"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Invoice %(id)s (draft) for %(name)s, reference %(ref)s."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Invoice %(id)s for %(name)s, reference %(ref)s, already made."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_repair__invoice_id
+msgid "Invoice ID"
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.actions.act_window,help:site_link_connector.action_site_link
+msgid ""
+"Its address, database and an API key of a technical user there (that user needs the group\n"
+"                \"Site Link: calls from a linked site\" on the other site)."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_log__kind
+msgid "Kind"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__last_sync_at
+msgid "Last Employee Sync"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__last_sync_message
+msgid "Last Employee Sync Result"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__last_check_at
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_form
+msgid "Last Test"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__last_check_ok
+msgid "Last Test OK"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__last_check_message
+msgid "Last Test Result"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__write_uid
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_consumption__write_uid
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_log__write_uid
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_repair__write_uid
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_sso_ticket__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__write_date
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_consumption__write_date
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_log__write_date
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_repair__write_date
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_sso_ticket__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_repair__lines_hash
+msgid "Lines Fingerprint"
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.actions.act_window,help:site_link_connector.action_site_link
+msgid "Link another Odoo site"
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_form
+msgid "Linked Site"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.actions.act_window,name:site_link_connector.action_site_link
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_list
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_settings
+msgid "Linked Sites"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model,name:site_link_connector.model_site_link
+msgid "Linked site"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model,name:site_link_connector.model_site_link_repair
+msgid "Linked site: customer repair"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model,name:site_link_connector.model_site_link_log
+msgid "Linked site: log"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model,name:site_link_connector.model_site_link_consumption
+msgid "Linked site: part consumption"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model,name:site_link_connector.model_site_link_api
+msgid "Linked site: protocol"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model,name:site_link_connector.model_site_link_sso_ticket
+msgid "Linked site: single sign-on ticket"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid ""
+"Linked sites may change only expenses and vendor contacts in Zoho Books, not"
+" %(method)s %(path)s."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Linked sites may use Zoho Books only, not %s."
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.login_staff_account
+msgid "Log in with your staff account"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__share_zoho
+msgid "May use our Zoho login"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_log__message
+msgid "Message"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_log__method
+msgid "Method"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_log__model
+msgid "Model"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__name
+msgid "Name"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "No bike %s on this site."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "No bike model on this site."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "No change."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "No contact %s on this site."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid "No linked site found (Settings › Site Link)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "No product %s on this site."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "No repair quote with reference %s on this site."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/controllers/sso.py:0
+msgid "No sign-in for %(login)s (%(why)s): opened %(to)s as it is."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "No single sign-on for %(login)s: %(why)s."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Not a Zoho call a linked site may make: %(method)s %(path)s"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_consumption__note
+msgid "Note"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid ""
+"Odoo's /json/2 API takes named arguments only; positional arguments are "
+"record ids (integers)."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,help:site_link_connector.field_site_link__shop_group_ids
+msgid ""
+"On the site that receives an employee list: the groups (of this site) an "
+"employee sent with shop access gets, besides \"Site link: single sign-on "
+"allowed\"; sent without shop access, they are taken away."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/controllers/sso.py:0
+msgid "Only staff accounts sign in on the linked site."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields.selection,name:site_link_connector.selection__site_link__role__other
+msgid "Other"
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_settings
+msgid ""
+"Other Odoo sites this one calls: address, database, the API key of a "
+"technical user there, and the other site's role (e.g. inventory source). "
+"Test connection shows the other side's health."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__role
+msgid "Other Site's Role"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_consumption__product_id
+msgid "Product ID"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_consumption__product_name
+msgid "Product Name"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_consumption__qty
+msgid "Quantity"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid ""
+"Quotation %(name)s (reference %(ref)s) is no longer a quotation (state "
+"%(state)s): it can no longer change. Use a new reference for more work."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Quotation %(name)s for reference %(ref)s (%(lines)s lines)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Quotation %(name)s has nothing to invoice yet (%(why)s)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Quotation %(name)s is not accepted yet: no invoice."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_repair__order_id
+msgid "Quotation ID"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_consumption__reference
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_repair__reference
+msgid "Reference"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Reference %(ref)s is %(other)s's quotation, not %(partner)s's."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/controllers/sso.py:0
+msgid "Refused: %s is not the address of a linked site."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_repair__repair_id
+msgid "Repair Order ID"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Repair labour"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/controllers/sso.py:0
+msgid "Return address refused (not this site's): %s; opened /odoo."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,help:site_link_connector.field_site_link__timeout
+msgid "Seconds to wait for the other site's answer."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__sync_users
+msgid "Send Employees"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__shop_group_ids
+msgid "Shop Access Groups"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid ""
+"Shop Access Groups may not give administrator rights (Settings or Access "
+"Rights): %s"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/controllers/sso.py:0
+msgid "Sign-in refused: %s"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/controllers/sso.py:0
+msgid "Signed in %s by single sign-on."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields.selection,name:site_link_connector.selection__site_link_log__kind__sso
+msgid "Single sign-on"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid "Single sign-on from %(site)s here: %(logins)s (shop access)."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,help:site_link_connector.field_site_link_log__user_id
+msgid "Single sign-on: the user the ticket or sign-in was for."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_log__site_id
+msgid "Site"
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_settings
+msgid "Site Link"
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_log_form
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_log_list
+msgid "Site Link Log"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.actions.act_window,name:site_link_connector.action_site_link_log_answered
+msgid "Site Link: Calls Answered and Sign-ins"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.actions.act_window,name:site_link_connector.action_site_link_log
+msgid "Site Link: Failed Calls"
+msgstr ""
+
+#. module: site_link_connector
+#: model:res.groups,name:site_link_connector.group_site_link_remote
+msgid "Site Link: calls from a linked site"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.actions.server,name:site_link_connector.cron_site_link_log_cleanup_ir_actions_server
+msgid "Site Link: remove failed calls older than 90 days"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.actions.server,name:site_link_connector.cron_site_link_user_sync_ir_actions_server
+msgid "Site Link: send employees to linked sites"
+msgstr ""
+
+#. module: site_link_connector
+#: model:res.groups,name:site_link_connector.group_site_link_sso
+msgid "Site link: single sign-on allowed"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid ""
+"Skipped: %s offers no employee sync (user_sync); is Site Link Connector up "
+"to date there?"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields.selection,name:site_link_connector.selection__site_link__role__staff_source
+msgid "Staff accounts"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Status of %(name)s, reference %(ref)s."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_consumption__move_id
+msgid "Stock Move ID"
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_form
+msgid "Sync employees now"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid "Sync employees: %s"
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_form
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_list
+msgid "Test connection"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid "Test connection: %s"
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_form
+msgid "The Other Site"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,help:site_link_connector.field_site_link_repair__lines_hash
+msgid "The last lines sent: the same lines again change nothing."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/controllers/sso.py:0
+msgid "The linked site could not sign you in: %s"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid "The other site answered from database %(db)s, not %(saved)s."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,help:site_link_connector.field_site_link__base_url
+msgid "The other site's address, e.g. https://shop.example.com (no path)."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,help:site_link_connector.field_site_link__db_name
+msgid ""
+"The other site's database name (sent as X-Odoo-Database; needed when it "
+"serves several)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "The stock move for %s could not be validated."
+msgstr ""
+
+#. module: site_link_connector
+#: model:res.groups,comment:site_link_connector.group_site_link_remote
+msgid ""
+"The technical user whose API key a linked site uses. Its calls (health, part lookup,\n"
+"            part consumption, customers, repair quotes and invoices, single sign-on tickets) run with the rights they\n"
+"            need, nothing more: the user needs no other access."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,help:site_link_connector.field_site_link__share_zoho
+msgid ""
+"This other site may make its Zoho Books calls with this site's Zoho login: "
+"reads, and writes to expenses and vendor contacts only, while this site's "
+"Zoho Books Writes allowed is on."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/controllers/sso.py:0
+msgid "This sign-in link does not lead to a linked site."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "This site does not share its Zoho login with linked sites."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "This site has no Inventory: it offers no part lookup or consumption."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "This site has no Sales: it offers no repair quotes or invoices."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid ""
+"This site has no customer bikes: send the bike as a description (text)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "This site has no shared inbox: it offers no unread count."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "This site has no staff clock: it offers no clock-in state."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link.py:0
+msgid ""
+"This site is set as the inventory source, but it offers no inventory methods"
+" (is Inventory installed there?)."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,help:site_link_connector.field_site_link__use_zoho
+msgid ""
+"This site's Zoho calls go to that site, which makes them with its Zoho login"
+" (no Zoho login here). That site must tick \"May use our Zoho login\" for "
+"this one."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,help:site_link_connector.field_site_link__sync_users
+msgid ""
+"This site's employee list is the one list: its internal users (login, name, "
+"email, active) are sent to the other site, which makes, updates and archives"
+" its users to match (no password: they sign in with their account here). "
+"Sent on every change of a user, by a daily safety net, and with Sync "
+"employees now. Employees sent with shop access may be signed in here from "
+"the other site too (they get \"Site link: single sign-on allowed\" here). "
+"Set it on one side only."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Ticket given for %(login)s (asked by %(caller)s)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "Ticket refused for %(login)s (asked by %(caller)s): %(why)s"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__timeout
+msgid "Time Limit (s)"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_sso_ticket__token_hash
+msgid "Token Hash"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_consumption__total_cost
+msgid "Total Cost"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_consumption__uom
+msgid "Unit"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_consumption__unit_cost
+msgid "Unit Cost"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link__use_zoho
+msgid "Use its Zoho login"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_sso_ticket__used_at
+msgid "Used At"
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model,name:site_link_connector.model_res_users
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_log__user_id
+#: model:ir.model.fields,field_description:site_link_connector.field_site_link_sso_ticket__user_id
+msgid "User"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid ""
+"User %s may not answer linked sites: give it the group \"Site Link: calls "
+"from a linked site\"."
+msgstr ""
+
+#. module: site_link_connector
+#: model:ir.model.fields,help:site_link_connector.field_site_link__role
+msgid ""
+"What the other site is to this one. Inventory source: the site that owns the"
+" products and stock; part lookups and consumptions go there."
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_log_form
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_log_list
+msgid "When"
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_form
+msgid "Zoho"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid ""
+"administrator (user id 1 or 2, or Settings or Access Rights rights): never "
+"changed by the employee list"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "barcode is required (text)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "bike must be a bike id (number) or a description (text)."
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_form
+msgid "e.g. Shop"
+msgstr ""
+
+#. module: site_link_connector
+#: model_terms:ir.ui.view,arch_db:site_link_connector.view_site_link_form
+msgid "https://shop.example.com"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid ""
+"lines is required: a list of {product, qty} (parts) and {service, price, "
+"hours} (labour)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_sso.py:0
+msgid "link already used"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_sso.py:0
+msgid "link expired (valid %s seconds)"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "login is required (text)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "name is required (text)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_sso.py:0
+msgid "no such link"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_sso.py:0
+msgid "no such user"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "note must be text."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "partner_id must be a contact id (number)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "portal user"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "product must be a product id (number) or a barcode (text)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "qty must be a number above 0."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "query is required (text, 2 characters at least)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "reference is required (text): it makes the consumption happen once."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid ""
+"reference is required (text): it makes the quote and the invoice happen "
+"once."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "service is the labour's name (text)."
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid "the calling user"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_sso.py:0
+msgid ""
+"user %s is an administrator (Settings or Access Rights) and never signs in "
+"by single sign-on"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_sso.py:0
+msgid "user %s is archived"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_sso.py:0
+msgid "user %s is not an internal user"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_sso.py:0
+msgid "user %s is not in the group \"Site Link: single sign-on allowed\""
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_sso.py:0
+msgid "user id %s (superuser or admin) never signs in by single sign-on"
+msgstr ""
+
+#. module: site_link_connector
+#. odoo-python
+#: code:addons/site_link_connector/models/site_link_api.py:0
+msgid ""
+"users is required: a list of {login, name, email, active, shop_access}."
+msgstr ""

@@ -1,6 +1,6 @@
 {
     "name": "Cloudflare Connector",
-    "version": "19.0.2.1.0",
+    "version": "19.0.2.1.1",
     "category": "Productivity/Connectors",
     "mtbg_tours_section": "connectors",
     "summary": "One Cloudflare connection: the account, its API token, R2 storage and the website's page cache, for "

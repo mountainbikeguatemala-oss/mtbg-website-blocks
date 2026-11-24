@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-17 18:43+0000\n"
-"PO-Revision-Date: 2026-11-17 18:43+0000\n"
+"POT-Creation-Date: 2026-11-24 05:28+0000\n"
+"PO-Revision-Date: 2026-11-24 05:28+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -486,6 +486,16 @@ msgid "Cloudflare setup: account, bucket or zone"
 msgstr ""
 
 #. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_website__cloudflare_zone_name
+msgid "Cloudflare zone"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_website__cloudflare_zone_id
+msgid "Cloudflare zone ID"
+msgstr ""
+
+#. module: cloudflare_connector
 #: model:ir.model,name:cloudflare_connector.model_res_config_settings
 msgid "Config Settings"
 msgstr ""
@@ -760,6 +770,11 @@ msgid "Info"
 msgstr ""
 
 #. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__website_cloudflare_zone_id
+msgid "Its zone ID"
+msgstr ""
+
+#. module: cloudflare_connector
 #: model:ir.model.fields,field_description:cloudflare_connector.field_cloudflare_setup_wizard__lock_days
 msgid "Keep every file at least (days)"
 msgstr ""
@@ -954,6 +969,14 @@ msgstr ""
 msgid ""
 "No website of this account was found, so there is nothing to set here. Press"
 " <em>Next</em>."
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
+#: code:addons/cloudflare_connector/models/page_cache_settings.py:0
+msgid ""
+"No zone for this website: give it its own below (its pages are not kept by "
+"Cloudflare until then)"
 msgstr ""
 
 #. module: cloudflare_connector
@@ -1581,6 +1604,15 @@ msgid ""
 msgstr ""
 
 #. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_res_config_settings__website_cloudflare_zone_id
+#: model:ir.model.fields,help:cloudflare_connector.field_website__cloudflare_zone_id
+msgid ""
+"The zone's ID (Cloudflare › the domain's Overview › API › Zone ID). The "
+"cache-purge token of Settings › Cloudflare must be allowed to purge this "
+"zone too (Zone › Cache Purge › Purge)."
+msgstr ""
+
+#. module: cloudflare_connector
 #: model_terms:ir.ui.view,arch_db:cloudflare_connector.cloudflare_setup_wizard_form
 msgid ""
 "This takes up to half a minute. You can run the setup again any time: a new "
@@ -1592,6 +1624,20 @@ msgstr ""
 msgid ""
 "This token sees several Cloudflare accounts: pick the one this site's "
 "backups go to, then press <em>Next</em> again."
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,field_description:cloudflare_connector.field_res_config_settings__website_cloudflare_zone_name
+msgid "This website's Cloudflare zone"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model:ir.model.fields,help:cloudflare_connector.field_res_config_settings__website_cloudflare_zone_name
+#: model:ir.model.fields,help:cloudflare_connector.field_website__cloudflare_zone_name
+msgid ""
+"This website's zone in Cloudflare (its domain, e.g. example.com). Empty: the"
+" zone of Settings › Cloudflare, when this website's address is in it (or it "
+"is the website that zone was set up for)."
 msgstr ""
 
 #. module: cloudflare_connector
@@ -1612,6 +1658,8 @@ msgstr ""
 
 #. module: cloudflare_connector
 #: model:ir.model,name:cloudflare_connector.model_website
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_log__website_id
+#: model:ir.model.fields,field_description:cloudflare_connector.field_mtbg_edge_cache_warm__website_id
 msgid "Website"
 msgstr ""
 
@@ -1708,6 +1756,12 @@ msgstr ""
 
 #. module: cloudflare_connector
 #. odoo-python
+#: code:addons/cloudflare_connector/models/page_cache_settings.py:0
+msgid "Zone %s (this website's own)"
+msgstr ""
+
+#. module: cloudflare_connector
+#. odoo-python
 #: code:addons/cloudflare_connector/models/setup.py:0
 msgid "Zone %s is not in this Cloudflare account."
 msgstr ""
@@ -1737,6 +1791,11 @@ msgstr ""
 msgid ""
 "delete <code>tours/</code> after 60 days, <code>inbox/</code> after 14 and "
 "<code>staging/</code> after 120 (lifecycle rules);"
+msgstr ""
+
+#. module: cloudflare_connector
+#: model_terms:ir.ui.view,arch_db:cloudflare_connector.res_config_settings_view_form
+msgid "example.com"
 msgstr ""
 
 #. module: cloudflare_connector

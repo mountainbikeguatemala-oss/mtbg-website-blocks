@@ -21,8 +21,7 @@ msgstr "\"%s\" necesita una fecha"
 #. module: mtbg_tours_forms
 #. odoo-javascript
 #. odoo-python
-#: code:addons/mtbg_tours_forms/models/form.py:0
-#: code:addons/mtbg_tours_forms/static/src/form.js:0
+#: code:addons/mtbg_tours_forms/models/form.py:0 code:addons/mtbg_tours_forms/static/src/form.js:0
 msgid "\"%s\" needs a number"
 msgstr "\"%s\" necesita un número"
 
@@ -138,14 +137,9 @@ msgid "After sending; {name} is \", <first name>\" when we know it"
 msgstr "Después de enviar; {name} es \", <nombre>\" cuando lo conocemos"
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields,help:mtbg_tours_forms.field_res_partner__mtbg_sms_marketing_opt_in
-#: model:ir.model.fields,help:mtbg_tours_forms.field_res_users__mtbg_sms_marketing_opt_in
-msgid ""
-"Agreed to receive occasional promotional texts (new tours, dates, offers): "
-"marketing audiences filter on it."
-msgstr ""
-"Aceptó recibir mensajes de texto promocionales ocasionales (nuevos tours, "
-"fechas, ofertas): las audiencias de marketing filtran por este dato."
+#: model:ir.model.fields,help:mtbg_tours_forms.field_res_partner__mtbg_sms_marketing_opt_in model:ir.model.fields,help:mtbg_tours_forms.field_res_users__mtbg_sms_marketing_opt_in
+msgid "Agreed to receive occasional promotional texts (new tours, dates, offers): marketing audiences filter on it."
+msgstr "Aceptó recibir mensajes de texto promocionales ocasionales (nuevos tours, fechas, ofertas): las audiencias de marketing filtran por este dato."
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
@@ -248,8 +242,7 @@ msgstr "Barra"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__block_ids
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0 model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__block_ids
 msgid "Blocks"
 msgstr "Bloques"
 
@@ -292,17 +285,8 @@ msgstr "Texto del botón"
 #. module: mtbg_tours_forms
 #. odoo-python
 #: code:addons/mtbg_tours_forms/models/contact.py:0
-msgid ""
-"By checking this box you agree to receive text messages from %(company)s in "
-"reply to your enquiry and about your booking. Message frequency varies. "
-"Message and data rates may apply. Consent is not a condition of purchase. "
-"Reply STOP to opt out, HELP for help or contact %(email)s."
-msgstr ""
-"Al marcar esta casilla aceptas recibir mensajes de texto de %(company)s en "
-"respuesta a tu consulta y sobre tu reserva. La frecuencia varía. Pueden "
-"aplicarse tarifas de mensajes y datos. El consentimiento no es condición de "
-"compra. Responde STOP para darte de baja, HELP para ayuda o escribe a "
-"%(email)s."
+msgid "By checking this box you agree to receive text messages from %(company)s in reply to your enquiry and about your booking. Message frequency varies. Message and data rates may apply. Consent is not a condition of purchase. Reply STOP to opt out, HELP for help or contact %(email)s."
+msgstr "Al marcar esta casilla aceptas recibir mensajes de texto de %(company)s en respuesta a tu consulta y sobre tu reserva. La frecuencia varía. Pueden aplicarse tarifas de mensajes y datos. El consentimiento no es condición de compra. Responde STOP para darte de baja, HELP para ayuda o escribe a %(email)s."
 
 #. module: mtbg_tours_forms
 #: model:ir.model.fields.selection,name:mtbg_tours_forms.selection__mtbg_form_block__text_align__center
@@ -341,8 +325,7 @@ msgid "Choices, one per line"
 msgstr "Opciones, una por línea"
 
 #. module: mtbg_tours_forms
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_forms.contact_popup
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_forms.newsletter_popup
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_forms.contact_popup model_terms:ir.ui.view,arch_db:mtbg_tours_forms.newsletter_popup
 msgid "Close"
 msgstr "Cerrar"
 
@@ -370,9 +353,7 @@ msgid "Contact"
 msgstr "Contacto"
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields.selection,name:mtbg_tours_forms.selection__mtbg_form__handler__contact
-#: model:mtbg.form,name:mtbg_tours_forms.form_contact
-#: model:mtbg.form.block,label:mtbg_tours_forms.form_contact_heading_page
+#: model:ir.model.fields.selection,name:mtbg_tours_forms.selection__mtbg_form__handler__contact model:mtbg.form,name:mtbg_tours_forms.form_contact model:mtbg.form.block,label:mtbg_tours_forms.form_contact_heading_page
 msgid "Contact form"
 msgstr "Formulario de contacto"
 
@@ -383,8 +364,7 @@ msgid "Contact page"
 msgstr "Página de contacto"
 
 #. module: mtbg_tours_forms
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_forms.contact_page
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_forms.contact_popup
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_forms.contact_page model_terms:ir.ui.view,arch_db:mtbg_tours_forms.contact_popup
 msgid "Contact us"
 msgstr "Contáctanos"
 
@@ -406,20 +386,17 @@ msgstr "País"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/components.xml:0
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_forms.phone_field
+#: code:addons/mtbg_tours_forms/static/src/components.xml:0 model_terms:ir.ui.view,arch_db:mtbg_tours_forms.phone_field
 msgid "Country code"
 msgstr "Código de país"
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__create_uid
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__create_uid
+#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__create_uid model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__create_date
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__create_date
+#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__create_date model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__create_date
 msgid "Created on"
 msgstr "Creado el"
 
@@ -445,9 +422,7 @@ msgstr ""
 msgid ""
 "Dark mode: these values\n"
 "                                        are the look on dark pages (a tour's Page Theme: Dark). Empty: the light mode's."
-msgstr ""
-"Modo oscuro: estos valores son el aspecto en páginas oscuras (Tema de página"
-" de un tour: Oscuro). Vacío: el del modo claro."
+msgstr "Modo oscuro: estos valores son el aspecto en páginas oscuras (Tema de página de un tour: Oscuro). Vacío: el del modo claro."
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
@@ -485,15 +460,7 @@ msgid "Discard"
 msgstr "Descartar"
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_crm_lead__display_name
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__display_name
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__display_name
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_designer__display_name
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_fields__display_name
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_text_setting__display_name
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_config_settings__display_name
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_country__display_name
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_partner__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__display_name model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__display_name model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_designer__display_name model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_fields__display_name model:ir.model.fields,field_description:mtbg_tours_forms.field_res_country__display_name model:ir.model.fields,field_description:mtbg_tours_forms.field_res_partner__display_name model:ir.model.fields,field_description:mtbg_tours_forms.field_utm_source__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
 
@@ -542,9 +509,7 @@ msgid "Editing the"
 msgstr "Editando las etiquetas en"
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields.selection,name:mtbg_tours_forms.selection__mtbg_form_block__kind__email
-#: model:mtbg.form.block,label:mtbg_tours_forms.form_contact_email
-#: model:mtbg.form.block,label:mtbg_tours_forms.form_menu_contact_email
+#: model:ir.model.fields.selection,name:mtbg_tours_forms.selection__mtbg_form_block__kind__email model:mtbg.form.block,label:mtbg_tours_forms.form_contact_email model:mtbg.form.block,label:mtbg_tours_forms.form_menu_contact_email
 msgid "Email"
 msgstr "Correo electrónico"
 
@@ -619,10 +584,7 @@ msgstr "Campos y aspecto"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
-#: code:addons/mtbg_tours_forms/static/src/website_builder/form_block_option.xml:0
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__form_id
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_forms.snippets
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0 code:addons/mtbg_tours_forms/static/src/website_builder/form_block_option.xml:0 model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__form_id model_terms:ir.ui.view,arch_db:mtbg_tours_forms.snippets
 msgid "Form"
 msgstr "Formulario"
 
@@ -645,8 +607,7 @@ msgstr "Vista previa del formulario"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
-#: model:ir.actions.client,name:mtbg_tours_forms.action_mtbg_extension_page
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0 model:ir.actions.client,name:mtbg_tours_forms.action_mtbg_extension_page
 msgid "Forms"
 msgstr "Formularios"
 
@@ -760,8 +721,7 @@ msgstr "Título del encabezado"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
-#: model:ir.model.fields.selection,name:mtbg_tours_forms.selection__mtbg_form_block__kind__heading
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0 model:ir.model.fields.selection,name:mtbg_tours_forms.selection__mtbg_form_block__kind__heading
 msgid "Heading"
 msgstr "Encabezado"
 
@@ -783,20 +743,15 @@ msgstr "Ayuda"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/contact_form.js:0
-#: code:addons/mtbg_tours_forms/static/src/form.js:0
+#: code:addons/mtbg_tours_forms/static/src/contact_form.js:0 code:addons/mtbg_tours_forms/static/src/form.js:0
 msgid "Hi %(name)s! We'll reply to %(reach)s."
 msgstr "¡Hola, %(name)s! Te responderemos a %(reach)s."
 
 #. module: mtbg_tours_forms
 #. odoo-python
 #: code:addons/mtbg_tours_forms/models/form.py:0
-msgid ""
-"Hi! We are four friends looking for three days of singletrack in March. What"
-" would you suggest?"
-msgstr ""
-"¡Hola! Somos cuatro amigos buscando tres días de senderos en marzo. ¿Qué nos"
-" sugieren?"
+msgid "Hi! We are four friends looking for three days of singletrack in March. What would you suggest?"
+msgstr "¡Hola! Somos cuatro amigos buscando tres días de senderos en marzo. ¿Qué nos sugieren?"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
@@ -811,15 +766,7 @@ msgid "Homepage"
 msgstr "Página de inicio"
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_crm_lead__id
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__id
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__id
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_designer__id
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_fields__id
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_text_setting__id
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_config_settings__id
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_country__id
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_partner__id
+#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__id model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__id model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_designer__id model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_fields__id model:ir.model.fields,field_description:mtbg_tours_forms.field_res_country__id model:ir.model.fields,field_description:mtbg_tours_forms.field_res_partner__id model:ir.model.fields,field_description:mtbg_tours_forms.field_utm_source__id
 msgid "ID"
 msgstr "ID"
 
@@ -834,8 +781,7 @@ msgstr ""
 "                                                sale de la página (computadoras), una vez por visita, en las páginas de abajo."
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__key
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__key
+#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__key model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__key
 msgid "Key"
 msgstr "Clave"
 
@@ -873,14 +819,12 @@ msgid "Language"
 msgstr "Idioma"
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__write_uid
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__write_uid
+#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__write_uid model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__write_uid
 msgid "Last Updated by"
 msgstr "Última actualización por"
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__write_date
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__write_date
+#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__write_date model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__write_date
 msgid "Last Updated on"
 msgstr "Última actualización el"
 
@@ -895,6 +839,11 @@ msgstr "Después"
 #: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0
 msgid "Layout"
 msgstr "Diseño"
+
+#. module: mtbg_tours_forms
+#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__lead_source_id
+msgid "Lead Source"
+msgstr "Origen del prospecto"
 
 #. module: mtbg_tours_forms
 #: model:ir.model.fields.selection,name:mtbg_tours_forms.selection__mtbg_form_block__text_align__left
@@ -958,8 +907,7 @@ msgstr "Texto largo"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__look
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0 model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__look
 msgid "Look"
 msgstr "Aspecto"
 
@@ -980,9 +928,7 @@ msgid "Messages"
 msgstr "Mensajes"
 
 #. module: mtbg_tours_forms
-#: model:mtbg.form.block,label:mtbg_tours_forms.form_contact_phone
-#: model:mtbg.form.block,label:mtbg_tours_forms.form_menu_contact_phone
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_forms.phone_field
+#: model:mtbg.form.block,label:mtbg_tours_forms.form_contact_phone model:mtbg.form.block,label:mtbg_tours_forms.form_menu_contact_phone model_terms:ir.ui.view,arch_db:mtbg_tours_forms.phone_field
 msgid "Mobile"
 msgstr "Celular"
 
@@ -993,10 +939,7 @@ msgstr "Celular (código de país)"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__name
-#: model:mtbg.form.block,label:mtbg_tours_forms.form_contact_first_name
-#: model:mtbg.form.block,label:mtbg_tours_forms.form_menu_contact_name
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0 model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__name model:mtbg.form.block,label:mtbg_tours_forms.form_contact_first_name model:mtbg.form.block,label:mtbg_tours_forms.form_menu_contact_name
 msgid "Name"
 msgstr "Nombre"
 
@@ -1007,6 +950,11 @@ msgid "Never on"
 msgstr "Nunca en"
 
 #. module: mtbg_tours_forms
+#: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form__lead_source_id
+msgid "New contacts from this form get it as their lead source"
+msgstr "Los contactos nuevos de este formulario lo reciben como origen del prospecto"
+
+#. module: mtbg_tours_forms
 #. odoo-python
 #: code:addons/mtbg_tours_forms/models/form_designer.py:0
 msgid "New form %s"
@@ -1015,39 +963,28 @@ msgstr "Nuevo formulario %s"
 #. module: mtbg_tours_forms
 #. odoo-javascript
 #: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0
-msgid ""
-"New form: name it next to the list, change its blocks and save; then choose "
-"who gets it."
-msgstr ""
-"Formulario nuevo: ponle nombre junto a la lista, cambia sus bloques y "
-"guarda; luego elige quién lo recibe."
+msgid "New form: name it next to the list, change its blocks and save; then choose who gets it."
+msgstr "Formulario nuevo: ponle nombre junto a la lista, cambia sus bloques y guarda; luego elige quién lo recibe."
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
 #: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0
-msgid ""
-"New website form: name it next to the list, change its blocks and save. It "
-"shows where its Form block is dropped (website editor > Contact & Forms)."
-msgstr ""
-"Nuevo formulario del sitio: ponle nombre junto a la lista, cambia sus "
-"bloques y guarda. Se muestra donde sueltes su bloque Formulario (editor del "
-"sitio > Contacto y formularios)."
+msgid "New website form: name it next to the list, change its blocks and save. It shows where its Form block is dropped (website editor > Contact & Forms)."
+msgstr "Nuevo formulario del sitio: ponle nombre junto a la lista, cambia sus bloques y guarda. Se muestra donde sueltes su bloque Formulario (editor del sitio > Contacto y formularios)."
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_partner__mtbg_newsletter
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_users__mtbg_newsletter
+#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_partner__mtbg_newsletter model:ir.model.fields,field_description:mtbg_tours_forms.field_res_users__mtbg_newsletter
 msgid "Newsletter"
 msgstr "Boletín"
 
 #. module: mtbg_tours_forms
 #. odoo-python
-#: code:addons/mtbg_tours_forms/models/form.py:0
+#: code:addons/mtbg_tours_forms/models/contact.py:0 code:addons/mtbg_tours_forms/models/form.py:0
 msgid "Newsletter signup"
 msgstr "Suscripción al boletín"
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_partner__mtbg_newsletter_date
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_users__mtbg_newsletter_date
+#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_partner__mtbg_newsletter_date model:ir.model.fields,field_description:mtbg_tours_forms.field_res_users__mtbg_newsletter_date
 msgid "Newsletter since"
 msgstr "Boletín desde"
 
@@ -1112,11 +1049,8 @@ msgstr "Número"
 #. module: mtbg_tours_forms
 #. odoo-javascript
 #: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
-msgid ""
-"On a page, only the first popup in this order that takes the page opens."
-msgstr ""
-"En una página, solo se abre la primera ventana emergente de esta lista que "
-"incluye la página."
+msgid "On a page, only the first popup in this order that takes the page opens."
+msgstr "En una página, solo se abre la primera ventana emergente de esta lista que incluye la página."
 
 #. module: mtbg_tours_forms
 #. odoo-python
@@ -1127,8 +1061,7 @@ msgstr "En la página de un tour"
 #. module: mtbg_tours_forms
 #: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form_block__system
 msgid "One of the form's own blocks: it can move, not be deleted"
-msgstr ""
-"Uno de los bloques propios del formulario: se puede mover, no eliminar"
+msgstr "Uno de los bloques propios del formulario: se puede mover, no eliminar"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
@@ -1142,8 +1075,7 @@ msgstr ""
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__step_by_step
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0 model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__step_by_step
 msgid "One step at a time"
 msgstr "Un paso a la vez"
 
@@ -1200,12 +1132,8 @@ msgstr "Opcional"
 #. module: mtbg_tours_forms
 #. odoo-javascript
 #: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
-msgid ""
-"PNG, SVG or JPEG; dark on the light page (a transparent background suits it "
-"best)."
-msgstr ""
-"PNG, SVG o JPEG; oscuro sobre la página clara (le queda mejor un fondo "
-"transparente)."
+msgid "PNG, SVG or JPEG; dark on the light page (a transparent background suits it best)."
+msgstr "PNG, SVG o JPEG; oscuro sobre la página clara (le queda mejor un fondo transparente)."
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
@@ -1275,26 +1203,20 @@ msgstr "Marcador de posición (en el campo vacío)"
 #. module: mtbg_tours_forms
 #. odoo-python
 #: code:addons/mtbg_tours_forms/models/fields.py:0
-msgid ""
-"Please add your country code: it starts with + (e.g. +1 for the US and "
-"Canada, +502 for Guatemala, +44 for the UK)."
-msgstr ""
-"Agrega el código de tu país: empieza con + (p. ej. +1 para EE. UU. y Canadá,"
-" +502 para Guatemala, +44 para el Reino Unido)."
+msgid "Please add your country code: it starts with + (e.g. +1 for the US and Canada, +502 for Guatemala, +44 for the UK)."
+msgstr "Agrega el código de tu país: empieza con + (p. ej. +1 para EE. UU. y Canadá, +502 para Guatemala, +44 para el Reino Unido)."
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
 #. odoo-python
-#: code:addons/mtbg_tours_forms/models/contact.py:0
-#: code:addons/mtbg_tours_forms/static/src/contact_form.js:0
+#: code:addons/mtbg_tours_forms/models/contact.py:0 code:addons/mtbg_tours_forms/static/src/contact_form.js:0
 msgid "Please agree to receive text messages"
 msgstr "Acepta recibir mensajes de texto"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
 #. odoo-python
-#: code:addons/mtbg_tours_forms/models/form.py:0
-#: code:addons/mtbg_tours_forms/static/src/form.js:0
+#: code:addons/mtbg_tours_forms/models/form.py:0 code:addons/mtbg_tours_forms/static/src/form.js:0
 msgid "Please choose \"%s\""
 msgstr "Por favor elige \"%s\""
 
@@ -1313,18 +1235,13 @@ msgstr "Por favor elige al menos uno: %s"
 #. module: mtbg_tours_forms
 #. odoo-javascript
 #: code:addons/mtbg_tours_forms/static/src/fields.js:0
-msgid ""
-"Please enter a valid %(country)s mobile number (%(digits)s digits after "
-"+%(dial)s)"
-msgstr ""
-"Ingresa un número de celular válido de %(country)s (%(digits)s dígitos "
-"después de +%(dial)s)"
+msgid "Please enter a valid %(country)s mobile number (%(digits)s digits after +%(dial)s)"
+msgstr "Ingresa un número de celular válido de %(country)s (%(digits)s dígitos después de +%(dial)s)"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
 #. odoo-python
-#: code:addons/mtbg_tours_forms/models/fields.py:0
-#: code:addons/mtbg_tours_forms/static/src/fields.js:0
+#: code:addons/mtbg_tours_forms/models/fields.py:0 code:addons/mtbg_tours_forms/static/src/fields.js:0
 msgid "Please enter a valid email"
 msgstr "Ingresa un correo electrónico válido"
 
@@ -1336,17 +1253,14 @@ msgstr "Ingresa un número de celular válido"
 
 #. module: mtbg_tours_forms
 #. odoo-python
-#: code:addons/mtbg_tours_forms/models/contact.py:0
-#: code:addons/mtbg_tours_forms/models/form.py:0
+#: code:addons/mtbg_tours_forms/models/contact.py:0 code:addons/mtbg_tours_forms/models/form.py:0
 msgid "Please enter your mobile number for SMS / WhatsApp updates"
 msgstr "Ingresa tu celular para recibir avisos por SMS / WhatsApp"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
 #. odoo-python
-#: code:addons/mtbg_tours_forms/models/fields.py:0
-#: code:addons/mtbg_tours_forms/static/src/contact_form.js:0
-#: code:addons/mtbg_tours_forms/static/src/fields.js:0
+#: code:addons/mtbg_tours_forms/models/fields.py:0 code:addons/mtbg_tours_forms/static/src/contact_form.js:0 code:addons/mtbg_tours_forms/static/src/fields.js:0
 msgid "Please enter your name"
 msgstr "Ingresa tu nombre"
 
@@ -1359,8 +1273,7 @@ msgstr "Ingresa tu número de teléfono"
 #. module: mtbg_tours_forms
 #. odoo-javascript
 #. odoo-python
-#: code:addons/mtbg_tours_forms/models/form.py:0
-#: code:addons/mtbg_tours_forms/static/src/form.js:0
+#: code:addons/mtbg_tours_forms/models/form.py:0 code:addons/mtbg_tours_forms/static/src/form.js:0
 msgid "Please fill in \"%s\""
 msgstr "Por favor llena \"%s\""
 
@@ -1373,15 +1286,13 @@ msgstr "Elige tu país"
 #. module: mtbg_tours_forms
 #. odoo-javascript
 #. odoo-python
-#: code:addons/mtbg_tours_forms/models/form.py:0
-#: code:addons/mtbg_tours_forms/static/src/form.js:0
+#: code:addons/mtbg_tours_forms/models/form.py:0 code:addons/mtbg_tours_forms/static/src/form.js:0
 msgid "Please tick \"%s\""
 msgstr "Por favor marca \"%s\""
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0 code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
 msgid "Popup"
 msgstr "Ventana emergente"
 
@@ -1431,33 +1342,28 @@ msgid "Preview the popup"
 msgstr "Ver la ventana emergente"
 
 #. module: mtbg_tours_forms
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_forms.form_preview
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_forms.newsletter_popup
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_forms.texting_consent
+#: model_terms:ir.ui.view,arch_db:mtbg_tours_forms.form_preview model_terms:ir.ui.view,arch_db:mtbg_tours_forms.newsletter_popup model_terms:ir.ui.view,arch_db:mtbg_tours_forms.texting_consent
 msgid "Privacy Policy"
 msgstr "Política de Privacidad"
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_partner__mtbg_sms_marketing_opt_in
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_users__mtbg_sms_marketing_opt_in
+#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_partner__mtbg_sms_marketing_opt_in model:ir.model.fields,field_description:mtbg_tours_forms.field_res_users__mtbg_sms_marketing_opt_in
 msgid "Promotional Texts Consent"
 msgstr "Consentimiento de mensajes promocionales"
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_partner__mtbg_sms_marketing_date
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_users__mtbg_sms_marketing_date
+#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_partner__mtbg_sms_marketing_date model:ir.model.fields,field_description:mtbg_tours_forms.field_res_users__mtbg_sms_marketing_date
 msgid "Promotions Consent Given On"
 msgstr "Consentimiento promocional otorgado el"
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_partner__mtbg_sms_marketing_text
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_users__mtbg_sms_marketing_text
+#: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_partner__mtbg_sms_marketing_text model:ir.model.fields,field_description:mtbg_tours_forms.field_res_users__mtbg_sms_marketing_text
 msgid "Promotions Consent Wording"
 msgstr "Texto del consentimiento promocional"
 
 #. module: mtbg_tours_forms
 #. odoo-python
-#: code:addons/mtbg_tours_forms/models/form.py:0
+#: code:addons/mtbg_tours_forms/models/form.py:0 code:addons/mtbg_tours_forms/models/partner.py:0
 msgid "Question about %s"
 msgstr "Pregunta sobre %s"
 
@@ -1469,8 +1375,7 @@ msgstr "¿Preguntas sobre este tour?"
 #. module: mtbg_tours_forms
 #: model:mtbg.form.block,help:mtbg_tours_forms.form_contact_heading_popup
 msgid "Questions, dates, a custom trip: tell us and we'll get back to you."
-msgstr ""
-"Preguntas, fechas, un viaje a la medida: cuéntanos y te responderemos."
+msgstr "Preguntas, fechas, un viaje a la medida: cuéntanos y te responderemos."
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
@@ -1508,8 +1413,7 @@ msgstr "Regla de obligatoriedad"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0
-#: model:ir.model.fields.selection,name:mtbg_tours_forms.selection__mtbg_form_block__require_mode__always
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0 model:ir.model.fields.selection,name:mtbg_tours_forms.selection__mtbg_form_block__require_mode__always
 msgid "Required"
 msgstr "Obligatorio"
 
@@ -1609,19 +1513,11 @@ msgstr "Botón Enviar"
 #. module: mtbg_tours_forms
 #. odoo-python
 #: code:addons/mtbg_tours_forms/models/contact.py:0
-msgid ""
-"Send me occasional promotional texts from %(company)s about new tours, dates"
-" and offers (up to 4 per month). Message and data rates may apply. Reply "
-"STOP to opt out. Consent is not a condition of purchase."
-msgstr ""
-"Envíenme mensajes de texto promocionales ocasionales de %(company)s sobre "
-"nuevos tours, fechas y ofertas (hasta 4 al mes). Pueden aplicarse tarifas de"
-" mensajes y datos. Responda STOP para darse de baja. El consentimiento no es"
-" condición de compra."
+msgid "Send me occasional promotional texts from %(company)s about new tours, dates and offers (up to 4 per month). Message and data rates may apply. Reply STOP to opt out. Consent is not a condition of purchase."
+msgstr "Envíenme mensajes de texto promocionales ocasionales de %(company)s sobre nuevos tours, fechas y ofertas (hasta 4 al mes). Pueden aplicarse tarifas de mensajes y datos. Responda STOP para darse de baja. El consentimiento no es condición de compra."
 
 #. module: mtbg_tours_forms
-#: model:mtbg.form.block,label:mtbg_tours_forms.form_contact_submit
-#: model:mtbg.form.block,label:mtbg_tours_forms.form_menu_contact_submit
+#: model:mtbg.form.block,label:mtbg_tours_forms.form_contact_submit model:mtbg.form.block,label:mtbg_tours_forms.form_menu_contact_submit
 msgid "Send message"
 msgstr "Enviar mensaje"
 
@@ -1637,8 +1533,7 @@ msgid "Sending it subscribes the person to the newsletter (tagged Newsletter)"
 msgstr "Enviarlo suscribe a la persona al boletín (etiqueta Newsletter)"
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__sequence
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__sequence
+#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__sequence model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__sequence
 msgid "Sequence"
 msgstr "Secuencia"
 
@@ -1666,8 +1561,7 @@ msgstr "Regla de visualización"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__popup
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0 model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__popup
 msgid "Show as a popup"
 msgstr "Mostrar como ventana emergente"
 
@@ -1684,8 +1578,7 @@ msgid "Shows when…"
 msgstr "Se muestra cuando…"
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields,help:mtbg_tours_forms.field_res_partner__mtbg_newsletter
-#: model:ir.model.fields,help:mtbg_tours_forms.field_res_users__mtbg_newsletter
+#: model:ir.model.fields,help:mtbg_tours_forms.field_res_partner__mtbg_newsletter model:ir.model.fields,help:mtbg_tours_forms.field_res_users__mtbg_newsletter
 msgid "Signed up for the newsletter"
 msgstr "Suscrito al boletín"
 
@@ -1715,8 +1608,7 @@ msgstr "Tallas"
 #. module: mtbg_tours_forms
 #: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form_block__help
 msgid "Small text under the field (a step or heading: its subtitle)"
-msgstr ""
-"Texto pequeño debajo del campo (en un paso o encabezado: su subtítulo)"
+msgstr "Texto pequeño debajo del campo (en un paso o encabezado: su subtítulo)"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
@@ -1726,15 +1618,13 @@ msgstr "Un texto para tus visitantes."
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/contact_form.js:0
-#: code:addons/mtbg_tours_forms/static/src/form.js:0
+#: code:addons/mtbg_tours_forms/static/src/contact_form.js:0 code:addons/mtbg_tours_forms/static/src/form.js:0
 msgid "Something went wrong, please try again."
 msgstr "Algo salió mal, inténtalo de nuevo."
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0 code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
 msgid "Space between fields"
 msgstr "Espacio entre campos"
 
@@ -1763,8 +1653,7 @@ msgstr "Pasos"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__style
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0 model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__style
 msgid "Style"
 msgstr "Estilo"
 
@@ -1786,10 +1675,7 @@ msgstr "Términos del Servicio"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
-#: model:ir.model.fields.selection,name:mtbg_tours_forms.selection__mtbg_form_block__kind__html
-#: model:ir.model.fields.selection,name:mtbg_tours_forms.selection__mtbg_form_block__kind__text
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0 code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0 model:ir.model.fields.selection,name:mtbg_tours_forms.selection__mtbg_form_block__kind__html model:ir.model.fields.selection,name:mtbg_tours_forms.selection__mtbg_form_block__kind__text
 msgid "Text"
 msgstr "Texto"
 
@@ -1864,9 +1750,7 @@ msgstr "Título de agradecimiento"
 
 #. module: mtbg_tours_forms
 #. odoo-python
-#: code:addons/mtbg_tours_forms/models/form.py:0
-#: model:mtbg.form,thanks_title:mtbg_tours_forms.form_contact
-#: model:mtbg.form,thanks_title:mtbg_tours_forms.form_menu_contact
+#: code:addons/mtbg_tours_forms/models/form.py:0 model:mtbg.form,thanks_title:mtbg_tours_forms.form_contact model:mtbg.form,thanks_title:mtbg_tours_forms.form_menu_contact
 msgid "Thanks{name}!"
 msgstr "¡Gracias{name}!"
 
@@ -1881,34 +1765,30 @@ msgstr ""
 "                    su texto de consentimiento (la redacción que exige la ley)."
 
 #. module: mtbg_tours_forms
+#: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form_block__key
+msgid "The answer's name (letters, digits, _); the form's standard ones (first_name, email, phone, message...) go to the contact, the others with their message"
+msgstr "El nombre de la respuesta (letras, dígitos, _); las estándar del formulario (first_name, email, phone, message...) van al contacto, las demás con su mensaje"
+
+#. module: mtbg_tours_forms
 #: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form_block__look
-msgid ""
-"The block's own look (a form type's block with settings: _mtbg_look_schemas)"
-msgstr ""
-"El aspecto propio del bloque (un bloque de un tipo de formulario con "
-"ajustes: _mtbg_look_schemas)"
+msgid "The block's own look (a form type's block with settings: _mtbg_look_schemas)"
+msgstr "El aspecto propio del bloque (un bloque de un tipo de formulario con ajustes: _mtbg_look_schemas)"
 
 #. module: mtbg_tours_forms
 #: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form_block__text_color_dark
 msgid "The block's text colour (#rrggbb) on dark pages; empty: its light one"
-msgstr ""
-"Color del texto del bloque (#rrggbb) en páginas oscuras; vacío: el de las "
-"claras"
+msgstr "Color del texto del bloque (#rrggbb) en páginas oscuras; vacío: el de las claras"
 
 #. module: mtbg_tours_forms
 #: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form_block__text_color
 msgid "The block's text colour (#rrggbb) on light pages; empty: the form's"
-msgstr ""
-"Color del texto del bloque (#rrggbb) en páginas claras; vacío: el del "
-"formulario"
+msgstr "Color del texto del bloque (#rrggbb) en páginas claras; vacío: el del formulario"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
 #: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
 msgid "The blocks their rules hide now, shown faded (click one to edit it)"
-msgstr ""
-"Los bloques que sus reglas ocultan ahora, mostrados atenuados (haz clic en "
-"uno para editarlo)"
+msgstr "Los bloques que sus reglas ocultan ahora, mostrados atenuados (haz clic en uno para editarlo)"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
@@ -1959,12 +1839,8 @@ msgstr "El bloque propio del formulario: se puede mover, no eliminar"
 
 #. module: mtbg_tours_forms
 #: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form__step_by_step
-msgid ""
-"The form's steps one at a time: their progress on top, Back / Next under the"
-" form"
-msgstr ""
-"Los pasos del formulario uno a la vez: su progreso arriba, Atrás / Siguiente"
-" debajo del formulario"
+msgid "The form's steps one at a time: their progress on top, Back / Next under the form"
+msgstr "Los pasos del formulario uno a la vez: su progreso arriba, Atrás / Siguiente debajo del formulario"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
@@ -2009,11 +1885,8 @@ msgstr "El idioma de la vista previa y de los textos que editas"
 #. module: mtbg_tours_forms
 #. odoo-javascript
 #: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
-msgid ""
-"The steps one at a time: their progress on top, Back / Next under the form"
-msgstr ""
-"Los pasos uno a la vez: su progreso arriba, Atrás / Siguiente debajo del "
-"formulario"
+msgid "The steps one at a time: their progress on top, Back / Next under the form"
+msgstr "Los pasos uno a la vez: su progreso arriba, Atrás / Siguiente debajo del formulario"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
@@ -2046,11 +1919,9 @@ msgid "The website's logo"
 msgstr "El logo del sitio web"
 
 #. module: mtbg_tours_forms
-#: model:ir.model.fields,help:mtbg_tours_forms.field_res_partner__mtbg_sms_marketing_text
-#: model:ir.model.fields,help:mtbg_tours_forms.field_res_users__mtbg_sms_marketing_text
+#: model:ir.model.fields,help:mtbg_tours_forms.field_res_partner__mtbg_sms_marketing_text model:ir.model.fields,help:mtbg_tours_forms.field_res_users__mtbg_sms_marketing_text
 msgid "The wording the customer agreed to, as shown, in the language shown."
-msgstr ""
-"El texto que el cliente aceptó, tal como se mostró y en el idioma mostrado."
+msgstr "El texto que el cliente aceptó, tal como se mostró y en el idioma mostrado."
 
 #. module: mtbg_tours_forms
 #. odoo-python
@@ -2098,14 +1969,18 @@ msgstr "Barra lateral del tour"
 #. odoo-python
 #: code:addons/mtbg_tours_forms/models/form_designer.py:0
 msgid "Two fields of the form share a name: each field needs its own."
-msgstr ""
-"Dos campos del formulario comparten un nombre: cada campo necesita el suyo."
+msgstr "Dos campos del formulario comparten un nombre: cada campo necesita el suyo."
 
 #. module: mtbg_tours_forms
 #. odoo-python
 #: code:addons/mtbg_tours_forms/models/form.py:0
 msgid "Two fields of the form share the name \"%s\"."
 msgstr "Dos campos del formulario comparten el nombre \"%s\"."
+
+#. module: mtbg_tours_forms
+#: model:ir.model,name:mtbg_tours_forms.model_utm_source
+msgid "UTM Source"
+msgstr "Origen UTM"
 
 #. module: mtbg_tours_forms
 #. odoo-python
@@ -2156,12 +2031,15 @@ msgstr "Variantes"
 
 #. module: mtbg_tours_forms
 #. odoo-python
-#: code:addons/mtbg_tours_forms/models/form.py:0
-#: model:mtbg.form,thanks_text:mtbg_tours_forms.form_contact
-#: model:mtbg.form,thanks_text:mtbg_tours_forms.form_menu_contact
+#: code:addons/mtbg_tours_forms/models/form.py:0 model:mtbg.form,thanks_text:mtbg_tours_forms.form_contact model:mtbg.form,thanks_text:mtbg_tours_forms.form_menu_contact
 msgid "We got your message and will reply soon, usually on WhatsApp."
-msgstr ""
-"Recibimos tu mensaje y te responderemos pronto, normalmente por WhatsApp."
+msgstr "Recibimos tu mensaje y te responderemos pronto, normalmente por WhatsApp."
+
+#. module: mtbg_tours_forms
+#. odoo-python
+#: code:addons/mtbg_tours_forms/models/form.py:0
+msgid "Web form: %s"
+msgstr "Formulario web: %s"
 
 #. module: mtbg_tours_forms
 #: model:ir.model,name:mtbg_tours_forms.model_mtbg_form
@@ -2186,6 +2064,11 @@ msgid "Website message"
 msgstr "Mensaje desde el sitio web"
 
 #. module: mtbg_tours_forms
+#: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form__handler
+msgid "What a sent form does (a contact, a note in its chatter, their message...)"
+msgstr "Lo que hace un formulario enviado (un contacto, una nota en su historial, su mensaje...)"
+
+#. module: mtbg_tours_forms
 #: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form__key
 msgid "What the website asks for: contact, newsletter, chat, booking"
 msgstr "Lo que pide el sitio web: contact, newsletter, chat, booking"
@@ -2198,27 +2081,18 @@ msgstr "Dónde se muestra el formulario"
 
 #. module: mtbg_tours_forms
 #: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form__variants
-msgid ""
-"Where the form shows, comma separated (page,popup,sidebar): the designer's "
-"preview and the Style tab offer each"
-msgstr ""
-"Dónde se muestra el formulario, separado por comas (page,popup,sidebar): la "
-"vista previa del diseñador y la pestaña Estilo ofrecen cada uno"
+msgid "Where the form shows, comma separated (page,popup,sidebar): the designer's preview and the Style tab offer each"
+msgstr "Dónde se muestra el formulario, separado por comas (page,popup,sidebar): la vista previa del diseñador y la pestaña Estilo ofrecen cada uno"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
 #: code:addons/mtbg_tours_forms/static/src/website_builder/form_block_option.xml:0
-msgid ""
-"Which website form this block shows: its fields, texts and look are set in "
-"the Forms page's Form Designer"
-msgstr ""
-"Qué formulario del sitio muestra este bloque: sus campos, textos y aspecto "
-"se definen en el Diseñador de formularios de la página Formularios"
+msgid "Which website form this block shows: its fields, texts and look are set in the Forms page's Form Designer"
+msgstr "Qué formulario del sitio muestra este bloque: sus campos, textos y aspecto se definen en el Diseñador de formularios de la página Formularios"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__width
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0 model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__width
 msgid "Width"
 msgstr "Ancho"
 
@@ -2229,10 +2103,21 @@ msgid "Yes"
 msgstr "Sí"
 
 #. module: mtbg_tours_forms
-#: model:mtbg.form.block,label:mtbg_tours_forms.form_contact_message
-#: model:mtbg.form.block,label:mtbg_tours_forms.form_menu_contact_message
+#. odoo-python
+#: code:addons/mtbg_tours_forms/models/form_designer.py:0
+msgid "You are not allowed to change the website forms."
+msgstr "No tienes permiso para cambiar los formularios del sitio web."
+
+#. module: mtbg_tours_forms
+#: model:mtbg.form.block,label:mtbg_tours_forms.form_contact_message model:mtbg.form.block,label:mtbg_tours_forms.form_menu_contact_message
 msgid "Your message"
 msgstr "Tu mensaje"
+
+#. module: mtbg_tours_forms
+#. odoo-python
+#: code:addons/mtbg_tours_forms/models/partner.py:0
+msgid "Your question"
+msgstr "Tu pregunta"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
@@ -2254,11 +2139,8 @@ msgstr "y"
 #. module: mtbg_tours_forms
 #. odoo-javascript
 #: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
-msgid ""
-"and pages whose address contains (comma separated), e.g. antigua, enduro"
-msgstr ""
-"y páginas cuya dirección contiene (separadas por comas), p. ej. antigua, "
-"enduro"
+msgid "and pages whose address contains (comma separated), e.g. antigua, enduro"
+msgstr "y páginas cuya dirección contiene (separadas por comas), p. ej. antigua, enduro"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
@@ -2292,11 +2174,8 @@ msgstr "integrado"
 
 #. module: mtbg_tours_forms
 #: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form__popup_settings
-msgid ""
-"clean_popup(): look, images, rotate, overlay, logo, bar, bar colours, pages"
-msgstr ""
-"clean_popup(): aspecto, imágenes, rotar, oscurecer, logo, barra, colores de "
-"la barra, páginas"
+msgid "clean_popup(): look, images, rotate, overlay, logo, bar, bar colours, pages"
+msgstr "clean_popup(): aspecto, imágenes, rotar, oscurecer, logo, barra, colores de la barra, páginas"
 
 #. module: mtbg_tours_forms
 #. odoo-python
@@ -2326,9 +2205,7 @@ msgstr "no incluye"
 #. odoo-javascript
 #: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
 msgid "e.g. Get 10% off your next tour — offer valid for subscribers only."
-msgstr ""
-"p. ej. Obtén 10% de descuento en tu próximo tour: oferta válida solo para "
-"suscriptores."
+msgstr "p. ej. Obtén 10% de descuento en tu próximo tour: oferta válida solo para suscriptores."
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
@@ -2479,10 +2356,8 @@ msgstr "sitio web"
 
 #. module: mtbg_tours_forms
 #: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form__header_look
-msgid ""
-"{level (h2-h5, empty: h1), size (%), color, color_dark, bold, upper, align}"
-msgstr ""
-"{level (h2-h5, vacío: h1), size (%), color, color_dark, bold, upper, align}"
+msgid "{level (h2-h5, empty: h1), size (%), color, color_dark, bold, upper, align}"
+msgstr "{level (h2-h5, vacío: h1), size (%), color, color_dark, bold, upper, align}"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
@@ -2494,55 +2369,3 @@ msgstr "{name} es \", Ana\" cuando conocemos el nombre del visitante."
 #: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form__style
 msgid "{variant: {token: value}} (the designer's Style tab)"
 msgstr "{variant: {token: value}} (la pestaña Estilo del diseñador)"
-
-#. module: mtbg_tours_forms
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__lead_source_id
-msgid "Lead Source"
-msgstr ""
-
-#. module: mtbg_tours_forms
-#: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form__lead_source_id
-msgid "New contacts from this form get it as their lead source"
-msgstr ""
-
-#. module: mtbg_tours_forms
-#: model:ir.model,name:mtbg_tours_forms.model_utm_source
-msgid "UTM Source"
-msgstr ""
-
-#. module: mtbg_tours_forms
-#. odoo-python
-#: code:addons/mtbg_tours_forms/models/form.py:0
-msgid "Web form: %s"
-msgstr ""
-
-#. module: mtbg_tours_forms
-#. odoo-python
-#: code:addons/mtbg_tours_forms/models/form_designer.py:0
-msgid "You are not allowed to change the website forms."
-msgstr ""
-
-#. module: mtbg_tours_forms
-#: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form_block__key
-msgid ""
-"The answer's name (letters, digits, _); the form's standard ones "
-"(first_name, email, phone, message...) go to the contact, the others with "
-"their message"
-msgstr ""
-"El nombre de la respuesta (letras, dígitos, _); las estándar del formulario "
-"(first_name, email, phone, message...) van al contacto, las demás con su "
-"mensaje"
-
-#. module: mtbg_tours_forms
-#: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form__handler
-msgid ""
-"What a sent form does (a contact, a note in its chatter, their message...)"
-msgstr ""
-"Lo que hace un formulario enviado (un contacto, una nota en su historial, su"
-" mensaje...)"
-
-#. module: mtbg_tours_forms
-#. odoo-python
-#: code:addons/mtbg_tours_forms/models/partner.py:0
-msgid "Your question"
-msgstr "Tu pregunta"

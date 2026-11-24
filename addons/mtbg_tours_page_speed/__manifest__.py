@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Tours — Page Speed',
-    'version': '19.0.0.11.0',
+    'version': '19.0.0.11.1',
     'category': 'Website/Website',
     'summary': "The website's pictures as fast as the screen allows: the first one at once, phone and tablet sizes "
                "of the background photos, every photo's size",
