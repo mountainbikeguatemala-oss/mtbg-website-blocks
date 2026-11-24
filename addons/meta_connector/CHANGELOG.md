@@ -2,6 +2,17 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'meta_connector-*'`.
 
+## 19.0.1.6.3 · 2026-11-24
+
+- **Instagram: a picture is published only once Meta has it ready** (www, since 2026-11-22: some Instagram stories
+  failed in the Marketing Queue with "Meta: The media with ... cannot be found"). `ig_publish` now follows Meta's
+  documented flow: after the media container is made it asks its status (`GET /{container}?fields=status_code,status`)
+  every 3 seconds, for at most a minute, and publishes once it is `FINISHED`; `ERROR` / `EXPIRED` fail with Meta's
+  status text, and a picture still not ready after a minute fails with a clear reason (the picture is not posted).
+  The publish step still tries again a few times while Meta answers "not ready", now also on "cannot be found".
+  Feed pictures and stories alike; callers unchanged (`ig_container_wait`, and `poll` / `timeout` on `ig_publish`,
+  are new and optional).
+
 ## 19.0.1.6.2 · 2026-11-22
 
 - **The marketing engine: story and post templates for every marketing app** (owner, 2026-11-22: "the marketing

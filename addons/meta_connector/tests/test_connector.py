@@ -276,6 +276,8 @@ class TestPostingSwitch(TransactionCase):
         calls = []
 
         def fake_call(method, path, token, params=None, data=None, **kw):
+            if method == "GET":  # the container's status: ready
+                return {"id": "77", "status_code": "FINISHED"}
             calls.append((path.split("/")[-1], dict(data or {})))
             return {"id": "77", "post_id": "123_77", "success": True}
 
@@ -370,3 +372,98 @@ class TestPostingTargets(TransactionCase):
         self.assertFalse(self.a.post_default_instagram)
         self.assertTrue(self.b.post_default_instagram)
         self.assertFalse(self.b.post_default_page)
+
+
+class _Response:
+    def __init__(self, payload, status=200):
+        self.payload, self.status_code = payload, status
+
+    def json(self):
+        return self.payload
+
+
+@tagged("post_install", "-at_install")
+class TestInstagramContainerWait(TransactionCase):
+    """Instagram (www 2026-11-22: stories failed with "The media with ... cannot be found"): the container is
+    published only once Meta says FINISHED (GET /{container}?fields=status_code), polled every few seconds for at
+    most a minute. ``requests`` is replaced: nothing reaches Meta; the clock is a fake one, nothing waits."""
+
+    def run_publish(self, statuses, publish=None, story=True, timeout=60.0):
+        """ig_publish with Meta answering the status polls with ``statuses`` (the last one repeats) and
+        media_publish with ``publish`` (a list of answers, default one success). The calls made, the result."""
+        calls, statuses, publish = [], list(statuses), list(publish or [({"id": "IGPOST"}, 200)])
+        now = [0.0]
+
+        def fake_request(method, url, params=None, data=None, **kw):
+            path = url.replace(graph.BASE, "")
+            calls.append((method, path, dict(params or {}), dict(data or {})))
+            if method == "POST" and path.endswith("/media"):
+                return _Response({"id": "CONT1"})
+            if method == "GET" and path == "/CONT1":
+                status = statuses.pop(0) if len(statuses) > 1 else statuses[0]
+                return _Response(status)
+            if method == "POST" and path.endswith("/media_publish"):
+                payload, code = publish.pop(0) if len(publish) > 1 else publish[0]
+                return _Response(payload, code)
+            raise AssertionError("unexpected call %s %s" % (method, path))
+
+        def fake_sleep(seconds):
+            now[0] += seconds
+
+        with patch.object(graph.requests, "request", fake_request), \
+                patch.object(graph.time, "sleep", fake_sleep), \
+                patch.object(graph.time, "monotonic", lambda: now[0]):
+            try:
+                result = graph.ig_publish("IG1", "tok", "https://x.test/s.jpg", "", story=story, timeout=timeout)
+            except graph.GraphError as error:
+                result = error
+        return calls, result, now[0]
+
+    def kinds(self, calls):
+        return [("status" if method == "GET" else path.split("/")[-1]) for method, path, _p, _d in calls]
+
+    def test_ready_on_first_poll(self):
+        calls, result, waited = self.run_publish([{"status_code": "FINISHED", "id": "CONT1"}])
+        self.assertEqual(result, {"id": "IGPOST"})
+        self.assertEqual(self.kinds(calls), ["media", "status", "media_publish"])
+        self.assertEqual(calls[1][2]["fields"], "status_code,status")
+        self.assertEqual(calls[2][3], {"creation_id": "CONT1"})
+        self.assertEqual(waited, 0)
+
+    def test_ready_after_in_progress(self):
+        calls, result, waited = self.run_publish(
+            [{"status_code": "IN_PROGRESS"}, {"status_code": "IN_PROGRESS"}, {"status_code": "FINISHED"}],
+            story=False)
+        self.assertEqual(result, {"id": "IGPOST"})
+        self.assertEqual(self.kinds(calls), ["media", "status", "status", "status", "media_publish"])
+        self.assertEqual(waited, 6.0)
+        self.assertNotIn("media_type", calls[0][3])  # a feed picture, with its caption
+
+    def test_error_status(self):
+        calls, result, _waited = self.run_publish(
+            [{"status_code": "IN_PROGRESS"}, {"status_code": "ERROR", "status": "Error: unsupported image"}])
+        self.assertIsInstance(result, graph.GraphError)
+        self.assertIn("ERROR", str(result))
+        self.assertIn("unsupported image", str(result))
+        self.assertNotIn("media_publish", self.kinds(calls))
+        _c, result, _w = self.run_publish([{"status_code": "EXPIRED"}])
+        self.assertIn("EXPIRED", str(result))
+
+    def test_timeout(self):
+        calls, result, waited = self.run_publish([{"status_code": "IN_PROGRESS"}])
+        self.assertIsInstance(result, graph.GraphError)
+        self.assertIn("still preparing", str(result))
+        self.assertNotIn("media_publish", self.kinds(calls))
+        self.assertLessEqual(waited, 60)
+        self.assertGreaterEqual(self.kinds(calls).count("status"), 15)
+
+    def test_publish_retries_cannot_be_found(self):
+        """FINISHED, yet media_publish answers "cannot be found" a moment: tried again; another error raises."""
+        missing = ({"error": {"message": "The media with 18577644565074925 cannot be found", "code": 100}}, 400)
+        calls, result, _w = self.run_publish([{"status_code": "FINISHED"}], publish=[missing, ({"id": "P2"}, 200)])
+        self.assertEqual(result, {"id": "P2"})
+        self.assertEqual(self.kinds(calls).count("media_publish"), 2)
+        other = ({"error": {"message": "Invalid parameter", "code": 100}}, 400)
+        calls, result, _w = self.run_publish([{"status_code": "FINISHED"}], publish=[other])
+        self.assertIsInstance(result, graph.GraphError)
+        self.assertEqual(self.kinds(calls).count("media_publish"), 1)

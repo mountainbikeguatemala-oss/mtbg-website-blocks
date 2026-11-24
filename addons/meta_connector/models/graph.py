@@ -4,6 +4,7 @@ an Instagram account's posts. Plain functions around ``requests``; errors raise 
 import hashlib
 import hmac
 import json
+import time
 from urllib.parse import urlencode
 
 import requests
@@ -279,20 +280,55 @@ def page_photo_story(page_id, page_token, image_url):
     return _call("POST", "/%s/photo_stories" % page_id, page_token, data={"photo_id": photo["id"]})
 
 
-def ig_publish(ig_id, page_token, image_url, caption, wait=2.0, tries=5, story=False):
-    """A picture posted on the Instagram account: Meta's two steps, a media container (the picture at ``image_url``,
-    public) then its publishing (once Meta has it ready). {"id"} of the post. ``story``: an Instagram story (no
-    caption: a story shows none)."""
-    import time
+# Instagram's container status (GET /{container}?fields=status_code): FINISHED is ready to publish; ERROR and
+# EXPIRED never will be; IN_PROGRESS (or nothing yet) is still being processed
+IG_READY, IG_DEAD = "FINISHED", ("ERROR", "EXPIRED")
+# media_publish's "not ready yet" answers (Meta still has the picture): try again a moment later
+IG_NOT_READY_CODES = (9007, 2207027, None)
+IG_NOT_READY_TEXTS = ("cannot be found",)
+
+
+def _ig_not_ready(error):
+    text = str(error).lower()
+    return error.code in IG_NOT_READY_CODES or any(part in text for part in IG_NOT_READY_TEXTS)
+
+
+def ig_container_wait(container_id, page_token, poll=3.0, timeout=60.0, sleep=None, clock=None):
+    """Wait until Meta has processed the media container ``container_id`` (Meta's documented flow: its
+    ``status_code`` FINISHED), polling every ``poll`` seconds for at most ``timeout`` seconds. Raises GraphError
+    when it becomes ERROR / EXPIRED (with Meta's status text) or is still not ready at the end."""
+    sleep, clock = sleep or time.sleep, clock or time.monotonic
+    deadline = clock() + timeout
+    status_code = ""
+    while True:
+        payload = _call("GET", "/%s" % container_id, page_token, params={"fields": "status_code,status"})
+        status_code = (payload.get("status_code") or "").upper()
+        if status_code == IG_READY:
+            return payload
+        if status_code in IG_DEAD:
+            raise GraphError("Meta: Instagram could not prepare the picture (%s%s)." % (
+                status_code, ": %s" % payload["status"] if payload.get("status") else ""))
+        if clock() + poll > deadline:
+            raise GraphError("Meta: Instagram was still preparing the picture after %d seconds (%s); try again "
+                             "later." % (timeout, status_code or "no status"))
+        sleep(poll)
+
+
+def ig_publish(ig_id, page_token, image_url, caption, wait=2.0, tries=5, story=False, poll=3.0, timeout=60.0):
+    """A picture posted on the Instagram account: Meta's steps, a media container (the picture at ``image_url``,
+    public), waiting until Meta has processed it (``ig_container_wait``: every ``poll`` s, at most ``timeout`` s),
+    then its publishing (``tries`` times ``wait`` s apart while Meta still answers "not ready"). {"id"} of the
+    post. ``story``: an Instagram story (no caption: a story shows none)."""
     data = {"image_url": image_url, "media_type": "STORIES"} if story else {"image_url": image_url,
                                                                             "caption": caption or ""}
     container = _call("POST", "/%s/media" % ig_id, page_token, data=data)
+    ig_container_wait(container["id"], page_token, poll=poll, timeout=timeout)
     for attempt in range(tries):
         try:
             return _call("POST", "/%s/media_publish" % ig_id, page_token, data={"creation_id": container["id"]})
         except GraphError as error:
-            # "Media ID is not available" / not ready yet: a moment more
-            if attempt == tries - 1 or error.code not in (9007, 2207027, None):
+            # "Media ID is not available" / "The media with ... cannot be found": a moment more
+            if attempt == tries - 1 or not _ig_not_ready(error):
                 raise
             time.sleep(wait)
     return {}
