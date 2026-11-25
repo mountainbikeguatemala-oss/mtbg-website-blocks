@@ -1,5 +1,19 @@
 # Changelog
 
+## 19.0.1.5.0 (2026-11-25)
+- Printing from iPhone / iPad (owner: "make bluetooth printing work on ios"; owner's choice: staff use the free
+  Bluefy browser, as Safari and Chrome on iOS have no Web Bluetooth). Without Web Bluetooth on an iPhone or iPad
+  (iPadOS too, which says "MacIntel"), the Print label button and "Print a test label" say: "iPhone and iPad can only
+  print labels from the Bluefy browser (free in the App Store): open this page in Bluefy.", with Copy link (paste it
+  in Bluefy's address bar; the link shown to copy by hand where the browser does not let the page copy) and Get
+  Bluefy (App Store). Bluefy has no documented link that opens a page in it. Other browsers keep their message.
+- The driver for Bluefy's partial Web Bluetooth: on iPhone / iPad the printer chooser filters by name only (E1,
+  MakeID: a filter with a service makes Bluefy-type browsers list only devices advertising it); filters the browser
+  rejects: the chooser again with every device; a notification read from its DataView's own bytes; write without
+  response failing once: every write with response from then on (until another printer is chosen); the
+  disconnect event also where only ``ongattserverdisconnected`` exists.
+- Hoot unit tests (static/tests/printer_bluefy.test.js, run by tests/test_printer_js.py).
+
 ## 19.0.1.4.0 (2026-11-19)
 - A text's spacing (owner: "text should have padding settings to (top bottom only)"): Code, Name and Price get a
   top and a bottom spacing (mm), kept as set when the rest shrinks to fit.

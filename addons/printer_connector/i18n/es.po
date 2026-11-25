@@ -867,3 +867,33 @@ msgstr "· Fila"
 #: code:addons/printer_connector/static/src/label_designer.xml:0
 msgid "Spacing (mm)"
 msgstr "Espacio (mm)"
+
+#. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_print.xml:0
+msgid "iPhone and iPad can only print labels from the Bluefy browser (free in the App Store): open this page in Bluefy."
+msgstr "El iPhone y el iPad solo pueden imprimir etiquetas desde el navegador Bluefy (gratis en el App Store): abra esta página en Bluefy."
+
+#. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_print.xml:0
+msgid "Copy link"
+msgstr "Copiar enlace"
+
+#. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_print.xml:0
+msgid "Get Bluefy"
+msgstr "Obtener Bluefy"
+
+#. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_print.xml:0
+msgid "Link copied: open Bluefy and paste it in the address bar."
+msgstr "Enlace copiado: abra Bluefy y péguelo en la barra de direcciones."
+
+#. module: printer_connector
+#. odoo-javascript
+#: code:addons/printer_connector/static/src/label_print.xml:0
+msgid "Copy this link and open it in Bluefy:"
+msgstr "Copie este enlace y ábralo en Bluefy:"

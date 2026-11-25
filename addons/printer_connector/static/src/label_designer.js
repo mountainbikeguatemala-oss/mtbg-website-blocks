@@ -16,7 +16,7 @@ import { useService } from "@web/core/utils/hooks";
 import { useRecordObserver } from "@web/model/relational_model/utils";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
 import { LABEL_FIELDS, newItem, newRow, prepareLabelAssets, renderLabel, rowsOf, SLOTS } from "./label_render";
-import { printLabelsWithLayout, warningText } from "./label_print";
+import { PrinterUnsupportedNote, printLabelsWithLayout, warningText } from "./label_print";
 import { makeIdPrinter } from "./makeid_printer";
 
 const ICONS = { logo: "fa-picture-o", barcode: "fa-barcode", code: "fa-hashtag", name: "fa-font", price: "fa-tag" };
@@ -28,6 +28,7 @@ function isBase64(value) {
 
 export class LabelDesigner extends Component {
     static template = "printer_connector.LabelDesigner";
+    static components = { PrinterUnsupportedNote };
     static props = { ...standardFieldProps };
 
     setup() {

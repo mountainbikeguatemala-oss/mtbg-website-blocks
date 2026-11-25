@@ -5,13 +5,15 @@
  *   for" ``usage``, else the first "Every screen" one), its font and logo, the printer's own head width and chunk
  *   size, then the labels. item: {name or label_name, barcode, default_code, price_display}.
  * - <LabelPrintButton product="..." usage="..."/>: Print label (one label a press: the printer does not cut).
+ * - <PrinterUnsupportedNote/>: why this browser can't print; on iPhone / iPad: open the page in Bluefy (Copy link,
+ *   Get Bluefy), the iPhone browser with Web Bluetooth.
  * (The Label layout page's drag and drop editor with its live preview: label_designer.js.)
  */
 import { Component, useState } from "@odoo/owl";
 import { _t } from "@web/core/l10n/translation";
 import { useService } from "@web/core/utils/hooks";
 import { labelCode, labelRows, prepareLabelAssets, renderLabel, rowsOf, SLOTS } from "./label_render";
-import { makeIdPrinter } from "./makeid_printer";
+import { BLUEFY_APP_STORE_URL, isIOS, makeIdPrinter, unsupportedMessage } from "./makeid_printer";
 
 const layoutPromises = new Map();
 
@@ -66,8 +68,61 @@ export async function printProductLabels(orm, product, copies = 1, { usage = "ge
     await printLabelsWithLayout(layout, product, copies);
 }
 
+/** Copies a text; false when the browser does not let the page copy. */
+async function copyText(text) {
+    try {
+        await navigator.clipboard.writeText(text);
+        return true;
+    } catch {
+        // older browsers / no clipboard permission: the hidden-field way
+    }
+    try {
+        const field = document.createElement("textarea");
+        field.value = text;
+        field.setAttribute("readonly", "");
+        field.style.position = "fixed";
+        field.style.opacity = "0";
+        document.body.appendChild(field);
+        field.select();
+        field.setSelectionRange(0, text.length);
+        const done = document.execCommand("copy");
+        field.remove();
+        return done;
+    } catch {
+        return false;
+    }
+}
+
+/**
+ * Under a print button the browser can't use: the reason. On iPhone / iPad (no Web Bluetooth in Safari or Chrome
+ * there) the way out: this page in the Bluefy browser. Bluefy has no documented link to open a page in it, so:
+ * Copy link (pasted in Bluefy's address bar) and Get Bluefy (App Store).
+ */
+export class PrinterUnsupportedNote extends Component {
+    static template = "printer_connector.PrinterUnsupportedNote";
+    static props = {};
+
+    setup() {
+        this.state = useState({ copied: false, failed: false });
+        this.ios = isIOS();
+        this.message = unsupportedMessage();
+        this.appStoreUrl = BLUEFY_APP_STORE_URL;
+    }
+
+    get pageUrl() {
+        return window.location.href;
+    }
+
+    async copyLink() {
+        const done = await copyText(this.pageUrl);
+        this.state.copied = done;
+        this.state.failed = !done;
+    }
+}
+
 export class LabelPrintButton extends Component {
     static template = "printer_connector.LabelPrintButton";
+    static components = { PrinterUnsupportedNote };
     static props = {
         product: Object,
         highlight: { type: Boolean, optional: true },

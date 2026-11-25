@@ -10,10 +10,32 @@
                     <t t-if="state.busy">Printing…</t><t t-elif="props.label" t-esc="props.label"/><t t-else="">Print label</t>
                 </button>
             </div>
-            <div t-if="!supported" class="small text-muted mt-1">This browser has no Bluetooth printing: use Chrome on Android, Windows or Mac.</div>
+            <PrinterUnsupportedNote t-if="!supported"/>
             <div t-elif="!hasCode" class="small text-muted mt-1">Add a barcode or an internal reference to print a label.</div>
             <div t-elif="props.disabled and props.disabledReason" class="small text-muted mt-1" t-esc="props.disabledReason"/>
             <div t-elif="printer.name" class="small text-muted mt-1"><i class="fa fa-bluetooth-b me-1"/><t t-esc="printer.name"/></div>
+        </div>
+    </t>
+
+    <!-- why this browser can't print; iPhone / iPad: open the page in Bluefy (label_print.js) -->
+    <t t-name="printer_connector.PrinterUnsupportedNote">
+        <div class="small text-muted mt-1 bsx_print_unsupported">
+            <div t-esc="message"/>
+            <t t-if="ios">
+                <div class="d-flex flex-wrap gap-2 mt-2">
+                    <button type="button" class="btn btn-sm btn-outline-primary bsx_print_copy" t-on-click="copyLink">
+                        <i class="fa fa-link me-1"/>Copy link
+                    </button>
+                    <a class="btn btn-sm btn-outline-secondary bsx_print_bluefy" t-att-href="appStoreUrl" target="_blank"
+                       rel="noopener noreferrer"><i class="fa fa-apple me-1"/>Get Bluefy</a>
+                </div>
+                <div t-if="state.copied" class="mt-1 bsx_print_copied">Link copied: open Bluefy and paste it in the address bar.</div>
+                <div t-elif="state.failed" class="mt-1">
+                    <div>Copy this link and open it in Bluefy:</div>
+                    <input type="text" readonly="readonly" class="form-control form-control-sm mt-1 bsx_print_link"
+                           t-att-value="pageUrl" t-on-focus="(ev) => ev.target.select()"/>
+                </div>
+            </t>
         </div>
     </t>
 

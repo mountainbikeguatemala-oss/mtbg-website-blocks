@@ -1,7 +1,8 @@
 /** @odoo-module **/
 /**
  * MakeID label printers (E1 and the other "new protocol" models) over Web Bluetooth: Chrome on Android, Windows,
- * macOS, Linux and ChromeOS (not iPhone / iPad). Protocol worked out from the MakeID-Life app and checked on the
+ * macOS, Linux and ChromeOS; on iPhone / iPad the free Bluefy browser (Safari and Chrome on iOS have no Web
+ * Bluetooth). Protocol worked out from the MakeID-Life app and checked on the
  * shop's E1: status 66 06 00 10 00 84; one 0x1B frame per chunk of rows; the printer answers every frame with
  * its status. See docs in the module description.
  */
@@ -16,6 +17,56 @@ const OLD_NOTIFY = "49535343-1e4d-4bd9-ba61-23c647249616";
 
 const WRITE_SIZE = 20; // ATT payload at the default MTU; works everywhere
 const STATUS_CMD = withChecksum([0x66, 0x06, 0x00, 0x10, 0x00]);
+
+/** Bluefy, the iPhone browser with Web Bluetooth (App Store; no documented URL scheme to open a page in it). */
+export const BLUEFY_APP_STORE_URL = "https://apps.apple.com/app/id1492822055";
+
+/** iPhone, iPod or iPad (iPadOS says "MacIntel" like a Mac, but has a touch screen). */
+export function isIOS(nav = globalThis.navigator) {
+    if (!nav) {
+        return false;
+    }
+    if (/iPad|iPhone|iPod/.test(nav.userAgent || "") || /^(iPad|iPhone|iPod)/.test(nav.platform || "")) {
+        return true;
+    }
+    return nav.platform === "MacIntel" && (nav.maxTouchPoints || 0) > 1;
+}
+
+/** Why this browser can't print (iPhone / iPad: open the page in Bluefy). */
+export function unsupportedMessage(nav = globalThis.navigator) {
+    if (isIOS(nav)) {
+        return _t("iPhone and iPad can only print labels from the Bluefy browser (free in the App Store): open this page in Bluefy.");
+    }
+    return _t("This browser has no Bluetooth printing: use Chrome on Android, Windows or Mac.");
+}
+
+/** The bytes of a characteristic value (a DataView, maybe a view on part of a bigger buffer), as a copy. */
+export function valueBytes(value) {
+    if (!value) {
+        return new Uint8Array(0);
+    }
+    if (ArrayBuffer.isView(value)) {
+        return new Uint8Array(value.buffer, value.byteOffset, value.byteLength).slice();
+    }
+    if (value instanceof ArrayBuffer) {
+        return new Uint8Array(value.slice(0));
+    }
+    return Uint8Array.from(value);
+}
+
+/**
+ * The printer chooser's options. Bluefy (like WebBLE, which it is reported to build on) scans only for devices
+ * advertising a service when any filter has `services`, so the name filters would find nothing there: on iPhone /
+ * iPad the chooser filters by name only.
+ */
+export function requestOptions({ ios = isIOS(), acceptAll = false } = {}) {
+    const optionalServices = [SERVICE, OLD_SERVICE];
+    if (acceptAll) {
+        return { acceptAllDevices: true, optionalServices };
+    }
+    const names = [{ namePrefix: "E1" }, { namePrefix: "MakeID" }];
+    return { filters: ios ? names : [names[0], { services: [SERVICE] }, names[1]], optionalServices };
+}
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -99,10 +150,17 @@ class MakeIdPrinter {
         this.status = null;
         this.onNotify = this.onNotify.bind(this);
         this.busy = false;
+        // the browser could not write without response once: every write waits for the answer from then on
+        this.noWriteWithoutResponse = false;
+    }
+
+    /** The browser's Web Bluetooth (Chrome; Bluefy on iPhone / iPad), none elsewhere. */
+    get bluetooth() {
+        return globalThis.navigator?.bluetooth || null;
     }
 
     get supported() {
-        return Boolean(globalThis.navigator?.bluetooth);
+        return Boolean(this.bluetooth);
     }
 
     get connected() {
@@ -116,20 +174,23 @@ class MakeIdPrinter {
     /** Must run from a click (the browser's printer chooser needs it); asks only the first time. */
     async connect({ forceChoose = false } = {}) {
         if (!this.supported) {
-            throw new PrinterError("unsupported", _t("This browser has no Bluetooth printing: use Chrome on Android, Windows or Mac."));
+            throw new PrinterError("unsupported", unsupportedMessage());
         }
         if (this.connected && !forceChoose) {
             return;
         }
         if (!this.device || forceChoose) {
-            this.device = await navigator.bluetooth.requestDevice({
-                filters: [{ namePrefix: "E1" }, { services: [SERVICE] }, { namePrefix: "MakeID" }],
-                optionalServices: [SERVICE, OLD_SERVICE],
-            });
-            this.device.addEventListener("gattserverdisconnected", () => {
+            this.device = await this.requestDevice();
+            this.noWriteWithoutResponse = false;
+            const gone = () => {
                 this.write = null;
                 this.notify = null;
-            });
+            };
+            if (this.device.addEventListener) {
+                this.device.addEventListener("gattserverdisconnected", gone);
+            } else {
+                this.device.ongattserverdisconnected = gone;
+            }
         }
         let server = null;
         for (let attempt = 0; attempt < 3 && !server; attempt++) {
@@ -157,6 +218,23 @@ class MakeIdPrinter {
         await this.notify.startNotifications();
     }
 
+    /**
+     * The browser's printer chooser. A browser that rejects the filters (a TypeError / NotSupportedError, e.g. a
+     * partial Web Bluetooth like Bluefy's) gets the chooser with every device instead. Closing the chooser
+     * (NotFoundError) is passed on.
+     */
+    async requestDevice() {
+        const bluetooth = this.bluetooth;
+        try {
+            return await bluetooth.requestDevice(requestOptions());
+        } catch (error) {
+            if (error?.name !== "TypeError" && error?.name !== "NotSupportedError") {
+                throw error;
+            }
+            return await bluetooth.requestDevice(requestOptions({ acceptAll: true }));
+        }
+    }
+
     disconnect() {
         try {
             this.device?.gatt?.disconnect();
@@ -166,7 +244,8 @@ class MakeIdPrinter {
     }
 
     onNotify(event) {
-        let data = new Uint8Array(event.target.value.buffer.slice(0));
+        // the value is a DataView: read its own bytes only (its buffer can be bigger, from an offset)
+        let data = valueBytes(event?.target?.value || this.notify?.value);
         if (data.length > 4 && data[0] === 0x23 && data[1] === 0x23) {
             data = data.slice(4);
         }
@@ -195,14 +274,31 @@ class MakeIdPrinter {
         });
         for (let i = 0; i < packet.length; i += WRITE_SIZE) {
             const part = packet.slice(i, i + WRITE_SIZE);
-            if (this.write.writeValueWithoutResponse) {
-                await this.write.writeValueWithoutResponse(part);
-            } else {
-                await this.write.writeValue(part);
-            }
+            await this.writePart(part);
             await sleep(4);
         }
         return answer;
+    }
+
+    /** One write: without response where the browser can, else (and after it failed once) with it. */
+    async writePart(part) {
+        const w = this.write;
+        if (w.writeValueWithoutResponse && !this.noWriteWithoutResponse) {
+            try {
+                await w.writeValueWithoutResponse(part);
+                return;
+            } catch (error) {
+                if (!this.connected) {
+                    throw error;
+                }
+                this.noWriteWithoutResponse = true;
+            }
+        }
+        if (w.writeValue) {
+            await w.writeValue(part);
+        } else {
+            await w.writeValueWithResponse(part);
+        }
     }
 
     async readStatus() {

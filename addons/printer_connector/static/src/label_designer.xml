@@ -13,7 +13,7 @@
                         <i t-att-class="state.busy ? 'fa fa-spinner fa-spin me-1' : 'fa fa-print me-1'"/>Print a test label
                     </button>
                 </div>
-                <div t-if="!supported" class="small text-muted">This browser has no Bluetooth printing: use Chrome on Android, Windows or Mac.</div>
+                <PrinterUnsupportedNote t-if="!supported"/>
                 <div t-foreach="state.warnings" t-as="w" t-key="w_index" class="text-warning small"><i class="fa fa-exclamation-triangle me-1"/><t t-esc="w"/></div>
             </div>
 

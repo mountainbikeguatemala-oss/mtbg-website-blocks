@@ -1,6 +1,6 @@
 {
     "name": "Printer Connector",
-    "version": "19.0.1.4.0",
+    "version": "19.0.1.5.0",
     "category": "Productivity/Connectors",
     "mtbg_tours_section": "connectors",
     "summary": "Odoo to the business's printers, straight from the browser. First: barcode labels on a Bluetooth "
@@ -10,7 +10,8 @@
 The printers of the tours site and the bike shop, connected from the browser (owner, 2026-11-19: one global
 module for our printers; more printers come here). First printer: barcode labels on a MakeID label printer (E1 and
 the other models on the same protocol) over Web Bluetooth: Chrome on Android, Windows, macOS, Linux (with
-Bluetooth on) or ChromeOS; not iPhone / iPad.
+Bluetooth on) or ChromeOS; on iPhone / iPad the free Bluefy browser (Safari and Chrome there have no Web Bluetooth:
+the Print label button then says to open the page in Bluefy, with Copy link and Get Bluefy).
 
 * Settings › Label layout (``bsx.label.layout``): a drag and drop editor like the Card Designer (the fields Logo,
   Barcode, Code, Name, Price dragged into the label's rows, each row with its Left, Center and Right, reordered,
@@ -45,6 +46,9 @@ Bluetooth on) or ChromeOS; not iPhone / iPad.
             "printer_connector/static/src/label_print.css",
             "printer_connector/static/src/label_designer.js",
             "printer_connector/static/src/label_designer.xml",
+        ],
+        "web.assets_unit_tests": [
+            "printer_connector/static/tests/*.test.js",
         ],
     },
     "pre_init_hook": "pre_init_hook",
