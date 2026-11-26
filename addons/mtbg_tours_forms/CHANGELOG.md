@@ -2,6 +2,10 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_forms-*'`.
 
+## 19.0.0.8.1 · 2026-11-26
+
+- **The forms' checks and steps in Spanish** (2026-11-26, Spanish audit: "Please enter your name", "Please enter a valid email", "Back", "Next"… in English on /es): public pages load this module's JavaScript translations (`ir.http`), and Odoo's reCAPTCHA's when it is installed (Odoo registers them nowhere); es.po already had them.
+
 ## 19.0.0.8.0 (2026-11-25)
 
 - **Any field can be required** (owner, 2026-11-25: "in the forms extension we need the ability to set any field as mandatory (required)"; asked which form: "All forms"). Every field block keeps its Answer option (Optional /

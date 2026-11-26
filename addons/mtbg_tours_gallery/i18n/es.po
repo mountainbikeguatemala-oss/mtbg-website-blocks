@@ -26,11 +26,6 @@ msgid "% down"
 msgstr "% en vertical"
 
 #. module: mtbg_tours_gallery
-#: model_terms:ir.ui.view,arch_db:mtbg_tours_gallery.s_mtbg_gallery
-msgid "<i class=\"fa fa-th-large me-1\"/> Tiled Gallery — choose the photos in the block options."
-msgstr "<i class=\"fa fa-th-large me-1\"/> Galería en mosaico — elige las fotos en las opciones del bloque."
-
-#. module: mtbg_tours_gallery
 #. odoo-javascript
 #: code:addons/mtbg_tours_gallery/static/src/website_builder/gallery_option.xml:0
 msgid "Add"
@@ -72,7 +67,7 @@ msgid "Cropped in a wide tile and in a tall one:"
 msgstr "Recortada en un mosaico ancho y en uno alto:"
 
 #. module: mtbg_tours_gallery
-#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_ir_attachment__display_name model:ir.model.fields,field_description:mtbg_tours_gallery.field_mtbg_gallery__display_name
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_ir_attachment__display_name model:ir.model.fields,field_description:mtbg_tours_gallery.field_ir_http__display_name model:ir.model.fields,field_description:mtbg_tours_gallery.field_mtbg_gallery__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
 
@@ -87,7 +82,12 @@ msgid "Focus point (down)"
 msgstr "Punto de enfoque (vertical)"
 
 #. module: mtbg_tours_gallery
-#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_ir_attachment__id model:ir.model.fields,field_description:mtbg_tours_gallery.field_mtbg_gallery__id
+#: model:ir.model,name:mtbg_tours_gallery.model_ir_http
+msgid "HTTP Routing"
+msgstr "Enrutamiento HTTP"
+
+#. module: mtbg_tours_gallery
+#: model:ir.model.fields,field_description:mtbg_tours_gallery.field_ir_attachment__id model:ir.model.fields,field_description:mtbg_tours_gallery.field_ir_http__id model:ir.model.fields,field_description:mtbg_tours_gallery.field_mtbg_gallery__id
 msgid "ID"
 msgstr "ID"
 
@@ -171,6 +171,12 @@ msgstr "Espaciado"
 #: model_terms:ir.ui.view,arch_db:mtbg_tours_gallery.snippets
 msgid "Tiled Gallery"
 msgstr "Galería en mosaico"
+
+#. module: mtbg_tours_gallery
+#. odoo-javascript
+#: code:addons/mtbg_tours_gallery/static/src/gallery/gallery.js:0
+msgid "Tiled Gallery — choose the photos in the block options."
+msgstr "Galería en mosaico — elige las fotos en las opciones del bloque."
 
 #. module: mtbg_tours_gallery
 #: model:ir.model,name:mtbg_tours_gallery.model_mtbg_gallery

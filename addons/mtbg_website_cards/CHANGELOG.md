@@ -2,6 +2,11 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_website_cards-*'`.
 
+## 19.0.0.4.12 · 2026-11-26
+
+- **"Compare" in the page's language** (2026-11-26, Spanish audit: the catalog cards' Compare box said "Compare" on 23 /es pages): a design's compare box with no text of its own, or the starting "Compare", shows "Compare" translated ("Comparar"); a text of its own shows as typed.
+- New string (Spanish in es.po): "Compare".
+
 ## 19.0.0.4.11 · 2026-11-21
 
 - **The slider measured when laid out** (desktop INP, 2026-11-21): a slider's arrows and "fits" state are measured in

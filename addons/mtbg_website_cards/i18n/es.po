@@ -438,6 +438,12 @@ msgid "Columns"
 msgstr "Columnas"
 
 #. module: mtbg_website_cards
+#. odoo-python
+#: code:addons/mtbg_website_cards/models/card_design.py:0
+msgid "Compare"
+msgstr "Comparar"
+
+#. module: mtbg_website_cards
 #. odoo-javascript
 #: code:addons/mtbg_website_cards/static/src/designer/designer.xml:0
 msgid "Computer"

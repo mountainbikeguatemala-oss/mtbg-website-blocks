@@ -124,6 +124,10 @@ class MtbgGalleryOptionPlugin extends Plugin {
             for (const el of root.querySelectorAll(".s_mtbg_gallery_placeholder.d-none")) {
                 el.classList.remove("d-none");
             }
+            // the editor's hint is written while editing (gallery.js), never saved
+            for (const el of root.querySelectorAll(".s_mtbg_gallery_placeholder")) {
+                el.replaceChildren();
+            }
             for (const el of root.querySelectorAll(".s_mtbg_gallery[data-mtbg-refresh]")) {
                 delete el.dataset.mtbgRefresh;
             }

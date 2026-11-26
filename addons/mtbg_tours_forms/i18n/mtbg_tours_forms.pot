@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-24 05:28+0000\n"
-"PO-Revision-Date: 2026-11-24 05:28+0000\n"
+"POT-Creation-Date: 2026-11-26 07:08+0000\n"
+"PO-Revision-Date: 2026-11-26 07:08+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -32,6 +32,12 @@ msgstr ""
 #. module: mtbg_tours_forms
 #: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form_block__text_size
 msgid "% of the form's text size; 0: the form's"
+msgstr ""
+
+#. module: mtbg_tours_forms
+#. odoo-javascript
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0
+msgid "%s required"
 msgstr ""
 
 #. module: mtbg_tours_forms
@@ -96,6 +102,12 @@ msgstr ""
 #. odoo-python
 #: code:addons/mtbg_tours_forms/models/form.py:0
 msgid "A longer sample answer, as a rider would write it."
+msgstr ""
+
+#. module: mtbg_tours_forms
+#. odoo-python
+#: code:addons/mtbg_tours_forms/models/form.py:0
+msgid "A new contact needs a name: this field is always required."
 msgstr ""
 
 #. module: mtbg_tours_forms
@@ -357,6 +369,14 @@ msgid "Colours"
 msgstr ""
 
 #. module: mtbg_tours_forms
+#. odoo-python
+#: code:addons/mtbg_tours_forms/models/form.py:0
+msgid ""
+"Consent to texts is never a condition: the law and the carriers need these "
+"boxes optional."
+msgstr ""
+
+#. module: mtbg_tours_forms
 #: model:ir.model,name:mtbg_tours_forms.model_res_partner
 msgid "Contact"
 msgstr ""
@@ -473,6 +493,7 @@ msgid "Discard"
 msgstr ""
 
 #. module: mtbg_tours_forms
+#: model:ir.model.fields,field_description:mtbg_tours_forms.field_ir_http__display_name
 #: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__display_name
 #: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__display_name
 #: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_designer__display_name
@@ -572,6 +593,11 @@ msgid "Except when"
 msgstr ""
 
 #. module: mtbg_tours_forms
+#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__field_rules
+msgid "Field Rules"
+msgstr ""
+
+#. module: mtbg_tours_forms
 #. odoo-javascript
 #: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0
 msgid "Field background"
@@ -591,7 +617,8 @@ msgstr ""
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0 code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
 msgid "Fields"
 msgstr ""
 
@@ -696,6 +723,11 @@ msgid "H5"
 msgstr ""
 
 #. module: mtbg_tours_forms
+#: model:ir.model,name:mtbg_tours_forms.model_ir_http
+msgid "HTTP Routing"
+msgstr ""
+
+#. module: mtbg_tours_forms
 #. odoo-javascript
 #: code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
 msgid "Half"
@@ -788,6 +820,7 @@ msgid "Homepage"
 msgstr ""
 
 #. module: mtbg_tours_forms
+#: model:ir.model.fields,field_description:mtbg_tours_forms.field_ir_http__id
 #: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form__id
 #: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__id
 #: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_designer__id
@@ -1410,6 +1443,12 @@ msgid "Promotional Texts Consent"
 msgstr ""
 
 #. module: mtbg_tours_forms
+#. odoo-python
+#: code:addons/mtbg_tours_forms/models/form.py:0
+msgid "Promotional texts"
+msgstr ""
+
+#. module: mtbg_tours_forms
 #: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_partner__mtbg_sms_marketing_date
 #: model:ir.model.fields,field_description:mtbg_tours_forms.field_res_users__mtbg_sms_marketing_date
 msgid "Promotions Consent Given On"
@@ -1523,6 +1562,12 @@ msgstr ""
 #. module: mtbg_tours_forms
 #: model:ir.model.fields.selection,name:mtbg_tours_forms.selection__mtbg_form_block__kind__texting
 msgid "SMS / WhatsApp opt-ins"
+msgstr ""
+
+#. module: mtbg_tours_forms
+#. odoo-python
+#: code:addons/mtbg_tours_forms/models/form.py:0
+msgid "SMS updates"
 msgstr ""
 
 #. module: mtbg_tours_forms
@@ -2158,6 +2203,12 @@ msgstr ""
 #. module: mtbg_tours_forms
 #. odoo-python
 #: code:addons/mtbg_tours_forms/models/form.py:0
+msgid "WhatsApp updates"
+msgstr ""
+
+#. module: mtbg_tours_forms
+#. odoo-python
+#: code:addons/mtbg_tours_forms/models/form.py:0
 msgid "Where the form shows"
 msgstr ""
 
@@ -2440,6 +2491,11 @@ msgid "website"
 msgstr ""
 
 #. module: mtbg_tours_forms
+#: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form_block__field_rules
+msgid "{field key: {mode, rule}}: Required, field by field, inside the block"
+msgstr ""
+
+#. module: mtbg_tours_forms
 #: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form__header_look
 msgid ""
 "{level (h2-h5, empty: h1), size (%), color, color_dark, bold, upper, align}"
@@ -2454,50 +2510,4 @@ msgstr ""
 #. module: mtbg_tours_forms
 #: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form__style
 msgid "{variant: {token: value}} (the designer's Style tab)"
-msgstr ""
-
-#. module: mtbg_tours_forms
-#. odoo-python
-#: code:addons/mtbg_tours_forms/models/form.py:0
-msgid "Consent to texts is never a condition: the law and the carriers need these boxes optional."
-msgstr ""
-
-#. module: mtbg_tours_forms
-#. odoo-python
-#: code:addons/mtbg_tours_forms/models/form.py:0
-msgid "SMS updates"
-msgstr ""
-
-#. module: mtbg_tours_forms
-#. odoo-python
-#: code:addons/mtbg_tours_forms/models/form.py:0
-msgid "WhatsApp updates"
-msgstr ""
-
-#. module: mtbg_tours_forms
-#. odoo-python
-#: code:addons/mtbg_tours_forms/models/form.py:0
-msgid "Promotional texts"
-msgstr ""
-
-#. module: mtbg_tours_forms
-#. odoo-python
-#: code:addons/mtbg_tours_forms/models/form.py:0
-msgid "A new contact needs a name: this field is always required."
-msgstr ""
-
-#. module: mtbg_tours_forms
-#. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0
-msgid "%s required"
-msgstr ""
-
-#. module: mtbg_tours_forms
-#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__field_rules
-msgid "Field Rules"
-msgstr ""
-
-#. module: mtbg_tours_forms
-#: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form_block__field_rules
-msgid "{field key: {mode, rule}}: Required, field by field, inside the block"
 msgstr ""

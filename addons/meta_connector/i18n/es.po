@@ -484,6 +484,7 @@ msgid "Disconnected"
 msgstr "Desconectado"
 
 #. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_ir_http__display_name
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector__display_name
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__display_name
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__display_name
@@ -756,6 +757,11 @@ msgid "Grid"
 msgstr "Cuadrícula"
 
 #. module: meta_connector
+#: model:ir.model,name:meta_connector.model_ir_http
+msgid "HTTP Routing"
+msgstr "Enrutamiento HTTP"
+
+#. module: meta_connector
 #: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__valign
 msgid "Hangs From"
 msgstr "Cuelga de"
@@ -783,6 +789,7 @@ msgid "Human Agent permission"
 msgstr "Permiso Human Agent"
 
 #. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_ir_http__id
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector__id
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_app__id
 #: model:ir.model.fields,field_description:meta_connector.field_meta_connector_media__id

@@ -5,6 +5,7 @@
 import { Interaction } from "@web/public/interaction";
 import { registry } from "@web/core/registry";
 import { rpc } from "@web/core/network/rpc";
+import { _t } from "@web/core/l10n/translation";
 
 const PAGE = /^([a-z][a-z0-9_]*):page$/;
 
@@ -25,6 +26,18 @@ export function gallerySource(el) {
     }
     const record = el.closest("[data-oe-model][data-oe-id]");
     return { gallery, page_model: record?.dataset.oeModel || "", page_id: Number(record?.dataset.oeId) || 0 };
+}
+
+/**
+ * The editor's hint in an empty block, written while editing only: the page saves an empty placeholder (the hint
+ * never in the page's HTML, so never in English on a Spanish page; emptied on save, gallery_option_plugin.js).
+ */
+export function galleryHint(placeholder) {
+    if (placeholder && !placeholder.textContent.trim()) {
+        const icon = document.createElement("i");
+        icon.className = "fa fa-th-large me-1";
+        placeholder.replaceChildren(icon, " " + _t("Tiled Gallery — choose the photos in the block options."));
+    }
 }
 
 // the blocks not loaded yet: each one's load(), run once (galleriesReady() runs them all)
@@ -112,6 +125,9 @@ export class TiledGalleryBlock extends Interaction {
         if (placeholder && (hasTiles || !this.isEditMode())) {
             placeholder.classList.add("d-none");
             this.registerCleanup(() => placeholder.classList.remove("d-none"));
+        }
+        if (placeholder && !hasTiles && this.isEditMode()) {
+            galleryHint(placeholder);
         }
         if (!hasTiles) {
             return;

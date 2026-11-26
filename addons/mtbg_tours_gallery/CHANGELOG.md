@@ -2,6 +2,12 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_gallery-*'`.
 
+## 19.0.0.6.11 · 2026-11-26
+
+- **No English editor hint in the pages** (2026-11-26, Spanish audit: "Tiled Gallery — choose a tour or add pictures in the block options." in the HTML of 75 /es tour pages): the hint of an empty block is written while editing only (`gallery.js`, translated), never saved; the update empties it in the blocks already saved, in every language (views and HTML fields).
+- Public pages load this module's JavaScript translations (`ir.http`): "Show all %s photos" and the photos' labels in Spanish on /es.
+- New string (Spanish in es.po): the hint, now in the JavaScript.
+
 ## 19.0.0.6.9 (2026-11-21)
 
 - **The photo gallery takes optional sizes and captions** (for Hotels and Accommodations 19.0.0.8.63's day galleries, owner 2026-11-21: "for multi-day in itinerary day-by day we should have the option to create a gallery for each day"). Additive: a photo of `gallery_photos` may also have `srcset` and `sizes` (the main photo's sizes: the browser picks its copy), `main` (a thumbnail's picture for the main photo's box, `data-mtbg-main`, already read since 19.0.0.6.7), `caption` (`data-mtbg-caption`: the lightbox shows it under the photo) and `width` (`data-mtbg-width`: the full picture's width, for the lightbox). A photo without them, and every gallery written so far (hotel sections, content blocks), is shown exactly as before.

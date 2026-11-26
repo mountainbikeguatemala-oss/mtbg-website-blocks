@@ -75,9 +75,8 @@
     <template id="s_mtbg_gallery" name="Tiled Gallery">
         <section class="s_mtbg_gallery o_not_editable my-3" data-snippet="s_mtbg_gallery" data-name="Tiled Gallery"
                  data-gallery="" contenteditable="false">
-            <div class="s_mtbg_gallery_placeholder alert alert-info text-center mb-0">
-                <i class="fa fa-th-large me-1"/> Tiled Gallery — choose the photos in the block options.
-            </div>
+            <!-- the editor's hint: written while editing (gallery.js), never saved in the page -->
+            <div class="s_mtbg_gallery_placeholder alert alert-info text-center mb-0"/>
         </section>
     </template>
 

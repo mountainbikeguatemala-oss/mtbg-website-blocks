@@ -76,6 +76,7 @@ ICON = re.compile(r'^fa-[a-z0-9-]+$')
 PLACEHOLDER = re.compile(r'\{(\w+)\}')
 # the fields every source has
 BOOK = 'book'
+COMPARE = 'Compare'  # the compare box's starting label (shown translated)
 # 0.1.x places -> regions
 OLD_PLACES = {'top_left': 'top', 'top_right': 'top', 'image_bottom': 'bottom', 'body': 'below'}
 
@@ -348,6 +349,9 @@ class MtbgWebsiteCardDesign(models.Model):
                     continue
                 entry = dict(item, kind=kind, value=value or {}, segments=segments,
                               show=item['show'] or region.get('show') or 'always')
+                if kind == 'compare' and (item['text'] or '').strip() in ('', COMPARE):
+                    # the compare box's label in the page's language (the designs' starting "Compare" too)
+                    entry['text'] = self.env._("Compare")
                 if item['field'] == BOOK and not entry['icon']:
                     entry['icon'] = book_icon  # (the website's card settings)
                 if item['look'] in BANNERS:

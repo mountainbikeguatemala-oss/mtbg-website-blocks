@@ -2,6 +2,10 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'meta_connector-*'`.
 
+## 19.0.1.6.4 · 2026-11-26
+
+- **The Instagram feed's texts in Spanish** (2026-11-26, Spanish audit: "See the post on Instagram", "Follow @%s", "%s followers" in English on /es): public pages load this module's JavaScript translations (`ir.http`); es.po already had them.
+
 ## 19.0.1.6.3 · 2026-11-24
 
 - **Instagram: a picture is published only once Meta has it ready** (www, since 2026-11-22: some Instagram stories
