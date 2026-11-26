@@ -107,7 +107,7 @@ class TestMarketingOverlay(TransactionCase):
         Overlay = type(self.env["mtbg.marketing.overlay"])
         self.patch(Overlay, "_mtbg_source_photo", api.model(lambda model, record, **o: (png((0, 0, 255)), True)))
         seen = []
-        for _post in range(6):
+        for _post in range(30):
             expected = shown({"_pick_seed": partner.id})
             self.overlay._mtbg_render_record(partner, "en", advance_pick=True)
             self.assertEqual(self.overlay.pick_last_layer_id.name, expected[0], "the preview is what is posted")
@@ -115,7 +115,7 @@ class TestMarketingOverlay(TransactionCase):
         self.assertTrue(all(a != b for a, b in zip(seen, seen[1:])), "never the same twice in a row: %s" % seen)
         self.assertEqual(set(seen), set(words), "all of them come round")
         self.overlay._mtbg_render_record(partner, "en")
-        self.assertEqual(self.overlay.pick_count, 6, "a preview does not count")
+        self.assertEqual(self.overlay.pick_count, 30, "a preview does not count")
 
     def test_3d_lettering_and_left_edge(self):
         plain = overlay_render.photo_canvas(None, "vertical", background="#000000")

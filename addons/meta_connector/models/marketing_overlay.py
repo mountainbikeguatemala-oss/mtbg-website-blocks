@@ -28,6 +28,7 @@ Every source gets the website's values: {website_name}, {website_domain} ("examp
 of a website (``website_id``) draws with that website's logo and address, one without with the website it is drawn
 for. ``_mtbg_render_record`` draws a record; the preview route (controllers) draws one for a queue's card."""
 import base64
+import random
 import io
 import re
 from PIL import Image
@@ -225,15 +226,16 @@ class MtbgMarketingOverlay(models.Model):
 
     def _mtbg_pick_layer(self, values):
         """The one "One per post" layer this drawing shows: of those whose flag the values have, not the last post's
-        when another can go, turning with the posts (and the record)."""
+        when another can go, at random (the same draw for the same post and record)."""
         self.ensure_one()
         pool = self.layer_ids.filtered(lambda l: l.active and l.pick_one).sorted(lambda l: (l.sequence, l.id))
         eligible = pool.filtered(lambda l: not l.show_if or values.get(l.show_if))
         if not eligible:
             return pool.browse()
         candidates = (eligible - self.pick_last_layer_id) or eligible
-        seed = int(self.pick_count or 0) + int(values.get('_pick_seed') or 0)
-        return candidates[seed % len(candidates)]
+        # random (owner, 2026-11-26: "random"), but the same for the same post: the preview is what is posted
+        chance = random.Random('%s-%s-%s' % (self.id, self.pick_count or 0, values.get('_pick_seed') or 0))
+        return candidates[chance.randrange(len(candidates))]
 
     def _compute_placeholders_help(self):
         from markupsafe import Markup
