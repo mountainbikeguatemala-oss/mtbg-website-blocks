@@ -1180,3 +1180,21 @@ msgstr ""
 #: code:addons/mtbg_tours_page_speed/models/speed_log.py:0
 msgid "tour cover"
 msgstr ""
+
+#. module: mtbg_tours_page_speed
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/ir_http.py:0
+msgid "Open photo"
+msgstr ""
+
+#. module: mtbg_tours_page_speed
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/ir_http.py:0
+msgid "Open the map"
+msgstr ""
+
+#. module: mtbg_tours_page_speed
+#. odoo-python
+#: code:addons/mtbg_tours_page_speed/models/ir_http.py:0
+msgid "Home"
+msgstr ""

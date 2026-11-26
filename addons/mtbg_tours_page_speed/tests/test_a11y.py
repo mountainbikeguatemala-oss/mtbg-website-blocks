@@ -53,6 +53,42 @@ class TestAccessible(TransactionCase):
         self.assertIn(b'aria-label="Learn more: Tours"', out)
         self.assertIn(b'aria-label="Learn more: other.org"', out)
 
+    def test_other_language(self):
+        """0.12.0: a page in another language than the website's never gets English words from a file's or an
+        address's name: a caption, the heading, the page's title; an icon beside a button's words is a decoration;
+        an empty link takes the words of a link to the same page; this extension's own words come translated."""
+        page = (b'<html><head><title>Paseo al lago | Ejemplo</title></head><body><header><img src="/web/image/9/logo-white.png"/>'
+                b'</header><main><h2>Nivel <em>1-5</em></h2><img src="/web/image/12/difficulty-chart.jpg"/>'
+                b'<figure><img src="/web/image/13/cal-white.png" alt=""/><figcaption>Foto del <b>lago</b></figcaption></figure>'
+                b'<a href="#form" class="btn"><img src="/web/image/14/cal-white.png"> Reservar ahora</a>'
+                b'<img src="/web/image/15/five-stars-300px.png" alt="Cinco estrellas"/>'
+                b'<a href="/es/blog/guatemala-mountain-biking-guide-2"><div class="cover"></div></a>'
+                b'<a href="/es/blog/guatemala-mountain-biking-guide-2">Gu\xc3\xada de MTB</a>'
+                b'<a href="/es/x-y"><i class="fa fa-x"/></a><a href="/web/image/16"><span></span></a>'
+                b'<a href="/es/tours/lake-atitlan">Leer m\xc3\xa1s</a>'
+                b'<section class="banner"><img src="/web/image/18/early-bird.png" alt=""/>'
+                b'<h3><span class="fa"></span> Precio anticipado</h3></section></main>'
+                b'<footer><img src="/web/image/17/footer-logo-big.png"/></footer></body></html>')
+        labels = {'photo': 'Abrir foto', 'map': 'Abrir el mapa', 'home': 'Inicio'}
+        out = a11y.accessible(page, {}, 'Ejemplo', (), labels, words=False)
+        self.assertIn(b'<img alt="Nivel 1-5" src="/web/image/12/', out, "the heading it is under")
+        self.assertIn(b'<img src="/web/image/13/cal-white.png" alt="Foto del lago"/>', out, "its figure's caption")
+        self.assertIn(b'<img alt="" src="/web/image/14/', out, "an icon beside the button's words")
+        self.assertIn(b'alt="Cinco estrellas"', out, "its own alt stays")
+        self.assertIn(b'<a aria-label="Gu\xc3\xada de MTB" href="/es/blog/guatemala-mountain', out, "the card's title")
+        self.assertIn(b'<a aria-label="Paseo al lago" href="/es/x-y">', out, "else the page's title")
+        self.assertIn(b'<a aria-label="Abrir foto" href="/web/image/16">', out)
+        self.assertIn(b'<a href="/es/tours/lake-atitlan">Leer m', out, "no address words for a vague link")
+        self.assertIn(b'<img src="/web/image/18/early-bird.png" alt="Precio anticipado"/>', out, "its section's heading")
+        self.assertIn(b'<img alt="Paseo al lago" src="/web/image/9/', out, "outside the main area: the title")
+        self.assertIn(b'<img alt="Paseo al lago" src="/web/image/17/', out)
+        for english in (b'Cal white', b'Difficulty chart', b'Guatemala mountain biking guide', b'X y', b'Open photo',
+                        b'Logo white', b'Lake atitlan', b'Early bird'):
+            self.assertNotIn(english, out)
+        self.assertEqual(a11y.accessible(out, {}, 'Ejemplo', (), labels, words=False), out, "once")
+        # the website's own language: as before (the file's words)
+        self.assertIn(b'<img alt="Difficulty chart" src="/web/image/12/', a11y.accessible(page, {}, 'Ejemplo'))
+
     def test_file_words(self):
         for name, words in (('lake-atitlan-sunset_2-1024x683.jpg', 'Lake atitlan sunset'), ('IMG_1234.JPG', ''),
                             ('DSC0042.jpg', ''), ('20230512_101010.jpg', ''), ('Tecpan%20XC%20trail.jpg', 'Tecpan XC trail')):
@@ -67,6 +103,27 @@ class TestAccessiblePages(HttpCase):
         self.assertEqual(response.status_code, 200)
         self.assertNotRegex(response.text, r'<img(?![^>]*\salt=)[^>]*>', "every picture has an alt")
         self.assertNotRegex(response.text, r'navbar-brand[^>]*>\s*<img[^>]*loading="lazy"', "the logo is not lazy")
+
+    def test_spanish_page_labels(self):
+        """0.12.0: on a page in another language, this extension's words in it (es.po), never a file's English."""
+        lang = self.env['res.lang']._activate_lang('es_ES')
+        website = self.env['website'].get_current_website()
+        website.language_ids |= lang
+        att = self.env['ir.attachment'].create({'name': 'cal-white.png', 'public': True, 'mimetype': 'image/png',
+                                                'raw': b'\x89PNG\r\n\x1a\n'})
+        view = self.env['ir.ui.view'].create({
+            'name': 'a11y es', 'type': 'qweb', 'key': 'test_a11y.es_page',
+            'arch': '<t t-call="website.layout"><div id="wrap"><h2>Heading</h2>'
+                    '<img src="/web/image/%d"/><a href="/web/image/%d"><span></span></a></div></t>' % (att.id, att.id)})
+        self.env['website.page'].create({'view_id': view.id, 'url': '/a11y-es-test', 'is_published': True,
+                                         'website_id': website.id})
+        self.env['ir.module.module']._load_module_terms(['mtbg_tours_page_speed'], ['es_ES'], overwrite=True)
+        en = self.url_open('/a11y-es-test').text
+        self.assertIn('aria-label="Open photo"', en)
+        self.assertIn('alt="Cal white"', en)
+        es = self.url_open('/es/a11y-es-test').text  # (after the English page: /es sets the language cookie)
+        self.assertIn('aria-label="Abrir foto"', es)
+        self.assertNotIn('Cal white', es)
 
 
 def _webp(width, height, quality=95):

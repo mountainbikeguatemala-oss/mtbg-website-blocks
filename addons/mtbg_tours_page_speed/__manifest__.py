@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Tours — Page Speed',
-    'version': '19.0.0.11.1',
+    'version': '19.0.0.12.0',
     'category': 'Website/Website',
     'summary': "The website's pictures as fast as the screen allows: the first one at once, phone and tablet sizes "
                "of the background photos, every photo's size",
@@ -41,6 +41,9 @@ on their own (their address, their homepages), the dashboard shows one website a
 A click at once (0.11.0, desktop INP 2026-11-21): the visitors' scripts start in short slices, the page answers a
 click between two: the bundle's modules (in Odoo's order), then the page's interactions (in Odoo's order), also those
 of a bundle loaded later (the booking form's).
+In the page's language (0.12.0, owner 2026-11-26): the names it writes ("Open photo", "Open the map", "Home") are
+translated; on a page in another language than the website's, a picture or link is never named by a file's or an
+address's (English) words: its caption, its section's heading, the heading it is under, the page's title.
 """,
     'author': 'MTBG Tours contributors',
     'license': 'LGPL-3',

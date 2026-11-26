@@ -2,6 +2,27 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_page_speed-*'`.
 
+## 19.0.0.12.0 · 2026-11-26
+
+- **No English picture names on a page in another language** (owner 2026-11-26: "every text on the Spanish site must
+  be Spanish"; live /es audit: 292 alts made from the pictures' file names, "Cal white", "Chat icon white",
+  "5 stars 300px", "Difficulty Chart", "Early Bird" (the group banner's bird, on ~15 tour pages)…): on a page in
+  another language than the website's own, a picture without an alt (or the editor's alt="" on a photo) is no longer
+  named by its file's or attachment's name (written in the website's language). It takes, in the page's language:
+  its figure's caption, else the heading of its section (a banner's title), else the heading it is under in the
+  page's main area, else the page's title. A picture inside a link or button that has words (the banners' calendar
+  and chat icons beside "Reservar ahora") is a decoration there (alt=""). An alt of its own (stored, translated)
+  always stays; pages in the website's own language are named as before.
+- **Links named in the page's language**: "Open photo", "Open the map" and "Home" (a link with nothing to say) are
+  translatable ("Abrir foto", "Abrir el mapa", "Inicio"). On a page in another language, a link with nothing to say
+  to one of the site's pages (the journal's cover links: "Guatemala mountain biking guide", the post's address in
+  words) takes the words of another link to the same page (the card's title), else the page's title; a "Learn more"
+  link is no longer told the address's words there.
+- **Tests**: `test_a11y.py` (a Spanish page: caption, section heading, heading, decoration, card title, page title,
+  no file or address words; the English page as before) and an /es page of the test site (`Abrir foto`, no file
+  name).
+- New strings (Spanish in es.po): "Open photo", "Open the map", "Home".
+
 ## 19.0.0.11.0 · 2026-11-21
 
 - **A click answered at once on computers** (desktop INP, 2026-11-21: Google Search Console rated every computer page

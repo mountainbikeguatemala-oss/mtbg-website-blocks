@@ -473,6 +473,20 @@ def _names(env, ids):
     return {row['id']: row['name'] for row in found}
 
 
+def _labels(env):
+    """The words this extension writes on a page (a11y.LABELS), in the page's language (0.12.0)."""
+    return {'photo': env._("Open photo"), 'map': env._("Open the map"), 'home': env._("Home")}
+
+
+def _own_words(env, website):
+    """True when the page is in the website's own language: a file's or an address's words may name a picture or a
+    link (they are written in it); else never (0.12.0: "Cal white", "5 stars 300px" on the Spanish pages)."""
+    lang = getattr(request, 'lang', None)
+    code = (lang.code if lang else '') or env.lang or ''
+    default = website.default_lang_id.code if website and website.default_lang_id else ''
+    return not code or not default or code == default
+
+
 class IrHttp(models.AbstractModel):
     _inherit = 'ir.http'
 
@@ -494,6 +508,7 @@ class IrHttp(models.AbstractModel):
                 faster = fonts_early(faster, _stylesheet_imports(request.env))
             faster = accessible(faster, _names(request.env, image_ids(faster)), request.website.name or '',
                                 (request.httprequest.host, urlsplit(request.website.domain or '').netloc
-                                 or request.website.domain or ''))
+                                 or request.website.domain or ''),
+                                _labels(request.env), _own_words(request.env, request.website))
             if faster is not page:
                 response.set_data(faster)
