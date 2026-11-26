@@ -329,6 +329,45 @@ class MtbgForm(models.Model):
         """{kind: message}: the blocks this form type cannot do without (the designer refuses to save without)."""
         return {'submit': _("The form needs its Send button.")}
 
+    # ------------------------------------------------------------------ Required, field by field (0.8.0)
+    @api.model
+    def _mtbg_block_fields(self):
+        """{kind: [field]}: the fields inside a form type's own blocks (a block that asks several things: the
+        SMS / WhatsApp opt-ins, a pre-tour section), each with the Required option of a field block (owner,
+        2026-11-25: "the ability to set any field as mandatory (required)", on all forms). A field: {key (its
+        answer's name), label, default ('never': Optional / 'always': Required: what the form did before), locked (''
+        or why it cannot change: the toggle shows locked with this as its tooltip)}. The block keeps what staff set in
+        ``field_rules`` ({key: {mode, rule}}); the form type checks them on submit (``_mtbg_fields_required``)."""
+        consent = _("Consent to texts is never a condition: the law and the carriers need these boxes optional.")
+        return {'texting': [
+            {'key': 'sms_optin', 'label': _("SMS updates"), 'default': 'never', 'locked': consent},
+            {'key': 'whatsapp_optin', 'label': _("WhatsApp updates"), 'default': 'never', 'locked': consent},
+            {'key': 'sms_marketing_optin', 'label': _("Promotional texts"), 'default': 'never', 'locked': consent},
+        ]}
+
+    def _mtbg_locked_fields(self):
+        """{key: (mode, reason)}: field blocks the form type cannot do without as they are (their Required option
+        locked; ``reason`` its tooltip). A contact form: a new contact needs a name."""
+        reason = _("A new contact needs a name: this field is always required.")
+        return {'name': ('always', reason), 'first_name': ('always', reason)} if self.handler == 'contact' else {}
+
+    def _mtbg_fields_required(self, answers, ctx, blocks=None):
+        """{key: required?} of the fields inside the form's own blocks that show for these answers (their step
+        shown): what the form type checks on submit, as ``_mtbg_block_fields`` and the blocks' ``field_rules`` say."""
+        blocks = blocks if blocks is not None else self.block_ids.filtered('active').sorted(lambda b: (b.sequence, b.id))
+        specs = self._mtbg_block_fields()
+        out, step_shown = {}, True
+        for block in blocks:
+            shown = block._mtbg_shown(answers, ctx)
+            if block.kind == 'step':
+                step_shown = shown
+                continue
+            if not (shown and step_shown):
+                continue
+            for spec in specs.get(block.kind) or ():
+                out[spec['key']] = block._mtbg_field_required(spec, answers, ctx)
+        return out
+
     def _mtbg_has_header(self):
         """Does the form show a header of its own (title, subtitle, logo: the designer's Messages tab)?"""
         return False
@@ -557,7 +596,14 @@ class MtbgForm(models.Model):
         ruled_off = {index for index, block in enumerate(blocks) if not block._mtbg_shown(answers, ctx)}
         hidden = set() if show_all else ruled_off
         required = {index for index, block in enumerate(blocks) if block._mtbg_required(answers, ctx)}
+        # the fields inside the form's own blocks (a pre-tour section...): their Required option, for the browser
+        # (form_fields: [{block, key, label, require}]) and the page as drawn (fields_required: {key: required?})
+        specs = self._mtbg_block_fields()
+        form_fields = [dict(block._mtbg_field_def(spec), block=index)
+                       for index, block in enumerate(blocks) for spec in specs.get(block.kind) or ()]
         return {
+            'form_fields': json.dumps(form_fields),
+            'fields_required': self._mtbg_fields_required(answers, ctx, blocks=blocks),
             'hidden': hidden, 'ruled_off': ruled_off if show_all else set(), 'show_all': show_all,
             'required': required, 'known': known, 'answers': answers, 'ctx': json.dumps(ctx),
             'phone_picker': self.env['res.country'].mtbg_phone_picker() if any(b.kind == 'phone' for b in blocks) else None,
@@ -765,6 +811,9 @@ class MtbgFormBlock(models.Model):
     show_rule = fields.Json(default=dict)
     require_mode = fields.Selection(MODES_REQUIRE, default='never', required=True)
     require_rule = fields.Json(default=dict)
+    # the Required option of each field inside a form type's own block (mtbg.form._mtbg_block_fields): {key: {mode:
+    # never | always | when | unless, rule}}; a field not in it: its default
+    field_rules = fields.Json(help="{field key: {mode, rule}}: Required, field by field, inside the block")
     look = fields.Json(help="The block's own look (a form type's block with settings: _mtbg_look_schemas)")
     # the block's text (the designer's block settings): its size (% of the form's text, 0: the form's), colour on light
     # pages and on dark pages (empty: the form's); a heading's level (its font and size: the website theme's)
@@ -800,11 +849,39 @@ class MtbgFormBlock(models.Model):
         held = evaluate(_rule(self.show_rule), answers, ctx)
         return held if self.show_mode == 'when' else not held
 
+    def _mtbg_require_mode(self):
+        """(mode, rule) of the field: a field the form type cannot do without (_mtbg_locked_fields) its locked mode."""
+        locked = self.form_id._mtbg_locked_fields().get(self.key) if self.form_id and self.key else None
+        if locked and self.kind in FIELDS:
+            return locked[0], {}
+        return self.require_mode, _rule(self.require_rule)
+
     def _mtbg_required(self, answers, ctx):
-        if self.require_mode in ('never', 'always'):
-            return self.require_mode == 'always'
-        held = evaluate(_rule(self.require_rule), answers, ctx)
-        return held if self.require_mode == 'when' else not held
+        mode, rule = self._mtbg_require_mode()
+        if mode in ('never', 'always'):
+            return mode == 'always'
+        held = evaluate(rule, answers, ctx)
+        return held if mode == 'when' else not held
+
+    def _mtbg_field_mode(self, spec):
+        """(mode, rule) of a field inside this block (``spec``: one of mtbg.form._mtbg_block_fields): its default
+        when locked or never set."""
+        entry = (self.field_rules or {}).get(spec['key']) if isinstance(self.field_rules, dict) else None
+        if spec.get('locked') or not isinstance(entry, dict) or entry.get('mode') not in dict(MODES_REQUIRE):
+            return spec.get('default') or 'never', {}
+        return entry['mode'], _rule(entry.get('rule'))
+
+    def _mtbg_field_required(self, spec, answers, ctx):
+        mode, rule = self._mtbg_field_mode(spec)
+        if mode in ('never', 'always'):
+            return mode == 'always'
+        held = evaluate(rule, answers, ctx)
+        return held if mode == 'when' else not held
+
+    def _mtbg_field_def(self, spec):
+        """What the browser needs of a field inside this block: its key, label and [mode, rule]."""
+        mode, rule = self._mtbg_field_mode(spec)
+        return {'key': spec['key'], 'label': spec.get('label') or spec['key'], 'require': [mode, rule]}
 
     def mtbg_title_look(self):
         """A step's title look (its size, colours, bold, uppercase, alignment): title_look()."""
@@ -831,4 +908,4 @@ class MtbgFormBlock(models.Model):
         """What form.js needs of the block: its rules, kind and label (for its messages)."""
         return {'kind': self.kind, 'key': self.key or '',
                 'label': self.label or '', 'show': [self.show_mode, _rule(self.show_rule)],
-                'require': [self.require_mode, _rule(self.require_rule)], 'choices': self._mtbg_choices()}
+                'require': list(self._mtbg_require_mode()), 'choices': self._mtbg_choices()}

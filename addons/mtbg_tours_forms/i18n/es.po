@@ -572,7 +572,7 @@ msgstr "Texto del campo"
 
 #. module: mtbg_tours_forms
 #. odoo-javascript
-#: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0 code:addons/mtbg_tours_forms/static/src/designer/designer.xml:0
 msgid "Fields"
 msgstr "Campos"
 
@@ -2369,3 +2369,49 @@ msgstr "{name} es \", Ana\" cuando conocemos el nombre del visitante."
 #: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form__style
 msgid "{variant: {token: value}} (the designer's Style tab)"
 msgstr "{variant: {token: value}} (la pestaña Estilo del diseñador)"
+
+#. module: mtbg_tours_forms
+#. odoo-python
+#: code:addons/mtbg_tours_forms/models/form.py:0
+msgid "Consent to texts is never a condition: the law and the carriers need these boxes optional."
+msgstr "El consentimiento para mensajes nunca es una condición: la ley y los operadores exigen que estas casillas sean opcionales."
+
+#. module: mtbg_tours_forms
+#. odoo-python
+#: code:addons/mtbg_tours_forms/models/form.py:0
+msgid "SMS updates"
+msgstr "Avisos por SMS"
+
+#. module: mtbg_tours_forms
+#. odoo-python
+#: code:addons/mtbg_tours_forms/models/form.py:0
+msgid "WhatsApp updates"
+msgstr "Avisos por WhatsApp"
+
+#. module: mtbg_tours_forms
+#. odoo-python
+#: code:addons/mtbg_tours_forms/models/form.py:0
+msgid "Promotional texts"
+msgstr "Mensajes promocionales"
+
+#. module: mtbg_tours_forms
+#. odoo-python
+#: code:addons/mtbg_tours_forms/models/form.py:0
+msgid "A new contact needs a name: this field is always required."
+msgstr "Un contacto nuevo necesita un nombre: este campo siempre es obligatorio."
+
+#. module: mtbg_tours_forms
+#. odoo-javascript
+#: code:addons/mtbg_tours_forms/static/src/designer/designer.js:0
+msgid "%s required"
+msgstr "%s obligatorios"
+
+#. module: mtbg_tours_forms
+#: model:ir.model.fields,field_description:mtbg_tours_forms.field_mtbg_form_block__field_rules
+msgid "Field Rules"
+msgstr "Reglas de los campos"
+
+#. module: mtbg_tours_forms
+#: model:ir.model.fields,help:mtbg_tours_forms.field_mtbg_form_block__field_rules
+msgid "{field key: {mode, rule}}: Required, field by field, inside the block"
+msgstr "{clave del campo: {modo, regla}}: obligatorio, campo por campo, dentro del bloque"

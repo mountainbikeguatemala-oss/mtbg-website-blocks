@@ -5,3 +5,4 @@ from . import test_form_designer
 from . import test_menu_form
 from . import test_popups
 from . import test_phone_visitor
+from . import test_required_fields

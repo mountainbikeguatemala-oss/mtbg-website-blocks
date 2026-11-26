@@ -665,7 +665,22 @@
                     <t t-set="which" t-value="'require'"/>
                     <t t-set="rule_title">Answer</t>
                     <t t-set="modes" t-value="state.data.require_modes"/>
+                    <t t-set="locked" t-value="lockedField(block)?.reason"/>
                 </t>
+                <!-- the fields inside the block (the opt-ins, a pre-tour section): each one's Required option, as a
+                     field block has it -->
+                <div t-if="block.fields and block.fields.length" class="mtbg_fd_inner_fields mt-2">
+                    <div class="small fw-bold mb-1">Fields</div>
+                    <t t-foreach="block.fields" t-as="inner" t-key="inner.key">
+                        <t t-call="mtbg_tours_forms.FormDesignerRule">
+                            <t t-set="block" t-value="inner"/>
+                            <t t-set="which" t-value="'require'"/>
+                            <t t-set="rule_title" t-value="inner.label"/>
+                            <t t-set="modes" t-value="state.data.require_modes"/>
+                            <t t-set="locked" t-value="inner.locked"/>
+                        </t>
+                    </t>
+                </div>
 
                 <div class="d-flex mt-2">
                     <span class="small text-muted me-auto" t-esc="kindOf(block.kind).label"/>
@@ -683,11 +698,13 @@
         <div class="mtbg_fd_rule">
             <div class="d-flex flex-wrap align-items-center gap-2">
                 <label class="small fw-bold mb-0 mtbg_fd_rule_title" t-esc="rule_title"/>
-                <select class="form-select form-select-sm w-auto" t-on-change="(ev) => this.setMode(block, which, ev.target.value)">
+                <select class="form-select form-select-sm w-auto" t-on-change="(ev) => this.setMode(block, which, ev.target.value)"
+                        t-att-disabled="locked ? 'disabled' : undefined" t-att-title="locked or undefined">
                     <t t-foreach="modes" t-as="m" t-key="m.key">
                         <option t-att-value="m.key" t-att-selected="mode === m.key" t-esc="m.label"/>
                     </t>
                 </select>
+                <i t-if="locked" class="fa fa-lock text-muted mtbg_fd_locked" t-att-title="locked" t-att-aria-label="locked"/>
                 <select t-if="['when', 'unless'].includes(mode) and rule.conditions.length > 1" class="form-select form-select-sm w-auto"
                         t-on-change="(ev) => this.setField(rule, 'match', ev.target.value)">
                     <option value="all" t-att-selected="rule.match !== 'any'">all of these hold</option>

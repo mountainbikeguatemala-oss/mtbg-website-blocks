@@ -65,6 +65,7 @@ class MtbgFormDesigner(models.AbstractModel):
         blocks = form.with_context(active_test=False).block_ids.sorted(lambda b: (b.sequence, b.id))
         kind_labels = self._mtbg_kinds()
         looks = Form._mtbg_look_schemas()
+        block_fields = (form or Form)._mtbg_block_fields()
         return {
             'handler': handler or False,
             'forms': [{'id': f.id, 'name': f.name, 'key': f.key,
@@ -96,8 +97,15 @@ class MtbgFormDesigner(models.AbstractModel):
                 'text_bold': b.text_bold, 'text_upper': b.text_upper, 'text_align': b.text_align or '',
                 'line_height': b.line_height or 0,
                 'require_mode': b.require_mode, 'require_rule': _rule(b.require_rule),
+                'field_rules': {spec['key']: dict(zip(('mode', 'rule'), b._mtbg_field_mode(spec)))
+                                for spec in block_fields.get(b.kind) or ()},
                 'texts': self._mtbg_texts(b, BLOCK_TEXTS, langs),
             } for b in blocks],
+            # Required, field by field (0.8.0): the fields inside the form type's own blocks ({kind: [{key, label,
+            # default, locked}]}) and the field blocks whose Required option is locked ({key: {mode, reason}})
+            'block_fields': block_fields,
+            'locked_fields': {key: {'mode': mode, 'reason': reason}
+                              for key, (mode, reason) in (form._mtbg_locked_fields() if form else {}).items()},
             'popups': self._mtbg_popups(),
             'popup_page_kinds': [{'key': k, 'label': label} for k, label in zip(POPUP_PAGE_KINDS, (
                 _("Homepage"), _("Tour pages"), _("Rental pages"), _("Blog"), _("Contact page")))],
@@ -218,9 +226,29 @@ class MtbgFormDesigner(models.AbstractModel):
         }
         if 'look' in item:
             vals['look'] = self.env['mtbg.form']._mtbg_clean_look(kind, item['look'])
+        specs = self.env['mtbg.form']._mtbg_block_fields().get(kind)
+        if specs and 'field_rules' in item:
+            vals['field_rules'] = self._mtbg_clean_field_rules(specs, item['field_rules'])
         if kind in ALWAYS_ON:
             vals['active'] = True  # a form always has its button (a pre-tour form its waivers)
         return vals
+
+    @api.model
+    def _mtbg_clean_field_rules(self, specs, rules):
+        """The Required option of each field inside a block as the designer sends it ({key: {mode, rule}}): only
+        the block's fields, never a locked one, nothing kept that is the field's default."""
+        rules = rules if isinstance(rules, dict) else {}
+        out = {}
+        for spec in specs:
+            entry = rules.get(spec['key'])
+            if spec.get('locked') or not isinstance(entry, dict) or entry.get('mode') not in dict(MODES_REQUIRE):
+                continue
+            rule = self._mtbg_clean_rule(entry.get('rule'))
+            if entry['mode'] in ('when', 'unless'):
+                out[spec['key']] = {'mode': entry['mode'], 'rule': rule}
+            elif entry['mode'] != (spec.get('default') or 'never'):
+                out[spec['key']] = {'mode': entry['mode'], 'rule': {'match': 'all', 'conditions': []}}
+        return out
 
     @api.model
     def _mtbg_clean_rule(self, rule):
@@ -294,8 +322,12 @@ class MtbgFormDesigner(models.AbstractModel):
             form.header_logo = data['logo']  # a new upload (base64)
         self._mtbg_write_texts(form, FORM_TEXTS + form._mtbg_extra_text_names(), data.get('texts'), langs)
         kept = []
+        locked = form._mtbg_locked_fields()
         for sequence, item in enumerate(items, start=1):
             vals = self._mtbg_block_vals(item, sequence)
+            if vals['kind'] in FIELDS and vals.get('key') in locked:
+                # a field the form type cannot do without: its Required option stays (the designer shows it locked)
+                vals.update(require_mode=locked[vals['key']][0], require_rule={'match': 'all', 'conditions': []})
             block = Block.browse(item['id']).exists() if isinstance(item.get('id'), int) else Block
             if block and block.form_id == form:
                 if block.system:

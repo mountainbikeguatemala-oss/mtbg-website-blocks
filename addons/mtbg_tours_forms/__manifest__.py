@@ -1,6 +1,6 @@
 {
     'name': 'MTBG Website — Forms',
-    'version': '19.0.0.7.2',
+    'version': '19.0.0.8.0',
     # where the updater gets it (the universal repo; owner, 2026-11-11: universal, from the Tours repo)
     'mtbg_github_source': {'repo': 'git@github.com:mountainbikeguatemala-oss/mtbg-website-blocks.git', 'subdir': 'addons'},
     'category': 'Website',

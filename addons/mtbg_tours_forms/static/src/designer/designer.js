@@ -102,6 +102,7 @@ export class FormDesigner extends Component {
             show_rule: { match: b.show_rule.match || "all", conditions: [...(b.show_rule.conditions || [])] },
             require_rule: { match: b.require_rule.match || "all", conditions: [...(b.require_rule.conditions || [])] },
             look: JSON.parse(JSON.stringify(b.look || {})),
+            fields: this.innerFields(b.kind, b.field_rules),
         }));
         this.state.dirty = false;
         // an extension's tab only for that extension's forms
@@ -176,6 +177,22 @@ export class FormDesigner extends Component {
 
     isField(block) {
         return this.kindOf(block.kind).field;
+    }
+
+    /** The fields inside a form type's own block (the opt-ins, a pre-tour section), each with its Required option as
+     * a field block has it (require_mode, require_rule; locked: why it cannot change). */
+    innerFields(kind, rules = {}) {
+        return (this.state.data?.block_fields?.[kind] || []).map((spec) => {
+            const saved = rules?.[spec.key] || {};
+            const rule = saved.rule || {};
+            return { ...spec, require_mode: spec.locked ? spec.default : saved.mode || spec.default,
+                     require_rule: { match: rule.match || "all", conditions: [...(rule.conditions || [])] } };
+        });
+    }
+
+    /** A field block whose Required option the form type locks: {mode, reason}, else undefined. */
+    lockedField(block) {
+        return this.isField(block) && block.key ? this.state.data?.locked_fields?.[block.key] : undefined;
     }
 
     icon(block) {
@@ -310,6 +327,11 @@ export class FormDesigner extends Component {
         }
         if (this.isField(block)) {
             badges.push({ always: _t("Required"), never: "", when: _t("Required when…"), unless: _t("Required unless…") }[block.require_mode]);
+        }
+        // the fields inside it that are required (always or by a rule)
+        const required = (block.fields || []).filter((f) => f.require_mode !== "never").length;
+        if (required) {
+            badges.push(_t("%s required", required));
         }
         return badges.filter(Boolean);
     }
@@ -545,7 +567,7 @@ export class FormDesigner extends Component {
             id: `new_${this.newId}`, uid: `new_${this.newId}`, kind, key: isField ? this.uniqueKey(slug(label)) : "",
             width: "full", system: false, active: true, show_mode: "always", show_rule: { match: "all", conditions: [] },
             require_mode: "never", require_rule: { match: "all", conditions: [] }, texts,
-            text_size: 0, text_color: "", text_color_dark: "", heading_level: "h3",
+            text_size: 0, text_color: "", text_color_dark: "", heading_level: "h3", fields: this.innerFields(kind),
         };
         const blocks = [...this.state.blocks];
         blocks.splice(index, 0, block);
@@ -840,6 +862,8 @@ export class FormDesigner extends Component {
                 text_bold: Boolean(b.text_bold), text_upper: Boolean(b.text_upper), text_align: b.text_align || "",
                 line_height: b.line_height || 0,
                 ...(this.lookSchema(b) ? { look: b.look } : {}),
+                ...(b.fields?.length ? { field_rules: Object.fromEntries(b.fields.filter((f) => !f.locked).map((f) => [
+                    f.key, { mode: f.require_mode, rule: f.require_rule }])) } : {}),
             })),
         };
     }

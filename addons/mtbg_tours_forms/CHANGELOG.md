@@ -2,6 +2,22 @@
 
 Every version of this extension, newest first. Tags: `git tag -l 'mtbg_tours_forms-*'`.
 
+## 19.0.0.8.0 (2026-11-25)
+
+- **Any field can be required** (owner, 2026-11-25: "in the forms extension we need the ability to set any field as mandatory (required)"; asked which form: "All forms"). Every field block keeps its Answer option (Optional /
+  Required / Required when / Required except when, with the rules engine). New: the fields **inside a form type's own
+  blocks** (a block that asks several things: the SMS / WhatsApp opt-ins, each pre-tour section) get the same option:
+  the block's settings in the Form Designer show **Fields**, one Answer line per field. A form type declares them with
+  `mtbg.form._mtbg_block_fields()` ({kind: [{key, label, default, locked}]}); the block keeps what staff set in its new
+  `field_rules` ({key: {mode, rule}}: only what differs from the default); `_mtbg_fields_required(answers, ctx)` gives
+  {key: required?} for the blocks shown, and `mtbg_view` hands the browser `form_fields` and `fields_required`.
+- **Locked fields**: a field the form needs shows its Answer option locked with a lock icon and a tooltip that says
+  why. A contact form's Name (`name`, `first_name`: a new contact needs a name) stays Required whatever is saved
+  (`_mtbg_locked_fields`), in the browser and on the server; the texting opt-ins stay Optional (consent is never a
+  condition). Nothing changes for what is required today.
+- The block list's badge counts the required fields inside a block ("2 required").
+- New strings (Spanish in es.po): the opt-ins' names, the two lock reasons, "%s required", the field's label and help.
+
 ## 19.0.0.7.1 (2026-11-16)
 
 - **No Odoo CRM** (release B): Forms no longer depends on `website_crm`; it depends on `utm` for the forms' sources.
