@@ -2294,3 +2294,58 @@ msgid ""
 msgstr ""
 "› Configuración › Cuentas de Instagram, conéctala a la página (o en "
 "Configuración de la página › Cuentas vinculadas › Instagram)."
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__depth_color
+msgid "3D Colour"
+msgstr "Color 3D"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__depth
+msgid "3D Depth (px)"
+msgstr "Profundidad 3D (px)"
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__depth
+msgid "3D lettering: the letters stacked this deep, down and to the right."
+msgstr "Letras en 3D: las letras apiladas con esta profundidad, hacia abajo y a la derecha."
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay_layer__box_shape__burst
+msgid "Comic burst"
+msgstr "Explosión de cómic"
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__box_shape
+msgid "Comic burst: a jagged \"KAPOW\" star around the text, its border drawn round it."
+msgstr "Explosión de cómic: una estrella dentada tipo \"KAPOW\" alrededor del texto, con su borde alrededor."
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__pick_last_layer_id
+msgid "Last Pick"
+msgstr "Última elegida"
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__pick_one
+msgid "Of the layers ticked One Per Post, each post shows only one, a different one from the last post (its Only When flag still counts)."
+msgstr "De las capas marcadas Una por publicación, cada publicación muestra solo una, distinta de la publicación anterior (su condición Solo cuando sigue contando)."
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__pick_one
+msgid "One Per Post"
+msgstr "Una por publicación"
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__pick_count
+msgid "Posts With a Pick"
+msgstr "Publicaciones con una elegida"
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay_layer__box_shape__rounded
+msgid "Rounded box"
+msgstr "Caja redondeada"
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "Shadow, outline and 3D"
+msgstr "Sombra, contorno y 3D"

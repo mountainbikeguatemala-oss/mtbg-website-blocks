@@ -77,6 +77,7 @@
                                     <field name="name"/>
                                     <field name="kind"/>
                                     <field name="show_if" optional="show"/>
+                                    <field name="pick_one" optional="show"/>
                                     <field name="text_en"/>
                                     <field name="font" optional="show"/>
                                     <field name="size" optional="show"/>
@@ -90,6 +91,7 @@
                                             <field name="name" placeholder="e.g. Headline"/>
                                             <field name="kind"/>
                                             <field name="show_if"/>
+                                            <field name="pick_one"/>
                                             <field name="active"/>
                                         </group>
                                         <group string="Where">
@@ -118,11 +120,13 @@
                                             <field name="max_width"/>
                                             <field name="max_lines"/>
                                         </group>
-                                        <group string="Shadow and outline">
+                                        <group string="Shadow, outline and 3D">
                                             <field name="shadow"/>
                                             <field name="shadow_color" widget="color" invisible="not shadow"/>
                                             <field name="outline"/>
                                             <field name="outline_color" widget="color" invisible="not outline"/>
+                                            <field name="depth"/>
+                                            <field name="depth_color" widget="color" invisible="not depth"/>
                                         </group>
                                         <group string="Background box" invisible="kind == 'sticker'">
                                             <field name="box"/>

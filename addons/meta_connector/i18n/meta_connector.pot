@@ -2156,3 +2156,58 @@ msgid ""
 "› Settings › Instagram accounts, connect it to the Page (or the Page's "
 "Settings › Linked accounts › Instagram)."
 msgstr ""
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__depth_color
+msgid "3D Colour"
+msgstr ""
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__depth
+msgid "3D Depth (px)"
+msgstr ""
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__depth
+msgid "3D lettering: the letters stacked this deep, down and to the right."
+msgstr ""
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay_layer__box_shape__burst
+msgid "Comic burst"
+msgstr ""
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__box_shape
+msgid "Comic burst: a jagged \"KAPOW\" star around the text, its border drawn round it."
+msgstr ""
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__pick_last_layer_id
+msgid "Last Pick"
+msgstr ""
+
+#. module: meta_connector
+#: model:ir.model.fields,help:meta_connector.field_mtbg_marketing_overlay_layer__pick_one
+msgid "Of the layers ticked One Per Post, each post shows only one, a different one from the last post (its Only When flag still counts)."
+msgstr ""
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay_layer__pick_one
+msgid "One Per Post"
+msgstr ""
+
+#. module: meta_connector
+#: model:ir.model.fields,field_description:meta_connector.field_mtbg_marketing_overlay__pick_count
+msgid "Posts With a Pick"
+msgstr ""
+
+#. module: meta_connector
+#: model:ir.model.fields.selection,name:meta_connector.selection__mtbg_marketing_overlay_layer__box_shape__rounded
+msgid "Rounded box"
+msgstr ""
+
+#. module: meta_connector
+#: model_terms:ir.ui.view,arch_db:meta_connector.view_mtbg_marketing_overlay_form
+msgid "Shadow, outline and 3D"
+msgstr ""

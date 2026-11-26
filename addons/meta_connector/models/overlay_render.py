@@ -32,7 +32,7 @@ from odoo.tools.misc import file_path
 
 SIZES = {'vertical': (1080, 1920), 'square': (1080, 1080)}
 DEFAULT_FONT = 'web/static/fonts/google/Oswald/Oswald-Bold.ttf'
-FONT_DIRS = ('web/static/fonts/google', 'web/static/fonts/lato')
+FONT_DIRS = ('web/static/fonts/google', 'web/static/fonts/lato', 'meta_connector/static/fonts')
 PLACEHOLDER = re.compile(r'\{([a-z_]+)\}')
 
 
@@ -369,7 +369,8 @@ def _block_origin(x, y, width, height, align, valign):
 def draw_text(canvas, layer, scale=1.0):
     """One text layer on ``canvas`` (RGBA, full size). ``layer``: {text, font, size, min_size, color, align, valign,
     x, y, max_width, max_lines, line_height, shadow, shadow_color, outline, outline_color, box, box_color,
-    box_opacity, box_padding, box_radius, box_border, box_border_color, rotate}. Returns {size, lines} (what was
+    box_opacity, box_padding, box_radius, box_border, box_border_color, rotate, depth, depth_color} (``depth``: 3D
+    lettering, px). Returns {size, lines} (what was
     drawn: the tests read it). ``rotate`` (degrees, counter-clockwise): the block drawn apart, then turned about its
     centre (a sticker); 0: drawn in place."""
     angle = float(layer.get('rotate') or 0.0)
@@ -443,6 +444,14 @@ def _draw_text(canvas, layer, scale=1.0):
         canvas.alpha_composite(shadow)
     draw = ImageDraw.Draw(canvas)
     stroke = int(round((layer.get('outline') or 0) * scale))
+    # 3D lettering: the letters stacked ``depth`` px down and right in the depth colour, the face on top
+    depth = int(round((layer.get('depth') or 0) * scale))
+    if depth > 0:
+        side = rgba(layer.get('depth_color'), '#000000')
+        for step_px in range(depth, 0, -1):
+            for line, lx, ly in positions():
+                draw.text((lx + step_px, ly + step_px), line, font=font, fill=side,
+                          stroke_width=stroke, stroke_fill=side if stroke else None)
     for line, lx, ly in positions():
         draw.text((lx, ly), line, font=font, fill=rgba(layer.get('color'), '#FFFFFF'),
                   stroke_width=stroke, stroke_fill=rgba(layer.get('outline_color'), '#000000') if stroke else None)
@@ -468,7 +477,10 @@ def draw_logo(canvas, layer, scale=1.0):
     if opacity is not None and opacity < 1:
         alpha = mark.getchannel('A').point(lambda a: int(a * max(0.0, opacity)))
         mark.putalpha(alpha)
-    left, top = _block_origin((layer.get('x') or 50) / 100.0 * W, (layer.get('y') or 5) / 100.0 * H, width, height,
+    # 0 is a place (the very edge), only a missing anchor takes the default
+    x = 50.0 if layer.get('x') is None else layer.get('x')
+    y = 5.0 if layer.get('y') is None else layer.get('y')
+    left, top = _block_origin(x / 100.0 * W, y / 100.0 * H, width, height,
                               layer.get('align') or 'center', layer.get('valign') or 'top')
     canvas.alpha_composite(mark, (int(left), int(top)))
 

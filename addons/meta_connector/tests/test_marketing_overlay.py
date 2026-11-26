@@ -89,6 +89,50 @@ class TestMarketingOverlay(TransactionCase):
         self.assertEqual(burst.getpixel((int(left + width / 2), int(top - 40)))[:3], (255, 214, 10),
                          "yellow above the text, inside the star")
 
+    def test_one_sticker_per_post_a_different_one_each_post(self):
+        """Owner 2026-11-26: "randomize the kapow stickers: only show one per post and a different one every post"."""
+        Layer = self.env["mtbg.marketing.overlay.layer"]
+        words = ["KAPOW", "BOOM", "ZAS"]
+        for index, word in enumerate(words):
+            Layer.create({"overlay_id": self.overlay.id, "sequence": 10 + index, "name": word, "kind": "sticker",
+                          "text_en": word, "pick_one": True, "box_shape": "burst"})
+
+        def shown(values):
+            texts = [l.get("text") for l in self.overlay._mtbg_layers(values, "en")]
+            return [w for w in words if w in texts]
+        first = shown({"_pick_seed": 0})
+        self.assertEqual(len(first), 1, "one per post")
+        self.assertIn("NEW IN", [l.get("text") for l in self.overlay._mtbg_layers({}, "en")], "others stay")
+        partner = self.env["res.partner"].create({"name": "Pick Record"})
+        Overlay = type(self.env["mtbg.marketing.overlay"])
+        self.patch(Overlay, "_mtbg_source_photo", api.model(lambda model, record, **o: (png((0, 0, 255)), True)))
+        seen = []
+        for _post in range(6):
+            expected = shown({"_pick_seed": partner.id})
+            self.overlay._mtbg_render_record(partner, "en", advance_pick=True)
+            self.assertEqual(self.overlay.pick_last_layer_id.name, expected[0], "the preview is what is posted")
+            seen.append(expected[0])
+        self.assertTrue(all(a != b for a, b in zip(seen, seen[1:])), "never the same twice in a row: %s" % seen)
+        self.assertEqual(set(seen), set(words), "all of them come round")
+        self.overlay._mtbg_render_record(partner, "en")
+        self.assertEqual(self.overlay.pick_count, 6, "a preview does not count")
+
+    def test_3d_lettering_and_left_edge(self):
+        plain = overlay_render.photo_canvas(None, "vertical", background="#000000")
+        deep = overlay_render.photo_canvas(None, "vertical", background="#000000")
+        text = {"text": "GANGA", "size": 120, "color": "#FFD60A", "x": 50, "y": 50, "shadow": False}
+        overlay_render.draw_text(plain, text)
+        overlay_render.draw_text(deep, dict(text, depth=8, depth_color="#E0262B"))
+
+        def count(canvas, colour):
+            return sum(1 for p in canvas.getdata() if p[:3] == colour)
+        self.assertEqual(count(plain, (224, 38, 43)), 0)
+        self.assertGreater(count(deep, (224, 38, 43)), 500, "the red side of the letters")
+        canvas = overlay_render.photo_canvas(None, "vertical", background="#000000")
+        overlay_render.draw_logo(canvas, {"image": png((0, 255, 0), (100, 100)), "size": 10, "x": 0, "y": 100,
+                                          "align": "left", "valign": "bottom"})
+        self.assertEqual(canvas.getpixel((2, 1917))[:3], (0, 255, 0), "x 0 is the left edge, not the middle")
+
     def test_turned_sticker_and_photo_shown_whole(self):
         badge = {"text": "GANGA", "size": 90, "box": True, "box_color": "#FFD60A", "box_opacity": 1, "x": 50, "y": 50}
         flat_canvas = overlay_render.photo_canvas(None, "vertical")

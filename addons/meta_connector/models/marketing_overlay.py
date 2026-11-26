@@ -128,6 +128,11 @@ class MtbgMarketingOverlay(models.Model):
     qr_offset_y = fields.Float(string='QR Offset Y (%)', default=9.0)
     qr_quiet = fields.Integer(string='QR Quiet Zone', default=3, help="White modules round the code (3-4 scan best).")
     preview_image = fields.Binary(compute='_compute_preview_image', string='Preview')
+    # "One per post" stickers (owner, 2026-11-26: "only show one per post and a different one every post"): how many
+    # posts took one, and the last one taken (the next post takes another)
+    pick_count = fields.Integer(string='Posts With a Pick', copy=False, readonly=True)
+    pick_last_layer_id = fields.Many2one('mtbg.marketing.overlay.layer', string='Last Pick', copy=False,
+                                         readonly=True, ondelete='set null')
     placeholders_help = fields.Html(compute='_compute_placeholders_help', sanitize=False)
 
     # ------------------------------------------------------------------ the registry
@@ -200,8 +205,9 @@ class MtbgMarketingOverlay(models.Model):
         return values
 
     def _mtbg_render_record(self, record, lang, website=None, fmt='JPEG', preview_width=None, photo=None,
-                            **options):
-        """``record`` drawn with this template (its values, its photo): image bytes."""
+                            advance_pick=False, **options):
+        """``record`` drawn with this template (its values, its photo): image bytes. ``advance_pick``: the drawing
+        is a real post: its "One per post" sticker counts as used (the next post takes another)."""
         self.ensure_one()
         values = self._mtbg_values_for(record, lang, website=website, **options)
         vertical = True
@@ -209,7 +215,25 @@ class MtbgMarketingOverlay(models.Model):
             photo, vertical = self._mtbg_source_photo(record, **options)
         values.setdefault('vertical', bool(vertical))
         values.setdefault('no_vertical', not vertical)
-        return self._mtbg_render(photo, values, lang, fmt=fmt, preview_width=preview_width)
+        values.setdefault('_pick_seed', record.id or 0)
+        image = self._mtbg_render(photo, values, lang, fmt=fmt, preview_width=preview_width)
+        if advance_pick:
+            picked = self._mtbg_pick_layer(values)
+            if picked:
+                self.sudo().write({'pick_count': self.pick_count + 1, 'pick_last_layer_id': picked.id})
+        return image
+
+    def _mtbg_pick_layer(self, values):
+        """The one "One per post" layer this drawing shows: of those whose flag the values have, not the last post's
+        when another can go, turning with the posts (and the record)."""
+        self.ensure_one()
+        pool = self.layer_ids.filtered(lambda l: l.active and l.pick_one).sorted(lambda l: (l.sequence, l.id))
+        eligible = pool.filtered(lambda l: not l.show_if or values.get(l.show_if))
+        if not eligible:
+            return pool.browse()
+        candidates = (eligible - self.pick_last_layer_id) or eligible
+        seed = int(self.pick_count or 0) + int(values.get('_pick_seed') or 0)
+        return candidates[seed % len(candidates)]
 
     def _compute_placeholders_help(self):
         from markupsafe import Markup
@@ -241,7 +265,7 @@ class MtbgMarketingOverlay(models.Model):
                  'layer_ids.shadow', 'layer_ids.shadow_color', 'layer_ids.outline', 'layer_ids.outline_color',
                  'layer_ids.box', 'layer_ids.box_color', 'layer_ids.box_opacity', 'layer_ids.box_padding',
                  'layer_ids.box_radius', 'layer_ids.box_border', 'layer_ids.box_border_color', 'layer_ids.rotate',
-                 'layer_ids.box_shape',
+                 'layer_ids.box_shape', 'layer_ids.pick_one', 'layer_ids.depth', 'layer_ids.depth_color',
                  'layer_ids.show_if', 'layer_ids.logo', 'layer_ids.logo_source', 'layer_ids.logo_size',
                  'layer_ids.opacity', 'qr_enabled', 'qr_size', 'qr_anchor', 'qr_offset_x', 'qr_offset_y', 'qr_quiet')
     def _compute_preview_image(self):
@@ -282,8 +306,11 @@ class MtbgMarketingOverlay(models.Model):
         values['headline'] = overlay_render.fill(headline, values)
         upper_values['headline'] = overlay_render.fill(headline, values, upper=True)
         layers = []
+        picked = self._mtbg_pick_layer(values)
         for layer in self.layer_ids.filtered('active').sorted(lambda l: (l.sequence, l.id)):
             if layer.show_if and not values.get(layer.show_if):
+                continue
+            if layer.pick_one and layer != picked:
                 continue
             if layer.kind == 'logo':
                 layers.append({'kind': 'logo', 'image': self._mtbg_logo(layer, values),
@@ -312,6 +339,7 @@ class MtbgMarketingOverlay(models.Model):
                 'box_padding': layer.box_padding, 'box_radius': layer.box_radius,
                 'box_border': layer.box_border, 'box_border_color': layer.box_border_color,
                 'rotate': layer.rotate, 'box_shape': layer.box_shape,
+                'depth': layer.depth, 'depth_color': layer.depth_color,
             })
         if self.qr_enabled and values.get('short_url'):
             layers.append({'kind': 'qr', 'data': values['short_url'], 'size': self.qr_size, 'anchor': self.qr_anchor,
@@ -402,6 +430,12 @@ class MtbgMarketingOverlayLayer(models.Model):
                                  default='rounded', required=True,
                                  help="Comic burst: a jagged \"KAPOW\" star around the text, its border drawn "
                                       "round it.")
+    pick_one = fields.Boolean(string='One Per Post',
+                              help="Of the layers ticked One Per Post, each post shows only one, a different one "
+                                   "from the last post (its Only When flag still counts).")
+    depth = fields.Integer(string='3D Depth (px)', default=0,
+                           help="3D lettering: the letters stacked this deep, down and to the right.")
+    depth_color = fields.Char(string='3D Colour', default='#000000')
     logo = fields.Image(max_width=1024, max_height=1024, help="Empty: the logo below.")
     logo_source = fields.Selection([('company', "The company's logo"), ('website', "The website's logo")],
                                    string='Logo From', default='company', required=True,
