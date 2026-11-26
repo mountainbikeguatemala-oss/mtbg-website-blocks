@@ -69,6 +69,26 @@ class TestMarketingOverlay(TransactionCase):
                 if l["kind"] == "logo"][0]
         self.assertEqual(Image.open(io.BytesIO(logo["image"])).getpixel((5, 5)), (10, 200, 10))
 
+    def test_comic_burst_frame(self):
+        """A sticker's Comic burst shape (owner 2026-11-26: "bicipaca kapaw framing"): a jagged star round the text,
+        its border colour all round it, the text on its fill; spikes reach well past the rounded box."""
+        badge = {"text": "NUEVO\nINGRESO", "size": 90, "max_lines": 2, "box": True, "box_color": "#FFD60A",
+                 "box_opacity": 1, "box_padding": 10, "box_border": 12, "box_border_color": "#E0262B",
+                 "color": "#111111", "x": 50, "y": 50}
+        boxed = overlay_render.photo_canvas(None, "vertical")
+        burst = overlay_render.photo_canvas(None, "vertical")
+        overlay_render.draw_text(boxed, badge)
+        drawn = overlay_render.draw_text(burst, dict(badge, box_shape="burst"))
+        self.assertEqual(drawn["lines"], ["NUEVO", "INGRESO"])
+
+        def count(canvas, colour):
+            return sum(1 for p in canvas.getdata() if p[:3] == colour)
+        self.assertGreater(count(burst, (255, 214, 10)), count(boxed, (255, 214, 10)), "the star is bigger")
+        self.assertGreater(count(burst, (224, 38, 43)), 1000, "its red border round it")
+        left, top, width, height = drawn["box"]
+        self.assertEqual(burst.getpixel((int(left + width / 2), int(top - 40)))[:3], (255, 214, 10),
+                         "yellow above the text, inside the star")
+
     def test_turned_sticker_and_photo_shown_whole(self):
         badge = {"text": "GANGA", "size": 90, "box": True, "box_color": "#FFD60A", "box_opacity": 1, "x": 50, "y": 50}
         flat_canvas = overlay_render.photo_canvas(None, "vertical")

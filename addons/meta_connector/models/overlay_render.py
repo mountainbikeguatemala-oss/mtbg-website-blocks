@@ -21,6 +21,7 @@ bottom), then each layer by its sequence:
 
 Pure functions (no Odoo records): the template's preview and the post are the same drawing."""
 import io
+import math
 import os
 import re
 
@@ -343,6 +344,22 @@ def fit_text(draw, text, font_ref, size, min_size, width, max_lines):
         size = max(min_size, int(size * 0.92))
 
 
+def burst_points(cx, cy, rx, ry, points=14, depth=0.30, grow=0.0):
+    """A comic "KAPOW" burst around an ellipse (rx, ry: the text's box fits inside its valleys): ``points`` spikes,
+    their tips ``depth`` further out, a little irregular (always the same) for the hand-drawn look. ``grow`` (px)
+    makes it bigger all round (its border drawn under it)."""
+    jitter = (0.0, 0.22, -0.12, 0.30, 0.05, -0.18, 0.16, -0.06, 0.26, -0.15, 0.10, 0.20, -0.10, 0.02)
+    result = []
+    for index in range(points * 2):
+        angle = math.pi * index / points - math.pi / 2
+        if index % 2:
+            factor = 1.0
+        else:
+            factor = 1.0 + depth * (1.0 + jitter[(index // 2) % len(jitter)])
+        result.append((cx + (rx * factor + grow) * math.cos(angle), cy + (ry * factor + grow) * math.sin(angle)))
+    return result
+
+
 def _block_origin(x, y, width, height, align, valign):
     left = x if align == 'left' else x - width if align == 'right' else x - width / 2.0
     top = y if valign == 'top' else y - height if valign == 'bottom' else y - height / 2.0
@@ -390,13 +407,24 @@ def _draw_text(canvas, layer, scale=1.0):
         pad = (layer.get('box_padding') or 0) * scale
         box = Image.new('RGBA', canvas.size, (0, 0, 0, 0))
         border = int(round((layer.get('box_border') or 0) * scale))
-        ImageDraw.Draw(box).rounded_rectangle(
-            (left - pad, top - pad, left + block_w + pad, top + block_h + pad),
-            radius=int((layer.get('box_radius') or 0) * scale),
-            fill=rgba(layer.get('box_color'), '#000000', layer.get('box_opacity') if layer.get('box_opacity')
-                      is not None else 0.6),
-            outline=rgba(layer.get('box_border_color'), '#000000') if border else None, width=border or 1)
-        canvas.alpha_composite(box)
+        fill = rgba(layer.get('box_color'), '#000000', layer.get('box_opacity') if layer.get('box_opacity')
+                    is not None else 0.6)
+        if layer.get('box_shape') == 'burst':
+            # the ellipse through the text box's corners (a little less than sqrt 2 x the half sides; the spikes give the room)
+            cx, cy = left + block_w / 2.0, top + block_h / 2.0
+            rx, ry = (block_w / 2.0 + pad) * 1.3, (block_h / 2.0 + pad) * 1.3
+            bdraw = ImageDraw.Draw(box)
+            if border:
+                bdraw.polygon(burst_points(cx, cy, rx, ry, grow=border), fill=rgba(layer.get('box_border_color'),
+                                                                                   '#000000'))
+            bdraw.polygon(burst_points(cx, cy, rx, ry), fill=fill)
+            canvas.alpha_composite(box)
+        else:
+            ImageDraw.Draw(box).rounded_rectangle(
+                (left - pad, top - pad, left + block_w + pad, top + block_h + pad),
+                radius=int((layer.get('box_radius') or 0) * scale), fill=fill,
+                outline=rgba(layer.get('box_border_color'), '#000000') if border else None, width=border or 1)
+            canvas.alpha_composite(box)
 
     def positions():
         for index, line in enumerate(lines):

@@ -131,7 +131,8 @@
                                             <field name="box_color" widget="color"/>
                                             <field name="box_opacity"/>
                                             <field name="box_padding"/>
-                                            <field name="box_radius"/>
+                                            <field name="box_shape"/>
+                                            <field name="box_radius" invisible="box_shape == 'burst'"/>
                                             <field name="box_border"/>
                                             <field name="box_border_color" widget="color" invisible="not box_border"/>
                                         </group>

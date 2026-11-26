@@ -241,6 +241,7 @@ class MtbgMarketingOverlay(models.Model):
                  'layer_ids.shadow', 'layer_ids.shadow_color', 'layer_ids.outline', 'layer_ids.outline_color',
                  'layer_ids.box', 'layer_ids.box_color', 'layer_ids.box_opacity', 'layer_ids.box_padding',
                  'layer_ids.box_radius', 'layer_ids.box_border', 'layer_ids.box_border_color', 'layer_ids.rotate',
+                 'layer_ids.box_shape',
                  'layer_ids.show_if', 'layer_ids.logo', 'layer_ids.logo_source', 'layer_ids.logo_size',
                  'layer_ids.opacity', 'qr_enabled', 'qr_size', 'qr_anchor', 'qr_offset_x', 'qr_offset_y', 'qr_quiet')
     def _compute_preview_image(self):
@@ -310,7 +311,7 @@ class MtbgMarketingOverlay(models.Model):
                 'box': layer.box or sticker, 'box_color': layer.box_color, 'box_opacity': layer.box_opacity,
                 'box_padding': layer.box_padding, 'box_radius': layer.box_radius,
                 'box_border': layer.box_border, 'box_border_color': layer.box_border_color,
-                'rotate': layer.rotate,
+                'rotate': layer.rotate, 'box_shape': layer.box_shape,
             })
         if self.qr_enabled and values.get('short_url'):
             layers.append({'kind': 'qr', 'data': values['short_url'], 'size': self.qr_size, 'anchor': self.qr_anchor,
@@ -397,6 +398,10 @@ class MtbgMarketingOverlayLayer(models.Model):
     box_radius = fields.Integer(default=16)
     box_border = fields.Integer(string='Box Border (px)', default=0)
     box_border_color = fields.Char(string='Box Border Colour', default='#000000')
+    box_shape = fields.Selection([('rounded', 'Rounded box'), ('burst', 'Comic burst')], string='Shape',
+                                 default='rounded', required=True,
+                                 help="Comic burst: a jagged \"KAPOW\" star around the text, its border drawn "
+                                      "round it.")
     logo = fields.Image(max_width=1024, max_height=1024, help="Empty: the logo below.")
     logo_source = fields.Selection([('company', "The company's logo"), ('website', "The website's logo")],
                                    string='Logo From', default='company', required=True,
